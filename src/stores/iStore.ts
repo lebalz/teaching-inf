@@ -3,7 +3,6 @@ import { computedFn } from 'mobx-utils';
 import axios from 'axios';
 import { RootStore } from './rootStore';
 
-
 export type ApiAction =
     | `load`
     | `create-${string}`
@@ -74,7 +73,6 @@ abstract class iStore<Api = ''> {
         },
         { keepAlive: true }
     );
-
 }
 
 export default iStore;

@@ -21,7 +21,6 @@ interface Message {
     message: string;
 }
 
-
 export class SocketDataStore {
     private readonly root: RootStore;
     abortControllers = new Map<string, AbortController>();

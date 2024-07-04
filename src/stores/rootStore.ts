@@ -1,9 +1,8 @@
-import React from "react";
-import { DocumentRootStore } from "./DocumentRootStore";
-import { UserStore } from "./UserStore";
-import { SessionStore } from "./SessionStore";
-import { SocketDataStore } from "./SocketDataStore";
-
+import React from 'react';
+import { DocumentRootStore } from './DocumentRootStore';
+import { UserStore } from './UserStore';
+import { SessionStore } from './SessionStore';
+import { SocketDataStore } from './SocketDataStore';
 
 export class RootStore {
     documentRootStore: DocumentRootStore;
@@ -18,7 +17,6 @@ export class RootStore {
         this.socketStore = new SocketDataStore(this);
     }
 }
-
 
 export const rootStore = Object.freeze(new RootStore());
 export const storesContext = React.createContext(rootStore);

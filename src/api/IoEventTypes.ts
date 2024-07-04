@@ -57,8 +57,7 @@ export type Notification = NotificationNewRecord | NotificationChangedRecord | N
 /**
  * client side initiated events
  */
-export enum IoEvents {
-}
+export enum IoEvents {}
 
 export type ServerToClientEvents = {
     [IoEvent.NEW_RECORD]: (message: NewRecord<RecordType>) => void;
@@ -66,9 +65,7 @@ export type ServerToClientEvents = {
     [IoEvent.DELETED_RECORD]: (message: DeletedRecord) => void;
 };
 
-export interface ClientToServerEvents {
-    
-}
+export interface ClientToServerEvents {}
 
 export const RecordStoreMap: { [key in RecordType]: keyof typeof rootStore } = {
     User: 'userStore',

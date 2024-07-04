@@ -8,30 +8,29 @@ export enum Access {
 }
 
 export interface Document {
-    id: string
-    authorId: string
-    type: string
-    data: Object
-  
-    parentId: string
-    documentRootId: string
+    id: string;
+    authorId: string;
+    type: string;
+    data: Object;
+
+    parentId: string;
+    documentRootId: string;
 
     createdAt: string;
     updatedAt: string;
-};
+}
 
 export interface RootGroupPermission {
     id: string;
     rootGroupPermissions: string;
     access: Access;
-
 }
 
 export interface DocumentRoot {
-    id: string
-    access: Access
-    documents: Document[]
-};
+    id: string;
+    access: Access;
+    documents: Document[];
+}
 
 export function currentUser(signal: AbortSignal): AxiosPromise<Document> {
     return api.get('/user', { signal });

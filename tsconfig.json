@@ -1,11 +1,11 @@
 {
-  // This file is not used in compilation. It is here just for a nice editor experience.
-  "extends": "@docusaurus/tsconfig",
-  "compilerOptions": {
-    "baseUrl": ".",
-    "experimentalDecorators": false,
-    "types": ["docusaurus-plugin-sass"],
-    "module": "esnext",
-    "target": "esnext",
-  }
+    // This file is not used in compilation. It is here just for a nice editor experience.
+    "extends": "@docusaurus/tsconfig",
+    "compilerOptions": {
+        "baseUrl": ".",
+        "experimentalDecorators": false,
+        "types": ["docusaurus-plugin-sass"],
+        "module": "esnext",
+        "target": "esnext"
+    }
 }

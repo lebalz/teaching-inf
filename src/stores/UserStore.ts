@@ -1,8 +1,5 @@
 import { action, computed, makeObservable, observable, reaction } from 'mobx';
-import {
-    User as UserProps,
-    find as apiFind
-} from '../api/user';
+import { User as UserProps, find as apiFind } from '../api/user';
 import { RootStore } from './rootStore';
 import User from '../models/User';
 import _ from 'lodash';
@@ -15,7 +12,7 @@ export class UserStore extends iStore {
 
     users = observable<User>([]);
 
-    affectedEventIds = observable.set<string>([], {deep: false});
+    affectedEventIds = observable.set<string>([], { deep: false });
 
     constructor(root: RootStore) {
         super();
@@ -53,11 +50,9 @@ export class UserStore extends iStore {
         { keepAlive: true }
     );
 
-
     createModel(data: UserProps): User {
         return new User(data, this);
     }
-
 
     @action
     addToStore(data: UserProps) {
@@ -101,7 +96,6 @@ export class UserStore extends iStore {
             return apiFind(id, ct.signal).then((res) => {
                 return this.addToStore(res.data);
             });
-        });        
+        });
     }
-
 }

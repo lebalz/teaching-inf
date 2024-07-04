@@ -2,21 +2,20 @@ import { action, computed, observable, reaction } from 'mobx';
 import { DocumentRootStore } from '../stores/DocumentRootStore';
 import { v4 as uuidv4 } from 'uuid';
 import throttle from 'lodash/throttle';
-import { 
-    CANVAS_OUTPUT_TESTER, 
-    DOM_ELEMENT_IDS, 
-    GRAPHICS_OUTPUT_TESTER, 
-    GRID_IMPORTS_TESTER, 
-    TURTLE_IMPORTS_TESTER 
+import {
+    CANVAS_OUTPUT_TESTER,
+    DOM_ELEMENT_IDS,
+    GRAPHICS_OUTPUT_TESTER,
+    GRID_IMPORTS_TESTER,
+    TURTLE_IMPORTS_TESTER
 } from 'docusaurus-live-brython/theme/CodeEditor/constants';
-import { 
-    type InitState, 
-    type LogMessage, 
+import {
+    type InitState,
+    type LogMessage,
     type Version,
     Status
 } from 'docusaurus-live-brython/theme/CodeEditor/WithScript/Types';
 import { runCode } from 'docusaurus-live-brython/theme/CodeEditor/WithScript/bryRunner';
-
 
 export default class Document {
     readonly store: DocumentRootStore;
@@ -37,9 +36,8 @@ export default class Document {
     @observable accessor status: Status = Status.IDLE;
     @observable accessor isGraphicsmodalOpen: boolean;
     @observable accessor isPasted: boolean = false;
-    versions = observable.array<Version>([], {deep: false});
-    logs = observable.array<LogMessage>([], {deep: false});
-
+    versions = observable.array<Version>([], { deep: false });
+    logs = observable.array<LogMessage>([], { deep: false });
 
     constructor(props: InitState, store: DocumentRootStore) {
         this.store = store;
@@ -54,7 +52,7 @@ export default class Document {
         this._pristineCode = props.code;
         this.code = props.code;
         if (this.isVersioned) {
-            this.versions.push({code: props.code, createdAt: new Date(), version: 1});
+            this.versions.push({ code: props.code, createdAt: new Date(), version: 1 });
         }
         this.preCode = props.preCode;
         this.postCode = props.postCode;
@@ -75,7 +73,7 @@ export default class Document {
 
     @action
     addLogMessage(message: LogMessage) {
-        this.logs.push({output: message.output, timeStamp: Date.now(), type: message.type});
+        this.logs.push({ output: message.output, timeStamp: Date.now(), type: message.type });
     }
 
     @action
@@ -108,7 +106,6 @@ export default class Document {
         // nop
     }
 
-    
     @action
     _addVersion(version: Version) {
         if (!this.isVersioned) {
@@ -117,11 +114,10 @@ export default class Document {
         this.versions.push(version);
     }
 
-    addVersion = throttle(
-        this._addVersion,
-        DocumentRootStore.syncMaxOnceEvery,
-        {leading: false, trailing: true}
-    );
+    addVersion = throttle(this._addVersion, DocumentRootStore.syncMaxOnceEvery, {
+        leading: false,
+        trailing: true
+    });
 
     @computed
     get _codeToExecute() {
@@ -134,7 +130,14 @@ export default class Document {
             this.isGraphicsmodalOpen = true;
         }
         this.isExecuting = true;
-        runCode(this.code, this.preCode, this.postCode, this.codeId, DocumentRootStore.libDir, DocumentRootStore.router);
+        runCode(
+            this.code,
+            this.preCode,
+            this.postCode,
+            this.codeId,
+            DocumentRootStore.libDir,
+            DocumentRootStore.router
+        );
     }
 
     @action
@@ -160,7 +163,9 @@ export default class Document {
 
     @computed
     get hasGraphicsOutput() {
-        return this.hasTurtleOutput || this.hasCanvasOutput || GRAPHICS_OUTPUT_TESTER.test(this._codeToExecute);
+        return (
+            this.hasTurtleOutput || this.hasCanvasOutput || GRAPHICS_OUTPUT_TESTER.test(this._codeToExecute)
+        );
     }
 
     @computed
@@ -168,10 +173,11 @@ export default class Document {
         return TURTLE_IMPORTS_TESTER.test(this._codeToExecute);
     }
 
-
     @computed
     get hasCanvasOutput() {
-        return CANVAS_OUTPUT_TESTER.test(this._codeToExecute) || GRID_IMPORTS_TESTER.test(this._codeToExecute);
+        return (
+            CANVAS_OUTPUT_TESTER.test(this._codeToExecute) || GRID_IMPORTS_TESTER.test(this._codeToExecute)
+        );
     }
 
     @computed
@@ -184,7 +190,6 @@ export default class Document {
         return true;
     }
 
-
     @action
     closeGraphicsModal() {
         this.isGraphicsmodalOpen = false;
@@ -192,15 +197,9 @@ export default class Document {
 
     subscribe(listener: () => void, selector: keyof Document) {
         if (Array.isArray(this[selector])) {
-            return reaction(
-                () => (this[selector] as Array<any>).length,
-                listener
-            );
+            return reaction(() => (this[selector] as Array<any>).length, listener);
         }
-        return reaction(
-            () => this[selector],
-            listener
-        );
+        return reaction(() => this[selector], listener);
     }
 
     @computed
@@ -211,15 +210,15 @@ export default class Document {
     @action
     setIsPasted(isPasted: boolean) {
         this.isPasted = isPasted;
-    };
+    }
     @action
     setShowRaw(showRaw: boolean) {
         this.showRaw = showRaw;
-    };
+    }
     @action
     setStatus(status: Status) {
         this.status = status;
-    };
+    }
 
     get lang() {
         if (this._lang === 'py') {

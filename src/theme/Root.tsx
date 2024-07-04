@@ -170,8 +170,11 @@ function Root({ children }) {
         };
     }, [rootStore]);
 
-    const {libDir, syncMaxOnceEvery} = usePluginData('docusaurus-live-brython') as { libDir: string; syncMaxOnceEvery: number; };
-    const {siteConfig} = useDocusaurusContext();
+    const { libDir, syncMaxOnceEvery } = usePluginData('docusaurus-live-brython') as {
+        libDir: string;
+        syncMaxOnceEvery: number;
+    };
+    const { siteConfig } = useDocusaurusContext();
     React.useEffect(() => {
         /**
          * Expose the store to the window object

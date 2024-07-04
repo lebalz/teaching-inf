@@ -12,15 +12,14 @@ export class DocumentRootStore {
     static syncMaxOnceEvery: number = 1000;
     static router: RouterType = 'hash';
 
-
     documents = observable.array<Document>([]);
-    
+
     constructor(root: RootStore) {
         this.root = root;
     }
 
     /**
-     * only to demonstrate that mobx reactivity 
+     * only to demonstrate that mobx reactivity
      * works across stores
      */
     @action
@@ -45,5 +44,4 @@ export class DocumentRootStore {
         },
         { keepAlive: true }
     );
-
 }

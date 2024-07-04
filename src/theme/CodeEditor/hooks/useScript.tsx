@@ -1,5 +1,5 @@
-import Document from "@site/src/models/Document";
-import { useCallback, useSyncExternalStore } from "react";
+import Document from '@site/src/models/Document';
+import { useCallback, useSyncExternalStore } from 'react';
 /**
  * A utility function to create a stable snapshot wrapper
  * it is meant to only track the length of the array and treats
@@ -18,7 +18,6 @@ const useStableSnapshot = (getSnapshot: () => Array<any>) => {
     };
 };
 
-
 export const useScript = <T extends keyof Document>(model: Document, selector: T): Document[T] => {
     const isArray = Array.isArray(model[selector]);
     if (isArray) {
@@ -28,9 +27,12 @@ export const useScript = <T extends keyof Document>(model: Document, selector: T
          * in the array
          */
         return useSyncExternalStore(
-            useCallback((callback) => {
-                return model.subscribe(callback, selector);
-            }, [model, selector]),
+            useCallback(
+                (callback) => {
+                    return model.subscribe(callback, selector);
+                },
+                [model, selector]
+            ),
             useCallback(
                 useStableSnapshot(() => {
                     return model[selector] as Array<any>;
@@ -40,14 +42,14 @@ export const useScript = <T extends keyof Document>(model: Document, selector: T
         );
     }
     return useSyncExternalStore(
-        useCallback((callback) => {
-            return model.subscribe(callback, selector);
-        }, [model, selector]),
         useCallback(
-            () => {
-                return model[selector];
+            (callback) => {
+                return model.subscribe(callback, selector);
             },
             [model, selector]
-        )
+        ),
+        useCallback(() => {
+            return model[selector];
+        }, [model, selector])
     );
-}
+};

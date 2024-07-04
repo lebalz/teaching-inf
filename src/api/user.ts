@@ -7,13 +7,13 @@ export enum Role {
 }
 
 export type User = {
-    id: string
-    email: string
-    firstName: string
-    lastName: string
-    isAdmin: boolean
-    createdAt: string
-    updatedAt: string
+    id: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    isAdmin: boolean;
+    createdAt: string;
+    updatedAt: string;
 };
 
 export function currentUser(signal: AbortSignal): AxiosPromise<User> {
