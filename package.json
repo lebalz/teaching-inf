@@ -15,12 +15,18 @@
     "typecheck": "tsc"
   },
   "dependencies": {
+    "@azure/msal-browser": "^3.18.0",
+    "@azure/msal-react": "^2.0.20",
     "@docusaurus/core": "3.4.0",
     "@docusaurus/preset-classic": "3.4.0",
     "@mdx-js/react": "^3.0.0",
+    "@types/lodash": "^4.17.6",
+    "axios": "^1.7.2",
     "clsx": "^2.0.0",
     "docusaurus-live-brython": "^3.0.0-beta.22",
     "docusaurus-plugin-sass": "^0.2.5",
+    "known-css-properties": "^0.34.0",
+    "lodash": "^4.17.21",
     "mobx": "^6.13.0",
     "mobx-react-lite": "^4.0.7",
     "mobx-utils": "^6.0.8",
@@ -28,6 +34,7 @@
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "sass": "^1.77.6",
+    "socket.io-client": "^4.7.5",
     "uuid": "^10.0.0"
   },
   "devDependencies": {

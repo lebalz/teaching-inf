@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 const ScriptContext = observer((props: InitState & { children: React.ReactNode; }) => {
     const [id, setId] = React.useState<string>(props.id || uuidv4());
-    const documentStore = useStore('documentStore');
+    const documentStore = useStore('documentRootStore');
     React.useEffect(() => {
         const doc = documentStore.find(id);
         if (doc) {

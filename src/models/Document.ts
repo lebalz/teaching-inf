@@ -1,5 +1,5 @@
 import { action, computed, observable, reaction } from 'mobx';
-import { DocumentStore } from '../stores/documentStore';
+import { DocumentRootStore } from '../stores/DocumentRootStore';
 import { v4 as uuidv4 } from 'uuid';
 import throttle from 'lodash/throttle';
 import { 
@@ -19,7 +19,7 @@ import { runCode } from 'docusaurus-live-brython/theme/CodeEditor/WithScript/bry
 
 
 export default class Document {
-    readonly store: DocumentStore;
+    readonly store: DocumentRootStore;
     readonly isVersioned: boolean;
     readonly _pristineCode: string;
     readonly id: string;
@@ -41,7 +41,7 @@ export default class Document {
     logs = observable.array<LogMessage>([], {deep: false});
 
 
-    constructor(props: InitState, store: DocumentStore) {
+    constructor(props: InitState, store: DocumentRootStore) {
         this.store = store;
         this.id = props.id || uuidv4();
         this.source = props.id ? 'remote' : 'local';
@@ -119,7 +119,7 @@ export default class Document {
 
     addVersion = throttle(
         this._addVersion,
-        DocumentStore.syncMaxOnceEvery,
+        DocumentRootStore.syncMaxOnceEvery,
         {leading: false, trailing: true}
     );
 
@@ -134,7 +134,7 @@ export default class Document {
             this.isGraphicsmodalOpen = true;
         }
         this.isExecuting = true;
-        runCode(this.code, this.preCode, this.postCode, this.codeId, DocumentStore.libDir, DocumentStore.router);
+        runCode(this.code, this.preCode, this.postCode, this.codeId, DocumentRootStore.libDir, DocumentRootStore.router);
     }
 
     @action

@@ -1,12 +1,21 @@
 import React from "react";
-import { DocumentStore } from "./documentStore";
+import { DocumentRootStore } from "./DocumentRootStore";
+import { UserStore } from "./UserStore";
+import { SessionStore } from "./SessionStore";
+import { SocketDataStore } from "./SocketDataStore";
 
 
 export class RootStore {
-    documentStore: DocumentStore;
+    documentRootStore: DocumentRootStore;
+    userStore: UserStore;
+    sessionStore: SessionStore;
+    socketStore: SocketDataStore;
 
     constructor() {
-        this.documentStore = new DocumentStore(this);
+        this.documentRootStore = new DocumentRootStore(this);
+        this.sessionStore = new SessionStore(this);
+        this.userStore = new UserStore(this);
+        this.socketStore = new SocketDataStore(this);
     }
 }
 

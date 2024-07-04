@@ -4,7 +4,7 @@ import { computedFn } from 'mobx-utils';
 import Document from '../models/Document';
 import { type RouterType } from '@docusaurus/types';
 
-export class DocumentStore {
+export class DocumentRootStore {
     readonly root: RootStore;
 
     @observable accessor clicks: number = 0;
@@ -37,7 +37,7 @@ export class DocumentStore {
     }
 
     find = computedFn(
-        function (this: DocumentStore, id?: string): Document | undefined {
+        function (this: DocumentRootStore, id?: string): Document | undefined {
             if (!id) {
                 return;
             }
