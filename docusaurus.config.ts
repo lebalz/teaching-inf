@@ -38,14 +38,14 @@ const config: Config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/GBSL-Informatik/teaching-dev/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/GBSL-Informatik/teaching-dev/edit/main/',
         },
         blog: {
           showReadingTime: true,
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/GBSL-Informatik/teaching-dev/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/GBSL-Informatik/teaching-dev/edit/main/',
         },
         theme: {
           customCss: './src/css/custom.scss',
@@ -129,6 +129,7 @@ const config: Config = {
     },
   } satisfies Preset.ThemeConfig,
   plugins: ['docusaurus-plugin-sass'],
+  themes: ['docusaurus-live-brython'],
 };
 
 export default config;
