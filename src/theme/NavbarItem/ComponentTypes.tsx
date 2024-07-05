@@ -21,7 +21,7 @@ const ComponentTypes: ComponentTypesObject = {
     docSidebar: DocSidebarNavbarItem,
     docsVersion: DocsVersionNavbarItem,
     docsVersionDropdown: DocsVersionDropdownNavbarItem,
-    ['custom-loginProfileButton']: LoginProfileButton,
+    ['custom-loginProfileButton']: LoginProfileButton
 };
 
 export default ComponentTypes;

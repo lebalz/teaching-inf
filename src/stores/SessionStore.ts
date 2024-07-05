@@ -68,7 +68,7 @@ export class SessionStore {
                 Storage.remove(SessionStore.NAME);
                 localStorage.clear();
                 window.location.reload();
-            })
+            });
     }
 
     @action
