@@ -28,11 +28,11 @@ jobs:
         run: |
             yarn install
             yarn build
-        working-directory: website
+        working-directory: .
       - name: Upload Build Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: website/build
+          path: ./build
 
   deploy:
     name: Deploy to GitHub Pages
