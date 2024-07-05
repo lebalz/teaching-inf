@@ -6,6 +6,9 @@ on:
       - main
     # Review gh actions docs if you want to further define triggers, paths, etc
     # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#on
+env:
+  # Setting an environment variable with the value of a configuration variable
+  env_var: ${{ vars.ENV_CONTEXT_VAR }}
 
 jobs:
   build:
@@ -27,8 +30,8 @@ jobs:
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
           TENANT_ID: ${{ secrets.TENANT_ID }}
           API_URI: ${{ secrets.API_URI }}
-          APP_URL: ${{ env.APP_URL }}
-          BACKEND_URL: ${{ env.BACKEND_URL }}
+          APP_URL: ${{ vars.APP_URL }}
+          BACKEND_URL: ${{ vars.BACKEND_URL }}
         working-directory: .
       - name: Upload Build Artifact
         uses: actions/upload-pages-artifact@v3
