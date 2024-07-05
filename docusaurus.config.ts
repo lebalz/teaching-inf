@@ -131,6 +131,10 @@ const config: Config = {
           label: 'GitHub',
           position: 'right',
         },
+        {
+            type: 'custom-loginProfileButton',
+            position: 'right'
+        },
       ],
     },
     footer: {

@@ -6,7 +6,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import { observer } from 'mobx-react-lite';
 import { Redirect } from '@docusaurus/router';
-import { mdiRefresh } from '@mdi/js';
+import { mdiLogout, mdiRefresh } from '@mdi/js';
 import { translate } from '@docusaurus/Translate';
 import { useMsal } from '@azure/msal-react';
 import { useIsAuthenticated } from '@azure/msal-react';
@@ -14,6 +14,7 @@ import { InteractionStatus } from '@azure/msal-browser';
 import siteConfig from '@generated/docusaurus.config';
 import { useStore } from '../hooks/useStore';
 import CodeBlock from '@theme/CodeBlock';
+import Button from '../components/shared/Button';
 const { NO_AUTH } = siteConfig.customFields as { TEST_USERNAME?: string; NO_AUTH?: boolean };
 
 const UserPage = observer(() => {
@@ -42,6 +43,7 @@ const UserPage = observer(() => {
                 >
                     {JSON.stringify(current?.props, null, 2)}
                 </CodeBlock>
+                <h3>MSAL</h3>
                 <CodeBlock
                     language="json"
                     title="MSAL-User"
@@ -49,6 +51,29 @@ const UserPage = observer(() => {
                 >
                     {JSON.stringify(sessionStore.account, null, 2)}
                 </CodeBlock>
+
+                <h2>Logout</h2>
+                <Button
+                    onClick={() => sessionStore.logout()}
+                    text="Logout"
+                    title="User Abmelden"
+                    color="red"
+                    icon={mdiLogout}
+                    iconSide="left"
+                    noOutline
+                    className={clsx(styles.logout)}
+                />
+                <Button
+                    text="LocalStorage löschen"
+                    icon={mdiRefresh}
+                    iconSide="left"
+                    onClick={() => {
+                        localStorage.clear();
+                        window.location.reload();
+                    }}
+                    color="orange"
+                    noOutline
+                />
             </main>
         </Layout>
     );
