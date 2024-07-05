@@ -5,6 +5,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 import strongPlugin from './src/plugins/remark-strong/plugin';
 import deflistPlugin from './src/plugins/remark-deflist/plugin';
 import mdiPlugin from './src/plugins/remark-mdi/plugin';
+const GIT_COMMIT_SHA = process.env.GITHUB_SHA || Math.random().toString(36).substring(7);
 
 const REMARK_PLUGINS = [  
   [strongPlugin, { className: 'boxed' }],
@@ -65,7 +66,8 @@ const config: Config = {
     /** Tenant / Verzeichnis-ID (Mandant) */
     TENANT_ID: process.env.TENANT_ID,
     /** The application id uri generated in https://portal.azure.com */
-    API_URI: process.env.API_URI
+    API_URI: process.env.API_URI,
+    GIT_COMMIT_SHA: GIT_COMMIT_SHA,
 },
 
   // Even if you don't use internationalization, you can use this field to set
@@ -152,7 +154,11 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Teaching Dev. Built with Docusaurus. <br />
+      <a class="badge badge--primary" href="https://github.com/GBSL-Informatik/teaching-dev/commit/${GIT_COMMIT_SHA}">
+            ᚶ ${GIT_COMMIT_SHA.substring(0, 7)}
+      </a>
+      `,
     },
     prism: {
       theme: prismThemes.github,
