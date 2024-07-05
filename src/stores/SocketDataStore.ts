@@ -15,7 +15,7 @@ import {
     RecordType,
     ServerToClientEvents
 } from '../api/IoEventTypes';
-import { EVENTS_API } from '../authConfig';
+import { BACKEND_URL } from '../authConfig';
 interface Message {
     type: string;
     message: string;
@@ -45,6 +45,7 @@ export class SocketDataStore {
                 return Promise.reject(error);
             }
         );
+        console.log('SocketDataStore: Connect Socket.IO to', BACKEND_URL);
         reaction(
             () => this.isLive,
             action((isLive) => {
@@ -97,7 +98,7 @@ export class SocketDataStore {
         if (this.socket?.connected) {
             return;
         }
-        const ws_url = EVENTS_API;
+        const ws_url = BACKEND_URL;
         this.socket = io(ws_url, {
             withCredentials: true,
             transports: ['websocket']

@@ -57,9 +57,9 @@ const config: Config = {
     TEST_USERNAME: process.env.TEST_USERNAME,
     NO_AUTH: process.env.NODE_ENV !== 'production' && process.env.TEST_USERNAME?.length > 0,
     /** The Domain Name where the api is running */
-    DOMAIN: process.env.APP_URL || 'http://localhost:3000',
+    APP_URL: process.env.APP_URL || 'http://localhost:3000',
     /** The Domain Name of this app */
-    EVENTS_API: process.env.BACKEND_URL || 'http://localhost:3002',
+    BACKEND_URL: process.env.BACKEND_URL || 'http://localhost:3002',
     /** The application id generated in https://portal.azure.com */
     CLIENT_ID: process.env.CLIENT_ID,
     /** Tenant / Verzeichnis-ID (Mandant) */

@@ -7,15 +7,15 @@ import { Configuration, LogLevel, PublicClientApplication } from '@azure/msal-br
 import siteConfig from '@generated/docusaurus.config';
 
 export interface CustomFields {
-    DOMAIN: string;
-    EVENTS_API: string;
+    APP_URL: string;
+    BACKEND_URL: string;
     CLIENT_ID: string;
     TENANT_ID: string;
     API_URI: string;
 }
 
 /** The Domain Name of this app */
-export const { EVENTS_API, CLIENT_ID, DOMAIN, TENANT_ID, API_URI } =
+export const { BACKEND_URL, CLIENT_ID, APP_URL, TENANT_ID, API_URI } =
     siteConfig.customFields as any as CustomFields;
 
 /**
@@ -30,8 +30,8 @@ export const msalConfig: Configuration = {
     auth: {
         clientId: CLIENT_ID || 'nope',
         authority: `https://login.microsoftonline.com/${TENANT_ID}`,
-        redirectUri: DOMAIN,
-        postLogoutRedirectUri: DOMAIN
+        redirectUri: APP_URL,
+        postLogoutRedirectUri: APP_URL
     },
     cache: {
         cacheLocation: 'localStorage', // This configures where your cache will be stored
