@@ -36,7 +36,7 @@ const UserPage = observer(() => {
                 <h2>User</h2>
                 <pre>
                     <code>
-                        {JSON.stringify(current.props, null, 2)}
+                        {JSON.stringify(current?.props, null, 2)}
                     </code>
                 </pre>
             </main>
