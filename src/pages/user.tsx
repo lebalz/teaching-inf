@@ -36,19 +36,11 @@ const UserPage = observer(() => {
         <Layout>
             <main className={clsx(styles.main)}>
                 <h2>User</h2>
-                <CodeBlock
-                    language="json"
-                    title="API-User Props"
-                    showLineNumbers
-                >
+                <CodeBlock language="json" title="API-User Props" showLineNumbers>
                     {JSON.stringify(current?.props, null, 2)}
                 </CodeBlock>
                 <h3>MSAL</h3>
-                <CodeBlock
-                    language="json"
-                    title="MSAL-User"
-                    showLineNumbers
-                >
+                <CodeBlock language="json" title="MSAL-User" showLineNumbers>
                     {JSON.stringify(sessionStore.account, null, 2)}
                 </CodeBlock>
 
