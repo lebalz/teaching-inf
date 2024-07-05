@@ -73,11 +73,11 @@ export const extractSharedProps = (props: Base) => {
 export const ButtonIcon = (props: Props) => {
     let icon = props.icon;
     if (typeof icon === 'string') {
-        icon = <Icon path={icon} size={props.size} />;
+        icon = <Icon path={icon} size={1} />;
     }
     return (
         <>
-            {icon && !(props.apiState && props.apiState !== ApiState.IDLE) && (
+            {icon && (
                 <span className={clsx(styles.icon, props.className)}>{icon}</span>
             )}
         </>
