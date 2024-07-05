@@ -30,7 +30,7 @@ export const msalConfig: Configuration = {
     auth: {
         clientId: CLIENT_ID || 'nope',
         authority: `https://login.microsoftonline.com/${TENANT_ID}`,
-        redirectUri: APP_URL,
+        redirectUri: `${APP_URL}/user`,
         postLogoutRedirectUri: APP_URL
     },
     cache: {
