@@ -1,3 +1,4 @@
+require('dotenv').config();
 import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
@@ -56,7 +57,7 @@ const config: Config = {
   customFields: {
     /** Use Testuser in local dev: set TEST_USERNAME to the test users email adress*/
     TEST_USERNAME: process.env.TEST_USERNAME,
-    NO_AUTH: process.env.NODE_ENV !== 'production' && process.env.TEST_USERNAME?.length > 0,
+    NO_AUTH: process.env.NODE_ENV !== 'production' && !!process.env.TEST_USERNAME,
     /** The Domain Name where the api is running */
     APP_URL: process.env.APP_URL || 'http://localhost:3000',
     /** The Domain Name of this app */
