@@ -2,6 +2,37 @@ import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
+import strongPlugin from './src/plugins/remark-strong/plugin';
+import deflistPlugin from './src/plugins/remark-deflist/plugin';
+import mdiPlugin from './src/plugins/remark-mdi/plugin';
+
+const REMARK_PLUGINS = [  
+  [strongPlugin, { className: 'boxed' }],
+  [
+      deflistPlugin,
+      {
+          tagNames: {
+              dl: 'Dl',
+          },
+      }
+  ],
+  [
+      mdiPlugin,
+      {
+          colorMapping: {
+              green: 'var(--ifm-color-success)',
+              red: 'var(--ifm-color-danger)',
+              orange: 'var(--ifm-color-warning)',
+              yellow: '#edcb5a',
+              blue: '#3578e5',
+              cyan: '#01f0bc'
+          },
+          defaultSize: '1.25em'
+      }
+  ],
+];
+
+
 const config: Config = {
   title: 'Teaching-Dev',
   tagline: 'Dogfooding Teaching Features',
@@ -20,6 +51,22 @@ const config: Config = {
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
+  
+  customFields: {
+    /** Use Testuser in local dev: set TEST_USERNAME to the test users email adress*/
+    TEST_USERNAME: process.env.TEST_USERNAME,
+    NO_AUTH: process.env.NODE_ENV !== 'production' && process.env.TEST_USERNAME?.length > 0,
+    /** The Domain Name where the api is running */
+    DOMAIN: process.env.APP_URL || 'http://localhost:3000',
+    /** The Domain Name of this app */
+    EVENTS_API: process.env.BACKEND_URL || 'http://localhost:3002',
+    /** The application id generated in https://portal.azure.com */
+    CLIENT_ID: process.env.CLIENT_ID,
+    /** Tenant / Verzeichnis-ID (Mandant) */
+    TENANT_ID: process.env.TENANT_ID,
+    /** The application id uri generated in https://portal.azure.com */
+    API_URI: process.env.API_URI
+},
 
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
@@ -39,6 +86,7 @@ const config: Config = {
           // Remove this to remove the "edit this page" links.
           editUrl:
             'https://github.com/GBSL-Informatik/teaching-dev/edit/main/',
+          remarkPlugins: REMARK_PLUGINS,
         },
         blog: {
           showReadingTime: true,
@@ -46,6 +94,10 @@ const config: Config = {
           // Remove this to remove the "edit this page" links.
           editUrl:
             'https://github.com/GBSL-Informatik/teaching-dev/edit/main/',
+            remarkPlugins: REMARK_PLUGINS,
+        },
+        pages: {
+          remarkPlugins: REMARK_PLUGINS,
         },
         theme: {
           customCss: './src/css/custom.scss',
@@ -66,9 +118,9 @@ const config: Config = {
       items: [
         {
           type: 'docSidebar',
-          sidebarId: 'tutorialSidebar',
+          sidebarId: 'gallerySidebar',
           position: 'left',
-          label: 'Tutorial',
+          label: 'Gallery',
         },
         {to: '/blog', label: 'Blog', position: 'left'},
         {
