@@ -19,15 +19,16 @@ jobs:
         with:
           node-version: 18
           cache: yarn
-      - name: Build Theme
-        run: |
-            yarn link
-            yarn install --frozen-lockfile
-            yarn run build
       - name: Install dependencies and build website
         run: |
             yarn install
             yarn build
+        env:
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          TENANT_ID: ${{ secrets.TENANT_ID }}
+          API_URI: ${{ secrets.API_URI }}
+          APP_URL: ${{ env.APP_URL }}
+          BACKEND_URL: ${{ env.BACKEND_URL }}
         working-directory: .
       - name: Upload Build Artifact
         uses: actions/upload-pages-artifact@v3
@@ -47,6 +48,7 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+
 
     runs-on: ubuntu-latest
     steps:
