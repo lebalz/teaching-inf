@@ -60,15 +60,15 @@ export class SessionStore {
     logout() {
         const sig = new AbortController();
         logout(sig.signal)
-            .then(() => {
+            .catch((err) => {
+                console.error('Failed to logout', err);
+            })
+            .finally(() => {
                 // this.root.cleanup();
                 Storage.remove(SessionStore.NAME);
                 localStorage.clear();
                 window.location.reload();
             })
-            .catch((err) => {
-                console.error('Failed to logout', err);
-            });
     }
 
     @action
