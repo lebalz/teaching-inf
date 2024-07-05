@@ -13,6 +13,7 @@ import { useIsAuthenticated } from '@azure/msal-react';
 import { InteractionStatus } from '@azure/msal-browser';
 import siteConfig from '@generated/docusaurus.config';
 import { useStore } from '../hooks/useStore';
+import CodeBlock from '@theme/CodeBlock';
 const { NO_AUTH } = siteConfig.customFields as { TEST_USERNAME?: string; NO_AUTH?: boolean };
 
 const UserPage = observer(() => {
@@ -34,11 +35,20 @@ const UserPage = observer(() => {
         <Layout>
             <main className={clsx(styles.main)}>
                 <h2>User</h2>
-                <pre>
-                    <code>
-                        {JSON.stringify(current?.props, null, 2)}
-                    </code>
-                </pre>
+                <CodeBlock
+                    language="json"
+                    title="API-User Props"
+                    showLineNumbers
+                >
+                    {JSON.stringify(current?.props, null, 2)}
+                </CodeBlock>
+                <CodeBlock
+                    language="json"
+                    title="MSAL-User"
+                    showLineNumbers
+                >
+                    {JSON.stringify(sessionStore.account, null, 2)}
+                </CodeBlock>
             </main>
         </Layout>
     );

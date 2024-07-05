@@ -31,7 +31,7 @@ const Login = observer(() => {
     const isAuthenticated = sessionStore.isLoggedIn || useIsAuthenticated();
     if (isAuthenticated || NO_AUTH) {
         console.log('redirect');
-        return <Redirect to={'/user?user-tab=account'} />;
+        return <Redirect to={'/user'} />;
     }
     return (
         <Layout>
