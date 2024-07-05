@@ -1,5 +1,5 @@
 import axios, { InternalAxiosRequestConfig } from 'axios';
-import { EVENTS_API, apiConfig } from '../authConfig';
+import { BACKEND_URL, apiConfig } from '../authConfig';
 import siteConfig from '@generated/docusaurus.config';
 import { InteractionRequiredAuthError } from '@azure/msal-browser';
 import { msalInstance } from '../theme/Root';
@@ -9,7 +9,7 @@ export namespace Api {
     export const BASE_API_URL = eventsApiUrl();
 
     function eventsApiUrl() {
-        return `${EVENTS_API}/api/v1/`;
+        return `${BACKEND_URL}/api/v1/`;
     }
 }
 
