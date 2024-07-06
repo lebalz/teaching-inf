@@ -90,6 +90,20 @@ export const setupMsalAxios = () => {
     );
 };
 
+export const setupNoAuthAxios = () => {
+    /** clear all current interceptors and set them up... */
+    api.interceptors.request.clear();
+    api.interceptors.request.use(
+        async (config: InternalAxiosRequestConfig) => {
+            config.headers['Authorization'] = JSON.stringify({ email: TEST_USERNAME });
+            return config;
+        },
+        (error) => {
+            Promise.reject(error);
+        }
+    );
+};
+
 export const checkLogin = (signal: AbortSignal) => {
     return api.get('checklogin', { signal });
 };

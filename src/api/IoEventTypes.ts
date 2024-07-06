@@ -4,7 +4,8 @@ import { rootStore } from '../stores/rootStore';
 export enum IoEvent {
     NEW_RECORD = 'NEW_RECORD',
     CHANGED_RECORD = 'CHANGED_RECORD',
-    DELETED_RECORD = 'DELETED_RECORD'
+    DELETED_RECORD = 'DELETED_RECORD',
+    PING = 'PING'
 }
 
 export enum RecordType {
@@ -63,6 +64,7 @@ export type ServerToClientEvents = {
     [IoEvent.NEW_RECORD]: (message: NewRecord<RecordType>) => void;
     [IoEvent.CHANGED_RECORD]: (message: ChangedRecord<RecordType>) => void;
     [IoEvent.DELETED_RECORD]: (message: DeletedRecord) => void;
+    [IoEvent.PING]: (message: { time: number }) => void;
 };
 
 export interface ClientToServerEvents {}

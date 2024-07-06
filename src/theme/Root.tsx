@@ -7,12 +7,13 @@ import Head from '@docusaurus/Head';
 import siteConfig from '@generated/docusaurus.config';
 import { useLocation } from '@docusaurus/router';
 import { AccountInfo, EventType, InteractionStatus, PublicClientApplication } from '@azure/msal-browser';
-import { setupMsalAxios, setupDefaultAxios } from '../api/base';
+import { setupMsalAxios, default as axiosAPI, setupNoAuthAxios } from '../api/base';
 import { useStore } from '../hooks/useStore';
 import { runInAction } from 'mobx';
 import { usePluginData } from '@docusaurus/useGlobalData';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import { DocumentRootStore } from '../stores/DocumentRootStore';
+import { InternalAxiosRequestConfig } from 'axios';
 const { NO_AUTH, TEST_USERNAME } = siteConfig.customFields as { TEST_USERNAME?: string; NO_AUTH?: boolean };
 export const msalInstance = new PublicClientApplication(msalConfig);
 
@@ -43,6 +44,11 @@ if (NO_AUTH) {
 
 const MsalWrapper = observer(({ children }: { children: React.ReactNode }) => {
     const sessionStore = useStore('sessionStore');
+    React.useEffect(() => {
+        if (NO_AUTH && process.env.NODE_ENV !== 'production' && TEST_USERNAME) {
+            setupNoAuthAxios();
+        }
+    }, []);
     React.useEffect(() => {
         /**
          * DEV MODE

@@ -1,70 +1,62 @@
 import clsx from 'clsx';
 import Heading from '@theme/Heading';
 import styles from './styles.module.css';
+import { useStore } from '@site/src/hooks/useStore';
+import { observer } from 'mobx-react-lite';
+import DefinitionList from '../DefinitionList';
+import { BACKEND_URL } from '@site/src/authConfig';
+import Icon from '@mdi/react';
+import { mdiCheckCircle, mdiCloseCircle, mdiConnection } from '@mdi/js';
+import Button from '../shared/Button';
 
-type FeatureItem = {
-    title: string;
-    Svg: React.ComponentType<React.ComponentProps<'svg'>>;
-    description: JSX.Element;
-};
 
-const FeatureList: FeatureItem[] = [
-    {
-        title: 'Easy to Use',
-        Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
-        description: (
-            <>
-                Docusaurus was designed from the ground up to be easily installed and used to get your website
-                up and running quickly.
-            </>
-        )
-    },
-    {
-        title: 'Focus on What Matters',
-        Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
-        description: (
-            <>
-                Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go ahead and move your
-                docs into the <code>docs</code> directory.
-            </>
-        )
-    },
-    {
-        title: 'Powered by React',
-        Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
-        description: (
-            <>
-                Extend or customize your website layout by reusing React. Docusaurus can be extended while
-                reusing the same header and footer.
-            </>
-        )
-    }
-];
-
-function Feature({ title, Svg, description }: FeatureItem) {
-    return (
-        <div className={clsx('col col--4')}>
-            <div className="text--center">
-                <Svg className={styles.featureSvg} role="img" />
-            </div>
-            <div className="text--center padding-horiz--md">
-                <Heading as="h3">{title}</Heading>
-                <p>{description}</p>
-            </div>
-        </div>
-    );
-}
-
-export default function HomepageFeatures(): JSX.Element {
+const HomepageFeatures = observer(() => {
+    const socketStore = useStore('socketStore');
     return (
         <section className={styles.features}>
             <div className="container">
-                <div className="row">
-                    {FeatureList.map((props, idx) => (
-                        <Feature key={idx} {...props} />
-                    ))}
-                </div>
+                <h2>Socket.IO</h2>
+                <DefinitionList>
+                    <dt>URL</dt>
+                    <dd>{BACKEND_URL}</dd>
+                    <dt>Connected?</dt>
+                    <dd>
+                        {socketStore.isLive 
+                            ? (<span><Icon path={mdiCheckCircle} size={0.8} color='var(--ifm-color-success)' />{' '}Live</span>)
+                            : (<span><Icon path={mdiCloseCircle} size={0.8} color='var(--ifm-color-danger)' />{' '}Offline</span>)
+                        }
+                    </dd>
+                    <dt>Ping-Events</dt>
+                    <dd>For Demo-Purpose: The API pings every second</dd>
+                    <dd>{socketStore.messages.length}{' Messages'}</dd>
+                    <dd>{(socketStore.messages.slice(-1)?.[0]?.time - socketStore.messages[0]?.time) / 1000}{' s Live'}</dd>
+                    <dd>{socketStore.messages.slice(-1)?.[0]?.time}{' Timestamp of latest message'}</dd>
+                    <dt>Connection</dt>
+                    <dd>
+                        <Button
+                            icon={mdiConnection}
+                            text="Connect"
+                            onClick={() => {
+                                socketStore.resetUserData();
+                                socketStore.connect();
+                            }}
+                            disabled={socketStore.isLive}
+                            color='blue'
+                        />
+                    </dd>
+                    <dd>
+                        <Button
+                            icon={mdiCloseCircle}
+                            text="Disconnect"
+                            onClick={() => socketStore.disconnect()}
+                            disabled={!socketStore.isLive}
+                            color='red'
+                        />
+                    </dd>
+                </DefinitionList>
             </div>
         </section>
     );
-}
+});
+
+export default HomepageFeatures;
