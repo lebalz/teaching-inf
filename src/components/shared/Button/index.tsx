@@ -75,13 +75,7 @@ export const ButtonIcon = (props: Props) => {
     if (typeof icon === 'string') {
         icon = <Icon path={icon} size={1} />;
     }
-    return (
-        <>
-            {icon && (
-                <span className={clsx(styles.icon, props.className)}>{icon}</span>
-            )}
-        </>
-    );
+    return <>{icon && <span className={clsx(styles.icon, props.className)}>{icon}</span>}</>;
 };
 
 const ButtonInner = (props: Props) => {
