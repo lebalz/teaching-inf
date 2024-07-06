@@ -9,7 +9,6 @@ import Icon from '@mdi/react';
 import { mdiCheckCircle, mdiCloseCircle, mdiConnection } from '@mdi/js';
 import Button from '../shared/Button';
 
-
 const HomepageFeatures = observer(() => {
     const socketStore = useStore('socketStore');
     return (
@@ -21,16 +20,32 @@ const HomepageFeatures = observer(() => {
                     <dd>{BACKEND_URL}</dd>
                     <dt>Connected?</dt>
                     <dd>
-                        {socketStore.isLive 
-                            ? (<span><Icon path={mdiCheckCircle} size={0.8} color='var(--ifm-color-success)' />{' '}Live</span>)
-                            : (<span><Icon path={mdiCloseCircle} size={0.8} color='var(--ifm-color-danger)' />{' '}Offline</span>)
-                        }
+                        {socketStore.isLive ? (
+                            <span>
+                                <Icon path={mdiCheckCircle} size={0.8} color="var(--ifm-color-success)" />{' '}
+                                Live
+                            </span>
+                        ) : (
+                            <span>
+                                <Icon path={mdiCloseCircle} size={0.8} color="var(--ifm-color-danger)" />{' '}
+                                Offline
+                            </span>
+                        )}
                     </dd>
                     <dt>Ping-Events</dt>
                     <dd>For Demo-Purpose: The API pings every second</dd>
-                    <dd>{socketStore.messages.length}{' Messages'}</dd>
-                    <dd>{(socketStore.messages.slice(-1)?.[0]?.time - socketStore.messages[0]?.time) / 1000}{' s Live'}</dd>
-                    <dd>{socketStore.messages.slice(-1)?.[0]?.time}{' Timestamp of latest message'}</dd>
+                    <dd>
+                        {socketStore.messages.length}
+                        {' Messages'}
+                    </dd>
+                    <dd>
+                        {(socketStore.messages.slice(-1)?.[0]?.time - socketStore.messages[0]?.time) / 1000}
+                        {' s Live'}
+                    </dd>
+                    <dd>
+                        {socketStore.messages.slice(-1)?.[0]?.time}
+                        {' Timestamp of latest message'}
+                    </dd>
                     <dt>Connection</dt>
                     <dd>
                         <Button
@@ -41,7 +56,7 @@ const HomepageFeatures = observer(() => {
                                 socketStore.connect();
                             }}
                             disabled={socketStore.isLive}
-                            color='blue'
+                            color="blue"
                         />
                     </dd>
                     <dd>
@@ -50,7 +65,7 @@ const HomepageFeatures = observer(() => {
                             text="Disconnect"
                             onClick={() => socketStore.disconnect()}
                             disabled={!socketStore.isLive}
-                            color='red'
+                            color="red"
                         />
                     </dd>
                 </DefinitionList>
