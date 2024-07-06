@@ -17,8 +17,7 @@ import {
 } from '../api/IoEventTypes';
 import { BACKEND_URL } from '../authConfig';
 interface Message {
-    type: string;
-    message: string;
+    time: number;
 }
 
 export class SocketDataStore {
@@ -45,7 +44,6 @@ export class SocketDataStore {
                 return Promise.reject(error);
             }
         );
-        console.log('SocketDataStore: Connect Socket.IO to', BACKEND_URL);
         reaction(
             () => this.isLive,
             action((isLive) => {
@@ -112,7 +110,7 @@ export class SocketDataStore {
         }
         this.socket.on('connect', () => {
             /**
-             * maybe there is a newer version to add headers,
+             * maybe there is a newer version to add headers?
              * @see https://socket.io/docs/v4/client-options/#extraheaders
              */
             api.defaults.headers.common['x-metadata-socketid'] = this.socket.id;
@@ -135,6 +133,12 @@ export class SocketDataStore {
         this.socket.on(IoEvent.NEW_RECORD, this.createRecord.bind(this));
         this.socket.on(IoEvent.CHANGED_RECORD, this.updateRecord.bind(this));
         this.socket.on(IoEvent.DELETED_RECORD, this.deleteRecord.bind(this));
+        this.socket.on(IoEvent.PING, this.onPing.bind(this));
+    }
+
+    @action
+    onPing({ time }) {
+        this.messages.push({ time });
     }
 
     @action

@@ -1,5 +1,5 @@
 import { action, computed, makeObservable, observable, reaction } from 'mobx';
-import { User as UserProps, find as apiFind } from '../api/user';
+import { User as UserProps, find as apiFind, currentUser } from '../api/user';
 import { RootStore } from './rootStore';
 import User from '../models/User';
 import _ from 'lodash';
@@ -21,7 +21,7 @@ export class UserStore extends iStore {
         setTimeout(() => {
             // attempt to load the previous state of this store from localstorage
             this.rehydrate();
-        }, 1);
+        }, 0);
     }
 
     @action
@@ -97,5 +97,15 @@ export class UserStore extends iStore {
                 return this.addToStore(res.data);
             });
         });
+    }
+
+    @action
+    loadCurrent() {
+        const res = this.withAbortController('load-user', async (signal) => {
+            return currentUser(signal.signal).then((res) => {
+                return this.addToStore(res.data);
+            });
+        });
+        return res;
     }
 }
