@@ -21,7 +21,7 @@ export class UserStore extends iStore {
         setTimeout(() => {
             // attempt to load the previous state of this store from localstorage
             this.rehydrate();
-        }, 0);
+        }, 1);
     }
 
     @action
