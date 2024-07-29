@@ -17,8 +17,8 @@
         "format:check": "prettier --check ."
     },
     "dependencies": {
-        "@azure/msal-browser": "^3.18.0",
-        "@azure/msal-react": "^2.0.20",
+        "@azure/msal-browser": "^3.20.0",
+        "@azure/msal-react": "^2.0.22",
         "@docusaurus/core": "3.4.0",
         "@docusaurus/preset-classic": "3.4.0",
         "@mdi/js": "^7.4.47",
@@ -32,7 +32,7 @@
         "dotenv": "^16.4.5",
         "known-css-properties": "^0.34.0",
         "lodash": "^4.17.21",
-        "mobx": "^6.13.0",
+        "mobx": "^6.13.1",
         "mobx-react-lite": "^4.0.7",
         "mobx-utils": "^6.0.8",
         "prism-react-renderer": "^2.3.0",
@@ -48,7 +48,7 @@
         "@docusaurus/tsconfig": "3.4.0",
         "@docusaurus/types": "3.4.0",
         "prettier": "^3.3.2",
-        "typescript": "~5.2.2"
+        "typescript": "^5.5.4"
     },
     "browserslist": {
         "production": [
