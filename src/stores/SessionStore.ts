@@ -8,9 +8,9 @@ import iStore from './iStore';
 const { NO_AUTH, TEST_USERNAME } = siteConfig.customFields as { TEST_USERNAME?: string; NO_AUTH?: boolean };
 
 class State {
-    @observable accessor account: AccountInfo | undefined | null = undefined;
+    @observable.ref accessor account: AccountInfo | undefined | null = undefined;
 
-    @observable accessor _msalInstance: IPublicClientApplication | undefined = undefined;
+    @observable.ref accessor _msalInstance: IPublicClientApplication | undefined = undefined;
 
     constructor() {}
 }
@@ -19,7 +19,7 @@ export class SessionStore extends iStore {
     readonly root: RootStore;
     private static readonly NAME = 'SessionStore' as const;
 
-    @observable private accessor stateRef: State = new State();
+    @observable.ref private accessor stateRef: State = new State();
 
     @observable accessor authMethod: 'apiKey' | 'msal';
 
