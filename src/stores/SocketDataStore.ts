@@ -24,7 +24,7 @@ export class SocketDataStore {
     private readonly root: RootStore;
     abortControllers = new Map<string, AbortController>();
 
-    @observable accessor socket: Socket<ServerToClientEvents, ClientToServerEvents>;
+    @observable.ref accessor socket: Socket<ServerToClientEvents, ClientToServerEvents>;
 
     messages = observable<Message>([]);
 
@@ -83,7 +83,7 @@ export class SocketDataStore {
         if (this.socket?.connected) {
             this.socket.disconnect();
         }
-        this.socket = undefined;
+        this.socket = io();
         this.setLiveState(false);
     }
 
