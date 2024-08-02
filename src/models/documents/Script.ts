@@ -1,5 +1,5 @@
 import { action, computed, observable, reaction } from 'mobx';
-import { DocumentRootStore } from '../stores/DocumentRootStore';
+import { DocumentRootStore } from '../../stores/DocumentRootStore';
 import { v4 as uuidv4 } from 'uuid';
 import throttle from 'lodash/throttle';
 import {
@@ -10,25 +10,26 @@ import {
     TURTLE_IMPORTS_TESTER
 } from 'docusaurus-live-brython/theme/CodeEditor/constants';
 import {
-    type InitState,
+    type InitState as Meta,
     type LogMessage,
     type Version,
     Status
 } from 'docusaurus-live-brython/theme/CodeEditor/WithScript/Types';
 import { runCode } from 'docusaurus-live-brython/theme/CodeEditor/WithScript/bryRunner';
+import iDocument from '../iDocument';
+import { DocumentType, Document as DocumentProps, ScriptData } from '@site/src/api/document';
+import DocumentStore from '@site/src/stores/DocumentStore';
+import siteConfig from '@generated/docusaurus.config';
+import { ScriptMeta } from '@site/src/theme/CodeEditor/WithScript/ScriptContext';
 
-export default class Document {
-    readonly store: DocumentRootStore;
-    readonly isVersioned: boolean;
-    readonly _pristineCode: string;
-    readonly id: string;
-    readonly codeId: string;
-    readonly source: 'local' | 'remote';
-    readonly _lang: 'py' | string;
-    readonly preCode: string;
-    readonly postCode: string;
-    @observable accessor createdAt: Date;
-    @observable accessor updatedAt: Date;
+// /**
+//  * Set some configuration options
+//  */
+// DocumentRootStore.syncMaxOnceEvery = syncMaxOnceEvery;
+// DocumentRootStore.libDir = libDir;
+// DocumentRootStore.router = siteConfig.future.experimental_router;
+
+export default class Script extends iDocument<DocumentType.Script> {
     @observable accessor code: string;
     @observable accessor isExecuting: boolean;
     @observable accessor showRaw: boolean;
@@ -39,26 +40,24 @@ export default class Document {
     versions = observable.array<Version>([], { deep: false });
     logs = observable.array<LogMessage>([], { deep: false });
 
-    constructor(props: InitState, store: DocumentRootStore) {
-        this.store = store;
-        this.id = props.id || uuidv4();
-        this.source = props.id ? 'remote' : 'local';
-        this._lang = props.lang;
+    constructor(props: DocumentProps<DocumentType.Script>, store: DocumentStore) {
+        super(props, store);
         this.isExecuting = false;
         this.showRaw = false;
         this.isLoaded = true;
-        this.isVersioned = props.versioned && this.source === 'remote';
+        this.code = props.data.code ?? this.meta.initCode;
 
-        this._pristineCode = props.code;
-        this.code = props.code;
         if (this.isVersioned) {
-            this.versions.push({ code: props.code, createdAt: new Date(), version: 1 });
+            // this.versions.push({ code: this.code, createdAt: new Date(), version: 1 });
         }
-        this.preCode = props.preCode;
-        this.postCode = props.postCode;
-        this.codeId = `code.${props.title || props.lang}.${this.id}`.replace(/(-|\.)/g, '_');
-        this.updatedAt = new Date();
-        this.createdAt = new Date();
+    }
+
+    @computed
+    get meta(): ScriptMeta {
+        if (this.root.type === DocumentType.Script) {
+            return this.root.meta as ScriptMeta;
+        }
+        return new ScriptMeta({});
     }
 
     @action
@@ -83,7 +82,6 @@ export default class Document {
         }
         this.code = code;
         const updatedAt = new Date();
-        this.updatedAt = updatedAt;
         if (this.isVersioned) {
             this.addVersion({
                 code: code,
@@ -99,6 +97,7 @@ export default class Document {
         /**
          * call the api to save the code...
          */
+        this.store.save(this);
     }
 
     @action
@@ -114,7 +113,7 @@ export default class Document {
         this.versions.push(version);
     }
 
-    addVersion = throttle(this._addVersion, DocumentRootStore.syncMaxOnceEvery, {
+    addVersion = throttle(this._addVersion, 1000, {
         leading: false,
         trailing: true
     });
@@ -122,6 +121,18 @@ export default class Document {
     @computed
     get _codeToExecute() {
         return `${this.preCode}\n${this.code}\n${this.postCode}`;
+    }
+
+    @computed
+    get data(): ScriptData {
+        return {
+            code: this.code
+        }
+    }
+
+    @action
+    setData(data: ScriptData) {
+        this.setCode(data.code);
     }
 
     @action
@@ -135,8 +146,8 @@ export default class Document {
             this.preCode,
             this.postCode,
             this.codeId,
-            DocumentRootStore.libDir,
-            DocumentRootStore.router
+            '/bry-libs/', // TODO: get this dynamically
+            siteConfig.future.experimental_router
         );
     }
 
@@ -145,6 +156,7 @@ export default class Document {
         /**
          * call the api to save the code...
          */
+        console.log('save now!!!!!');
     }
 
     /**
@@ -195,7 +207,7 @@ export default class Document {
         this.isGraphicsmodalOpen = false;
     }
 
-    subscribe(listener: () => void, selector: keyof Document) {
+    subscribe(listener: () => void, selector: keyof Script) {
         if (Array.isArray(this[selector])) {
             return reaction(() => (this[selector] as Array<any>).length, listener);
         }
@@ -220,10 +232,35 @@ export default class Document {
         this.status = status;
     }
 
+    get isVersioned() {
+        return this.meta.versioned;
+    }
+    get _pristineCode() {
+        return this.meta.initCode;
+    }
+
+    @computed
+    get codeId() {
+        return `code.${this.meta.title || this.meta.lang}.${this.id}`.replace(/(-|\.)/g, '_');
+    }
+    get source() {
+        return 'browser';
+    }
+    get _lang() {
+        return this.meta.lang;
+    }
+    get preCode() {
+        return this.meta.preCode;
+    }
+    get postCode() {
+        return this.meta.postCode;
+    }
+
     get lang() {
-        if (this._lang === 'py') {
-            return 'python';
-        }
+        if (this.root.meta)
+            if (this._lang === 'py') {
+                return 'python';
+            }
         return this._lang;
     }
 }
