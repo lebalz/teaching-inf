@@ -135,7 +135,7 @@ class DocumentStore extends iStore {
         model: iDocument<Type>,
         replaceStoreModel: boolean = false
     ): Promise<TypeModelMapping[Type] | undefined> {
-        if (model.isDirty) {
+        if (model.isDirty && !model.root.isDummy) {
             const { id } = model;
             return this.withAbortController(`save-${id}`, (sig) => {
                 return apiUpdate(model.id, model.data, sig.signal);
