@@ -9,21 +9,13 @@ export const useDocumentRoot = <Type extends DocumentType>(id: string | undefine
     const defaultDocId = useId();
     const store = rootStore.documentRootStore;
     const [dummyDocumentRoot] = React.useState<DocumentRoot<Type>>(
-        new DocumentRoot(
-            { id: id || defaultRootDocId, access: Access.RW },
-            meta,
-            store,
-            true
-        )
+        new DocumentRoot({ id: id || defaultRootDocId, access: Access.RW }, meta, store, true)
     );
 
     /** initial load */
     React.useEffect(() => {
         const rootDoc = store.find(dummyDocumentRoot.id);
-        if (
-            rootDoc ||
-            store.apiStateFor(`load-${dummyDocumentRoot.id}`) === ApiState.LOADING
-        ) {
+        if (rootDoc || store.apiStateFor(`load-${dummyDocumentRoot.id}`) === ApiState.LOADING) {
             return;
         }
         if (dummyDocumentRoot.isDummy) {
