@@ -109,7 +109,7 @@ export default class Script extends iDocument<DocumentType.Script> {
     
 
     get versions(): ScriptVersion[] {
-        return (this.root?.mainDocuments || []).filter((doc) => doc.type === DocumentType.ScriptVersion) as ScriptVersion[];
+        return (this.root?.documents || []).filter((doc) => doc.type === DocumentType.ScriptVersion) as ScriptVersion[];
     }
 
     @action
