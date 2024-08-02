@@ -21,7 +21,7 @@ const LoginProfileButton = observer(() => {
                 text={userStore.current?.firstName || 'Profil'}
                 icon={mdiAccountCircleOutline}
                 iconSide="left"
-                apiState={userStore.current ? ApiState.IDLE : ApiState.LOADING}
+                apiState={userStore.current ? ApiState.IDLE : ApiState.SYNCING}
                 color="primary"
                 href="/user"
                 title="Persönlicher Bereich"
