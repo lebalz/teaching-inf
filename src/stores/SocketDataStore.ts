@@ -83,7 +83,7 @@ export class SocketDataStore {
         if (this.socket?.connected) {
             this.socket.disconnect();
         }
-        const dummySock = io({autoConnect: false});
+        const dummySock = io({ autoConnect: false });
         dummySock.disconnect();
         this.socket = dummySock;
         this.setLiveState(false);

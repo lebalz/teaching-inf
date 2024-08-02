@@ -19,7 +19,10 @@ export const useDocumentRoot = <Type extends DocumentType>(id: string | undefine
     /** initial load */
     React.useEffect(() => {
         const rootDoc = rootStore.documentRootStore.find(dummyDocumentRoot.id);
-        if (rootDoc || rootStore.documentRootStore.apiStateFor(`load-${dummyDocumentRoot.id}`) === ApiState.LOADING) {
+        if (
+            rootDoc ||
+            rootStore.documentRootStore.apiStateFor(`load-${dummyDocumentRoot.id}`) === ApiState.LOADING
+        ) {
             return;
         }
         if (dummyDocumentRoot.isDummy) {
