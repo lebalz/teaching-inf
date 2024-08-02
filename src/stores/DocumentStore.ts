@@ -141,40 +141,46 @@ class DocumentStore extends iStore {
             const { id } = model;
             return this.withAbortController(`save-${id}`, (sig) => {
                 return apiUpdate(model.id, model.data, sig.signal);
-            }).then(
-                action(({ data }) => {
-                    if (data) {
-                        if (replaceStoreModel) {
-                            return this.addToStore(data);
+            })
+                .then(
+                    action(({ data }) => {
+                        if (data) {
+                            if (replaceStoreModel) {
+                                return this.addToStore(data);
+                            }
+                            return this.createModel(data);
                         }
-                        return this.createModel(data);
+                        return undefined;
+                    })
+                )
+                .catch((err) => {
+                    if (!axios.isCancel(err)) {
+                        console.warn('Error saving document', err);
                     }
                     return undefined;
-                })
-            ).catch((err) => {
-                if (!axios.isCancel(err)) {
-                    console.warn('Error saving document', err);
-                }
-                return undefined;
-            });
+                });
         }
         return Promise.resolve(undefined);
     }
 
     @action
-    create<Type extends DocumentType>(model: { documentRootId: string, type: Type } & Partial<DocumentProps<Type>>) {
+    create<Type extends DocumentType>(
+        model: { documentRootId: string; type: Type } & Partial<DocumentProps<Type>>
+    ) {
         return this.withAbortController(`create-${model.id || uuidv4()}`, (sig) => {
             return apiCreate<Type>(model, sig.signal);
-        }).then(
-            action(({ data }) => {
-                return this.addToStore(data);
-            })
-        ).catch((err) => {
-            if (!axios.isCancel(err)) {
-                console.warn('Error saving document', err);
-            }
-            return undefined;
-        });;
+        })
+            .then(
+                action(({ data }) => {
+                    return this.addToStore(data);
+                })
+            )
+            .catch((err) => {
+                if (!axios.isCancel(err)) {
+                    console.warn('Error saving document', err);
+                }
+                return undefined;
+            });
     }
 }
 

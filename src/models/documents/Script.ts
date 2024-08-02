@@ -17,7 +17,12 @@ import {
 } from 'docusaurus-live-brython/theme/CodeEditor/WithScript/Types';
 import { runCode } from 'docusaurus-live-brython/theme/CodeEditor/WithScript/bryRunner';
 import iDocument from '../iDocument';
-import { DocumentType, Document as DocumentProps, ScriptData, ScriptVersionData } from '@site/src/api/document';
+import {
+    DocumentType,
+    Document as DocumentProps,
+    ScriptData,
+    ScriptVersionData
+} from '@site/src/api/document';
 import DocumentStore from '@site/src/stores/DocumentStore';
 import siteConfig from '@generated/docusaurus.config';
 import { ScriptMeta } from '@site/src/theme/CodeEditor/WithScript/ScriptContext';
@@ -50,7 +55,7 @@ export default class Script extends iDocument<DocumentType.Script> {
         this.code = props.data.code ?? this.meta.initCode;
         /**
          * TODO: derive this from the api state
-        */
+         */
         this.isLoaded = true;
     }
 
@@ -106,10 +111,11 @@ export default class Script extends iDocument<DocumentType.Script> {
     loadVersions() {
         // nop
     }
-    
 
     get versions(): ScriptVersion[] {
-        return (this.root?.documents || []).filter((doc) => doc.type === DocumentType.ScriptVersion) as ScriptVersion[];
+        return (this.root?.documents || []).filter(
+            (doc) => doc.type === DocumentType.ScriptVersion
+        ) as ScriptVersion[];
     }
 
     @action
