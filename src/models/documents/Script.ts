@@ -21,6 +21,7 @@ import { DocumentType, Document as DocumentProps, ScriptData } from '@site/src/a
 import DocumentStore from '@site/src/stores/DocumentStore';
 import siteConfig from '@generated/docusaurus.config';
 import { ScriptMeta } from '@site/src/theme/CodeEditor/WithScript/ScriptContext';
+import globalData from '@generated/globalData';
 
 // /**
 //  * Set some configuration options
@@ -46,6 +47,7 @@ export default class Script extends iDocument<DocumentType.Script> {
         this.showRaw = false;
         this.isLoaded = true;
         this.code = props.data.code ?? this.meta.initCode;
+        console.log(globalData);
 
         if (this.isVersioned) {
             // this.versions.push({ code: this.code, createdAt: new Date(), version: 1 });
