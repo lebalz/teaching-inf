@@ -17,13 +17,14 @@ import {
 } from 'docusaurus-live-brython/theme/CodeEditor/WithScript/Types';
 import { runCode } from 'docusaurus-live-brython/theme/CodeEditor/WithScript/bryRunner';
 import iDocument from '../iDocument';
-import { DocumentType, Document as DocumentProps, ScriptData } from '@site/src/api/document';
+import { DocumentType, Document as DocumentProps, ScriptData, ScriptVersionData } from '@site/src/api/document';
 import DocumentStore from '@site/src/stores/DocumentStore';
 import siteConfig from '@generated/docusaurus.config';
 import { ScriptMeta } from '@site/src/theme/CodeEditor/WithScript/ScriptContext';
 import globalData from '@generated/globalData';
 import { ThemeOptions } from 'docusaurus-live-brython';
 import { ApiState } from '@site/src/stores/iStore';
+import ScriptVersion from './ScriptVersion';
 
 // /**
 //  * Set some configuration options
@@ -36,30 +37,26 @@ const BRYTHON_CONFIG = globalData['docusaurus-live-brython'].default as ThemeOpt
 
 export default class Script extends iDocument<DocumentType.Script> {
     @observable accessor code: string;
-    @observable accessor isExecuting: boolean;
-    @observable accessor showRaw: boolean;
-    @observable accessor isLoaded: boolean;
+    @observable accessor isExecuting: boolean = false;
+    @observable accessor showRaw: boolean = false;
+    @observable accessor isLoaded: boolean = false;
     @observable accessor _status: Status = Status.IDLE;
-    @observable accessor isGraphicsmodalOpen: boolean;
+    @observable accessor isGraphicsmodalOpen: boolean = false;
     @observable accessor isPasted: boolean = false;
-    versions = observable.array<Version>([], { deep: false });
     logs = observable.array<LogMessage>([], { deep: false });
 
     constructor(props: DocumentProps<DocumentType.Script>, store: DocumentStore) {
         super(props, store);
-        this.isExecuting = false;
-        this.showRaw = false;
-        this.isLoaded = true;
         this.code = props.data.code ?? this.meta.initCode;
-
-        if (this.isVersioned) {
-            // this.versions.push({ code: this.code, createdAt: new Date(), version: 1 });
-        }
+        /**
+         * TODO: derive this from the api state
+        */
+        this.isLoaded = true;
     }
 
     @computed
     get meta(): ScriptMeta {
-        if (this.root.type === DocumentType.Script) {
+        if (this.root?.type === DocumentType.Script) {
             return this.root.meta as ScriptMeta;
         }
         return new ScriptMeta({});
@@ -109,13 +106,27 @@ export default class Script extends iDocument<DocumentType.Script> {
     loadVersions() {
         // nop
     }
+    
+
+    get versions(): ScriptVersion[] {
+        return (this.root?.mainDocuments || []).filter((doc) => doc.type === DocumentType.ScriptVersion) as ScriptVersion[];
+    }
 
     @action
     _addVersion(version: Version) {
         if (!this.isVersioned) {
             return;
         }
-        this.versions.push(version);
+        const versionData: ScriptVersionData = {
+            code: version.code,
+            version: version.version,
+            pasted: version.pasted
+        };
+        this.store.create({
+            documentRootId: this.documentRootId,
+            data: versionData,
+            type: DocumentType.ScriptVersion
+        });
     }
 
     addVersion = throttle(this._addVersion, 1000, {
@@ -238,7 +249,7 @@ export default class Script extends iDocument<DocumentType.Script> {
     }
     @computed
     get status() {
-        if (this.root.status === ApiState.SYNCING) {
+        if (this.root?.status === ApiState.SYNCING) {
             return Status.SYNCING;
         }
         if (this.store.apiStateFor(`save-${this.id}`) === ApiState.SYNCING) {
@@ -272,7 +283,7 @@ export default class Script extends iDocument<DocumentType.Script> {
     }
 
     get lang() {
-        if (this.root.meta)
+        if (this.root?.meta)
             if (this._lang === 'py') {
                 return 'python';
             }

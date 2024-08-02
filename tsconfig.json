@@ -6,6 +6,12 @@
         "experimentalDecorators": false,
         "types": ["docusaurus-plugin-sass"],
         "module": "esnext",
-        "target": "esnext"
-    }
+        "target": "esnext",
+        "strict": true
+    },
+    "exclude": [
+        "node_modules",
+        "dist",
+        "build"
+    ]
 }

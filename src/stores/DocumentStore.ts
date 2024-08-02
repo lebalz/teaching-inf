@@ -14,12 +14,14 @@ import iStore from './iStore';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import iDocument from '../models/iDocument';
+import ScriptVersion from '../models/documents/ScriptVersion';
 
 export interface TypeModelMapping {
     [DocumentType.Script]: Script;
     [DocumentType.TaskState]: TaskState;
+    [DocumentType.ScriptVersion]: ScriptVersion;
 }
-type DocumentTypes = Script | TaskState;
+type DocumentTypes = Script | TaskState | ScriptVersion;
 
 class DocumentStore extends iStore {
     readonly root: RootStore;
@@ -160,7 +162,7 @@ class DocumentStore extends iStore {
     }
 
     @action
-    create<Type extends DocumentType>(model: { documentRootId: string } & Partial<DocumentProps<Type>>) {
+    create<Type extends DocumentType>(model: { documentRootId: string, type: Type } & Partial<DocumentProps<Type>>) {
         return this.withAbortController(`create-${model.id || uuidv4()}`, (sig) => {
             return apiCreate<Type>(model, sig.signal);
         }).then(

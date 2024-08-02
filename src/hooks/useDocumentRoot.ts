@@ -41,6 +41,13 @@ export const useDocumentRoot = <Type extends DocumentType>(id: string | undefine
         }
 
         /**
+         * dont create dummy documents, ever
+         */
+        if (!id) {
+            return;
+        }
+
+        /**
          * load the documentRoot and it's documents from the api.
          */
         store
