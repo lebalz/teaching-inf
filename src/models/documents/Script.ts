@@ -23,6 +23,7 @@ import siteConfig from '@generated/docusaurus.config';
 import { ScriptMeta } from '@site/src/theme/CodeEditor/WithScript/ScriptContext';
 import globalData from '@generated/globalData';
 import { ThemeOptions } from 'docusaurus-live-brython';
+import { ApiState } from '@site/src/stores/iStore';
 
 // /**
 //  * Set some configuration options
@@ -38,7 +39,7 @@ export default class Script extends iDocument<DocumentType.Script> {
     @observable accessor isExecuting: boolean;
     @observable accessor showRaw: boolean;
     @observable accessor isLoaded: boolean;
-    @observable accessor status: Status = Status.IDLE;
+    @observable accessor _status: Status = Status.IDLE;
     @observable accessor isGraphicsmodalOpen: boolean;
     @observable accessor isPasted: boolean = false;
     versions = observable.array<Version>([], { deep: false });
@@ -101,7 +102,7 @@ export default class Script extends iDocument<DocumentType.Script> {
         /**
          * call the api to save the code...
          */
-        this.store.save(this);
+        this.saveNow();
     }
 
     @action
@@ -160,7 +161,7 @@ export default class Script extends iDocument<DocumentType.Script> {
         /**
          * call the api to save the code...
          */
-        console.log('save now!!!!!');
+        this.store.save(this);
     }
 
     /**
@@ -233,7 +234,14 @@ export default class Script extends iDocument<DocumentType.Script> {
     }
     @action
     setStatus(status: Status) {
-        this.status = status;
+        this._status = status;
+    }
+    @computed
+    get status() {
+        if (this.root.status === ApiState.LOADING) {
+            return Status.SYNCING;
+        }
+        return this._status;
     }
 
     get isVersioned() {
