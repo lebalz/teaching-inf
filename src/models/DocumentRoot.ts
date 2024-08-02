@@ -86,7 +86,7 @@ class DocumentRoot<T extends DocumentType> {
     @computed
     get mainDocuments(): TypeModelMapping[T][] {
         return this.documents
-            .filter((d) => d.isRoot && d.type === this.type)
+            .filter((d) => d.isMain)
             .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime()) as TypeModelMapping[T][];
     }
 

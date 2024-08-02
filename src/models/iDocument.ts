@@ -6,7 +6,7 @@ abstract class iDocument<Type extends DocumentType> {
     readonly store: DocumentStore;
     readonly id: string;
     readonly authorId: string;
-    readonly parentId: string | null;
+    readonly parentId: string | null | undefined;
     readonly documentRootId: string;
     readonly type: Type;
     readonly _pristine: TypeDataMapping[Type];
@@ -56,8 +56,8 @@ abstract class iDocument<Type extends DocumentType> {
     }
 
     @computed
-    get isRoot() {
-        return !this.parentId;
+    get isMain() {
+        return !this.parentId && this.root?.type === this.type;
     }
 
     @computed
