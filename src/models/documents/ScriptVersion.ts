@@ -26,7 +26,7 @@ class ScriptVersion extends iDocument<DocumentType.ScriptVersion> implements Ver
 
     get pasted() {
         return this.data.pasted;
-    }    
+    }
 }
 
 export default ScriptVersion;

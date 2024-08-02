@@ -8,7 +8,6 @@ class TaskState extends iDocument<DocumentType.TaskState> {
         super(props, store);
     }
 
-    
     setData(data: TaskStateData): void {
         throw new Error('Not implemented.');
     }
