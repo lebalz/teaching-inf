@@ -149,7 +149,12 @@ class DocumentStore extends iStore {
                     }
                     return undefined;
                 })
-            );
+            ).catch((err) => {
+                if (!axios.isCancel(err)) {
+                    console.warn('Error saving document', err);
+                }
+                return undefined;
+            });
         }
         return Promise.resolve(undefined);
     }
@@ -162,7 +167,12 @@ class DocumentStore extends iStore {
             action(({ data }) => {
                 return this.addToStore(data);
             })
-        );
+        ).catch((err) => {
+            if (!axios.isCancel(err)) {
+                console.warn('Error saving document', err);
+            }
+            return undefined;
+        });;
     }
 }
 
