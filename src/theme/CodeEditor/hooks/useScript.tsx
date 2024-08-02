@@ -1,4 +1,4 @@
-import Document from '@site/src/models/Document';
+import Script from '@site/src/models/documents/Script';
 import { useCallback, useSyncExternalStore } from 'react';
 /**
  * A utility function to create a stable snapshot wrapper
@@ -18,7 +18,7 @@ const useStableSnapshot = (getSnapshot: () => Array<any>) => {
     };
 };
 
-export const useScript = <T extends keyof Document>(model: Document, selector: T): Document[T] => {
+export const useScript = <T extends keyof Script>(model: Script, selector: T): Script[T] => {
     const isArray = Array.isArray(model[selector]);
     if (isArray) {
         /**
@@ -36,7 +36,7 @@ export const useScript = <T extends keyof Document>(model: Document, selector: T
             useCallback(
                 useStableSnapshot(() => {
                     return model[selector] as Array<any>;
-                }) as () => Document[T],
+                }) as () => Script[T],
                 [model, selector]
             )
         );

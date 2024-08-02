@@ -187,12 +187,6 @@ function Root({ children }) {
          * Expose the store to the window object
          */
         (window as any).store = rootStore;
-        /**
-         * Set some configuration options
-         */
-        DocumentRootStore.syncMaxOnceEvery = syncMaxOnceEvery;
-        DocumentRootStore.libDir = libDir;
-        DocumentRootStore.router = siteConfig.future.experimental_router;
     }, [rootStore]);
 
     return (

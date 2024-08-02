@@ -108,4 +108,9 @@ export class UserStore extends iStore {
         });
         return res;
     }
+
+    @action
+    cleanup() {
+        this.users.clear();
+    }
 }
