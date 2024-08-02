@@ -30,7 +30,7 @@ class DocumentStore extends iStore {
         this.root = root;
     }
 
-    createModel<T extends DocumentType>(data: DocumentProps<T>): TypeModelMapping[T]
+    createModel<T extends DocumentType>(data: DocumentProps<T>): TypeModelMapping[T];
     createModel(data: DocumentProps<DocumentType>): Script | TaskState {
         switch (data.type) {
             case DocumentType.Script:
@@ -78,7 +78,7 @@ class DocumentStore extends iStore {
             return;
         }
         const model = this.createModel(data);
-        console.log('add model', data, model)
+        console.log('add model', data, model);
 
         this.removeFromStore(model.id);
         this.documents.push(model);

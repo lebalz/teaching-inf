@@ -127,7 +127,7 @@ export default class Script extends iDocument<DocumentType.Script> {
     get data(): ScriptData {
         return {
             code: this.code
-        }
+        };
     }
 
     @action

@@ -87,7 +87,7 @@ class DocumentRoot<T extends DocumentType> {
     }
 
     @computed
-    get firstMainDocument():  TypeModelMapping[T] | undefined {
+    get firstMainDocument(): TypeModelMapping[T] | undefined {
         return this.mainDocuments[0];
     }
 }
