@@ -12,7 +12,7 @@ export type ApiAction =
 
 export enum ApiState {
     IDLE = 'idle',
-    LOADING = 'loading',
+    SYNCING = 'syncing',
     ERROR = 'error',
     SUCCESS = 'success'
 }
@@ -31,7 +31,7 @@ abstract class iStore<Api = ''> {
             this.abortControllers.get(sigId).abort();
         }
         this.abortControllers.set(sigId, sig);
-        this.apiState.set(sigId, ApiState.LOADING);
+        this.apiState.set(sigId, ApiState.SYNCING);
         return fn(sig)
             .then(
                 action((res) => {
