@@ -241,6 +241,9 @@ export default class Script extends iDocument<DocumentType.Script> {
         if (this.root.status === ApiState.LOADING) {
             return Status.SYNCING;
         }
+        if (this.store.apiStateFor(`save-${this.id}`) === ApiState.LOADING) {
+            return Status.SYNCING;
+        }
         return this._status;
     }
 
