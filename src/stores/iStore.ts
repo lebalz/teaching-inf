@@ -28,7 +28,7 @@ abstract class iStore<Api = ''> {
     withAbortController<T>(sigId: Api | ApiAction, fn: (ct: AbortController) => Promise<T>) {
         const sig = new AbortController();
         if (this.abortControllers.has(sigId)) {
-            this.abortControllers.get(sigId).abort();
+            this.abortControllers.get(sigId)?.abort();
         }
         this.abortControllers.set(sigId, sig);
         this.apiState.set(sigId, ApiState.SYNCING);

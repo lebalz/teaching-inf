@@ -47,6 +47,7 @@
         "@docusaurus/module-type-aliases": "3.4.0",
         "@docusaurus/tsconfig": "3.4.0",
         "@docusaurus/types": "3.4.0",
+        "@types/uuid": "^10.0.0",
         "prettier": "^3.3.2",
         "typescript": "^5.5.4"
     },

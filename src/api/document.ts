@@ -9,10 +9,17 @@ export enum Access {
 
 export enum DocumentType {
     Script = 'script',
+    ScriptVersion = 'script_version',
     TaskState = 'task_state'
 }
 export interface ScriptData {
     code: string;
+}
+
+export interface ScriptVersionData {
+    code: string;
+    version: number;
+    pasted?: boolean;
 }
 
 export interface TaskStateData {
@@ -22,6 +29,7 @@ export interface TaskStateData {
 export interface TypeDataMapping {
     [DocumentType.Script]: ScriptData;
     [DocumentType.TaskState]: TaskStateData;
+    [DocumentType.ScriptVersion]: ScriptVersionData;
     // Add more mappings as needed
 }
 
@@ -30,7 +38,7 @@ export interface Document<Type extends DocumentType> {
     type: Type;
     authorId: string;
 
-    parentId: string;
+    parentId: string | null | undefined;
     documentRootId: string;
 
     data: TypeDataMapping[Type];
