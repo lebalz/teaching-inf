@@ -78,7 +78,6 @@ class DocumentStore extends iStore {
             return;
         }
         const model = this.createModel(data);
-        console.log('add model', data, model);
 
         this.removeFromStore(model.id);
         this.documents.push(model);
