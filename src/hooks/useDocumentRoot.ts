@@ -7,26 +7,27 @@ import DocumentRoot, { TypeMeta } from '../models/DocumentRoot';
 export const useDocumentRoot = <Type extends DocumentType>(id: string | undefined, meta: TypeMeta<Type>) => {
     const defaultRootDocId = useId();
     const defaultDocId = useId();
+    const store = rootStore.documentRootStore;
     const [dummyDocumentRoot] = React.useState<DocumentRoot<Type>>(
         new DocumentRoot(
             { id: id || defaultRootDocId, access: Access.RW },
             meta,
-            rootStore.documentRootStore,
+            store,
             true
         )
     );
 
     /** initial load */
     React.useEffect(() => {
-        const rootDoc = rootStore.documentRootStore.find(dummyDocumentRoot.id);
+        const rootDoc = store.find(dummyDocumentRoot.id);
         if (
             rootDoc ||
-            rootStore.documentRootStore.apiStateFor(`load-${dummyDocumentRoot.id}`) === ApiState.LOADING
+            store.apiStateFor(`load-${dummyDocumentRoot.id}`) === ApiState.LOADING
         ) {
             return;
         }
         if (dummyDocumentRoot.isDummy) {
-            rootStore.documentRootStore.addDocumentRoot(dummyDocumentRoot);
+            store.addDocumentRoot(dummyDocumentRoot);
             /** add default document when there are no mainDocs */
             if (dummyDocumentRoot.mainDocuments.length === 0) {
                 const now = new Date().toISOString();
@@ -50,11 +51,11 @@ export const useDocumentRoot = <Type extends DocumentType>(id: string | undefine
         /**
          * load the documentRoot and it's documents from the api.
          */
-        rootStore.documentRootStore
+        store
             .load(id, meta)
             .then((docRoot) => {
                 if (!docRoot) {
-                    return rootStore.documentRootStore.create(id, meta, {}).then((docRoot) => {
+                    return store.create(id, meta, {}).then((docRoot) => {
                         return docRoot;
                     });
                 }
@@ -77,5 +78,5 @@ export const useDocumentRoot = <Type extends DocumentType>(id: string | undefine
             });
     }, [meta, id]);
 
-    return dummyDocumentRoot.id;
+    return store.find<Type>(dummyDocumentRoot.id);
 };

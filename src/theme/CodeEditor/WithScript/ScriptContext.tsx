@@ -38,9 +38,7 @@ export class ScriptMeta extends TypeMeta<DocumentType.Script> {
 
 const ScriptContext = observer((props: InitState & { children: React.ReactNode }) => {
     const [meta] = React.useState(new ScriptMeta(props));
-    const documentRootId = useDocumentRoot(props.id, meta);
-    const documentRootStore = useStore('documentRootStore');
-    const documentRoot = documentRootStore.find<DocumentType.Script>(documentRootId);
+    const documentRoot = useDocumentRoot(props.id, meta);
 
     if (!documentRoot || !documentRoot.firstMainDocument) {
         return <div>Load</div>;
