@@ -22,6 +22,7 @@ import DocumentStore from '@site/src/stores/DocumentStore';
 import siteConfig from '@generated/docusaurus.config';
 import { ScriptMeta } from '@site/src/theme/CodeEditor/WithScript/ScriptContext';
 import globalData from '@generated/globalData';
+import { ThemeOptions } from 'docusaurus-live-brython';
 
 // /**
 //  * Set some configuration options
@@ -29,6 +30,8 @@ import globalData from '@generated/globalData';
 // DocumentRootStore.syncMaxOnceEvery = syncMaxOnceEvery;
 // DocumentRootStore.libDir = libDir;
 // DocumentRootStore.router = siteConfig.future.experimental_router;
+
+const BRYTHON_CONFIG = globalData['docusaurus-live-brython'].default as ThemeOptions;
 
 export default class Script extends iDocument<DocumentType.Script> {
     @observable accessor code: string;
@@ -47,7 +50,6 @@ export default class Script extends iDocument<DocumentType.Script> {
         this.showRaw = false;
         this.isLoaded = true;
         this.code = props.data.code ?? this.meta.initCode;
-        console.log(globalData);
 
         if (this.isVersioned) {
             // this.versions.push({ code: this.code, createdAt: new Date(), version: 1 });
@@ -148,7 +150,7 @@ export default class Script extends iDocument<DocumentType.Script> {
             this.preCode,
             this.postCode,
             this.codeId,
-            '/bry-libs/', // TODO: get this dynamically
+            BRYTHON_CONFIG.libDir, // TODO: get this dynamically
             siteConfig.future.experimental_router
         );
     }
