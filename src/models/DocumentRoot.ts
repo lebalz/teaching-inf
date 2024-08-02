@@ -58,6 +58,10 @@ class DocumentRoot<T extends DocumentType> {
         return this.meta.access || this._access;
     }
 
+    get status() {
+        return this.store.apiStateFor(`load-${this.id}`);
+    }
+
     @computed
     get permissions() {
         return this.store.usersPermissions(this.id);
