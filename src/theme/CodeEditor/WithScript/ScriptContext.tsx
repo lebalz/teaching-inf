@@ -6,6 +6,7 @@ import { useStore } from '@site/src/hooks/useStore';
 import { useDocumentRoot } from '@site/src/hooks/useDocumentRoot';
 import { Access, Document, DocumentType, TypeDataMapping } from '@site/src/api/document';
 import { TypeMeta } from '@site/src/models/DocumentRoot';
+import { useFirstMainDocument } from '@site/src/hooks/useFirstMainDocument';
 export const Context = React.createContext<Script | undefined>(undefined);
 
 export class ScriptMeta extends TypeMeta<DocumentType.Script> {
@@ -38,12 +39,12 @@ export class ScriptMeta extends TypeMeta<DocumentType.Script> {
 
 const ScriptContext = observer((props: InitState & { children: React.ReactNode }) => {
     const [meta] = React.useState(new ScriptMeta(props));
-    const documentRoot = useDocumentRoot(props.id, meta);
+    const document = useFirstMainDocument(props.id, meta);
 
-    if (!documentRoot || !documentRoot.firstMainDocument) {
+    if (!document) {
         return <div>Load</div>;
     }
-    return <Context.Provider value={documentRoot.firstMainDocument}>{props.children}</Context.Provider>;
+    return <Context.Provider value={document}>{props.children}</Context.Provider>;
 });
 
 export default ScriptContext;
