@@ -5,6 +5,7 @@ import { default as api, checkLogin as pingApi } from '../api/base';
 import axios from 'axios';
 import iStore from './iStore';
 import {
+    ChangedDocument,
     ChangedRecord,
     ClientToServerEvents,
     DeletedRecord,
@@ -20,10 +21,12 @@ interface Message {
     time: number;
 }
 
+type TypedSocket = Socket<ServerToClientEvents, ClientToServerEvents>;
+
 export class SocketDataStore extends iStore<'ping'> {
     readonly root: RootStore;
 
-    @observable.ref accessor socket: Socket<ServerToClientEvents, ClientToServerEvents> | undefined = undefined;
+    @observable.ref accessor socket: TypedSocket | undefined = undefined;
 
     messages = observable<Message>([]);
 
@@ -111,14 +114,9 @@ export class SocketDataStore extends iStore<'ping'> {
             });
         });
         this.socket.on(IoEvent.NEW_RECORD, this.createRecord.bind(this));
+        this.socket.on(IoEvent.CHANGED_DOCUMENT, this.updateDocument.bind(this));
         this.socket.on(IoEvent.CHANGED_RECORD, this.updateRecord.bind(this));
         this.socket.on(IoEvent.DELETED_RECORD, this.deleteRecord.bind(this));
-        this.socket.on(IoEvent.PING, this.onPing.bind(this));
-    }
-
-    @action
-    onPing({ time }: { time: number }) {
-        this.messages.push({ time });
     }
 
     @action
@@ -129,6 +127,12 @@ export class SocketDataStore extends iStore<'ping'> {
     @action
     updateRecord({ type, record }: ChangedRecord<RecordType>) {
         console.log('changedRecord', type, record);
+    }
+
+    @action
+    updateDocument(change: ChangedDocument) {
+        console.log('changedDocument', change.updatedAt, change.id, change.data);
+        this.root.documentStore.handleUpdate(change);
     }
 
     @action

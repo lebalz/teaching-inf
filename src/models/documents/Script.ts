@@ -88,11 +88,11 @@ export default class Script extends iDocument<DocumentType.Script> {
             return;
         }
         this.code = code;
-        const updatedAt = new Date();
+        this.updatedAt = new Date();
         if (this.isVersioned) {
             this.addVersion({
                 code: code,
-                createdAt: updatedAt,
+                createdAt: this.updatedAt,
                 version: this.versions.length + 1,
                 pasted: this.isPasted
             });
@@ -153,8 +153,15 @@ export default class Script extends iDocument<DocumentType.Script> {
     }
 
     @action
-    setData(data: ScriptData) {
-        this.setCode(data.code);
+    setData(data: ScriptData, persist: boolean, updatedAt?: Date) {
+        if (persist) {
+            this.setCode(data.code);
+        } else {
+            this.code = data.code;
+        }
+        if (updatedAt) {
+            this.updatedAt = new Date(updatedAt);
+        }
     }
 
     @action
