@@ -32,20 +32,6 @@ const HomepageFeatures = observer(() => {
                             </span>
                         )}
                     </dd>
-                    <dt>Ping-Events</dt>
-                    <dd>For Demo-Purpose: The API pings every second</dd>
-                    <dd>
-                        {socketStore.messages.length}
-                        {' Messages'}
-                    </dd>
-                    <dd>
-                        {(socketStore.messages.slice(-1)?.[0]?.time - socketStore.messages[0]?.time) / 1000}
-                        {' s Live'}
-                    </dd>
-                    <dd>
-                        {socketStore.messages.slice(-1)?.[0]?.time}
-                        {' Timestamp of latest message'}
-                    </dd>
                     <dt>Connection</dt>
                     <dd>
                         <Button

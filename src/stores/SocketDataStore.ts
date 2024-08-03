@@ -1,8 +1,7 @@
 import { RootStore } from './rootStore';
 import { io, Socket } from 'socket.io-client';
-import { action, makeObservable, observable, reaction } from 'mobx';
+import { action, observable, reaction } from 'mobx';
 import { default as api, checkLogin as pingApi } from '../api/base';
-import axios from 'axios';
 import iStore from './iStore';
 import {
     ChangedDocument,
@@ -10,16 +9,11 @@ import {
     ClientToServerEvents,
     DeletedRecord,
     IoEvent,
-    IoEvents,
     NewRecord,
-    RecordStoreMap,
     RecordType,
     ServerToClientEvents
 } from '../api/IoEventTypes';
 import { BACKEND_URL } from '../authConfig';
-interface Message {
-    time: number;
-}
 
 type TypedSocket = Socket<ServerToClientEvents, ClientToServerEvents>;
 
@@ -27,8 +21,6 @@ export class SocketDataStore extends iStore<'ping'> {
     readonly root: RootStore;
 
     @observable.ref accessor socket: TypedSocket | undefined = undefined;
-
-    messages = observable<Message>([]);
 
     @observable accessor isLive: boolean = false;
 
@@ -163,7 +155,6 @@ export class SocketDataStore extends iStore<'ping'> {
     resetUserData() {
         this.disconnect();
         api.defaults.headers.common['x-metadata-socketid'] = undefined;
-        this.messages.clear();
     }
 
     @action
