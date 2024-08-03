@@ -3788,10 +3788,10 @@ dns-packet@^5.2.2:
   dependencies:
     "@leichtgewicht/ip-codec" "^2.0.1"
 
-docusaurus-live-brython@^3.0.0-beta.24:
-  version "3.0.0-beta.24"
-  resolved "https://registry.yarnpkg.com/docusaurus-live-brython/-/docusaurus-live-brython-3.0.0-beta.24.tgz#c870c16469c84b18dc7a29ebfd16fb078288b0b4"
-  integrity sha512-Su2UW4uHIXP4u9iKdlddzdJRFK9WpukWHn7QHeArUOodJVz95Eetex6KFAnvb9upFB8kgLyQsffAwXkyFArSLA==
+docusaurus-live-brython@^3.0.0-beta.25:
+  version "3.0.0-beta.25"
+  resolved "https://registry.yarnpkg.com/docusaurus-live-brython/-/docusaurus-live-brython-3.0.0-beta.25.tgz#2e89ba6b3bb93b450137d44f60770301f4c4db07"
+  integrity sha512-TZMZ+JV/laWJVN0LKnXxOn7PmaCoJ1p54OtJG9xiRVP8Mrj3eOB563ljIZy4kmhvrnWEEOpeWet+P0QY201UFw==
   dependencies:
     "@docusaurus/core" "3.4.0"
     "@docusaurus/theme-classic" "3.4.0"

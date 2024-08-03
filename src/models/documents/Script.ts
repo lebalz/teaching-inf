@@ -46,7 +46,7 @@ export default class Script extends iDocument<DocumentType.Script> {
     @observable accessor showRaw: boolean = false;
     @observable accessor isLoaded: boolean = false;
     @observable accessor _status: Status = Status.IDLE;
-    @observable accessor isGraphicsmodalOpen: boolean = false;
+    @observable accessor isGraphicsmodalOpen: number = 0;
     @observable accessor isPasted: boolean = false;
     logs = observable.array<LogMessage>([], { deep: false });
 
@@ -167,7 +167,7 @@ export default class Script extends iDocument<DocumentType.Script> {
     @action
     execScript() {
         if (this.hasGraphicsOutput) {
-            this.isGraphicsmodalOpen = true;
+            this.isGraphicsmodalOpen = this.isGraphicsmodalOpen + 1;
         }
         this.isExecuting = true;
         runCode(
@@ -233,7 +233,7 @@ export default class Script extends iDocument<DocumentType.Script> {
 
     @action
     closeGraphicsModal() {
-        this.isGraphicsmodalOpen = false;
+        this.isGraphicsmodalOpen = 0;
     }
 
     subscribe(listener: () => void, selector: keyof Script) {
