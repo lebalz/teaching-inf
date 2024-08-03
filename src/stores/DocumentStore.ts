@@ -15,6 +15,7 @@ import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import iDocument from '../models/iDocument';
 import ScriptVersion from '../models/documents/ScriptVersion';
+import { ChangedDocument } from '../api/IoEventTypes';
 
 export interface TypeModelMapping {
     [DocumentType.Script]: Script;
@@ -181,6 +182,14 @@ class DocumentStore extends iStore {
                 }
                 return undefined;
             });
+    }
+
+    @action
+    handleUpdate(change: ChangedDocument) {
+        const model = this.find(change.id);
+        if (model) {
+            model.setData(change.data as any, false, new Date(change.updatedAt));
+        }
     }
 }
 

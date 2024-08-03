@@ -12,7 +12,7 @@ abstract class iDocument<Type extends DocumentType> {
     readonly _pristine: TypeDataMapping[Type];
 
     readonly createdAt: Date;
-    readonly updatedAt: Date;
+    @observable.ref accessor updatedAt: Date;
 
     constructor(props: DocumentProps<Type>, store: DocumentStore) {
         this.store = store;
@@ -43,12 +43,12 @@ abstract class iDocument<Type extends DocumentType> {
 
     @action
     reset() {
-        this.setData({ ...this._pristine });
+        this.setData({ ...this._pristine }, true);
     }
 
     abstract get data(): TypeDataMapping[Type];
 
-    abstract setData(data: TypeDataMapping[Type]): void;
+    abstract setData(data: TypeDataMapping[Type], persist: boolean, updatedAt?: Date): void;
 
     @computed
     get isDirty() {
