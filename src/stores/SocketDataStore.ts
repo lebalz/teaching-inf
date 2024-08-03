@@ -20,11 +20,10 @@ interface Message {
     time: number;
 }
 
-export class SocketDataStore {
-    private readonly root: RootStore;
-    abortControllers = new Map<string, AbortController>();
+export class SocketDataStore extends iStore<'ping'> {
+    readonly root: RootStore;
 
-    @observable.ref accessor socket: Socket<ServerToClientEvents, ClientToServerEvents>;
+    @observable.ref accessor socket: Socket<ServerToClientEvents, ClientToServerEvents> | undefined = undefined;
 
     messages = observable<Message>([]);
 
@@ -33,6 +32,7 @@ export class SocketDataStore {
     @observable accessor isConfigured = false;
 
     constructor(root: RootStore) {
+        super();
         this.root = root;
 
         api.interceptors.response.use(
@@ -52,26 +52,6 @@ export class SocketDataStore {
         );
     }
 
-    withAbortController<T>(sigId: string, fn: (ct: AbortController) => Promise<T>) {
-        const sig = new AbortController();
-        if (this.abortControllers.has(sigId)) {
-            this.abortControllers.get(sigId).abort();
-        }
-        this.abortControllers.set(sigId, sig);
-        return fn(sig)
-            .catch((err) => {
-                if (axios.isCancel(err)) {
-                    return { data: null };
-                }
-                throw err;
-            })
-            .finally(() => {
-                if (this.abortControllers.get(sigId) === sig) {
-                    this.abortControllers.delete(sigId);
-                }
-            });
-    }
-
     @action
     reconnect() {
         this.disconnect();
@@ -83,9 +63,7 @@ export class SocketDataStore {
         if (this.socket?.connected) {
             this.socket.disconnect();
         }
-        const dummySock = io({ autoConnect: false });
-        dummySock.disconnect();
-        this.socket = dummySock;
+        this.socket = undefined;
         this.setLiveState(false);
     }
 
@@ -115,12 +93,12 @@ export class SocketDataStore {
              * maybe there is a newer version to add headers?
              * @see https://socket.io/docs/v4/client-options/#extraheaders
              */
-            api.defaults.headers.common['x-metadata-socketid'] = this.socket.id;
+            api.defaults.headers.common['x-metadata-socketid'] = this.socket!.id;
             this.setLiveState(true);
         });
 
         this.socket.on('disconnect', () => {
-            console.log('disconnect', this.socket.id);
+            console.log('disconnect', this.socket?.id);
             this.setLiveState(false);
         });
         this.socket.on('connect_error', (err) => {
@@ -139,7 +117,7 @@ export class SocketDataStore {
     }
 
     @action
-    onPing({ time }) {
+    onPing({ time }: { time: number }) {
         this.messages.push({ time });
     }
 
