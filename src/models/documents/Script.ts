@@ -31,13 +31,6 @@ import { ThemeOptions } from 'docusaurus-live-brython';
 import { ApiState } from '@site/src/stores/iStore';
 import ScriptVersion from './ScriptVersion';
 
-// /**
-//  * Set some configuration options
-//  */
-// DocumentRootStore.syncMaxOnceEvery = syncMaxOnceEvery;
-// DocumentRootStore.libDir = libDir;
-// DocumentRootStore.router = siteConfig.future.experimental_router;
-
 const BRYTHON_CONFIG = globalData['docusaurus-live-brython'].default as ThemeOptions;
 
 export default class Script extends iDocument<DocumentType.Script> {
@@ -46,7 +39,7 @@ export default class Script extends iDocument<DocumentType.Script> {
     @observable accessor showRaw: boolean = false;
     @observable accessor isLoaded: boolean = false;
     @observable accessor _status: Status = Status.IDLE;
-    @observable accessor isGraphicsmodalOpen: number = 0;
+    @observable accessor graphicsModalExecutionNr: number = 0;
     @observable accessor isPasted: boolean = false;
     logs = observable.array<LogMessage>([], { deep: false });
 
@@ -167,7 +160,7 @@ export default class Script extends iDocument<DocumentType.Script> {
     @action
     execScript() {
         if (this.hasGraphicsOutput) {
-            this.isGraphicsmodalOpen = this.isGraphicsmodalOpen + 1;
+            this.graphicsModalExecutionNr = this.graphicsModalExecutionNr + 1;
         }
         this.isExecuting = true;
         runCode(
@@ -233,7 +226,7 @@ export default class Script extends iDocument<DocumentType.Script> {
 
     @action
     closeGraphicsModal() {
-        this.isGraphicsmodalOpen = 0;
+        this.graphicsModalExecutionNr = 0;
     }
 
     subscribe(listener: () => void, selector: keyof Script) {
