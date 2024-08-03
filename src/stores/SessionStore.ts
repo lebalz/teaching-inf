@@ -21,7 +21,7 @@ export class SessionStore extends iStore {
 
     @observable.ref private accessor stateRef: State = new State();
 
-    @observable accessor authMethod: 'apiKey' | 'msal';
+    @observable accessor authMethod: 'apiKey' | 'msal' = 'msal';
 
     @observable accessor currentUserId: string | undefined;
 
@@ -39,7 +39,7 @@ export class SessionStore extends iStore {
             () => this.root.userStore?.current?.id,
             (id) => {
                 if (id) {
-                    const user = this.root.userStore.current;
+                    const user = this.root.userStore.current!;
                     Storage.set(StorageKey.SessionStore, {
                         user: { ...user.props, role: Role.USER }
                     });

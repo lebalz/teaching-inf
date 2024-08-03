@@ -25,10 +25,10 @@ function HomepageHeader() {
     );
 }
 
-const Login = observer(() => {
+const LoginPage = observer(() => {
     const sessionStore = useStore('sessionStore');
     const { instance } = useMsal();
-    const isAuthenticated = sessionStore.isLoggedIn || useIsAuthenticated();
+    const isAuthenticated = useIsAuthenticated();
     if (isAuthenticated || NO_AUTH) {
         console.log('redirect');
         return <Redirect to={'/user'} />;
@@ -55,5 +55,14 @@ const Login = observer(() => {
             </main>
         </Layout>
     );
+});
+
+const Login = observer(() => {
+    const sessionStore = useStore('sessionStore');
+    if (sessionStore.isLoggedIn || NO_AUTH) {
+        console.log('redirect');
+        return <Redirect to={'/user'} />;
+    }
+    return <LoginPage />;
 });
 export default Login;
