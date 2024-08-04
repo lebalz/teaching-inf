@@ -19,7 +19,7 @@ const ScriptContext = observer((props: InitState & { children: JSX.Element }) =>
                     return (
                         <div style={{ position: 'relative' }}>
                             <CodeBlock language={props.lang}>{props.code}</CodeBlock>
-                            <Loader label="Code laden..." overlay />
+                            <Loader label="Editor laden..." overlay />
                         </div>
                     );
                 }
