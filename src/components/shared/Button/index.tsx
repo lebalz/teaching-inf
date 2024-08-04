@@ -104,8 +104,8 @@ const Button = (props: Props) => {
     let colorCls = getButtonColorClass(props.color, props.color ? undefined : 'secondary');
     const style: React.CSSProperties = {};
     if (props.color && !colorCls) {
-        style['--ifm-color-primary'] = props.color;
-        style['--ifm-color-primary-darker'] = props.color;
+        (style as any)['--ifm-color-primary'] = props.color;
+        (style as any)['--ifm-color-primary-darker'] = props.color;
         colorCls = 'button--primary';
     }
     const commonCls = clsx(

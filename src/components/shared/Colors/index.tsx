@@ -28,12 +28,12 @@ export const ButtonColors = {
 export type Color = keyof typeof Colors;
 
 export const getColorClass = (color: Color | string | undefined, defaultColor?: Color) => {
-    return Colors[color] || Colors[defaultColor];
+    return Colors[color as Color] || Colors[defaultColor as Color];
 };
 
-export const getButtonColorClass = (color: Color | string, defaultColor?: Color) => {
+export const getButtonColorClass = (color: Color | string | undefined, defaultColor?: Color) => {
     return clsx(
-        ButtonColors[color] || ButtonColors[defaultColor],
+        ButtonColors[color as Color] || ButtonColors[defaultColor as Color],
         color === 'blue' && styles.buttonBlue,
         color === 'black' && styles.buttonBlack
     );
