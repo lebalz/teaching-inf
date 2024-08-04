@@ -11,6 +11,7 @@ import Button from '../shared/Button';
 
 const HomepageFeatures = observer(() => {
     const socketStore = useStore('socketStore');
+    const userStore = useStore('userStore');
     return (
         <section className={styles.features}>
             <div className="container">
@@ -32,6 +33,16 @@ const HomepageFeatures = observer(() => {
                             </span>
                         )}
                     </dd>
+                    {
+                        socketStore.isLive && (
+                            <>
+                                <dt>Clients</dt>
+                                <dd>
+                                    {socketStore.connectedClients.get(userStore.current?.id ?? '') ?? 0}
+                                </dd>
+                            </>
+                        )
+                    }
                     <dt>Connection</dt>
                     <dd>
                         <Button
