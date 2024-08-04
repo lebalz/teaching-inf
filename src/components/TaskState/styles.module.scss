@@ -33,11 +33,16 @@
 :global(.theme-admonition) {
     position: relative;
     & > div[class^='admonitionContent'] {
-        :first-child.stateComponent {
+        & > :first-child.state {
             position: absolute;
             top: 10px;
             left: 8px;
             margin-bottom: 0;
+            &.loader {
+                top: 14px;
+                left: 16px;
+                background-color: var(--ifm-alert-background-color);
+            }
         }
     }
 }
