@@ -30,13 +30,14 @@
     }
 }
 
-:global(.theme-admonition-aufgabe) {
+:global(.theme-admonition) {
     position: relative;
-
-    .stateComponent:not(.noHeader) {
-        position: absolute;
-        top: 10px;
-        left: 8px;
-        margin-bottom: 0;
+    &>div[class^="admonitionContent"] {
+        :first-child.stateComponent {
+            position: absolute;
+            top: 10px;
+            left: 8px;
+            margin-bottom: 0;
+        }
     }
 }
