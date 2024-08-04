@@ -6,7 +6,8 @@ import {
     DocumentType,
     find as apiFind,
     update as apiUpdate,
-    create as apiCreate
+    create as apiCreate,
+    Access
 } from '@site/src/api/document';
 import Script from '@site/src/models/documents/Script';
 import TaskState from '@site/src/models/documents/TaskState';
@@ -140,6 +141,9 @@ class DocumentStore extends iStore {
     ): Promise<TypeModelMapping[Type] | undefined> {
         if (model.isDirty && !model.root?.isDummy) {
             const { id } = model;
+            if (model.root?.access !== Access.RW) {
+                return Promise.resolve(undefined);
+            }
             return this.withAbortController(`save-${id}`, (sig) => {
                 return apiUpdate(model.id, model.data, sig.signal);
             })

@@ -22,8 +22,10 @@ export interface ScriptVersionData {
     pasted?: boolean;
 }
 
+export type StateType = 'checked' | 'question' | 'unset' | 'star' | 'star-half' | 'star-empty';
+
 export interface TaskStateData {
-    state: 'set' | 'unset' | 'question' | string;
+    state: StateType;
 }
 
 export interface TypeDataMapping {
