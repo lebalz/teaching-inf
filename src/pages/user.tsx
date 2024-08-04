@@ -2,12 +2,9 @@ import React from 'react';
 import clsx from 'clsx';
 import styles from './user.module.scss';
 import Layout from '@theme/Layout';
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 import { observer } from 'mobx-react-lite';
 import { Redirect } from '@docusaurus/router';
 import { mdiLogout, mdiRefresh } from '@mdi/js';
-import { translate } from '@docusaurus/Translate';
 import { useMsal } from '@azure/msal-react';
 import { useIsAuthenticated } from '@azure/msal-react';
 import { InteractionStatus } from '@azure/msal-browser';
@@ -15,6 +12,7 @@ import siteConfig from '@generated/docusaurus.config';
 import { useStore } from '../hooks/useStore';
 import CodeBlock from '@theme/CodeBlock';
 import Button from '../components/shared/Button';
+import Loader from '../components/Loader';
 const { NO_AUTH } = siteConfig.customFields as { TEST_USERNAME?: string; NO_AUTH?: boolean };
 
 const UserPage = observer(() => {
@@ -27,7 +25,7 @@ const UserPage = observer(() => {
         !NO_AUTH &&
         ((sessionStore.currentUserId && !sessionStore.isLoggedIn) || inProgress !== InteractionStatus.None)
     ) {
-        return 'Laden';
+        return <Loader />;
     }
     if (!NO_AUTH && !(sessionStore.isLoggedIn || isAuthenticated)) {
         return <Redirect to={'/login'} />;

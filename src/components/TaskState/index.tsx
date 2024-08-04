@@ -15,6 +15,7 @@ import { StateType } from '@site/src/api/document';
 import { useFirstMainDocument } from '@site/src/hooks/useFirstMainDocument';
 import Icon from '@mdi/react';
 import { MetaInit, TaskMeta } from '@site/src/models/documents/TaskState';
+import Loader from '../Loader';
 
 export const mdiIcon: { [key in StateType]: string } = {
     checked: mdiCheckboxMarkedOutline,
@@ -59,14 +60,13 @@ const TaskState = observer((props: Props) => {
     }, [doc, ref]);
 
     if (!doc) {
-        return <div>Load</div>;
+        return <Loader noLabel title="Laden" align="left" className={clsx(styles.state, styles.loader)} />;
     }
     return (
         <div
             ref={ref}
             className={clsx(
                 styles.state,
-                styles.stateComponent,
                 'state-component',
                 props.children && styles.noHeader,
                 'no-comments',
