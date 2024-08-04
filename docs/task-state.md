@@ -79,6 +79,31 @@ TaskState kann nicht verändert werden, wenn `readonly` gesetzt wurde.
 Wenn [👉 oberhalb](#zustände-selber-setzen) der Zustand verändert wird, wird er auch hier verändert.
 :::
 
+## In einer Admonition
+Wird innerhalb einer Admonition als erstes Element eine TaskState-Komponente verwendet, wird diese als "Icon" des Admonition-Titels gesetzt.
+
+```md
+:::note[Admonition]
+<TaskState id="d936a45b-8c22-42b6-abe4-4df6c3be9406" />
+Hello aus einer Admonition.
+:::
+```
+:::note[Admonition]
+<TaskState id="d936a45b-8c22-42b6-abe4-4df6c3be9406" />
+Hello aus einer Admonition.
+:::
+
+```md
+:::note[So Nicht...]
+Hello aus einer Admonition.
+<TaskState id="d936a45b-8c22-42b6-abe4-4df6c3be9406" />
+:::
+```
+:::note[So Nicht...]
+Hello aus einer Admonition.
+<TaskState id="d936a45b-8c22-42b6-abe4-4df6c3be9406" />
+:::
+
 
 ## Temporäre Komponente (nicht persistiert)
 

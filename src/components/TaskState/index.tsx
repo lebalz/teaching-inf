@@ -47,8 +47,7 @@ const TaskState = observer((props: Props) => {
     const doc = useFirstMainDocument(props.id, meta);
     React.useEffect(() => {
         if (ref.current && doc) {
-            // document.setWindowPositionY(ref.current.getBoundingClientRect().top);
-            console.log('setup stuff');
+            doc.setWindowPositionY(ref.current.getBoundingClientRect().top);
         }
     }, [doc, ref]);
     

@@ -30,6 +30,11 @@ export class TaskMeta extends TypeMeta<DocumentType.TaskState> {
 class TaskState extends iDocument<DocumentType.TaskState> {
     @observable accessor state: StateType;
 
+    /**
+     * used to sort the tasks in the task list
+     */
+    @observable accessor windowPositionY: number = -1;
+
     constructor(props: DocumentProps<DocumentType.TaskState>, store: DocumentStore) {
         super(props, store);
         this.state = props.data.state;
@@ -70,6 +75,11 @@ class TaskState extends iDocument<DocumentType.TaskState> {
         this.setData({
             state: this.meta.states[(idx + 1) % this.meta.states.length]
         }, true, new Date());
+    }
+
+    @action
+    setWindowPositionY(y: number) {
+        this.windowPositionY = y;
     }
 }
 
