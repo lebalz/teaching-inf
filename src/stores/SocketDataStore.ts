@@ -7,6 +7,7 @@ import {
     ChangedDocument,
     ChangedRecord,
     ClientToServerEvents,
+    ConnectedClients,
     DeletedRecord,
     IoEvent,
     NewRecord,
@@ -25,6 +26,8 @@ export class SocketDataStore extends iStore<'ping'> {
     @observable accessor isLive: boolean = false;
 
     @observable accessor isConfigured = false;
+
+    connectedClients = observable.map<string, number>();
 
     constructor(root: RootStore) {
         super();
@@ -109,6 +112,7 @@ export class SocketDataStore extends iStore<'ping'> {
         this.socket.on(IoEvent.CHANGED_DOCUMENT, this.updateDocument.bind(this));
         this.socket.on(IoEvent.CHANGED_RECORD, this.updateRecord.bind(this));
         this.socket.on(IoEvent.DELETED_RECORD, this.deleteRecord.bind(this));
+        this.socket.on(IoEvent.CONNECTED_CLIENTS, this.updateConnectedClients.bind(this));
     }
 
     @action
@@ -130,6 +134,11 @@ export class SocketDataStore extends iStore<'ping'> {
     @action
     deleteRecord({ type, id }: DeletedRecord) {
         console.log('deletedRecord', type, id);
+    }
+
+    @action
+    updateConnectedClients({ room, count }: ConnectedClients) {
+        this.connectedClients.set(room, count);
     }
 
     checkLogin() {
