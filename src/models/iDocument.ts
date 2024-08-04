@@ -1,7 +1,12 @@
-import { action, computed, observable } from 'mobx';
+import { action, computed, IReactionDisposer, observable, reaction } from 'mobx';
 import { Document as DocumentProps, TypeDataMapping, DocumentType } from '../api/document';
 import DocumentStore from '../stores/DocumentStore';
+import { debounce } from 'lodash';
 
+/**
+ * normally, save only once all 1000ms
+ */
+const SAVE_DEBOUNCE_TIME = 1000;
 abstract class iDocument<Type extends DocumentType> {
     readonly store: DocumentStore;
     readonly id: string;
@@ -12,8 +17,17 @@ abstract class iDocument<Type extends DocumentType> {
     readonly _pristine: TypeDataMapping[Type];
 
     readonly createdAt: Date;
-    @observable.ref accessor updatedAt: Date;
+    /**
+     * save the model only after 1 second of "silence" (=no edits during this period)
+     * or after 5s of permanent editing...
+     * 
+     * Save     :                  v                                                v          
+     * Time [s] :    0        1        2        3        4        5        6        7       
+     * Edits    :    |||  |            |||   ||  |  |     ||  ||||  |||    ||  ||| |||||
+     */
+    save = debounce(action(this._save), SAVE_DEBOUNCE_TIME, { leading: false, trailing: true, maxWait: 5 * SAVE_DEBOUNCE_TIME });
 
+    @observable.ref accessor updatedAt: Date;
     constructor(props: DocumentProps<Type>, store: DocumentStore) {
         this.store = store;
         this.id = props.id;
@@ -70,6 +84,21 @@ abstract class iDocument<Type extends DocumentType> {
         /**
          * cancel pending actions and cleanup if needed...
          */
+    }
+
+    
+    @action
+    saveNow() {
+        this.save();
+        return this.save.flush();
+    }
+
+    @action
+    _save() {
+        /**
+         * call the api to save the code...
+         */
+        return this.store.save(this);
     }
 }
 

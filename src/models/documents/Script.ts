@@ -1,6 +1,4 @@
 import { action, computed, observable, reaction } from 'mobx';
-import { DocumentRootStore } from '../../stores/DocumentRootStore';
-import { v4 as uuidv4 } from 'uuid';
 import throttle from 'lodash/throttle';
 import {
     CANVAS_OUTPUT_TESTER,
@@ -10,9 +8,9 @@ import {
     TURTLE_IMPORTS_TESTER
 } from 'docusaurus-live-brython/theme/CodeEditor/constants';
 import {
-    type InitState as Meta,
     type LogMessage,
     type Version,
+    type InitState,
     Status
 } from 'docusaurus-live-brython/theme/CodeEditor/WithScript/Types';
 import { runCode } from 'docusaurus-live-brython/theme/CodeEditor/WithScript/bryRunner';
@@ -20,18 +18,47 @@ import iDocument from '../iDocument';
 import {
     DocumentType,
     Document as DocumentProps,
-    ScriptData,
-    ScriptVersionData
+    ScriptVersionData,
+    Access,
+    TypeDataMapping
 } from '@site/src/api/document';
 import DocumentStore from '@site/src/stores/DocumentStore';
 import siteConfig from '@generated/docusaurus.config';
-import { ScriptMeta } from '@site/src/theme/CodeEditor/WithScript/ScriptContext';
 import globalData from '@generated/globalData';
 import { ThemeOptions } from 'docusaurus-live-brython';
 import { ApiState } from '@site/src/stores/iStore';
 import ScriptVersion from './ScriptVersion';
+import { TypeMeta } from '../DocumentRoot';
 
 const BRYTHON_CONFIG = globalData['docusaurus-live-brython'].default as ThemeOptions;
+
+export class ScriptMeta extends TypeMeta<DocumentType.Script> {
+    readonly type = DocumentType.Script;
+    readonly title: string;
+    readonly lang: 'py' | string;
+    readonly preCode: string;
+    readonly postCode: string;
+    readonly readonly: boolean;
+    readonly versioned: boolean;
+    readonly initCode: string;
+
+    constructor(props: Partial<Omit<InitState, 'id'>>) {
+        super(DocumentType.Script, props.readonly ? Access.RO : undefined);
+        this.title = props.title || '';
+        this.lang = props.lang || 'py';
+        this.preCode = props.preCode || '';
+        this.postCode = props.postCode || '';
+        this.readonly = props.readonly || false;
+        this.versioned = props.versioned || false;
+        this.initCode = props.code || '';
+    }
+
+    get defaultData(): TypeDataMapping[DocumentType.Script] {
+        return {
+            code: this.initCode
+        };
+    }
+}
 
 export default class Script extends iDocument<DocumentType.Script> {
     @observable accessor code: string;
@@ -97,7 +124,7 @@ export default class Script extends iDocument<DocumentType.Script> {
         /**
          * call the api to save the code...
          */
-        this.saveNow();
+        this.save();
     }
 
     @action
@@ -139,14 +166,14 @@ export default class Script extends iDocument<DocumentType.Script> {
     }
 
     @computed
-    get data(): ScriptData {
+    get data(): TypeDataMapping[DocumentType.Script] {
         return {
             code: this.code
         };
     }
 
     @action
-    setData(data: ScriptData, persist: boolean, updatedAt?: Date) {
+    setData(data: TypeDataMapping[DocumentType.Script], persist: boolean, updatedAt?: Date) {
         if (persist) {
             this.setCode(data.code);
         } else {
@@ -168,17 +195,9 @@ export default class Script extends iDocument<DocumentType.Script> {
             this.preCode,
             this.postCode,
             this.codeId,
-            BRYTHON_CONFIG.libDir, // TODO: get this dynamically
+            BRYTHON_CONFIG.libDir,
             siteConfig.future.experimental_router
         );
-    }
-
-    @action
-    saveNow() {
-        /**
-         * call the api to save the code...
-         */
-        this.store.save(this);
     }
 
     /**
