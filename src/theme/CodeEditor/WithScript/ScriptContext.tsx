@@ -16,9 +16,8 @@ const ScriptContext = observer((props: InitState & { children: JSX.Element }) =>
         <BrowserOnly fallback={<CodeBlock language={props.lang}>{props.code}</CodeBlock>}>
             {() => {
                 if (!doc) {
-                    // return <Loader label="Code laden..." />;
                     return (
-                        <div>
+                        <div style={{ position: 'relative' }}>
                             <CodeBlock language={props.lang}>{props.code}</CodeBlock>
                             <Loader label="Code laden..." overlay />
                         </div>
