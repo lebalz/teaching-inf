@@ -33,16 +33,12 @@ const HomepageFeatures = observer(() => {
                             </span>
                         )}
                     </dd>
-                    {
-                        socketStore.isLive && (
-                            <>
-                                <dt>Clients</dt>
-                                <dd>
-                                    {socketStore.connectedClients.get(userStore.current?.id ?? '') ?? 0}
-                                </dd>
-                            </>
-                        )
-                    }
+                    {socketStore.isLive && (
+                        <>
+                            <dt>Clients</dt>
+                            <dd>{socketStore.connectedClients.get(userStore.current?.id ?? '') ?? 0}</dd>
+                        </>
+                    )}
                     <dt>Connection</dt>
                     <dd>
                         <Button

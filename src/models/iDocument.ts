@@ -20,12 +20,16 @@ abstract class iDocument<Type extends DocumentType> {
     /**
      * save the model only after 1 second of "silence" (=no edits during this period)
      * or after 5s of permanent editing...
-     * 
-     * Save     :                  v                                                v          
-     * Time [s] :    0        1        2        3        4        5        6        7       
+     *
+     * Save     :                  v                                                v
+     * Time [s] :    0        1        2        3        4        5        6        7
      * Edits    :    |||  |            |||   ||  |  |     ||  ||||  |||    ||  ||| |||||
      */
-    save = debounce(action(this._save), SAVE_DEBOUNCE_TIME, { leading: false, trailing: true, maxWait: 5 * SAVE_DEBOUNCE_TIME });
+    save = debounce(action(this._save), SAVE_DEBOUNCE_TIME, {
+        leading: false,
+        trailing: true,
+        maxWait: 5 * SAVE_DEBOUNCE_TIME
+    });
 
     @observable.ref accessor updatedAt: Date;
     constructor(props: DocumentProps<Type>, store: DocumentStore) {
@@ -86,7 +90,6 @@ abstract class iDocument<Type extends DocumentType> {
          */
     }
 
-    
     @action
     saveNow() {
         this.save();

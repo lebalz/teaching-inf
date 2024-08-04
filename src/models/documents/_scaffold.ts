@@ -1,6 +1,13 @@
 import { action, computed, observable } from 'mobx';
 import iDocument from '../iDocument';
-import { DocumentType, Document as DocumentProps, TaskStateData, StateType, TypeDataMapping, Access } from '@site/src/api/document';
+import {
+    DocumentType,
+    Document as DocumentProps,
+    TaskStateData,
+    StateType,
+    TypeDataMapping,
+    Access
+} from '@site/src/api/document';
 import DocumentStore from '@site/src/stores/DocumentStore';
 import { TypeMeta } from '../DocumentRoot';
 
@@ -39,8 +46,7 @@ class Model extends iDocument<DocumentType.TaskState> {
 
     get data(): TypeDataMapping[DocumentType.TaskState] {
         // TODO: return correct data
-        return {
-        } as any;
+        return {} as any;
     }
 
     @computed

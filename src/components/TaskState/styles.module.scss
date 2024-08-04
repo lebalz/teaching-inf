@@ -32,7 +32,7 @@
 
 :global(.theme-admonition) {
     position: relative;
-    &>div[class^="admonitionContent"] {
+    & > div[class^='admonitionContent'] {
         :first-child.stateComponent {
             position: absolute;
             top: 10px;

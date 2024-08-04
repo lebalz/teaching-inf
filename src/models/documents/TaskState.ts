@@ -1,6 +1,12 @@
 import { action, computed, observable } from 'mobx';
 import iDocument from '../iDocument';
-import { DocumentType, Document as DocumentProps, StateType, TypeDataMapping, Access } from '@site/src/api/document';
+import {
+    DocumentType,
+    Document as DocumentProps,
+    StateType,
+    TypeDataMapping,
+    Access
+} from '@site/src/api/document';
 import DocumentStore from '@site/src/stores/DocumentStore';
 import { TypeMeta } from '../DocumentRoot';
 
@@ -16,7 +22,8 @@ export class TaskMeta extends TypeMeta<DocumentType.TaskState> {
 
     constructor(props: Partial<MetaInit>) {
         super(DocumentType.TaskState, props.readonly ? Access.RO : undefined);
-        this.states = (props.states && props.states.length > 0) ? props.states : ['unset', 'checked', 'question'];
+        this.states =
+            props.states && props.states.length > 0 ? props.states : ['unset', 'checked', 'question'];
         this.readonly = !!props.readonly;
     }
 
@@ -46,7 +53,7 @@ class TaskState extends iDocument<DocumentType.TaskState> {
             return;
         }
         this.state = data.state;
-        
+
         if (persist) {
             this.saveNow();
         }
@@ -57,7 +64,7 @@ class TaskState extends iDocument<DocumentType.TaskState> {
 
     get data(): TypeDataMapping[DocumentType.TaskState] {
         return {
-            state: this.state,
+            state: this.state
         };
     }
 
@@ -72,9 +79,13 @@ class TaskState extends iDocument<DocumentType.TaskState> {
     @action
     nextState() {
         const idx = this.meta.states.indexOf(this.state);
-        this.setData({
-            state: this.meta.states[(idx + 1) % this.meta.states.length]
-        }, true, new Date());
+        this.setData(
+            {
+                state: this.meta.states[(idx + 1) % this.meta.states.length]
+            },
+            true,
+            new Date()
+        );
     }
 
     @action

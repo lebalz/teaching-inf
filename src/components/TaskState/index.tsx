@@ -3,7 +3,14 @@ import clsx from 'clsx';
 
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
-import { mdiAccountQuestionOutline, mdiCheckboxBlankOutline, mdiCheckboxMarkedOutline, mdiStar, mdiStarHalfFull, mdiStarOutline } from '@mdi/js';
+import {
+    mdiAccountQuestionOutline,
+    mdiCheckboxBlankOutline,
+    mdiCheckboxMarkedOutline,
+    mdiStar,
+    mdiStarHalfFull,
+    mdiStarOutline
+} from '@mdi/js';
 import { StateType } from '@site/src/api/document';
 import { useFirstMainDocument } from '@site/src/hooks/useFirstMainDocument';
 import Icon from '@mdi/react';
@@ -15,7 +22,7 @@ export const mdiIcon: { [key in StateType]: string } = {
     question: mdiAccountQuestionOutline,
     star: mdiStar,
     ['star-half']: mdiStarHalfFull,
-    ['star-empty']: mdiStarOutline,
+    ['star-empty']: mdiStarOutline
 };
 
 export const mdiBgColor: { [key in StateType]: string } = {
@@ -24,7 +31,7 @@ export const mdiBgColor: { [key in StateType]: string } = {
     question: '--ifm-color-warning',
     star: '--ifm-color-primary',
     ['star-empty']: '--ifm-color-primary',
-    ['star-half']: '--ifm-color-primary',
+    ['star-half']: '--ifm-color-primary'
 };
 export const mdiColor: { [key in StateType]: string } = {
     checked: 'white',
@@ -32,7 +39,7 @@ export const mdiColor: { [key in StateType]: string } = {
     question: 'white',
     star: 'gold',
     'star-empty': 'gold',
-    'star-half': 'gold',
+    'star-half': 'gold'
 };
 
 interface Props extends MetaInit {
@@ -50,7 +57,7 @@ const TaskState = observer((props: Props) => {
             doc.setWindowPositionY(ref.current.getBoundingClientRect().top);
         }
     }, [doc, ref]);
-    
+
     if (!doc) {
         return <div>Load</div>;
     }
@@ -77,26 +84,20 @@ const TaskState = observer((props: Props) => {
                 }}
                 title={props.readonly ? 'Nur Anzeigen' : undefined}
             >
-                <Icon
-                    path={mdiIcon[doc.state]}
-                    size={1}
-                    color={mdiColor[doc.state]}
-                />
+                <Icon path={mdiIcon[doc.state]} size={1} color={mdiColor[doc.state]} />
             </div>
-            {
-                (props.children || props.label) && (
-                    <div 
-                        onClick={() => {
-                            if (props.readonly) {
-                                return;
-                            }
-                            doc.nextState();
-                        }}
-                    >
-                        {props.children || props.label}
-                    </div>
-                )
-            }
+            {(props.children || props.label) && (
+                <div
+                    onClick={() => {
+                        if (props.readonly) {
+                            return;
+                        }
+                        doc.nextState();
+                    }}
+                >
+                    {props.children || props.label}
+                </div>
+            )}
         </div>
     );
 });
