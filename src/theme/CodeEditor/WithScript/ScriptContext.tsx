@@ -5,7 +5,6 @@ import Script, { ScriptMeta } from '@site/src/models/documents/Script';
 import { useFirstMainDocument } from '@site/src/hooks/useFirstMainDocument';
 export const Context = React.createContext<Script | undefined>(undefined);
 
-
 const ScriptContext = observer((props: InitState & { children: JSX.Element }) => {
     const [meta] = React.useState(new ScriptMeta(props));
     const document = useFirstMainDocument(props.id, meta);
