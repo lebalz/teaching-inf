@@ -1,0 +1,64 @@
+.string {
+    display: flex;
+    height: 1.5em;
+    margin: 0.5em 0;
+    align-items: stretch;
+    font-size: var(--ifm-font-size-base);
+    --ifm-color-secondary: var(--ifm-color-emphasis-400);
+    .input {
+        padding: 0.5em;
+        border: 1px solid var(--ifm-color-secondary);
+        border-radius: var(--ifm-global-radius);
+        box-sizing: border-box;
+        box-sizing: border-box;
+        outline: none;
+        transition: border-color 0.3s ease;
+        display: inline-block;
+        &:focus {
+            border-color: #007bff;
+        }
+    }
+    &.withSolution {
+        .input {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        .checkButton {
+            border-left-width: 0;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            margin: 0;
+            height: var(--input-height);
+        }
+    }
+    &.withLabel {
+        .input {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+        .label {
+            margin: 0;
+            padding: 0 0.5em;
+            border: 1px solid var(--ifm-color-secondary);
+            background-color: var(--ifm-color-secondary);
+            border-radius: var(--ifm-global-radius);
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            border-right-width: 0;
+            line-height: normal;
+        }
+    }
+
+    &.correct {
+        --ifm-color-secondary: var(--ifm-color-success);
+        .label {
+            color: white;
+        }
+    }
+    &.wrong {
+        --ifm-color-secondary: var(--ifm-color-danger);
+        .label {
+            color: white;
+        }
+    }
+}
