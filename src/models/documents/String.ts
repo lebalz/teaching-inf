@@ -1,11 +1,6 @@
 import { action, computed, observable } from 'mobx';
 import iDocument from '../iDocument';
-import {
-    DocumentType,
-    Document as DocumentProps,
-    TypeDataMapping,
-    Access
-} from '@site/src/api/document';
+import { DocumentType, Document as DocumentProps, TypeDataMapping, Access } from '@site/src/api/document';
 import DocumentStore from '@site/src/stores/DocumentStore';
 import { TypeMeta } from '../DocumentRoot';
 
@@ -15,7 +10,7 @@ export interface MetaInit {
     default?: string;
     solution?: string;
     labelWidth?: string;
-    width?: string;  /* input width */
+    width?: string /* input width */;
     sanitizer?: (val: string) => string;
     checker?: (val: string | undefined) => boolean;
 }

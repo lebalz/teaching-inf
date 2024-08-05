@@ -15,7 +15,7 @@ export enum DocumentType {
     Script = 'script',
     ScriptVersion = 'script_version',
     TaskState = 'task_state',
-    String = 'string',
+    String = 'string'
 }
 export interface ScriptData {
     code: string;
@@ -43,7 +43,6 @@ export interface TypeDataMapping {
     [DocumentType.String]: StringData;
     // Add more mappings as needed
 }
-
 
 export interface TypeModelMapping {
     [DocumentType.Script]: Script;

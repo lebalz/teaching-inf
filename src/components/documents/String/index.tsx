@@ -18,15 +18,15 @@ const Component = observer((props: Props) => {
     }
     return (
         <input
-          type="text"
-          style={{ width: props.width }}
-          spellCheck={false}
-          onChange={(e) => {
-            doc.setData({ text: e.target.value }, true);
-          }}
-          value={doc.text}
-          placeholder={props.placeholder}
-          disabled={props.readonly || !doc.canEdit}
+            type="text"
+            style={{ width: props.width }}
+            spellCheck={false}
+            onChange={(e) => {
+                doc.setData({ text: e.target.value }, true);
+            }}
+            value={doc.text}
+            placeholder={props.placeholder}
+            disabled={props.readonly || !doc.canEdit}
         />
     );
 });
