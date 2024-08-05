@@ -51,9 +51,12 @@ abstract class iDocument<Type extends DocumentType> {
             () => this.state,
             (state) => {
                 if (state !== ApiState.IDLE) {
-                    const cancelId = setTimeout(() => {
-                        this.state = ApiState.IDLE;
-                    }, 1500);
+                    const cancelId = setTimeout(
+                        action(() => {
+                            this.state = ApiState.IDLE;
+                        }),
+                        1500
+                    );
                     return () => {
                         clearTimeout(cancelId);
                     };
