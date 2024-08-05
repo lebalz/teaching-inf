@@ -6,6 +6,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 import strongPlugin from './src/plugins/remark-strong/plugin';
 import deflistPlugin from './src/plugins/remark-deflist/plugin';
 import mdiPlugin from './src/plugins/remark-mdi/plugin';
+import kbdPlugin from './src/plugins/remark-kbd/plugin';
 const GIT_COMMIT_SHA = process.env.GITHUB_SHA || Math.random().toString(36).substring(7);
 
 const REMARK_PLUGINS = [  
@@ -32,6 +33,7 @@ const REMARK_PLUGINS = [
           defaultSize: '1.25em'
       }
   ],
+  kbdPlugin
 ];
 
 
