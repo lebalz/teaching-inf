@@ -6,11 +6,8 @@ import { TypeMeta } from '../DocumentRoot';
 
 export interface MetaInit {
     readonly?: boolean;
-    placeholder?: string;
-    default?: string;
     solution?: string;
-    labelWidth?: string;
-    width?: string /* input width */;
+    default?: string;
     sanitizer?: (val: string) => string;
     checker?: (val: string | undefined) => boolean;
 }
@@ -18,29 +15,23 @@ export interface MetaInit {
 export class ModelMeta extends TypeMeta<DocumentType.String> {
     readonly type = DocumentType.String;
     readonly readonly?: boolean;
-    readonly placeholder?: string;
-    readonly default?: string;
     readonly solution?: string;
-    readonly labelWidth?: string;
-    readonly width?: string;
+    readonly default?: string;
     readonly sanitizer: (val: string) => string;
     readonly checker: (val: string | undefined) => boolean;
 
     constructor(props: Partial<MetaInit>) {
         super(DocumentType.String, props.readonly ? Access.RO : undefined);
         this.readonly = props.readonly;
-        this.placeholder = props.placeholder;
         this.default = props.default;
         this.solution = props.solution;
-        this.labelWidth = props.labelWidth;
-        this.width = props.width;
         this.sanitizer = props.sanitizer || ((val: string) => val);
         this.checker = props.checker || ((val: string | undefined) => val === this.solution);
     }
 
     get defaultData(): TypeDataMapping[DocumentType.String] {
         return {
-            text: ''
+            text: this.default || ''
         };
     }
 }
@@ -62,6 +53,7 @@ class String extends iDocument<DocumentType.String> {
     @action
     setData(data: TypeDataMapping[DocumentType.String], persist: boolean, updatedAt?: Date): void {
         this.text = data.text;
+        this.answer = StringAnswer.Unchecked;
         if (persist) {
             this.save();
         }
@@ -78,7 +70,7 @@ class String extends iDocument<DocumentType.String> {
 
     @computed
     get hasSolution() {
-        return !!this.meta.solution;
+        return this.meta.solution !== undefined;
     }
 
     @action
@@ -86,7 +78,7 @@ class String extends iDocument<DocumentType.String> {
         if (!this.hasSolution) {
             return;
         }
-        if (this.text === this._pristine.text) {
+        if (this.text === this.meta.defaultData.text) {
             this.answer = StringAnswer.Unchecked;
         } else if (this.meta.checker(this.meta.sanitizer(this.text))) {
             this.answer = StringAnswer.Correct;
