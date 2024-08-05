@@ -8,7 +8,6 @@ import { MetaInit, ModelMeta, StringAnswer } from '@site/src/models/documents/St
 import Button from '../../shared/Button';
 import { mdiCheckCircle, mdiCloseCircle, mdiFlashTriangle, mdiHelpCircleOutline } from '@mdi/js';
 import Icon from '@mdi/react';
-import { ApiState } from '@site/src/stores/iStore';
 import SyncStatus from '../../SyncStatus';
 
 interface Props extends MetaInit {
@@ -16,8 +15,12 @@ interface Props extends MetaInit {
     placeholder?: string;
     label?: string;
     labelWidth?: string;
-    width?: string /* input width */;
+    inputWidth?: string /* input width */;
     children?: JSX.Element;
+    type?: React.HTMLInputTypeAttribute | undefined;
+    stateIconsPosition?: 'inside' | 'outside' | 'hidden';
+    hideWarning?: boolean;
+    hideApiState?: boolean;
 }
 
 const IconMap: { [key in StringAnswer]: string } = {
@@ -36,6 +39,10 @@ const String = observer((props: Props) => {
     const [meta] = React.useState(new ModelMeta(props));
     const doc = useFirstMainDocument(props.id, meta);
     const inputId = useId();
+    const inputType = props.type || 'text';
+    const stateIconsPosition =
+        props.stateIconsPosition ||
+        (['text', 'url', 'email', 'tel'].includes(inputType) ? 'inside' : 'outside');
     React.useEffect(() => {
         if (doc) {
             doc.checkAnswer();
@@ -56,16 +63,28 @@ const String = observer((props: Props) => {
             }
         }
     };
+    const style: React.CSSProperties | undefined =
+        props.type === 'color' && doc.text ? { ['--ifm-color-secondary' as any]: doc.text } : undefined;
+
+    const StateIcons = () => (
+        <div className={clsx(styles.stateIcons, styles[stateIconsPosition])}>
+            {!props.hideApiState && <SyncStatus model={doc} size={0.7} />}
+            {doc.root?.isDummy && !props.hideWarning && (
+                <Icon path={mdiFlashTriangle} size={0.7} color="orange" title="Wird nicht gespeichert." />
+            )}
+        </div>
+    );
 
     return (
         <div
             className={clsx(
                 styles.string,
                 doc.hasSolution && styles.withSolution,
-                props.label && styles.withLabel,
+                (props.label || props.children) && styles.withLabel,
                 styles[doc.answer],
                 'notranslate'
             )}
+            style={style}
         >
             {props.label && (
                 <label className={styles.label} style={{ width: props.labelWidth }} htmlFor={inputId}>
@@ -79,9 +98,9 @@ const String = observer((props: Props) => {
             )}
             <div className={clsx(styles.inputBox)}>
                 <input
-                    type="text"
+                    type={props.type || 'text'}
                     id={inputId}
-                    style={{ width: props.width }}
+                    style={{ width: props.inputWidth }}
                     spellCheck={false}
                     onChange={(e) => {
                         doc.setData({ text: e.target.value }, true);
@@ -92,17 +111,7 @@ const String = observer((props: Props) => {
                     disabled={props.readonly || !doc.canEdit}
                     onKeyDown={handleKeyDown}
                 />
-                <div className={clsx(styles.stateIcons)}>
-                    <SyncStatus model={doc} size={0.7} />
-                    {doc.root?.isDummy && (
-                        <Icon
-                            path={mdiFlashTriangle}
-                            size={0.7}
-                            color="orange"
-                            title="Wird nicht gespeichert."
-                        />
-                    )}
-                </div>
+                {stateIconsPosition === 'inside' && <StateIcons />}
             </div>
             {doc.hasSolution && (
                 <Button
@@ -113,6 +122,7 @@ const String = observer((props: Props) => {
                     size={0.7}
                 />
             )}
+            {stateIconsPosition === 'outside' && <StateIcons />}
         </div>
     );
 });
