@@ -1,5 +1,5 @@
 import { action, computed, IReactionDisposer, observable, reaction } from 'mobx';
-import { Document as DocumentProps, TypeDataMapping, DocumentType } from '../api/document';
+import { Document as DocumentProps, TypeDataMapping, DocumentType, Access } from '../api/document';
 import DocumentStore from '../stores/DocumentStore';
 import { debounce } from 'lodash';
 
@@ -81,6 +81,11 @@ abstract class iDocument<Type extends DocumentType> {
     @computed
     get root() {
         return this.store.root.documentRootStore.find(this.documentRootId);
+    }
+
+    @computed
+    get canEdit() {
+        return this.root?.access === Access.RW;
     }
 
     @action
