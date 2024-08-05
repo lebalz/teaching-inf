@@ -1,4 +1,4 @@
-import TaskState from '@site/src/components/TaskState';
+import TaskState from '@site/src/components/documents/TaskState';
 
 # Task State
 
