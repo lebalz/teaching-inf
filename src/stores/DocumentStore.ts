@@ -136,10 +136,14 @@ class DocumentStore extends iStore {
     save<Type extends DocumentType>(
         model: iDocument<Type>,
         replaceStoreModel: boolean = false
-    ): Promise<TypeModelMapping[Type] | undefined> {
+    ): Promise<TypeModelMapping[Type] | 'error' | undefined> {
+        if (model.root?.isDummy) {
+            return Promise.resolve('error');
+        }
         if (model.isDirty && !model.root?.isDummy) {
             const { id } = model;
             if (model.root?.access !== Access.RW) {
+                // TODO: return error?
                 return Promise.resolve(undefined);
             }
             return this.withAbortController(`save-${id}`, (sig) => {
@@ -160,7 +164,7 @@ class DocumentStore extends iStore {
                     if (!axios.isCancel(err)) {
                         console.warn('Error saving document', err);
                     }
-                    return undefined;
+                    return 'error';
                 });
         }
         return Promise.resolve(undefined);

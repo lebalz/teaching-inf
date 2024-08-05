@@ -6,7 +6,10 @@ import { useFirstMainDocument } from '../../../hooks/useFirstMainDocument';
 import Loader from '../../Loader';
 import { MetaInit, ModelMeta, StringAnswer } from '@site/src/models/documents/String';
 import Button from '../../shared/Button';
-import { mdiCheckCircle, mdiCloseCircle, mdiHelpCircleOutline } from '@mdi/js';
+import { mdiCheckCircle, mdiCloseCircle, mdiFlashTriangle, mdiHelpCircleOutline } from '@mdi/js';
+import Icon from '@mdi/react';
+import { ApiState } from '@site/src/stores/iStore';
+import SyncStatus from '../../SyncStatus';
 
 interface Props extends MetaInit {
     id: string;
@@ -43,8 +46,14 @@ const String = observer((props: Props) => {
         return <Loader />;
     }
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.ctrlKey && event.key === 'Enter') {
-            doc.checkAnswer();
+        if (event.ctrlKey || event.metaKey) {
+            if (event.key === 's') {
+                event.preventDefault();
+                doc.saveNow();
+            } else if (event.key === 'Enter') {
+                event.preventDefault();
+                doc.checkAnswer();
+            }
         }
     };
 
@@ -68,23 +77,33 @@ const String = observer((props: Props) => {
                     {props.children}
                 </label>
             )}
-            <input
-                type="text"
-                id={inputId}
-                style={{ width: props.width }}
-                spellCheck={false}
-                onChange={(e) => {
-                    doc.setData({ text: e.target.value }, true);
-                }}
-                onFocus={() => {
-                    console.log('focus');
-                }}
-                className={clsx(styles.input)}
-                value={doc.text}
-                placeholder={props.placeholder}
-                disabled={props.readonly || !doc.canEdit}
-                onKeyDown={handleKeyDown}
-            />
+            <div className={clsx(styles.inputBox)}>
+                <input
+                    type="text"
+                    id={inputId}
+                    style={{ width: props.width }}
+                    spellCheck={false}
+                    onChange={(e) => {
+                        doc.setData({ text: e.target.value }, true);
+                    }}
+                    className={clsx(styles.input)}
+                    value={doc.text}
+                    placeholder={props.placeholder}
+                    disabled={props.readonly || !doc.canEdit}
+                    onKeyDown={handleKeyDown}
+                />
+                <div className={clsx(styles.stateIcons)}>
+                    <SyncStatus model={doc} size={0.7} />
+                    {doc.root?.isDummy && (
+                        <Icon
+                            path={mdiFlashTriangle}
+                            size={0.7}
+                            color="orange"
+                            title="Wird nicht gespeichert."
+                        />
+                    )}
+                </div>
+            </div>
             {doc.hasSolution && (
                 <Button
                     onClick={() => doc.checkAnswer()}

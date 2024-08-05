@@ -58,7 +58,7 @@ class DocumentRoot<T extends DocumentType> {
         return this._access;
     }
 
-    get status() {
+    get loadStatus() {
         return this.store.apiStateFor(`load-${this.id}`);
     }
 

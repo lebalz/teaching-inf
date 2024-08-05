@@ -2,6 +2,7 @@ import { action, computed, IReactionDisposer, observable, reaction } from 'mobx'
 import { Document as DocumentProps, TypeDataMapping, DocumentType, Access } from '../api/document';
 import DocumentStore from '../stores/DocumentStore';
 import { debounce } from 'lodash';
+import { ApiState } from '../stores/iStore';
 
 /**
  * normally, save only once all 1000ms
@@ -31,7 +32,10 @@ abstract class iDocument<Type extends DocumentType> {
         maxWait: 5 * SAVE_DEBOUNCE_TIME
     });
 
+    @observable accessor state: ApiState = ApiState.IDLE;
+
     @observable.ref accessor updatedAt: Date;
+    readonly stateDisposer: IReactionDisposer;
     constructor(props: DocumentProps<Type>, store: DocumentStore) {
         this.store = store;
         this.id = props.id;
@@ -43,6 +47,19 @@ abstract class iDocument<Type extends DocumentType> {
 
         this.createdAt = new Date(props.createdAt);
         this.updatedAt = new Date(props.updatedAt);
+        this.stateDisposer = reaction(
+            () => this.state,
+            (state) => {
+                if (state !== ApiState.IDLE) {
+                    const cancelId = setTimeout(() => {
+                        this.state = ApiState.IDLE;
+                    }, 1500);
+                    return () => {
+                        clearTimeout(cancelId);
+                    };
+                }
+            }
+        );
     }
 
     @computed
@@ -93,6 +110,7 @@ abstract class iDocument<Type extends DocumentType> {
         /**
          * cancel pending actions and cleanup if needed...
          */
+        this.stateDisposer();
     }
 
     @action
@@ -106,7 +124,16 @@ abstract class iDocument<Type extends DocumentType> {
         /**
          * call the api to save the code...
          */
-        return this.store.save(this);
+        this.state = ApiState.SYNCING;
+        return this.store.save(this).then(
+            action((res) => {
+                if (res === 'error') {
+                    this.state = ApiState.ERROR;
+                } else {
+                    this.state = ApiState.SUCCESS;
+                }
+            })
+        );
     }
 }
 

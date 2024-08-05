@@ -274,7 +274,7 @@ export default class Script extends iDocument<DocumentType.Script> {
     }
     @computed
     get status() {
-        if (this.root?.status === ApiState.SYNCING) {
+        if (this.root?.loadStatus === ApiState.SYNCING) {
             return Status.SYNCING;
         }
         if (this.store.apiStateFor(`save-${this.id}`) === ApiState.SYNCING) {
