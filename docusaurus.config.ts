@@ -111,7 +111,7 @@ const config: Config = {
 
   themeConfig: {
     // Replace with your project's social card
-    image: 'img/docusaurus-social-card.jpg',
+    image: 'img/social-card.jpg',
     navbar: {
       title: 'Teaching Dev',
       logo: {
@@ -123,7 +123,7 @@ const config: Config = {
           type: 'docSidebar',
           sidebarId: 'gallerySidebar',
           position: 'left',
-          label: 'Gallery',
+          label: 'Gallerie',
         },
         {to: '/blog', label: 'Blog', position: 'left'},
         {
