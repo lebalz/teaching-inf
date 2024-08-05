@@ -15,12 +15,13 @@ interface Props extends MetaInit {
     placeholder?: string;
     label?: string;
     labelWidth?: string;
-    inputWidth?: string /* input width */;
+    inputWidth?: string;
     children?: JSX.Element;
     type?: React.HTMLInputTypeAttribute | undefined;
     stateIconsPosition?: 'inside' | 'outside' | 'hidden';
     hideWarning?: boolean;
     hideApiState?: boolean;
+    inline?: boolean;
 }
 
 const IconMap: { [key in StringAnswer]: string } = {
@@ -34,6 +35,23 @@ const ColorMap: { [key in StringAnswer]: string } = {
     [StringAnswer.Correct]: 'green',
     [StringAnswer.Wrong]: 'red'
 };
+
+const InputWrapper = observer(
+    (props: { inline?: boolean; className?: string; style?: React.CSSProperties; children: JSX.Element }) => {
+        if (props.inline) {
+            return (
+                <span className={clsx(styles.inline, props.className)} style={props.style}>
+                    {props.children}
+                </span>
+            );
+        }
+        return (
+            <div className={props.className} style={props.style}>
+                {props.children}
+            </div>
+        );
+    }
+);
 
 const String = observer((props: Props) => {
     const [meta] = React.useState(new ModelMeta(props));
@@ -67,16 +85,16 @@ const String = observer((props: Props) => {
         props.type === 'color' && doc.text ? { ['--ifm-color-secondary' as any]: doc.text } : undefined;
 
     const StateIcons = () => (
-        <div className={clsx(styles.stateIcons, styles[stateIconsPosition])}>
+        <span className={clsx(styles.stateIcons, styles[stateIconsPosition])}>
             {!props.hideApiState && <SyncStatus model={doc} size={0.7} />}
             {doc.root?.isDummy && !props.hideWarning && (
                 <Icon path={mdiFlashTriangle} size={0.7} color="orange" title="Wird nicht gespeichert." />
             )}
-        </div>
+        </span>
     );
 
     return (
-        <div
+        <InputWrapper
             className={clsx(
                 styles.string,
                 doc.hasSolution && styles.withSolution,
@@ -85,45 +103,48 @@ const String = observer((props: Props) => {
                 'notranslate'
             )}
             style={style}
+            inline={props.inline}
         >
-            {props.label && (
-                <label className={styles.label} style={{ width: props.labelWidth }} htmlFor={inputId}>
-                    {props.label}
-                </label>
-            )}
-            {props.children && (
-                <label className={styles.label} htmlFor={inputId}>
-                    {props.children}
-                </label>
-            )}
-            <div className={clsx(styles.inputBox)}>
-                <input
-                    type={props.type || 'text'}
-                    id={inputId}
-                    style={{ width: props.inputWidth }}
-                    spellCheck={false}
-                    onChange={(e) => {
-                        doc.setData({ text: e.target.value }, true);
-                    }}
-                    className={clsx(styles.input)}
-                    value={doc.text}
-                    placeholder={props.placeholder}
-                    disabled={props.readonly || !doc.canEdit}
-                    onKeyDown={handleKeyDown}
-                />
-                {stateIconsPosition === 'inside' && <StateIcons />}
-            </div>
-            {doc.hasSolution && (
-                <Button
-                    onClick={() => doc.checkAnswer()}
-                    className={styles.checkButton}
-                    icon={IconMap[doc.answer]}
-                    color={ColorMap[doc.answer]}
-                    size={0.7}
-                />
-            )}
-            {stateIconsPosition === 'outside' && <StateIcons />}
-        </div>
+            <>
+                {props.label && (
+                    <label className={styles.label} style={{ width: props.labelWidth }} htmlFor={inputId}>
+                        {props.label}
+                    </label>
+                )}
+                {props.children && (
+                    <label className={styles.label} htmlFor={inputId}>
+                        {props.children}
+                    </label>
+                )}
+                <span className={clsx(styles.inputBox)}>
+                    <input
+                        type={props.type || 'text'}
+                        id={inputId}
+                        style={{ width: props.inputWidth }}
+                        spellCheck={false}
+                        onChange={(e) => {
+                            doc.setData({ text: e.target.value }, true);
+                        }}
+                        className={clsx(styles.input)}
+                        value={doc.text}
+                        placeholder={props.placeholder}
+                        disabled={props.readonly || !doc.canEdit}
+                        onKeyDown={handleKeyDown}
+                    />
+                    {stateIconsPosition === 'inside' && <StateIcons />}
+                </span>
+                {doc.hasSolution && (
+                    <Button
+                        onClick={() => doc.checkAnswer()}
+                        className={styles.checkButton}
+                        icon={IconMap[doc.answer]}
+                        color={ColorMap[doc.answer]}
+                        size={0.7}
+                    />
+                )}
+                {stateIconsPosition === 'outside' && <StateIcons />}
+            </>
+        </InputWrapper>
     );
 });
 

@@ -143,11 +143,12 @@ Ohne `id` wird der Zustand nicht gespeichert, was mit einem :mdi[flash-triangle-
 :  Versteckt die Warnung :mdi[flash-triangle-outline]{.orange}, dass es sich um eine temporäre Komponente handelt.
 `hideApiState`
 : Versteckt den API-Status (Icon das angezeigt wird beim Speichern).
+`inline`
+: Verwendet anstatt eines Block-Elements (`<div></div>` mit `display: flex`) ein Inline-Element (`<span></span>` mit `display: inline-flex`).
 `stateIconsPosition`
 : `inside` das Sync-Icon wird innerhalb des Inputs angezeigt (standard für `text`, `email`, `tel` und `url`)
-: <String stateIconsPosition="inside"/>
+: <String stateIconsPosition="inside" inline /> hello
 : `outside` rechts neben dem Input (standard für alle anderen Felder)
-: <String stateIconsPosition="outside"/>
+: <String stateIconsPosition="outside" inline />
 : `none` Icon wird nicht angezeigt
-: <String stateIconsPosition="none"/>
-
+: <String stateIconsPosition="none" inline />
