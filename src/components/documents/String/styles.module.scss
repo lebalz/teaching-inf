@@ -19,6 +19,12 @@
             border-color: #007bff;
         }
     }
+    &.inline {
+        display: inline-flex;
+        .input {
+            display: inline-flex;
+        }
+    }
     &.withSolution {
         .input {
             border-top-right-radius: 0;
