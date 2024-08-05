@@ -1,9 +1,8 @@
 import { action, computed, observable } from 'mobx';
 import { DocumentRootBase as DocumentRootProps } from '../api/documentRoot';
 import { DocumentRootStore } from '../stores/DocumentRootStore';
-import { Access, Document, DocumentType, TypeDataMapping } from '../api/document';
+import { Access, Document, DocumentType, TypeDataMapping, TypeModelMapping } from '../api/document';
 import { highestAccess } from './helpers/accessPolicy';
-import { TypeModelMapping } from '../stores/DocumentStore';
 
 export abstract class TypeMeta<T extends DocumentType> {
     type: T;
@@ -55,7 +54,8 @@ class DocumentRoot<T extends DocumentType> {
         if (this.meta.access) {
             return this.meta.access;
         }
-        return this.meta.access || this._access;
+        // TODO: check for group permissions!
+        return this._access;
     }
 
     get status() {

@@ -7,7 +7,9 @@ import {
     find as apiFind,
     update as apiUpdate,
     create as apiCreate,
-    Access
+    Access,
+    DocumentTypes,
+    TypeModelMapping
 } from '@site/src/api/document';
 import Script from '@site/src/models/documents/Script';
 import TaskState from '@site/src/models/documents/TaskState';
@@ -17,13 +19,7 @@ import { v4 as uuidv4 } from 'uuid';
 import iDocument from '../models/iDocument';
 import ScriptVersion from '../models/documents/ScriptVersion';
 import { ChangedDocument } from '../api/IoEventTypes';
-
-export interface TypeModelMapping {
-    [DocumentType.Script]: Script;
-    [DocumentType.TaskState]: TaskState;
-    [DocumentType.ScriptVersion]: ScriptVersion;
-}
-type DocumentTypes = Script | TaskState | ScriptVersion;
+import String from '../models/documents/String';
 
 class DocumentStore extends iStore {
     readonly root: RootStore;
@@ -43,6 +39,8 @@ class DocumentStore extends iStore {
                 return new TaskState(data as DocumentProps<DocumentType.TaskState>, this);
             case DocumentType.ScriptVersion:
                 return new ScriptVersion(data as DocumentProps<DocumentType.ScriptVersion>, this);
+            case DocumentType.String:
+                return new String(data as DocumentProps<DocumentType.String>, this);
         }
     }
 

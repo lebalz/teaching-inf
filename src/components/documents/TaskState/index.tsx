@@ -15,7 +15,7 @@ import { StateType } from '@site/src/api/document';
 import { useFirstMainDocument } from '@site/src/hooks/useFirstMainDocument';
 import Icon from '@mdi/react';
 import { MetaInit, TaskMeta } from '@site/src/models/documents/TaskState';
-import Loader from '../Loader';
+import Loader from '../../Loader';
 
 export const mdiIcon: { [key in StateType]: string } = {
     checked: mdiCheckboxMarkedOutline,
