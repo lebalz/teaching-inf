@@ -18,24 +18,24 @@ export interface MetaInit {
 export class TaskMeta extends TypeMeta<DocumentType.TaskState> {
     readonly type = DocumentType.TaskState;
     readonly readonly: boolean;
-    readonly states: StateType[];
+    readonly taskState: StateType[];
 
     constructor(props: Partial<MetaInit>) {
         super(DocumentType.TaskState, props.readonly ? Access.RO : undefined);
-        this.states =
+        this.taskState =
             props.states && props.states.length > 0 ? props.states : ['unset', 'checked', 'question'];
         this.readonly = !!props.readonly;
     }
 
     get defaultData(): TypeDataMapping[DocumentType.TaskState] {
         return {
-            state: this.states[0]
+            state: this.taskState[0]
         };
     }
 }
 
 class TaskState extends iDocument<DocumentType.TaskState> {
-    @observable accessor state: StateType;
+    @observable accessor taskState: StateType;
 
     /**
      * used to sort the tasks in the task list
@@ -44,7 +44,7 @@ class TaskState extends iDocument<DocumentType.TaskState> {
 
     constructor(props: DocumentProps<DocumentType.TaskState>, store: DocumentStore) {
         super(props, store);
-        this.state = props.data.state;
+        this.taskState = props.data.state;
     }
 
     @action
@@ -52,7 +52,7 @@ class TaskState extends iDocument<DocumentType.TaskState> {
         if (this.root?.access !== Access.RW) {
             return;
         }
-        this.state = data.state;
+        this.taskState = data.state;
 
         if (persist) {
             this.saveNow();
@@ -64,7 +64,7 @@ class TaskState extends iDocument<DocumentType.TaskState> {
 
     get data(): TypeDataMapping[DocumentType.TaskState] {
         return {
-            state: this.state
+            state: this.taskState
         };
     }
 
@@ -78,10 +78,10 @@ class TaskState extends iDocument<DocumentType.TaskState> {
 
     @action
     nextState() {
-        const idx = this.meta.states.indexOf(this.state);
+        const idx = this.meta.taskState.indexOf(this.taskState);
         this.setData(
             {
-                state: this.meta.states[(idx + 1) % this.meta.states.length]
+                state: this.meta.taskState[(idx + 1) % this.meta.taskState.length]
             },
             true,
             new Date()
