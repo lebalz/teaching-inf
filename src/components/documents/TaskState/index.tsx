@@ -75,7 +75,7 @@ const TaskState = observer((props: Props) => {
         >
             <div
                 className={clsx(styles.state, styles.checkbox, props.readonly && styles.readonly)}
-                style={{ backgroundColor: `var(${mdiBgColor[doc.state]})` }}
+                style={{ backgroundColor: `var(${mdiBgColor[doc.taskState]})` }}
                 onClick={() => {
                     if (props.readonly) {
                         return;
@@ -84,7 +84,7 @@ const TaskState = observer((props: Props) => {
                 }}
                 title={props.readonly ? 'Nur Anzeigen' : undefined}
             >
-                <Icon path={mdiIcon[doc.state]} size={1} color={mdiColor[doc.state]} />
+                <Icon path={mdiIcon[doc.taskState]} size={1} color={mdiColor[doc.taskState]} />
             </div>
             {(props.children || props.label) && (
                 <div
