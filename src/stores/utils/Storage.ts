@@ -1,15 +1,12 @@
-import { UntisTeacher } from '@site/src/api/untis';
 import { User } from '@site/src/api/user';
 import { Primitive } from 'utility-types';
 
 export type PersistedData = {
     user?: User;
-    teacher?: UntisTeacher;
 };
 
 export enum StorageKey {
-    SessionStore = 'SessionStore',
-    ColorPrefs = 'ColorPrefs'
+    SessionStore = 'SessionStore'
 }
 
 /**
@@ -56,7 +53,7 @@ class Storage {
      * @param fallback The fallback value if the key doesn't exist.
      * @returns The value or undefined if it doesn't exist.
      */
-    public get<T>(key: StorageKey, fallback?: T): T {
+    public get<T>(key: StorageKey, fallback?: T): T | undefined {
         try {
             const value = this.interface.getItem(key);
             if (typeof value === 'string') {
@@ -88,7 +85,7 @@ class Storage {
  * when localStorage is not available.
  */
 class MemoryStorage {
-    private data = {};
+    private data: any = {};
 
     getItem(key: string) {
         return this.data[key] || null;
