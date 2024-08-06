@@ -78,7 +78,10 @@ export class DocumentRootStore extends iStore {
         });
     }
 
-    usersPermissions(documentRootId: string) {
+    /**
+     * returns userPermissions and! groupPermissions
+     */
+    currentUsersPermissions(documentRootId: string) {
         const currentUser = this.root.userStore.current;
         if (!currentUser) {
             return [];
