@@ -12,6 +12,7 @@ export interface RootGroupPermission {
 export interface DocumentRootBase {
     id: string;
     access: Access;
+    sharedAccess: Access;
 }
 
 export interface DocumentRoot extends DocumentRootBase {
@@ -22,6 +23,7 @@ export interface DocumentRoot extends DocumentRootBase {
 
 export interface Config {
     access?: Access;
+    sharedAccess?: Access;
     userPermissions: Omit<UserPermissionBase, 'id'>[];
     groupPermissions: Omit<GroupPermissionBase, 'id'>[];
 }

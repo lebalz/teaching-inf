@@ -79,7 +79,15 @@ class DocumentStore extends iStore {
         if (!data) {
             return;
         }
+
         const model = this.createModel(data);
+        if (model.root?.isDummy) {
+            const current = this.find(model.id);
+            const currentIsNotDummy = current?.root && !current.root.isDummy;
+            if (currentIsNotDummy) {
+                return current as TypeModelMapping[Type];
+            }
+        }
 
         this.removeFromStore(model.id);
         this.documents.push(model);

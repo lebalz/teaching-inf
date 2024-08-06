@@ -1,21 +1,33 @@
 import React, { useId } from 'react';
 import { Access, Document, DocumentType } from '../api/document';
 import { rootStore } from '../stores/rootStore';
-import { ApiState } from '../stores/iStore';
 import DocumentRoot, { TypeMeta } from '../models/DocumentRoot';
 
+/**
+ * 1. create a dummy documentRoot with default (meta) data
+ * 2. when component mounts, check if the documentRoot is already in the store
+ * 3. if not
+ *  3.1. add the dummy documentRoot to the store
+ *  3.2. when no documentRootId is provided (dummyDocumentRoot.id==defaultRootDocId), return early
+ *  3.3. otherwise, load or create the documentRoot
+ */
 export const useDocumentRoot = <Type extends DocumentType>(id: string | undefined, meta: TypeMeta<Type>) => {
     const defaultRootDocId = useId();
     const defaultDocId = useId();
     const store = rootStore.documentRootStore;
     const [dummyDocumentRoot] = React.useState<DocumentRoot<Type>>(
-        new DocumentRoot({ id: id || defaultRootDocId, access: Access.RW }, meta, store, true)
+        new DocumentRoot(
+            { id: id || defaultRootDocId, access: Access.RW, sharedAccess: Access.None },
+            meta,
+            store,
+            true
+        )
     );
 
     /** initial load */
     React.useEffect(() => {
         const rootDoc = store.find(dummyDocumentRoot.id);
-        if (rootDoc || store.apiStateFor(`load-${dummyDocumentRoot.id}`) === ApiState.SYNCING) {
+        if (rootDoc) {
             return;
         }
         if (dummyDocumentRoot.isDummy) {
@@ -62,10 +74,10 @@ export const useDocumentRoot = <Type extends DocumentType>(id: string | undefine
             })
             .then((docRoot) => {
                 if (docRoot) {
-                    if (docRoot.mainDocuments.length === 0 && rootStore.userStore.current) {
+                    if (docRoot.permission === Access.RW && !docRoot.firstMainDocument) {
                         rootStore.documentStore.create({
                             documentRootId: docRoot.id,
-                            authorId: rootStore.userStore.current.id,
+                            authorId: rootStore.userStore.current!.id,
                             type: docRoot.type,
                             data: meta.defaultData
                         });
@@ -73,6 +85,10 @@ export const useDocumentRoot = <Type extends DocumentType>(id: string | undefine
                 }
             })
             .catch((err) => {
+                /**
+                 * could land here, when two users try to create the same document root
+                 * at the same time
+                 */
                 console.log('err loading', err);
             });
     }, [meta, id]);

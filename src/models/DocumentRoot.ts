@@ -27,6 +27,7 @@ class DocumentRoot<T extends DocumentType> {
     readonly _isDummy: boolean;
 
     @observable accessor _access: Access;
+    @observable accessor sharedAccess: Access;
 
     constructor(
         props: DocumentRootProps,
@@ -38,6 +39,7 @@ class DocumentRoot<T extends DocumentType> {
         this.meta = meta;
         this.id = props.id;
         this._access = props.access;
+        this.sharedAccess = props.sharedAccess;
         this._isDummy = isDummy;
     }
 
@@ -54,7 +56,6 @@ class DocumentRoot<T extends DocumentType> {
         if (this.meta.access) {
             return this.meta.access;
         }
-        // TODO: check for group permissions!
         return this._access;
     }
 
@@ -64,16 +65,36 @@ class DocumentRoot<T extends DocumentType> {
 
     @computed
     get permissions() {
-        return this.store.usersPermissions(this.id);
+        return [...this.store.currentUsersPermissions(this.id)];
     }
 
     @computed
     get permission() {
-        return highestAccess(new Set([...this.permissions.map((p) => p.access)]));
+        return highestAccess(new Set([...this.permissions.map((p) => p.access), this.access]));
     }
 
     get documents() {
-        return this.store.root.documentStore.findByDocumentRoot(this.id);
+        const currentUserId = this.store.root.userStore.current?.id;
+        if (!currentUserId) {
+            return [];
+        }
+        return this.store.root.documentStore.findByDocumentRoot(this.id).filter((d) => {
+            return (
+                d.authorId === currentUserId ||
+                highestAccess(new Set([this.permission]), this.sharedAccess) !== Access.None
+            );
+        });
+    }
+
+    /**
+     * TODO: replace this placeholder to the currently viewed user
+     * @default: should return the current viewed user id
+     *      --> this is for users the current user id
+     *      --> this is for admins the current viewed user id
+     */
+    @computed
+    get viewedUserId() {
+        return this.store.root.userStore.current?.id;
     }
 
     /**
@@ -85,9 +106,17 @@ class DocumentRoot<T extends DocumentType> {
      */
     @computed
     get mainDocuments(): TypeModelMapping[T][] {
-        return this.documents
+        const docs = this.documents
             .filter((d) => d.isMain)
             .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime()) as TypeModelMapping[T][];
+        const byUser = docs.filter((d) => d.authorId === this.viewedUserId);
+        if (this.sharedAccess !== Access.RO) {
+            return byUser;
+        }
+        if (byUser.length > 0) {
+            return byUser;
+        }
+        return docs;
     }
 
     @computed
