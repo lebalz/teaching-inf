@@ -74,10 +74,14 @@ export const useDocumentRoot = <Type extends DocumentType>(id: string | undefine
             })
             .then((docRoot) => {
                 if (docRoot) {
-                    if (docRoot.permission === Access.RW && !docRoot.firstMainDocument) {
+                    if (
+                        docRoot.permission === Access.RW &&
+                        rootStore.userStore.current &&
+                        !docRoot.firstMainDocument
+                    ) {
                         rootStore.documentStore.create({
                             documentRootId: docRoot.id,
-                            authorId: rootStore.userStore.current!.id,
+                            authorId: rootStore.userStore.current.id,
                             type: docRoot.type,
                             data: meta.defaultData
                         });
