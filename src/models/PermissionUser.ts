@@ -15,6 +15,7 @@ class PermissionUser {
 
     constructor(props: UserPermission, store: PermissionStore) {
         this.store = store;
+        this.access = props.access;
         this.id = props.id;
         this.userId = props.userId;
         this.documentRootId = props.documentRootId;
