@@ -27,6 +27,7 @@ export class DocumentRootStore extends iStore {
             }
         }
         this.documentRoots.push(documentRoot);
+        return documentRoot;
     }
 
     find = computedFn(
