@@ -26,16 +26,19 @@ export const useDocumentRoot = <Type extends DocumentType>(id: string | undefine
         )
     );
     const [dummyDocument] = React.useState(
-        CreateDocumentModel({
-            id: defaultDocId,
-            type: meta.type,
-            data: meta.defaultData,
-            authorId: 'dummy',
-            documentRootId: id || defaultRootDocId,
-            parentId: null,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-        }, rootStore.documentStore)
+        CreateDocumentModel(
+            {
+                id: defaultDocId,
+                type: meta.type,
+                data: meta.defaultData,
+                authorId: 'dummy',
+                documentRootId: id || defaultRootDocId,
+                parentId: null,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            },
+            rootStore.documentStore
+        )
     );
     /**
      * only run the effect after the initial render to avoid

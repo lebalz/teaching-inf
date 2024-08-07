@@ -21,8 +21,10 @@ import ScriptVersion from '../models/documents/ScriptVersion';
 import { ChangedDocument } from '../api/IoEventTypes';
 import String from '../models/documents/String';
 
-
-export function CreateDocumentModel<T extends DocumentType>(data: DocumentProps<T>, store: DocumentStore): TypeModelMapping[T];
+export function CreateDocumentModel<T extends DocumentType>(
+    data: DocumentProps<T>,
+    store: DocumentStore
+): TypeModelMapping[T];
 export function CreateDocumentModel(data: DocumentProps<DocumentType>, store: DocumentStore): DocumentTypes {
     switch (data.type) {
         case DocumentType.Script:
@@ -34,7 +36,7 @@ export function CreateDocumentModel(data: DocumentProps<DocumentType>, store: Do
         case DocumentType.String:
             return new String(data as DocumentProps<DocumentType.String>, store);
     }
-};
+}
 class DocumentStore extends iStore {
     readonly root: RootStore;
     documents = observable.array<DocumentTypes>([]);
@@ -153,7 +155,7 @@ class DocumentStore extends iStore {
             if (!model.canEdit) {
                 return Promise.resolve(undefined);
             }
-            if ( model.root.permission !== Access.RW) {
+            if (model.root.permission !== Access.RW) {
                 return Promise.resolve(undefined);
             }
             return this.withAbortController(`save-${id}`, (sig) => {

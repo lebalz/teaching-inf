@@ -29,12 +29,7 @@ class DocumentRoot<T extends DocumentType> {
     @observable accessor _access: Access;
     @observable accessor sharedAccess: Access;
 
-    constructor(
-        props: DocumentRootProps,
-        meta: TypeMeta<T>,
-        store: DocumentRootStore,
-        isDummy?: boolean
-    ) {
+    constructor(props: DocumentRootProps, meta: TypeMeta<T>, store: DocumentRootStore, isDummy?: boolean) {
         this.store = store;
         this.meta = meta;
         this.id = props.id;
