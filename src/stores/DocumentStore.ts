@@ -21,6 +21,20 @@ import ScriptVersion from '../models/documents/ScriptVersion';
 import { ChangedDocument } from '../api/IoEventTypes';
 import String from '../models/documents/String';
 
+
+export function CreateDocumentModel<T extends DocumentType>(data: DocumentProps<T>, store: DocumentStore): TypeModelMapping[T];
+export function CreateDocumentModel(data: DocumentProps<DocumentType>, store: DocumentStore): DocumentTypes {
+    switch (data.type) {
+        case DocumentType.Script:
+            return new Script(data as DocumentProps<DocumentType.Script>, store);
+        case DocumentType.TaskState:
+            return new TaskState(data as DocumentProps<DocumentType.TaskState>, store);
+        case DocumentType.ScriptVersion:
+            return new ScriptVersion(data as DocumentProps<DocumentType.ScriptVersion>, store);
+        case DocumentType.String:
+            return new String(data as DocumentProps<DocumentType.String>, store);
+    }
+};
 class DocumentStore extends iStore {
     readonly root: RootStore;
     documents = observable.array<DocumentTypes>([]);
@@ -28,20 +42,6 @@ class DocumentStore extends iStore {
     constructor(root: RootStore) {
         super();
         this.root = root;
-    }
-
-    createModel<T extends DocumentType>(data: DocumentProps<T>): TypeModelMapping[T];
-    createModel(data: DocumentProps<DocumentType>): DocumentTypes {
-        switch (data.type) {
-            case DocumentType.Script:
-                return new Script(data as DocumentProps<DocumentType.Script>, this);
-            case DocumentType.TaskState:
-                return new TaskState(data as DocumentProps<DocumentType.TaskState>, this);
-            case DocumentType.ScriptVersion:
-                return new ScriptVersion(data as DocumentProps<DocumentType.ScriptVersion>, this);
-            case DocumentType.String:
-                return new String(data as DocumentProps<DocumentType.String>, this);
-        }
     }
 
     @action
@@ -81,7 +81,7 @@ class DocumentStore extends iStore {
             return;
         }
 
-        const model = this.createModel(data);
+        const model = CreateDocumentModel(data, this);
         if (onlyFor === 'dummy-root' && (!model.root || !model.root.isDummy)) {
             return;
         }
@@ -145,7 +145,7 @@ class DocumentStore extends iStore {
         model: iDocument<Type>,
         replaceStoreModel: boolean = false
     ): Promise<TypeModelMapping[Type] | 'error' | undefined> {
-        if (model.root?.isDummy || !this.root.sessionStore.isLoggedIn) {
+        if (!model.root || model.root?.isDummy || !this.root.sessionStore.isLoggedIn) {
             return Promise.resolve('error');
         }
         if (model.isDirty) {
@@ -153,7 +153,7 @@ class DocumentStore extends iStore {
             if (!model.canEdit) {
                 return Promise.resolve(undefined);
             }
-            if ( model.root?.permission !== Access.RW) {
+            if ( model.root.permission !== Access.RW) {
                 return Promise.resolve(undefined);
             }
             return this.withAbortController(`save-${id}`, (sig) => {
@@ -165,7 +165,7 @@ class DocumentStore extends iStore {
                             if (replaceStoreModel) {
                                 return this.addToStore(data, 'persisted-root');
                             }
-                            return this.createModel(data);
+                            return CreateDocumentModel(data, this);
                         }
                         return undefined;
                     })

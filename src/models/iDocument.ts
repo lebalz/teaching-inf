@@ -105,12 +105,11 @@ abstract class iDocument<Type extends DocumentType> {
 
     @computed
     get canEdit() {
-        /**
-         * here _isDummy must be used, because otherwise dummy docs would be editable
-         * by offline users...
-         */
-        if (!this.root || this.root._isDummy) {
+        if (!this.root) {
             return false;
+        }
+        if (this.root.isDummy) {
+            return this.root.permission === Access.RW;
         }
         if (!this.store.root.userStore.current) {
             return this.root.permission === Access.RW;

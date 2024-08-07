@@ -5,10 +5,10 @@ import String from '@site/src/components/documents/String';
 Einzeilige Texteingabe ohne Formatierung.
 
 ```md
-<String id="c9c2ecab-98b0-4696-b44a-8fdf79b8daac" />
+<String id="4caa49d4-5385-433e-9651-a48ebed29a9a" />
 ```
 
-<String id="c9c2ecab-98b0-4696-b44a-8fdf79b8daac" />
+<String id="4caa49d4-5385-433e-9651-a48ebed29a9a" />
 
 ## Label
 
@@ -147,8 +147,9 @@ Ohne `id` wird der Zustand nicht gespeichert, was mit einem :mdi[flash-triangle-
 : Verwendet anstatt eines Block-Elements (`<div></div>` mit `display: flex`) ein Inline-Element (`<span></span>` mit `display: inline-flex`).
 `stateIconsPosition`
 : `inside` das Sync-Icon wird innerhalb des Inputs angezeigt (standard für `text`, `email`, `tel` und `url`)
-: <String stateIconsPosition="inside" inline /> hello
 : `outside` rechts neben dem Input (standard für alle anderen Felder)
-: <String stateIconsPosition="outside" inline />
 : `none` Icon wird nicht angezeigt
-: <String stateIconsPosition="none" inline />
+
+<String label="inside" stateIconsPosition="inside" />
+<String label="outside" stateIconsPosition="outside" />
+<String label="none" stateIconsPosition="none" />
