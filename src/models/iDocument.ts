@@ -120,7 +120,7 @@ abstract class iDocument<Type extends DocumentType> {
         }
         return this.root.sharedAccess === Access.RW && this.root.permission === Access.RW;
     }
-    
+
     @computed
     get canDisplay() {
         if (!this.root) {

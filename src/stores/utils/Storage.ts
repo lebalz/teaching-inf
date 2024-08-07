@@ -3,13 +3,12 @@ import { Primitive } from 'utility-types';
 import siteConfig from '@generated/docusaurus.config';
 import _ from 'lodash';
 
-
 export type PersistedData = {
     user?: User;
 };
 
 export const StorageKey = Object.freeze({
-    SessionStore: _.upperFirst(_.camelCase(`SessionStore${siteConfig.projectName}`)),
+    SessionStore: _.upperFirst(_.camelCase(`SessionStore${siteConfig.projectName}`))
 });
 
 /**
