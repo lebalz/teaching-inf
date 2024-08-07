@@ -71,7 +71,8 @@ class DocumentStore extends iStore {
 
     @action
     addToStore<Type extends DocumentType>(
-        data: DocumentProps<Type> | undefined | null
+        data: DocumentProps<Type> | undefined | null,
+        onlyFor?: 'dummy-root' | 'persisted-root'
     ): TypeModelMapping[Type] | undefined {
         /**
          * Adds a new model to the store. Existing models with the same id are replaced.
@@ -81,12 +82,11 @@ class DocumentStore extends iStore {
         }
 
         const model = this.createModel(data);
-        if (model.root?.isDummy) {
-            const current = this.find(model.id);
-            const currentIsNotDummy = current?.root && !current.root.isDummy;
-            if (currentIsNotDummy) {
-                return current as TypeModelMapping[Type];
-            }
+        if (onlyFor === 'dummy-root' && (!model.root || !model.root.isDummy)) {
+            return;
+        }
+        if (onlyFor === 'persisted-root' && (!model.root || model.root.isDummy)) {
+            return;
         }
 
         this.removeFromStore(model.id);
@@ -118,7 +118,7 @@ class DocumentStore extends iStore {
             .then(
                 action(({ data }) => {
                     if (data && Object.keys(data).length > 0) {
-                        return this.addToStore(data);
+                        return this.addToStore(data, 'persisted-root');
                     } else {
                         /** apparently the model is not present anymore - remove it from the store */
                         return this.removeFromStore(id);
@@ -145,13 +145,15 @@ class DocumentStore extends iStore {
         model: iDocument<Type>,
         replaceStoreModel: boolean = false
     ): Promise<TypeModelMapping[Type] | 'error' | undefined> {
-        if (model.root?.isDummy) {
+        if (model.root?.isDummy || !this.root.sessionStore.isLoggedIn) {
             return Promise.resolve('error');
         }
-        if (model.isDirty && !model.root?.isDummy) {
+        if (model.isDirty) {
             const { id } = model;
-            if (model.root?.access !== Access.RW) {
-                // TODO: return error?
+            if (!model.canEdit) {
+                return Promise.resolve(undefined);
+            }
+            if ( model.root?.permission !== Access.RW) {
                 return Promise.resolve(undefined);
             }
             return this.withAbortController(`save-${id}`, (sig) => {
@@ -161,7 +163,7 @@ class DocumentStore extends iStore {
                     action(({ data }) => {
                         if (data) {
                             if (replaceStoreModel) {
-                                return this.addToStore(data);
+                                return this.addToStore(data, 'persisted-root');
                             }
                             return this.createModel(data);
                         }
@@ -182,12 +184,19 @@ class DocumentStore extends iStore {
     create<Type extends DocumentType>(
         model: { documentRootId: string; type: Type } & Partial<DocumentProps<Type>>
     ) {
+        const rootDoc = this.root.documentRootStore.find(model.documentRootId);
+        if (!rootDoc || rootDoc.isDummy) {
+            return Promise.resolve('error');
+        }
+        if (rootDoc.permission !== Access.RW) {
+            return Promise.resolve('error');
+        }
         return this.withAbortController(`create-${model.id || uuidv4()}`, (sig) => {
             return apiCreate<Type>(model, sig.signal);
         })
             .then(
                 action(({ data }) => {
-                    return this.addToStore(data);
+                    return this.addToStore(data, 'persisted-root');
                 })
             )
             .catch((err) => {

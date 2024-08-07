@@ -105,7 +105,39 @@ abstract class iDocument<Type extends DocumentType> {
 
     @computed
     get canEdit() {
-        return this.root?.access === Access.RW;
+        /**
+         * here _isDummy must be used, because otherwise dummy docs would be editable
+         * by offline users...
+         */
+        if (!this.root || this.root._isDummy) {
+            return false;
+        }
+        if (!this.store.root.userStore.current) {
+            return this.root.permission === Access.RW;
+        }
+        const userId = this.store.root.userStore.current.id;
+        if (this.authorId === userId) {
+            return this.root.permission === Access.RW;
+        }
+        return this.root.sharedAccess === Access.RW && this.root.permission === Access.RW;
+    }
+    
+    @computed
+    get canDisplay() {
+        if (!this.root) {
+            return true;
+        }
+        if (!this.store.root.userStore.current) {
+            return this.root.permission !== Access.None;
+        }
+        const userId = this.store.root.userStore.current.id;
+        if (this.root.permission === Access.None) {
+            return false;
+        }
+        if (this.authorId === userId) {
+            return true;
+        }
+        return this.root.sharedAccess !== Access.None;
     }
 
     @action

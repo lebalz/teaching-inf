@@ -47,7 +47,7 @@ export const useDocumentRoot = <Type extends DocumentType>(id: string | undefine
                     documentRootId: dummyDocumentRoot.id,
                     id: defaultDocId,
                     parentId: null
-                } satisfies Document<Type>);
+                } satisfies Document<Type>, 'dummy-root');
             }
             if (dummyDocumentRoot.id === defaultRootDocId) {
                 /** no according document in the backend can be expected - skip */
