@@ -52,7 +52,7 @@ export class DocumentRootStore extends iStore {
             const documentRoot = new DocumentRoot(data, meta, this);
             this.addDocumentRoot(documentRoot, true);
             data.documents.forEach((doc) => {
-                this.root.documentStore.addToStore(doc);
+                this.root.documentStore.addToStore(doc, 'persisted-root');
             });
             data.groupPermissions.forEach((gp) => {
                 this.root.permissionStore.addGroupPermission(
