@@ -110,7 +110,11 @@ class DocumentRoot<T extends DocumentType> {
             .filter((d) => d.isMain)
             .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime()) as TypeModelMapping[T][];
         const byUser = docs.filter((d) => d.authorId === this.viewedUserId);
-        if (this.sharedAccess !== Access.RO) {
+
+        if (
+            this.sharedAccess === Access.None ||
+            highestAccess(new Set([this.sharedAccess]), this.access) === Access.RW
+        ) {
             return byUser;
         }
         if (byUser.length > 0) {
