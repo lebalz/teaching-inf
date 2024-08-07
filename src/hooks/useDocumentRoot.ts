@@ -14,28 +14,27 @@ import DocumentRoot, { TypeMeta } from '../models/DocumentRoot';
 export const useDocumentRoot = <Type extends DocumentType>(id: string | undefined, meta: TypeMeta<Type>) => {
     const defaultRootDocId = useId();
     const defaultDocId = useId();
-    const documentStore = rootStore.documentRootStore;
-    const sessionStore = rootStore.sessionStore;
     const [dummyDocumentRoot] = React.useState<DocumentRoot<Type>>(
         new DocumentRoot(
             { id: id || defaultRootDocId, access: Access.RW, sharedAccess: Access.None },
             meta,
-            documentStore,
+            rootStore.documentRootStore,
             true
         )
     );
 
     /** initial load */
     React.useEffect(() => {
+        const { sessionStore, documentRootStore } = rootStore;
         if (!sessionStore.isLoggedIn) {
             return;
         }
-        const rootDoc = documentStore.find(dummyDocumentRoot.id);
+        const rootDoc = documentRootStore.find(dummyDocumentRoot.id);
         if (rootDoc) {
             return;
         }
         if (dummyDocumentRoot.isDummy) {
-            documentStore.addDocumentRoot(dummyDocumentRoot);
+            documentRootStore.addDocumentRoot(dummyDocumentRoot);
             /** add default document when there are no mainDocs */
             if (dummyDocumentRoot.mainDocuments.length === 0) {
                 const now = new Date().toISOString();
@@ -52,7 +51,9 @@ export const useDocumentRoot = <Type extends DocumentType>(id: string | undefine
             }
             if (dummyDocumentRoot.id === defaultRootDocId) {
                 /** no according document in the backend can be expected - skip */
-                return;
+                return () => {
+                    documentRootStore.removeFromStore(dummyDocumentRoot.id);
+                };
             }
         }
 
@@ -66,13 +67,11 @@ export const useDocumentRoot = <Type extends DocumentType>(id: string | undefine
         /**
          * load the documentRoot and it's documents from the api.
          */
-        documentStore
+        documentRootStore
             .load(id, meta)
             .then((docRoot) => {
                 if (!docRoot) {
-                    return documentStore.create(id, meta, {}).then((docRoot) => {
-                        return docRoot;
-                    });
+                    return documentRootStore.create(id, meta, {});
                 }
                 return docRoot;
             })
@@ -90,6 +89,7 @@ export const useDocumentRoot = <Type extends DocumentType>(id: string | undefine
                             data: meta.defaultData
                         });
                     }
+                    rootStore.documentStore.removeFromStore(defaultDocId);
                 }
             })
             .catch((err) => {
@@ -99,7 +99,7 @@ export const useDocumentRoot = <Type extends DocumentType>(id: string | undefine
                  */
                 console.log('err loading', err);
             });
-    }, [meta, id, sessionStore.isLoggedIn]);
+    }, [rootStore, rootStore.sessionStore.isLoggedIn]);
 
-    return documentStore.find<Type>(dummyDocumentRoot.id);
+    return rootStore.documentRootStore.find<Type>(dummyDocumentRoot.id);
 };
