@@ -5,6 +5,8 @@ import QuillV2 from '@site/src/components/documents/QuillV2';
 
 <QuillV2 id="d20ee4cf-537a-4a21-91e3-25f5e88339ff" />
 
+<QuillV2 id="784205dd-c98e-4049-9a8d-41d420d0cb5c" theme="bubble"/>
+
 
 
 :::info[Dependencies]

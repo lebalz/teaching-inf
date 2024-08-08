@@ -6,6 +6,7 @@ import { MetaInit, ModelMeta } from '@site/src/models/documents/QuillV2';
 import { useQuill } from 'react-quilljs';
 import { ToolbarOptions } from '@site/src/models/documents/QuillV2/helpers/toolbar';
 import 'quill/dist/quill.snow.css'; // Add css for snow theme
+import 'quill/dist/quill.bubble.css'; // Add css for snow theme
 import BaseImageFormat from 'quill/formats/image';
 import { downscaleImage } from './quill-img-compress/downscaleImage';
 import { file2b64 } from './quill-img-compress/file2b64';
@@ -28,6 +29,31 @@ export interface Props extends MetaInit {
     theme?: 'snow' | 'bubble';
 }
 
+const FORMATS = [
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'align',
+    'list',
+    'indent',
+    'size',
+    'width',
+    'header',
+    'link',
+    'image',
+    'color',
+    'background',
+    'clean',
+    'code-block',
+    'indent',
+    'blockquote',
+    'script',
+    'code',
+    'style',
+    // 'video'
+];
+
 const QuillV2 = observer((props: Props) => {
     const mounted = React.useRef(false);
     const [meta] = React.useState(new ModelMeta(props));
@@ -35,8 +61,11 @@ const QuillV2 = observer((props: Props) => {
     const [processingImage, setProcessingImage] = React.useState(false);
     const [showQuillToolbar, setShowQuillToolbar] = React.useState(false);
     const ref = React.useRef<HTMLDivElement>(null);
+    const [theme] = React.useState(props.theme || 'snow');
     const { quill, quillRef, Quill } = useQuill({
+        theme: theme,
         modules: {
+            toolbar: meta.toolbar,
             resize: {
                 showSize: false,
                 toolbar: {
@@ -51,7 +80,10 @@ const QuillV2 = observer((props: Props) => {
                     restore: ''
                 }
             }
-        }
+        },
+        formats: FORMATS,
+        placeholder: props.placeholder || '✍️ Antwort...',
+        readOnly: props.readonly
     });
 
     // Insert Image(selected by user) to quill
@@ -215,7 +247,7 @@ const QuillV2 = observer((props: Props) => {
         <div
             className={clsx(styles.quillEditor, styles.quill, 'notranslate')}
             onFocus={() => !showQuillToolbar && setShowQuillToolbar(true)}
-            onBlur={() => showQuillToolbar && setShowQuillToolbar(false)}
+            // onBlur={() => showQuillToolbar && setShowQuillToolbar(false)}
             ref={ref}
         >
             <div
