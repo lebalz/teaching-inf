@@ -1,7 +1,7 @@
 import { action, computed, observable } from 'mobx';
 import { DocumentRootBase as DocumentRootProps } from '../api/documentRoot';
 import { DocumentRootStore } from '../stores/DocumentRootStore';
-import { Access, Document, DocumentType, TypeDataMapping, TypeModelMapping } from '../api/document';
+import { Access, DocumentType, TypeDataMapping, TypeModelMapping } from '../api/document';
 import { highestAccess } from './helpers/accessPolicy';
 
 export abstract class TypeMeta<T extends DocumentType> {
@@ -49,11 +49,11 @@ class DocumentRoot<T extends DocumentType> {
         return this._access;
     }
 
-    get persistedAccess() {
+    get rootAccess() {
         return this._access;
     }
 
-    set persistedAccess(access: Access) {
+    set rootAccess(access: Access) {
         this._access = access;
     }
 
@@ -128,6 +128,14 @@ class DocumentRoot<T extends DocumentType> {
     @computed
     get firstMainDocument(): TypeModelMapping[T] | undefined {
         return this.mainDocuments[0];
+    }
+
+    @action
+    save() {
+        return this.store
+            .save(this)
+            .then()
+            .catch(() => console.log('Failed to update document root'));
     }
 }
 
