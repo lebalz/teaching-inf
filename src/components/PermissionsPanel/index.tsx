@@ -14,42 +14,40 @@ interface Props {
     documentRootId: string;
 }
 
+interface AccessRadioButtonProps {
+    targetAccess: Access;
+    accessProp: 'rootAccess' | 'sharedAccess';
+    documentRoot: DocumentRoot<any>;
+}
+
+const AccessRadioButton = observer(({ targetAccess, accessProp, documentRoot }: AccessRadioButtonProps) => {
+    const group = accessProp;
+    const id = `${group}-${targetAccess}`;
+
+    return (
+        <div>
+            <input
+                type="radio"
+                id={id}
+                name={group}
+                value={targetAccess}
+                checked={targetAccess === documentRoot[accessProp]}
+                onChange={(e) => {
+                    documentRoot[accessProp] = e.target.value as Access;
+                    documentRoot.save();
+                }}
+            />
+            <label htmlFor={id}>{targetAccess}</label>
+        </div>
+    );
+});
+
 const PermissionsPanel = observer(({ documentRootId }: Props) => {
     const [documentRoot, setDocumentRoot] = useState<DocumentRoot<any> | null>();
 
     const onOpen = async () => {
         setDocumentRoot(rootStore.documentRootStore.find(documentRootId));
     };
-
-    function createAccessRadioButton(
-        targetAccess: Access,
-        currentAccess: Access,
-        group: string,
-        onChange: (value: Access) => void
-    ) {
-        const id = `${group}-${targetAccess}`;
-        return (
-            <div>
-                <input
-                    type="radio"
-                    id={id}
-                    name={group}
-                    value={targetAccess}
-                    checked={targetAccess === currentAccess}
-                    onChange={(e) => onChange(e.target.value as Access)}
-                />
-                <label htmlFor={id}>{targetAccess}</label>
-            </div>
-        );
-    }
-
-    function saveRootAccess(access: Access) {
-        if (!documentRoot) {
-            return;
-        }
-        documentRoot.rootAccess = access;
-        documentRoot.save();
-    }
 
     return (
         <>
@@ -67,24 +65,21 @@ const PermissionsPanel = observer(({ documentRootId }: Props) => {
                             <div>
                                 <div className={styles.radioGroup}>
                                     <b className={styles.radioGroupTitle}>Root access:</b>
-                                    {createAccessRadioButton(
-                                        Access.RW,
-                                        documentRoot.rootAccess,
-                                        'rootAccess',
-                                        (newAccess) => saveRootAccess(newAccess)
-                                    )}
-                                    {createAccessRadioButton(
-                                        Access.RO,
-                                        documentRoot.rootAccess,
-                                        'rootAccess',
-                                        (newAccess) => saveRootAccess(newAccess)
-                                    )}
-                                    {createAccessRadioButton(
-                                        Access.None,
-                                        documentRoot.rootAccess,
-                                        'rootAccess',
-                                        (newAccess) => saveRootAccess(newAccess)
-                                    )}
+                                    <AccessRadioButton
+                                        targetAccess={Access.RW}
+                                        accessProp="rootAccess"
+                                        documentRoot={documentRoot}
+                                    />
+                                    <AccessRadioButton
+                                        targetAccess={Access.RO}
+                                        accessProp="rootAccess"
+                                        documentRoot={documentRoot}
+                                    />
+                                    <AccessRadioButton
+                                        targetAccess={Access.None}
+                                        accessProp="rootAccess"
+                                        documentRoot={documentRoot}
+                                    />
                                 </div>
                             </div>
                         )}

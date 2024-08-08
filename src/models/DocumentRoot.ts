@@ -53,6 +53,7 @@ class DocumentRoot<T extends DocumentType> {
         return this._access;
     }
 
+    @action
     set rootAccess(access: Access) {
         this._access = access;
     }
