@@ -20,6 +20,7 @@ import iDocument from '../models/iDocument';
 import ScriptVersion from '../models/documents/ScriptVersion';
 import { ChangedDocument } from '../api/IoEventTypes';
 import String from '../models/documents/String';
+import QuillV2 from '../models/documents/QuillV2';
 
 export function CreateDocumentModel<T extends DocumentType>(
     data: DocumentProps<T>,
@@ -35,6 +36,8 @@ export function CreateDocumentModel(data: DocumentProps<DocumentType>, store: Do
             return new ScriptVersion(data as DocumentProps<DocumentType.ScriptVersion>, store);
         case DocumentType.String:
             return new String(data as DocumentProps<DocumentType.String>, store);
+        case DocumentType.QuillV2:
+            return new QuillV2(data as DocumentProps<DocumentType.QuillV2>, store);
     }
 }
 class DocumentStore extends iStore {
