@@ -160,13 +160,16 @@ const QuillV2 = observer((props: Props) => {
                     key: 's',
                     shortKey: true,
                     handler: action(function () {
-                        console.log('save');
                         doc.saveNow();
                     })
                 },
             );
 
             return () => {
+                if (doc.isDirty) {
+                    saveHandeler();
+                }
+                
                 quill.off('text-change', saveHandeler);
                 delete quill.keyboard.bindings['s'];
             }
