@@ -39,7 +39,7 @@ Es sind folgende Optionen verfügbar:
 - `ol`
 - `code`
 - `image`
-
+ 
 ### Beispiel
 Nur die Buttons für Bilder und Code werden angezeigt
 
@@ -50,7 +50,22 @@ Nur die Buttons für Bilder und Code werden angezeigt
   <QuillV2 toolbar={{image: true, code: true}} id="a6694c0b-56a1-4888-afe0-e59dc0cf9015" />
 </BrowserWindow>
 
+### Toolbar ausblenden
+Standardmässig wird die Toolbar immer angezeigt. Mit dem Attribut `hideToolbar` kann die Toolbar permanent ausgeblendet werden.
 
+```md
+<QuillV2 hideToolbar id="eeacafce-0f83-4f55-b349-cb73ec7da43d" />
+```
+<BrowserWindow>
+  <QuillV2 hideToolbar id="eeacafce-0f83-4f55-b349-cb73ec7da43d" />
+</BrowserWindow>
+
+## Installation
+
+:::info[Code]
+- `src/models/documents/QuillV2`
+- `src/components/documents/QuillV2`
+:::
 
 :::info[Dependencies]
 ```json
