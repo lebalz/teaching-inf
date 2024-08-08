@@ -46,8 +46,7 @@
         "remark-math": "6",
         "sass": "^1.77.6",
         "socket.io-client": "^4.7.5",
-        "uuid": "^10.0.0",
-        "yarn": "^1.22.22"
+        "uuid": "^10.0.0"
     },
     "devDependencies": {
         "@babel/plugin-proposal-decorators": "^7.24.7",
