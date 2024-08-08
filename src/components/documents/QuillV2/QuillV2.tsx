@@ -2,7 +2,7 @@ import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { useFirstMainDocument } from '../../../hooks/useFirstMainDocument';
 import Loader from '../../Loader';
-import { MetaInit, ModelMeta } from '@site/src/models/documents/QuillV2';
+import { default as QuillV2Model, MetaInit, ModelMeta } from '@site/src/models/documents/QuillV2';
 import { useQuill } from 'react-quilljs';
 import { ToolbarOptions } from '@site/src/models/documents/QuillV2/helpers/toolbar';
 import 'quill/dist/quill.snow.css'; // Add css for snow theme
@@ -28,6 +28,7 @@ export interface Props extends MetaInit {
     toolbarExtra?: ToolbarOptions;
     placeholder?: string;
     theme?: 'snow' | 'bubble';
+    quillDocument: QuillV2Model;
 }
 
 const FORMATS = [
@@ -56,10 +57,9 @@ const FORMATS = [
 ];
 
 const QuillV2 = observer((props: Props) => {
+    const doc = props.quillDocument;
     const mounted = React.useRef(false);
     const updateSource = React.useRef<'current' | undefined>(undefined);
-    const [meta] = React.useState(new ModelMeta(props));
-    const doc = useFirstMainDocument(props.id, meta);
     const [processingImage, setProcessingImage] = React.useState(false);
     const [showQuillToolbar, setShowQuillToolbar] = React.useState(false);
     const ref = React.useRef<HTMLDivElement>(null);
@@ -67,7 +67,7 @@ const QuillV2 = observer((props: Props) => {
     const { quill, quillRef, Quill } = useQuill({
         theme: theme,
         modules: {
-            toolbar: meta.toolbar,
+            toolbar: doc.meta.toolbar,
             resize: {
                 showSize: false,
                 toolbar: {
@@ -148,8 +148,7 @@ const QuillV2 = observer((props: Props) => {
     };
 
     React.useEffect(() => {
-        console.log(meta.toolbar);
-        if (quill && doc) {
+        if (quill) {
             quill.setContents(doc.delta);
             const saveHandeler = action(() => {
                 updateSource.current = 'current';
@@ -172,7 +171,7 @@ const QuillV2 = observer((props: Props) => {
                 delete quill.keyboard.bindings['s'];
             }
         }
-    }, [quill, doc, doc?.id, updateSource]);
+    }, [quill, updateSource]);
 
     React.useEffect(() => {
         const onQuillToolbarMouseDown = (e: any) => {
@@ -205,10 +204,10 @@ const QuillV2 = observer((props: Props) => {
         return () => {
             mounted.current = false;
         };
-    }, [doc]);
+    }, []);
 
     React.useEffect(() => {
-        if (!doc || !quill) {
+        if (!quill) {
             return;
         }
         
@@ -222,47 +221,45 @@ const QuillV2 = observer((props: Props) => {
         }
 
         quill.setContents(doc.delta, 'silent');
-    }, [quill, doc?.delta, updateSource]);
+    }, [quill, doc.delta, updateSource]);
 
-    if (Quill && !quill) {
-        /**
-         * ensure these attributes are present in the formats object
-         * and are be persisted to the delta
-         */
-        class ImageFormat extends BaseImageFormat {
-            static formats(domNode: Element) {
-                const formats: { [key: string]: string } = {};
-                ['alt', 'height', 'width', 'style'].forEach((attribute) => {
-                    if (domNode.hasAttribute(attribute)) {
-                        formats[attribute] = domNode.getAttribute(attribute)!;
-                    }
-                });
-                return formats;
-            }
-            format(name: string, value: string) {
-                if (['alt', 'height', 'width', 'style'].includes(name)) {
-                    if (value) {
-                        this.domNode.setAttribute(name, value);
+    React.useEffect(() => {
+        if (Quill && !quill) {
+            /**
+             * ensure these attributes are present in the formats object
+             * and are be persisted to the delta
+             */
+            class ImageFormat extends BaseImageFormat {
+                static formats(domNode: Element) {
+                    const formats: { [key: string]: string } = {};
+                    ['alt', 'height', 'width', 'style'].forEach((attribute) => {
+                        if (domNode.hasAttribute(attribute)) {
+                            formats[attribute] = domNode.getAttribute(attribute)!;
+                        }
+                    });
+                    return formats;
+                }
+                format(name: string, value: string) {
+                    if (['alt', 'height', 'width', 'style'].includes(name)) {
+                        if (value) {
+                            this.domNode.setAttribute(name, value);
+                        } else {
+                            this.domNode.removeAttribute(name);
+                        }
                     } else {
-                        this.domNode.removeAttribute(name);
+                        super.format(name, value);
                     }
-                } else {
-                    super.format(name, value);
                 }
             }
+    
+            Quill.register(ImageFormat, true);
+            (window as any).Quill = Quill;
+            /* Quill register method signature is => static register(path, target, overwrite = false)
+            Set overwrite to true to avoid warning
+            https://github.com/quilljs/quill/issues/2559#issuecomment-945605414 */
+            Quill.register('modules/resize', ResizeModule, true);
         }
-
-        Quill.register(ImageFormat, true);
-        (window as any).Quill = Quill;
-        /* Quill register method signature is => static register(path, target, overwrite = false)
-        Set overwrite to true to avoid warning
-        https://github.com/quilljs/quill/issues/2559#issuecomment-945605414 */
-        Quill.register('modules/resize', ResizeModule, true);
-    }
-
-    if (!doc) {
-        return <Loader />;
-    }
+    }, [quill, Quill]);
 
     return (
         <div
@@ -278,7 +275,7 @@ const QuillV2 = observer((props: Props) => {
                     props.monospace && styles.monospace,
                     !showQuillToolbar && styles.disableToolbar
                 )}
-                style={{ display: mounted.current ? undefined : 'none', ...(props.style || {}) }}
+                // style={{ display: mounted.current ? undefined : 'none', ...(props.style || {}) }}
             >
                 <div ref={quillRef} />
                 {processingImage && <Loader label="Bild Einfügen..." overlay />}
