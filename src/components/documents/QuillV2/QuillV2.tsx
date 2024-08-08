@@ -155,11 +155,21 @@ const QuillV2 = observer((props: Props) => {
     }, [quill]);
 
     React.useEffect(() => {
+        if (!doc) {
+            return;
+        }
         mounted.current = true;
         return () => {
             mounted.current = false;
         };
-    }, []);
+    }, [doc]);
+
+    React.useEffect(() => {
+        if (!doc || doc.hotReloadTrigger < 1 || !quill) {
+            return;
+        }
+        quill.setContents(doc.delta, 'silent');
+    }, [quill, doc?.hotReloadTrigger]);
 
     if (Quill && !quill) {
         /**
