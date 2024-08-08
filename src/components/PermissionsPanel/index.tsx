@@ -81,6 +81,25 @@ const PermissionsPanel = observer(({ documentRootId }: Props) => {
                                         documentRoot={documentRoot}
                                     />
                                 </div>
+
+                                <div className={styles.radioGroup}>
+                                    <b className={styles.radioGroupTitle}>Shared access:</b>
+                                    <AccessRadioButton
+                                        targetAccess={Access.RW}
+                                        accessProp="sharedAccess"
+                                        documentRoot={documentRoot}
+                                    />
+                                    <AccessRadioButton
+                                        targetAccess={Access.RO}
+                                        accessProp="sharedAccess"
+                                        documentRoot={documentRoot}
+                                    />
+                                    <AccessRadioButton
+                                        targetAccess={Access.None}
+                                        accessProp="sharedAccess"
+                                        documentRoot={documentRoot}
+                                    />
+                                </div>
                             </div>
                         )}
 

@@ -131,13 +131,13 @@ export class DocumentRootStore extends iStore {
 
         const model = {
             access: documentRoot.rootAccess,
-            sharedAccess: documentRoot.access
+            sharedAccess: documentRoot.sharedAccess
         };
 
         return this.withAbortController(`save-${documentRoot.id}`, (signal) => {
             return apiUpdate(documentRoot.id, model, signal.signal);
         })
             .then()
-            .catch();
+            .catch(() => console.warn('Error saving document root'));
     }
 }
