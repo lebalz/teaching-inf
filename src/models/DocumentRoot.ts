@@ -49,6 +49,14 @@ class DocumentRoot<T extends DocumentType> {
         return this._access;
     }
 
+    get persistedAccess() {
+        return this._access;
+    }
+
+    set persistedAccess(access: Access) {
+        this._access = access;
+    }
+
     get loadStatus() {
         return this.store.apiStateFor(`load-${this.id}`);
     }
