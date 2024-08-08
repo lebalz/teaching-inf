@@ -1,4 +1,5 @@
 import QuillV2 from '@site/src/components/documents/QuillV2';
+import BrowserWindow from '@site/src/components/BrowserWindow';
 
 
 # Quill V2: Text Documents
@@ -9,13 +10,18 @@ Standardmässig wird das `snow` Theme verwendet.
 ```md
 <QuillV2 id="d20ee4cf-537a-4a21-91e3-25f5e88339ff" />
 ```
-<QuillV2 id="d20ee4cf-537a-4a21-91e3-25f5e88339ff" />
+<BrowserWindow>
+  <QuillV2 id="d20ee4cf-537a-4a21-91e3-25f5e88339ff" />
+</BrowserWindow>
 
 Wahlweise kann auch das `bubble` Theme verwendet werden.
 ```md
 <QuillV2 theme="bubble" id="c927c357-4898-4d0c-9878-df0c0100abb3"/>
 ```
-<QuillV2 theme="bubble" id="c927c357-4898-4d0c-9878-df0c0100abb3"/>
+<BrowserWindow>
+  <QuillV2 theme="bubble" id="c927c357-4898-4d0c-9878-df0c0100abb3"/>
+</BrowserWindow>
+
 
 ## Toolbar anpassen
 Die Toolbar kann angepasst werden, indem die gewünschten Buttons definiert werden. Die Buttons können dabei in Gruppen zusammengefasst werden.
@@ -34,12 +40,15 @@ Es sind folgende Optionen verfügbar:
 - `code`
 - `image`
 
-Beispiel:
+### Beispiel
+Nur die Buttons für Bilder und Code werden angezeigt
 
 ```md
-<QuillV2 toolbar={{image: true, code: true}} id="05551c8e-cecb-4446-8338-65dac7e6c711" />
+<QuillV2 toolbar={{image: true, code: true}} id="ad7ae52b-e757-44b7-b48e-28de3342fc73" />
 ```
-<QuillV2 toolbar={{image: true, code: true}} id="05551c8e-cecb-4446-8338-65dac7e6c711" />
+<BrowserWindow>
+  <QuillV2 toolbar={{image: true, code: true}} id="a6694c0b-56a1-4888-afe0-e59dc0cf9015" />
+</BrowserWindow>
 
 
 
