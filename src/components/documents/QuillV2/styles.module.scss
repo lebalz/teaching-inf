@@ -1,5 +1,6 @@
 .quillEditor {
     z-index: 1;
+    margin-bottom: 1em;
     .quillAnswer {
         position: relative;
         border-radius: var(--ifm-alert-border-radius);
@@ -8,7 +9,7 @@
             border: 2px solid var(--ifm-color-success);
         }
         &.monospace {
-            :global .ql-editor {
+            :global(.ql-editor) {
                 font-family:
                     Monaco,
                     Courier New,
@@ -16,44 +17,68 @@
                 font-size: 11px;
             }
         }
-        :global .ql-toolbar.ql-snow {
-            border-top: 0px;
-            border-left: 0px;
-            border-right: 0px;
-            border-color: var(--ifm-color-primary);
-            .ql-stroke {
-                fill: none;
-                stroke: var(--ifm-color-primary-contrast-foreground);
+        
+        :global(.ql-toolbar) {
+            &:global(.ql-snow) {
+                border: 0px solid var(--ifm-color-primary);
+                border-bottom-width: 1px;
+                :global(.ql-stroke) {
+                    fill: none;
+                    stroke: var(--ifm-color-primary-contrast-foreground);
+                }
+                :global(.ql-fill) {
+                    fill: var(--ifm-color-primary-contrast-foreground);
+                    stroke: none;
+                }
+                :global(.ql-picker-options) {
+                    background: var(--ifm-background-color);
+                }
+            }  
+        }
+        :global(.ql-formats) {
+            >[class^="ql-"] {
+                border-radius: var(--ifm-global-radius);
+                &:hover {
+                    box-shadow: var(--ifm-global-shadow-lw);
+                    :global(.ql-stroke) {
+                        stroke: var(--ifm-color-primary-lighter);
+                    }
+                    :global(.ql-fill) {
+                        fill: var(--ifm-color-primary-lighter);
+                    }
+                }
             }
-            .ql-fill {
-                fill: var(--ifm-color-primary-contrast-foreground);
-                stroke: none;
+            :global(.ql-active) {
+                box-shadow: var(--ifm-global-shadow-lw);
+                border-radius: var(--ifm-global-radius);
+                :global(.ql-stroke) {
+                    stroke: var(--ifm-color-primary);
+                }
+                :global(.ql-fill) {
+                    fill: var(--ifm-color-primary);
+                }
             }
+        }
 
-            .ql-picker {
-                color: var(--ifm-color-primary-contrast-foreground);
+        :global(.ql-container) {
+            &:global(.ql-bubble) {
+                :global(.ql-tooltip) {
+                    z-index: calc(var(--ifm-z-index-fixed) - 1);
+                }
+
             }
-            .ql-picker-options {
-                background: var(--ifm-background-color);
-            }
-        }
-        :global .ql-container.ql-bubble {
-            :global .ql-tooltip {
-                z-index: calc(var(--ifm-z-index-fixed) - 1);
+            &:global(.ql-snow) {
+                border: 0px solid;
             }
         }
 
-        :global .ql-container.ql-snow {
-            border: 0px solid;
-        }
 
         &.disableToolbar {
-            :global .ql-toolbar.ql-snow {
+            :global(.ql-toolbar.ql-snow) {
                 display: none;
             }
-            .ql-container {
-                border-top: 1px solid #ccc;
-                border-radius: var(--ifm-alert-border-radius);
+            :global(.ql-container) {
+                border: 0;
             }
         }
         .saveIndicator {
@@ -62,7 +87,6 @@
             right: 4px;
         }
     }
-    margin-bottom: 1em;
 }
 
 .quill {

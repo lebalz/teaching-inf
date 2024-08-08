@@ -41,7 +41,7 @@ export type ToolbarModule = (
       }[]
 )[];
 
-export const TOOLBAR_BASE: ToolbarModule = [['bold', 'italic', 'underline']];
+export const TOOLBAR_BASE: ToolbarModule = [['bold', 'italic', 'underline', 'code-block']];
 
 export const TOOLBAR: ToolbarModule = [
     ...TOOLBAR_BASE,
