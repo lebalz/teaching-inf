@@ -49,7 +49,7 @@ const FORMATS = [
     'indent',
     'blockquote',
     'script',
-    'code',
+    'code'
     // 'width',
     // 'clean',
     // 'style',
@@ -155,24 +155,22 @@ const QuillV2 = observer((props: Props) => {
                 doc.setDelta(quill.getContents());
             });
             quill.on('text-change', saveHandeler);
-            quill.keyboard.addBinding(
-                {
-                    key: 's',
-                    shortKey: true,
-                    handler: action(function () {
-                        doc.saveNow();
-                    })
-                },
-            );
+            quill.keyboard.addBinding({
+                key: 's',
+                shortKey: true,
+                handler: action(function () {
+                    doc.saveNow();
+                })
+            });
 
             return () => {
                 if (doc.isDirty) {
                     saveHandeler();
                 }
-                
+
                 quill.off('text-change', saveHandeler);
                 delete quill.keyboard.bindings['s'];
-            }
+            };
         }
     }, [quill, updateSource]);
 
@@ -213,10 +211,10 @@ const QuillV2 = observer((props: Props) => {
         if (!quill) {
             return;
         }
-        
+
         /**
          * Do not update the quill editor if the change was made by the current quill component
-        */
+         */
         const source = updateSource.current;
         updateSource.current = undefined;
         if (source === 'current') {
@@ -254,7 +252,7 @@ const QuillV2 = observer((props: Props) => {
                     }
                 }
             }
-    
+
             Quill.register(ImageFormat, true);
             (window as any).Quill = Quill;
             /* Quill register method signature is => static register(path, target, overwrite = false)
@@ -268,7 +266,9 @@ const QuillV2 = observer((props: Props) => {
         <div
             className={clsx(styles.quillEditor, styles.quill, 'notranslate')}
             onFocus={() => !showQuillToolbar && setShowQuillToolbar(true)}
-            onBlur={() => {updateSource.current = undefined}}
+            onBlur={() => {
+                updateSource.current = undefined;
+            }}
             ref={ref}
         >
             <div

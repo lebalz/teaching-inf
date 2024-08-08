@@ -100,7 +100,8 @@ export const getToolbar = (options: ToolbarOptions): ToolbarModule => {
         }
         toolbar.push(l);
     }
-    if (options.image) { // || options.formula 
+    if (options.image) {
+        // || options.formula
         const visuals = [];
         // if (options.formula) {
         //     visuals.push('formula');
