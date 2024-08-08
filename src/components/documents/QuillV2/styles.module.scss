@@ -17,7 +17,7 @@
                 font-size: 11px;
             }
         }
-        
+
         :global(.ql-toolbar) {
             &:global(.ql-snow) {
                 border: 0px solid var(--ifm-color-primary);
@@ -33,10 +33,10 @@
                 :global(.ql-picker-options) {
                     background: var(--ifm-background-color);
                 }
-            }  
+            }
         }
         :global(.ql-formats) {
-            >[class^="ql-"] {
+            > [class^='ql-'] {
                 border-radius: var(--ifm-global-radius);
                 &:hover {
                     box-shadow: var(--ifm-global-shadow-lw);
@@ -65,13 +65,11 @@
                 :global(.ql-tooltip) {
                     z-index: calc(var(--ifm-z-index-fixed) - 1);
                 }
-
             }
             &:global(.ql-snow) {
                 border: 0px solid;
             }
         }
-
 
         &.disableToolbar {
             :global(.ql-toolbar.ql-snow) {
