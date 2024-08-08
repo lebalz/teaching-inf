@@ -7,6 +7,8 @@ import strongPlugin from './src/plugins/remark-strong/plugin';
 import deflistPlugin from './src/plugins/remark-deflist/plugin';
 import mdiPlugin from './src/plugins/remark-mdi/plugin';
 import kbdPlugin from './src/plugins/remark-kbd/plugin';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
 const GIT_COMMIT_SHA = process.env.GITHUB_SHA || Math.random().toString(36).substring(7);
 
 const REMARK_PLUGINS = [  
@@ -33,8 +35,12 @@ const REMARK_PLUGINS = [
           defaultSize: '1.25em'
       }
   ],
-  kbdPlugin
+  kbdPlugin,
+  remarkMath
 ];
+const REHYPE_PLUGINS = [
+  rehypeKatex
+]
 
 
 const config: Config = {
@@ -94,6 +100,7 @@ const config: Config = {
           editUrl:
             'https://github.com/GBSL-Informatik/teaching-dev/edit/main/',
           remarkPlugins: REMARK_PLUGINS,
+          rehypePlugins: REHYPE_PLUGINS,
         },
         blog: {
           showReadingTime: true,
@@ -102,9 +109,11 @@ const config: Config = {
           editUrl:
             'https://github.com/GBSL-Informatik/teaching-dev/edit/main/',
             remarkPlugins: REMARK_PLUGINS,
+            rehypePlugins: REHYPE_PLUGINS,
         },
         pages: {
           remarkPlugins: REMARK_PLUGINS,
+          rehypePlugins: REHYPE_PLUGINS,
         },
         theme: {
           customCss: './src/css/custom.scss',
@@ -176,6 +185,15 @@ const config: Config = {
   } satisfies Preset.ThemeConfig,
   plugins: ['docusaurus-plugin-sass'],
   themes: ['docusaurus-live-brython'],
+  stylesheets: [
+    {
+      href: 'https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css',
+      type: 'text/css',
+      integrity:
+        'sha384-odtC+0UGzzFL/6PNoE8rX/SPcQDXBJ+uRepguP4QkPCm2LBxH3FA3y+fKSiJ+AmM',
+      crossorigin: 'anonymous',
+    },
+  ]
 };
 
 export default config;

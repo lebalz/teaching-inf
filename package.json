@@ -26,6 +26,7 @@
         "@mdi/react": "^1.6.1",
         "@mdx-js/react": "^3.0.0",
         "@types/lodash": "^4.17.6",
+        "add": "^2.0.6",
         "axios": "^1.7.2",
         "clsx": "^2.0.0",
         "docusaurus-live-brython": "^3.0.0-beta.27",
@@ -42,9 +43,12 @@
         "react": "^18.0.0",
         "react-dom": "^18.0.0",
         "react-quilljs": "^2.0.4",
+        "rehype-katex": "7",
+        "remark-math": "6",
         "sass": "^1.77.6",
         "socket.io-client": "^4.7.5",
-        "uuid": "^10.0.0"
+        "uuid": "^10.0.0",
+        "yarn": "^1.22.22"
     },
     "devDependencies": {
         "@babel/plugin-proposal-decorators": "^7.24.7",
