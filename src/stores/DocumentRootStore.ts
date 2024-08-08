@@ -2,7 +2,13 @@ import { action, observable } from 'mobx';
 import { RootStore } from './rootStore';
 import { computedFn } from 'mobx-utils';
 import DocumentRoot, { TypeMeta } from '../models/DocumentRoot';
-import { Config, create as apiCreate, DocumentRootUpdate, find as apiFind } from '../api/documentRoot';
+import {
+    Config,
+    create as apiCreate,
+    DocumentRootUpdate,
+    find as apiFind,
+    update as apiUpdate
+} from '../api/documentRoot';
 import iStore from './iStore';
 import PermissionGroup from '../models/PermissionGroup';
 import PermissionUser from '../models/PermissionUser';
@@ -79,25 +85,11 @@ export class DocumentRootStore extends iStore {
         });
     }
 
-    /*
-    @action
-    save<Type extends DocumentType>(model: DocumentRoot<DocumentType>): Promise<DocumentRoot<DocumentType> | 'error'> {
-        if (!this.root.sessionStore.isLoggedIn || !this.root.userStore.current?.isAdmin) {
-            return Promise.resolve('error');
-        }
-        return this.withAbortController(`save-${model.id}`, (signal) => {
-            return apiUpdate(model.id, model, signal.signal);
-        })
-            .then()
-            .catch();
-    }
-     */
-
     @action
     handleUpdate({ id, access, sharedAccess }: DocumentRootUpdate) {
         const model = this.find(id);
         if (model) {
-            model.persistedAccess = access;
+            model.rootAccess = access;
             model.sharedAccess = sharedAccess;
         }
     }
@@ -129,5 +121,23 @@ export class DocumentRootStore extends iStore {
         documentRoot.documents.forEach((doc) => {
             this.root.documentStore.removeFromStore(doc.id);
         });
+    }
+
+    @action
+    save(documentRoot: DocumentRoot<any>) {
+        if (!this.root.sessionStore.isLoggedIn || !this.root.userStore.current?.isAdmin) {
+            return Promise.resolve('error');
+        }
+
+        const model = {
+            access: documentRoot.rootAccess,
+            sharedAccess: documentRoot.access
+        };
+
+        return this.withAbortController(`save-${documentRoot.id}`, (signal) => {
+            return apiUpdate(documentRoot.id, model, signal.signal);
+        })
+            .then()
+            .catch();
     }
 }
