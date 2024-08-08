@@ -27,14 +27,14 @@ class DocumentRoot<T extends DocumentType> {
     readonly isDummy: boolean;
 
     @observable accessor _access: Access;
-    @observable accessor sharedAccess: Access;
+    @observable accessor _sharedAccess: Access;
 
     constructor(props: DocumentRootProps, meta: TypeMeta<T>, store: DocumentRootStore, isDummy?: boolean) {
         this.store = store;
         this.meta = meta;
         this.id = props.id;
         this._access = props.access;
-        this.sharedAccess = props.sharedAccess;
+        this._sharedAccess = props.sharedAccess;
         this.isDummy = !!isDummy;
     }
 
@@ -56,6 +56,15 @@ class DocumentRoot<T extends DocumentType> {
     @action
     set rootAccess(access: Access) {
         this._access = access;
+    }
+
+    get sharedAccess() {
+        return this._sharedAccess;
+    }
+
+    @action
+    set sharedAccess(access: Access) {
+        this._sharedAccess = access;
     }
 
     get loadStatus() {
