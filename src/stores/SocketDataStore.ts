@@ -1,7 +1,7 @@
 import { RootStore } from './rootStore';
 import { io, Socket } from 'socket.io-client';
 import { action, observable, reaction } from 'mobx';
-import { default as api, checkLogin as pingApi } from '../api/base';
+import { checkLogin as pingApi, default as api } from '../api/base';
 import iStore from './iStore';
 import {
     ChangedDocument,
@@ -15,6 +15,7 @@ import {
     ServerToClientEvents
 } from '../api/IoEventTypes';
 import { BACKEND_URL } from '../authConfig';
+import { DocumentRootUpdate } from '@site/src/api/documentRoot';
 
 type TypedSocket = Socket<ServerToClientEvents, ClientToServerEvents>;
 
@@ -122,7 +123,11 @@ export class SocketDataStore extends iStore<'ping'> {
 
     @action
     updateRecord({ type, record }: ChangedRecord<RecordType>) {
-        console.log('changedRecord', type, record);
+        if (type === RecordType.DocumentRoot) {
+            this.root.documentRootStore.handleUpdate(record as DocumentRootUpdate);
+        } else {
+            console.log('changedRecord', type, record);
+        }
     }
 
     @action

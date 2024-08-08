@@ -7,18 +7,18 @@ import Button from '../shared/Button';
 import { mdiShieldLockOutline } from '@mdi/js';
 import DocumentRoot from '@site/src/models/DocumentRoot';
 import Loader from '@site/src/components/Loader';
+import { observer } from 'mobx-react-lite';
 
 interface Props {
     documentRootId: string;
 }
 
-const PermissionsPanel = ({documentRootId}: Props) => {
-
+const PermissionsPanel = observer(({ documentRootId }: Props) => {
     const [documentRoot, setDocumentRoot] = useState<DocumentRoot<any> | null>();
 
     const onOpen = async () => {
         setDocumentRoot(rootStore.documentRootStore.find(documentRootId));
-    }
+    };
 
     return (
         <Popup
@@ -26,23 +26,21 @@ const PermissionsPanel = ({documentRootId}: Props) => {
             onOpen={onOpen}
             modal
             closeOnEscape
-            closeOnDocumentClick>
-
+            closeOnDocumentClick
+        >
             <div className={styles.popupContentContainer}>
                 <h2>Permissions</h2>
-                {!!documentRoot &&
+                {!!documentRoot && (
                     <div>
-                        <div>Root permission: {documentRoot.permission}</div>
+                        <div>Root permission: {documentRoot.persistedAccess}</div>
                         <div>Shared access: {documentRoot.sharedAccess}</div>
                     </div>
-                }
+                )}
 
-                {!documentRoot &&
-                    <Loader />
-                }
+                {!documentRoot && <Loader />}
             </div>
         </Popup>
     );
-};
+});
 
 export default PermissionsPanel;
