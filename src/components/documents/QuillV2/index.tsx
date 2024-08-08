@@ -21,6 +21,8 @@ const QuillV2 = observer((props: Omit<Props, 'quillDocument'>) => {
             setQuill(quill);
         });
     }, []);
+    if (doc) {
+    }
     if (!useIsBrowser() || !doc || !quill) {
         return <div>{props.default || props.placeholder || '✍️ Antwort...'}</div>;
     }

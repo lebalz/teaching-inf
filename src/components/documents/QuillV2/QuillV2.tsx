@@ -1,8 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import { useFirstMainDocument } from '../../../hooks/useFirstMainDocument';
 import Loader from '../../Loader';
-import { default as QuillV2Model, MetaInit, ModelMeta } from '@site/src/models/documents/QuillV2';
+import { default as QuillV2Model, MetaInit } from '@site/src/models/documents/QuillV2';
 import { useQuill } from 'react-quilljs';
 import { ToolbarOptions } from '@site/src/models/documents/QuillV2/helpers/toolbar';
 import 'quill/dist/quill.snow.css'; // Add css for snow theme
@@ -29,6 +28,7 @@ export interface Props extends MetaInit {
     placeholder?: string;
     theme?: 'snow' | 'bubble';
     quillDocument: QuillV2Model;
+    hideToolbar?: boolean;
 }
 
 const FORMATS = [
@@ -61,7 +61,6 @@ const QuillV2 = observer((props: Props) => {
     const mounted = React.useRef(false);
     const updateSource = React.useRef<'current' | undefined>(undefined);
     const [processingImage, setProcessingImage] = React.useState(false);
-    const [showQuillToolbar, setShowQuillToolbar] = React.useState(false);
     const ref = React.useRef<HTMLDivElement>(null);
     const [theme] = React.useState(props.theme || 'snow');
     const { quill, quillRef, Quill } = useQuill({
@@ -72,7 +71,7 @@ const QuillV2 = observer((props: Props) => {
                 showSize: false,
                 toolbar: {
                     alingTools: true,
-                    sizeTools: false
+                    sizeTools: true
                 },
                 locale: {
                     altTip: 'Alt-Taste gedrückt halten, um das Seitenverhältnis beizubehalten',
@@ -174,6 +173,29 @@ const QuillV2 = observer((props: Props) => {
         }
     }, [quill, updateSource]);
 
+    /** ensure no context menu is shown when using bubble mode. Otherwise, touch-devices can't start to edit... */
+    React.useEffect(() => {
+        if (ref.current) {
+            const onContext = (e: MouseEvent) => {
+                e.preventDefault();
+                if (props.theme === 'bubble') {
+                    try {
+                        (quill as any).theme.tooltip.edit();
+                        (quill as any).theme.tooltip.show();
+                    } catch (e) {
+                        console.log(e);
+                    }
+                }
+            };
+            ref.current.addEventListener('contextmenu', onContext);
+            return () => {
+                if (ref.current) {
+                    ref.current.removeEventListener('contextmenu', onContext);
+                }
+            };
+        }
+    }, [ref, quill]);
+
     React.useEffect(() => {
         const onQuillToolbarMouseDown = (e: any) => {
             e.preventDefault();
@@ -224,48 +246,55 @@ const QuillV2 = observer((props: Props) => {
         quill.setContents(doc.delta, 'silent');
     }, [quill, doc.delta, updateSource]);
 
-    React.useEffect(() => {
-        if (Quill && !quill) {
-            /**
-             * ensure these attributes are present in the formats object
-             * and are be persisted to the delta
-             */
-            class ImageFormat extends BaseImageFormat {
-                static formats(domNode: Element) {
-                    const formats: { [key: string]: string } = {};
-                    ['alt', 'height', 'width', 'style'].forEach((attribute) => {
-                        if (domNode.hasAttribute(attribute)) {
-                            formats[attribute] = domNode.getAttribute(attribute)!;
-                        }
-                    });
-                    return formats;
-                }
-                format(name: string, value: string) {
-                    if (['alt', 'height', 'width', 'style'].includes(name)) {
-                        if (value) {
-                            this.domNode.setAttribute(name, value);
-                        } else {
-                            this.domNode.removeAttribute(name);
-                        }
-                    } else {
-                        super.format(name, value);
+    if (Quill && !quill) {
+        /**
+         * current bug in react strict mode together with quilljs:
+         * the toolbar is rendered twice, once with the correct toolbar and once without.
+         * if there are two toolbars, remove the first one.
+         */
+        if (ref.current) {
+            const toolbars = ref.current.querySelectorAll('.ql-toolbar[role="toolbar"]');
+            if (toolbars.length > 0) {
+                toolbars[0].remove();
+            }
+        }
+        /**
+         * ensure these attributes are present in the formats object
+         * and are be persisted to the delta
+         */
+        class ImageFormat extends BaseImageFormat {
+            static formats(domNode: Element) {
+                const formats: { [key: string]: string } = {};
+                ['alt', 'height', 'width', 'style'].forEach((attribute) => {
+                    if (domNode.hasAttribute(attribute)) {
+                        formats[attribute] = domNode.getAttribute(attribute)!;
                     }
+                });
+                return formats;
+            }
+            format(name: string, value: string) {
+                if (['alt', 'height', 'width', 'style'].includes(name)) {
+                    if (value) {
+                        this.domNode.setAttribute(name, value);
+                    } else {
+                        this.domNode.removeAttribute(name);
+                    }
+                } else {
+                    super.format(name, value);
                 }
             }
-
-            Quill.register(ImageFormat, true);
-            (window as any).Quill = Quill;
-            /* Quill register method signature is => static register(path, target, overwrite = false)
-            Set overwrite to true to avoid warning
-            https://github.com/quilljs/quill/issues/2559#issuecomment-945605414 */
-            Quill.register('modules/resize', ResizeModule, true);
         }
-    }, [quill, Quill]);
+
+        Quill.register(ImageFormat, true);
+        /* Quill register method signature is => static register(path, target, overwrite = false)
+        Set overwrite to true to avoid warning
+        https://github.com/quilljs/quill/issues/2559#issuecomment-945605414 */
+        Quill.register('modules/resize', ResizeModule, true);
+    }
 
     return (
         <div
             className={clsx(styles.quillEditor, styles.quill, 'notranslate')}
-            onFocus={() => !showQuillToolbar && setShowQuillToolbar(true)}
             onBlur={() => {
                 updateSource.current = undefined;
             }}
@@ -276,9 +305,11 @@ const QuillV2 = observer((props: Props) => {
                     'quill-editor-container',
                     styles.quillAnswer,
                     props.monospace && styles.monospace,
-                    !showQuillToolbar && styles.disableToolbar
+                    props.hideToolbar && styles.hideToolbar
                 )}
-                // style={{ display: mounted.current ? undefined : 'none', ...(props.style || {}) }}
+                style={{
+                    ...(props.style || {})
+                }} /*display: (props.toolbarAlwaysVisible || mounted.current) ? undefined : 'none',*/
             >
                 <div ref={quillRef} />
                 {processingImage && <Loader label="Bild Einfügen..." overlay />}
