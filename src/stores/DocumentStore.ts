@@ -16,7 +16,7 @@ import TaskState from '@site/src/models/documents/TaskState';
 import iStore from './iStore';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
-import iDocument from '../models/iDocument';
+import iDocument, { Source } from '../models/iDocument';
 import ScriptVersion from '../models/documents/ScriptVersion';
 import { ChangedDocument } from '../api/IoEventTypes';
 import String from '../models/documents/String';
@@ -216,7 +216,7 @@ class DocumentStore extends iStore {
     handleUpdate(change: ChangedDocument) {
         const model = this.find(change.id);
         if (model) {
-            model.setData(change.data as any, false, new Date(change.updatedAt));
+            model.setData(change.data as any, Source.API, new Date(change.updatedAt));
         }
     }
 }

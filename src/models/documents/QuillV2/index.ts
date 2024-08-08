@@ -1,10 +1,11 @@
 import { action, computed, observable } from 'mobx';
-import iDocument from '../../iDocument';
+import iDocument, { Source } from '../../iDocument';
 import { DocumentType, Document as DocumentProps, TypeDataMapping, Access } from '@site/src/api/document';
 import DocumentStore from '@site/src/stores/DocumentStore';
 import { TypeMeta } from '../../DocumentRoot';
 import { getToolbar, TOOLBAR, ToolbarModule, ToolbarOptions } from './helpers/toolbar';
 import { Delta } from 'quill/core';
+import { ApiState } from '@site/src/stores/iStore';
 
 export interface MetaInit {
     readonly?: boolean;
@@ -38,16 +39,25 @@ export class ModelMeta extends TypeMeta<DocumentType.QuillV2> {
 
 class QuillV2 extends iDocument<DocumentType.QuillV2> {
     @observable.ref accessor delta: Delta;
+    /**
+     * whenever a API change is detected, this accessor is increased
+     * --> the QuillV2 component will reload accordingly
+     */
+    @observable accessor hotReloadTrigger: number = 0;
+
     constructor(props: DocumentProps<DocumentType.QuillV2>, store: DocumentStore) {
         super(props, store);
         this.delta = props.data.delta;
     }
 
     @action
-    setData(data: TypeDataMapping[DocumentType.QuillV2], persist: boolean, updatedAt?: Date): void {
+    setData(data: TypeDataMapping[DocumentType.QuillV2], from: Source, updatedAt?: Date): void {
         this.delta = data.delta;
-        if (persist) {
+        if (from === Source.LOCAL) {
             this.save();
+        } else {
+            this.hotReloadTrigger = this.hotReloadTrigger + 1;
+            this.state = ApiState.SYNCING;
         }
         if (updatedAt) {
             this.updatedAt = new Date(updatedAt);
@@ -62,7 +72,7 @@ class QuillV2 extends iDocument<DocumentType.QuillV2> {
 
     @action
     setDelta(delta: Delta): void {
-        this.setData({ delta }, true);
+        this.setData({ delta }, Source.LOCAL);
     }
 
     @computed
