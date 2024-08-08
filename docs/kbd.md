@@ -42,7 +42,7 @@ const config: Config = {
 :::
 
 :::info[`src/css/custom.scss`]
-```scss
+```css
 kbd {
     padding: 0.3em 0.5em;
     padding-bottom: 0.35em;
