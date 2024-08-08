@@ -16,6 +16,7 @@ import {
 } from '../api/IoEventTypes';
 import { BACKEND_URL } from '../authConfig';
 import { DocumentRootUpdate } from '@site/src/api/documentRoot';
+import { GroupPermission, UserPermission } from '@site/src/api/permission';
 
 type TypedSocket = Socket<ServerToClientEvents, ClientToServerEvents>;
 
@@ -123,10 +124,19 @@ export class SocketDataStore extends iStore<'ping'> {
 
     @action
     updateRecord({ type, record }: ChangedRecord<RecordType>) {
-        if (type === RecordType.DocumentRoot) {
-            this.root.documentRootStore.handleUpdate(record as DocumentRootUpdate);
-        } else {
-            console.log('changedRecord', type, record);
+        switch (type) {
+            case RecordType.DocumentRoot:
+                this.root.documentRootStore.handleUpdate(record as DocumentRootUpdate);
+                break;
+            case RecordType.UserPermission:
+                this.root.permissionStore.handleUserPermissionUpdate(record as UserPermission);
+                break;
+            case RecordType.GroupPermission:
+                this.root.permissionStore.handleGroupPermissionUpdate(record as GroupPermission);
+                break;
+            default:
+                console.log('changedRecord', type, record);
+                break;
         }
     }
 
@@ -138,7 +148,19 @@ export class SocketDataStore extends iStore<'ping'> {
 
     @action
     deleteRecord({ type, id }: DeletedRecord) {
-        console.log('deletedRecord', type, id);
+        switch (type) {
+            case RecordType.UserPermission:
+                // TODO: Do we also need to update all docs / doc roots?
+                this.root.permissionStore.deleteUserPermission(id);
+                break;
+            case RecordType.GroupPermission:
+                // TODO: Do we also need to update all docs / doc roots?
+                this.root.permissionStore.deleteGroupPermission(id);
+                break;
+            default:
+                console.log('deletedRecord', type, id);
+                break;
+        }
     }
 
     @action
