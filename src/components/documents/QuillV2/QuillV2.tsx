@@ -16,6 +16,7 @@ import ResizeModule from '@botom/quill-resize-module';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
 import SyncStatus from '../../SyncStatus';
+import { action } from 'mobx';
 
 export interface Props extends MetaInit {
     id: string;
@@ -24,7 +25,7 @@ export interface Props extends MetaInit {
     monospace?: boolean;
     default?: string;
     toolbar?: ToolbarOptions;
-    toolbarAdd?: ToolbarOptions;
+    toolbarExtra?: ToolbarOptions;
     placeholder?: string;
     theme?: 'snow' | 'bubble';
 }
@@ -38,24 +39,25 @@ const FORMATS = [
     'list',
     'indent',
     'size',
-    'width',
     'header',
     'link',
     'image',
     'color',
     'background',
-    'clean',
     'code-block',
     'indent',
     'blockquote',
     'script',
     'code',
-    'style',
+    // 'width',
+    // 'clean',
+    // 'style',
     // 'video'
 ];
 
 const QuillV2 = observer((props: Props) => {
     const mounted = React.useRef(false);
+    const updateSource = React.useRef<'current' | undefined>(undefined);
     const [meta] = React.useState(new ModelMeta(props));
     const doc = useFirstMainDocument(props.id, meta);
     const [processingImage, setProcessingImage] = React.useState(false);
@@ -146,22 +148,31 @@ const QuillV2 = observer((props: Props) => {
     };
 
     React.useEffect(() => {
+        console.log(meta.toolbar);
         if (quill && doc) {
             quill.setContents(doc.delta);
-            quill.on('text-change', (delta, oldDelta, source) => {
+            const saveHandeler = action(() => {
+                updateSource.current = 'current';
                 doc.setDelta(quill.getContents());
             });
-            const isMac = navigator.userAgent.includes('Mac');
+            quill.on('text-change', saveHandeler);
             quill.keyboard.addBinding(
                 {
                     key: 's',
-                    metaKey: isMac,
-                    ctrlKey: !isMac
+                    shortKey: true,
+                    handler: action(function () {
+                        console.log('save');
+                        doc.saveNow();
+                    })
                 },
-                () => doc.saveNow()
             );
+
+            return () => {
+                quill.off('text-change', saveHandeler);
+                delete quill.keyboard.bindings['s'];
+            }
         }
-    }, [quill, doc]);
+    }, [quill, doc, doc?.id, updateSource]);
 
     React.useEffect(() => {
         const onQuillToolbarMouseDown = (e: any) => {
@@ -197,11 +208,21 @@ const QuillV2 = observer((props: Props) => {
     }, [doc]);
 
     React.useEffect(() => {
-        if (!doc || doc.hotReloadTrigger < 1 || !quill) {
+        if (!doc || !quill) {
             return;
         }
+        
+        /**
+         * Do not update the quill editor if the change was made by the current quill component
+        */
+        const source = updateSource.current;
+        updateSource.current = undefined;
+        if (source === 'current') {
+            return;
+        }
+
         quill.setContents(doc.delta, 'silent');
-    }, [quill, doc?.hotReloadTrigger]);
+    }, [quill, doc?.delta, updateSource]);
 
     if (Quill && !quill) {
         /**
@@ -247,7 +268,7 @@ const QuillV2 = observer((props: Props) => {
         <div
             className={clsx(styles.quillEditor, styles.quill, 'notranslate')}
             onFocus={() => !showQuillToolbar && setShowQuillToolbar(true)}
-            // onBlur={() => showQuillToolbar && setShowQuillToolbar(false)}
+            onBlur={() => {updateSource.current = undefined}}
             ref={ref}
         >
             <div
