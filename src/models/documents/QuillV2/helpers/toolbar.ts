@@ -9,7 +9,7 @@ export interface ToolbarOptions {
     background?: boolean;
     ul?: boolean;
     ol?: boolean;
-    formula?: boolean;
+    // formula?: boolean;
     code?: boolean;
     image?: boolean;
 }
@@ -100,11 +100,11 @@ export const getToolbar = (options: ToolbarOptions): ToolbarModule => {
         }
         toolbar.push(l);
     }
-    if (options.formula || options.image) {
+    if (options.image) { // || options.formula 
         const visuals = [];
-        if (options.formula) {
-            visuals.push('formula');
-        }
+        // if (options.formula) {
+        //     visuals.push('formula');
+        // }
         if (options.image) {
             visuals.push('image');
         }

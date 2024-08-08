@@ -23,7 +23,7 @@ export class ModelMeta extends TypeMeta<DocumentType.QuillV2> {
 
     constructor(props: Partial<MetaInit>) {
         super(DocumentType.QuillV2, props.readonly ? Access.RO : undefined);
-        this.default = `${props.default}` || '';
+        this.default = `${props.default || ''}\n` || '\n';
         this.toolbar = props.toolbar
             ? getToolbar(props.toolbar)
             : [...TOOLBAR, ...getToolbar(props.toolbarExtra || {})];
@@ -39,11 +39,6 @@ export class ModelMeta extends TypeMeta<DocumentType.QuillV2> {
 
 class QuillV2 extends iDocument<DocumentType.QuillV2> {
     @observable.ref accessor delta: Delta;
-    /**
-     * whenever a API change is detected, this accessor is increased
-     * --> the QuillV2 component will reload accordingly
-     */
-    @observable accessor hotReloadTrigger: number = 0;
 
     constructor(props: DocumentProps<DocumentType.QuillV2>, store: DocumentStore) {
         super(props, store);
@@ -56,7 +51,6 @@ class QuillV2 extends iDocument<DocumentType.QuillV2> {
         if (from === Source.LOCAL) {
             this.save();
         } else {
-            this.hotReloadTrigger = this.hotReloadTrigger + 1;
             this.state = ApiState.SYNCING;
         }
         if (updatedAt) {
