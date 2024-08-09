@@ -14,13 +14,13 @@ const DEFAULT_TAG_NAMES = {
 
 interface OptionsInput {
     tagNames?: {
-        figure?: string,
-        figcaption?: string,
-        sourceRef?: string
-    },
+        figure?: string;
+        figcaption?: string;
+        sourceRef?: string;
+    };
     vFile?: {
-        history: string[]
-    }
+        history: string[];
+    };
 }
 
 const SPACER_SPAN = {
@@ -85,11 +85,11 @@ const plugin: Plugin = function plugin(
         visit(ast, (node, idx, parent: Parent) => {
             if (node.type === 'paragraph') {
                 const paragraph = node as unknown as Paragraph;
-                const imagesOnly = paragraph.children.every(n => {
-                    return n.type === 'image' || (n.type === 'text' && n.value.trim() === '')
+                const imagesOnly = paragraph.children.every((n) => {
+                    return n.type === 'image' || (n.type === 'text' && n.value.trim() === '');
                 });
                 if (imagesOnly) {
-                    const imgs = paragraph.children.filter(n => n.type === 'image') as Image[];
+                    const imgs = paragraph.children.filter((n) => n.type === 'image') as Image[];
                     parent.children.splice(idx!, 1, ...imgs);
                     return [SKIP, idx];
                 }
@@ -126,35 +126,42 @@ const plugin: Plugin = function plugin(
 
                 if (cleanedAlt) {
                     const altAst = this.parse(cleanedAlt) as unknown as Parent;
-                    const isWrappedByParagraph = altAst.children?.length === 1 && altAst.children[0].type === 'paragraph';
+                    const isWrappedByParagraph =
+                        altAst.children?.length === 1 && altAst.children[0].type === 'paragraph';
                     const sanitized = isWrappedByParagraph ? (altAst.children[0] as Paragraph) : altAst;
-                    (caption.children as Content[]).splice(0, 0, ...[SPACER_SPAN, ...sanitized.children, SPACER_SPAN])
+                    (caption.children as Content[]).splice(
+                        0,
+                        0,
+                        ...[SPACER_SPAN, ...sanitized.children, SPACER_SPAN]
+                    );
                 }
 
                 /**
                  * Try to find a bib file with the same name as the image
                  */
                 const ext = path.extname(image.url);
-                const bibFile = path.resolve(dir, image.url.replace((new RegExp(`${ext}$`)), '.json'));
+                const bibFile = path.resolve(dir, image.url.replace(new RegExp(`${ext}$`), '.json'));
                 const hasBibFile = fs.existsSync(bibFile);
                 if (hasBibFile) {
-                    const bibPromise = import(bibFile).then(({ default: bib }) => {
-                        const bibNode = {
-                            type: jsxType,
-                            name: optionsInput?.tagNames?.sourceRef || DEFAULT_TAG_NAMES.sourceRef,
-                            attributes: [toJsxAttribute('bib', bib)],
-                            children: [],
-                            data: {
-                                _mdxExplicitJsx: true
+                    const bibPromise = import(bibFile)
+                        .then(({ default: bib }) => {
+                            const bibNode = {
+                                type: jsxType,
+                                name: optionsInput?.tagNames?.sourceRef || DEFAULT_TAG_NAMES.sourceRef,
+                                attributes: [toJsxAttribute('bib', bib)],
+                                children: [],
+                                data: {
+                                    _mdxExplicitJsx: true
+                                }
+                            } as MdxJsxFlowElement;
+                            if (!cleanedAlt) {
+                                caption.children.splice(caption.children.length, 0, SPACER_SPAN);
                             }
-                        } as MdxJsxFlowElement;
-                        if (!cleanedAlt) {
-                            caption.children.splice(caption.children.length, 0, SPACER_SPAN)
-                        }
-                        caption.children.splice(caption.children.length, 0, bibNode)
-                    }).catch((err) => {
-                        console.warn('Invalid bib file', bibFile, err);
-                    });
+                            caption.children.splice(caption.children.length, 0, bibNode);
+                        })
+                        .catch((err) => {
+                            console.warn('Invalid bib file', bibFile, err);
+                        });
                     bibPromises.push(bibPromise);
                 }
                 if (caption.children.length > 0 || hasBibFile) {
@@ -165,8 +172,7 @@ const plugin: Plugin = function plugin(
         });
         await Promise.all(bibPromises);
         // console.log(JSON.stringify(ast, null, 2));
-    }
-}
-
+    };
+};
 
 export default plugin;
