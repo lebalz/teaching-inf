@@ -133,10 +133,9 @@ const config: Config = {
       },
       items: [
         {
-          type: 'docSidebar',
-          sidebarId: 'gallerySidebar',
+          to: '/docs/Komponentengalerie',
+          label: 'Galerie',
           position: 'left',
-          label: 'Gallerie',
         },
         {to: '/blog', label: 'Blog', position: 'left'},
         {
