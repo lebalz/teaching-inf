@@ -1,5 +1,5 @@
-import _ from "lodash";
-import { iRow } from "../components/SemesterTable";
+import _ from 'lodash';
+import { iRow } from '../components/SemesterTable';
 
 export const SECOND_MS = 1000;
 export const MINUTE_MS = 60 * SECOND_MS;
@@ -17,7 +17,7 @@ export const slimTime = (ms: number) => {
         return `${t.slice(3).replace(/^0+/, '')}m`;
     }
     return `${t.replace(/^0+/, '')}h`;
-}
+};
 
 export const formatTime = (ms: number) => {
     const t = new Date(ms).toISOString().slice(11, -5);
@@ -32,14 +32,13 @@ export const formatDate = (date: Date) => {
     return `${day}.${month}.${year}`;
 };
 
-
 /**
  * expected format: dd.mm.YYYY
  */
 const getDate = (date: string) => {
     const [dd, mm, YYYY] = date.split('.').map(Number.parseInt);
     return new Date(YYYY, mm - 1, dd);
-}
+};
 
 /**
  * Expects the date in the first column. Format: dd.mm.YYYY
@@ -50,7 +49,7 @@ export const SortTimeTableByDate = (dateIdx: number = 0) => {
             const dateA = getDate(a.cells[dateIdx] as string).getTime();
             const dateB = getDate(b.cells[dateIdx] as string).getTime();
             return dateA - dateB;
-        })
+        });
         return rows;
-    }
-}
+    };
+};

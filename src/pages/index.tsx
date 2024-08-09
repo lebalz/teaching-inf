@@ -5,7 +5,7 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import styles from './index.module.scss';
 import HomepageCourses from '../components/HomepageCourses';
 import ImageGallery from 'react-image-gallery';
-import { Content } from "@theme/BlogPostPage";
+import { Content } from '@theme/BlogPostPage';
 
 function HomepageHeader() {
     const { siteConfig } = useDocusaurusContext();
@@ -25,20 +25,20 @@ interface Props {
 export default function Home({ recentPosts }: Props) {
     const images = [
         {
-            original: './img/index/artificial-intelligence.jpg',
+            original: './img/index/artificial-intelligence.jpg'
         },
         {
-            original: './img/index/robot-hand.jpg',
+            original: './img/index/robot-hand.jpg'
         },
         {
-            original: './img/index/security.jpg',
+            original: './img/index/security.jpg'
         },
         {
-            original: './img/index/network.jpg',
+            original: './img/index/network.jpg'
         },
         {
-            original: './img/index/computer.jpg',
-        },
+            original: './img/index/computer.jpg'
+        }
     ];
 
     return (
