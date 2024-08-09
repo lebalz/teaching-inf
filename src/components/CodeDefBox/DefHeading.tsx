@@ -15,7 +15,7 @@ const DefHeading = (props: Props) => {
             <Icon path={mdiFileEyeOutline} size={1} />
             {props.children}
         </div>
-    )
+    );
 };
 
 export default DefHeading;
