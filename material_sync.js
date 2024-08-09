@@ -117,7 +117,7 @@ const main = async () => {
             fs.writeFileSync(`news/${new Date().toISOString().slice(0, 10)}-news.md`, `# News Placeholder\n`);
         }
     }
-    fs.writeFileSync('static/CNAME', (process.env.DOMAIN || 'ofi.gbsl.website').replace(/https?:\/\//g, ''), {
+    fs.writeFileSync('static/CNAME', (process.env.DOMAIN || 'inf.gbsl.website').replace(/https?:\/\//g, ''), {
         encoding: 'utf-8',
         flag: 'w'
     }); /** overwrite */
