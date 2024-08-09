@@ -1,11 +1,11 @@
 const fs = require('fs');
 const path = require('path');
-const CONFIG_FILE = './material_config.json'
+const CONFIG_FILE = './material_config.json';
 
 /** @type {{
  * [key: string]: {
- *  from: string, 
- *  to: string, 
+ *  from: string,
+ *  to: string,
  *  ignore: string[],
  *  open?: boolean
  * }[]}} */
@@ -19,8 +19,8 @@ yarn run cleanup
 examples:
 
 yarn run cleanup
-`)
-    exit(0)
+`);
+    exit(0);
 }
 
 var klassen = Object.keys(configs);
@@ -32,21 +32,21 @@ klassen.forEach((klass) => {
     const config = configs[klass];
     const tmp_dir = `versioned_docs/version-${klass}/.tmp`;
     const copyBack = [];
-    fs.mkdirSync(tmp_dir, {recursive: true});
+    fs.mkdirSync(tmp_dir, { recursive: true });
     config.forEach((src) => {
         if (src.ignore.length > 0) {
-            fs.mkdirSync(`${tmp_dir}/${src.to}`, {recursive: true});
+            fs.mkdirSync(`${tmp_dir}/${src.to}`, { recursive: true });
         }
         src.ignore.forEach((keep) => {
             if (fs.existsSync(`${src.to}/${keep}`)) {
                 const bkpLocation = `${tmp_dir}/${src.to}/${keep}`;
                 if (!fs.existsSync(path.dirname(bkpLocation))) {
-                    fs.mkdirSync(path.dirname(bkpLocation), {recursive: true});
+                    fs.mkdirSync(path.dirname(bkpLocation), { recursive: true });
                 }
-                fs.copyFileSync(`${src.to}/${keep}`, `${tmp_dir}/${src.to}/${keep}`)
+                fs.copyFileSync(`${src.to}/${keep}`, `${tmp_dir}/${src.to}/${keep}`);
             }
             copyBack.push(`${src.to}/${keep}`);
-        })
+        });
         if (fs.existsSync(src.to)) {
             let parent = path.dirname(src.to);
             if (fs.lstatSync(src.to).isDirectory()) {
@@ -55,10 +55,10 @@ klassen.forEach((klass) => {
                 fs.unlinkSync(src.to);
                 const categoryPath = path.join(path.dirname(src.to), '_category_.json');
                 if (src.open) {
-                    console.log(categoryPath, fs.existsSync(categoryPath))
+                    console.log(categoryPath, fs.existsSync(categoryPath));
                 }
                 if (src.open && fs.existsSync(categoryPath)) {
-                    console.log('REMOVE CAT', categoryPath)
+                    console.log('REMOVE CAT', categoryPath);
                     fs.unlinkSync(categoryPath);
                 }
             }
@@ -73,10 +73,9 @@ klassen.forEach((klass) => {
             return;
         }
         if (!fs.existsSync(path.dirname(f))) {
-            fs.mkdirSync(path.dirname(f), {recursive: true});
+            fs.mkdirSync(path.dirname(f), { recursive: true });
         }
         fs.copyFileSync(`${tmp_dir}/${f}`, f);
     });
     fs.rmSync(tmp_dir, { recursive: true, force: true });
-
-})
+});
