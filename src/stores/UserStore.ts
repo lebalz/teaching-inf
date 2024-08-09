@@ -3,7 +3,7 @@ import { User as UserProps, find as apiFind, currentUser } from '../api/user';
 import { RootStore } from './rootStore';
 import User from '../models/User';
 import _ from 'lodash';
-import Storage, { PersistedData, StorageKey } from './utils/Storage';
+import Storage, { PersistedData } from './utils/Storage';
 import { computedFn } from 'mobx-utils';
 import iStore from './iStore';
 
@@ -29,19 +29,19 @@ export class UserStore extends iStore {
         if (this.users.length > 0) {
             return;
         }
-        const data = _data || Storage.get(StorageKey.SessionStore) || {};
+        const data = _data || Storage.get('SessionStore') || {};
         if (data.user) {
             try {
                 this.addToStore(data.user);
             } catch (e) {
                 console.error(e);
-                Storage.remove(StorageKey.SessionStore);
+                Storage.remove('SessionStore');
             }
         }
     }
 
     find = computedFn(
-        function <T>(this: UserStore, id?: string): User {
+        function <T>(this: UserStore, id?: string): User | undefined {
             if (!id) {
                 return;
             }

@@ -32,7 +32,7 @@ export class SessionStore extends iStore {
     constructor(store: RootStore) {
         super();
         this.root = store;
-        const data = Storage.get<PersistedData>(StorageKey.SessionStore) || {};
+        const data = Storage.get<PersistedData>(SessionStore.NAME) || {};
         this.rehydrate(data);
 
         reaction(
@@ -40,7 +40,7 @@ export class SessionStore extends iStore {
             (id) => {
                 if (id) {
                     const user = this.root.userStore.current!;
-                    Storage.set(StorageKey.SessionStore, {
+                    Storage.set(SessionStore.NAME, {
                         user: { ...user.props, role: Role.USER }
                     });
                 }
@@ -66,7 +66,6 @@ export class SessionStore extends iStore {
                 console.error('Failed to logout', err);
             })
             .finally(() => {
-                // this.root.cleanup();
                 Storage.remove(SessionStore.NAME);
                 localStorage.clear();
                 window.location.reload();
