@@ -24,7 +24,7 @@
         "@mdi/js": "^7.4.47",
         "@mdi/react": "^1.6.1",
         "@mdx-js/react": "^3.0.0",
-        "@types/lodash": "^4.17.6",
+        "@types/lodash": "^4.17.7",
         "axios": "^1.7.2",
         "clsx": "^2.0.0",
         "docusaurus-live-brython": "^3.0.0-beta.27",
