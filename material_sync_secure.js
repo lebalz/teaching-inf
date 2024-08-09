@@ -1,9 +1,8 @@
 const { syncSecure } = require('./material_helpers');
 
-
 const main = async () => {
-        /** copy secure pages */
-        await syncSecure();
+    /** copy secure pages */
+    await syncSecure();
 };
 
 main().catch((e) => {
