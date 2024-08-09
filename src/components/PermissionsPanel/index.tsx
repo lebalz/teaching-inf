@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Popup from 'reactjs-popup';
-import 'reactjs-popup/dist/index.css';
 import styles from './styles.module.scss';
-import { rootStore } from '@site/src/stores/rootStore';
 import Button from '../shared/Button';
 import { mdiShieldLockOutline } from '@mdi/js';
 import DocumentRoot from '@site/src/models/DocumentRoot';
-import Loader from '@site/src/components/Loader';
 import { observer } from 'mobx-react-lite';
 import { Access } from '@site/src/api/document';
+import { useStore } from '@site/src/hooks/useStore';
+import clsx from 'clsx';
 
 interface Props {
     documentRootId: string;
@@ -43,71 +42,82 @@ const AccessRadioButton = observer(({ targetAccess, accessProp, documentRoot }: 
 });
 
 const PermissionsPanel = observer(({ documentRootId }: Props) => {
-    const [documentRoot, setDocumentRoot] = useState<DocumentRoot<any> | null>();
+    const userStore = useStore('userStore');
+    const documentRootStore = useStore('documentRootStore')
+    const documentRoot = documentRootStore.find(documentRootId);
 
-    const onOpen = async () => {
-        setDocumentRoot(rootStore.documentRootStore.find(documentRootId));
-    };
+    if (!userStore.current?.isAdmin || !documentRoot) {
+        return null;
+    }
 
     return (
-        <>
-            {rootStore.userStore.current?.isAdmin && (
-                <Popup
-                    trigger={<Button icon={mdiShieldLockOutline}></Button>}
-                    onOpen={onOpen}
-                    modal
-                    closeOnEscape
-                    closeOnDocumentClick
-                >
+        <Popup
+            trigger={
+                <span>
+                    <Button
+                        onClick={(e) => {
+                            e.preventDefault();
+                        }}
+                        icon={mdiShieldLockOutline}
+                        color="secondary"
+                    />
+                </span>
+            }
+            on="click"
+            closeOnDocumentClick
+            closeOnEscape
+        >
+            <div className={clsx(styles.wrapper, 'card')}>
+                <div className={clsx('card__header', styles.header)}>
+                    <h3>
+                        Berechtigungen Festlegen
+                    </h3>
+                </div>
+                <div className={clsx('card__body')}>
                     <div className={styles.popupContentContainer}>
-                        <h2>Permissions</h2>
-                        {!!documentRoot && (
-                            <div>
-                                <div className={styles.radioGroup}>
-                                    <b className={styles.radioGroupTitle}>Root access:</b>
-                                    <AccessRadioButton
-                                        targetAccess={Access.RW}
-                                        accessProp="rootAccess"
-                                        documentRoot={documentRoot}
-                                    />
-                                    <AccessRadioButton
-                                        targetAccess={Access.RO}
-                                        accessProp="rootAccess"
-                                        documentRoot={documentRoot}
-                                    />
-                                    <AccessRadioButton
-                                        targetAccess={Access.None}
-                                        accessProp="rootAccess"
-                                        documentRoot={documentRoot}
-                                    />
-                                </div>
-
-                                <div className={styles.radioGroup}>
-                                    <b className={styles.radioGroupTitle}>Shared access:</b>
-                                    <AccessRadioButton
-                                        targetAccess={Access.RW}
-                                        accessProp="sharedAccess"
-                                        documentRoot={documentRoot}
-                                    />
-                                    <AccessRadioButton
-                                        targetAccess={Access.RO}
-                                        accessProp="sharedAccess"
-                                        documentRoot={documentRoot}
-                                    />
-                                    <AccessRadioButton
-                                        targetAccess={Access.None}
-                                        accessProp="sharedAccess"
-                                        documentRoot={documentRoot}
-                                    />
-                                </div>
+                        <div>
+                            <div className={styles.radioGroup}>
+                                <b className={styles.radioGroupTitle}>Root access:</b>
+                                <AccessRadioButton
+                                    targetAccess={Access.RW}
+                                    accessProp="rootAccess"
+                                    documentRoot={documentRoot}
+                                />
+                                <AccessRadioButton
+                                    targetAccess={Access.RO}
+                                    accessProp="rootAccess"
+                                    documentRoot={documentRoot}
+                                />
+                                <AccessRadioButton
+                                    targetAccess={Access.None}
+                                    accessProp="rootAccess"
+                                    documentRoot={documentRoot}
+                                />
                             </div>
-                        )}
 
-                        {!documentRoot && <Loader />}
+                            <div className={styles.radioGroup}>
+                                <b className={styles.radioGroupTitle}>Shared access:</b>
+                                <AccessRadioButton
+                                    targetAccess={Access.RW}
+                                    accessProp="sharedAccess"
+                                    documentRoot={documentRoot}
+                                />
+                                <AccessRadioButton
+                                    targetAccess={Access.RO}
+                                    accessProp="sharedAccess"
+                                    documentRoot={documentRoot}
+                                />
+                                <AccessRadioButton
+                                    targetAccess={Access.None}
+                                    accessProp="sharedAccess"
+                                    documentRoot={documentRoot}
+                                />
+                            </div>
+                        </div>
                     </div>
-                </Popup>
-            )}
-        </>
+                </div>
+            </div>
+        </Popup>
     );
 });
 
