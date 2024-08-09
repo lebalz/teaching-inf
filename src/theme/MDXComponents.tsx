@@ -16,5 +16,5 @@ export default {
     DefHeading: DefHeading,
     DefContent: DefContent,
     Figure: Figure,
-    SourceRef: SourceRef,
+    SourceRef: SourceRef
 };

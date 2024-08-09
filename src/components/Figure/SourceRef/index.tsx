@@ -4,7 +4,6 @@ import styles from './styles.module.scss';
 import Icon from '@mdi/react';
 import { mdiOpenInNew } from '@mdi/js';
 
-
 interface Bib {
     author?: string;
     source?: string;
