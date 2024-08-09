@@ -50,9 +50,7 @@ html[data-theme='dark'] {
 
     details.solution {
         --ifm-alert-border-color: var(--ifm-color-success-dark);
-        --ifm-alert-background-color: var(
-            --ifm-color-success-contrast-background
-          );
+        --ifm-alert-background-color: var(--ifm-color-success-contrast-background);
     }
 
     details.hint,
@@ -78,7 +76,7 @@ html[data-theme='dark'] {
                     transform: scale(1.6) rotate(360deg);
                 }
             }
-        } 
+        }
         > div {
             > div {
                 // the collapsibleContent within the details
