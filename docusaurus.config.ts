@@ -11,9 +11,22 @@ import kbdPlugin from './src/plugins/remark-kbd/plugin';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import { mdiSourceCommit } from '@mdi/js';
+import defboxPlugin from './src/plugins/remark-code-defbox/plugin';
+import flexCardsPlugin from './src/plugins/remark-flex-cards/plugin';
+import imagePlugin from './src/plugins/remark-images/plugin';
+import mediaPlugin from './src/plugins/remark-media/plugin';
 
 const GIT_COMMIT_SHA = process.env.GITHUB_SHA || Math.random().toString(36).substring(7);
 const BASE_URL = '/';
+
+const BEFORE_DEFAULT_REMARK_PLUGINS = [
+  flexCardsPlugin,
+  [
+      imagePlugin,
+      { tagNames: { sourceRef: 'SourceRef', figure: 'Figure' } }
+  ],
+  defboxPlugin
+];
 
 const REMARK_PLUGINS = [  
   [strongPlugin, { className: 'boxed' }],
@@ -39,6 +52,7 @@ const REMARK_PLUGINS = [
           defaultSize: '1.25em'
       }
   ],
+  mediaPlugin,
   kbdPlugin,
   remarkMath
 ];
@@ -130,6 +144,7 @@ const config: Config = {
           versions: VERSIONS,
           remarkPlugins: REMARK_PLUGINS,
           rehypePlugins: REHYPE_PLUGINS,
+          beforeDefaultRemarkPlugins: BEFORE_DEFAULT_REMARK_PLUGINS,
         },
         blog: {
           showReadingTime: true,
@@ -144,6 +159,7 @@ const config: Config = {
                 extendDefaults: true,
             },
             postsPerPage: 15,
+            beforeDefaultRemarkPlugins: BEFORE_DEFAULT_REMARK_PLUGINS,
         },
         pages: {
           admonitions: {
@@ -152,6 +168,7 @@ const config: Config = {
           },
           remarkPlugins: REMARK_PLUGINS,
           rehypePlugins: REHYPE_PLUGINS,
+          beforeDefaultRemarkPlugins: BEFORE_DEFAULT_REMARK_PLUGINS,
         },
         theme: {
           customCss: [
@@ -175,7 +192,7 @@ const config: Config = {
       items: [
         {to: '/blog', label: 'Blog', position: 'left'},
         {
-          href: 'https://github.com/GBSL-Informatik',
+          href: 'https://github.com/GBSL-Informatik/teaching-dev',
           label: 'GitHub',
           position: 'right',
         },
