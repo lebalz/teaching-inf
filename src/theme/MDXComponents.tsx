@@ -5,6 +5,8 @@ import DefinitionList from '../components/DefinitionList';
 import DefBox from '../components/CodeDefBox';
 import DefHeading from '../components/CodeDefBox/DefHeading';
 import DefContent from '../components/CodeDefBox/DefContent';
+import Figure from '../components/Figure';
+import SourceRef from '../components/Figure/SourceRef';
 
 export default {
     // Re-use the default mapping
@@ -12,5 +14,7 @@ export default {
     Dl: DefinitionList,
     DefBox: DefBox,
     DefHeading: DefHeading,
-    DefContent: DefContent
+    DefContent: DefContent,
+    Figure: Figure,
+    SourceRef: SourceRef,
 };

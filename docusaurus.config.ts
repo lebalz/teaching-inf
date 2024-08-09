@@ -9,11 +9,16 @@ import mdiPlugin from './src/plugins/remark-mdi/plugin';
 import kbdPlugin from './src/plugins/remark-kbd/plugin';
 import defboxPlugin from './src/plugins/remark-code-defbox/plugin';
 import flexCardsPlugin from './src/plugins/remark-flex-cards/plugin';
+import imagePlugin from './src/plugins/remark-images/plugin';
 
 const GIT_COMMIT_SHA = process.env.GITHUB_SHA || Math.random().toString(36).substring(7);
 
 const BEFORE_DEFAULT_REMARK_PLUGINS = [
   flexCardsPlugin,
+  [
+      imagePlugin,
+      { tagNames: { sourceRef: 'SourceRef', figure: 'Figure' } }
+  ],
   defboxPlugin
 ];
 
