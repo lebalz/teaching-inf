@@ -116,7 +116,9 @@
                         background-color: var(--ifm-color-secondary);
                     }
                     &:global(.btn-group) {
+                        flex-basis: auto;
                         :global(.inner-btn) {
+                            min-width: 0.75em;
                             &:hover {
                                 background-color: var(--ifm-color-secondary);
                             }
@@ -168,6 +170,8 @@
     .quill {
         :global(#editor-resizer) {
             :global(.toolbar) > :global(.group) {
+                background: var(--ifm-background-color);
+                color: var(--ifm-font-color-base);
                 a {
                     filter: invert(100%);
                     -webkit-filter: invert(100%);

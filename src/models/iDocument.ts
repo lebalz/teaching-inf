@@ -113,6 +113,9 @@ abstract class iDocument<Type extends DocumentType> {
         if (!this.root) {
             return false;
         }
+        if (this.root.meta.access === Access.RO) {
+            return false;
+        }
         if (this.root.isDummy) {
             return this.root.permission === Access.RW;
         }

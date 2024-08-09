@@ -22,6 +22,14 @@ Wahlweise kann auch das `bubble` Theme verwendet werden.
   <QuillV2 theme="bubble" id="c927c357-4898-4d0c-9878-df0c0100abb3"/>
 </BrowserWindow>
 
+## Readonly
+
+```md
+<QuillV2 readonly id="c927c357-4898-4d0c-9878-df0c0100abb3"/>
+```
+<BrowserWindow>
+  <QuillV2 readonly id="c927c357-4898-4d0c-9878-df0c0100abb3"/>
+</BrowserWindow>
 
 ## Toolbar anpassen
 Die Toolbar kann angepasst werden, indem die gewünschten Buttons definiert werden. Die Buttons können dabei in Gruppen zusammengefasst werden.

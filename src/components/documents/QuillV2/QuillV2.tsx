@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 import Loader from '../../Loader';
-import { default as QuillV2Model, MetaInit } from '@site/src/models/documents/QuillV2';
+import { MetaInit, ModelMeta } from '@site/src/models/documents/QuillV2';
 import { useQuill } from 'react-quilljs';
 import { ToolbarOptions } from '@site/src/models/documents/QuillV2/helpers/toolbar';
 import 'quill/dist/quill.snow.css'; // Add css for snow theme
@@ -16,6 +16,7 @@ import styles from './styles.module.scss';
 import clsx from 'clsx';
 import SyncStatus from '../../SyncStatus';
 import { action } from 'mobx';
+import { useFirstMainDocument } from '@site/src/hooks/useFirstMainDocument';
 
 export interface Props extends MetaInit {
     id: string;
@@ -27,7 +28,6 @@ export interface Props extends MetaInit {
     toolbarExtra?: ToolbarOptions;
     placeholder?: string;
     theme?: 'snow' | 'bubble';
-    quillDocument: QuillV2Model;
     hideToolbar?: boolean;
 }
 
@@ -57,7 +57,8 @@ const FORMATS = [
 ];
 
 const QuillV2 = observer((props: Props) => {
-    const doc = props.quillDocument;
+    const [meta] = React.useState(new ModelMeta(props));
+    const doc = useFirstMainDocument(props.id, meta);
     const mounted = React.useRef(false);
     const updateSource = React.useRef<'current' | undefined>(undefined);
     const [processingImage, setProcessingImage] = React.useState(false);
@@ -66,7 +67,7 @@ const QuillV2 = observer((props: Props) => {
     const { quill, quillRef, Quill } = useQuill({
         theme: theme,
         modules: {
-            toolbar: doc.meta.toolbar,
+            toolbar: meta.toolbar,
             resize: {
                 showSize: false,
                 toolbar: {
@@ -140,15 +141,18 @@ const QuillV2 = observer((props: Props) => {
         setProcessingImage(true);
         dropImage(event).then(insertImage);
     };
-
     const pasteHandler = (event: ClipboardEvent) => {
         setProcessingImage(true);
         pasteImage(event).then(insertImage);
     };
 
+    /**
+     * initial setup of the quill editor
+     * with the props of doc
+     */
     React.useEffect(() => {
-        if (quill) {
-            quill.setContents(doc.delta);
+        if (quill && doc) {
+            quill.setContents(doc.delta, 'silent');
             const saveHandeler = action(() => {
                 updateSource.current = 'current';
                 doc.setDelta(quill.getContents());
@@ -163,15 +167,25 @@ const QuillV2 = observer((props: Props) => {
             });
 
             return () => {
-                if (doc.isDirty) {
+                if (doc.isDirty && updateSource.current !== 'current') {
                     saveHandeler();
                 }
-
                 quill.off('text-change', saveHandeler);
-                delete quill.keyboard.bindings['s'];
             };
         }
-    }, [quill, updateSource]);
+    }, [quill, doc, updateSource]);
+
+    React.useEffect(() => {
+        if (doc && quill) {
+            const isEnabled = quill.isEnabled();
+            const canEdit = doc.canEdit && !props.readonly;
+            if (canEdit && isEnabled) {
+                quill.enable();
+            } else if (!canEdit && !isEnabled) {
+                quill.disable();
+            }
+        }
+    }, [doc, doc?.canEdit, quill])
 
     /** ensure no context menu is shown when using bubble mode. Otherwise, touch-devices can't start to edit... */
     React.useEffect(() => {
@@ -227,10 +241,10 @@ const QuillV2 = observer((props: Props) => {
         return () => {
             mounted.current = false;
         };
-    }, []);
+    }, [doc]);
 
     React.useEffect(() => {
-        if (!quill) {
+        if (!quill || !doc) {
             return;
         }
 
@@ -244,53 +258,40 @@ const QuillV2 = observer((props: Props) => {
         }
 
         quill.setContents(doc.delta, 'silent');
-    }, [quill, doc.delta, updateSource]);
+    }, [quill, doc?.delta, updateSource]);
 
-    if (Quill && !quill) {
-        /**
-         * current bug in react strict mode together with quilljs:
-         * the toolbar is rendered twice, once with the correct toolbar and once without.
-         * if there are two toolbars, remove the first one.
-         */
-        if (ref.current) {
-            const toolbars = ref.current.querySelectorAll('.ql-toolbar[role="toolbar"]');
-            if (toolbars.length > 0) {
-                toolbars[0].remove();
-            }
-        }
-        /**
-         * ensure these attributes are present in the formats object
-         * and are be persisted to the delta
-         */
-        class ImageFormat extends BaseImageFormat {
-            static formats(domNode: Element) {
-                const formats: { [key: string]: string } = {};
-                ['alt', 'height', 'width', 'style'].forEach((attribute) => {
-                    if (domNode.hasAttribute(attribute)) {
-                        formats[attribute] = domNode.getAttribute(attribute)!;
-                    }
-                });
-                return formats;
-            }
-            format(name: string, value: string) {
-                if (['alt', 'height', 'width', 'style'].includes(name)) {
-                    if (value) {
-                        this.domNode.setAttribute(name, value);
+    React.useEffect(() => {
+        if (Quill && !quill) {
+            class ImageFormat extends BaseImageFormat {
+                static formats(domNode: Element) {
+                    const formats: { [key: string]: string } = {};
+                    ['alt', 'height', 'width', 'style'].forEach((attribute) => {
+                        if (domNode.hasAttribute(attribute)) {
+                            formats[attribute] = domNode.getAttribute(attribute)!;
+                        }
+                    });
+                    return formats;
+                }
+                format(name: string, value: string) {
+                    if (['alt', 'height', 'width', 'style'].includes(name)) {
+                        if (value) {
+                            this.domNode.setAttribute(name, value);
+                        } else {
+                            this.domNode.removeAttribute(name);
+                        }
                     } else {
-                        this.domNode.removeAttribute(name);
+                        super.format(name, value);
                     }
-                } else {
-                    super.format(name, value);
                 }
             }
+    
+            Quill.register(ImageFormat, true);
+            /* Quill register method signature is => static register(path, target, overwrite = false)
+            Set overwrite to true to avoid warning
+            https://github.com/quilljs/quill/issues/2559#issuecomment-945605414 */
+            Quill.register('modules/resize', ResizeModule, true);
         }
-
-        Quill.register(ImageFormat, true);
-        /* Quill register method signature is => static register(path, target, overwrite = false)
-        Set overwrite to true to avoid warning
-        https://github.com/quilljs/quill/issues/2559#issuecomment-945605414 */
-        Quill.register('modules/resize', ResizeModule, true);
-    }
+    }, [quill, Quill]);
 
     return (
         <div
@@ -305,15 +306,15 @@ const QuillV2 = observer((props: Props) => {
                     'quill-editor-container',
                     styles.quillAnswer,
                     props.monospace && styles.monospace,
-                    props.hideToolbar && styles.hideToolbar
+                    (props.hideToolbar || !doc?.canEdit || props.readonly) && styles.hideToolbar
                 )}
                 style={{
                     ...(props.style || {})
                 }} /*display: (props.toolbarAlwaysVisible || mounted.current) ? undefined : 'none',*/
             >
-                <div ref={quillRef} />
+                {mounted.current && <div ref={quillRef} />}
                 {processingImage && <Loader label="Bild Einfügen..." overlay />}
-                <SyncStatus model={doc} className={styles.saveIndicator} />
+                {doc && <SyncStatus model={doc} className={styles.saveIndicator} />}
             </div>
         </div>
     );
