@@ -1,4 +1,4 @@
-import { action, computed, observable } from 'mobx';
+import { action, computed, observable, override } from 'mobx';
 import iDocument, { Source } from '../../iDocument';
 import { DocumentType, Document as DocumentProps, TypeDataMapping, Access } from '@site/src/api/document';
 import DocumentStore from '@site/src/stores/DocumentStore';
@@ -6,6 +6,7 @@ import { TypeMeta } from '../../DocumentRoot';
 import { getToolbar, TOOLBAR, ToolbarModule, ToolbarOptions } from './helpers/toolbar';
 import { Delta } from 'quill/core';
 import { ApiState } from '@site/src/stores/iStore';
+import _ from 'lodash';
 
 export interface MetaInit {
     readonly?: boolean;
@@ -75,6 +76,11 @@ class QuillV2 extends iDocument<DocumentType.QuillV2> {
             return this.root.meta as ModelMeta;
         }
         return new ModelMeta({});
+    }
+
+    @computed
+    get isDirty(): boolean {
+        return !_.isEqual(this.delta, this._pristine.delta);
     }
 }
 
