@@ -136,8 +136,6 @@ export class DocumentRootStore extends iStore {
 
         return this.withAbortController(`save-${documentRoot.id}`, (signal) => {
             return apiUpdate(documentRoot.id, model, signal.signal);
-        })
-            .then()
-            .catch(() => console.warn('Error saving document root'));
+        }).catch(() => console.warn('Error saving document root'));
     }
 }

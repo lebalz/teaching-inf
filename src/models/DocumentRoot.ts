@@ -144,7 +144,6 @@ class DocumentRoot<T extends DocumentType> {
     save() {
         return this.store
             .save(this)
-            .then()
             .catch(() => console.log('Failed to update document root'));
     }
 }
