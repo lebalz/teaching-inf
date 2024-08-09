@@ -1,0 +1,42 @@
+---
+sidebar_position: 0.1
+sidebar_label: 28Gj
+sidebar_custom_props:
+  id: 6e06bb1e-1c0e-4ca0-bfea-41fa535850bd
+---
+
+import SemesterTable from "@site/src/components/SemesterTable";
+import {SortTimeTableByDate} from '@site/src/helpers/time';
+import hs2024 from "./28Gb_HS2024.json"
+import hk2024 from "./28Gb-HK_HS2024.json"
+
+# 28Gj Informatik
+
+<Tabs
+    defaultValue="theorie"
+    values={[
+      {label: 'Einzellektion', value: 'theorie'},
+      {label: 'Praktikum', value: 'hk'}
+    ]}
+>
+<TabItem value="theorie">
+<SemesterTable
+  header={["Datum", "Thema", "Inhalt"]}
+  compact
+  selectable
+  rows={hs2024}
+  order={SortTimeTableByDate()}
+/>
+
+</TabItem>
+
+<TabItem value="hk">
+<SemesterTable
+  header={["Datum", "Halbklasse", "Thema", "Inhalt"]}
+  compact
+  selectable
+  rows={hk2024}
+  order={SortTimeTableByDate()}
+/>
+</TabItem>
+</Tabs>

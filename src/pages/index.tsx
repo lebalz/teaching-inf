@@ -1,41 +1,66 @@
+import React from 'react';
 import clsx from 'clsx';
-import Link from '@docusaurus/Link';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
-import HomepageFeatures from '@site/src/components/HomepageFeatures';
-import Heading from '@theme/Heading';
-
-import styles from './index.module.css';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import styles from './index.module.scss';
+import HomepageCourses from '../components/HomepageCourses';
+import ImageGallery from 'react-image-gallery';
+import { Content } from "@theme/BlogPostPage";
 
 function HomepageHeader() {
     const { siteConfig } = useDocusaurusContext();
     return (
-        <header className={clsx('hero hero--primary', styles.heroBanner)}>
-            <div className="container">
-                <Heading as="h1" className="hero__title">
-                    {siteConfig.title}
-                </Heading>
+        <header className={clsx('hero hero--primary index-page', styles.heroBanner)}>
+            <div className="container index-page-title">
+                <h1 className="hero__title">{siteConfig.title}</h1>
                 <p className="hero__subtitle">{siteConfig.tagline}</p>
-                <div className={styles.buttons}>
-                    <Link className="button button--secondary button--lg" to="/docs/Komponentengalerie">
-                        Komponentengalerie 🖼️
-                    </Link>
-                </div>
             </div>
         </header>
     );
 }
+interface Props {
+    readonly recentPosts: readonly { readonly content: Content }[];
+}
 
-export default function Home(): JSX.Element {
-    const { siteConfig } = useDocusaurusContext();
+export default function Home({ recentPosts }: Props) {
+    const images = [
+        {
+            original: './img/index/artificial-intelligence.jpg',
+        },
+        {
+            original: './img/index/robot-hand.jpg',
+        },
+        {
+            original: './img/index/security.jpg',
+        },
+        {
+            original: './img/index/network.jpg',
+        },
+        {
+            original: './img/index/computer.jpg',
+        },
+    ];
+
     return (
-        <Layout
-            title={`Hello from ${siteConfig.title}`}
-            description="Description will go into a meta tag in <head />"
-        >
+        <Layout>
             <HomepageHeader />
             <main>
-                <HomepageFeatures />
+                <div className={clsx(styles.galleryWrapper)}>
+                    <ImageGallery
+                        items={images}
+                        infinite
+                        lazyLoad
+                        showNav={false}
+                        showThumbnails={false}
+                        showFullscreenButton={false}
+                        showPlayButton={false}
+                        showBullets
+                        slideDuration={2000}
+                        slideInterval={8000}
+                        autoPlay
+                    />
+                </div>
+                <HomepageCourses />
             </main>
         </Layout>
     );
