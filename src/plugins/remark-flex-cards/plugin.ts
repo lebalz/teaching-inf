@@ -129,7 +129,7 @@ const visitChildren = (
             if (Object.keys(style).length > 0) {
                 block.attributes.push(toJsxAttribute('style', style));
             }
-            parent.children.splice(idx!, 1, block);
+            parent.children.splice(idx || 0, 1, block);
             items.push(block);
             return SKIP;
         }
@@ -143,13 +143,13 @@ const visitChildren = (
             /**
              * insert the new block before the current node
              */
-            parent.children.splice(idx!, 0, item);
+            parent.children.splice(idx || 0, 0, item);
             // and visit the current node again
-            return [SKIP, idx! + 1];
+            return [SKIP, idx || 0 + 1];
         }
         /** flatten images in paragraphs */
         if (type === ContainerDirectiveName.Cards && node.type === 'paragraph') {
-            parent.children.splice(idx!, 1, ...(node as Paragraph).children);
+            parent.children.splice(idx || 0, 1, ...(node as Paragraph).children);
             return [SKIP, idx];
         }
         const item = items[items.length - 1];
@@ -160,7 +160,7 @@ const visitChildren = (
                 children: [node as Image]
             });
             item.children.push(image);
-            parent.children.splice(idx!, 1);
+            parent.children.splice(idx || 0, 1);
             return [SKIP, idx];
         }
         let content = item.children[item.children.length - 1] as Parent;
@@ -169,7 +169,7 @@ const visitChildren = (
             item.children.push(content as MdxJsxFlowElement);
         }
         content.children.push(node as Content);
-        parent.children.splice(idx!, 1);
+        parent.children.splice(idx || 0, 1);
         /** since the current position was removed, visit the current index again */
         return [SKIP, idx];
     });
@@ -211,7 +211,7 @@ const visitor = (ast: Node) => {
             block.attributes.push(toJsxAttribute('style', attributes.style));
         }
         visitor(block);
-        parent.children.splice(idx!, 1, block);
+        parent.children.splice(idx || 0, 1, block);
         visitChildren(block, type, itemStyle);
     });
 };
