@@ -185,7 +185,7 @@ const QuillV2 = observer((props: Props) => {
                 quill.disable();
             }
         }
-    }, [doc, doc?.canEdit, quill])
+    }, [doc, doc?.canEdit, quill]);
 
     /** ensure no context menu is shown when using bubble mode. Otherwise, touch-devices can't start to edit... */
     React.useEffect(() => {
@@ -284,7 +284,7 @@ const QuillV2 = observer((props: Props) => {
                     }
                 }
             }
-    
+
             Quill.register(ImageFormat, true);
             /* Quill register method signature is => static register(path, target, overwrite = false)
             Set overwrite to true to avoid warning
