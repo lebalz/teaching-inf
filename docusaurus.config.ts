@@ -1,6 +1,7 @@
 require('dotenv').config();
 import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
+import type { VersionOptions } from '@docusaurus/plugin-content-docs';
 import type * as Preset from '@docusaurus/preset-classic';
 
 import strongPlugin from './src/plugins/remark-strong/plugin';
@@ -9,7 +10,10 @@ import mdiPlugin from './src/plugins/remark-mdi/plugin';
 import kbdPlugin from './src/plugins/remark-kbd/plugin';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import { mdiSourceCommit } from '@mdi/js';
+
 const GIT_COMMIT_SHA = process.env.GITHUB_SHA || Math.random().toString(36).substring(7);
+const BASE_URL = '/';
 
 const REMARK_PLUGINS = [  
   [strongPlugin, { className: 'boxed' }],
@@ -42,6 +46,20 @@ const REHYPE_PLUGINS = [
   rehypeKatex
 ]
 
+const VERSIONS: { [version: string]: VersionOptions } = {
+  current: {
+      label: 'Material',
+      banner: 'none'
+  }
+};
+if (!process.env.DOCS_ONLY) {
+  ['28Gb', '28Gj'].forEach(version => {
+      VERSIONS[version] = {
+          label: version,
+          banner: 'none'
+      }
+  });
+}
 
 const config: Config = {
   title: 'Teaching-Dev',
@@ -95,10 +113,21 @@ const config: Config = {
       {
         docs: {
           sidebarPath: './sidebars.ts',
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/GBSL-Informatik/teaching-dev/edit/main/',
+          editUrl: (params) => {
+              if (params.version === 'current') {
+                  return `https://github.com/lebalz/teaching-inf/edit/main/${params.versionDocsDirPath}/${params.docPath}`
+              }
+          },
+          path: 'docs',
+          includeCurrentVersion: true,
+          lastVersion: 'current',
+          showLastUpdateTime: true,
+          routeBasePath: '/',
+          admonitions: {
+              keywords: ['aufgabe', 'finding'],
+              extendDefaults: true,
+          },
+          versions: VERSIONS,
           remarkPlugins: REMARK_PLUGINS,
           rehypePlugins: REHYPE_PLUGINS,
         },
@@ -107,16 +136,28 @@ const config: Config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/GBSL-Informatik/teaching-dev/edit/main/',
+            'https://github.com/lebalz/teaching-inf/edit/main/',
             remarkPlugins: REMARK_PLUGINS,
             rehypePlugins: REHYPE_PLUGINS,
+            admonitions: {
+                keywords: ['aufgabe', 'finding'],
+                extendDefaults: true,
+            },
+            postsPerPage: 15,
         },
         pages: {
+          admonitions: {
+              keywords: ['aufgabe', 'finding'],
+              extendDefaults: true,
+          },
           remarkPlugins: REMARK_PLUGINS,
           rehypePlugins: REHYPE_PLUGINS,
         },
         theme: {
-          customCss: './src/css/custom.scss',
+          customCss: [
+            './src/css/custom.scss',
+             require.resolve('./node_modules/react-image-gallery/styles/css/image-gallery.css')
+          ]
         },
       } satisfies Preset.Options,
     ],
@@ -132,11 +173,6 @@ const config: Config = {
         src: 'img/logo.svg',
       },
       items: [
-        {
-          to: '/docs/Komponentengalerie',
-          label: 'Galerie',
-          position: 'left',
-        },
         {to: '/blog', label: 'Blog', position: 'left'},
         {
           href: 'https://github.com/GBSL-Informatik',
@@ -152,30 +188,72 @@ const config: Config = {
     footer: {
       style: 'dark',
       links: [
-        {
-          title: 'Docs',
-          items: [
-            {
-              label: 'Tutorial',
-              to: '/docs/intro',
-            },
-          ],
-        },
-        {
-          title: 'More',
-          items: [
-            {
-              label: 'Blog',
-              to: '/blog',
-            },
-          ],
-        },
+          {
+              title: 'Tools',
+              items: [
+                  {
+                      label: 'VS Code',
+                      to: 'https://code.visualstudio.com/'
+                  },
+                  {
+                      label: 'Python',
+                      to: 'https://www.python.org/'
+                  }
+              ]
+          },
+          {
+              title: 'Links',
+              items: [
+                  {
+                      label: 'Troubleshooting Office 365',
+                      to: '/troubleshooting',
+                  },
+                  {
+                      label: 'Jupyterhub',
+                      to: 'https://jupyter.gbsl.website',
+                  }
+              ],
+          },
+          {
+              title: 'Gymnasium',
+              items: [
+                  {
+                      label: 'Passwort Zurücksetzen',
+                      to: 'https://password.edubern.ch/'
+                  },
+                  {
+                      label: 'Office 365',
+                      to: 'https://office.com',
+                  },
+                  {
+                      label: 'GBSL',
+                      to: 'https://gbsl.ch',
+                  },
+                  {
+                      label: 'Intranet',
+                      to: 'https://erzbe.sharepoint.com/sites/GYMB/gbs'
+                  },
+                  {
+                      label: 'Stundenplan',
+                      to: 'https://mese.webuntis.com/WebUntis/?school=gym_Biel-Bienne#/basic/main',
+                  },
+              ],
+          }
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Teaching Dev. Built with Docusaurus. <br />
-      <a class="badge badge--primary" href="https://github.com/GBSL-Informatik/teaching-dev/commit/${GIT_COMMIT_SHA}">
-            ᚶ ${GIT_COMMIT_SHA.substring(0, 7)}
-      </a>
-      `,
+      copyright: `<a 
+                class="footer__link-item"
+                href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.de"
+              >
+                <img src="${BASE_URL}img/by-nc-sa.eu.svg" alt="CC-BY-NC-SA"> 
+                Text und Bilder von Balthasar Hofer, Ausnahmen sind gekennzeichnet. 
+              </a>
+              <br />
+              <a 
+                class="badge badge--primary"
+                href="https://github.com/lebalz/ofi-blog/commit/${GIT_COMMIT_SHA}"
+              >
+                  <svg viewBox="0 0 24 24" role="presentation" style="width: 0.9rem; height: 0.9rem; transform: translateY(15%) rotate(90deg); transform-origin: center center;"><path d="${mdiSourceCommit}" style="fill: currentcolor;"></path></svg> ${GIT_COMMIT_SHA.substring(0, 7)}
+              </a>`
     },
     prism: {
       theme: prismThemes.github,
