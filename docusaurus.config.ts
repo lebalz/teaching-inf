@@ -144,7 +144,7 @@ const config: Config = {
         },
         {to: '/blog', label: 'Blog', position: 'left'},
         {
-          href: 'https://github.com/GBSL-Informatik',
+          href: 'https://github.com/GBSL-Informatik/teaching-dev',
           label: 'GitHub',
           position: 'right',
         },
