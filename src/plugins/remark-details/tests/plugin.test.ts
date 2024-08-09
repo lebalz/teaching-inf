@@ -1,22 +1,20 @@
-import {remark} from 'remark';
-import remarkMdx  from 'remark-mdx';
+import { remark } from 'remark';
+import remarkMdx from 'remark-mdx';
 import remarkDirective from 'remark-directive';
 import { describe, expect, it } from 'vitest';
 
 const alignLeft = (content: string) => {
-  return content.split('\n').map((line) => line.trimStart()).join('\n');
-}
+    return content
+        .split('\n')
+        .map((line) => line.trimStart())
+        .join('\n');
+};
 const process = async (content: string) => {
-    const {default: plugin} = await import('../plugin');
-    const result = await remark()
-        .use(remarkMdx)
-        .use(remarkDirective)
-        .use(plugin)
-        .process(alignLeft(content));
+    const { default: plugin } = await import('../plugin');
+    const result = await remark().use(remarkMdx).use(remarkDirective).use(plugin).process(alignLeft(content));
 
     return result.value;
-}
-
+};
 
 describe('#flex', () => {
     it("does nothing if there's no flex", async () => {
@@ -27,7 +25,7 @@ describe('#flex', () => {
         const result = await process(input);
         expect(result).toBe(alignLeft(input));
     });
-    it("can convert details", async () => {
+    it('can convert details', async () => {
         const input = alignLeft(`# Details element example
             :::details[Hello World]
             Hello world!
@@ -50,15 +48,15 @@ describe('#flex', () => {
           "
         `);
     });
-    it("uses default summary when not provided", async () => {
-      const input = alignLeft(`# Details element example
+    it('uses default summary when not provided', async () => {
+        const input = alignLeft(`# Details element example
           :::details
           Hello world!
           :::
           Byyye!
       `);
-      const result = await process(input);
-      expect(result).toMatchInlineSnapshot(`
+        const result = await process(input);
+        expect(result).toMatchInlineSnapshot(`
         "# Details element example
 
         <details>
@@ -68,5 +66,5 @@ describe('#flex', () => {
         Byyye!
         "
       `);
-  });
+    });
 });
