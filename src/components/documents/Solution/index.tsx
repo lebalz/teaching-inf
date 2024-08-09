@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
-import Details from "@theme/Details";
+import Details from '@theme/Details';
 import Loader from '../../Loader';
 import { MetaInit, ModelMeta } from '@site/src/models/documents/Solution';
 import { useDocumentRoot } from '@site/src/hooks/useDocumentRoot';
@@ -36,10 +36,19 @@ const Solution = observer((props: Props) => {
                         <summary>
                             <div className={styles.summary}>
                                 {props.title || 'Lösung'}
-                                <div style={{flex: '1 1 0'}}/>
-                                {userStore.current?.isAdmin && <PermissionsPanel documentRootId={docRoot.id} />}
-                                {docRoot.access === Access.None && <span className="badge badge--secondary">Hidden</span>}
-                                <Icon path={mdiCheckAll} className={styles.summaryIcon} size={1} color="var(--ifm-color-success)" />
+                                <div style={{ flex: '1 1 0' }} />
+                                {userStore.current?.isAdmin && (
+                                    <PermissionsPanel documentRootId={docRoot.id} />
+                                )}
+                                {docRoot.access === Access.None && (
+                                    <span className="badge badge--secondary">Hidden</span>
+                                )}
+                                <Icon
+                                    path={mdiCheckAll}
+                                    className={styles.summaryIcon}
+                                    size={1}
+                                    color="var(--ifm-color-success)"
+                                />
                             </div>
                         </summary>
                     }
@@ -47,9 +56,7 @@ const Solution = observer((props: Props) => {
                     open={props.open}
                     key={`poly-${props.open}`}
                 >
-                    <div className={clsx(props.className)}>
-                        {props.children}
-                    </div>
+                    <div className={clsx(props.className)}>{props.children}</div>
                 </Details>
             ) : (
                 <div className={clsx('alert', styles.disabled)}>

@@ -1,11 +1,6 @@
 import { action, computed } from 'mobx';
 import iDocument, { Source } from '../iDocument';
-import {
-    DocumentType,
-    Document as DocumentProps,
-    TypeDataMapping,
-    Access
-} from '@site/src/api/document';
+import { DocumentType, Document as DocumentProps, TypeDataMapping, Access } from '@site/src/api/document';
 import DocumentStore from '@site/src/stores/DocumentStore';
 import { TypeMeta } from '../DocumentRoot';
 
@@ -22,7 +17,7 @@ export class ModelMeta extends TypeMeta<DocumentType.Solution> {
     }
 
     get defaultData(): TypeDataMapping[DocumentType.Solution] {
-        return {}
+        return {};
     }
 }
 
@@ -43,8 +38,7 @@ class Solution extends iDocument<DocumentType.Solution> {
     }
 
     get data(): TypeDataMapping[DocumentType.Solution] {
-        return {
-        };
+        return {};
     }
 
     @computed

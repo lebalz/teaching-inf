@@ -14,7 +14,11 @@ import { CreateDocumentModel } from '../stores/DocumentStore';
  *  3.3. if an id was provided, load or create the documentRoot and it's documents from the api
  *  3.4. cleanup the dummy document
  */
-export const useDocumentRoot = <Type extends DocumentType>(id: string | undefined, meta: TypeMeta<Type>, createFirstDocument: boolean = true) => {
+export const useDocumentRoot = <Type extends DocumentType>(
+    id: string | undefined,
+    meta: TypeMeta<Type>,
+    createFirstDocument: boolean = true
+) => {
     const defaultRootDocId = useId();
     const defaultDocId = useId();
     const [dummyDocumentRoot] = React.useState<DocumentRoot<Type>>(
