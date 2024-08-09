@@ -58,7 +58,7 @@ describe('#iamge', () => {
         expect(result).toMatchInlineSnapshot(`
         "# Heading
 
-        <figure options={{\\"width\\":\\"200px\\"}}>
+        <figure options={{"width":"200px"}}>
           ![Caption](https://example.com/image.png)
 
           <figcaption>
@@ -81,7 +81,7 @@ describe('#iamge', () => {
         expect(result).toMatchInlineSnapshot(`
       "# Heading
 
-      <figure options={{\\"maxWidth\\":\\"200px\\"}}>
+      <figure options={{"maxWidth":"200px"}}>
         ![Caption](https://example.com/image.png)
 
         <figcaption>
@@ -121,14 +121,14 @@ describe('#iamge', () => {
 
     it('extracts links in caption', async () => {
         const input = `# Heading
-            ![image \\[foo.bar\\](https://foo.bar)](https://example.com/image.png)
+            ![image [foo.bar](https://foo.bar)](https://example.com/image.png)
         `;
         const result = await process(input);
         expect(result).toMatchInlineSnapshot(`
           "# Heading
 
           <figure>
-            ![image \\\\[foo.bar\\\\](https://foo.bar)](https://example.com/image.png)
+            ![image [foo.bar](https://foo.bar)](https://example.com/image.png)
 
             <figcaption>
               <span style={{flexGrow: 1}} />
@@ -158,7 +158,7 @@ describe('#iamge', () => {
             <figcaption>
               <span style={{flexGrow: 1}} />
 
-              <SourceRef bib={{\\"author\\":\\"Flanoz\\",\\"source\\":\\"https://commons.wikimedia.org/wiki/File:Placeholder_view_vector.svg\\",\\"licence\\":\\"CC 0\\",\\"licence_url\\":\\"https://creativecommons.org/publicdomain/zero/1.0/deed.en\\",\\"edited\\":false}} />
+              <SourceRef bib={{"author":"Flanoz","source":"https://commons.wikimedia.org/wiki/File:Placeholder_view_vector.svg","licence":"CC 0","licence_url":"https://creativecommons.org/publicdomain/zero/1.0/deed.en","edited":false}} />
             </figcaption>
           </figure>
           "
@@ -173,7 +173,7 @@ describe('#iamge', () => {
         expect(result).toMatchInlineSnapshot(`
       "# Heading
 
-      Hello <figure>![](assets/placeholder.svg)<figcaption><span style={{flexGrow: 1}} /><SourceRef bib={{\\"author\\":\\"Flanoz\\",\\"source\\":\\"https://commons.wikimedia.org/wiki/File:Placeholder_view_vector.svg\\",\\"licence\\":\\"CC 0\\",\\"licence_url\\":\\"https://creativecommons.org/publicdomain/zero/1.0/deed.en\\",\\"edited\\":false}} /></figcaption></figure> my friend.
+      Hello <figure>![](assets/placeholder.svg)<figcaption><span style={{flexGrow: 1}} /><SourceRef bib={{"author":"Flanoz","source":"https://commons.wikimedia.org/wiki/File:Placeholder_view_vector.svg","licence":"CC 0","licence_url":"https://creativecommons.org/publicdomain/zero/1.0/deed.en","edited":false}} /></figcaption></figure> my friend.
       "
     `);
     });
