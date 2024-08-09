@@ -4,11 +4,21 @@ import MDXComponents from '@theme-original/MDXComponents';
 import DefinitionList from '../components/DefinitionList';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import DefBox from '../components/CodeDefBox';
+import DefHeading from '../components/CodeDefBox/DefHeading';
+import DefContent from '../components/CodeDefBox/DefContent';
+import Figure from '../components/Figure';
+import SourceRef from '../components/Figure/SourceRef';
 
 export default {
     // Re-use the default mapping
     ...MDXComponents,
     Dl: DefinitionList,
     Tabs: Tabs,
-    TabItem: TabItem
+    TabItem: TabItem,
+    DefBox: DefBox,
+    DefHeading: DefHeading,
+    DefContent: DefContent,
+    Figure: Figure,
+    SourceRef: SourceRef
 };
