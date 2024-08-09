@@ -39,15 +39,15 @@ Some content
         expect(result).toMatchInlineSnapshot(`
           "# Details element example
 
-          <div className=\\"flex\\">
-            <div className=\\"item\\">
-              <div className=\\"content\\">
+          <div className="flex">
+            <div className="item">
+              <div className="content">
                 Hello world!
               </div>
             </div>
 
-            <div className=\\"item\\">
-              <div className=\\"content\\">
+            <div className="item">
+              <div className="content">
                 Hello moon!
               </div>
             </div>
@@ -75,26 +75,26 @@ Some content
         expect(result).toMatchInlineSnapshot(`
           "# Details element example
 
-          <div className=\\"flex\\">
-            <div className=\\"item\\">
-              <div className=\\"content\\">
+          <div className="flex">
+            <div className="item">
+              <div className="content">
                 Nesting Level 1
               </div>
             </div>
 
-            <div className=\\"item\\">
-              <div className=\\"content\\">
+            <div className="item">
+              <div className="content">
                 Content with a flex
 
-                <div className=\\"flex\\">
-                  <div className=\\"item\\">
-                    <div className=\\"content\\">
+                <div className="flex">
+                  <div className="item">
+                    <div className="content">
                       Boo!
                     </div>
                   </div>
 
-                  <div className=\\"item\\">
-                    <div className=\\"content\\">
+                  <div className="item">
+                    <div className="content">
                       Yaa!
                     </div>
                   </div>
@@ -118,15 +118,15 @@ Some content
       `);
         const result = await process(input);
         expect(result).toMatchInlineSnapshot(`
-        "<div className=\\"flex red\\" style={{\\"alignItems\\":\\"center\\"}}>
-          <div className=\\"item\\">
-            <div className=\\"content\\">
+        "<div className="flex red" style={{"alignItems":"center"}}>
+          <div className="item">
+            <div className="content">
               center
             </div>
           </div>
 
-          <div className=\\"item\\">
-            <div className=\\"content\\">
+          <div className="item">
+            <div className="content">
               item
             </div>
           </div>
@@ -145,15 +145,15 @@ Some content
       `);
         const result = await process(input);
         expect(result).toMatchInlineSnapshot(`
-        "<div className=\\"flex\\">
-          <div className=\\"item\\">
-            <div className=\\"content\\">
+        "<div className="flex">
+          <div className="item">
+            <div className="content">
               center
             </div>
           </div>
 
-          <div className=\\"item red\\" style={{\\"alignItems\\":\\"center\\"}}>
-            <div className=\\"content\\">
+          <div className="item red" style={{"alignItems":"center"}}>
+            <div className="content">
               item
             </div>
           </div>
@@ -173,15 +173,15 @@ Some content
       `);
         const result = await process(input);
         expect(result).toMatchInlineSnapshot(`
-        "<div className=\\"flex\\">
-          <div className=\\"item red\\" style={{\\"alignItems\\":\\"center\\"}}>
-            <div className=\\"content\\">
+        "<div className="flex">
+          <div className="item red" style={{"alignItems":"center"}}>
+            <div className="content">
               center
             </div>
           </div>
 
-          <div className=\\"item\\">
-            <div className=\\"content\\">
+          <div className="item">
+            <div className="content">
               item
             </div>
           </div>
@@ -200,15 +200,15 @@ Some content
       `);
         const result = await process(input);
         expect(result).toMatchInlineSnapshot(`
-        "<div className=\\"flex\\">
-          <div className=\\"item\\" style={{\\"flexBasis\\":\\"200px\\"}}>
-            <div className=\\"content\\">
+        "<div className="flex">
+          <div className="item" style={{"flexBasis":"200px"}}>
+            <div className="content">
               center
             </div>
           </div>
 
-          <div className=\\"item\\" style={{\\"flexBasis\\":\\"200px\\"}}>
-            <div className=\\"content\\">
+          <div className="item" style={{"flexBasis":"200px"}}>
+            <div className="content">
               item
             </div>
           </div>
@@ -233,24 +233,24 @@ Some content
       `);
         const result = await process(input);
         expect(result).toMatchInlineSnapshot(`
-        "<div className=\\"flex\\">
-          <div className=\\"item\\">
-            <div className=\\"content\\">
+        "<div className="flex">
+          <div className="item">
+            <div className="content">
               Outer flex
             </div>
           </div>
 
-          <div className=\\"item\\">
-            <div className=\\"content\\">
-              <div className=\\"flex\\">
-                <div className=\\"item\\">
-                  <div className=\\"content\\">
+          <div className="item">
+            <div className="content">
+              <div className="flex">
+                <div className="item">
+                  <div className="content">
                     inner flex
                   </div>
                 </div>
 
-                <div className=\\"item\\">
-                  <div className=\\"content\\">
+                <div className="item">
+                  <div className="content">
                     item
                   </div>
                 </div>
@@ -258,8 +258,8 @@ Some content
             </div>
           </div>
 
-          <div className=\\"item\\">
-            <div className=\\"content\\">
+          <div className="item">
+            <div className="content">
               whatever
             </div>
           </div>
@@ -291,15 +291,15 @@ Some content
         expect(result).toMatchInlineSnapshot(`
         "# Details element example
 
-        <div className=\\"flex-cards flex\\">
-          <div className=\\"item card\\">
-            <div className=\\"card__body\\">
+        <div className="flex-cards flex">
+          <div className="item card">
+            <div className="card__body">
               Hello world!
             </div>
           </div>
 
-          <div className=\\"item card\\">
-            <div className=\\"card__body\\">
+          <div className="item card">
+            <div className="card__body">
               Hello moon!
             </div>
           </div>
@@ -327,26 +327,26 @@ Some content
         expect(result).toMatchInlineSnapshot(`
         "# Details element example
 
-        <div className=\\"flex-cards flex\\">
-          <div className=\\"item card\\">
-            <div className=\\"card__body\\">
+        <div className="flex-cards flex">
+          <div className="item card">
+            <div className="card__body">
               Nesting Level 1
             </div>
           </div>
 
-          <div className=\\"item card\\">
-            <div className=\\"card__body\\">
+          <div className="item card">
+            <div className="card__body">
               Content with a cards section
 
-              <div className=\\"flex-cards flex\\">
-                <div className=\\"item card\\">
-                  <div className=\\"card__body\\">
+              <div className="flex-cards flex">
+                <div className="item card">
+                  <div className="card__body">
                     Boo!
                   </div>
                 </div>
 
-                <div className=\\"item card\\">
-                  <div className=\\"card__body\\">
+                <div className="item card">
+                  <div className="card__body">
                     Yaa!
                   </div>
                 </div>
@@ -372,20 +372,20 @@ Some content
       `);
         const result = await process(input);
         expect(result).toMatchInlineSnapshot(`
-        "<div className=\\"flex-cards flex\\">
-          <div className=\\"item card\\">
-            <div className=\\"card__image\\">
+        "<div className="flex-cards flex">
+          <div className="item card">
+            <div className="card__image">
               ![Some Image](https://via.placeholder.com/150)
             </div>
 
-            <div className=\\"card__body\\">
+            <div className="card__body">
 
               Hello world!
             </div>
           </div>
 
-          <div className=\\"item card\\">
-            <div className=\\"card__body\\">
+          <div className="item card">
+            <div className="card__body">
               Hello moon!
             </div>
           </div>
@@ -410,30 +410,30 @@ Some content
     `);
         const result = await process(input);
         expect(result).toMatchInlineSnapshot(`
-      "<div className=\\"flex-cards flex\\">
-        <div className=\\"item card\\">
-          <div className=\\"card__body\\">
+      "<div className="flex-cards flex">
+        <div className="item card">
+          <div className="card__body">
             Hii
 
           </div>
 
-          <div className=\\"card__image\\">
+          <div className="card__image">
             ![Some Image](https://via.placeholder.com/150)
           </div>
 
-          <div className=\\"card__body\\">
+          <div className="card__body">
 
             Hello world!
           </div>
         </div>
 
-        <div className=\\"item card\\">
-          <div className=\\"card__body\\">
+        <div className="item card">
+          <div className="card__body">
             Hello moon!
 
           </div>
 
-          <div className=\\"card__image\\">
+          <div className="card__image">
             ![Some Image](https://via.placeholder.com/150)
           </div>
         </div>
@@ -458,22 +458,22 @@ Some content
       `);
         const result = await process(input);
         expect(result).toMatchInlineSnapshot(`
-        "<div className=\\"flex-cards flex\\">
-          <div className=\\"item card\\">
-            <div className=\\"card__image\\">
+        "<div className="flex-cards flex">
+          <div className="item card">
+            <div className="card__image">
               ![Some Image](https://via.placeholder.com/150)
             </div>
 
-            <div className=\\"card__body\\">
-              <div className=\\"flex-cards flex\\">
-                <div className=\\"item card\\">
-                  <div className=\\"card__body\\">
+            <div className="card__body">
+              <div className="flex-cards flex">
+                <div className="item card">
+                  <div className="card__body">
                     Hello
                   </div>
                 </div>
 
-                <div className=\\"item card\\">
-                  <div className=\\"card__body\\">
+                <div className="item card">
+                  <div className="card__body">
                     Hello moon!
                   </div>
                 </div>
