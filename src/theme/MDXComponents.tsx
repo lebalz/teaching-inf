@@ -10,5 +10,5 @@ export default {
     ...MDXComponents,
     Dl: DefinitionList,
     Tabs: Tabs,
-    TabItem: TabItem,
+    TabItem: TabItem
 };
