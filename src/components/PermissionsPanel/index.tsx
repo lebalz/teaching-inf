@@ -43,7 +43,7 @@ const AccessRadioButton = observer(({ targetAccess, accessProp, documentRoot }: 
 
 const PermissionsPanel = observer(({ documentRootId }: Props) => {
     const userStore = useStore('userStore');
-    const documentRootStore = useStore('documentRootStore')
+    const documentRootStore = useStore('documentRootStore');
     const documentRoot = documentRootStore.find(documentRootId);
 
     if (!userStore.current?.isAdmin || !documentRoot) {
@@ -69,9 +69,7 @@ const PermissionsPanel = observer(({ documentRootId }: Props) => {
         >
             <div className={clsx(styles.wrapper, 'card')}>
                 <div className={clsx('card__header', styles.header)}>
-                    <h3>
-                        Berechtigungen Festlegen
-                    </h3>
+                    <h3>Berechtigungen Festlegen</h3>
                 </div>
                 <div className={clsx('card__body')}>
                     <div className={styles.popupContentContainer}>
