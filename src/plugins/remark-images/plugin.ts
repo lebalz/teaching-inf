@@ -90,7 +90,7 @@ const plugin: Plugin = function plugin(
                 });
                 if (imagesOnly) {
                     const imgs = paragraph.children.filter((n) => n.type === 'image') as Image[];
-                    parent.children.splice(idx!, 1, ...imgs);
+                    parent.children.splice(idx || 0, 1, ...imgs);
                     return [SKIP, idx];
                 }
             }
@@ -167,7 +167,7 @@ const plugin: Plugin = function plugin(
                 if (caption.children.length > 0 || hasBibFile) {
                     figure.children.splice(figure.children.length, 0, caption as BlockContent);
                 }
-                parent.children.splice(idx!, 1, figure);
+                parent.children.splice(idx || 0, 1, figure);
             }
         });
         await Promise.all(bibPromises);
