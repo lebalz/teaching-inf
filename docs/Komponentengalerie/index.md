@@ -2,7 +2,14 @@
 sidebar_position: 1
 ---
 
-# Gallery
+# Komponentengalerie
+
+
+```mdx-code-block
+import DocCardList from '@theme/DocCardList';
+
+<DocCardList />
+```
 
 ## Live Python
 ```py live_py slim
