@@ -81,15 +81,15 @@ const config: Config = {
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
-  url: 'https://teaching-dev.gbsl.website',
+  url: 'https://inf.gbsl.website',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'gbsl-informatik', // Usually your GitHub org/user name.
-  projectName: 'teaching-dev', // Usually your repo name.
+  organizationName: 'lebalz', // Usually your GitHub org/user name.
+  projectName: 'teaching-inf', // Usually your repo name.
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -184,15 +184,15 @@ const config: Config = {
     // Replace with your project's social card
     image: 'img/social-card.jpg',
     navbar: {
-      title: 'Teaching Dev',
+      title: 'Informatik',
       logo: {
-        alt: 'Teaching Dev Logo',
+        alt: 'Teaching Inf Logo',
         src: 'img/logo.svg',
       },
       items: [
         {to: '/blog', label: 'Blog', position: 'left'},
         {
-          href: 'https://github.com/GBSL-Informatik/teaching-dev',
+          href: 'https://github.com/lebalz/teaching-inf',
           label: 'GitHub',
           position: 'right',
         },
@@ -248,7 +248,7 @@ const config: Config = {
                   },
                   {
                       label: 'Intranet',
-                      to: 'https://erzbe.sharepoint.com/sites/GYMB/gbs'
+                      to: 'https://erzbe.sharepoint.com/sites/GYMB/gbsl'
                   },
                   {
                       label: 'Stundenplan',
