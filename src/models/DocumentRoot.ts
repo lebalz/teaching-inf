@@ -24,28 +24,18 @@ class DocumentRoot<T extends DocumentType> {
      * This is useful to support interactive behavior even for not logged in users or
      * in offline mode.
      */
-    readonly _isDummy: boolean;
+    readonly isDummy: boolean;
 
     @observable accessor _access: Access;
     @observable accessor sharedAccess: Access;
 
-    constructor(
-        props: DocumentRootProps,
-        meta: TypeMeta<T>,
-        store: DocumentRootStore,
-        isDummy: boolean = false
-    ) {
+    constructor(props: DocumentRootProps, meta: TypeMeta<T>, store: DocumentRootStore, isDummy?: boolean) {
         this.store = store;
         this.meta = meta;
         this.id = props.id;
         this._access = props.access;
         this.sharedAccess = props.sharedAccess;
-        this._isDummy = isDummy;
-    }
-
-    @computed
-    get isDummy() {
-        return this._isDummy || !this.store.root.sessionStore.isLoggedIn;
+        this.isDummy = !!isDummy;
     }
 
     get type() {
@@ -75,11 +65,12 @@ class DocumentRoot<T extends DocumentType> {
 
     get documents() {
         const currentUserId = this.store.root.userStore.current?.id;
-        if (!currentUserId) {
+        if (!currentUserId && !this.isDummy) {
             return [];
         }
         return this.store.root.documentStore.findByDocumentRoot(this.id).filter((d) => {
             return (
+                this.isDummy ||
                 d.authorId === currentUserId ||
                 highestAccess(new Set([this.permission]), this.sharedAccess) !== Access.None
             );
@@ -109,8 +100,15 @@ class DocumentRoot<T extends DocumentType> {
         const docs = this.documents
             .filter((d) => d.isMain)
             .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime()) as TypeModelMapping[T][];
+        if (this.isDummy) {
+            return docs;
+        }
         const byUser = docs.filter((d) => d.authorId === this.viewedUserId);
-        if (this.sharedAccess !== Access.RO) {
+
+        if (
+            this.sharedAccess === Access.None ||
+            highestAccess(new Set([this.sharedAccess]), this.access) === Access.RW
+        ) {
             return byUser;
         }
         if (byUser.length > 0) {

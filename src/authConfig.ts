@@ -3,7 +3,7 @@
  * Licensed under the MIT License.
  */
 
-import { Configuration, LogLevel, PublicClientApplication } from '@azure/msal-browser';
+import { Configuration, LogLevel } from '@azure/msal-browser';
 import siteConfig from '@generated/docusaurus.config';
 
 export interface CustomFields {
