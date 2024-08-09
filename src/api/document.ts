@@ -6,6 +6,7 @@ import api from './base';
 import { AxiosPromise } from 'axios';
 import QuillV2 from '../models/documents/QuillV2';
 import { Delta } from 'quill/core';
+import Solution from '../models/documents/Solution';
 
 export enum Access {
     RO = 'RO',
@@ -18,7 +19,8 @@ export enum DocumentType {
     ScriptVersion = 'script_version',
     TaskState = 'task_state',
     String = 'string',
-    QuillV2 = 'quill_v2'
+    QuillV2 = 'quill_v2',
+    Solution = 'solution',
 }
 export interface ScriptData {
     code: string;
@@ -38,6 +40,10 @@ export interface QuillV2Data {
     delta: Delta;
 }
 
+export interface SolutionData {
+    /** no content needed */
+}
+
 export type StateType = 'checked' | 'question' | 'unset' | 'star' | 'star-half' | 'star-empty';
 
 export interface TaskStateData {
@@ -50,6 +56,7 @@ export interface TypeDataMapping {
     [DocumentType.ScriptVersion]: ScriptVersionData;
     [DocumentType.String]: StringData;
     [DocumentType.QuillV2]: QuillV2Data;
+    [DocumentType.Solution]: SolutionData;
     // Add more mappings as needed
 }
 
@@ -59,6 +66,7 @@ export interface TypeModelMapping {
     [DocumentType.ScriptVersion]: ScriptVersion;
     [DocumentType.String]: String;
     [DocumentType.QuillV2]: QuillV2;
+    [DocumentType.Solution]: Solution;
     /**
      * Add more mappings as needed
      * TODO: implement the mapping in DocumentRoot.ts
@@ -67,7 +75,7 @@ export interface TypeModelMapping {
      */
 }
 
-export type DocumentTypes = Script | TaskState | ScriptVersion | String | QuillV2;
+export type DocumentTypes = Script | TaskState | ScriptVersion | String | QuillV2 | Solution;
 
 export interface Document<Type extends DocumentType> {
     id: string;
