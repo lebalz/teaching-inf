@@ -20,7 +20,7 @@ export enum DocumentType {
     TaskState = 'task_state',
     String = 'string',
     QuillV2 = 'quill_v2',
-    Solution = 'solution',
+    Solution = 'solution'
 }
 export interface ScriptData {
     code: string;
