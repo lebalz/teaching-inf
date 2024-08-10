@@ -17,6 +17,8 @@ import clsx from 'clsx';
 import SyncStatus from '../../SyncStatus';
 import { action } from 'mobx';
 import { useFirstMainDocument } from '@site/src/hooks/useFirstMainDocument';
+import Icon from '@mdi/react';
+import { mdiFlashTriangle } from '@mdi/js';
 
 export interface Props extends MetaInit {
     id: string;
@@ -29,6 +31,7 @@ export interface Props extends MetaInit {
     placeholder?: string;
     theme?: 'snow' | 'bubble';
     hideToolbar?: boolean;
+    hideWarning?: boolean;
 }
 
 const FORMATS = [
@@ -59,7 +62,6 @@ const FORMATS = [
 const QuillV2 = observer((props: Props) => {
     const [meta] = React.useState(new ModelMeta(props));
     const doc = useFirstMainDocument(props.id, meta);
-    const mounted = React.useRef(false);
     const updateSource = React.useRef<'current' | undefined>(undefined);
     const [processingImage, setProcessingImage] = React.useState(false);
     const ref = React.useRef<HTMLDivElement>(null);
@@ -90,7 +92,7 @@ const QuillV2 = observer((props: Props) => {
 
     // Insert Image(selected by user) to quill
     const insertToEditor = (url: string) => {
-        if (!mounted.current || !quill) {
+        if (!quillRef.current || !quill) {
             return;
         }
         const range = quill.getSelection(true);
@@ -115,7 +117,7 @@ const QuillV2 = observer((props: Props) => {
                 console.log('Could not insert image');
             })
             .finally(() => {
-                if (mounted.current) {
+                if (quillRef.current) {
                     setProcessingImage(false);
                 }
             });
@@ -234,16 +236,6 @@ const QuillV2 = observer((props: Props) => {
     }, [quill]);
 
     React.useEffect(() => {
-        if (!doc) {
-            return;
-        }
-        mounted.current = true;
-        return () => {
-            mounted.current = false;
-        };
-    }, [doc]);
-
-    React.useEffect(() => {
         if (!quill || !doc) {
             return;
         }
@@ -305,14 +297,24 @@ const QuillV2 = observer((props: Props) => {
                 className={clsx(
                     'quill-editor-container',
                     styles.quillAnswer,
+                    doc.root?.isDummy && !props.hideWarning && styles.dummy,
                     props.monospace && styles.monospace,
                     (props.hideToolbar || !doc?.canEdit || props.readonly) && styles.hideToolbar
                 )}
                 style={{
                     ...(props.style || {})
-                }} /*display: (props.toolbarAlwaysVisible || mounted.current) ? undefined : 'none',*/
+                }}
             >
-                {mounted.current && <div ref={quillRef} />}
+                {doc.root?.isDummy && !props.hideWarning && (
+                    <Icon
+                        path={mdiFlashTriangle}
+                        size={0.7}
+                        color="orange"
+                        title="Wird nicht gespeichert."
+                        className={styles.dummyIndicatorIcon}
+                    />
+                )}
+                {doc.isInitialized && <div ref={quillRef} />}
                 {processingImage && <Loader label="Bild Einfügen..." overlay />}
                 {doc && <SyncStatus model={doc} className={styles.saveIndicator} />}
             </div>
