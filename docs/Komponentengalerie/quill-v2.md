@@ -68,6 +68,19 @@ Standardmässig wird die Toolbar immer angezeigt. Mit dem Attribut `hideToolbar`
   <QuillV2 hideToolbar id="eeacafce-0f83-4f55-b349-cb73ec7da43d" />
 </BrowserWindow>
 
+## Temporäres Textfeld
+
+Ohne `id` wird der Zustand nicht gespeichert, was mit einem :mdi[flash-triangle-outline]{.orange} und einem roten Rand signalisiert wird. Die Warnhinweise können mit `hideWarning` ausgeblendet werden.
+
+```md
+<QuillV2 />
+<QuillV2 hideWarning />
+```
+<BrowserWindow>
+  <QuillV2 placeholder="Keine id vergeben - temporär!" />
+  <QuillV2 hideWarning placeholder="Keine id vergeben, aber die Warnungen wurden deaktiviert"/>
+</BrowserWindow>
+
 ## Installation
 
 :::info[Code]

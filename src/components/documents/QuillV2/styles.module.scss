@@ -5,6 +5,14 @@
         position: relative;
         border-radius: var(--ifm-alert-border-radius);
         border: 1px solid var(--ifm-color-primary);
+        &.dummy {
+            border-color: var(--ifm-color-danger);
+            :global(.ql-toolbar) {
+                &:global(.ql-snow) {
+                    border-color: var(--ifm-color-danger);
+                }
+            }
+        }
         &.edited {
             border: 2px solid var(--ifm-color-success);
         }
@@ -37,7 +45,7 @@
                 }
                 :global(.ql-picker-options) {
                     background: var(--ifm-background-color);
-                }
+                }      
             }
         }
         :global(.ql-formats) {
@@ -87,6 +95,11 @@
         .saveIndicator {
             position: absolute;
             bottom: 4px;
+            right: 4px;
+        }
+        .dummyIndicatorIcon {
+            position: absolute;
+            bottom: 1.3em;
             right: 4px;
         }
     }
