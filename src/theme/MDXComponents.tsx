@@ -10,7 +10,7 @@ import DefContent from '../components/CodeDefBox/DefContent';
 import Figure from '../components/Figure';
 import SourceRef from '../components/Figure/SourceRef';
 import Answer from '../components/Answer';
-import Solution from '../models/documents/Solution';
+import Solution from '../components/documents/Solution';
 
 export default {
     // Re-use the default mapping
