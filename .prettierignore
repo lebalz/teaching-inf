@@ -18,3 +18,9 @@ versioned_sidebars/*.json
 
 static/katex/katex.min.css
 .vscode/*.code-snippets
+*.mp4
+*.mp3
+*.jpeg
+*.jpg
+*.png
+static/p/reveal.js

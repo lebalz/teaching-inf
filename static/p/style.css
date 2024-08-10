@@ -44,7 +44,7 @@
     width: auto;
 }
 
-.reveal pre.code-wrapper>code.hljs {
+.reveal pre.code-wrapper > code.hljs {
     font-size: 26pt;
     width: 100%;
     line-height: initial;
