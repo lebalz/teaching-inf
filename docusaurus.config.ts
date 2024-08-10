@@ -13,6 +13,7 @@ import defboxPlugin from './src/plugins/remark-code-defbox/plugin';
 import flexCardsPlugin from './src/plugins/remark-flex-cards/plugin';
 import imagePlugin from './src/plugins/remark-images/plugin';
 import mediaPlugin from './src/plugins/remark-media/plugin';
+import detailsPlugin from './src/plugins/remark-details/plugin';
 
 const GIT_COMMIT_SHA = process.env.GITHUB_SHA || Math.random().toString(36).substring(7);
 
@@ -22,6 +23,7 @@ const BEFORE_DEFAULT_REMARK_PLUGINS = [
       imagePlugin,
       { tagNames: { sourceRef: 'SourceRef', figure: 'Figure' } }
   ],
+  detailsPlugin,
   defboxPlugin
 ];
 
