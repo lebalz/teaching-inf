@@ -1,4 +1,16 @@
 {
-    "26Gb": [],
-    "26Gj": []
+  "28Gb": [
+    {
+      "from": "docs/OF-BYOD-Basics/",
+      "to": "versioned_docs/version-28Gb/01-BYOD",
+      "ignore": []
+    }
+  ],
+  "28Gj": [
+    {
+      "from": "docs/OF-BYOD-Basics/",
+      "to": "versioned_docs/version-28Gj/01-BYOD",
+      "ignore": []
+    }
+  ]
 }
