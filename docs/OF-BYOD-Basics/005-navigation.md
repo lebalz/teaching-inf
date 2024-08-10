@@ -187,7 +187,7 @@ import Video from '@site/src/components/Video'
 </OsTabs>
 
 :::aufgabe[Quizz]
-<Answer type="state" webKey="215e7040-8992-4ded-ac14-85acd782a0f9" />
+<Answer type="state" id="215e7040-8992-4ded-ac14-85acd782a0f9" />
 
 Lösen Sie das Quizz und markieren Sie die Aufgabe anschliessend als erledigt.
 
@@ -238,11 +238,11 @@ Lösen Sie das Quizz und markieren Sie die Aufgabe anschliessend als erledigt.
 </OsTabs>
 
 :::aufgabe[Shortcuts Tastatur&Pfeiltasten ausprobieren]
-<Answer type="state" webKey="1d692ff8-21b1-416b-ab51-79573dfece5c" />
+<Answer type="state" id="1d692ff8-21b1-416b-ab51-79573dfece5c" />
 
 Probieren Sie die verschiedenen Shortcuts im untenstehenden Textfeld aus!
 
-<Answer type="text" webKey="cfcb00d3-701b-4b28-a369-53dfb860cb00">
+<Answer type="text" id="cfcb00d3-701b-4b28-a369-53dfb860cb00">
 
 <b>Lorem Ipsum</b> is simply dummy text of the printing and typesetting industry.<br />
 Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
@@ -312,11 +312,11 @@ __]__
 </OsTabs>
 
 :::aufgabe[Klammern schreiben]
-<Answer type="state" webKey="887346bb-a996-4799-98f3-e7ac25fd0a19" />
+<Answer type="state" id="887346bb-a996-4799-98f3-e7ac25fd0a19" />
 
 Versuchen Sie, alle Klammern selber zu tippen!
 
-<Answer type="text" webKey="7f8d0d23-6ee8-4eaa-90e2-1eed40a1208a" />
+<Answer type="text" id="7f8d0d23-6ee8-4eaa-90e2-1eed40a1208a" />
 
 :::
 
@@ -406,16 +406,16 @@ __>__
 
 
 :::aufgabe[Sonderzeichen]
-<Answer type="state" webKey="eb8771a6-681b-439c-b02e-d926d8c93fc5" />
+<Answer type="state" id="eb8771a6-681b-439c-b02e-d926d8c93fc5" />
 
 Können Sie die obigen Sonderzeichen selber erzeugen?
 
-<Answer type="text" webKey="015cfbd5-a051-4f7d-b965-858c208428b2" />
+<Answer type="text" id="015cfbd5-a051-4f7d-b965-858c208428b2" />
 
 :::
 
 :::aufgabe[Quizz]
-<Answer type="state" webKey="41b18d27-2066-482b-926d-c4fa4253d96e" />
+<Answer type="state" id="41b18d27-2066-482b-926d-c4fa4253d96e" />
 
 Werden Sie Millionär? 🤑💰🤑💰🤑💰
 
@@ -423,7 +423,7 @@ Werden Sie Millionär? 🤑💰🤑💰🤑💰
 :::
 
 :::aufgabe[🌟 Arcade Game (englisch)]
-<Answer type="state" webKey="dd6bddb6-fea8-4d37-902d-3ea1c9529c6e" />
+<Answer type="state" id="dd6bddb6-fea8-4d37-902d-3ea1c9529c6e" />
 
 Freiwillig: Spielen Sie das Tastenkürzel-Game
 

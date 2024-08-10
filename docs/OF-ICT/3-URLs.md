@@ -29,9 +29,9 @@ Wie lauten die vier Teile des folgenden URL?
 
 [https://www.google.ch/search?q=Quellenangabe](https://www.google.ch/search?q=Quellenangabe)
 
-<Answer type="text" webKey="0e7760c9-9b78-44be-a023-5c946f1c5d58" />
+<Answer type="text" id="0e7760c9-9b78-44be-a023-5c946f1c5d58" />
 
-<Solution webKey="d8afbed1-98b1-43a7-bba8-a692a336d22c">
+<Solution id="d8afbed1-98b1-43a7-bba8-a692a336d22c">
 
 ```
   https://   www.google.ch  /search    ?q=Quellenangabe
@@ -53,9 +53,9 @@ Die folgenden Quellenangaben stammen aus einem PDF zum korrekten Zitieren und Bi
 1. Goethe-Universität Frankfurt a. M.: Neurolinguistik (geändert am 6. November 2007) http://www.uni-frankfurt.de/fb/fb10/KogLi/Lehrstuehle/ehem__Lehrstuhl_Leuninger/Neurolinguistik/index.html (abgerufen am 03.03.2018).  
 
   Wer ist heute die vorstehende Professor:in?
-  <Answer type="text" webKey="f9419997-fdd1-4a4c-ae37-40f07d353c21" />
+  <Answer type="text" id="f9419997-fdd1-4a4c-ae37-40f07d353c21" />
   
-<Solution webKey="99a0793d-e17c-448c-83d3-6d8cdde483d9">
+<Solution id="99a0793d-e17c-448c-83d3-6d8cdde483d9">
 
   - https://www.uni-frankfurt.de/65406913/Neurolinguistik (15.08.2022)
   - Prof. Dr. Markus Bader
@@ -67,10 +67,10 @@ Die folgenden Quellenangaben stammen aus einem PDF zum korrekten Zitieren und Bi
 2. Baader, S.: Geometrie – Vorlesungsscript. Mitschrift von Alex Aeberli und Raoul Bourquin, Wintersemester 07. [PDF], Skript zur Vorlesung Geometrie an der ETHZ im Wintersemester 2007, (2007) https://www.mitschriften.ethz.ch/main.php?page=3&scrid=1&pid=29&eid=1 (abgerufen am 31.01.2018).  
 
   Finden Sie das Dokument und halten Sie den Link fest.
-  <Answer type="text" webKey="9e968285-7d48-4b67-975c-3adb5b3b8b1c" />
+  <Answer type="text" id="9e968285-7d48-4b67-975c-3adb5b3b8b1c" />
 
 
-<Solution webKey="91a9c405-acda-41d8-955a-2272f57cc251">
+<Solution id="91a9c405-acda-41d8-955a-2272f57cc251">
 
 z.B. https://docplayer.org/47099510-Geometrie-vorlesungsscript.html (15.08.2022)
 </Solution>
@@ -78,9 +78,9 @@ z.B. https://docplayer.org/47099510-Geometrie-vorlesungsscript.html (15.08.2022)
 3. ParlCH: «Erklär mir das Parlament». 18.02.2016 https://www.youtube.com/watchv=vtfEG0txhOU (abgerufen am 31.01.2018).  
    
    Finden Sie das Video und halten Si den Link fest.
-   <Answer type="text" webKey="7f3adbb2-4591-4673-a9ae-5e1b0a809ee9" />
+   <Answer type="text" id="7f3adbb2-4591-4673-a9ae-5e1b0a809ee9" />
 
-<Solution webKey="34a4972b-e9c8-4787-9688-9783e691d826">
+<Solution id="34a4972b-e9c8-4787-9688-9783e691d826">
 
 https://www.youtube.com/watch?v=vtfEG0txhOU (15.08.2022)
 </Solution>
@@ -99,8 +99,8 @@ Da die Websiten archiviert sind, dauert es sehr lange, bis eine Website geladen 
 :::aufgabe
 Seit wann ist unter [srf.ch](https://srf.ch) die heutige Website vom Schweizer Radio und Fernsehen zu finden? Wem hat die Webseite vor diesem Zeitpunkt gehört? Wie erklären Sie sich die unterschiedlichen Wechsel?
 
-<Answer type="text" webKey="61faebd8-f614-4823-8af2-d5e34f3b5a3e" />
-<Solution webKey="a4ab9909-2b1b-4b11-8aba-0990594d17c0">
+<Answer type="text" id="61faebd8-f614-4823-8af2-d5e34f3b5a3e" />
+<Solution id="a4ab9909-2b1b-4b11-8aba-0990594d17c0">
 
 1. Seit 2011
 2. Bis 2010 gehörte die Seite einem **Stefan Fuchs**
