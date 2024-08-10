@@ -293,12 +293,11 @@ const QuillV2 = observer((props: Props) => {
             }}
             ref={ref}
         >
-        
             <div
                 className={clsx(
                     'quill-editor-container',
                     styles.quillAnswer,
-                    (doc.root?.isDummy && !props.hideWarning) && styles.dummy,
+                    doc.root?.isDummy && !props.hideWarning && styles.dummy,
                     props.monospace && styles.monospace,
                     (props.hideToolbar || !doc?.canEdit || props.readonly) && styles.hideToolbar
                 )}
@@ -307,8 +306,14 @@ const QuillV2 = observer((props: Props) => {
                 }}
             >
                 {doc.root?.isDummy && !props.hideWarning && (
-                <Icon path={mdiFlashTriangle} size={0.7} color="orange" title="Wird nicht gespeichert." className={styles.dummyIndicatorIcon} />
-            )}
+                    <Icon
+                        path={mdiFlashTriangle}
+                        size={0.7}
+                        color="orange"
+                        title="Wird nicht gespeichert."
+                        className={styles.dummyIndicatorIcon}
+                    />
+                )}
                 {doc.isInitialized && <div ref={quillRef} />}
                 {processingImage && <Loader label="Bild Einfügen..." overlay />}
                 {doc && <SyncStatus model={doc} className={styles.saveIndicator} />}
