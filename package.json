@@ -26,7 +26,8 @@
         "format:check": "prettier --check .",
         "test": "vitest --coverage",
         "add": "node material_add.js",
-        "postadd": "node material_sync.js"
+        "postadd": "node material_sync.js",
+        "present": "gulp serve"
     },
     "dependencies": {
         "@azure/msal-browser": "^3.20.0",
@@ -71,6 +72,8 @@
         "@types/react-image-gallery": "^1.2.4",
         "@types/uuid": "^10.0.0",
         "@vitest/coverage-v8": "^2.0.5",
+        "gulp": "^4.0.2",
+        "gulp-connect": "^5.7.0",
         "prettier": "^3.3.2",
         "remark": "^15.0.1",
         "rsync": "^0.6.1",
