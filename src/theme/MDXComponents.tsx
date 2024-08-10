@@ -7,6 +7,8 @@ import DefHeading from '../components/CodeDefBox/DefHeading';
 import DefContent from '../components/CodeDefBox/DefContent';
 import Figure from '../components/Figure';
 import SourceRef from '../components/Figure/SourceRef';
+import Answer from '../components/Answer';
+import Solution from '../models/documents/Solution';
 
 export default {
     // Re-use the default mapping
@@ -16,5 +18,7 @@ export default {
     DefHeading: DefHeading,
     DefContent: DefContent,
     Figure: Figure,
-    SourceRef: SourceRef
+    SourceRef: SourceRef,
+    Answer: Answer,
+    Solution: Solution,
 };
