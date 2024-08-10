@@ -79,7 +79,7 @@ if (!process.env.DOCS_ONLY) {
 
 const config: Config = {
   title: 'Teaching-Dev',
-  tagline: 'Dogfooding Teaching Features',
+  tagline: 'Informatik Gymnasium Biel-Seeland',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
