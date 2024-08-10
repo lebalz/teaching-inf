@@ -205,7 +205,7 @@ const main = async () => {
                     category.collapsed = false;
                     category.collapsible = true;
                 }
-                fs.writeFileSync(categoryPath, JSON.stringify(category, undefined, 2));
+                fs.writeFileSync(categoryPath, JSON.stringify(category, undefined, 2) + "\n");
             }
             fs.writeFileSync(`${classDir}.gitignore`, gitignore.join('\n'));
         });
