@@ -1,96 +1,96 @@
 [
     {
-        "cells": ["13.08.2024","A","Programmieren 1","Algorithmen & RoboZZle"]
+        "cells": ["13.08.2024", "A", "Programmieren 1", "Algorithmen & RoboZZle"]
     },
     {
-        "cells": ["20.08.2024","B","Programmieren 1","Algorithmen & RoboZZle"]
+        "cells": ["20.08.2024", "B", "Programmieren 1", "Algorithmen & RoboZZle"]
     },
     {
-        "cells": ["27.08.2024","A","Programmieren 1","Algorithmen & Einstieg Turtlegrafik"]
+        "cells": ["27.08.2024", "A", "Programmieren 1", "Algorithmen & Einstieg Turtlegrafik"]
     },
     {
-        "cells": ["03.09.2024","B","Programmieren 1","Algorithmen & Einstieg Turtlegrafik"]
+        "cells": ["03.09.2024", "B", "Programmieren 1", "Algorithmen & Einstieg Turtlegrafik"]
     },
     {
-        "cells": ["10.09.2024","A","Programmieren 1","Wiederholte Ausführung"]
+        "cells": ["10.09.2024", "A", "Programmieren 1", "Wiederholte Ausführung"]
     },
     {
-        "cells": ["17.09.2024","Kennenlernwoche GYM1","",""],
+        "cells": ["17.09.2024", "Kennenlernwoche GYM1", "", ""],
         "type": "holiday"
     },
     {
-        "cells": ["24.09.2024","Herbstferien","",""],
+        "cells": ["24.09.2024", "Herbstferien", "", ""],
         "type": "holiday"
     },
     {
-        "cells": ["01.10.2024","Herbstferien","",""],
+        "cells": ["01.10.2024", "Herbstferien", "", ""],
         "type": "holiday"
     },
     {
-        "cells": ["08.10.2024","Herbstferien","",""],
+        "cells": ["08.10.2024", "Herbstferien", "", ""],
         "type": "holiday"
     },
     {
-        "cells": ["15.10.2024","B","Programmieren 1","Wiederholte Ausführung"]
+        "cells": ["15.10.2024", "B", "Programmieren 1", "Wiederholte Ausführung"]
     },
     {
-        "cells": ["22.10.2024","A","Programmieren 1","Unterprogramme und Fehler"]
+        "cells": ["22.10.2024", "A", "Programmieren 1", "Unterprogramme und Fehler"]
     },
     {
-        "cells": ["29.10.2024","B","Programmieren 1","Unterprogramme und Fehler"]
+        "cells": ["29.10.2024", "B", "Programmieren 1", "Unterprogramme und Fehler"]
     },
     {
-        "cells": ["05.11.2024","A","Programmieren 1","Parameter"]
+        "cells": ["05.11.2024", "A", "Programmieren 1", "Parameter"]
     },
     {
-        "cells": ["12.11.2024","B","Programmieren 1","Parameter"]
+        "cells": ["12.11.2024", "B", "Programmieren 1", "Parameter"]
     },
     {
-        "cells": ["19.11.2024","A","Programmieren 1","Variablen, Eingabe & Ausgabe"]
+        "cells": ["19.11.2024", "A", "Programmieren 1", "Variablen, Eingabe & Ausgabe"]
     },
     {
-        "cells": ["26.11.2024","B","Programmieren 1","Variablen, Eingabe & Ausgabe"]
+        "cells": ["26.11.2024", "B", "Programmieren 1", "Variablen, Eingabe & Ausgabe"]
     },
     {
-        "cells": ["03.12.2024","A","Programmieren 1","Variablen, Eingabe & Ausgabe"]
+        "cells": ["03.12.2024", "A", "Programmieren 1", "Variablen, Eingabe & Ausgabe"]
     },
     {
-        "cells": ["10.12.2024","B","Programmieren 1","Variablen, Eingabe & Ausgabe"]
+        "cells": ["10.12.2024", "B", "Programmieren 1", "Variablen, Eingabe & Ausgabe"]
     },
     {
-        "cells": ["17.12.2024","A","Programmieren 1","Verzweigungen"]
+        "cells": ["17.12.2024", "A", "Programmieren 1", "Verzweigungen"]
     },
     {
-        "cells": ["20.12.2024","Weihnachtskonzert","",""],
+        "cells": ["20.12.2024", "Weihnachtskonzert", "", ""],
         "type": "holiday"
     },
     {
-        "cells": ["24.12.2024","Winterferien","",""],
+        "cells": ["24.12.2024", "Winterferien", "", ""],
         "type": "holiday"
     },
     {
-        "cells": ["02.01.2024","Winterferien","",""],
+        "cells": ["02.01.2024", "Winterferien", "", ""],
         "type": "holiday"
     },
     {
-        "cells": ["09.01.2024","B","Programmieren 1","Verzweigungen"]
+        "cells": ["09.01.2024", "B", "Programmieren 1", "Verzweigungen"]
     },
     {
-        "cells": ["16.01.2024","A","Programmieren 1","Robotik Maqueen"]
+        "cells": ["16.01.2024", "A", "Programmieren 1", "Robotik Maqueen"]
     },
     {
-        "cells": ["23.01.2024","Notenschluss","",""],
+        "cells": ["23.01.2024", "Notenschluss", "", ""],
         "type": "event"
     },
     {
-        "cells": ["30.01.2024","B","Programmieren 1","Robotik Maqueen"]
+        "cells": ["30.01.2024", "B", "Programmieren 1", "Robotik Maqueen"]
     },
     {
-        "cells": ["03.02.2025","Beginn Semester 2","",""],
+        "cells": ["03.02.2025", "Beginn Semester 2", "", ""],
         "type": "event"
     },
     {
-        "cells": ["06.02.2024","Sportwoche","",""],
+        "cells": ["06.02.2024", "Sportwoche", "", ""],
         "type": "holiday"
     }
 ]
