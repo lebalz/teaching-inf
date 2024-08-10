@@ -20,5 +20,5 @@ export default {
     Figure: Figure,
     SourceRef: SourceRef,
     Answer: Answer,
-    Solution: Solution,
+    Solution: Solution
 };
