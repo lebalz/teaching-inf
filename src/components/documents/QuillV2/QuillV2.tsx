@@ -312,7 +312,7 @@ const QuillV2 = observer((props: Props) => {
                     ...(props.style || {})
                 }} /*display: (props.toolbarAlwaysVisible || mounted.current) ? undefined : 'none',*/
             >
-                {mounted.current && <div ref={quillRef} />}
+                {doc.isInitialized && <div ref={quillRef} />}
                 {processingImage && <Loader label="Bild Einfügen..." overlay />}
                 {doc && <SyncStatus model={doc} className={styles.saveIndicator} />}
             </div>
