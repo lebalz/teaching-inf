@@ -1,0 +1,14 @@
+.label {
+    position: relative;
+    .icon {
+        position: absolute;
+        top: -0.6em;
+        right: -0.6em;
+        font-size: 80%;
+        color: var(--ifm-color-warning);
+    }
+}
+.tabs {
+    --ifm-tabs-padding-vertical: 0.3em;
+    --ifm-tabs-padding-horizontal: 0.3em;
+}

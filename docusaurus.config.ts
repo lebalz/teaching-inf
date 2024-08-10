@@ -192,12 +192,12 @@ const config: Config = {
         src: 'img/logo.svg',
       },
       items: [
-        {to: '/blog', label: 'Blog', position: 'left'},
         {
-          href: 'https://github.com/lebalz/teaching-inf',
-          label: 'GitHub',
-          position: 'right',
+            to: 'playground',
+            position: 'left',
+            label: 'Playground'
         },
+        {to: '/blog', label: 'Blog', position: 'left'},
         {
             type: 'custom-loginProfileButton',
             position: 'right'
@@ -263,7 +263,7 @@ const config: Config = {
                 class="footer__link-item"
                 href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.de"
               >
-                <img src="${BASE_URL}img/by-nc-sa.eu.svg" alt="CC-BY-NC-SA"> 
+                <img style="height: 1.6em" src="${BASE_URL}img/by-nc-sa.eu.svg" alt="CC-BY-NC-SA"> 
                 Text und Bilder von Balthasar Hofer, Ausnahmen sind gekennzeichnet. 
               </a>
               <br />
