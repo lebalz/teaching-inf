@@ -31,6 +31,10 @@
         "type": "holiday"
     },
     {
+        "cells": ["14.10.2024", "Beginn BYOD-Tests", "", ""],
+        "type": "test"
+    },
+    {
         "cells": ["15.10.2024", "B", "Programmieren 1", "Wiederholte Ausführung"]
     },
     {
@@ -46,51 +50,53 @@
         "cells": ["12.11.2024", "B", "Programmieren 1", "Parameter"]
     },
     {
-        "cells": ["19.11.2024", "A", "Programmieren 1", "Variablen, Eingabe & Ausgabe"]
+        "cells": ["19.11.2024", "A", "Programmieren 1", "Kurztest Programmieren, Variablen, Ein- & Ausgabe"],
+        "type": "test"
     },
     {
-        "cells": ["26.11.2024", "B", "Programmieren 1", "Variablen, Eingabe & Ausgabe"]
+        "cells": ["26.11.2024", "B", "Programmieren 1", "Kurztest Programmieren, Variablen, Ein- & Ausgabe"],
+        "type": "test"
     },
     {
-        "cells": ["03.12.2024", "A", "Programmieren 1", "Variablen, Eingabe & Ausgabe"]
-    },
-    {
-        "cells": ["10.12.2024", "B", "Programmieren 1", "Variablen, Eingabe & Ausgabe"]
-    },
-    {
-        "cells": ["17.12.2024", "A", "Programmieren 1", "Verzweigungen"]
-    },
-    {
-        "cells": ["20.12.2024", "Weihnachtskonzert", "", ""],
+        "cells": ["03.12.2024", "Kantonaler Fachschaftstag", "", ""],
         "type": "holiday"
+    },
+    {
+        "cells": ["10.12.2024", "A", "Programmieren 1", "Variablen, Eingabe & Ausgabe"]
+    },
+    {
+        "cells": ["17.12.2024", "B", "Programmieren 1", "Variablen, Eingabe & Ausgabe"]
     },
     {
         "cells": ["24.12.2024", "Winterferien", "", ""],
         "type": "holiday"
     },
     {
-        "cells": ["02.01.2024", "Winterferien", "", ""],
+        "cells": ["31.12.2024", "Winterferien", "", ""],
         "type": "holiday"
     },
     {
-        "cells": ["09.01.2024", "B", "Programmieren 1", "Verzweigungen"]
+        "cells": ["07.01.2025", "A", "Programmieren 1", "Verzweigungen"]
     },
     {
-        "cells": ["16.01.2024", "A", "Programmieren 1", "Robotik Maqueen"]
+        "cells": ["14.01.2025", "B", "Programmieren 1", "Verzweigungen"]
     },
     {
-        "cells": ["23.01.2024", "Notenschluss", "", ""],
+        "cells": ["21.01.2025", "A", "Programmieren 1", "Robotik Micro:Bit 🤖"]
+    },
+    {
+        "cells": ["23.01.2025", "Notenschluss", "", ""],
         "type": "event"
     },
     {
-        "cells": ["30.01.2024", "B", "Programmieren 1", "Robotik Maqueen"]
+        "cells": ["28.01.2025", "B", "Programmieren 1", "Robotik Micro:Bit 🤖"]
     },
     {
         "cells": ["03.02.2025", "Beginn Semester 2", "", ""],
         "type": "event"
     },
     {
-        "cells": ["06.02.2024", "Sportwoche", "", ""],
-        "type": "holiday"
+        "cells": ["04.02.2025", "Programmieren 1", "Test", ""],
+        "type": "test"
     }
 ]

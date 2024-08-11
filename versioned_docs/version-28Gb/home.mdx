@@ -12,31 +12,23 @@ import hk2024 from './28Gb-HK_HS2024.json';
 
 # 28Gb Informatik
 
-<Tabs
-    defaultValue="theorie"
-    values={[
-      {label: 'Einzellektion', value: 'theorie'},
-      {label: 'Praktikum', value: 'hk'}
-    ]}
->
-<TabItem value="theorie">
-<SemesterTable
-  header={["Datum", "Thema", "Inhalt"]}
-  compact
-  selectable
-  rows={hs2024}
-  order={SortTimeTableByDate()}
-/>
-
-</TabItem>
-
-<TabItem value="hk">
-<SemesterTable
-  header={["Datum", "Halbklasse", "Thema", "Inhalt"]}
-  compact
-  selectable
-  rows={hk2024}
-  order={SortTimeTableByDate()}
-/>
-</TabItem>
+<Tabs queryString="semester">
+    <TabItem label="Einzellektion" value="gym1-hs-theorie">
+        <SemesterTable
+            header={['Datum', 'Thema', 'Inhalt']}
+            compact
+            selectable
+            rows={hs2024}
+            order={SortTimeTableByDate()}
+        />
+    </TabItem>
+    <TabItem label="Praktikum" value="gym1-hs-praktikum">
+        <SemesterTable
+            header={['Datum', 'Halbklasse', 'Thema', 'Inhalt']}
+            compact
+            selectable
+            rows={hk2024}
+            order={SortTimeTableByDate()}
+        />
+    </TabItem>
 </Tabs>

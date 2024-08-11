@@ -19,23 +19,32 @@ const EVENTS = {
     [41]: { desc: 'Herbstferien', type: 'holiday' },
     [52]: { desc: 'Winterferien', type: 'holiday' },
     [1]: { desc: 'Winterferien', type: 'holiday' },
-    [4]: { desc: 'Notenschluss', type: 'event', date: '23.01.2025' },
-    [6]: { desc: 'Sportwoche', type: 'holiday' }
+    [7]: { desc: 'Sportwoche', type: 'holiday' }
 };
 const CLASS_EVENTS = {
-    // ['24ef']: {
-    //     [20]: { desc: 'Start Maturprüfungen', details: 'Schriftlich', type: 'test', date: '17.05.2024' },
-    //     [21]: { desc: 'Schriftliche Maturprüfung', details: '5. Prüfungsfach/EF Informatik', type: 'test', date: '24.05.2024' },
-    //     [23]: { desc: 'Mündliche Maturprüfung', details: '5. Prüfungsfach/EF Informatik', type: 'test', date: '13.06.2024' },
-
-    // },
-    ['28Gb']: {},
-    ['28Gj']: {}
+    ['28Gb-HK']: {
+        [49]: { desc: 'Kantonaler Fachschaftstag', type: 'holiday', date: '03.12.2024' },
+        [6]: { desc: 'Programmieren 1', details: 'Test', type: 'test', date: '04.02.2025' }
+        // [2]: { desc: 'Biber', details: 'Wettbewerb', type: 'event', date: '17.01.2025' },
+    },
+    ['28Gj-HK']: {
+        [49]: { desc: 'Kantonaler Fachschaftstag', type: 'holiday', date: '03.12.2024' },
+        [6]: { desc: 'Programmieren 1', details: 'Test', type: 'test', date: '04.02.2025' }
+    },
+    ['28Gb']: {
+        [45]: { desc: 'Informatik Biber', details: 'Wettbewerb', type: 'event', date: '8.11.2024' },
+        [6]: { desc: 'Programmieren 1', details: 'Test', type: 'test', date: '04.02.2025' }
+    },
+    ['28Gj']: {
+        [45]: { desc: 'Informatik Biber', details: 'Wettbewerb', type: 'event', date: '7.11.2024' },
+        [6]: { desc: 'Programmieren 1', details: 'Test', type: 'test', date: '04.02.2025' }
+    }
 };
 
 SCHOOL_EVENTS = {
-    [51]: [{ desc: 'Weihnachtskonzert', type: 'holiday', date: '20.12.2024' }],
-    [5]: { desc: 'Beginn Semester 2', type: 'event', date: '03.02.2025' }
+    [42]: { desc: 'Beginn BYOD-Tests', type: 'test', date: '14.10.2024' },
+    [5]: { desc: 'Beginn Semester 2', type: 'event', date: '03.02.2025' },
+    [4]: { desc: 'Notenschluss', type: 'event', date: '23.01.2025' }
     // [51]: [
     //     { desc: 'Weihnachtskonzert', type: 'holiday', date: '20.12.2024' }
     // ],
@@ -43,8 +52,10 @@ SCHOOL_EVENTS = {
 };
 
 const CLASS_DAY = {
-    ['28Gb-HK']: 'fr',
-    ['28Gj-HK']: 'do'
+    ['28Gb']: 'fr',
+    ['28Gj']: 'do',
+    ['28Gb-HK']: 'di',
+    ['28Gj-HK']: 'di'
 };
 const YEAR = 2024;
 const SEMESTER = 'HS';
@@ -53,21 +64,33 @@ const SCHEDULE_GYM1_HS = [
     ['Einstieg', 'Informatik, BYOD'],
     ['ICT', 'BYOD Basics'],
     ['ICT', 'BYOD Basics'],
-    ['ICT', 'Office: Layout und Gliederung'],
-    ['ICT', 'Office: Layout und Gliederung'],
-    ['ICT', 'Office: Layout und Gliederung'],
-    ['ICT', 'Office: Layout und Gliederung'],
+    ['Digitale Dokumente', 'Struktur von Dokumenten'],
+    ['Digitale Dokumente', 'Word Grundlagen'],
+    ['Digitale Dokumente', 'Formatvorlagen in Word'],
+    ['Digitale Dokumente', 'Formatvorlagen in Word'],
+    ['Digitale Dokumente', 'Inhaltsverzeichnis und Seitennummerierung in Word'],
+    ['Digitale Dokumente', 'Gemeinsames Arbeiten an Dokumenten'],
     ['ICT', 'Kurztest Office'],
-    ['Informatik Biber', 'Wettbewerb'],
-    ['Daten', 'Office: Tabellenkalkulation'],
-    ['Daten', 'Office: Tabellenkalkulation'],
-    ['Daten', 'Datenbanken'],
-    ['Daten', 'Datenbanken'],
-    ['Daten', 'Datenbanken'],
-    ['Daten', 'Wiederholung'],
-    ['Daten', 'Kurztest Daten'],
-    ['Codes und Daten', 'Zeichencodierung'],
-    ['Codes und Daten', 'Zahlensysteme']
+    ['Webseiten', 'HTML'],
+    ['Webseiten', 'CSS'],
+    ['Webseiten', 'Suchmaschinen'],
+    ['Webseiten', 'Steckbrief Webseite'],
+    ['Programmieren 1', 'Micro:Bit 🤖'],
+    ['Programmieren 1', 'Micro:Bit 🤖'],
+    ['Programmieren 1', 'Micro:Bit 🤖'],
+    ['Programmieren 1', 'Wiederholung']
+];
+const SCHEDULE_GYM1_PRAKTIKUM = [
+    ['Programmieren 1', 'Algorithmen & RoboZZle'],
+    ['Programmieren 1', 'Algorithmen & Einstieg Turtlegrafik'],
+    ['Programmieren 1', 'Wiederholte Ausführung'],
+    ['Programmieren 1', 'Unterprogramme und Fehler'],
+    ['Programmieren 1', 'Parameter'],
+    ['Programmieren 1', 'Kurztest Programmieren, Variablen, Ein- & Ausgabe'],
+    ['Programmieren 1', 'Variablen, Eingabe & Ausgabe'],
+    ['Programmieren 1', 'Verzweigungen'],
+    ['Programmieren 1', 'Robotik Micro:Bit 🤖'],
+    ['Programmieren 1', 'Robotik Micro:Bit 🤖']
 ];
 const SCHEDULE_EF_HS1 = [
     ['Programmieren', 'Infrastruktur, Installation, Git, Markdown, Python Grundlagen'],
@@ -125,19 +148,6 @@ const SCHEDULE_EF_FS4 = [
     ['Rechnen mit Strom', ''],
     ['Rechnen mit Strom', 'Test'],
     ['Wiederholung & Fragestunde', '']
-];
-
-const SCHEDULE_GYM1_PRAKTIKUM = [
-    ['Programmieren 1', 'Algorithmen & RoboZZle'],
-    ['Programmieren 1', 'Algorithmen & Einstieg Turtlegrafik'],
-    ['Programmieren 1', 'Wiederholte Ausführung'],
-    ['Programmieren 1', 'Unterprogramme und Fehler'],
-    ['Programmieren 1', 'Parameter'],
-    ['Programmieren 1', 'Variablen, Eingabe & Ausgabe'],
-    ['Programmieren 1', 'Variablen, Eingabe & Ausgabe'],
-    ['Programmieren 1', 'Verzweigungen'],
-    ['Programmieren 1', 'Robotik Maqueen'],
-    ['Programmieren 1', 'Robotik Maqueen']
 ];
 
 const SCHEDULE_GYM2_HS_DB = [
@@ -247,13 +257,18 @@ const SCHEDULE_GYM2_26_FS = [
     ['Abschluss Informatik', '']
 ];
 
-const SCHEDULE = SCHEDULE_GYM1_HS;
-// const SCHEDULE = prepareHK(SCHEDULE_GYM1_PRAKTIKUM, ['A', 'B']);
-console.log(SCHEDULE);
-['28Gb', '28Gj'].forEach((klasse) => {
+const CLASS_SCHEDULE_MAP = {
+    ['28Gb']: SCHEDULE_GYM1_HS,
+    ['28Gj']: SCHEDULE_GYM1_HS,
+    ['28Gb-HK']: prepareHK(SCHEDULE_GYM1_PRAKTIKUM, ['A', 'B']),
+    ['28Gj-HK']: prepareHK(SCHEDULE_GYM1_PRAKTIKUM, ['A', 'B'])
+};
+
+Object.keys(CLASS_SCHEDULE_MAP).forEach((klasse) => {
     const cells = [];
     let subjectNr = 0;
     const klass = klasse.split('-')[0];
+    const SCHEDULE = CLASS_SCHEDULE_MAP[klasse];
     const colSize = SCHEDULE[0].length + 1;
     Array(
         33,
@@ -284,7 +299,7 @@ console.log(SCHEDULE);
         6
     ).forEach((weekNr) => {
         const date = moment()
-            .year(YEAR + (weekNr < 30 ? 0 : 0))
+            .year(YEAR + (weekNr < 30 ? 1 : 0))
             .week(weekNr)
             .day(DAYS[CLASS_DAY[klasse]])
             .format('DD.MM.YYYY');
@@ -298,23 +313,22 @@ console.log(SCHEDULE);
                 cells: [date, EVENTS[weekNr].desc, EVENTS[weekNr].details || ''],
                 type: EVENTS[weekNr].type
             });
-        } else if (CLASS_EVENTS[klass][date]) {
+        } else if (CLASS_EVENTS[klasse][date]) {
             cells.push({
-                cells: [date, CLASS_EVENTS[klass][date].desc, CLASS_EVENTS[klass][date].details || ''],
-                type: CLASS_EVENTS[klass][date].type
+                cells: [date, CLASS_EVENTS[klasse][date].desc, CLASS_EVENTS[klasse][date].details || ''],
+                type: CLASS_EVENTS[klasse][date].type
             });
-        } else if (CLASS_EVENTS[klass][weekNr]) {
+        } else if (CLASS_EVENTS[klasse][weekNr]) {
             cells.push({
                 cells: [
-                    CLASS_EVENTS[klass][weekNr].date,
-                    CLASS_EVENTS[klass][weekNr].desc,
-                    CLASS_EVENTS[klass][weekNr].details || ''
+                    CLASS_EVENTS[klasse][weekNr].date,
+                    CLASS_EVENTS[klasse][weekNr].desc,
+                    CLASS_EVENTS[klasse][weekNr].details || ''
                 ],
-                type: CLASS_EVENTS[klass][weekNr].type
+                type: CLASS_EVENTS[klasse][weekNr].type
             });
         } else if (SCHEDULE[subjectNr]) {
-            const isTest =
-                SCHEDULE[subjectNr][1].toLowerCase().includes('test') || SCHEDULE[subjectNr][2] === 'test';
+            const isTest = /test/gi.test(SCHEDULE[subjectNr].join(' '));
             cells.push({
                 cells: [date, ...SCHEDULE[subjectNr].slice(0, 3)],
                 type: isTest ? 'test' : undefined
@@ -345,8 +359,14 @@ console.log(SCHEDULE);
     });
 
     let first = true;
+    console.log(cells);
+    const sortedByDate = cells.sort((a, b) => {
+        const dateA = moment(a.cells[0], 'DD.MM.YYYY');
+        const dateB = moment(b.cells[0], 'DD.MM.YYYY');
+        return dateA.diff(dateB);
+    });
     const prettyJson = JSON.stringify(
-        cells,
+        sortedByDate,
         function (k, v) {
             if (v instanceof Array && !first) {
                 return JSON.stringify(v);
@@ -359,12 +379,13 @@ console.log(SCHEDULE);
         .replace(/"\[/g, '[')
         .replace(/\]"/g, ']')
         .replace(/\\"/g, '"')
-        .replace(/""/g, '""');
+        .replace(/""/g, '""')
+        .replace(/","/g, '", "');
     console.log(`Writing ${klasse}_${SEMESTER}${YEAR}.json`);
     // console.log(prettyJson)
     fs.writeFileSync(
         `versioned_docs/version-${klass}/${klasse}_${SEMESTER}${YEAR}.json`,
-        prettyJson,
+        prettyJson + '\n',
         'utf-8'
     );
     // fs.writeFileSync(`./bin/${klasse}_${SEMESTER}${YEAR}.json`, prettyJson, 'utf8');
