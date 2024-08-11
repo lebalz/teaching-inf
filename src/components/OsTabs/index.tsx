@@ -28,6 +28,7 @@ const OsTabs = (props: Props) => {
             groupId="operating-systems"
             defaultValue={props.os ? props.os[0] : tabs[0]}
             values={getValues(props.os || tabs)}
+            lazy
         >
             {props.children}
         </Tabs>
