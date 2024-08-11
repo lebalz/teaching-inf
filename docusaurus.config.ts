@@ -1,5 +1,4 @@
 require('dotenv').config();
-require('dotenv').config();
 import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type { VersionOptions } from '@docusaurus/plugin-content-docs';
@@ -115,25 +114,6 @@ const config: Config = {
     API_URI: process.env.API_URI,
     GIT_COMMIT_SHA: GIT_COMMIT_SHA,
 },
-  
-  customFields: {
-    /** Use Testuser in local dev: set TEST_USERNAME to the test users email adress*/
-    TEST_USERNAME: process.env.TEST_USERNAME,
-    NO_AUTH: process.env.NODE_ENV !== 'production' && !!process.env.TEST_USERNAME,
-    /** The Domain Name where the api is running */
-    APP_URL: process.env.NETLIFY 
-      ? process.env.DEPLOY_PRIME_URL 
-      : process.env.APP_URL || 'http://localhost:3000',
-    /** The Domain Name of this app */
-    BACKEND_URL: process.env.BACKEND_URL || 'http://localhost:3002',
-    /** The application id generated in https://portal.azure.com */
-    CLIENT_ID: process.env.CLIENT_ID,
-    /** Tenant / Verzeichnis-ID (Mandant) */
-    TENANT_ID: process.env.TENANT_ID,
-    /** The application id uri generated in https://portal.azure.com */
-    API_URI: process.env.API_URI,
-    GIT_COMMIT_SHA: GIT_COMMIT_SHA,
-},
 
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
@@ -205,7 +185,6 @@ const config: Config = {
   themeConfig: {
     // Replace with your project's social card
     image: 'img/social-card.jpg',
-    image: 'img/social-card.jpg',
     navbar: {
       title: 'Informatik',
       logo: {
@@ -219,10 +198,6 @@ const config: Config = {
             label: 'Playground'
         },
         {to: '/blog', label: 'Blog', position: 'left'},
-        {
-            type: 'custom-loginProfileButton',
-            position: 'right'
-        },
         {
             type: 'custom-loginProfileButton',
             position: 'right'
@@ -306,15 +281,6 @@ const config: Config = {
   } satisfies Preset.ThemeConfig,
   plugins: ['docusaurus-plugin-sass'],
   themes: ['docusaurus-live-brython'],
-  stylesheets: [
-    {
-      href: 'https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css',
-      type: 'text/css',
-      integrity:
-        'sha384-odtC+0UGzzFL/6PNoE8rX/SPcQDXBJ+uRepguP4QkPCm2LBxH3FA3y+fKSiJ+AmM',
-      crossorigin: 'anonymous',
-    },
-  ]
   stylesheets: [
     {
       href: 'https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css',
