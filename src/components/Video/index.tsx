@@ -16,9 +16,6 @@ interface Props {
 const Video = (props: Props) => {
     const [open, setOpen] = React.useState(!!props.expanded);
 
-    const onClick = () => {
-        setOpen(true);
-    };
     return (
         <div className={styles.videoComponent}>
             {open ? (
@@ -31,7 +28,9 @@ const Video = (props: Props) => {
                                     'button button--sm button--outline button--secondary',
                                     styles.minimize
                                 )}
-                                onClick={onClick}
+                                onClick={() => {
+                                    setOpen(!open);
+                                }}
                             >
                                 <Icon path={mdiWindowMinimize} size={1} />
                             </button>
@@ -48,7 +47,9 @@ const Video = (props: Props) => {
                         'button button--block button--outline button--secondary',
                         styles.wrapButton
                     )}
-                    onClick={onClick}
+                    onClick={() => {
+                        setOpen(!open);
+                    }}
                     style={{
                         display: 'flex',
                         justifyContent: 'space-between',

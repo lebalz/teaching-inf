@@ -36,6 +36,9 @@ export default function Figure(props: Props): JSX.Element {
             opts.width = defaultUnit(opts.width);
             // delete opts.width;
         }
+        if ((opts.maxWidth || opts.minWidth) && !opts.width) {
+            opts.width = '100%';
+        }
     }
     React.useEffect(() => {
         if (!ref.current) {
