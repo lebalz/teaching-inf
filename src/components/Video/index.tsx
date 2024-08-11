@@ -15,7 +15,7 @@ interface Props {
 
 const Video = (props: Props) => {
     const [open, setOpen] = React.useState(!!props.expanded);
-    
+
     const onClick = () => {
         setOpen(true);
     };
@@ -38,7 +38,7 @@ const Video = (props: Props) => {
                         )}
                         {props.children && <div className={styles.description}>{props.children}</div>}
                     </div>
-                    <video controls autoPlay width="100%" loop preload='none'>
+                    <video controls autoPlay width="100%" loop preload="none">
                         <source src={props.src} type={`video/${props.type || 'mp4'}`} />
                     </video>
                 </div>
