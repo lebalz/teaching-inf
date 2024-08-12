@@ -320,7 +320,6 @@ const QuillV2 = observer((props: Props) => {
                 {processingImage && <Loader label="Bild Einfügen..." overlay />}
                 {doc && <SyncStatus model={doc} className={styles.saveIndicator} />}
             </div>
-            {doc.root?.isDummy && props.id && userStore.current && <Loader overlay />}
         </div>
     );
 });
