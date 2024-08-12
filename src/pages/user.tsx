@@ -34,36 +34,49 @@ const UserPage = observer(() => {
         <Layout>
             <main className={clsx(styles.main)}>
                 <h2>User</h2>
-                <CodeBlock language="json" title="API-User Props" showLineNumbers>
-                    {JSON.stringify(current?.props, null, 2)}
-                </CodeBlock>
-                <h3>MSAL</h3>
-                <CodeBlock language="json" title="MSAL-User" showLineNumbers>
-                    {JSON.stringify(sessionStore.account, null, 2)}
-                </CodeBlock>
+                <h3>
+                    Eingeloggt als {current?.firstName} {current?.lastName}
+                </h3>
 
+                <a
+                    className={clsx('button', 'button--secondary')}
+                    href={`mailto:balthasar.hofer@gbsl.ch?subject=[${window.location.hostname}]: Datenlöschung für ${current?.email}&body=Guten Tag%0D%0A%0D%0A
+Hiermit beantrage ich die vollständige und unwiderrufliche Löschung meiner Daten der Webseite ${window.location.hostname}.%0D%0A%0D%0A
+
+E-Mail: ${current?.email}%0D%0A
+Account-ID: ${current?.id}%0D%0A%0D%0A
+
+Bitte bestätigen Sie die Löschung meiner Daten.%0D%0A%0D%0A
+
+Freundliche Grüsse,%0D%0A
+${current?.firstName} ${current?.lastName} &cc=${current?.email}`}
+                >
+                    Datenlöschung beantragen
+                </a>
                 <h2>Logout</h2>
-                <Button
-                    onClick={() => sessionStore.logout()}
-                    text="Logout"
-                    title="User Abmelden"
-                    color="red"
-                    icon={mdiLogout}
-                    iconSide="left"
-                    noOutline
-                    className={clsx(styles.logout)}
-                />
-                <Button
-                    text="LocalStorage löschen"
-                    icon={mdiRefresh}
-                    iconSide="left"
-                    onClick={() => {
-                        localStorage.clear();
-                        window.location.reload();
-                    }}
-                    color="orange"
-                    noOutline
-                />
+                <span style={{ display: 'flex', gap: '1em' }}>
+                    <Button
+                        onClick={() => sessionStore.logout()}
+                        text="Logout"
+                        title="User Abmelden"
+                        color="red"
+                        icon={mdiLogout}
+                        iconSide="left"
+                        noOutline
+                        className={clsx(styles.logout)}
+                    />
+                    <Button
+                        text="LocalStorage löschen"
+                        icon={mdiRefresh}
+                        iconSide="left"
+                        onClick={() => {
+                            localStorage.clear();
+                            window.location.reload();
+                        }}
+                        color="orange"
+                        noOutline
+                    />
+                </span>
             </main>
         </Layout>
     );
