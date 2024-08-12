@@ -29,6 +29,7 @@ jobs:
           API_URI: ${{ secrets.API_URI }}
           APP_URL: ${{ secrets.APP_URL }}
           BACKEND_URL: ${{ secrets.BACKEND_URL }}
+          UMAMI_ID: ${{ secrets.UMAMI_ID }}
         run: |
             yarn install
             yarn build
