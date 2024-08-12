@@ -19,6 +19,7 @@ import { action } from 'mobx';
 import { useFirstMainDocument } from '@site/src/hooks/useFirstMainDocument';
 import Icon from '@mdi/react';
 import { mdiFlashTriangle } from '@mdi/js';
+import { useStore } from '@site/src/hooks/useStore';
 
 export interface Props extends MetaInit {
     id: string;
@@ -62,6 +63,7 @@ const FORMATS = [
 const QuillV2 = observer((props: Props) => {
     const [meta] = React.useState(new ModelMeta(props));
     const doc = useFirstMainDocument(props.id, meta);
+    const userStore = useStore('userStore');
     const updateSource = React.useRef<'current' | undefined>(undefined);
     const [processingImage, setProcessingImage] = React.useState(false);
     const ref = React.useRef<HTMLDivElement>(null);
@@ -317,6 +319,7 @@ const QuillV2 = observer((props: Props) => {
                 {doc.isInitialized && <div ref={quillRef} />}
                 {processingImage && <Loader label="Bild Einfügen..." overlay />}
                 {doc && <SyncStatus model={doc} className={styles.saveIndicator} />}
+                {doc.root?.isDummy && props.id && userStore.current && <Loader overlay />}
             </div>
         </div>
     );
