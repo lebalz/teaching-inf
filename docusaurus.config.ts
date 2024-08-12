@@ -281,6 +281,15 @@ const config: Config = {
   } satisfies Preset.ThemeConfig,
   plugins: ['docusaurus-plugin-sass'],
   themes: ['docusaurus-live-brython'],
+  scripts: [
+    {
+      src: 'https://umami.gbsl.website/tell-me.js',
+      ['data-website-id']: process.env.UMAMI_ID,
+      ['data-domains']: 'inf.gbsl.website',
+      async: true,
+      defer: true
+    }
+  ],
   stylesheets: [
     {
       href: 'https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css',
