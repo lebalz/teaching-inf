@@ -184,12 +184,12 @@ const config: Config = {
 
   themeConfig: {
     // Replace with your project's social card
-    image: 'img/social-card.jpg',
+    image: 'img/social-card.png',
     navbar: {
       title: 'Informatik',
       logo: {
         alt: 'Teaching Inf Logo',
-        src: 'img/logo.svg',
+        src: 'img/logo.png',
       },
       items: [
         {
