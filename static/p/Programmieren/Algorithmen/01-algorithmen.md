@@ -2,8 +2,7 @@
 
 - Arbeitsweise einer Maschine <!-- .element: class="fragment" data-fragment-index="1" -->
 - Verständigung mit einer Maschine <!-- .element: class="fragment" data-fragment-index="2" -->
-  - Einblick in eine Programmiersprache <!-- .element: class="fragment" data-fragment-index="3" -->
-  - Python <!-- .element: class="fragment" data-fragment-index="3" -->
+- Einblick in die Programmiersprache Python <!-- .element: class="fragment" data-fragment-index="3" -->
 - Alle zwei Wochen <!-- .element: class="fragment" data-fragment-index="4" -->
 
 
@@ -54,13 +53,11 @@ Note:
 | Musikstück spielen | Notenblatt    | Ein c' spielen                    |
 
 
-
-## Spezielle Sprachen
+## Spezielle Sprache
 
 - Fachsprache oder symbolische Sprache <!-- .element: class="fragment" data-fragment-index="1" -->
 - kürzere und klarere Beschreibung der einzelnen Schritte <!-- .element: class="fragment" data-fragment-index="2" -->
 - Einheitliche Verwendung = universell einsetzbar <!-- .element: class="fragment" data-fragment-index="3" -->
-
 
 
 # Struktur
@@ -69,9 +66,10 @@ Note:
 - Die Struktur eines Algorithmus ist universell <!-- .element: class="fragment" data-fragment-index="2" -->
 
 
-# Strukturen
 
-- Sequenz <span style="background: white">👣</span>  <!-- .element: class="fragment" data-fragment-index="1" -->
+## Algorithmusstruktur
+
+- Sequenz <!-- .element: class="fragment" data-fragment-index="1" --> <span style="background: white">👣</span> <!-- .element: class="fragment" data-fragment-index="1" -->
 - Wiederholung 🔁  <!-- .element: class="fragment" data-fragment-index="2" -->
 - Bedingte Ausführung ⑂  <!-- .element: class="fragment" data-fragment-index="3" -->
 - Unterprogramm: 🏷 Beschriftung einer Sequenz  <!-- .element: class="fragment" data-fragment-index="4" -->
@@ -170,5 +168,5 @@ Note:
 
 - Ziel: Algorithmus finden, welcher alle Sterne auf dem Spielfeld erwischt<!-- .element: class="fragment" data-fragment-index="1" -->
 - Symbole: ↑, ↰, ↱<!-- .element: class="fragment" data-fragment-index="2" -->
-- Unterprogramme: F1, F2<!-- .element: class="fragment" data-fragment-index="3" -->
+- Haupt- und Unterprogramme: Mn, F1<!-- .element: class="fragment" data-fragment-index="3" -->
 - Bedingte Ausführung Farben<!-- .element: class="fragment" data-fragment-index="4" -->
