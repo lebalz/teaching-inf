@@ -1,6 +1,7 @@
 .quillEditor {
     z-index: 1;
     margin-bottom: 1em;
+    position: relative;
     .quillAnswer {
         position: relative;
         border-radius: var(--ifm-alert-border-radius);

@@ -319,8 +319,8 @@ const QuillV2 = observer((props: Props) => {
                 {doc.isInitialized && <div ref={quillRef} />}
                 {processingImage && <Loader label="Bild Einfügen..." overlay />}
                 {doc && <SyncStatus model={doc} className={styles.saveIndicator} />}
-                {doc.root?.isDummy && props.id && userStore.current && <Loader overlay />}
             </div>
+            {doc.root?.isDummy && props.id && userStore.current && <Loader overlay />}
         </div>
     );
 });
