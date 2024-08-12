@@ -15,7 +15,9 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          submodules: 'true'
+          # Whether to checkout submodules: `true` to checkout submodules or `recursive` to
+          # recursively checkout submodules.
+          submodules: 'recursive'
       - uses: actions/setup-node@v4
         with:
           node-version: 18

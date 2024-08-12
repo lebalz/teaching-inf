@@ -85,4 +85,4 @@ klassen.forEach((klass) => {
     configs[klass].push({ from: src, to: toPath, ignore: ignore });
 });
 
-fs.writeFileSync(CONFIG_FILE, JSON.stringify(configs, undefined, 2));
+fs.writeFileSync(CONFIG_FILE, JSON.stringify(configs, undefined, 2) + '\n');
