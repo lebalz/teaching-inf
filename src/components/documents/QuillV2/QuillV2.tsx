@@ -169,7 +169,6 @@ const QuillV2 = observer((props: Props) => {
                     doc.saveNow();
                 })
             });
-
             return () => {
                 if (doc.isDirty && updateSource.current !== 'current') {
                     saveHandeler();
@@ -194,23 +193,23 @@ const QuillV2 = observer((props: Props) => {
     /** ensure no context menu is shown when using bubble mode. Otherwise, touch-devices can't start to edit... */
     React.useEffect(() => {
         if (ref.current) {
-            const onContext = (e: MouseEvent) => {
-                e.preventDefault();
-                if (props.theme === 'bubble') {
+            if (props.theme === 'bubble') {
+                const onContext = (e: MouseEvent) => {
+                    e.preventDefault();
                     try {
                         (quill as any).theme.tooltip.edit();
                         (quill as any).theme.tooltip.show();
                     } catch (e) {
                         console.log(e);
                     }
-                }
-            };
-            ref.current.addEventListener('contextmenu', onContext);
-            return () => {
-                if (ref.current) {
-                    ref.current.removeEventListener('contextmenu', onContext);
-                }
-            };
+                };
+                ref.current.addEventListener('contextmenu', onContext);
+                return () => {
+                    if (ref.current) {
+                        ref.current.removeEventListener('contextmenu', onContext);
+                    }
+                };
+            }
         }
     }, [ref, quill]);
 
@@ -220,8 +219,8 @@ const QuillV2 = observer((props: Props) => {
         };
         if (quill) {
             (quill.getModule('toolbar') as any).addHandler('image', selectLocalImage);
-            quill.root.addEventListener('drop', dropHandler);
-            quill.root.addEventListener('paste', pasteHandler);
+            quill.root.addEventListener('drop', dropHandler, true);
+            quill.root.addEventListener('paste', pasteHandler, true);
             (quill.getModule('toolbar') as any).container.addEventListener(
                 'mousedown',
                 onQuillToolbarMouseDown
