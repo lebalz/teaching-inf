@@ -59,7 +59,7 @@ const MsalWrapper = observer(({ children }: { children: React.ReactNode }) => {
                 sessionStore.authMethod = 'msal';
             });
             rootStore.sessionStore.setAccount({ username: TEST_USERNAME } as any);
-            // rootStore.load();
+            rootStore.load();
             return;
         }
 
@@ -142,7 +142,7 @@ const MsalAccount = observer(() => {
                 setupMsalAxios();
                 setTimeout(() => {
                     rootStore.sessionStore.setAccount(active);
-                    // rootStore.load();
+                    rootStore.load();
                 }, 0);
             }
         }
