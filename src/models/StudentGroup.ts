@@ -1,6 +1,8 @@
-import { computed, observable } from 'mobx';
+import { action, computed, observable } from 'mobx';
 import { StudentGroup as StudentGroupProps } from '../api/studentGroup';
 import { StudentGroupStore } from '../stores/StudentGroupStore';
+import { formatDateTime } from './helpers/date';
+import User from './User';
 
 class StudentGroup {
     readonly store: StudentGroupStore;
@@ -33,6 +35,29 @@ class StudentGroup {
     @computed
     get users() {
         return this.store.users.filter((u) => this.userIds.has(u.id));
+    }
+
+    get fCreatedAt() {
+        return formatDateTime(this.createdAt);
+    }
+
+    get fUpdatedAt() {
+        return formatDateTime(this.updatedAt);
+    }
+
+    @computed
+    get students() {
+        return this.store.root.userStore.users.filter((u) => this.userIds.has(u.id));
+    }
+
+    @action
+    addStudent(student: User) {
+        this.store.addUser(this, student);
+    }
+
+    @action
+    removeStudent(student: User) {
+        this.store.removeUser(this, student);
     }
 }
 

@@ -3,9 +3,15 @@ import { RootStore } from './rootStore';
 import { computedFn } from 'mobx-utils';
 import StudentGroup from '../models/StudentGroup';
 import iStore from './iStore';
-import { create as apiCreate, all as apiAll } from '../api/studentGroup';
+import {
+    create as apiCreate,
+    all as apiAll,
+    addUser as apiAddUser,
+    removeUser as apiRemoveUser
+} from '../api/studentGroup';
+import User from '../models/User';
 
-export class StudentGroupStore extends iStore {
+export class StudentGroupStore extends iStore<`members-${string}`> {
     readonly root: RootStore;
     studentGroups = observable.array<StudentGroup>([]);
 
@@ -36,13 +42,39 @@ export class StudentGroupStore extends iStore {
     }
 
     @action
+    addUser(studentGroup: StudentGroup, user: User) {
+        return this.withAbortController(`members-add-${studentGroup.id}-${user.id}`, async (signal) => {
+            return apiAddUser(studentGroup.id, user.id, signal.signal).then(
+                action(({ data }) => {
+                    studentGroup.userIds.add(user.id);
+                    return studentGroup;
+                })
+            );
+        });
+    }
+
+    @action
+    removeUser(studentGroup: StudentGroup, user: User) {
+        return this.withAbortController(`members-rm-${studentGroup.id}-${user.id}`, async (signal) => {
+            return apiRemoveUser(studentGroup.id, user.id, signal.signal).then(
+                action(({ data }) => {
+                    studentGroup.userIds.delete(user.id);
+                    return studentGroup;
+                })
+            );
+        });
+    }
+
+    @action
     load() {
         return this.withAbortController('load-all', async (signal) => {
-            return apiAll(signal.signal).then(({ data }) => {
-                const groups = data.map((group) => new StudentGroup(group, this));
-                this.studentGroups.replace(groups);
-                return groups;
-            });
+            return apiAll(signal.signal).then(
+                action(({ data }) => {
+                    const groups = data.map((group) => new StudentGroup(group, this));
+                    this.studentGroups.replace(groups);
+                    return groups;
+                })
+            );
         });
     }
 

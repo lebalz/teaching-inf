@@ -1,5 +1,5 @@
 import { action, computed, makeObservable, observable, reaction } from 'mobx';
-import { User as UserProps, find as apiFind, currentUser } from '../api/user';
+import { User as UserProps, all as apiAll, currentUser } from '../api/user';
 import { RootStore } from './rootStore';
 import User from '../models/User';
 import _ from 'lodash';
@@ -91,11 +91,14 @@ export class UserStore extends iStore {
     }
 
     @action
-    loadUser(id: string) {
-        return this.withAbortController(`load-${id}`, async (ct) => {
-            return apiFind(id, ct.signal).then((res) => {
-                return this.addToStore(res.data);
-            });
+    load() {
+        return this.withAbortController(`load-all`, async (ct) => {
+            return apiAll(ct.signal).then(
+                action((res) => {
+                    const models = res.data.map((d) => this.createModel(d));
+                    this.users.replace(models);
+                })
+            );
         });
     }
 

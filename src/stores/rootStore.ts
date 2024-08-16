@@ -50,6 +50,7 @@ export class RootStore {
                 /**
                  * load stores
                  */
+                this.userStore.load();
                 this.studentGroupStore.load();
             }
         });
