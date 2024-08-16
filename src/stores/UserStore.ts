@@ -1,5 +1,5 @@
 import { action, computed, makeObservable, observable, reaction } from 'mobx';
-import { User as UserProps, all as apiAll, currentUser } from '../api/user';
+import { Role, User as UserProps, all as apiAll, currentUser } from '../api/user';
 import { RootStore } from './rootStore';
 import User from '../models/User';
 import _ from 'lodash';
@@ -29,8 +29,8 @@ export class UserStore extends iStore {
         if (this.users.length > 0) {
             return;
         }
-        const data = _data || Storage.get('SessionStore') || {};
-        if (data.user) {
+        const data = Storage.get('SessionStore', _data);
+        if (data?.user) {
             try {
                 this.addToStore(data.user);
             } catch (e) {
@@ -106,7 +106,13 @@ export class UserStore extends iStore {
     loadCurrent() {
         const res = this.withAbortController('load-user', async (signal) => {
             return currentUser(signal.signal).then((res) => {
-                return this.addToStore(res.data);
+                const currentUser = this.addToStore(res.data);
+                if (currentUser) {
+                    Storage.set('SessionStore', {
+                        user: { ...currentUser.props, isAdmin: false }
+                    });
+                }
+                return currentUser;
             });
         });
         return res;
