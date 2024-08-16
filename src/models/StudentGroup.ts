@@ -15,6 +15,8 @@ class StudentGroup {
 
     @observable accessor parentId: string | undefined;
 
+    readonly _pristine: { name: string; description: string };
+
     readonly createdAt: Date;
     readonly updatedAt: Date;
 
@@ -22,6 +24,7 @@ class StudentGroup {
         this.store = store;
         this.id = props.id;
 
+        this._pristine = { name: props.name, description: props.description };
         this.name = props.name;
         this.description = props.description;
 
@@ -51,13 +54,44 @@ class StudentGroup {
     }
 
     @action
+    setDescription(description: string) {
+        this.description = description;
+    }
+
+    @action
+    setName(name: string) {
+        this.name = name;
+    }
+
+    @action
     addStudent(student: User) {
         this.store.addUser(this, student);
     }
 
     @action
+    reset() {
+        this.name = this._pristine.name;
+        this.description = this._pristine.description;
+    }
+
+    @action
     removeStudent(student: User) {
         this.store.removeUser(this, student);
+    }
+
+    @action
+    save() {
+        this.store.save(this);
+    }
+
+    @computed
+    get props(): Omit<StudentGroupProps, 'userIds' | 'createdAt' | 'updatedAt'> {
+        return {
+            id: this.id,
+            name: this.name,
+            description: this.description,
+            parentId: this.parentId
+        };
     }
 }
 

@@ -49,7 +49,7 @@ const AddUserPopup = observer((props: Props) => {
                         type="text"
                         placeholder="Suche..."
                         value={searchFilter}
-                        className={clsx(styles.search)}
+                        className={clsx(styles.textInput)}
                         onChange={(e) => {
                             setSearchFilter(e.target.value);
                         }}

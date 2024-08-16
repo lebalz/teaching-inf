@@ -11,6 +11,9 @@ import {
     mdiAccountReactivateOutline,
     mdiAccountRemove,
     mdiAccountRemoveOutline,
+    mdiCircleEditOutline,
+    mdiCloseCircleOutline,
+    mdiContentSave,
     mdiMinusCircle
 } from '@mdi/js';
 import Popup from 'reactjs-popup';
@@ -23,23 +26,83 @@ interface Props {
 
 const StudentGroup = observer((props: Props) => {
     const [removedIds, setRemovedIds] = React.useState<string[]>([]);
+    const [editing, setEditing] = React.useState(false);
     React.useEffect(() => {
-        // const timeout = setTimeout(() => {
-        //     setRemovedIds([]);
-        // }, 5000);
-        // return () => clearTimeout(timeout);
+        const timeout = setTimeout(() => {
+            setRemovedIds([]);
+        }, 5000);
+        return () => clearTimeout(timeout);
     }, [removedIds]);
     const group = props.studentGroup;
     const userStore = useStore('userStore');
     return (
         <div className={clsx(styles.studentGroup, 'card')}>
-            <div className={clsx('card__header')}>
-                <h3>{group.name}</h3>
+            <div className={clsx('card__header', styles.header)}>
+                <h3>
+                    {editing ? (
+                        <input
+                            type="text"
+                            placeholder="Titel..."
+                            value={group.name}
+                            className={clsx(styles.textInput)}
+                            onChange={(e) => {
+                                group.setName(e.target.value);
+                            }}
+                        />
+                    ) : (
+                        group.name || '-'
+                    )}
+                </h3>
+                {editing ? (
+                    <div>
+                        <Button
+                            onClick={() => {
+                                group.reset();
+                                setEditing(false);
+                            }}
+                            icon={mdiCloseCircleOutline}
+                            color="black"
+                            title="Verwerfen"
+                        />
+                        <Button
+                            onClick={() => {
+                                group.save();
+                                setEditing(false);
+                            }}
+                            icon={mdiContentSave}
+                            color="green"
+                            title="Speichern"
+                        />
+                    </div>
+                ) : (
+                    <Button
+                        onClick={() => {
+                            setEditing(!editing);
+                            setEditing(true);
+                        }}
+                        icon={mdiCircleEditOutline}
+                        color="orange"
+                        title="Bearbeiten"
+                    />
+                )}
             </div>
             <div className={clsx('card__body')}>
                 <dl>
                     <dt>Beschreibung</dt>
-                    <dd>{group.description || '-'}</dd>
+                    <dd>
+                        {editing ? (
+                            <textarea
+                                placeholder="Beschreibung..."
+                                value={group.description}
+                                className={clsx(styles.textarea)}
+                                onChange={(e) => {
+                                    group.setDescription(e.target.value);
+                                }}
+                            />
+                        ) : (
+                            group.description || '-'
+                        )}
+                    </dd>
 
                     <dt>Erstellt Am</dt>
                     <dd>{group.fCreatedAt}</dd>

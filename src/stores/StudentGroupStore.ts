@@ -6,6 +6,7 @@ import iStore from './iStore';
 import {
     create as apiCreate,
     all as apiAll,
+    update as apiUpdate,
     addUser as apiAddUser,
     removeUser as apiRemoveUser
 } from '../api/studentGroup';
@@ -36,6 +37,26 @@ export class StudentGroupStore extends iStore<`members-${string}`> {
             return apiCreate({ name, description, parentId }, signal.signal).then(({ data }) => {
                 const group = new StudentGroup(data, this);
                 this.studentGroups.push(group);
+                return group;
+            });
+        });
+    }
+
+    @action
+    addToStore(studentGroup: StudentGroup) {
+        const old = this.find(studentGroup.id);
+        if (old) {
+            this.studentGroups.remove(old);
+        }
+        this.studentGroups.push(studentGroup);
+    }
+
+    @action
+    save(studentGroup: StudentGroup) {
+        return this.withAbortController(`save-${studentGroup.id}`, async (signal) => {
+            return apiUpdate(studentGroup.id, studentGroup.props, signal.signal).then(({ data }) => {
+                const group = new StudentGroup({ ...data, userIds: [...studentGroup.userIds] }, this);
+                this.addToStore(group);
                 return group;
             });
         });
