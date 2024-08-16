@@ -8,7 +8,8 @@ import {
     all as apiAll,
     update as apiUpdate,
     addUser as apiAddUser,
-    removeUser as apiRemoveUser
+    removeUser as apiRemoveUser,
+    destroy as apiDestroy
 } from '../api/studentGroup';
 import User from '../models/User';
 
@@ -63,12 +64,24 @@ export class StudentGroupStore extends iStore<`members-${string}`> {
     }
 
     @action
+    destroy(studentGroup: StudentGroup) {
+        return this.withAbortController(`destroy-${studentGroup.id}`, async (signal) => {
+            return apiDestroy(studentGroup.id, signal.signal).then(({ data }) => {
+                this.studentGroups.remove(studentGroup);
+                return studentGroup;
+            });
+        });
+    }
+
+    @action
     addUser(studentGroup: StudentGroup, user: User) {
         return this.withAbortController(`members-add-${studentGroup.id}-${user.id}`, async (signal) => {
             return apiAddUser(studentGroup.id, user.id, signal.signal).then(
                 action(({ data }) => {
-                    studentGroup.userIds.add(user.id);
-                    return studentGroup;
+                    if (data) {
+                        studentGroup.userIds.add(user.id);
+                        return studentGroup;
+                    }
                 })
             );
         });

@@ -10,20 +10,23 @@ import Button from '@site/src/components/shared/Button';
 import { mdiPlusCircleOutline } from '@mdi/js';
 
 const StudentGroups = observer(() => {
+    const user = useStore('userStore').current;
     const groupStore = useStore('studentGroupStore');
     return (
         <Layout>
             <main className={clsx(styles.main)}>
                 <h2>Lerngruppen</h2>
                 <div>
-                    <Button
-                        onClick={() => {
-                            groupStore.create('Neue Lerngruppe', 'Beschreibung');
-                        }}
-                        icon={mdiPlusCircleOutline}
-                        color="primary"
-                        text="Neue Lerngruppe erstellen"
-                    />
+                    {user?.isAdmin && (
+                        <Button
+                            onClick={() => {
+                                groupStore.create('Neue Lerngruppe', 'Beschreibung');
+                            }}
+                            icon={mdiPlusCircleOutline}
+                            color="primary"
+                            text="Neue Lerngruppe erstellen"
+                        />
+                    )}
                 </div>
                 <div className={clsx(styles.studentGroups)}>
                     {_.orderBy(groupStore.studentGroups, ['name', 'createdAt'], ['asc', 'desc']).map(

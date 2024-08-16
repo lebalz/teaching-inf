@@ -65,7 +65,7 @@ class StudentGroup {
 
     @action
     addStudent(student: User) {
-        this.store.addUser(this, student);
+        return this.store.addUser(this, student);
     }
 
     @action
@@ -76,12 +76,12 @@ class StudentGroup {
 
     @action
     removeStudent(student: User) {
-        this.store.removeUser(this, student);
+        return this.store.removeUser(this, student);
     }
 
     @action
     save() {
-        this.store.save(this);
+        return this.store.save(this);
     }
 
     @computed
