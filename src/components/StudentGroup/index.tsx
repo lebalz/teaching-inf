@@ -4,7 +4,15 @@ import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
 import { default as StudentGroupModel } from '@site/src/models/StudentGroup';
 import Button from '../shared/Button';
-import { mdiAccountMinus, mdiAccountPlus, mdiAccountReactivate, mdiAccountReactivateOutline, mdiAccountRemove, mdiAccountRemoveOutline, mdiMinusCircle } from '@mdi/js';
+import {
+    mdiAccountMinus,
+    mdiAccountPlus,
+    mdiAccountReactivate,
+    mdiAccountReactivateOutline,
+    mdiAccountRemove,
+    mdiAccountRemoveOutline,
+    mdiMinusCircle
+} from '@mdi/js';
 import Popup from 'reactjs-popup';
 import { useStore } from '@site/src/hooks/useStore';
 import AddUserPopup from './AddUserPopup';
@@ -63,7 +71,11 @@ const StudentGroup = observer((props: Props) => {
                             </ul>
                         </div>
                         {removedIds.map((removedId) => (
-                            <div className={clsx('alert alert--warning', styles.removeAlert)} role="alert" key={removedId}>
+                            <div
+                                className={clsx('alert alert--warning', styles.removeAlert)}
+                                role="alert"
+                                key={removedId}
+                            >
                                 <button
                                     aria-label="Close"
                                     className={clsx('clean-btn close')}
@@ -85,8 +97,8 @@ const StudentGroup = observer((props: Props) => {
                                     icon={mdiAccountReactivateOutline}
                                     text="Rückgängig"
                                     className={clsx('button--block')}
-                                    iconSide='left'
-                                    color='primary'
+                                    iconSide="left"
+                                    color="primary"
                                 />
                             </div>
                         ))}

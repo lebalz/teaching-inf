@@ -32,7 +32,7 @@ const AddUserPopup = observer((props: Props) => {
                         icon={mdiAccountPlus}
                         color="green"
                         text="Hinzufügen"
-                        iconSide='left'
+                        iconSide="left"
                     />
                 </div>
             }
