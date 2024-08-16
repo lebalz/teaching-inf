@@ -96,6 +96,12 @@ export class UserStore extends iStore {
             return apiAll(ct.signal).then(
                 action((res) => {
                     const models = res.data.map((d) => this.createModel(d));
+                    if (models.length === 0 && this.users.length === 1) {
+                        /**
+                         * only the current user is in the store
+                         */
+                        return;
+                    }
                     this.users.replace(models);
                 })
             );
