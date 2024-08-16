@@ -22,6 +22,10 @@ export function create(data: Partial<StudentGroup> = {}, signal: AbortSignal): A
     return api.post(`/studentGroups`, data, { signal });
 }
 
+export function destroy(id: string, signal: AbortSignal): AxiosPromise<StudentGroup> {
+    return api.delete(`/studentGroups/${id}`, { signal });
+}
+
 export function update(
     id: string,
     data: Partial<StudentGroup> = {},

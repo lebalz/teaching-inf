@@ -14,7 +14,9 @@ import {
     mdiCircleEditOutline,
     mdiCloseCircleOutline,
     mdiContentSave,
-    mdiMinusCircle
+    mdiMinusCircle,
+    mdiTrashCan,
+    mdiTrashCanOutline
 } from '@mdi/js';
 import Popup from 'reactjs-popup';
 import { useStore } from '@site/src/hooks/useStore';
@@ -27,6 +29,9 @@ interface Props {
 const StudentGroup = observer((props: Props) => {
     const [removedIds, setRemovedIds] = React.useState<string[]>([]);
     const [editing, setEditing] = React.useState(false);
+    const user = useStore('userStore').current;
+    const groupStore = useStore('studentGroupStore');
+    const isAdmin = !!user?.isAdmin;
     React.useEffect(() => {
         const timeout = setTimeout(() => {
             setRemovedIds([]);
@@ -39,7 +44,7 @@ const StudentGroup = observer((props: Props) => {
         <div className={clsx(styles.studentGroup, 'card')}>
             <div className={clsx('card__header', styles.header)}>
                 <h3>
-                    {editing ? (
+                    {isAdmin && editing ? (
                         <input
                             type="text"
                             placeholder="Titel..."
@@ -53,44 +58,56 @@ const StudentGroup = observer((props: Props) => {
                         group.name || '-'
                     )}
                 </h3>
-                {editing ? (
+                {isAdmin && (
                     <div>
-                        <Button
-                            onClick={() => {
-                                group.reset();
-                                setEditing(false);
-                            }}
-                            icon={mdiCloseCircleOutline}
-                            color="black"
-                            title="Verwerfen"
-                        />
-                        <Button
-                            onClick={() => {
-                                group.save();
-                                setEditing(false);
-                            }}
-                            icon={mdiContentSave}
-                            color="green"
-                            title="Speichern"
-                        />
+                        {editing ? (
+                            <>
+                                <Button
+                                    onClick={() => {
+                                        group.reset();
+                                        setEditing(false);
+                                    }}
+                                    icon={mdiCloseCircleOutline}
+                                    color="black"
+                                    title="Verwerfen"
+                                />
+                                <Button
+                                    onClick={() => {
+                                        group.save();
+                                        setEditing(false);
+                                    }}
+                                    icon={mdiContentSave}
+                                    color="green"
+                                    title="Speichern"
+                                />
+                                <Button
+                                    onClick={() => {
+                                        groupStore.destroy(group);
+                                    }}
+                                    icon={mdiTrashCanOutline}
+                                    color="red"
+                                    title="Löschen"
+                                />
+                            </>
+                        ) : (
+                            <Button
+                                onClick={() => {
+                                    setEditing(!editing);
+                                    setEditing(true);
+                                }}
+                                icon={mdiCircleEditOutline}
+                                color="orange"
+                                title="Bearbeiten"
+                            />
+                        )}
                     </div>
-                ) : (
-                    <Button
-                        onClick={() => {
-                            setEditing(!editing);
-                            setEditing(true);
-                        }}
-                        icon={mdiCircleEditOutline}
-                        color="orange"
-                        title="Bearbeiten"
-                    />
                 )}
             </div>
             <div className={clsx('card__body')}>
                 <dl>
                     <dt>Beschreibung</dt>
                     <dd>
-                        {editing ? (
+                        {isAdmin && editing ? (
                             <textarea
                                 placeholder="Beschreibung..."
                                 value={group.description}
@@ -110,25 +127,49 @@ const StudentGroup = observer((props: Props) => {
                     <dt>Letzte Änderung</dt>
                     <dd>{group.fUpdatedAt}</dd>
 
-                    <dt>User:innen</dt>
+                    <dt>Anzahl Schüler:innen</dt>
                     <dd>
-                        <AddUserPopup studentGroup={group} />
+                        <span className={clsx('badge badge--primary')}>
+                            {group.students.filter((u) => !u.isAdmin).length}
+                        </span>
+                    </dd>
+
+                    <dt>Lehrpersonen</dt>
+                    <dd>
+                        <ul>
+                            {group.students
+                                .filter((u) => u.isAdmin)
+                                .map((user, idx) => (
+                                    <li key={idx}>
+                                        {user.firstName.slice(0, 1)}. {user.lastName}
+                                    </li>
+                                ))}
+                        </ul>
+                    </dd>
+
+                    <dt>Gruppe</dt>
+                    <dd>
+                        {isAdmin && <AddUserPopup studentGroup={group} />}
                         <div className={styles.listContainer}>
                             <ul className={clsx(styles.students, styles.list)}>
                                 {group.students.map((student, idx) => (
                                     <li key={idx} className={clsx(styles.listItem)}>
                                         {student.email}
-                                        <div className={styles.actions}>
-                                            <Button
-                                                onClick={() => {
-                                                    group.removeStudent(student);
-                                                    setRemovedIds([...new Set([...removedIds, student.id])]);
-                                                }}
-                                                icon={mdiAccountMinus}
-                                                color="red"
-                                                title="Entfernen"
-                                            />
-                                        </div>
+                                        {isAdmin && (
+                                            <div className={styles.actions}>
+                                                <Button
+                                                    onClick={() => {
+                                                        group.removeStudent(student);
+                                                        setRemovedIds([
+                                                            ...new Set([...removedIds, student.id])
+                                                        ]);
+                                                    }}
+                                                    icon={mdiAccountMinus}
+                                                    color="red"
+                                                    title="Entfernen"
+                                                />
+                                            </div>
+                                        )}
                                     </li>
                                 ))}
                             </ul>
