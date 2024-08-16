@@ -32,7 +32,7 @@ export class StudentGroupStore extends iStore<`members-${string}`> {
     );
 
     @action
-    create(name: string, description: string, parentId: string) {
+    create(name: string, description: string, parentId?: string) {
         return this.withAbortController(`create-${name}`, async (signal) => {
             return apiCreate({ name, description, parentId }, signal.signal).then(({ data }) => {
                 const group = new StudentGroup(data, this);
