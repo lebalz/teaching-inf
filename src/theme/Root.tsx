@@ -157,7 +157,6 @@ const MsalAccount = observer(() => {
 
 // Default implementation, that you can customize
 function Root({ children }: { children: JSX.Element }) {
-    const location = useLocation();
     React.useEffect(() => {
         if (!rootStore) {
             return;
@@ -177,10 +176,6 @@ function Root({ children }: { children: JSX.Element }) {
         };
     }, [rootStore]);
 
-    const { libDir, syncMaxOnceEvery } = usePluginData('docusaurus-live-brython') as {
-        libDir: string;
-        syncMaxOnceEvery: number;
-    };
     const { siteConfig } = useDocusaurusContext();
     React.useEffect(() => {
         /**

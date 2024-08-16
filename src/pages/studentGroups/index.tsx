@@ -18,14 +18,11 @@ const StudentGroups = observer(() => {
                 <div>
                     <Button
                         onClick={() => {
-                            groupStore.create(
-                                'Neue Lerngruppe',
-                                'Beschreibung'
-                            );
+                            groupStore.create('Neue Lerngruppe', 'Beschreibung');
                         }}
                         icon={mdiPlusCircleOutline}
                         color="primary"
-                        text='Neue Lerngruppe erstellen'
+                        text="Neue Lerngruppe erstellen"
                     />
                 </div>
                 <div className={clsx(styles.studentGroups)}>

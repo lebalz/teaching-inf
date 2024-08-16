@@ -3,7 +3,7 @@ import { DocumentRootStore } from './DocumentRootStore';
 import { UserStore } from './UserStore';
 import { SessionStore } from './SessionStore';
 import { SocketDataStore } from './SocketDataStore';
-import { action, reaction } from 'mobx';
+import { action, observable, reaction } from 'mobx';
 import { StudentGroupStore } from './StudentGroupStore';
 import PermissionStore from './PermissionStore';
 import DocumentStore from './DocumentStore';
@@ -17,6 +17,7 @@ export class RootStore {
     permissionStore: PermissionStore;
     documentStore: DocumentStore;
 
+    // @observable accessor initialized = false;
     constructor() {
         this.documentRootStore = new DocumentRootStore(this);
         this.sessionStore = new SessionStore(this);
@@ -26,24 +27,14 @@ export class RootStore {
         this.permissionStore = new PermissionStore(this);
         this.documentStore = new DocumentStore(this);
 
-        reaction(
-            () => this.sessionStore.isLoggedIn,
-            (isLoggedIn) => {
-                if (isLoggedIn) {
-                    this.userStore.loadCurrent().then((user) => {
-                        if (user) {
-                            this.socketStore.reconnect();
-                        }
-                    });
-                } else {
-                    this.cleanup();
-                }
-            }
-        );
+        if (this.sessionStore.isLoggedIn) {
+            this.load();
+        }
     }
 
     @action
     load() {
+        console.log('load: models');
         this.userStore.loadCurrent().then((user) => {
             if (user) {
                 this.socketStore.reconnect();
