@@ -37,4 +37,9 @@ export default class User {
             updatedAt: this.updatedAt.toISOString()
         };
     }
+
+    @computed
+    get searchTerms(): string {
+        return `${this.firstName} ${this.lastName} ${this.email}`;
+    }
 }

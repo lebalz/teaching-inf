@@ -29,3 +29,11 @@ export function update(
 ): AxiosPromise<StudentGroup> {
     return api.put(`/studentGroups/${id}`, { data }, { signal });
 }
+
+export function addUser(id: string, userId: string, signal: AbortSignal): AxiosPromise<StudentGroup[]> {
+    return api.post(`/studentGroups/${id}/members/${userId}`, { signal });
+}
+
+export function removeUser(id: string, userId: string, signal: AbortSignal): AxiosPromise<StudentGroup[]> {
+    return api.delete(`/studentGroups/${id}/members/${userId}`, { signal });
+}
