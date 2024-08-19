@@ -219,16 +219,20 @@ class PermissionStore extends iStore<`update-${string}`> {
             return Promise.resolve();
         }
         this.withAbortController(`load-permissions-${documentRoot.id}`, async (signal) => {
-            return permissionsFor(documentRoot.id, signal.signal).then(action(({ data }) => {
-                const docRootId = data.id;
-                data.userPermissions.forEach((p) => {
-                    this.addUserPermission(new UserPermission({ ...p, documentRootId: docRootId }, this));
-                });
-                data.groupPermissions.forEach((p) => {
-                    this.addGroupPermission(new GroupPermission({ ...p, documentRootId: docRootId }, this));
-                });
-                this.permissionsLoadedForDocumentRootIds.add(documentRoot.id);
-            }));
+            return permissionsFor(documentRoot.id, signal.signal).then(
+                action(({ data }) => {
+                    const docRootId = data.id;
+                    data.userPermissions.forEach((p) => {
+                        this.addUserPermission(new UserPermission({ ...p, documentRootId: docRootId }, this));
+                    });
+                    data.groupPermissions.forEach((p) => {
+                        this.addGroupPermission(
+                            new GroupPermission({ ...p, documentRootId: docRootId }, this)
+                        );
+                    });
+                    this.permissionsLoadedForDocumentRootIds.add(documentRoot.id);
+                })
+            );
         });
     }
 }
