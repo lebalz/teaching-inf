@@ -30,7 +30,7 @@ const Solution = observer((props: Props) => {
     }
     return (
         <div className={clsx(styles.wrapper, props.standalone && styles.standalone)}>
-            {docRoot.access !== Access.None || userStore.current?.isAdmin ? (
+            {docRoot.permission !== Access.None || userStore.current?.isAdmin ? (
                 <Details
                     summary={
                         <summary>
@@ -40,7 +40,7 @@ const Solution = observer((props: Props) => {
                                 {userStore.current?.isAdmin && (
                                     <PermissionsPanel documentRootId={docRoot.id} />
                                 )}
-                                {docRoot.access === Access.None && (
+                                {docRoot.permission === Access.None && (
                                     <span className="badge badge--secondary">Hidden</span>
                                 )}
                                 <Icon

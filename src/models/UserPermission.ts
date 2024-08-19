@@ -1,10 +1,10 @@
 import { action, observable } from 'mobx';
 import { Access } from '../api/document';
 import PermissionStore from '../stores/PermissionStore';
-import { UserPermission } from '../api/permission';
+import { UserPermission as UserPermissionProps } from '../api/permission';
 import User from './User';
 
-class PermissionUser {
+class UserPermission {
     readonly store: PermissionStore;
 
     readonly id: string;
@@ -13,7 +13,7 @@ class PermissionUser {
 
     @observable accessor _access: Access;
 
-    constructor(props: UserPermission, store: PermissionStore) {
+    constructor(props: UserPermissionProps, store: PermissionStore) {
         this.store = store;
         this._access = props.access;
         this.id = props.id;
@@ -31,7 +31,11 @@ class PermissionUser {
 
     @action
     set access(access: Access) {
-        this.access = access;
+        if (this._access === access) {
+            return;
+        }
+        this._access = access;
+        this.store.saveUserPermission(this);
     }
 
     get access() {
@@ -44,4 +48,4 @@ class PermissionUser {
     }
 }
 
-export default PermissionUser;
+export default UserPermission;

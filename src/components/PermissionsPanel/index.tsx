@@ -58,7 +58,7 @@ const PermissionsPanel = observer(({ documentRootId }: Props) => {
                 <div className={clsx('card__header', styles.header)}>
                     <h3>Berechtigungen Festlegen</h3>
                 </div>
-                <div className={clsx('card__body')}>
+                <div className={clsx('card__body', styles.cardBody)}>
                     <DefinitionList className={styles.popupContentContainer}>
                         <dt>Root Access</dt>
                         <dd>

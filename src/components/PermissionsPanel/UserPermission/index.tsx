@@ -2,20 +2,24 @@ import React from 'react';
 import clsx from 'clsx';
 import styles from '../Permission.module.scss';
 import { observer } from 'mobx-react-lite';
-import PermissionUser from '@site/src/models/PermissionUser';
+import { default as UserPermissionModel } from '@site/src/models/UserPermission';
 import AccessSelector from '../AccessSelector';
 import Button from '../../shared/Button';
-import { mdiDelete } from '@mdi/js';
+import { mdiAccountCircle, mdiDelete } from '@mdi/js';
+import Icon from '@mdi/react';
 
 interface Props {
-    permission: PermissionUser;
+    permission: UserPermissionModel;
 }
 
 const UserPermission = observer((props: Props) => {
     const { permission } = props;
     return (
         <div className={clsx(styles.permission)}>
-            <span className={clsx(styles.audience)}>{permission.user?.nameShort || permission.id}</span>
+            <span className={clsx(styles.audience)}>
+                <Icon path={mdiAccountCircle} color="var(--ifm-color-primary)" size={0.8} />
+                {permission.user?.nameShort || permission.id}
+            </span>
             <span className={clsx(styles.spacer)} />
             <AccessSelector
                 access={permission.access}

@@ -54,18 +54,11 @@ const AccessPanel = observer((props: Props) => {
                         .filter(
                             (group) =>
                                 searchRegex.test(group.searchTerm) &&
-                                !documentRoot.groupPermissions.some((p) => p.groupId === p.id)
+                                !documentRoot.groupPermissions.some((p) => p.groupId === group.id)
                         )
                         .map((group, idx) => (
                             <div key={idx} className={clsx(styles.item)}>
-                                <span className={styles.audience}>
-                                    <Icon
-                                        path={mdiAccountSupervisorCircle}
-                                        color="var(--ifm-color-primary)"
-                                        size={0.8}
-                                    />
-                                    {group.name}
-                                </span>
+                                <span className={styles.audience}>{group.name}</span>
                                 <span className={clsx(styles.spacer)} />
                                 <div className={styles.actions}>
                                     <AccessSelector

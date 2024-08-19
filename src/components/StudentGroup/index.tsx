@@ -6,21 +6,15 @@ import { default as StudentGroupModel } from '@site/src/models/StudentGroup';
 import Button from '../shared/Button';
 import {
     mdiAccountMinus,
-    mdiAccountPlus,
-    mdiAccountReactivate,
     mdiAccountReactivateOutline,
-    mdiAccountRemove,
-    mdiAccountRemoveOutline,
     mdiCircleEditOutline,
     mdiCloseCircleOutline,
     mdiContentSave,
-    mdiMinusCircle,
-    mdiTrashCan,
     mdiTrashCanOutline
 } from '@mdi/js';
-import Popup from 'reactjs-popup';
 import { useStore } from '@site/src/hooks/useStore';
 import AddUserPopup from './AddUserPopup';
+import DefinitionList from '../DefinitionList';
 
 interface Props {
     studentGroup: StudentGroupModel;
@@ -104,7 +98,7 @@ const StudentGroup = observer((props: Props) => {
                 )}
             </div>
             <div className={clsx('card__body')}>
-                <dl>
+                <DefinitionList>
                     <dt>Beschreibung</dt>
                     <dd>
                         {isAdmin && editing ? (
@@ -207,7 +201,7 @@ const StudentGroup = observer((props: Props) => {
                             </div>
                         ))}
                     </dd>
-                </dl>
+                </DefinitionList>
             </div>
         </div>
     );

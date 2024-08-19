@@ -1,12 +1,12 @@
 import { action, observable } from 'mobx';
 import { RootStore } from './rootStore';
 import { computedFn } from 'mobx-utils';
-import PermissionUser from '../models/PermissionUser';
-import PermissionGroup from '../models/PermissionGroup';
+import UserPermission from '../models/UserPermission';
+import GroupPermission from '../models/GroupPermission';
 import iStore from './iStore';
 import {
-    GroupPermission,
-    UserPermission,
+    GroupPermission as GroupPermissionProps,
+    UserPermission as UserPermissionProps,
     createGroupPermission as createGroupPermissionApi,
     createUserPermission as createUserPermissionApi,
     updateGroupPermission as updateGroupPermissionApi,
@@ -22,8 +22,8 @@ import StudentGroup from '../models/StudentGroup';
 
 class PermissionStore extends iStore<`update-${string}`> {
     readonly root: RootStore;
-    userPermissions = observable.array<PermissionUser>([]);
-    groupPermissions = observable.array<PermissionGroup>([]);
+    userPermissions = observable.array<UserPermission>([]);
+    groupPermissions = observable.array<GroupPermission>([]);
     @observable accessor permissionsLoadedForDocumentRootIds = new Set<string>();
 
     constructor(root: RootStore) {
@@ -32,7 +32,7 @@ class PermissionStore extends iStore<`update-${string}`> {
     }
 
     findUserPermission = computedFn(
-        function (this: PermissionStore, id?: string): PermissionUser | undefined {
+        function (this: PermissionStore, id?: string): UserPermission | undefined {
             if (!id) {
                 return;
             }
@@ -42,7 +42,7 @@ class PermissionStore extends iStore<`update-${string}`> {
     );
 
     findGroupPermission = computedFn(
-        function (this: PermissionStore, id?: string): PermissionGroup | undefined {
+        function (this: PermissionStore, id?: string): GroupPermission | undefined {
             if (!id) {
                 return;
             }
@@ -52,7 +52,7 @@ class PermissionStore extends iStore<`update-${string}`> {
     );
 
     userPermissionsByDocumentRoot = computedFn(
-        function (this: PermissionStore, documentRootId?: string): PermissionUser[] {
+        function (this: PermissionStore, documentRootId?: string): UserPermission[] {
             if (!documentRootId) {
                 return [];
             }
@@ -62,7 +62,7 @@ class PermissionStore extends iStore<`update-${string}`> {
     );
 
     groupPermissionsByDocumentRoot = computedFn(
-        function (this: PermissionStore, documentRootId?: string): PermissionGroup[] {
+        function (this: PermissionStore, documentRootId?: string): GroupPermission[] {
             if (!documentRootId) {
                 return [];
             }
@@ -71,7 +71,7 @@ class PermissionStore extends iStore<`update-${string}`> {
         { keepAlive: true }
     );
 
-    permissionsByDocumentRoot(documentRootId?: string): (PermissionUser | PermissionGroup)[] {
+    permissionsByDocumentRoot(documentRootId?: string): (UserPermission | GroupPermission)[] {
         if (!documentRootId) {
             return [];
         }
@@ -86,7 +86,7 @@ class PermissionStore extends iStore<`update-${string}`> {
     }
 
     @action
-    addUserPermission(userPermission: PermissionUser) {
+    addUserPermission(userPermission: UserPermission) {
         const old = this.findUserPermission(userPermission.id);
         if (old) {
             if (old.access === userPermission.access) {
@@ -98,7 +98,7 @@ class PermissionStore extends iStore<`update-${string}`> {
     }
 
     @action
-    addGroupPermission(groupPermission: PermissionGroup) {
+    addGroupPermission(groupPermission: GroupPermission) {
         const old = this.findUserPermission(groupPermission.id);
         if (old) {
             if (old.access === groupPermission.access) {
@@ -107,6 +107,16 @@ class PermissionStore extends iStore<`update-${string}`> {
             this.userPermissions.remove(old);
         }
         this.groupPermissions.push(groupPermission);
+    }
+
+    @action
+    handleUserPermissionUpdate(permission: UserPermissionProps) {
+        this.addUserPermission(new UserPermission(permission, this));
+    }
+
+    @action
+    handleGroupPermissionUpdate(permission: GroupPermissionProps) {
+        this.addGroupPermission(new GroupPermission(permission, this));
     }
 
     @action
@@ -120,8 +130,7 @@ class PermissionStore extends iStore<`update-${string}`> {
                 },
                 signal.signal
             ).then(({ data }) => {
-                console.log('user permission', data);
-                this.addUserPermission(new PermissionUser(data, this));
+                this.addUserPermission(new UserPermission(data, this));
             });
         });
     }
@@ -137,35 +146,47 @@ class PermissionStore extends iStore<`update-${string}`> {
                 },
                 signal.signal
             ).then(({ data }) => {
-                this.addGroupPermission(new PermissionGroup(data, this));
+                this.addGroupPermission(new GroupPermission(data, this));
             });
         });
     }
 
     @action
-    handleUserPermissionUpdate(permission: UserPermission) {
+    saveUserPermission(permission: UserPermission) {
         this.withAbortController(`update-${permission.id}`, async (signal) => {
             return updateUserPermissionApi(permission.id, permission.access, signal.signal).then(
                 ({ data }) => {
-                    this.addUserPermission(new PermissionUser(data, this));
+                    this.addUserPermission(new UserPermission(data, this));
                 }
             );
         });
     }
 
     @action
-    handleGroupPermissionUpdate(permission: GroupPermission) {
+    saveGroupPermission(permission: GroupPermission) {
         this.withAbortController(`update-${permission.id}`, async (signal) => {
             return updateGroupPermissionApi(permission.id, permission.access, signal.signal).then(
                 ({ data }) => {
-                    this.addGroupPermission(new PermissionGroup(data, this));
+                    this.addGroupPermission(new GroupPermission(data, this));
                 }
             );
         });
     }
 
     @action
-    deleteUserPermission(permission?: PermissionUser) {
+    removeFromStore(permission?: UserPermission | GroupPermission) {
+        if (!permission) {
+            return;
+        }
+        if (permission instanceof UserPermission) {
+            this.userPermissions.remove(permission);
+        } else {
+            this.groupPermissions.remove(permission);
+        }
+    }
+
+    @action
+    deleteUserPermission(permission?: UserPermission) {
         if (!permission) {
             return Promise.resolve();
         }
@@ -179,7 +200,7 @@ class PermissionStore extends iStore<`update-${string}`> {
     }
 
     @action
-    deleteGroupPermission(permission?: PermissionGroup) {
+    deleteGroupPermission(permission?: GroupPermission) {
         if (!permission) {
             return Promise.resolve();
         }
@@ -198,16 +219,20 @@ class PermissionStore extends iStore<`update-${string}`> {
             return Promise.resolve();
         }
         this.withAbortController(`load-permissions-${documentRoot.id}`, async (signal) => {
-            return permissionsFor(documentRoot.id, signal.signal).then(({ data }) => {
-                const docRootId = data.id;
-                data.userPermissions.forEach((p) => {
-                    this.addUserPermission(new PermissionUser({ ...p, documentRootId: docRootId }, this));
-                });
-                data.groupPermissions.forEach((p) => {
-                    this.addGroupPermission(new PermissionGroup({ ...p, documentRootId: docRootId }, this));
-                });
-                this.permissionsLoadedForDocumentRootIds.add(documentRoot.id);
-            });
+            return permissionsFor(documentRoot.id, signal.signal).then(
+                action(({ data }) => {
+                    const docRootId = data.id;
+                    data.userPermissions.forEach((p) => {
+                        this.addUserPermission(new UserPermission({ ...p, documentRootId: docRootId }, this));
+                    });
+                    data.groupPermissions.forEach((p) => {
+                        this.addGroupPermission(
+                            new GroupPermission({ ...p, documentRootId: docRootId }, this)
+                        );
+                    });
+                    this.permissionsLoadedForDocumentRootIds.add(documentRoot.id);
+                })
+            );
         });
     }
 }
