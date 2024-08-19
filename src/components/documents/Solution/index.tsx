@@ -19,6 +19,7 @@ interface Props extends MetaInit {
     open?: boolean;
     className?: string;
     children: JSX.Element;
+    access?: Access;
 }
 
 const Solution = observer((props: Props) => {
@@ -30,7 +31,8 @@ const Solution = observer((props: Props) => {
     }
     return (
         <div className={clsx(styles.wrapper, props.standalone && styles.standalone)}>
-            {docRoot.permission !== Access.None || userStore.current?.isAdmin ? (
+            {props.access !== Access.None &&
+            (docRoot.permission !== Access.None || userStore.current?.isAdmin) ? (
                 <Details
                     summary={
                         <summary>
@@ -60,7 +62,7 @@ const Solution = observer((props: Props) => {
                 </Details>
             ) : (
                 <div className={clsx('alert', styles.disabled)}>
-                    {props.title || 'Lösung'} (nicht freigeschaltet) <Icon path={mdiCheckAll} />
+                    {props.title || 'Lösung'} (nicht freigeschaltet) <Icon path={mdiCheckAll} size={1} />
                 </div>
             )}
         </div>
