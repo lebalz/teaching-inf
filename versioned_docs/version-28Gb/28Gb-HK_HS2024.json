@@ -1,18 +1,18 @@
 [
     {
-        "cells": ["13.08.2024", "A", "Programmieren 1", "Algorithmen & RoboZZle"]
+        "cells": ["13.08.2024", "B", "Programmieren 1", "Algorithmen & RoboZZle"]
     },
     {
-        "cells": ["20.08.2024", "B", "Programmieren 1", "Algorithmen & RoboZZle"]
+        "cells": ["20.08.2024", "A", "Programmieren 1", "Algorithmen & RoboZZle"]
     },
     {
-        "cells": ["27.08.2024", "A", "Programmieren 1", "Algorithmen & Einstieg Turtlegrafik"]
+        "cells": ["27.08.2024", "B", "Programmieren 1", "Algorithmen & Einstieg Turtlegrafik"]
     },
     {
-        "cells": ["03.09.2024", "B", "Programmieren 1", "Algorithmen & Einstieg Turtlegrafik"]
+        "cells": ["03.09.2024", "A", "Programmieren 1", "Algorithmen & Einstieg Turtlegrafik"]
     },
     {
-        "cells": ["10.09.2024", "A", "Programmieren 1", "Wiederholte Ausführung"]
+        "cells": ["10.09.2024", "B", "Programmieren 1", "Wiederholte Ausführung"]
     },
     {
         "cells": ["17.09.2024", "Kennenlernwoche GYM1", "", ""],
@@ -35,26 +35,26 @@
         "type": "test"
     },
     {
-        "cells": ["15.10.2024", "B", "Programmieren 1", "Wiederholte Ausführung"]
+        "cells": ["15.10.2024", "A", "Programmieren 1", "Wiederholte Ausführung"]
     },
     {
-        "cells": ["22.10.2024", "A", "Programmieren 1", "Unterprogramme und Fehler"]
+        "cells": ["22.10.2024", "B", "Programmieren 1", "Unterprogramme und Fehler"]
     },
     {
-        "cells": ["29.10.2024", "B", "Programmieren 1", "Unterprogramme und Fehler"]
+        "cells": ["29.10.2024", "A", "Programmieren 1", "Unterprogramme und Fehler"]
     },
     {
-        "cells": ["05.11.2024", "A", "Programmieren 1", "Parameter"]
+        "cells": ["05.11.2024", "B", "Programmieren 1", "Parameter"]
     },
     {
-        "cells": ["12.11.2024", "B", "Programmieren 1", "Parameter"]
+        "cells": ["12.11.2024", "A", "Programmieren 1", "Parameter"]
     },
     {
-        "cells": ["19.11.2024", "A", "Programmieren 1", "Kurztest Programmieren, Variablen, Ein- & Ausgabe"],
+        "cells": ["19.11.2024", "B", "Programmieren 1", "Kurztest Programmieren, Variablen, Ein- & Ausgabe"],
         "type": "test"
     },
     {
-        "cells": ["26.11.2024", "B", "Programmieren 1", "Kurztest Programmieren, Variablen, Ein- & Ausgabe"],
+        "cells": ["26.11.2024", "A", "Programmieren 1", "Kurztest Programmieren, Variablen, Ein- & Ausgabe"],
         "type": "test"
     },
     {
@@ -62,10 +62,10 @@
         "type": "holiday"
     },
     {
-        "cells": ["10.12.2024", "A", "Programmieren 1", "Variablen, Eingabe & Ausgabe"]
+        "cells": ["10.12.2024", "B", "Programmieren 1", "Variablen, Eingabe & Ausgabe"]
     },
     {
-        "cells": ["17.12.2024", "B", "Programmieren 1", "Variablen, Eingabe & Ausgabe"]
+        "cells": ["17.12.2024", "A", "Programmieren 1", "Variablen, Eingabe & Ausgabe"]
     },
     {
         "cells": ["24.12.2024", "Winterferien", "", ""],
@@ -76,20 +76,20 @@
         "type": "holiday"
     },
     {
-        "cells": ["07.01.2025", "A", "Programmieren 1", "Verzweigungen"]
+        "cells": ["07.01.2025", "B", "Programmieren 1", "Verzweigungen"]
     },
     {
-        "cells": ["14.01.2025", "B", "Programmieren 1", "Verzweigungen"]
+        "cells": ["14.01.2025", "A", "Programmieren 1", "Verzweigungen"]
     },
     {
-        "cells": ["21.01.2025", "A", "Programmieren 1", "Robotik Micro:Bit 🤖"]
+        "cells": ["21.01.2025", "B", "Programmieren 1", "Robotik Micro:Bit 🤖"]
     },
     {
         "cells": ["23.01.2025", "Notenschluss", "", ""],
         "type": "event"
     },
     {
-        "cells": ["28.01.2025", "B", "Programmieren 1", "Robotik Micro:Bit 🤖"]
+        "cells": ["28.01.2025", "A", "Programmieren 1", "Robotik Micro:Bit 🤖"]
     },
     {
         "cells": ["03.02.2025", "Beginn Semester 2", "", ""],
