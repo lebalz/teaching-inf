@@ -123,7 +123,7 @@ abstract class iDocument<Type extends DocumentType> {
         if (!this.store.root.userStore.current) {
             return this.root.permission === Access.RW;
         }
-        const userId = this.store.root.userStore.current.id;
+        const userId = this.store.root.userStore.current?.id;
         if (this.authorId === userId) {
             return this.root.permission === Access.RW;
         }
@@ -138,7 +138,7 @@ abstract class iDocument<Type extends DocumentType> {
         if (!this.store.root.userStore.current) {
             return this.root.permission !== Access.None;
         }
-        const userId = this.store.root.userStore.current.id;
+        const userId = this.store.root.userStore.current?.id;
         if (this.root.permission === Access.None) {
             return false;
         }
