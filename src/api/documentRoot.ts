@@ -32,6 +32,10 @@ export function find(id: string, signal: AbortSignal): AxiosPromise<DocumentRoot
     return api.get(`/documentRoots/${id}`, { signal });
 }
 
+export function findMany(ids: string[], signal: AbortSignal): AxiosPromise<DocumentRoot[]> {
+    return api.get(`/documentRoots?${ids.map((id) => `ids=${id}`).join('&')}`, { signal });
+}
+
 export function create(
     id: string,
     data: Partial<Config> = {},

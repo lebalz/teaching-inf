@@ -26,6 +26,7 @@ class DocumentRoot<T extends DocumentType> {
      */
     readonly isDummy: boolean;
 
+    @observable accessor isLoaded: boolean = false;
     @observable accessor _access: Access;
     @observable accessor sharedAccess: Access;
 
@@ -36,6 +37,14 @@ class DocumentRoot<T extends DocumentType> {
         this._access = props.access;
         this.sharedAccess = props.sharedAccess;
         this.isDummy = !!isDummy;
+        if (!isDummy) {
+            this.setLoaded();
+        }
+    }
+
+    @action
+    setLoaded() {
+        this.isLoaded = true;
     }
 
     get type() {

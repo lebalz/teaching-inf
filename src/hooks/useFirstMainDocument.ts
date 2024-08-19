@@ -1,5 +1,5 @@
 import React, { useId } from 'react';
-import { DocumentType } from '../api/document';
+import { Access, DocumentType } from '../api/document';
 import { TypeMeta } from '../models/DocumentRoot';
 import { CreateDocumentModel } from '../stores/DocumentStore';
 import { useDocumentRoot } from './useDocumentRoot';
@@ -31,5 +31,19 @@ export const useFirstMainDocument = <Type extends DocumentType>(
             rootStore.documentStore
         )
     );
+    React.useEffect(() => {
+        if (documentRoot.isLoaded && !documentRoot.isDummy && !documentRoot.firstMainDocument) {
+            if (documentRoot.permission === Access.RW) {
+                console.log('create first document', documentRoot.id, documentRoot.type);
+                rootStore.documentStore.create({
+                    documentRootId: documentRoot.id,
+                    authorId: rootStore.userStore.current!.id,
+                    type: documentRoot.type,
+                    data: meta.defaultData
+                });
+            }
+        }
+    }, [documentRoot]);
+
     return documentRoot?.firstMainDocument || dummyDocument;
 };

@@ -13,7 +13,11 @@ import DocumentRoot, { TypeMeta } from '../models/DocumentRoot';
  *  3.3. if an id was provided, load or create the documentRoot and it's documents from the api
  *  3.4. cleanup the dummy document
  */
-export const useDocumentRoot = <Type extends DocumentType>(id: string | undefined, meta: TypeMeta<Type>) => {
+export const useDocumentRoot = <Type extends DocumentType>(
+    id: string | undefined,
+    meta: TypeMeta<Type>,
+    createFirstDocument: boolean = true
+) => {
     const defaultRootDocId = useId();
     const [dummyDocumentRoot] = React.useState<DocumentRoot<Type>>(
         new DocumentRoot(
@@ -39,7 +43,9 @@ export const useDocumentRoot = <Type extends DocumentType>(id: string | undefine
         if (rootDoc) {
             return;
         }
-        documentRootStore.addDocumentRoot(dummyDocumentRoot);
+        if (createFirstDocument) {
+            documentRootStore.addDocumentRoot(dummyDocumentRoot);
+        }
         if (!id) {
             return;
         }
@@ -47,38 +53,8 @@ export const useDocumentRoot = <Type extends DocumentType>(id: string | undefine
         /**
          * load the documentRoot and it's documents from the api.
          */
-        documentRootStore
-            .load(id, meta)
-            .then((docRoot) => {
-                if (!docRoot) {
-                    return documentRootStore.create(id, meta, {});
-                }
-                return docRoot;
-            })
-            .then((docRoot) => {
-                if (docRoot) {
-                    if (
-                        docRoot.permission === Access.RW &&
-                        rootStore.userStore.current &&
-                        !docRoot.firstMainDocument
-                    ) {
-                        rootStore.documentStore.create({
-                            documentRootId: docRoot.id,
-                            authorId: rootStore.userStore.current.id,
-                            type: docRoot.type,
-                            data: meta.defaultData
-                        });
-                    }
-                }
-            })
-            .catch((err) => {
-                /**
-                 * could land here, when two users try to create the same document root
-                 * at the same time
-                 */
-                console.log('err loading', err);
-            });
-    }, [initRender, rootStore]);
+        documentRootStore.loadInNextBatch(id, meta);
+    }, [initRender, rootStore, createFirstDocument]);
 
     React.useEffect(() => {
         setInitRender(true);
