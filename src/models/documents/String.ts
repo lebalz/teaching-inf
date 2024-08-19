@@ -49,7 +49,7 @@ class String extends iDocument<DocumentType.String> {
     @observable accessor answer: StringAnswer = StringAnswer.Unchecked;
     constructor(props: DocumentProps<DocumentType.String>, store: DocumentStore) {
         super(props, store);
-        this.text = props.data.text || '';
+        this.text = props.data?.text || '';
     }
 
     @action

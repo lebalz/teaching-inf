@@ -33,17 +33,17 @@ export const useFirstMainDocument = <Type extends DocumentType>(
     );
     React.useEffect(() => {
         if (documentRoot.isLoaded && !documentRoot.isDummy && !documentRoot.firstMainDocument) {
-            if (documentRoot.permission === Access.RW) {
+            if (documentRoot.permission === Access.RW && rootStore.userStore.current) {
                 console.log('create first document', documentRoot.id, documentRoot.type);
                 rootStore.documentStore.create({
                     documentRootId: documentRoot.id,
-                    authorId: rootStore.userStore.current!.id,
+                    authorId: rootStore.userStore.current.id,
                     type: documentRoot.type,
                     data: meta.defaultData
                 });
             }
         }
-    }, [documentRoot]);
+    }, [documentRoot, rootStore.userStore.current]);
 
     return documentRoot?.firstMainDocument || dummyDocument;
 };
