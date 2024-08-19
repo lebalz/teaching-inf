@@ -8,6 +8,11 @@ import { observer } from 'mobx-react-lite';
 import { Access } from '@site/src/api/document';
 import { useStore } from '@site/src/hooks/useStore';
 import clsx from 'clsx';
+import AccessSelector from './AccessSelector';
+import { default as UserAccessPanel } from './UserPermission/AccessPanel';
+import { default as GroupAccessPanel } from './GroupPermission/AccessPanel';
+import DefinitionList from '../DefinitionList';
+import { action } from 'mobx';
 
 interface Props {
     documentRootId: string;
@@ -19,31 +24,10 @@ interface AccessRadioButtonProps {
     documentRoot: DocumentRoot<any>;
 }
 
-const AccessRadioButton = observer(({ targetAccess, accessProp, documentRoot }: AccessRadioButtonProps) => {
-    const group = accessProp;
-    const id = `${group}-${targetAccess}`;
-
-    return (
-        <div>
-            <input
-                type="radio"
-                id={id}
-                name={group}
-                value={targetAccess}
-                checked={targetAccess === documentRoot[accessProp]}
-                onChange={(e) => {
-                    documentRoot[accessProp] = e.target.value as Access;
-                    documentRoot.save();
-                }}
-            />
-            <label htmlFor={id}>{targetAccess}</label>
-        </div>
-    );
-});
-
 const PermissionsPanel = observer(({ documentRootId }: Props) => {
     const userStore = useStore('userStore');
     const documentRootStore = useStore('documentRootStore');
+    const permissionStore = useStore('permissionStore');
     const documentRoot = documentRootStore.find(documentRootId);
 
     if (!userStore.current?.isAdmin || !documentRoot) {
@@ -66,53 +50,43 @@ const PermissionsPanel = observer(({ documentRootId }: Props) => {
             on="click"
             closeOnDocumentClick
             closeOnEscape
+            onOpen={action(() => {
+                permissionStore.loadPermissions(documentRoot);
+            })}
         >
             <div className={clsx(styles.wrapper, 'card')}>
                 <div className={clsx('card__header', styles.header)}>
                     <h3>Berechtigungen Festlegen</h3>
                 </div>
                 <div className={clsx('card__body')}>
-                    <div className={styles.popupContentContainer}>
-                        <div>
-                            <div className={styles.radioGroup}>
-                                <b className={styles.radioGroupTitle}>Root access:</b>
-                                <AccessRadioButton
-                                    targetAccess={Access.RW}
-                                    accessProp="rootAccess"
-                                    documentRoot={documentRoot}
-                                />
-                                <AccessRadioButton
-                                    targetAccess={Access.RO}
-                                    accessProp="rootAccess"
-                                    documentRoot={documentRoot}
-                                />
-                                <AccessRadioButton
-                                    targetAccess={Access.None}
-                                    accessProp="rootAccess"
-                                    documentRoot={documentRoot}
-                                />
-                            </div>
-
-                            <div className={styles.radioGroup}>
-                                <b className={styles.radioGroupTitle}>Shared access:</b>
-                                <AccessRadioButton
-                                    targetAccess={Access.RW}
-                                    accessProp="sharedAccess"
-                                    documentRoot={documentRoot}
-                                />
-                                <AccessRadioButton
-                                    targetAccess={Access.RO}
-                                    accessProp="sharedAccess"
-                                    documentRoot={documentRoot}
-                                />
-                                <AccessRadioButton
-                                    targetAccess={Access.None}
-                                    accessProp="sharedAccess"
-                                    documentRoot={documentRoot}
-                                />
-                            </div>
-                        </div>
-                    </div>
+                    <DefinitionList className={styles.popupContentContainer}>
+                        <dt>Root Access</dt>
+                        <dd>
+                            <AccessSelector
+                                access={documentRoot.rootAccess}
+                                onChange={(access) => {
+                                    documentRoot.rootAccess = access;
+                                }}
+                            />
+                        </dd>
+                        <dt>Shared Access</dt>
+                        <dd>
+                            <AccessSelector
+                                access={documentRoot.sharedAccess}
+                                onChange={(access) => {
+                                    documentRoot.sharedAccess = access;
+                                }}
+                            />
+                        </dd>
+                        <dt>User Access</dt>
+                        <dd>
+                            <UserAccessPanel documentRoot={documentRoot} />
+                        </dd>
+                        <dt>Group Access</dt>
+                        <dd>
+                            <GroupAccessPanel documentRoot={documentRoot} />
+                        </dd>
+                    </DefinitionList>
                 </div>
             </div>
         </Popup>

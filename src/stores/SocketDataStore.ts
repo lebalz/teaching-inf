@@ -150,12 +150,12 @@ export class SocketDataStore extends iStore<'ping'> {
     deleteRecord({ type, id }: DeletedRecord) {
         switch (type) {
             case RecordType.UserPermission:
-                // TODO: Do we also need to update all docs / doc roots?
-                this.root.permissionStore.deleteUserPermission(id);
+                const currentUP = this.root.permissionStore.findUserPermission(id);
+                this.root.permissionStore.deleteUserPermission(currentUP);
                 break;
             case RecordType.GroupPermission:
-                // TODO: Do we also need to update all docs / doc roots?
-                this.root.permissionStore.deleteGroupPermission(id);
+                const currentGP = this.root.permissionStore.findGroupPermission(id);
+                this.root.permissionStore.deleteGroupPermission(currentGP);
                 break;
             default:
                 console.log('deletedRecord', type, id);

@@ -52,10 +52,7 @@ class DocumentRoot<T extends DocumentType> {
     }
 
     get access() {
-        if (this.meta.access) {
-            return this.meta.access;
-        }
-        return this._access;
+        return highestAccess(new Set([this._access]), this.meta.access);
     }
 
     get rootAccess() {
@@ -78,6 +75,14 @@ class DocumentRoot<T extends DocumentType> {
 
     get loadStatus() {
         return this.store.apiStateFor(`load-${this.id}`);
+    }
+
+    get userPermissions() {
+        return this.store.root.permissionStore.userPermissionsByDocumentRoot(this.id);
+    }
+
+    get groupPermissions() {
+        return this.store.root.permissionStore.groupPermissionsByDocumentRoot(this.id);
     }
 
     @computed

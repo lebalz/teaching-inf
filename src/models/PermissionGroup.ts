@@ -1,4 +1,4 @@
-import { computed, observable } from 'mobx';
+import { action, computed, observable } from 'mobx';
 import { Access } from '../api/document';
 import PermissionStore from '../stores/PermissionStore';
 import { GroupPermission } from '../api/permission';
@@ -11,22 +11,33 @@ class PermissionGroup {
     readonly documentRootId: string;
     readonly groupId: string;
 
-    @observable accessor access: Access;
+    @observable accessor _access: Access;
 
     constructor(props: GroupPermission, store: PermissionStore) {
         this.store = store;
         this.id = props.id;
+        this._access = props.access;
+        this.documentRootId = props.documentRootId;
         this.groupId = props.groupId;
     }
 
+    get access() {
+        return this._access;
+    }
+
+    @action
+    set access(access: Access) {
+        this._access = access;
+    }
+
     @computed
-    get groups() {
-        return this.store.studentGroups.filter((g) => g.id === this.groupId);
+    get group() {
+        return this.store.root.studentGroupStore.find(this.groupId);
     }
 
     @computed
     get userIds() {
-        return new Set(this.groups.flatMap((g) => [...g.userIds]));
+        return new Set(...(this.group?.userIds || []));
     }
 
     @computed
@@ -36,6 +47,11 @@ class PermissionGroup {
 
     isAffectingUser(user: User) {
         return this.userIds.has(user.id);
+    }
+
+    @action
+    delete() {
+        this.store.deleteGroupPermission(this);
     }
 }
 
