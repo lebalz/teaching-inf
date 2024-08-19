@@ -44,7 +44,7 @@ class TaskState extends iDocument<DocumentType.TaskState> {
 
     constructor(props: DocumentProps<DocumentType.TaskState>, store: DocumentStore) {
         super(props, store);
-        this.taskState = props.data.state;
+        this.taskState = props.data?.state;
     }
 
     @action

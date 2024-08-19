@@ -90,10 +90,19 @@ class DocumentStore extends iStore {
         }
 
         const model = CreateDocumentModel(data, this);
-        if (onlyFor === 'dummy-root' && (!model.root || !model.root.isDummy)) {
+        if (!model.root) {
             return;
         }
-        if (onlyFor === 'persisted-root' && (!model.root || model.root.isDummy)) {
+        /**
+         * don't add a dummy model to a persisted root
+         */
+        if (onlyFor === 'dummy-root' && !model.root.isDummy) {
+            return;
+        }
+        /**
+         * don't add a persisted model to a dummy root
+         */
+        if (onlyFor === 'persisted-root' && model.root.isDummy) {
             return;
         }
 
