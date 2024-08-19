@@ -1,4 +1,4 @@
-import { action, observable } from 'mobx';
+import { action, observable, runInAction } from 'mobx';
 import { RootStore } from './rootStore';
 import { computedFn } from 'mobx-utils';
 import DocumentRoot, { TypeMeta } from '../models/DocumentRoot';
@@ -86,9 +86,11 @@ export class DocumentRootStore extends iStore {
                         return;
                     }
                     const documentRoot = new DocumentRoot(data, meta, this);
-                    this.addDocumentRoot(documentRoot, true);
-                    data.documents.forEach((doc) => {
-                        this.root.documentStore.addToStore(doc, 'persisted-root');
+                    runInAction(() => {
+                        this.addDocumentRoot(documentRoot, true);
+                        data.documents.forEach((doc) => {
+                            this.root.documentStore.addToStore(doc, 'persisted-root');
+                        });
                     });
                     data.groupPermissions.forEach((gp) => {
                         this.root.permissionStore.addGroupPermission(
