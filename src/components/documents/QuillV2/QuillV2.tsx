@@ -315,7 +315,13 @@ const QuillV2 = observer((props: Props) => {
                         className={styles.dummyIndicatorIcon}
                     />
                 )}
-                {doc.isInitialized && <div ref={quillRef} />}
+                {doc.isInitialized ? (
+                    <div ref={quillRef} />
+                ) : (
+                    <div className={styles.loaderContainer}>
+                        <Loader label="Laden..." overlay className={styles.loader} />
+                    </div>
+                )}
                 {processingImage && <Loader label="Bild Einfügen..." overlay />}
                 {doc && <SyncStatus model={doc} className={styles.saveIndicator} />}
             </div>
