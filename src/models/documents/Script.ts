@@ -64,7 +64,6 @@ export default class Script extends iDocument<DocumentType.Script> {
     @observable accessor code: string;
     @observable accessor isExecuting: boolean = false;
     @observable accessor showRaw: boolean = false;
-    @observable accessor isLoaded: boolean = false;
     @observable accessor _status: Status = Status.IDLE;
     @observable accessor graphicsModalExecutionNr: number = 0;
     @observable accessor isPasted: boolean = false;
@@ -73,10 +72,6 @@ export default class Script extends iDocument<DocumentType.Script> {
     constructor(props: DocumentProps<DocumentType.Script>, store: DocumentStore) {
         super(props, store);
         this.code = props.data?.code ?? this.meta.initCode;
-        /**
-         * TODO: derive this from the api state
-         */
-        this.isLoaded = true;
     }
 
     @computed
@@ -85,6 +80,10 @@ export default class Script extends iDocument<DocumentType.Script> {
             return this.root.meta as ScriptMeta;
         }
         return new ScriptMeta({});
+    }
+
+    get isLoaded() {
+        return this.isInitialized;
     }
 
     @action
@@ -270,17 +269,32 @@ export default class Script extends iDocument<DocumentType.Script> {
     }
     @action
     setStatus(status: Status) {
-        this._status = status;
+        switch (status) {
+            case Status.SUCCESS:
+                this.state = ApiState.SUCCESS;
+                break;
+            case Status.ERROR:
+                this.state = ApiState.ERROR;
+                break;
+            case Status.SYNCING:
+                this.state = ApiState.SYNCING;
+                break;
+            default:
+                this.state = ApiState.IDLE;
+        }
     }
     @computed
     get status() {
-        if (this.root?.loadStatus === ApiState.SYNCING) {
-            return Status.SYNCING;
+        switch (this.state) {
+            case ApiState.SYNCING:
+                return Status.SYNCING;
+            case ApiState.SUCCESS:
+                return Status.SUCCESS;
+            case ApiState.ERROR:
+                return Status.ERROR;
+            default:
+                return Status.IDLE;
         }
-        if (this.store.apiStateFor(`save-${this.id}`) === ApiState.SYNCING) {
-            return Status.SYNCING;
-        }
-        return this._status;
     }
 
     get isVersioned() {
