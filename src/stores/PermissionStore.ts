@@ -130,7 +130,6 @@ class PermissionStore extends iStore<`update-${string}`> {
                 },
                 signal.signal
             ).then(({ data }) => {
-                console.log('user permission', data);
                 this.addUserPermission(new UserPermission(data, this));
             });
         });
@@ -175,6 +174,18 @@ class PermissionStore extends iStore<`update-${string}`> {
     }
 
     @action
+    removeFromStore(permission?: UserPermission | GroupPermission) {
+        if (!permission) {
+            return;
+        }
+        if (permission instanceof UserPermission) {
+            this.userPermissions.remove(permission);
+        } else {
+            this.groupPermissions.remove(permission);
+        }
+    }
+
+    @action
     deleteUserPermission(permission?: UserPermission) {
         if (!permission) {
             return Promise.resolve();
@@ -208,7 +219,7 @@ class PermissionStore extends iStore<`update-${string}`> {
             return Promise.resolve();
         }
         this.withAbortController(`load-permissions-${documentRoot.id}`, async (signal) => {
-            return permissionsFor(documentRoot.id, signal.signal).then(({ data }) => {
+            return permissionsFor(documentRoot.id, signal.signal).then(action(({ data }) => {
                 const docRootId = data.id;
                 data.userPermissions.forEach((p) => {
                     this.addUserPermission(new UserPermission({ ...p, documentRootId: docRootId }, this));
@@ -217,7 +228,7 @@ class PermissionStore extends iStore<`update-${string}`> {
                     this.addGroupPermission(new GroupPermission({ ...p, documentRootId: docRootId }, this));
                 });
                 this.permissionsLoadedForDocumentRootIds.add(documentRoot.id);
-            });
+            }));
         });
     }
 }

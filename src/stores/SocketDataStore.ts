@@ -119,7 +119,17 @@ export class SocketDataStore extends iStore<'ping'> {
 
     @action
     createRecord({ type, record }: NewRecord<RecordType>) {
-        console.log('createRecord', type, record);
+        switch (type) {
+            case RecordType.UserPermission:
+                this.root.permissionStore.handleUserPermissionUpdate(record as UserPermission);
+                break;
+            case RecordType.GroupPermission:
+                this.root.permissionStore.handleGroupPermissionUpdate(record as GroupPermission);
+                break;
+            default:
+                console.log('newRecord', type, record);
+                break;
+        }
     }
 
     @action
@@ -151,11 +161,11 @@ export class SocketDataStore extends iStore<'ping'> {
         switch (type) {
             case RecordType.UserPermission:
                 const currentUP = this.root.permissionStore.findUserPermission(id);
-                this.root.permissionStore.deleteUserPermission(currentUP);
+                this.root.permissionStore.removeFromStore(currentUP);
                 break;
             case RecordType.GroupPermission:
                 const currentGP = this.root.permissionStore.findGroupPermission(id);
-                this.root.permissionStore.deleteGroupPermission(currentGP);
+                this.root.permissionStore.removeFromStore(currentGP);
                 break;
             default:
                 console.log('deletedRecord', type, id);
