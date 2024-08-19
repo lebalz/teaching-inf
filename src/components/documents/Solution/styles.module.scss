@@ -88,12 +88,16 @@ html[data-theme='dark'] {
 }
 
 :global(.theme-admonition-aufgabe) {
-    :last-child {
-        &.hint-wrapper,
-        &.solution-wrapper {
-            > .alert {
-                margin-bottom: calc(-1 * var(--current-alert-padding-vertical));
-                border-bottom-left-radius: var(--ifm-alert-border-radius);
+    div[class^="admonitionContent"] {
+        :last-child {
+            &.hint-wrapper,
+            &.wrapper {
+                margin-bottom: -1em;
+                > .solution {
+                    margin-bottom: calc(-1 * var(--current-alert-padding-vertical));
+                    border-bottom-left-radius: var(--ifm-alert-border-radius);
+                    border-top-right-radius: 0;
+                }
             }
         }
     }
