@@ -81,6 +81,22 @@ export class DocumentRootStore extends iStore {
     _loadQueued() {
         const current = new Map([...this.queued]);
         this.queued.clear();
+        /**
+         * if the user is not logged in, we can't load the documents
+         * so we just mark all queued documents as loaded
+         */
+        if (!this.root.sessionStore.isLoggedIn) {
+            [...current.keys()].forEach((id) => {
+                const dummyModel = this.find(id);
+                if (dummyModel && dummyModel.isDummy) {
+                    dummyModel.setLoaded();
+                }
+            });
+            return;
+        }
+        /**
+         * load all queued documents
+         */
         const keys = [...current.keys()].sort();
         this.withAbortController(`load-queued-${keys.join('--')}`, async (signal) => {
             const models = await apiFindMany(keys, signal.signal);

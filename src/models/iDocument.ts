@@ -114,7 +114,7 @@ abstract class iDocument<Type extends DocumentType> {
          * -> maybe the root document is not yet loaded, then this model
          *   should not be displayed...
          */
-        return !!this.root;
+        return !!this.root && this.root.isLoaded;
     }
 
     @computed

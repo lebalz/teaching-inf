@@ -27,17 +27,9 @@ export const useDocumentRoot = <Type extends DocumentType>(
             true
         )
     );
-    /**
-     * only run the effect after the initial render to avoid
-     * unnecessary api calls and delays
-     */
-    const [initRender, setInitRender] = React.useState(false);
 
     /** initial load */
     React.useEffect(() => {
-        if (!initRender) {
-            return;
-        }
         const { documentRootStore } = rootStore;
         const rootDoc = documentRootStore.find(dummyDocumentRoot.id);
         if (rootDoc) {
@@ -47,6 +39,7 @@ export const useDocumentRoot = <Type extends DocumentType>(
             documentRootStore.addDocumentRoot(dummyDocumentRoot);
         }
         if (!id) {
+            dummyDocumentRoot.setLoaded();
             return;
         }
 
@@ -54,14 +47,11 @@ export const useDocumentRoot = <Type extends DocumentType>(
          * load the documentRoot and it's documents from the api.
          */
         documentRootStore.loadInNextBatch(id, meta);
-    }, [initRender, rootStore, createFirstDocument]);
-
-    React.useEffect(() => {
-        setInitRender(true);
         return () => {
             rootStore.documentRootStore.removeFromStore(defaultRootDocId, false);
         };
     }, []);
+
 
     return rootStore.documentRootStore.find<Type>(dummyDocumentRoot.id) || dummyDocumentRoot;
 };
