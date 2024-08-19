@@ -53,38 +53,7 @@ export const useDocumentRoot = <Type extends DocumentType>(
         /**
          * load the documentRoot and it's documents from the api.
          */
-        documentRootStore
-            .load(id, meta)
-            .then((docRoot) => {
-                if (!docRoot) {
-                    return documentRootStore.create(id, meta, {});
-                }
-                return docRoot;
-            })
-            .then((docRoot) => {
-                if (docRoot) {
-                    if (
-                        docRoot.permission === Access.RW &&
-                        rootStore.userStore.current &&
-                        !docRoot.firstMainDocument &&
-                        createFirstDocument
-                    ) {
-                        rootStore.documentStore.create({
-                            documentRootId: docRoot.id,
-                            authorId: rootStore.userStore.current.id,
-                            type: docRoot.type,
-                            data: meta.defaultData
-                        });
-                    }
-                }
-            })
-            .catch((err) => {
-                /**
-                 * could land here, when two users try to create the same document root
-                 * at the same time
-                 */
-                console.log('err loading', err);
-            });
+        documentRootStore.loadInNextBatch(id, meta);
     }, [initRender, rootStore, createFirstDocument]);
 
     React.useEffect(() => {
