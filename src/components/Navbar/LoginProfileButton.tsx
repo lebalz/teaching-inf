@@ -7,7 +7,6 @@ import Link from '@docusaurus/Link';
 import { mdiAccountCircleOutline, mdiCircle, mdiCircleSmall } from '@mdi/js';
 import siteConfig from '@generated/docusaurus.config';
 import { ApiState } from '@site/src/stores/iStore';
-import { translate } from '@docusaurus/Translate';
 import { useStore } from '@site/src/hooks/useStore';
 import Button from '../shared/Button';
 import Icon from '@mdi/react';
