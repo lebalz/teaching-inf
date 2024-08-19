@@ -8,7 +8,7 @@ export type PersistedData = {
 };
 
 export const StorageKey = Object.freeze({
-    SessionStore: _.upperFirst(_.camelCase(`SessionStore${siteConfig.projectName}`))
+    SessionStore: _.upperFirst(_.camelCase(`SessionStore${siteConfig.projectName || ''}`))
 });
 
 /**
@@ -25,6 +25,7 @@ class Storage {
             localStorage.removeItem('test');
             this.interface = localStorage;
         } catch (_err) {
+            console.log('localStorage not available, falling back to memory storage');
             this.interface = new MemoryStorage();
         }
     }
@@ -75,7 +76,7 @@ class Storage {
      */
     public remove(key: keyof typeof StorageKey) {
         try {
-            this.interface.removeItem(key);
+            this.interface.removeItem(StorageKey[key]);
         } catch (_err) {
             // Ignore errors
         }

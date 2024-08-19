@@ -29,8 +29,8 @@ export class UserStore extends iStore {
         if (this.users.length > 0) {
             return;
         }
-        const data = _data || Storage.get('SessionStore') || {};
-        if (data.user) {
+        const data = Storage.get('SessionStore', _data);
+        if (data?.user) {
             try {
                 this.addToStore(data.user);
             } catch (e) {
@@ -103,9 +103,21 @@ export class UserStore extends iStore {
     loadCurrent() {
         const res = this.withAbortController('load-user', async (signal) => {
             return currentUser(signal.signal).then((res) => {
-                return this.addToStore(res.data);
+                const currentUser = this.addToStore(res.data);
+                if (currentUser) {
+                    Storage.set('SessionStore', {
+                        user: { ...currentUser.props, isAdmin: false }
+                    });
+                }
+                return currentUser;
             });
-        });
+        }).catch(
+            action((e) => {
+                if (this.root.sessionStore.authMethod === 'apiKey') {
+                    this.root.sessionStore.setMsalStrategy();
+                }
+            })
+        );
         return res;
     }
 

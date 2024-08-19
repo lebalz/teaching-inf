@@ -17,7 +17,6 @@ class State {
 
 export class SessionStore extends iStore {
     readonly root: RootStore;
-    private static readonly NAME = 'SessionStore' as const;
 
     @observable.ref private accessor stateRef: State = new State();
 
@@ -32,20 +31,13 @@ export class SessionStore extends iStore {
     constructor(store: RootStore) {
         super();
         this.root = store;
-        const data = Storage.get<PersistedData>(SessionStore.NAME) || {};
-        this.rehydrate(data);
-
-        reaction(
-            () => this.root.userStore?.current?.id,
-            (id) => {
-                if (id) {
-                    const user = this.root.userStore.current!;
-                    Storage.set(SessionStore.NAME, {
-                        user: { ...user.props, role: Role.USER }
-                    });
-                }
-            }
-        );
+        const data = Storage.get('SessionStore', {} as PersistedData);
+        if (data?.user) {
+            this.authMethod = 'apiKey';
+            this.rehydrate(data);
+        } else {
+            this.authMethod = 'msal';
+        }
         this.initialized = true;
     }
 
@@ -66,7 +58,7 @@ export class SessionStore extends iStore {
                 console.error('Failed to logout', err);
             })
             .finally(() => {
-                Storage.remove(SessionStore.NAME);
+                Storage.remove('SessionStore');
                 localStorage.clear();
                 window.location.reload();
             });
@@ -74,7 +66,7 @@ export class SessionStore extends iStore {
 
     @action
     setMsalStrategy() {
-        Storage.remove(SessionStore.NAME);
+        Storage.remove('SessionStore');
         this.authMethod = 'msal';
     }
 
@@ -99,7 +91,7 @@ export class SessionStore extends iStore {
             return;
         }
         window.addEventListener('storage', (event) => {
-            if (event.key === SessionStore.NAME && event.newValue) {
+            if (event.key === StorageKey['SessionStore'] && event.newValue) {
                 const newData: PersistedData | null = JSON.parse(event.newValue);
 
                 // data may be null if key is deleted in localStorage
