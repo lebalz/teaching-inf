@@ -2,7 +2,13 @@ import { action, observable, runInAction } from 'mobx';
 import { RootStore } from './rootStore';
 import { computedFn } from 'mobx-utils';
 import DocumentRoot, { TypeMeta } from '../models/DocumentRoot';
-import { find as apiFind, create as apiCreate, Config, findMany as apiFindMany } from '../api/documentRoot';
+import {
+    find as apiFind,
+    create as apiCreate,
+    Config,
+    findMany as apiFindMany,
+    DocumentRoot as ApiDocumentRoot
+} from '../api/documentRoot';
 import iStore from './iStore';
 import PermissionGroup from '../models/PermissionGroup';
 import PermissionUser from '../models/PermissionUser';
@@ -85,29 +91,7 @@ export class DocumentRootStore extends iStore {
                     if (!meta) {
                         return;
                     }
-                    const documentRoot = new DocumentRoot(data, meta, this);
-                    runInAction(() => {
-                        this.addDocumentRoot(documentRoot, true);
-                        data.documents.forEach((doc) => {
-                            this.root.documentStore.addToStore(doc, 'persisted-root');
-                        });
-                    });
-                    data.groupPermissions.forEach((gp) => {
-                        this.root.permissionStore.addGroupPermission(
-                            new PermissionGroup(
-                                { ...gp, documentRootId: documentRoot.id },
-                                this.root.permissionStore
-                            )
-                        );
-                    });
-                    data.userPermissions.forEach((up) => {
-                        this.root.permissionStore.addUserPermission(
-                            new PermissionUser(
-                                { ...up, documentRootId: documentRoot.id },
-                                this.root.permissionStore
-                            )
-                        );
-                    });
+                    this.addApiResultToStore(data, meta);
                     current.delete(data.id);
                 })
             );
@@ -140,11 +124,15 @@ export class DocumentRootStore extends iStore {
             if (!data) {
                 return;
             }
-            const documentRoot = new DocumentRoot(data, meta, this);
+            return this.addApiResultToStore(data, meta);
+        });
+    }
+
+    @action
+    addApiResultToStore<Type extends DocumentType>(data: ApiDocumentRoot, meta: TypeMeta<Type>) {
+        const documentRoot = new DocumentRoot(data, meta, this);
+        runInAction(() => {
             this.addDocumentRoot(documentRoot, true);
-            data.documents.forEach((doc) => {
-                this.root.documentStore.addToStore(doc, 'persisted-root');
-            });
             data.groupPermissions.forEach((gp) => {
                 this.root.permissionStore.addGroupPermission(
                     new PermissionGroup({ ...gp, documentRootId: documentRoot.id }, this.root.permissionStore)
@@ -155,8 +143,11 @@ export class DocumentRootStore extends iStore {
                     new PermissionUser({ ...up, documentRootId: documentRoot.id }, this.root.permissionStore)
                 );
             });
-            return documentRoot;
+            data.documents.forEach((doc) => {
+                this.root.documentStore.addToStore(doc, 'persisted-root');
+            });
         });
+        return documentRoot;
     }
 
     @action
