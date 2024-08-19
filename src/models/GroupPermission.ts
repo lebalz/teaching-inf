@@ -1,10 +1,10 @@
 import { action, computed, observable } from 'mobx';
 import { Access } from '../api/document';
 import PermissionStore from '../stores/PermissionStore';
-import { GroupPermission } from '../api/permission';
+import { GroupPermission as GroupPermissionProps } from '../api/permission';
 import User from './User';
 
-class PermissionGroup {
+class GroupPermission {
     readonly store: PermissionStore;
 
     readonly id: string;
@@ -13,7 +13,7 @@ class PermissionGroup {
 
     @observable accessor _access: Access;
 
-    constructor(props: GroupPermission, store: PermissionStore) {
+    constructor(props: GroupPermissionProps, store: PermissionStore) {
         this.store = store;
         this.id = props.id;
         this._access = props.access;
@@ -27,7 +27,11 @@ class PermissionGroup {
 
     @action
     set access(access: Access) {
+        if (this._access === access) {
+            return;
+        }
         this._access = access;
+        this.store.saveGroupPermission(this);
     }
 
     @computed
@@ -55,4 +59,4 @@ class PermissionGroup {
     }
 }
 
-export default PermissionGroup;
+export default GroupPermission;

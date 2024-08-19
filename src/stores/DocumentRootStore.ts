@@ -12,8 +12,8 @@ import {
     DocumentRoot as ApiDocumentRoot
 } from '../api/documentRoot';
 import iStore from './iStore';
-import PermissionGroup from '../models/PermissionGroup';
-import PermissionUser from '../models/PermissionUser';
+import GroupPermission from '../models/GroupPermission';
+import UserPermission from '../models/UserPermission';
 import { DocumentType } from '../api/document';
 import { debounce } from 'lodash';
 
@@ -153,12 +153,12 @@ export class DocumentRootStore extends iStore {
             this.addDocumentRoot(documentRoot, true);
             data.groupPermissions.forEach((gp) => {
                 this.root.permissionStore.addGroupPermission(
-                    new PermissionGroup({ ...gp, documentRootId: documentRoot.id }, this.root.permissionStore)
+                    new GroupPermission({ ...gp, documentRootId: documentRoot.id }, this.root.permissionStore)
                 );
             });
             data.userPermissions.forEach((up) => {
                 this.root.permissionStore.addUserPermission(
-                    new PermissionUser({ ...up, documentRootId: documentRoot.id }, this.root.permissionStore)
+                    new UserPermission({ ...up, documentRootId: documentRoot.id }, this.root.permissionStore)
                 );
             });
             data.documents.forEach((doc) => {

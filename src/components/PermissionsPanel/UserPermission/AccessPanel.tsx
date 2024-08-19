@@ -58,14 +58,7 @@ const AccessPanel = observer((props: Props) => {
                         )
                         .map((user, idx) => (
                             <div key={idx} className={clsx(styles.item)}>
-                                <span className={styles.audience}>
-                                    <Icon
-                                        path={mdiAccountCircle}
-                                        color="var(--ifm-color-primary)"
-                                        size={0.8}
-                                    />
-                                    {user.nameShort}
-                                </span>
+                                <span className={styles.audience}>{user.nameShort}</span>
                                 <span className={clsx(styles.spacer)} />
                                 <div className={styles.actions}>
                                     <AccessSelector
