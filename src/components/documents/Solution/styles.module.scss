@@ -88,7 +88,7 @@ html[data-theme='dark'] {
 }
 
 :global(.theme-admonition-aufgabe) {
-    div[class^="admonitionContent"] {
+    div[class^='admonitionContent'] {
         :last-child {
             &.hint-wrapper,
             &.wrapper {
