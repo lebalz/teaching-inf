@@ -53,6 +53,11 @@ class StudentGroup {
         return this.store.root.userStore.users.filter((u) => this.userIds.has(u.id));
     }
 
+    @computed
+    get searchTerm() {
+        return `${this.name} ${this.description}`;
+    }
+
     @action
     setDescription(description: string) {
         this.description = description;
