@@ -43,7 +43,7 @@ abstract class iDocument<Type extends DocumentType> {
         this.parentId = props.parentId;
         this.documentRootId = props.documentRootId;
         this.type = props.type;
-        this._pristine = props.data;
+        this._pristine = props.data || {};
 
         this.createdAt = new Date(props.createdAt);
         this.updatedAt = new Date(props.updatedAt);

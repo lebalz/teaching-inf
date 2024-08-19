@@ -72,7 +72,7 @@ export default class Script extends iDocument<DocumentType.Script> {
 
     constructor(props: DocumentProps<DocumentType.Script>, store: DocumentStore) {
         super(props, store);
-        this.code = props.data.code ?? this.meta.initCode;
+        this.code = props.data?.code ?? this.meta.initCode;
         /**
          * TODO: derive this from the api state
          */
