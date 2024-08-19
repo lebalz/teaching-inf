@@ -103,6 +103,13 @@
             bottom: 1.3em;
             right: 4px;
         }
+        .loaderContainer {
+            height: 4.5em;
+            position: relative;
+            .loader {
+                background-color: inherit;
+            }
+        }
     }
 }
 
