@@ -114,11 +114,13 @@ export class UserStore extends iStore {
                 }
                 return currentUser;
             });
-        }).catch(action((e) => {
-            if (this.root.sessionStore.authMethod === 'apiKey') {
-                this.root.sessionStore.setMsalStrategy();
-            }
-        }));
+        }).catch(
+            action((e) => {
+                if (this.root.sessionStore.authMethod === 'apiKey') {
+                    this.root.sessionStore.setMsalStrategy();
+                }
+            })
+        );
         return res;
     }
 
