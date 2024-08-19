@@ -26,20 +26,9 @@ export class RootStore {
         this.permissionStore = new PermissionStore(this);
         this.documentStore = new DocumentStore(this);
 
-        reaction(
-            () => this.sessionStore.isLoggedIn,
-            (isLoggedIn) => {
-                if (isLoggedIn) {
-                    this.userStore.loadCurrent().then((user) => {
-                        if (user) {
-                            this.socketStore.reconnect();
-                        }
-                    });
-                } else {
-                    this.cleanup();
-                }
-            }
-        );
+        if (this.sessionStore.isLoggedIn) {
+            this.load();
+        }
     }
 
     @action
