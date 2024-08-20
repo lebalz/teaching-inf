@@ -59,13 +59,14 @@ const PermissionsPanel = observer(({ documentRootId }: Props) => {
                     <h3>Berechtigungen Festlegen</h3>
                 </div>
                 <div className={clsx('card__body', styles.cardBody)}>
-                    <DefinitionList className={styles.popupContentContainer}>
+                    <DefinitionList className={styles.popupContentContainer} small>
                         <dt>Root Access</dt>
                         <dd>
                             <AccessSelector
                                 access={documentRoot.rootAccess}
                                 onChange={(access) => {
                                     documentRoot.rootAccess = access;
+                                    documentRoot.save();
                                 }}
                             />
                         </dd>
@@ -75,6 +76,7 @@ const PermissionsPanel = observer(({ documentRootId }: Props) => {
                                 access={documentRoot.sharedAccess}
                                 onChange={(access) => {
                                     documentRoot.sharedAccess = access;
+                                    documentRoot.save();
                                 }}
                             />
                         </dd>

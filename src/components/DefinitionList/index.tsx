@@ -8,6 +8,7 @@ interface Props {
     children: ReactNode;
     className?: string;
     gridTemplateColumns?: string;
+    small?: boolean;
 }
 
 const DefinitionList = observer((props: Props) => {
@@ -16,7 +17,8 @@ const DefinitionList = observer((props: Props) => {
             className={clsx(
                 styles.definitionList,
                 props.className,
-                props.gridTemplateColumns && styles.ignoreMediaQueries
+                props.gridTemplateColumns && styles.ignoreMediaQueries,
+                props.small && styles.small
             )}
             style={{ gridTemplateColumns: props.gridTemplateColumns }}
         >

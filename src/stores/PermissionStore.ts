@@ -99,12 +99,12 @@ class PermissionStore extends iStore<`update-${string}`> {
 
     @action
     addGroupPermission(groupPermission: GroupPermission) {
-        const old = this.findUserPermission(groupPermission.id);
+        const old = this.findGroupPermission(groupPermission.id);
         if (old) {
             if (old.access === groupPermission.access) {
                 return;
             }
-            this.userPermissions.remove(old);
+            this.groupPermissions.remove(old);
         }
         this.groupPermissions.push(groupPermission);
     }
