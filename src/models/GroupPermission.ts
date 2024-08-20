@@ -41,15 +41,22 @@ class GroupPermission {
 
     @computed
     get userIds() {
-        return new Set(...(this.group?.userIds || []));
+        return this.group?.userIds;
     }
 
     @computed
     get users() {
-        return this.store.root.userStore.users.filter((u) => this.userIds.has(u.id));
+        const userIds = this.userIds;
+        if (!userIds) {
+            return [];
+        }
+        return this.store.root.userStore.users.filter((u) => userIds.has(u.id));
     }
 
     isAffectingUser(user: User) {
+        if (!this.userIds) {
+            return false;
+        }
         return this.userIds.has(user.id);
     }
 

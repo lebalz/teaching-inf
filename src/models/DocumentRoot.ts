@@ -61,8 +61,10 @@ class DocumentRoot<T extends DocumentType> {
 
     @action
     set rootAccess(access: Access) {
+        if (this._access === access) {
+            return;
+        }
         this._access = access;
-        this.store.save(this);
     }
 
     get sharedAccess() {
@@ -71,8 +73,10 @@ class DocumentRoot<T extends DocumentType> {
 
     @action
     set sharedAccess(access: Access) {
+        if (this._sharedAccess === access) {
+            return;
+        }
         this._sharedAccess = access;
-        this.store.save(this);
     }
 
     get loadStatus() {
