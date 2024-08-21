@@ -40,7 +40,6 @@ const AccountSwitcher = observer(() => {
             on={['click', 'hover']}
             closeOnDocumentClick
             closeOnEscape
-            open
         >
             <div className={clsx(styles.wrapper, 'card')}>
                 <div className={clsx('card__header', styles.header)}>
