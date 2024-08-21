@@ -6,9 +6,13 @@ import { useFirstMainDocument } from '@site/src/hooks/useFirstMainDocument';
 import Loader from '@site/src/components/Loader';
 import CodeBlock from '@theme/CodeBlock';
 import useIsBrowser from '@docusaurus/useIsBrowser';
+import { useStore as useMobxStore } from '@site/src/hooks/useStore';
+import clsx from 'clsx';
+import styles from './styles.module.scss';
 export const Context = React.createContext<Script | undefined>(undefined);
 
 const ScriptContext = observer((props: InitState & { children: JSX.Element }) => {
+    const userStore = useMobxStore('userStore');
     const isBrowser = useIsBrowser();
     const [meta] = React.useState(new ScriptMeta(props));
     const doc = useFirstMainDocument(props.id, meta);
@@ -24,7 +28,16 @@ const ScriptContext = observer((props: InitState & { children: JSX.Element }) =>
             </div>
         );
     }
-    return <Context.Provider value={doc}>{props.children}</Context.Provider>;
+    return (
+        <div className={clsx(styles.editor)}>
+            {props.id && userStore.isUserSwitched && (
+                <span className={clsx('badge', 'badge--primary', styles.badge)}>
+                    {userStore.viewedUser?.nameShort}
+                </span>
+            )}
+            <Context.Provider value={doc}>{props.children}</Context.Provider>
+        </div>
+    );
 });
 
 export default ScriptContext;
