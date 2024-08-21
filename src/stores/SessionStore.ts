@@ -75,6 +75,11 @@ export class SessionStore extends iStore {
         return this.stateRef.account;
     }
 
+    @computed
+    get userId() {
+        return this.currentUserId || this.account?.localAccountId;
+    }
+
     @action
     setAccount(account?: AccountInfo | null) {
         this.stateRef.account = account;

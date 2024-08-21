@@ -199,6 +199,10 @@ const config: Config = {
         },
         {to: '/blog', label: 'Blog', position: 'left'},
         {
+            type: 'custom-accountSwitcher',
+            position: 'right'
+        },
+        {
             type: 'custom-loginProfileButton',
             position: 'right'
         },

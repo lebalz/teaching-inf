@@ -9,6 +9,7 @@ import {
     ClientToServerEvents,
     ConnectedClients,
     DeletedRecord,
+    IoClientEvent,
     IoEvent,
     NewRecord,
     RecordType,
@@ -217,6 +218,20 @@ export class SocketDataStore extends iStore<'ping'> {
                     this.isConfigured = true;
                 })
             );
+    }
+
+    @action
+    joinRoom(roomId: string) {
+        this.socket?.emit(IoClientEvent.JOIN_ROOM, roomId, () => {
+            console.log('joined room', roomId);
+        });
+    }
+
+    @action
+    leaveRoom(roomId: string) {
+        this.socket?.emit(IoClientEvent.LEAVE_ROOM, roomId, () => {
+            console.log('leaved room', roomId);
+        });
     }
 
     @action

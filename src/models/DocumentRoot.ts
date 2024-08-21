@@ -102,7 +102,7 @@ class DocumentRoot<T extends DocumentType> {
     }
 
     get documents() {
-        const currentUserId = this.store.root.userStore.current?.id;
+        const currentUserId = this.store.root.userStore.viewedUser?.id;
         if (!currentUserId && !this.isDummy) {
             return [];
         }

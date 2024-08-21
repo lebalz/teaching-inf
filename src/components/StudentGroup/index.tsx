@@ -23,9 +23,9 @@ interface Props {
 const StudentGroup = observer((props: Props) => {
     const [removedIds, setRemovedIds] = React.useState<string[]>([]);
     const [editing, setEditing] = React.useState(false);
-    const user = useStore('userStore').current;
+    const current = useStore('userStore').current;
     const groupStore = useStore('studentGroupStore');
-    const isAdmin = !!user?.isAdmin;
+    const isAdmin = !!current?.isAdmin;
     React.useEffect(() => {
         const timeout = setTimeout(() => {
             setRemovedIds([]);

@@ -3,7 +3,7 @@ import { Access, DocumentType } from '../api/document';
 import { TypeMeta } from '../models/DocumentRoot';
 import { CreateDocumentModel } from '../stores/DocumentStore';
 import { useDocumentRoot } from './useDocumentRoot';
-import { rootStore } from '../stores/rootStore';
+import { useStore } from './useStore';
 
 /**
  * This hook provides access to the first main document of the rootDocument.
@@ -16,6 +16,8 @@ export const useFirstMainDocument = <Type extends DocumentType>(
 ) => {
     const defaultDocId = useId();
     const documentRoot = useDocumentRoot(documentRootId, meta);
+    const userStore = useStore('userStore');
+    const documentStore = useStore('documentStore');
     const [dummyDocument] = React.useState(
         CreateDocumentModel(
             {
@@ -28,22 +30,28 @@ export const useFirstMainDocument = <Type extends DocumentType>(
                 createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString()
             },
-            rootStore.documentStore
+            documentStore
         )
     );
     React.useEffect(() => {
+        if (!userStore.current || userStore.isUserSwitched) {
+            return;
+        }
         if (documentRoot.isLoaded && !documentRoot.isDummy && !documentRoot.firstMainDocument) {
-            if (documentRoot.permission === Access.RW && rootStore.userStore.current) {
-                console.log('create first document', documentRoot.id, documentRoot.type);
-                rootStore.documentStore.create({
+            /**
+             * If the user is viewing another user, we should not create a document
+             * and instead try to load the first main document of the viewed user.
+             */
+            if (documentRoot.permission === Access.RW) {
+                documentStore.create({
                     documentRootId: documentRoot.id,
-                    authorId: rootStore.userStore.current.id,
+                    authorId: userStore.current.id,
                     type: documentRoot.type,
                     data: meta.defaultData
                 });
             }
         }
-    }, [documentRoot, rootStore.userStore.current]);
+    }, [documentRoot, userStore.current]);
 
     return documentRoot?.firstMainDocument || dummyDocument;
 };

@@ -36,7 +36,7 @@ const HomepageFeatures = observer(() => {
                     {socketStore.isLive && (
                         <>
                             <dt>Clients</dt>
-                            <dd>{socketStore.connectedClients.get(userStore.current?.id ?? '') ?? 0}</dd>
+                            <dd>{socketStore.connectedClients.get(userStore.viewedUser?.id ?? '') ?? 0}</dd>
                         </>
                     )}
                     <dt>Connection</dt>
