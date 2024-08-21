@@ -59,4 +59,9 @@ export default class User {
     get searchTerm(): string {
         return `${this.firstName} ${this.lastName} ${this.email}`;
     }
+
+    @computed
+    get studentGroups() {
+        return this.store.root.studentGroupStore.studentGroups.filter((group) => group.userIds.has(this.id));
+    }
 }
