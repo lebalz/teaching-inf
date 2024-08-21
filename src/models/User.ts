@@ -26,6 +26,23 @@ export default class User {
     }
 
     @computed
+    get isStudent() {
+        return /@edu/i.test(this.email);
+    }
+
+    get isTeacher() {
+        return !this.isStudent;
+    }
+
+    @computed
+    get nameShort() {
+        if (this.isStudent) {
+            return `${this.firstName} ${this.lastName.slice(0, 1)}.`;
+        }
+        return `${this.firstName.slice(0, 1)}. ${this.lastName}`;
+    }
+
+    @computed
     get props(): UserProps {
         return {
             id: this.id,
