@@ -33,7 +33,7 @@ const LoginProfileButton = observer(() => {
                     return (
                         <div className={styles.profileButton}>
                             <Button
-                                text={userStore.current?.firstName || 'Profil'}
+                                text={userStore.current?.nameShort || 'Profil'}
                                 icon={mdiAccountCircleOutline}
                                 iconSide="left"
                                 apiState={userStore.current ? ApiState.IDLE : ApiState.SYNCING}
