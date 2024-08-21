@@ -50,10 +50,6 @@ const UserTable = observer(() => {
         };
     }, [observerTarget, userStore.users.length]);
 
-    React.useEffect(() => {
-        console.log('sortColumn', sortColumn);
-    }, [sortColumn]);
-
     const setSortColumn = (
         column: 'email' | 'role' | 'firstName' | 'lastName' | 'createdAt' | 'updatedAt' | 'id'
     ) => {

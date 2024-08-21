@@ -7,7 +7,7 @@ import { mdiAccountCircleOutline, mdiCircle, mdiLogin } from '@mdi/js';
 import siteConfig from '@generated/docusaurus.config';
 import { ApiState } from '@site/src/stores/iStore';
 import { useStore } from '@site/src/hooks/useStore';
-import Button from '../shared/Button';
+import Button from '../../shared/Button';
 import Icon from '@mdi/react';
 import useIsBrowser from '@docusaurus/useIsBrowser';
 const { NO_AUTH } = siteConfig.customFields as { NO_AUTH?: boolean };
@@ -28,10 +28,10 @@ const LoginProfileButton = observer(() => {
     return (
         <div className={styles.profileButton}>
             <Button
-                text={userStore.current?.nameShort || 'Profil'}
+                text={userStore.viewedUser?.nameShort || 'Profil'}
                 icon={mdiAccountCircleOutline}
                 iconSide="left"
-                apiState={userStore.current ? ApiState.IDLE : ApiState.SYNCING}
+                apiState={userStore.viewedUser ? ApiState.IDLE : ApiState.SYNCING}
                 color="primary"
                 href="/user"
                 title="Persönlicher Bereich"

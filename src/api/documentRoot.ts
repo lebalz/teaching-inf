@@ -43,8 +43,12 @@ export function find(id: string, signal: AbortSignal): AxiosPromise<DocumentRoot
     return api.get(`/documentRoots/${id}`, { signal });
 }
 
-export function findMany(ids: string[], signal: AbortSignal): AxiosPromise<DocumentRoot[]> {
-    return api.get(`/documentRoots?${ids.map((id) => `ids=${id}`).join('&')}`, { signal });
+export function findManyFor(
+    userId: string,
+    ids: string[],
+    signal: AbortSignal
+): AxiosPromise<DocumentRoot[]> {
+    return api.get(`/users/${userId}/documentRoots?${ids.map((id) => `ids=${id}`).join('&')}`, { signal });
 }
 
 export function create(

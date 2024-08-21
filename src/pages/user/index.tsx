@@ -32,7 +32,7 @@ const UserPage = observer(() => {
     const groupStore = useStore('studentGroupStore');
     const isAuthenticated = useIsAuthenticated();
     const { inProgress } = useMsal();
-    const { current } = userStore;
+    const { viewedUser, current } = userStore;
     if (
         !NO_AUTH &&
         ((sessionStore.currentUserId && !sessionStore.isLoggedIn) || inProgress !== InteractionStatus.None)
@@ -49,10 +49,10 @@ const UserPage = observer(() => {
                 <DefinitionList>
                     <dt>Eingeloggt als</dt>
                     <dd>
-                        {current?.firstName} {current?.lastName}
+                        {viewedUser?.firstName} {viewedUser?.lastName}
                     </dd>
                     <dt>Email</dt>
-                    <dd>{current?.email}</dd>
+                    <dd>{viewedUser?.email}</dd>
                     <dt>Mit dem Server Verbunden?</dt>
                     <dd>
                         <Icon
@@ -64,12 +64,12 @@ const UserPage = observer(() => {
                         />{' '}
                         {socketStore.isLive ? 'Ja' : 'Nein'}
                     </dd>
-                    {current && (
+                    {viewedUser && (
                         <>
                             <dt>Aktuell Online</dt>
                             <dd>
                                 <span className={clsx(styles.connectedClients, 'badge', 'badge--primary')}>
-                                    {socketStore.connectedClients.get(current.id)}
+                                    {socketStore.connectedClients.get(viewedUser.id)}
                                 </span>
                             </dd>
                             <dt>In Gruppen</dt>
@@ -128,16 +128,16 @@ const UserPage = observer(() => {
                     <dd>Alle personenbezogenen Daten löschen (Konto, Übungen, Notizen,...).</dd>
                     <dd>
                         <Button
-                            href={LeftAlign(`mailto:teachers.name@school.ch?subject=[${window.location.hostname}]: Datenlöschung für ${current?.email}&body=Guten Tag%0D%0A%0D%0A
+                            href={LeftAlign(`mailto:teachers.name@school.ch?subject=[${window.location.hostname}]: Datenlöschung für ${viewedUser?.email}&body=Guten Tag%0D%0A%0D%0A
                                     Hiermit beantrage ich die vollständige und unwiderrufliche Löschung meiner Daten der Webseite ${window.location.hostname}.%0D%0A%0D%0A
                                     
-                                    E-Mail: ${current?.email}%0D%0A
-                                    Account-ID: ${current?.id}%0D%0A%0D%0A
+                                    E-Mail: ${viewedUser?.email}%0D%0A
+                                    Account-ID: ${viewedUser?.id}%0D%0A%0D%0A
                                     
                                     Bitte bestätigen Sie die Löschung meiner Daten.%0D%0A%0D%0A
                                     
                                     Freundliche Grüsse,%0D%0A
-                                    ${current?.firstName} ${current?.lastName} &cc=${current?.email}`)}
+                                    ${viewedUser?.firstName} ${viewedUser?.lastName} &cc=${viewedUser?.email}`)}
                             text="Jetzt Beantragen"
                             icon={mdiDeleteEmptyOutline}
                             iconSide="left"

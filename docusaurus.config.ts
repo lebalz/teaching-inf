@@ -164,6 +164,10 @@ const config: Config = {
           position: 'right',
         },
         {
+            type: 'custom-accountSwitcher',
+            position: 'right'
+        },
+        {
             type: 'custom-loginProfileButton',
             position: 'right'
         },

@@ -30,7 +30,6 @@ const LoginPage = observer(() => {
     const { instance } = useMsal();
     const isAuthenticated = useIsAuthenticated();
     if (isAuthenticated || NO_AUTH) {
-        console.log('redirect');
         return <Redirect to={'/user'} />;
     }
     return (
@@ -60,7 +59,6 @@ const LoginPage = observer(() => {
 const Login = observer(() => {
     const sessionStore = useStore('sessionStore');
     if (sessionStore.isLoggedIn || NO_AUTH) {
-        console.log('redirect');
         return <Redirect to={'/user'} />;
     }
     return <LoginPage />;

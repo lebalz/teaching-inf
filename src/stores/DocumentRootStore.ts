@@ -7,7 +7,7 @@ import {
     create as apiCreate,
     DocumentRootUpdate,
     find as apiFind,
-    findMany as apiFindMany,
+    findManyFor as apiFindManyFor,
     update as apiUpdate,
     DocumentRoot as ApiDocumentRoot
 } from '../api/documentRoot';
@@ -17,10 +17,22 @@ import UserPermission from '../models/UserPermission';
 import { DocumentType } from '../api/document';
 import { debounce } from 'lodash';
 
+type LoadConfig = {
+    documents?: boolean;
+    userPermissions?: boolean;
+    groupPermissions?: boolean;
+    documentRoot?: boolean;
+};
+
+type BatchedMeta = {
+    load: LoadConfig;
+    meta: TypeMeta<any>;
+};
+
 export class DocumentRootStore extends iStore {
     readonly root: RootStore;
     documentRoots = observable.array<DocumentRoot<DocumentType>>([]);
-    queued = new Map<string, TypeMeta<any>>();
+    queued = new Map<string, BatchedMeta>();
 
     constructor(root: RootStore) {
         super();
@@ -54,11 +66,19 @@ export class DocumentRootStore extends iStore {
     );
 
     @action
-    loadInNextBatch<Type extends DocumentType>(id: string, meta: TypeMeta<Type>) {
+    loadInNextBatch<Type extends DocumentType>(id: string, meta: TypeMeta<Type>, config?: LoadConfig) {
         if (this.queued.has(id)) {
             return;
         }
-        this.queued.set(id, meta);
+        this.queued.set(id, {
+            meta: meta,
+            load: config || {
+                documentRoot: true,
+                documents: true,
+                groupPermissions: true,
+                userPermissions: true
+            }
+        });
         this.loadQueued();
         if (this.queued.size > 42) {
             // max 2048 characters in URL - flush if too many
@@ -96,28 +116,45 @@ export class DocumentRootStore extends iStore {
             });
             return;
         }
+        const userId = this.root.userStore.viewedUserId;
+        /**
+         * the user is not yet loaded, but a session is active
+         */
+        if (!userId) {
+            for (const [id, meta] of current.entries()) {
+                this.queued.set(id, meta);
+            }
+            this.loadQueued();
+            return;
+        }
         /**
          * load all queued documents
          */
         const keys = [...current.keys()].sort();
         this.withAbortController(`load-queued-${keys.join('--')}`, async (signal) => {
-            const models = await apiFindMany(keys, signal.signal);
+            const models = await apiFindManyFor(userId, keys, signal.signal);
             // create all loaded models
             models.data.forEach(
                 action((data) => {
-                    const meta = current.get(data.id);
-                    if (!meta) {
+                    const config = current.get(data.id);
+                    if (!config) {
                         return;
                     }
-                    this.addApiResultToStore(data, meta);
+                    this.addApiResultToStore(data, config);
                     current.delete(data.id);
                 })
             );
             // create all missing root documents
             const created = await Promise.all(
-                [...current.keys()].map((id) => {
-                    return this.create(id, current.get(id) as TypeMeta<any>, {});
-                })
+                [...current.keys()]
+                    .filter((id) => !this.find(id))
+                    .map((id) => {
+                        const config = current.get(id);
+                        if (config) {
+                            return this.create(id, config.meta, {});
+                        }
+                        return Promise.resolve(undefined);
+                    })
             );
             // delete all created roots from the current map
             created
@@ -136,35 +173,35 @@ export class DocumentRootStore extends iStore {
     }
 
     @action
-    load<Type extends DocumentType>(id: string, meta: TypeMeta<Type>) {
-        return this.withAbortController(`load-${id}`, async (signal) => {
-            const { data } = await apiFind(id, signal.signal);
-            if (!data) {
-                return;
-            }
-            return this.addApiResultToStore(data, meta);
-        });
-    }
-
-    @action
-    addApiResultToStore<Type extends DocumentType>(data: ApiDocumentRoot, meta: TypeMeta<Type>) {
-        const documentRoot = new DocumentRoot(data, meta, this);
-        runInAction(() => {
+    addApiResultToStore<Type extends DocumentType>(data: ApiDocumentRoot, config: BatchedMeta) {
+        const documentRoot = config.load.documentRoot
+            ? new DocumentRoot(data, config.meta, this)
+            : this.find(data.id);
+        if (!documentRoot) {
+            return;
+        }
+        if (config.load.documentRoot) {
             this.addDocumentRoot(documentRoot, true);
+        }
+        if (config.load.groupPermissions) {
             data.groupPermissions.forEach((gp) => {
                 this.root.permissionStore.addGroupPermission(
                     new GroupPermission({ ...gp, documentRootId: documentRoot.id }, this.root.permissionStore)
                 );
             });
+        }
+        if (config.load.userPermissions) {
             data.userPermissions.forEach((up) => {
                 this.root.permissionStore.addUserPermission(
                     new UserPermission({ ...up, documentRootId: documentRoot.id }, this.root.permissionStore)
                 );
             });
+        }
+        if (config.load.documents) {
             data.documents.forEach((doc) => {
                 this.root.documentStore.addToStore(doc, 'persisted-root');
             });
-        });
+        }
         return documentRoot;
     }
 

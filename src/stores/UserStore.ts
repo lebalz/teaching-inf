@@ -10,9 +10,8 @@ import iStore from './iStore';
 export class UserStore extends iStore {
     readonly root: RootStore;
 
+    @observable accessor _viewedUserId: string | undefined = undefined;
     users = observable<User>([]);
-
-    affectedEventIds = observable.set<string>([], { deep: false });
 
     constructor(root: RootStore) {
         super();
@@ -88,6 +87,49 @@ export class UserStore extends iStore {
             );
         }
         return this.users.find((u) => u.id === this.root.sessionStore?.currentUserId);
+    }
+
+    @computed
+    get viewedUserId() {
+        if (!this.current?.isAdmin) {
+            return this.current?.id;
+        }
+        return this._viewedUserId || this.current?.id || this.root.sessionStore.userId;
+    }
+
+    @computed
+    get isUserSwitched() {
+        return !!this._viewedUserId;
+    }
+
+    @action
+    switchUser(userId: string | undefined) {
+        if (!this.current?.isAdmin || this._viewedUserId === userId) {
+            return;
+        }
+        /**
+         * side-effect: if there are unprocessed rootDocuments in the queue, ensure they are processed
+         *
+         */
+        if (this.root.documentRootStore.queued.size > 0) {
+            this.root.documentRootStore.loadQueued.flush();
+        }
+        if (this._viewedUserId) {
+            this.root.socketStore.leaveRoom(this._viewedUserId);
+        }
+        if (userId === this.current?.id) {
+            this._viewedUserId = undefined;
+            return;
+        }
+        this._viewedUserId = userId;
+        if (userId) {
+            this.root.socketStore.joinRoom(userId);
+        }
+    }
+
+    @computed
+    get viewedUser(): User | undefined {
+        return this.find(this.viewedUserId);
     }
 
     @action
