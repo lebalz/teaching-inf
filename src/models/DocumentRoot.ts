@@ -102,14 +102,13 @@ class DocumentRoot<T extends DocumentType> {
     }
 
     get documents() {
-        const currentUserId = this.store.root.userStore.viewedUser?.id;
-        if (!currentUserId && !this.isDummy) {
+        if (!this.viewedUserId && !this.isDummy) {
             return [];
         }
         return this.store.root.documentStore.findByDocumentRoot(this.id).filter((d) => {
             return (
                 this.isDummy ||
-                d.authorId === currentUserId ||
+                d.authorId === this.viewedUserId ||
                 highestAccess(new Set([this.permission]), this.sharedAccess) !== Access.None
             );
         });
@@ -123,7 +122,7 @@ class DocumentRoot<T extends DocumentType> {
      */
     @computed
     get viewedUserId() {
-        return this.store.root.userStore.current?.id;
+        return this.store.root.userStore.viewedUserId;
     }
 
     /**
@@ -142,6 +141,10 @@ class DocumentRoot<T extends DocumentType> {
             return docs;
         }
         const byUser = docs.filter((d) => d.authorId === this.viewedUserId);
+
+        if (this.store.root.userStore.current?.isAdmin && this.store.root.userStore.isUserSwitched) {
+            return byUser;
+        }
 
         if (
             this.sharedAccess === Access.None ||

@@ -33,7 +33,6 @@ const AccountSwitcher = observer(() => {
                 </div>
             }
             on={['click', 'hover']}
-            position={['bottom right']}
             closeOnDocumentClick
             closeOnEscape
         >
