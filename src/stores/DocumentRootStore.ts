@@ -117,6 +117,7 @@ export class DocumentRootStore extends iStore {
             return;
         }
         const userId = this.root.userStore.viewedUserId;
+        const switchedUser = this.root.userStore.isUserSwitched;
         /**
          * the user is not yet loaded, but a session is active
          */
@@ -132,7 +133,7 @@ export class DocumentRootStore extends iStore {
          */
         const keys = [...current.keys()].sort();
         this.withAbortController(`load-queued-${keys.join('--')}`, async (signal) => {
-            const models = await apiFindManyFor(userId, keys, signal.signal);
+            const models = await apiFindManyFor(userId, keys, switchedUser, signal.signal);
             // create all loaded models
             models.data.forEach(
                 action((data) => {

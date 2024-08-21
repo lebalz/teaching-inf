@@ -46,9 +46,13 @@ export function find(id: string, signal: AbortSignal): AxiosPromise<DocumentRoot
 export function findManyFor(
     userId: string,
     ids: string[],
+    ignoreMissingRoots: boolean,
     signal: AbortSignal
 ): AxiosPromise<DocumentRoot[]> {
-    return api.get(`/users/${userId}/documentRoots?${ids.map((id) => `ids=${id}`).join('&')}`, { signal });
+    return api.get(
+        `/users/${userId}/documentRoots?${ignoreMissingRoots ? 'ignoreMissingRoots=1&' : ''}${ids.map((id) => `ids=${id}`).join('&')}`,
+        { signal }
+    );
 }
 
 export function create(
