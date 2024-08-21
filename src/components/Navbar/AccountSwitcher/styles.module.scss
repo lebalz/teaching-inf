@@ -3,8 +3,15 @@
     .accountSwitcherButton {
         height: 1.55rem;
     }
-    .userList {
-        max-height: 20em;
-        overflow-y: auto;
+}
+
+.wrapper {
+    .body {
+        // overflow-y: hidden;
+        // max-height: 2em;
+        .userList {
+            max-height: 20em;
+            overflow-y: auto;
+        }
     }
 }
