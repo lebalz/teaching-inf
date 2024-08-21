@@ -9,14 +9,11 @@ import { ApiState } from '@site/src/stores/iStore';
 import { useStore } from '@site/src/hooks/useStore';
 import Button from '../shared/Button';
 import Icon from '@mdi/react';
-import useBaseUrl from '@docusaurus/useBaseUrl';
 import useIsBrowser from '@docusaurus/useIsBrowser';
 const { NO_AUTH } = siteConfig.customFields as { NO_AUTH?: boolean };
 
 const LoginButton = () => {
-    return (
-        <Button href={useBaseUrl('/login')} text="Login" icon={mdiLogin} color="primary" iconSide="left" />
-    );
+    return <Button href={'/login'} text="Login" icon={mdiLogin} color="primary" iconSide="left" />;
 };
 
 const LoginProfileButton = observer(() => {

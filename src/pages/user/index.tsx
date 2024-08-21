@@ -4,7 +4,7 @@ import styles from './styles.module.scss';
 import Layout from '@theme/Layout';
 import { observer } from 'mobx-react-lite';
 import { Redirect } from '@docusaurus/router';
-import { mdiCircle, mdiDeleteEmptyOutline, mdiLogout, mdiRefresh } from '@mdi/js';
+import { mdiArrowRightThin, mdiCircle, mdiDeleteEmptyOutline, mdiLogout, mdiRefresh } from '@mdi/js';
 import { useMsal } from '@azure/msal-react';
 import { useIsAuthenticated } from '@azure/msal-react';
 import { InteractionStatus } from '@azure/msal-browser';
@@ -96,6 +96,20 @@ const UserPage = observer(() => {
                 </DefinitionList>
                 <h2>Account</h2>
                 <DefinitionList>
+                    {current?.isAdmin && (
+                        <>
+                            <dt>Admin</dt>
+                            <dd>
+                                <Button
+                                    href={'/admin'}
+                                    text="zum Adminbereich"
+                                    icon={mdiArrowRightThin}
+                                    iconSide="left"
+                                    color="primary"
+                                />
+                            </dd>
+                        </>
+                    )}
                     <dt>Daten</dt>
                     <dd>
                         Während der Schulzeit werden alle ausgefüllten Textfelder, Codeblocks und Checkboxes

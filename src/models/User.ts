@@ -56,7 +56,7 @@ export default class User {
     }
 
     @computed
-    get searchTerms(): string {
+    get searchTerm(): string {
         return `${this.firstName} ${this.lastName} ${this.email}`;
     }
 }

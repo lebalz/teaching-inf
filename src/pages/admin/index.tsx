@@ -4,14 +4,13 @@ import styles from './styles.module.scss';
 import Layout from '@theme/Layout';
 import { observer } from 'mobx-react-lite';
 import _ from 'lodash';
-import StudentGroupPanel from '@site/src/components/Admin/StudentGroupPanel';
+import AdminPanel from '@site/src/components/Admin/AdminPanel';
 
 const StudentGroups = observer(() => {
     return (
         <Layout>
             <main className={clsx(styles.main)}>
-                <h2>Lerngruppen</h2>
-                <StudentGroupPanel />
+                <AdminPanel />
             </main>
         </Layout>
     );

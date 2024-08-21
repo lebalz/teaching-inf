@@ -41,9 +41,7 @@ const AccessPanel = observer((props: Props) => {
                 <div className={clsx(styles.list)}>
                     {documentRoot.userPermissions
                         .filter((permission) =>
-                            permission.user?.searchTerms
-                                ? searchRegex.test(permission.user.searchTerms)
-                                : true
+                            permission.user?.searchTerm ? searchRegex.test(permission.user.searchTerm) : true
                         )
                         .map((userPermission, idx) => (
                             <div key={userPermission.id} className={clsx(styles.item)}>
@@ -53,7 +51,7 @@ const AccessPanel = observer((props: Props) => {
                     {userStore.users
                         .filter(
                             (user) =>
-                                searchRegex.test(user.searchTerms) &&
+                                searchRegex.test(user.searchTerm) &&
                                 !documentRoot.userPermissions.some((p) => p.userId === user.id)
                         )
                         .map((user, idx) => (

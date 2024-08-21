@@ -57,7 +57,7 @@ const AddUserPopup = observer((props: Props) => {
                     <div className={styles.listContainer}>
                         <ul className={clsx(styles.students, styles.list)}>
                             {userStore.users
-                                .filter((user) => searchRegex.test(user.searchTerms))
+                                .filter((user) => searchRegex.test(user.searchTerm))
                                 .map((user, idx) => (
                                     <li
                                         key={idx}
