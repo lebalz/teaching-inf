@@ -17,10 +17,13 @@ import Icon from '@mdi/react';
 const { NO_AUTH } = siteConfig.customFields as { TEST_USERNAME?: string; NO_AUTH?: boolean };
 
 const LeftAlign = (text: String) => {
-    return text.split('\n').map((line, index) => {
-        return line.trim()
-    }).join('\n')
-}
+    return text
+        .split('\n')
+        .map((line, index) => {
+            return line.trim();
+        })
+        .join('\n');
+};
 
 const UserPage = observer(() => {
     const sessionStore = useStore('sessionStore');
@@ -94,14 +97,24 @@ const UserPage = observer(() => {
                 <h2>Account</h2>
                 <DefinitionList>
                     <dt>Daten</dt>
-                        <dd>Während der Schulzeit werden alle ausgefüllten Textfelder, Codeblocks und Checkboxes auf einem Server der Schule gespeichert.</dd>
-                        <dd>Am Ende der Schulzeit erhalten die Lernenden einen Datenexport ihrer Daten (so dass die Webseite offline gebraucht werden kann). Zudem werden alle personenbezogenen Daten vom Server gelöscht.</dd>
-                        <dd>Bei einem Klassenwechsel oder einem Austritt kann die Datenlöschung auch vorgängig beantragt werden.</dd>
+                    <dd>
+                        Während der Schulzeit werden alle ausgefüllten Textfelder, Codeblocks und Checkboxes
+                        auf einem Server der Schule gespeichert.
+                    </dd>
+                    <dd>
+                        Am Ende der Schulzeit erhalten die Lernenden einen Datenexport ihrer Daten (so dass
+                        die Webseite offline gebraucht werden kann). Zudem werden alle personenbezogenen Daten
+                        vom Server gelöscht.
+                    </dd>
+                    <dd>
+                        Bei einem Klassenwechsel oder einem Austritt kann die Datenlöschung auch vorgängig
+                        beantragt werden.
+                    </dd>
                     <dt>Datenlöschung</dt>
-                        <dd>Alle personenbezogenen Daten löschen (Konto, Übungen, Notizen,...).</dd>
-                        <dd>
-                            <Button
-                                href={LeftAlign(`mailto:teachers.name@school.ch?subject=[${window.location.hostname}]: Datenlöschung für ${current?.email}&body=Guten Tag%0D%0A%0D%0A
+                    <dd>Alle personenbezogenen Daten löschen (Konto, Übungen, Notizen,...).</dd>
+                    <dd>
+                        <Button
+                            href={LeftAlign(`mailto:teachers.name@school.ch?subject=[${window.location.hostname}]: Datenlöschung für ${current?.email}&body=Guten Tag%0D%0A%0D%0A
                                     Hiermit beantrage ich die vollständige und unwiderrufliche Löschung meiner Daten der Webseite ${window.location.hostname}.%0D%0A%0D%0A
                                     
                                     E-Mail: ${current?.email}%0D%0A
@@ -111,37 +124,37 @@ const UserPage = observer(() => {
                                     
                                     Freundliche Grüsse,%0D%0A
                                     ${current?.firstName} ${current?.lastName} &cc=${current?.email}`)}
-                                text="Jetzt Beantragen"
-                                icon={mdiDeleteEmptyOutline}
-                                iconSide="left"
-                            />
-                        </dd>
+                            text="Jetzt Beantragen"
+                            icon={mdiDeleteEmptyOutline}
+                            iconSide="left"
+                        />
+                    </dd>
                     <dt>Ausloggen</dt>
-                        <dd>
-                            <Button
-                                onClick={() => sessionStore.logout()}
-                                text="Logout"
-                                title="User Abmelden"
-                                color="red"
-                                icon={mdiLogout}
-                                iconSide="left"
-                                noOutline
-                                className={clsx(styles.logout)}
-                            />
-                        </dd>
+                    <dd>
+                        <Button
+                            onClick={() => sessionStore.logout()}
+                            text="Logout"
+                            title="User Abmelden"
+                            color="red"
+                            icon={mdiLogout}
+                            iconSide="left"
+                            noOutline
+                            className={clsx(styles.logout)}
+                        />
+                    </dd>
                     <dt>LocalStorage Löschen</dt>
-                        <dd>
-                            <Button
-                                text="Jetzt Löschen"
-                                icon={mdiRefresh}
-                                iconSide="left"
-                                onClick={() => {
-                                    localStorage.clear();
-                                    window.location.reload();
-                                }}
-                                color="orange"
-                            />
-                        </dd>
+                    <dd>
+                        <Button
+                            text="Jetzt Löschen"
+                            icon={mdiRefresh}
+                            iconSide="left"
+                            onClick={() => {
+                                localStorage.clear();
+                                window.location.reload();
+                            }}
+                            color="orange"
+                        />
+                    </dd>
                 </DefinitionList>
             </main>
         </Layout>
