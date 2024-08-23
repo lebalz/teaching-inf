@@ -8,7 +8,7 @@
         {
             "from": "docs/OF-Programmieren-1/",
             "to": "versioned_docs/version-28Gb/02-Programmieren-1",
-            "ignore": ["02-Turtlegrafik"]
+            "ignore": []
         }
     ],
     "28Gj": [
@@ -20,7 +20,7 @@
         {
             "from": "docs/OF-Programmieren-1/",
             "to": "versioned_docs/version-28Gj/02-Programmieren-1",
-            "ignore": ["02-Turtlegrafik"]
+            "ignore": []
         }
     ]
 }
