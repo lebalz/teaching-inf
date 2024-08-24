@@ -1,10 +1,10 @@
 ---
 sidebar_label: Browser
 sidebar_custom_props:
-  id: 0c56b0b2-9b28-4a13-b783-ee7c4833158c
   source:
     name: rothe.io
-    ref: https://rothe.io/?page=ict/1-basics/1-browser/
+    ref: 'https://rothe.io/?page=ict/1-basics/1-browser/'
+page_id: 0c56b0b2-9b28-4a13-b783-ee7c4833158c
 ---
 
 # Browser

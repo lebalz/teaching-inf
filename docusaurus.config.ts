@@ -143,10 +143,13 @@ const config: Config = {
          */
         if ('sidebar_custom_props' in result.frontMatter && 'id' in (result.frontMatter as any).sidebar_custom_props) {
           if (!('page_id' in result.frontMatter)) {
-            result.frontMatter.page_id = (result.frontMatter as any).sidebar_custom_props.page_id;
+            result.frontMatter.page_id = (result.frontMatter as any).sidebar_custom_props.id;
             needsRewrite = true;
           }
-          delete (result.frontMatter as any).sidebar_custom_props.page_id;
+          delete (result.frontMatter as any).sidebar_custom_props.id;
+          if (Object.keys((result.frontMatter as any).sidebar_custom_props).length === 0) {
+            delete result.frontMatter.sidebar_custom_props;
+          }
         }
         if (!('page_id' in result.frontMatter)) {
           result.frontMatter.page_id = uuidv4();

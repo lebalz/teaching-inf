@@ -1,10 +1,10 @@
 ---
 sidebar_label: Algorithmus
 sidebar_custom_props:
-  id: c649390e-7880-46a5-a611-f938c1f6a100
   source:
     name: rothe.io
-    ref: https://rothe.io/?page=prog1/1-algo/1-algorithm/
+    ref: 'https://rothe.io/?page=prog1/1-algo/1-algorithm/'
+page_id: c649390e-7880-46a5-a611-f938c1f6a100
 ---
 
 # Algorithmus

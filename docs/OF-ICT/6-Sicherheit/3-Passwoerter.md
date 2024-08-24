@@ -1,6 +1,5 @@
 ---
-sidebar_custom_props:
-  id: ebe4ae20-e88b-48c1-bbe2-827ba69d58bc
+page_id: ebe4ae20-e88b-48c1-bbe2-827ba69d58bc
 ---
 
 # Passwörter

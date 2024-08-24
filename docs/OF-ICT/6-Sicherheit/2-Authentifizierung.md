@@ -1,9 +1,9 @@
 ---
 sidebar_custom_props:
-  id: a1dc8bc7-653e-4e55-9197-c9cdb7fd2234
   source:
     name: rothe.io
-    ref: https://rothe.io/?page=ict/2-security/2-authentication/
+    ref: 'https://rothe.io/?page=ict/2-security/2-authentication/'
+page_id: a1dc8bc7-653e-4e55-9197-c9cdb7fd2234
 ---
 
 # Authentifizierung

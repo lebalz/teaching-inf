@@ -1,6 +1,5 @@
 ---
-sidebar_custom_props:
-  id: 635e5614-3048-4412-adea-bd717a96bd05
+page_id: 635e5614-3048-4412-adea-bd717a96bd05
 ---
 # Bauanleitung
 

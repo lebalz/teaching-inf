@@ -1,6 +1,5 @@
 ---
-sidebar_custom_props:
-  id: 0faa446a-08da-498c-833a-d20bd6767021
+page_id: 0faa446a-08da-498c-833a-d20bd6767021
 ---
 import GTabs from '@site/src/components/GTabs'
 

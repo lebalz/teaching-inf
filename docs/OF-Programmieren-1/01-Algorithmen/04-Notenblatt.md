@@ -1,9 +1,9 @@
 ---
 sidebar_custom_props:
-  id: 583be0ff-e45a-4ff3-9a15-c0a7a99345b0
   source:
     name: rothe.io
-    ref: https://rothe.io/?page=prog1/1-algo/3-sheet-music/
+    ref: 'https://rothe.io/?page=prog1/1-algo/3-sheet-music/'
+page_id: 583be0ff-e45a-4ff3-9a15-c0a7a99345b0
 ---
 
 import useBaseUrl from '@docusaurus/useBaseUrl';

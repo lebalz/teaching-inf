@@ -1,10 +1,10 @@
 ---
 sidebar_label: Datenverlust
 sidebar_custom_props:
-  id: 73c81d4b-ceac-4db9-95e2-c562ec5691ba
   source:
     name: rothe.io
-    ref: https://rothe.io/?page=ict/2-security/1-data-loss/
+    ref: 'https://rothe.io/?page=ict/2-security/1-data-loss/'
+page_id: 73c81d4b-ceac-4db9-95e2-c562ec5691ba
 ---
 
 # Datenverlust

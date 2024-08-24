@@ -1,9 +1,9 @@
 ---
 sidebar_custom_props:
-  id: 6107d921-37dd-402a-915c-b1751f8df3f7
   source:
     name: rothe.io
-    ref: https://rothe.io/?page=prog1/1-algo/2-origami/
+    ref: 'https://rothe.io/?page=prog1/1-algo/2-origami/'
+page_id: 6107d921-37dd-402a-915c-b1751f8df3f7
 ---
 
 # Faltanleitung

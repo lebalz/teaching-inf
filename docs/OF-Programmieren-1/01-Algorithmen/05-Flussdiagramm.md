@@ -1,10 +1,10 @@
 ---
 sidebar_label: Flussdiagramm
 sidebar_custom_props:
-  id: 7bf4440d-dbc1-40a0-9002-ff0b1d894686
   source:
     name: rothe.io
-    ref: https://rothe.io/?page=prog1/1-algo/4-recipe/
+    ref: 'https://rothe.io/?page=prog1/1-algo/4-recipe/'
+page_id: 7bf4440d-dbc1-40a0-9002-ff0b1d894686
 ---
 
 # Flussdiagramm
