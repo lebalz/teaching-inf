@@ -1,3 +1,6 @@
+---
+page_id: e1405533-17b1-46d8-9168-97c6c0d1f362
+---
 import BrowserWindow from '@site/src/components/BrowserWindow';
 
 # Bilder

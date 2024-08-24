@@ -1,3 +1,6 @@
+---
+page_id: d38be43d-eb1a-43f0-8b8b-42d9336fa726
+---
 import BrowserWindow from '@site/src/components/BrowserWindow';
 
 # Medien Einfügen

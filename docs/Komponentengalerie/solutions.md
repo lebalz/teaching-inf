@@ -1,3 +1,6 @@
+---
+page_id: fa1107ab-16af-462c-b3ad-224c1c49409e
+---
 import Solution from '@site/src/components/documents/Solution';
 import BrowserWindow from '@site/src/components/BrowserWindow';
 

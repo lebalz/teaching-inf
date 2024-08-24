@@ -1,3 +1,6 @@
+---
+page_id: 98798b41-86ab-49c1-a3fc-21939df16a98
+---
 import BrowserWindow from '@site/src/components/BrowserWindow';
 
 # Antworten

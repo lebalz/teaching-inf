@@ -174,7 +174,7 @@ export class DocumentRootStore extends iStore {
     }
 
     @action
-    addApiResultToStore<Type extends DocumentType>(data: ApiDocumentRoot, config: BatchedMeta) {
+    addApiResultToStore(data: ApiDocumentRoot, config: BatchedMeta) {
         const documentRoot = config.load.documentRoot
             ? new DocumentRoot(data, config.meta, this)
             : this.find(data.id);
@@ -200,7 +200,7 @@ export class DocumentRootStore extends iStore {
         }
         if (config.load.documents) {
             data.documents.forEach((doc) => {
-                this.root.documentStore.addToStore(doc, 'persisted-root');
+                this.root.documentStore.addToStore(doc);
             });
         }
         return documentRoot;

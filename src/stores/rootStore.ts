@@ -3,10 +3,11 @@ import { DocumentRootStore } from './DocumentRootStore';
 import { UserStore } from './UserStore';
 import { SessionStore } from './SessionStore';
 import { SocketDataStore } from './SocketDataStore';
-import { action, observable, reaction } from 'mobx';
+import { action } from 'mobx';
 import { StudentGroupStore } from './StudentGroupStore';
 import PermissionStore from './PermissionStore';
 import DocumentStore from './DocumentStore';
+import { PageStore } from './PageStore';
 
 export class RootStore {
     documentRootStore: DocumentRootStore;
@@ -16,6 +17,7 @@ export class RootStore {
     studentGroupStore: StudentGroupStore;
     permissionStore: PermissionStore;
     documentStore: DocumentStore;
+    pageStore: PageStore;
 
     // @observable accessor initialized = false;
     constructor() {
@@ -26,6 +28,7 @@ export class RootStore {
         this.studentGroupStore = new StudentGroupStore(this);
         this.permissionStore = new PermissionStore(this);
         this.documentStore = new DocumentStore(this);
+        this.pageStore = new PageStore(this);
 
         if (this.sessionStore.isLoggedIn) {
             this.load();

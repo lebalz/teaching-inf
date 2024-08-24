@@ -23,6 +23,7 @@ abstract class iDocument<Type extends DocumentType> {
     readonly _pristine: TypeDataMapping[Type];
 
     readonly createdAt: Date;
+
     /**
      * save the model only after 1 second of "silence" (=no edits during this period)
      * or after 5s of permanent editing...
@@ -154,6 +155,10 @@ abstract class iDocument<Type extends DocumentType> {
             return true;
         }
         return this.root.sharedAccess !== Access.None;
+    }
+
+    get author() {
+        return this.store.root.userStore.find(this.authorId);
     }
 
     @action

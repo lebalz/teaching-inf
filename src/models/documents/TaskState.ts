@@ -36,12 +36,7 @@ export class TaskMeta extends TypeMeta<DocumentType.TaskState> {
 
 class TaskState extends iDocument<DocumentType.TaskState> {
     @observable accessor taskState: StateType;
-
-    /**
-     * used to sort the tasks in the task list
-     */
-    @observable accessor windowPositionY: number = -1;
-
+    @observable accessor scrollTo: boolean = false;
     constructor(props: DocumentProps<DocumentType.TaskState>, store: DocumentStore) {
         super(props, store);
         this.taskState = props.data?.state;
@@ -77,6 +72,11 @@ class TaskState extends iDocument<DocumentType.TaskState> {
     }
 
     @action
+    setScrollTo(scrollTo: boolean) {
+        this.scrollTo = scrollTo;
+    }
+
+    @action
     nextState() {
         const idx = this.meta.taskState.indexOf(this.taskState);
         this.setData(
@@ -86,11 +86,6 @@ class TaskState extends iDocument<DocumentType.TaskState> {
             Source.LOCAL,
             new Date()
         );
-    }
-
-    @action
-    setWindowPositionY(y: number) {
-        this.windowPositionY = y;
     }
 }
 

@@ -101,7 +101,7 @@ const plugin: Plugin = function plugin(this: Processor, optionsInput?: {}): Tran
                     newNode.attributes.push(toJsxAttribute('title', 'Circuit Verse'));
                     newNode.attributes.push(toJsxAttribute('frameBorder', '0'));
                     newNode.attributes.push(toJsxAttribute('scrolling', 'no'));
-                    newNode.attributes.push(toJsxAttribute('webkitAllowFullScreen', ''));
+                    newNode.attributes.push(toJsxAttribute('webkitallowfullscreen', ''));
                     newNode.attributes.push(toJsxAttribute('mozAllowFullScreen', ''));
                     newNode.attributes.push(toJsxAttribute('allowFullScreen', ''));
                     break;

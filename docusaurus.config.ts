@@ -1,6 +1,6 @@
 require('dotenv').config();
-import {themes as prismThemes} from 'prism-react-renderer';
-import type {Config} from '@docusaurus/types';
+import { themes as prismThemes } from 'prism-react-renderer';
+import type { Config } from '@docusaurus/types';
 import type { VersionOptions } from '@docusaurus/plugin-content-docs';
 import type * as Preset from '@docusaurus/preset-classic';
 
@@ -16,43 +16,47 @@ import flexCardsPlugin from './src/plugins/remark-flex-cards/plugin';
 import imagePlugin from './src/plugins/remark-images/plugin';
 import mediaPlugin from './src/plugins/remark-media/plugin';
 import detailsPlugin from './src/plugins/remark-details/plugin';
+import { v4 as uuidv4 } from 'uuid';
+import matter from 'gray-matter';
+import { promises as fs } from 'fs';
 
+const BUILD_LOCATION = __dirname;
 const GIT_COMMIT_SHA = process.env.GITHUB_SHA || Math.random().toString(36).substring(7);
 const BASE_URL = '/';
 
 const BEFORE_DEFAULT_REMARK_PLUGINS = [
   flexCardsPlugin,
   [
-      imagePlugin,
-      { tagNames: { sourceRef: 'SourceRef', figure: 'Figure' } }
+    imagePlugin,
+    { tagNames: { sourceRef: 'SourceRef', figure: 'Figure' } }
   ],
   detailsPlugin,
   defboxPlugin
 ];
 
-const REMARK_PLUGINS = [  
+const REMARK_PLUGINS = [
   [strongPlugin, { className: 'boxed' }],
   [
-      deflistPlugin,
-      {
-          tagNames: {
-              dl: 'Dl',
-          },
-      }
+    deflistPlugin,
+    {
+      tagNames: {
+        dl: 'Dl',
+      },
+    }
   ],
   [
-      mdiPlugin,
-      {
-          colorMapping: {
-              green: 'var(--ifm-color-success)',
-              red: 'var(--ifm-color-danger)',
-              orange: 'var(--ifm-color-warning)',
-              yellow: '#edcb5a',
-              blue: '#3578e5',
-              cyan: '#01f0bc'
-          },
-          defaultSize: '1.25em'
-      }
+    mdiPlugin,
+    {
+      colorMapping: {
+        green: 'var(--ifm-color-success)',
+        red: 'var(--ifm-color-danger)',
+        orange: 'var(--ifm-color-warning)',
+        yellow: '#edcb5a',
+        blue: '#3578e5',
+        cyan: '#01f0bc'
+      },
+      defaultSize: '1.25em'
+    }
   ],
   mediaPlugin,
   kbdPlugin,
@@ -95,14 +99,14 @@ const config: Config = {
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
-  
+
   customFields: {
     /** Use Testuser in local dev: set TEST_USERNAME to the test users email adress*/
     TEST_USERNAME: process.env.TEST_USERNAME,
     NO_AUTH: process.env.NODE_ENV !== 'production' && !!process.env.TEST_USERNAME,
     /** The Domain Name where the api is running */
-    APP_URL: process.env.NETLIFY 
-      ? process.env.DEPLOY_PRIME_URL 
+    APP_URL: process.env.NETLIFY
+      ? process.env.DEPLOY_PRIME_URL
       : process.env.APP_URL || 'http://localhost:3000',
     /** The Domain Name of this app */
     BACKEND_URL: process.env.BACKEND_URL || 'http://localhost:3002',
@@ -113,7 +117,7 @@ const config: Config = {
     /** The application id uri generated in https://portal.azure.com */
     API_URI: process.env.API_URI,
     GIT_COMMIT_SHA: GIT_COMMIT_SHA,
-},
+  },
 
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
@@ -122,7 +126,43 @@ const config: Config = {
     defaultLocale: 'de',
     locales: ['de'],
   },
-
+  markdown: {
+    parseFrontMatter: async (params) => {
+      const result = await params.defaultParseFrontMatter(params);
+      /**
+       * don't edit blogs frontmatter
+       */
+      if (params.filePath.startsWith(`${BUILD_LOCATION}/blog/`)) {
+        return result;
+      }
+      if (process.env.NODE_ENV !== 'production') {
+        let needsRewrite = false;
+        /**
+         * material on ofi.gbsl.website used to have 'sidebar_custom_props.id' as the page id.
+         * Rewrite it as 'page_id' and remove it in case it's present.
+         */
+        if ('sidebar_custom_props' in result.frontMatter && 'id' in (result.frontMatter as any).sidebar_custom_props) {
+          if (!('page_id' in result.frontMatter)) {
+            result.frontMatter.page_id = (result.frontMatter as any).sidebar_custom_props.page_id;
+            needsRewrite = true;
+          }
+          delete (result.frontMatter as any).sidebar_custom_props.page_id;
+        }
+        if (!('page_id' in result.frontMatter)) {
+          result.frontMatter.page_id = uuidv4();
+          needsRewrite = true;
+        }
+        if (needsRewrite) {
+          await fs.writeFile(
+            params.filePath,
+            matter.stringify(params.fileContent, result.frontMatter),
+            { encoding: 'utf-8' }
+          )
+        }
+      }
+      return result;
+    }
+  },
   presets: [
     [
       'classic',
@@ -154,14 +194,14 @@ const config: Config = {
           // Remove this to remove the "edit this page" links.
           editUrl:
             'https://github.com/lebalz/teaching-inf/edit/main/',
-            remarkPlugins: REMARK_PLUGINS,
-            rehypePlugins: REHYPE_PLUGINS,
-            admonitions: {
-                keywords: ['aufgabe', 'finding'],
-                extendDefaults: true,
-            },
-            postsPerPage: 15,
-            beforeDefaultRemarkPlugins: BEFORE_DEFAULT_REMARK_PLUGINS,
+          remarkPlugins: REMARK_PLUGINS,
+          rehypePlugins: REHYPE_PLUGINS,
+          admonitions: {
+            keywords: ['aufgabe', 'finding'],
+            extendDefaults: true,
+          },
+          postsPerPage: 15,
+          beforeDefaultRemarkPlugins: BEFORE_DEFAULT_REMARK_PLUGINS,
         },
         pages: {
           admonitions: {
@@ -197,14 +237,18 @@ const config: Config = {
             position: 'left',
             label: 'Playground'
         },
-        {to: '/blog', label: 'Blog', position: 'left'},
+        { to: '/blog', label: 'Blog', position: 'left' },
         {
-            type: 'custom-accountSwitcher',
-            position: 'right'
+          type: 'custom-taskStateOverview',
+          position: 'left'
         },
         {
-            type: 'custom-loginProfileButton',
-            position: 'right'
+          type: 'custom-accountSwitcher',
+          position: 'right'
+        },
+        {
+          type: 'custom-loginProfileButton',
+          position: 'right'
         },
       ],
     },

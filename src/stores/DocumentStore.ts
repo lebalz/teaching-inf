@@ -9,7 +9,8 @@ import {
     create as apiCreate,
     Access,
     DocumentTypes,
-    TypeModelMapping
+    TypeModelMapping,
+    allDocuments as apiAllDocuments
 } from '@site/src/api/document';
 import Script from '@site/src/models/documents/Script';
 import TaskState from '@site/src/models/documents/TaskState';
@@ -79,8 +80,7 @@ class DocumentStore extends iStore {
 
     @action
     addToStore<Type extends DocumentType>(
-        data: DocumentProps<Type> | undefined | null,
-        onlyFor?: 'dummy-root' | 'persisted-root'
+        data: DocumentProps<Type> | undefined | null
     ): TypeModelMapping[Type] | undefined {
         /**
          * Adds a new model to the store. Existing models with the same id are replaced.
@@ -93,16 +93,11 @@ class DocumentStore extends iStore {
         if (!model.root) {
             return;
         }
-        /**
-         * don't add a dummy model to a persisted root
-         */
-        if (onlyFor === 'dummy-root' && !model.root.isDummy) {
-            return;
-        }
+
         /**
          * don't add a persisted model to a dummy root
          */
-        if (onlyFor === 'persisted-root' && model.root.isDummy) {
+        if (model.root.isDummy) {
             return;
         }
 
@@ -135,7 +130,7 @@ class DocumentStore extends iStore {
             .then(
                 action(({ data }) => {
                     if (data && Object.keys(data).length > 0) {
-                        return this.addToStore(data, 'persisted-root');
+                        return this.addToStore(data);
                     } else {
                         /** apparently the model is not present anymore - remove it from the store */
                         return this.removeFromStore(id);
@@ -180,7 +175,7 @@ class DocumentStore extends iStore {
                     action(({ data }) => {
                         if (data) {
                             if (replaceStoreModel) {
-                                return this.addToStore(data, 'persisted-root');
+                                return this.addToStore(data);
                             }
                             return CreateDocumentModel(data, this);
                         }
@@ -213,7 +208,7 @@ class DocumentStore extends iStore {
         })
             .then(
                 action(({ data }) => {
-                    return this.addToStore(data, 'persisted-root');
+                    return this.addToStore(data);
                 })
             )
             .catch((err) => {
@@ -230,6 +225,24 @@ class DocumentStore extends iStore {
         if (model) {
             model.setData(change.data as any, Source.API, new Date(change.updatedAt));
         }
+    }
+
+    @action
+    apiLoadDocumentsFrom(rootIds: string[]) {
+        if (!this.root.userStore.current?.isAdmin) {
+            return;
+        }
+        return this.withAbortController(`load-docs-${rootIds.join('::')}`, (sig) => {
+            return apiAllDocuments(rootIds, sig.signal);
+        }).then(({ data }) => {
+            console.log(data);
+            const models = Promise.all(
+                data.map((doc) => {
+                    return this.addToStore(doc);
+                })
+            );
+            return models;
+        });
     }
 }
 
