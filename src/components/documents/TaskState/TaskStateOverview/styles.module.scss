@@ -1,0 +1,22 @@
+.usersTaskStates,
+.taskStateOverview {
+    display: flex;
+    align-items: center;
+    gap: 0.2em;
+    flex-shrink: 1;
+    flex-grow: 1;
+    flex-basis: 7em;
+    overflow-x: auto;
+    margin: 0 1em;
+    .icon {
+        line-height: 0;
+    }
+    .taskState {
+        cursor: pointer;
+        line-height: 0;
+        &:hover {
+            filter: brightness(0.6);
+            box-shadow: var(--ifm-global-shadow-md);
+        }
+    }
+}

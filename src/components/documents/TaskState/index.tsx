@@ -16,6 +16,7 @@ import { useFirstMainDocument } from '@site/src/hooks/useFirstMainDocument';
 import Icon from '@mdi/react';
 import { MetaInit, TaskMeta } from '@site/src/models/documents/TaskState';
 import Loader from '../../Loader';
+import { useStore } from '@site/src/hooks/useStore';
 
 export const mdiIcon: { [key in StateType]: string } = {
     checked: mdiCheckboxMarkedOutline,
@@ -52,12 +53,21 @@ interface Props extends MetaInit {
 const TaskState = observer((props: Props) => {
     const [meta] = React.useState(new TaskMeta(props));
     const ref = React.useRef<HTMLDivElement>(null);
+    const pageStore = useStore('pageStore');
+
     const doc = useFirstMainDocument(props.id, meta);
     React.useEffect(() => {
-        if (ref.current && doc) {
-            doc.setWindowPositionY(ref.current.getBoundingClientRect().top);
+        if (ref.current && doc.root && pageStore.current && !doc.root.isDummy) {
+            pageStore.current.addDocumentRoot(doc, ref.current.getBoundingClientRect().top);
         }
     }, [doc, ref]);
+
+    React.useEffect(() => {
+        if (ref.current && doc.scrollTo) {
+            ref.current.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'start' });
+            doc.setScrollTo(false);
+        }
+    }, [ref, doc.scrollTo]);
 
     if (!doc) {
         return <Loader noLabel title="Laden" align="left" className={clsx(styles.state, styles.loader)} />;
