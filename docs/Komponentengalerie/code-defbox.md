@@ -1,3 +1,6 @@
+---
+page_id: bab79a4c-17be-4ed3-aca9-bb4d7df92346
+---
 import BrowserWindow from '@site/src/components/BrowserWindow';
 
 # Code Defbox
