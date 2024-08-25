@@ -37,8 +37,8 @@ export default class Page {
     get documents() {
         return this.documentRoots
             .flatMap((doc) => doc.firstMainDocument)
-            .filter((d) => !!d)
-            .sort((a, b) => this.positionYFor(a) - this.positionYFor(b));
+            .filter((d) => this.positionYFor(d))
+            .sort((a, b) => this.positionYFor(a)! - this.positionYFor(b)!);
     }
 
     @computed
@@ -46,7 +46,8 @@ export default class Page {
         return this.documentRoots
             .flatMap((doc) => doc.firstMainDocument)
             .filter((d): d is TaskState => d instanceof TaskState)
-            .sort((a, b) => this.positionYFor(a) - this.positionYFor(b));
+            .filter((d) => this.positionYFor(d))
+            .sort((a, b) => this.positionYFor(a)! - this.positionYFor(b)!);
     }
 
     @action
@@ -54,21 +55,21 @@ export default class Page {
         return this.store.loadAllDocuments(this);
     }
 
-    positionYFor(doc?: iDocument<any>) {
+    positionYFor(doc?: iDocument<any>): number | undefined {
         if (!doc) {
-            return -1;
+            return;
         }
-        return this.documentRootPositionsY.get(doc.documentRootId) ?? -1;
+        return this.documentRootPositionsY.get(doc.documentRootId);
     }
 
     @computed
     get taskStatesByUsers() {
         return _.groupBy(
             this.documentRoots
-                .flatMap((dr) => dr.documents)
+                .flatMap((dr) => dr.allDocuments)
                 .filter((doc): doc is TaskState => doc instanceof TaskState)
-                .filter((doc) => doc.isMain && this.positionYFor(doc) > 0)
-                .sort((a, b) => this.positionYFor(a) - this.positionYFor(b)),
+                .filter((doc) => doc.isMain && this.positionYFor(doc))
+                .sort((a, b) => this.positionYFor(a)! - this.positionYFor(b)!),
             (doc) => doc.authorId
         );
     }

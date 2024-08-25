@@ -33,8 +33,8 @@ const OverviewIcon = (props: OverviewIconProps) => {
                 props.allChecked
                     ? 'var(--ifm-color-success)'
                     : props.someChecked
-                      ? 'var(--ifm-color-warning)'
-                      : 'var(--ifm-color-secondary-darkest)'
+                        ? 'var(--ifm-color-warning)'
+                        : 'var(--ifm-color-secondary-darkest)'
             }
         />
     );
@@ -43,22 +43,25 @@ const OverviewIcon = (props: OverviewIconProps) => {
 const TaskStateOverview = observer(() => {
     const userStore = useStore('userStore');
     const pageStore = useStore('pageStore');
-    const current = userStore.current;
+    const currentUser = userStore.current;
     const currentPage = pageStore.current;
-    if (!current || !currentPage) {
+    if (!currentUser || !currentPage) {
         return null;
     }
     const taskStates = currentPage.taskStates.filter((ts) => ts.root?.access === Access.RW) || [];
+    if (taskStates.length === 0) {
+        return null;
+    }
     const someChecked = taskStates.some((d) => d.taskState === 'checked');
     const allChecked = someChecked && taskStates.every((d) => d.taskState === 'checked');
     return (
         <div className={clsx(styles.taskStateOverview)}>
-            {current.isAdmin ? (
+            {currentUser.isAdmin ? (
                 <Popup
                     trigger={
-                        <span className={styles.icon}>
+                        <div className={styles.icon}>
                             <Button icon={mdiCheckboxMultipleMarkedCircle} size={1} color="primary" />
-                        </span>
+                        </div>
                     }
                     onOpen={() => {
                         currentPage.loadOverview();
@@ -70,9 +73,13 @@ const TaskStateOverview = observer(() => {
                             <div>
                                 {Object.values(currentPage.taskStatesByUsers).map((docs, idx) => {
                                     return (
-                                        <div key={idx} className={clsx(styles.usersTaskStates)}>
-                                            {docs[0].author?.nameShort}
-                                            <TaskStateList taskStates={docs} />
+                                        <div key={idx} className={clsx(styles.usersTasks)}>
+                                            <span className={styles.user}>{docs[0].author?.nameShort}</span>
+                                            <div>
+                                                <div className={styles.tasks}>
+                                                    <TaskStateList taskStates={docs} />
+                                                </div>
+                                            </div>
                                         </div>
                                     );
                                 })}
