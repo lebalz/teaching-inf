@@ -11,6 +11,7 @@ import Icon from '@mdi/react';
 import Popup from 'reactjs-popup';
 import TaskStateList from './TaskStateList';
 import { RWAccess } from '@site/src/models/helpers/accessPolicy';
+import _ from 'lodash';
 
 export const mdiColor: { [key in StateType]: string } = {
     checked: '--ifm-color-success',
@@ -103,7 +104,11 @@ const TaskStateOverview = observer(() => {
                                 })}
                             </div>
                             <div className={clsx(styles.overviewWrapper)}>
-                                {Object.values(currentPage.taskStatesByUsers).map((docs, idx) => {
+                                {_.orderBy(
+                                    Object.values(currentPage.taskStatesByUsers),
+                                    (docs) => docs[0].author?.nameShort,
+                                    ['asc']
+                                ).map((docs, idx) => {
                                     return (
                                         <div key={idx} className={clsx(styles.usersTasks)}>
                                             <span className={styles.user}>{docs[0].author?.nameShort}</span>
