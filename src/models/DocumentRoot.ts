@@ -115,6 +115,17 @@ class DocumentRoot<T extends DocumentType> {
     }
 
     /**
+     * All documents which are related to this document root.
+     * This method should be used only for admin users.
+     */
+    get allDocuments() {
+        if (!this.store.root.userStore.current?.isAdmin) {
+            return this.documents;
+        }
+        return this.store.root.documentStore.findByDocumentRoot(this.id);
+    }
+
+    /**
      * TODO: replace this placeholder to the currently viewed user
      * @default: should return the current viewed user id
      *      --> this is for users the current user id

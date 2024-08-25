@@ -1,4 +1,4 @@
-.usersTaskStates,
+.tasks,
 .taskStateOverview {
     display: flex;
     align-items: center;
@@ -18,5 +18,13 @@
             filter: brightness(0.6);
             box-shadow: var(--ifm-global-shadow-md);
         }
+    }
+}
+.usersTasks {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .tasks {
+        margin-right: 0;
     }
 }
