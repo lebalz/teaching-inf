@@ -43,7 +43,7 @@ export class ScriptMeta extends TypeMeta<DocumentType.Script> {
     readonly initCode: string;
 
     constructor(props: Partial<Omit<InitState, 'id'>>) {
-        super(DocumentType.Script, props.readonly ? Access.RO : undefined);
+        super(DocumentType.Script, props.readonly ? Access.RO_User : undefined);
         this.title = props.title || '';
         this.lang = props.lang || 'py';
         this.preCode = props.preCode || '';

@@ -148,7 +148,7 @@ export class DocumentRootStore extends iStore {
             // create all missing root documents
             const created = await Promise.all(
                 [...current.keys()]
-                    .filter((id) => !this.find(id))
+                    .filter((id) => !this.find(id)?.isLoaded)
                     .map((id) => {
                         const config = current.get(id);
                         if (config) {

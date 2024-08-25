@@ -63,6 +63,11 @@ const PermissionsPanel = observer(({ documentRootId }: Props) => {
                         <dt>Root Access</dt>
                         <dd>
                             <AccessSelector
+                                accessTypes={[
+                                    Access.RO_DocumentRoot,
+                                    Access.RW_DocumentRoot,
+                                    Access.None_DocumentRoot
+                                ]}
                                 access={documentRoot.rootAccess}
                                 onChange={(access) => {
                                     documentRoot.rootAccess = access;
@@ -73,6 +78,11 @@ const PermissionsPanel = observer(({ documentRootId }: Props) => {
                         <dt>Shared Access</dt>
                         <dd>
                             <AccessSelector
+                                accessTypes={[
+                                    Access.RO_DocumentRoot,
+                                    Access.RW_DocumentRoot,
+                                    Access.None_DocumentRoot
+                                ]}
                                 access={documentRoot.sharedAccess}
                                 onChange={(access) => {
                                     documentRoot.sharedAccess = access;

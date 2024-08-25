@@ -9,6 +9,7 @@ import {
 } from '@site/src/api/document';
 import DocumentStore from '@site/src/stores/DocumentStore';
 import { TypeMeta } from '../DocumentRoot';
+import { RWAccess } from '../helpers/accessPolicy';
 
 export interface MetaInit {
     readonly?: boolean;
@@ -21,7 +22,7 @@ export class TaskMeta extends TypeMeta<DocumentType.TaskState> {
     readonly taskState: StateType[];
 
     constructor(props: Partial<MetaInit>) {
-        super(DocumentType.TaskState, props.readonly ? Access.RO : undefined);
+        super(DocumentType.TaskState, props.readonly ? Access.RO_User : undefined);
         this.taskState =
             props.states && props.states.length > 0 ? props.states : ['unset', 'checked', 'question'];
         this.readonly = !!props.readonly;
@@ -44,7 +45,7 @@ class TaskState extends iDocument<DocumentType.TaskState> {
 
     @action
     setData(data: TypeDataMapping[DocumentType.TaskState], from: Source, updatedAt?: Date): void {
-        if (this.root?.access !== Access.RW) {
+        if (!RWAccess.has(this.root?.permission)) {
             return;
         }
         this.taskState = data.state;

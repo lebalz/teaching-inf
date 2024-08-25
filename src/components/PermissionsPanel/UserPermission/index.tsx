@@ -7,6 +7,7 @@ import AccessSelector from '../AccessSelector';
 import Button from '../../shared/Button';
 import { mdiAccountCircle, mdiDelete } from '@mdi/js';
 import Icon from '@mdi/react';
+import { Access } from '@site/src/api/document';
 
 interface Props {
     permission: UserPermissionModel;
@@ -22,6 +23,7 @@ const UserPermission = observer((props: Props) => {
             </span>
             <span className={clsx(styles.spacer)} />
             <AccessSelector
+                accessTypes={[Access.RO_User, Access.RW_User, Access.None_User]}
                 access={permission.access}
                 onChange={(access) => {
                     permission.access = access;

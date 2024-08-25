@@ -13,7 +13,7 @@ export class ModelMeta extends TypeMeta<DocumentType.Solution> {
     readonly type = DocumentType.Solution;
 
     constructor(props: Partial<MetaInit>) {
-        super(DocumentType.Solution, props.readonly ? Access.RO : undefined);
+        super(DocumentType.Solution, props.readonly ? Access.RO_User : undefined);
     }
 
     get defaultData(): TypeDataMapping[DocumentType.Solution] {

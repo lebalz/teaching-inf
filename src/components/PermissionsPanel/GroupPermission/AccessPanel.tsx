@@ -9,6 +9,7 @@ import { mdiAccountSupervisorCircle } from '@mdi/js';
 import AccessSelector from '../AccessSelector';
 import Icon from '@mdi/react';
 import Loader from '../../Loader';
+import { Access } from '@site/src/api/document';
 
 interface Props {
     documentRoot: DocumentRoot<any>;
@@ -62,6 +63,11 @@ const AccessPanel = observer((props: Props) => {
                                 <span className={clsx(styles.spacer)} />
                                 <div className={styles.actions}>
                                     <AccessSelector
+                                        accessTypes={[
+                                            Access.RO_StudentGroup,
+                                            Access.RW_StudentGroup,
+                                            Access.None_StudentGroup
+                                        ]}
                                         onChange={(access) => {
                                             permissionStore.createGroupPermission(
                                                 documentRoot,
