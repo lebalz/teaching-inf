@@ -32,6 +32,17 @@ export class StudentGroupStore extends iStore<`members-${string}`> {
         { keepAlive: true }
     );
 
+    findByName = computedFn(
+        function (this: StudentGroupStore, name?: string): StudentGroup | undefined {
+            if (!name) {
+                return;
+            }
+            const nameMatcher = new RegExp(`^${name}$`, 'i');
+            return this.studentGroups.find((d) => nameMatcher.test(d.name));
+        },
+        { keepAlive: true }
+    );
+
     @action
     create(name: string, description: string, parentId?: string) {
         return this.withAbortController(`create-${name}`, async (signal) => {
