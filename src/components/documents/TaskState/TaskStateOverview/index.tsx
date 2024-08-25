@@ -10,6 +10,7 @@ import { Access, StateType } from '@site/src/api/document';
 import Icon from '@mdi/react';
 import Popup from 'reactjs-popup';
 import TaskStateList from './TaskStateList';
+import { RWAccess } from '@site/src/models/helpers/accessPolicy';
 
 export const mdiColor: { [key in StateType]: string } = {
     checked: '--ifm-color-success',
@@ -48,7 +49,7 @@ const TaskStateOverview = observer(() => {
     if (!currentUser || !currentPage) {
         return null;
     }
-    const taskStates = currentPage.taskStates.filter((ts) => ts.root?.access === Access.RW) || [];
+    const taskStates = currentPage.taskStates.filter((ts) => RWAccess.has(ts.root?.permission)) || [];
     if (taskStates.length === 0) {
         return null;
     }

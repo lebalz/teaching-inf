@@ -11,6 +11,7 @@ import { useStore } from '@site/src/hooks/useStore';
 import Icon from '@mdi/react';
 import { mdiCheckAll } from '@mdi/js';
 import PermissionsPanel from '../../PermissionsPanel';
+import { NoneAccess } from '@site/src/models/helpers/accessPolicy';
 
 interface Props extends MetaInit {
     id: string;
@@ -31,8 +32,8 @@ const Solution = observer((props: Props) => {
     }
     return (
         <div className={clsx(styles.wrapper, props.standalone && styles.standalone)}>
-            {props.access !== Access.None &&
-            (docRoot.permission !== Access.None || userStore.current?.isAdmin) ? (
+            {!NoneAccess.has(props.access) &&
+            (!NoneAccess.has(docRoot.permission) || userStore.current?.isAdmin) ? (
                 <Details
                     summary={
                         <summary>
@@ -42,7 +43,7 @@ const Solution = observer((props: Props) => {
                                 {userStore.current?.isAdmin && (
                                     <PermissionsPanel documentRootId={docRoot.id} />
                                 )}
-                                {docRoot.permission === Access.None && (
+                                {NoneAccess.has(docRoot.permission) && (
                                     <span className="badge badge--secondary">Hidden</span>
                                 )}
                                 <Icon

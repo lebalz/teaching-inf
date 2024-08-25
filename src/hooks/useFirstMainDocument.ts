@@ -4,6 +4,7 @@ import { TypeMeta } from '../models/DocumentRoot';
 import { CreateDocumentModel } from '../stores/DocumentStore';
 import { useDocumentRoot } from './useDocumentRoot';
 import { useStore } from './useStore';
+import { RWAccess } from '../models/helpers/accessPolicy';
 
 /**
  * This hook provides access to the first main document of the rootDocument.
@@ -42,7 +43,7 @@ export const useFirstMainDocument = <Type extends DocumentType>(
              * If the user is viewing another user, we should not create a document
              * and instead try to load the first main document of the viewed user.
              */
-            if (documentRoot.permission === Access.RW) {
+            if (RWAccess.has(documentRoot.permission)) {
                 documentStore.create({
                     documentRootId: documentRoot.id,
                     authorId: userStore.current.id,

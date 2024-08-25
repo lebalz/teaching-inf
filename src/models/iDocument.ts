@@ -3,6 +3,7 @@ import { Document as DocumentProps, TypeDataMapping, DocumentType, Access } from
 import DocumentStore from '../stores/DocumentStore';
 import { debounce } from 'lodash';
 import { ApiState } from '../stores/iStore';
+import { NoneAccess, ROAccess, RWAccess } from './helpers/accessPolicy';
 
 /**
  * normally, save only once all 1000ms
@@ -123,20 +124,20 @@ abstract class iDocument<Type extends DocumentType> {
         if (!this.root) {
             return false;
         }
-        if (this.root.meta.access === Access.RO) {
+        if (ROAccess.has(this.root.meta.access)) {
             return false;
         }
         if (this.root.isDummy) {
-            return this.root.permission === Access.RW;
+            return RWAccess.has(this.root.permission);
         }
         if (!this.store.root.userStore.current) {
-            return this.root.permission === Access.RW;
+            return RWAccess.has(this.root.access);
         }
         const userId = this.store.root.userStore.current?.id;
         if (this.authorId === userId) {
-            return this.root.permission === Access.RW;
+            return RWAccess.has(this.root.permission);
         }
-        return this.root.sharedAccess === Access.RW && this.root.permission === Access.RW;
+        return RWAccess.has(this.root.sharedAccess) && RWAccess.has(this.root.permission);
     }
 
     @computed
@@ -145,16 +146,16 @@ abstract class iDocument<Type extends DocumentType> {
             return true;
         }
         if (!this.store.root.userStore.current) {
-            return this.root.permission !== Access.None;
+            return !NoneAccess.has(this.root.permission);
         }
         const userId = this.store.root.userStore.current?.id;
-        if (this.root.permission === Access.None) {
+        if (NoneAccess.has(this.root.permission)) {
             return false;
         }
         if (this.authorId === userId) {
             return true;
         }
-        return this.root.sharedAccess !== Access.None;
+        return !NoneAccess.has(this.root.sharedAccess);
     }
 
     get author() {

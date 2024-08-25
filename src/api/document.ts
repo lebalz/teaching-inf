@@ -9,9 +9,15 @@ import { Delta } from 'quill/core';
 import Solution from '../models/documents/Solution';
 
 export enum Access {
-    RO = 'RO',
-    RW = 'RW',
-    None = 'None'
+    RO_DocumentRoot = 'RO_DocumentRoot',
+    RW_DocumentRoot = 'RW_DocumentRoot',
+    None_DocumentRoot = 'None_DocumentRoot',
+    RO_StudentGroup = 'RO_StudentGroup',
+    RW_StudentGroup = 'RW_StudentGroup',
+    None_StudentGroup = 'None_StudentGroup',
+    RO_User = 'RO_User',
+    RW_User = 'RW_User',
+    None_User = 'None_User'
 }
 
 export enum DocumentType {

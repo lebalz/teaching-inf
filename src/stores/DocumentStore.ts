@@ -23,6 +23,7 @@ import { ChangedDocument } from '../api/IoEventTypes';
 import String from '../models/documents/String';
 import QuillV2 from '../models/documents/QuillV2';
 import Solution from '../models/documents/Solution';
+import { RWAccess } from '../models/helpers/accessPolicy';
 
 export function CreateDocumentModel<T extends DocumentType>(
     data: DocumentProps<T>,
@@ -165,7 +166,7 @@ class DocumentStore extends iStore {
             if (!model.canEdit) {
                 return Promise.resolve(undefined);
             }
-            if (model.root.permission !== Access.RW) {
+            if (!RWAccess.has(model.root.permission)) {
                 return Promise.resolve(undefined);
             }
             return this.withAbortController(`save-${id}`, (sig) => {
@@ -200,7 +201,7 @@ class DocumentStore extends iStore {
         if (!rootDoc || rootDoc.isDummy) {
             return Promise.resolve('error');
         }
-        if (rootDoc.permission !== Access.RW) {
+        if (!RWAccess.has(rootDoc.permission)) {
             return Promise.resolve('error');
         }
         return this.withAbortController(`create-${model.id || uuidv4()}`, (sig) => {

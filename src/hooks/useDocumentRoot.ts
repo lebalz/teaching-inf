@@ -23,7 +23,11 @@ export const useDocumentRoot = <Type extends DocumentType>(
     const documentRootStore = useStore('documentRootStore');
     const [dummyDocumentRoot] = React.useState<DocumentRoot<Type>>(
         new DocumentRoot(
-            { id: id || defaultRootDocId, access: Access.RW, sharedAccess: Access.None },
+            {
+                id: id || defaultRootDocId,
+                access: Access.RW_DocumentRoot,
+                sharedAccess: Access.None_DocumentRoot
+            },
             meta,
             documentRootStore,
             true

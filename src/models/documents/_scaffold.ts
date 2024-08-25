@@ -20,7 +20,7 @@ export class ModelMeta extends TypeMeta<DocumentType.TaskState> {
     readonly type = DocumentType.TaskState;
 
     constructor(props: Partial<MetaInit>) {
-        super(DocumentType.TaskState, props.readonly ? Access.RO : undefined);
+        super(DocumentType.TaskState, props.readonly ? Access.RO_User : undefined);
     }
 
     get defaultData(): TypeDataMapping[DocumentType.TaskState] {

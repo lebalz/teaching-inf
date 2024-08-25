@@ -9,6 +9,7 @@ import { mdiAccountCircle } from '@mdi/js';
 import AccessSelector from '../AccessSelector';
 import Icon from '@mdi/react';
 import Loader from '../../Loader';
+import { Access } from '@site/src/api/document';
 
 interface Props {
     documentRoot: DocumentRoot<any>;
@@ -60,6 +61,7 @@ const AccessPanel = observer((props: Props) => {
                                 <span className={clsx(styles.spacer)} />
                                 <div className={styles.actions}>
                                     <AccessSelector
+                                        accessTypes={[Access.RO_User, Access.RW_User, Access.None_User]}
                                         onChange={(access) => {
                                             permissionStore.createUserPermission(documentRoot, user, access);
                                         }}

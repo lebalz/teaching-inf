@@ -2,7 +2,7 @@ import { action, computed, observable } from 'mobx';
 import { DocumentRootBase as DocumentRootProps } from '../api/documentRoot';
 import { DocumentRootStore } from '../stores/DocumentRootStore';
 import { Access, DocumentType, TypeDataMapping, TypeModelMapping } from '../api/document';
-import { highestAccess } from './helpers/accessPolicy';
+import { highestAccess, NoneAccess, RWAccess } from './helpers/accessPolicy';
 
 export abstract class TypeMeta<T extends DocumentType> {
     type: T;
@@ -109,7 +109,7 @@ class DocumentRoot<T extends DocumentType> {
             return (
                 this.isDummy ||
                 d.authorId === this.viewedUserId ||
-                highestAccess(new Set([this.permission]), this.sharedAccess) !== Access.None
+                !NoneAccess.has(highestAccess(new Set([this.permission]), this.sharedAccess))
             );
         });
     }
@@ -158,8 +158,8 @@ class DocumentRoot<T extends DocumentType> {
         }
 
         if (
-            this.sharedAccess === Access.None ||
-            highestAccess(new Set([this.sharedAccess]), this.access) === Access.RW
+            NoneAccess.has(this.sharedAccess) ||
+            RWAccess.has(highestAccess(new Set([this.sharedAccess]), this.access))
         ) {
             return byUser;
         }

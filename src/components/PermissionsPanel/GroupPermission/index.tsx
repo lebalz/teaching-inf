@@ -7,6 +7,7 @@ import Button from '../../shared/Button';
 import { mdiAccountSupervisorCircle, mdiDelete } from '@mdi/js';
 import { default as GroupPermissionModel } from '@site/src/models/GroupPermission';
 import Icon from '@mdi/react';
+import { Access } from '@site/src/api/document';
 
 interface Props {
     permission: GroupPermissionModel;
@@ -22,6 +23,7 @@ const GroupPermission = observer((props: Props) => {
             </span>
             <span className={clsx(styles.spacer)} />
             <AccessSelector
+                accessTypes={[Access.RO_StudentGroup, Access.RW_StudentGroup, Access.None_StudentGroup]}
                 access={permission.access}
                 onChange={(access) => {
                     permission.access = access;
