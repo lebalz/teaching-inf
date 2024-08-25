@@ -72,9 +72,8 @@ const TaskStateOverview = observer(() => {
                     }}
                     arrow={false}
                     repositionOnResize
-                    nested
                 >
-                    <div className={clsx('card', styles.card)}>
+                    <div className={clsx('card', styles.popupCard)}>
                         <div className={clsx('card__body')}>
                             <div
                                 className={clsx(
@@ -103,7 +102,7 @@ const TaskStateOverview = observer(() => {
                                     );
                                 })}
                             </div>
-                            <div>
+                            <div className={clsx(styles.overviewWrapper)}>
                                 {Object.values(currentPage.taskStatesByUsers).map((docs, idx) => {
                                     return (
                                         <div key={idx} className={clsx(styles.usersTasks)}>

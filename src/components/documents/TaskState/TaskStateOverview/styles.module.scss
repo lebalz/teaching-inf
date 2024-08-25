@@ -28,16 +28,33 @@
         margin-right: 0;
     }
 }
+.popupCard {
+    position: fixed;
+    top: 3.1em;
+    max-width: 98vw;
+    overflow: auto;
+}
+.overviewWrapper {
+    max-height: 85vh;
+    overflow: auto;
+}
 
-/**
-Hacky mess to make the cards look good on mobile
-*/
+
+@media screen and (max-width: 768px) {
+    .popupCard {
+        left: 1.5em;
+    }
+}
+
 @media screen and (max-width: 660px) {
     :global(.navbar__brand) {
         margin-right: 0;
     }
     .taskStateOverview {
         margin-left: 0.5em;
+    }
+    .popupCard {
+        left: 1em;
     }
 }
 @media screen and (max-width: 500px) {
@@ -50,12 +67,12 @@ Hacky mess to make the cards look good on mobile
     .taskStateOverview {
         margin-left: 0;
     }
-    .card {
-        margin-left: 10em;
+    .popupCard {
+        left: 0.5em;
     }
 }
 @media screen and (max-width: 400px) {
-    .card {
-        margin-left: 6em;
+    .popupCard {
+        left: 0;
     }
 }
