@@ -28,3 +28,34 @@
         margin-right: 0;
     }
 }
+
+/**
+Hacky mess to make the cards look good on mobile
+*/
+@media screen and (max-width: 660px) {
+    :global(.navbar__brand) {
+        margin-right: 0;
+    }
+    .taskStateOverview {
+        margin-left: 0.5em;
+    }
+}
+@media screen and (max-width: 500px) {
+    :global(.navbar__brand) {
+        margin-right: 0;
+    }
+    :global(.navbar__title.text--truncate) {
+        display: none;
+    }
+    .taskStateOverview {
+        margin-left: 0;
+    }
+    .card {
+        margin-left: 10em;
+    }
+}
+@media screen and (max-width: 400px) {
+    .card {
+        margin-left: 6em;
+    }
+}

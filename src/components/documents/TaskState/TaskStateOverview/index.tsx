@@ -33,8 +33,8 @@ const OverviewIcon = (props: OverviewIconProps) => {
                 props.allChecked
                     ? 'var(--ifm-color-success)'
                     : props.someChecked
-                        ? 'var(--ifm-color-warning)'
-                        : 'var(--ifm-color-secondary-darkest)'
+                      ? 'var(--ifm-color-warning)'
+                      : 'var(--ifm-color-secondary-darkest)'
             }
         />
     );
@@ -66,10 +66,42 @@ const TaskStateOverview = observer(() => {
                     onOpen={() => {
                         currentPage.loadOverview();
                     }}
+                    contentStyle={{
+                        position: 'fixed'
+                    }}
+                    arrow={false}
+                    repositionOnResize
                     nested
                 >
-                    <div className={clsx('card')}>
+                    <div className={clsx('card', styles.card)}>
                         <div className={clsx('card__body')}>
+                            <div
+                                className={clsx(
+                                    styles.studentGroupSelector,
+                                    'button-group button-group--block'
+                                )}
+                            >
+                                {currentPage.studentGroups.map((group, idx) => {
+                                    return (
+                                        <button
+                                            key={idx}
+                                            className={clsx(
+                                                'button',
+                                                'button--sm',
+                                                currentPage.activeStudentGroup?.id === group.id
+                                                    ? 'button--primary'
+                                                    : 'button--secondary',
+                                                styles.button
+                                            )}
+                                            onClick={() => {
+                                                currentPage.toggleActiveStudentGroup(group);
+                                            }}
+                                        >
+                                            {group.name}
+                                        </button>
+                                    );
+                                })}
+                            </div>
                             <div>
                                 {Object.values(currentPage.taskStatesByUsers).map((docs, idx) => {
                                     return (

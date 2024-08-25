@@ -3,6 +3,7 @@ import { StudentGroup as StudentGroupProps } from '../api/studentGroup';
 import { StudentGroupStore } from '../stores/StudentGroupStore';
 import { formatDateTime } from './helpers/date';
 import User from './User';
+import _ from 'lodash';
 
 class StudentGroup {
     readonly store: StudentGroupStore;
@@ -35,11 +36,6 @@ class StudentGroup {
         this.createdAt = new Date(props.createdAt);
     }
 
-    @computed
-    get users() {
-        return this.store.users.filter((u) => this.userIds.has(u.id));
-    }
-
     get fCreatedAt() {
         return formatDateTime(this.createdAt);
     }
@@ -56,6 +52,15 @@ class StudentGroup {
     @computed
     get searchTerm() {
         return `${this.name} ${this.description}`;
+    }
+
+    @computed
+    get children() {
+        return _.orderBy(
+            this.store.studentGroups.filter((g) => g.parentId === this.id),
+            ['name'],
+            ['asc']
+        );
     }
 
     @action
