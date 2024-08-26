@@ -35,13 +35,14 @@
     overflow: auto;
 }
 .overviewWrapper {
-    max-height: 85vh;
+    max-height: calc(100vh - 15em);
     overflow: auto;
 }
 
 @media screen and (max-width: 768px) {
     .popupCard {
-        left: 1.5em;
+        left: 50%;
+        transform: translateX(-50%);
     }
 }
 
@@ -51,9 +52,6 @@
     }
     .taskStateOverview {
         margin-left: 0.5em;
-    }
-    .popupCard {
-        left: 1em;
     }
 }
 @media screen and (max-width: 500px) {
@@ -66,12 +64,10 @@
     .taskStateOverview {
         margin-left: 0;
     }
-    .popupCard {
-        left: 0.5em;
-    }
 }
-@media screen and (max-width: 400px) {
-    .popupCard {
-        left: 0;
+
+@media (orientation: landscape) {
+    .overviewWrapper {
+        max-height: calc(100vh - 7em);
     }
-}
+  }
