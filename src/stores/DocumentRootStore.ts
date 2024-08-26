@@ -117,7 +117,7 @@ export class DocumentRootStore extends iStore {
             return;
         }
         const userId = this.root.userStore.viewedUserId;
-        const switchedUser = this.root.userStore.isUserSwitched;
+        const isUserSwitched = this.root.userStore.isUserSwitched;
         /**
          * the user is not yet loaded, but a session is active
          */
@@ -133,7 +133,7 @@ export class DocumentRootStore extends iStore {
          */
         const keys = [...current.keys()].sort();
         this.withAbortController(`load-queued-${keys.join('--')}`, async (signal) => {
-            const models = await apiFindManyFor(userId, keys, switchedUser, signal.signal);
+            const models = await apiFindManyFor(userId, keys, isUserSwitched, signal.signal);
             // create all loaded models
             models.data.forEach(
                 action((data) => {
@@ -145,24 +145,26 @@ export class DocumentRootStore extends iStore {
                     current.delete(data.id);
                 })
             );
-            // create all missing root documents
-            const created = await Promise.all(
-                [...current.keys()]
-                    .filter((id) => !this.find(id)?.isLoaded)
-                    .map((id) => {
-                        const config = current.get(id);
-                        if (config) {
-                            return this.create(id, config.meta, {});
-                        }
-                        return Promise.resolve(undefined);
-                    })
-            );
-            // delete all created roots from the current map
-            created
-                .filter((docRoot) => !!docRoot)
-                .forEach((docRoot) => {
-                    current.delete(docRoot.id);
-                });
+            if (!isUserSwitched) {
+                // create all missing root documents
+                const created = await Promise.all(
+                    [...current.keys()]
+                        .filter((id) => !this.find(id)?.isLoaded)
+                        .map((id) => {
+                            const config = current.get(id);
+                            if (config) {
+                                return this.create(id, config.meta, {});
+                            }
+                            return Promise.resolve(undefined);
+                        })
+                );
+                // delete all created roots from the current map
+                created
+                    .filter((docRoot) => !!docRoot)
+                    .forEach((docRoot) => {
+                        current.delete(docRoot.id);
+                    });
+            }
             // mark all remaining roots as loaded
             [...current.keys()].forEach((id) => {
                 const dummyModel = this.find(id);
