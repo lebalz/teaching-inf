@@ -65,8 +65,9 @@ const AddUserPopup = observer((props: Props) => {
                                             styles.listItem,
                                             group.userIds.has(user.id) && styles.disabled
                                         )}
+                                        title={user.email}
                                     >
-                                        {user.email}
+                                        {user.nameShort}
                                         <div className={styles.actions}>
                                             <Button
                                                 onClick={() => {

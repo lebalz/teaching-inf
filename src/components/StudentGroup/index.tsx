@@ -15,9 +15,11 @@ import {
 import { useStore } from '@site/src/hooks/useStore';
 import AddUserPopup from './AddUserPopup';
 import DefinitionList from '../DefinitionList';
+import Details from '@theme/Details';
 
 interface Props {
     studentGroup: StudentGroupModel;
+    className?: string;
 }
 
 const StudentGroup = observer((props: Props) => {
@@ -35,7 +37,7 @@ const StudentGroup = observer((props: Props) => {
     const group = props.studentGroup;
     const userStore = useStore('userStore');
     return (
-        <div className={clsx(styles.studentGroup, 'card')}>
+        <div className={clsx(styles.studentGroup, props.className, 'card')}>
             <div className={clsx('card__header', styles.header)}>
                 <h3>
                     {isAdmin && editing ? (
@@ -120,6 +122,30 @@ const StudentGroup = observer((props: Props) => {
 
                     <dt>Letzte Änderung</dt>
                     <dd>{group.fUpdatedAt}</dd>
+                    <dt>Obergruppe</dt>
+                    <dd>
+                        {isAdmin && editing ? (
+                            <>
+                                <select
+                                    value={group.parentId || ''}
+                                    onChange={(e) => {
+                                        group.setParentId(e.target.value || null);
+                                    }}
+                                >
+                                    <option value="">Keine</option>
+                                    {groupStore.studentGroups
+                                        .filter((g) => g.id !== group.id)
+                                        .map((g) => (
+                                            <option key={g.id} value={g.id}>
+                                                {g.name}
+                                            </option>
+                                        ))}
+                                </select>
+                            </>
+                        ) : (
+                            <>{group.parentId ? <code>{group.parentId}</code> : '-'}</>
+                        )}
+                    </dd>
 
                     <dt>Anzahl Schüler:innen</dt>
                     <dd>
@@ -142,13 +168,13 @@ const StudentGroup = observer((props: Props) => {
                     </dd>
 
                     <dt>Gruppe</dt>
-                    <dd>
+                    <dd className={clsx(styles.ddGroup)}>
                         {isAdmin && <AddUserPopup studentGroup={group} />}
                         <div className={styles.listContainer}>
                             <ul className={clsx(styles.students, styles.list)}>
                                 {group.students.map((student, idx) => (
                                     <li key={idx} className={clsx(styles.listItem)}>
-                                        {student.email}
+                                        {student.nameShort}
                                         {isAdmin && (
                                             <div className={styles.actions}>
                                                 <Button
@@ -182,7 +208,7 @@ const StudentGroup = observer((props: Props) => {
                                 >
                                     <span aria-hidden="true">&times;</span>
                                 </button>
-                                Benutzer:in <strong>{userStore.find(removedId)?.email}</strong> wurde
+                                Benutzer:in <strong>{userStore.find(removedId)?.nameShort}</strong> wurde
                                 entfernt.
                                 <Button
                                     onClick={() => {
@@ -202,6 +228,22 @@ const StudentGroup = observer((props: Props) => {
                         ))}
                     </dd>
                 </DefinitionList>
+                {group.children.length > 0 && (
+                    <Details
+                        summary={
+                            <summary className={clsx(styles.childGroupSummary)}>
+                                Untergruppen
+                                <span className={clsx('badge badge--primary')}>{group.children.length}</span>
+                            </summary>
+                        }
+                    >
+                        <div>
+                            {group.children.map((child) => (
+                                <StudentGroup key={child.id} studentGroup={child} />
+                            ))}
+                        </div>
+                    </Details>
+                )}
             </div>
         </div>
     );

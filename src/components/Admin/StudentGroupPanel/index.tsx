@@ -26,8 +26,12 @@ const StudentGroupPanel = observer(() => {
                 text="Neue Lerngruppe erstellen"
             />
             <div className={clsx(styles.studentGroups)}>
-                {_.orderBy(groupStore.studentGroups, ['name', 'createdAt'], ['asc', 'desc']).map((group) => (
-                    <StudentGroup key={group.id} studentGroup={group} />
+                {_.orderBy(
+                    groupStore.studentGroups.filter((g) => !g.parentId),
+                    ['name', 'createdAt'],
+                    ['asc', 'desc']
+                ).map((group) => (
+                    <StudentGroup key={group.id} studentGroup={group} className={clsx(styles.studentGroup)} />
                 ))}
             </div>
         </div>
