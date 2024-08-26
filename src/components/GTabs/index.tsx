@@ -19,12 +19,16 @@ const getValue = (idx: number) => {
 
 // Generated Tabs
 const GTabs = (props: Props) => {
+    const [lazy, setLazy] = React.useState(false);
+    React.useEffect(() => {
+        setLazy(props.lazy || false);
+    }, [props.lazy]);
     return (
         <Tabs
             defaultValue={getValue(0)}
             className={clsx(styles.tabs)}
             groupId={props.groupId}
-            lazy={props.lazy}
+            lazy={lazy}
             values={props.children.map((_, idx) => {
                 const isHighlight = (props.highlighted || []).includes(idx);
                 const label = (
