@@ -60,7 +60,7 @@ const PermissionsPanel = observer(({ documentRootId }: Props) => {
                 </div>
                 <div className={clsx('card__body', styles.cardBody)}>
                     <DefinitionList className={styles.popupContentContainer} small>
-                        <dt>Root Access</dt>
+                        <dt>Allgemeine Berechtigung</dt>
                         <dd>
                             <AccessSelector
                                 accessTypes={[
@@ -75,7 +75,7 @@ const PermissionsPanel = observer(({ documentRootId }: Props) => {
                                 }}
                             />
                         </dd>
-                        <dt>Shared Access</dt>
+                        <dt>Für geteilte Dokumente (default: None)</dt>
                         <dd>
                             <AccessSelector
                                 accessTypes={[
@@ -90,13 +90,13 @@ const PermissionsPanel = observer(({ documentRootId }: Props) => {
                                 }}
                             />
                         </dd>
-                        <dt>User Access</dt>
-                        <dd>
-                            <UserAccessPanel documentRoot={documentRoot} />
-                        </dd>
-                        <dt>Group Access</dt>
+                        <dt>Gruppen-Berechtigungen</dt>
                         <dd>
                             <GroupAccessPanel documentRoot={documentRoot} />
+                        </dd>
+                        <dt>User Berechtigungen</dt>
+                        <dd>
+                            <UserAccessPanel documentRoot={documentRoot} />
                         </dd>
                     </DefinitionList>
                 </div>
