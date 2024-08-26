@@ -14,7 +14,7 @@ class StudentGroup {
 
     userIds = observable.set<string>([]);
 
-    @observable accessor parentId: string | undefined;
+    @observable accessor parentId: string | null;
 
     readonly _pristine: { name: string; description: string };
 
@@ -30,7 +30,7 @@ class StudentGroup {
         this.description = props.description;
 
         this.userIds.replace(props.userIds);
-        this.parentId = props.parentId;
+        this.parentId = props.parentId || null;
 
         this.updatedAt = new Date(props.updatedAt);
         this.createdAt = new Date(props.createdAt);
@@ -102,6 +102,12 @@ class StudentGroup {
             description: this.description,
             parentId: this.parentId
         };
+    }
+
+    @action
+    setParentId(parentId: string | null) {
+        this.parentId = parentId;
+        this.save();
     }
 }
 

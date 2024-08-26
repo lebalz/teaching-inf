@@ -1,6 +1,5 @@
 import api from './base';
 import { AxiosPromise } from 'axios';
-import { Access } from './document';
 
 export interface StudentGroup {
     id: string;
@@ -8,7 +7,7 @@ export interface StudentGroup {
     description: string;
     userIds: string[];
 
-    parentId?: string;
+    parentId: string | null;
 
     createdAt: string;
     updatedAt: string;
