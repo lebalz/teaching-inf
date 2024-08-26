@@ -48,6 +48,7 @@ interface Props extends MetaInit {
     id: string;
     children?: JSX.Element;
     label?: string;
+    pagePosition?: number;
 }
 
 const TaskState = observer((props: Props) => {
@@ -57,10 +58,10 @@ const TaskState = observer((props: Props) => {
 
     const doc = useFirstMainDocument(props.id, meta);
     React.useEffect(() => {
-        if (ref.current && doc.root && pageStore.current && !doc.root.isDummy) {
-            pageStore.current.addDocumentRoot(doc, ref.current.getBoundingClientRect().top);
+        if (doc.root && pageStore.current && !doc.root.isDummy) {
+            pageStore.current.addDocumentRoot(doc);
         }
-    }, [doc, ref]);
+    }, [doc, pageStore.current]);
 
     React.useEffect(() => {
         if (ref.current && doc.scrollTo) {

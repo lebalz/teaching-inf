@@ -5,11 +5,13 @@ import { Access, DocumentType, TypeDataMapping, TypeModelMapping } from '../api/
 import { highestAccess, NoneAccess, RWAccess } from './helpers/accessPolicy';
 
 export abstract class TypeMeta<T extends DocumentType> {
+    readonly pagePosition: number;
     type: T;
     access?: Access;
-    constructor(type: T, access?: Access) {
+    constructor(type: T, access?: Access, pagePosition?: number) {
         this.type = type;
         this.access = access;
+        this.pagePosition = pagePosition || 0;
     }
     abstract get defaultData(): TypeDataMapping[T];
 }

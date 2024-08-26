@@ -14,6 +14,7 @@ import flexCardsPlugin from './src/plugins/remark-flex-cards/plugin';
 import imagePlugin from './src/plugins/remark-images/plugin';
 import mediaPlugin from './src/plugins/remark-media/plugin';
 import detailsPlugin from './src/plugins/remark-details/plugin';
+import enumerateAnswersPlugin from './src/plugins/remark-enumerate-components/plugin';
 import { v4 as uuidv4 } from 'uuid';
 import matter from 'gray-matter';
 import { promises as fs } from 'fs';
@@ -57,7 +58,13 @@ const REMARK_PLUGINS = [
   ],
   mediaPlugin,
   kbdPlugin,
-  remarkMath
+  remarkMath,
+  [
+    enumerateAnswersPlugin,
+    {
+      componentsToEnumerate: ['Answer', 'TaskState'],
+    }
+  ]
 ];
 const REHYPE_PLUGINS = [
   rehypeKatex
