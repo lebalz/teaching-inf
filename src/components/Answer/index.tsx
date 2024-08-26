@@ -8,6 +8,7 @@ import { DocumentType } from '@site/src/api/document';
 interface Props {
     id: string;
     type: DocumentType | 'text' | 'state';
+    pagePosition?: number;
 }
 
 type AnswerProps = Props &

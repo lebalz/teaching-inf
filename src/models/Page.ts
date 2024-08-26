@@ -16,7 +16,6 @@ export default class Page {
     @observable accessor primaryStudentGroupName: string | undefined = undefined;
     @observable accessor activeStudentGroupId: string | undefined = undefined;
     documentRootIds = observable.set<string>();
-    documentRootPositionsY = observable.map<string, number>();
 
     constructor(id: string, store: PageStore) {
         this.id = id;
@@ -24,9 +23,8 @@ export default class Page {
     }
 
     @action
-    addDocumentRoot(doc: iDocument<any>, pagePosition: number) {
+    addDocumentRoot(doc: iDocument<any>) {
         this.documentRootIds.add(doc.documentRootId);
-        this.documentRootPositionsY.set(doc.documentRootId, pagePosition);
     }
 
     @computed
@@ -40,8 +38,8 @@ export default class Page {
     get documents() {
         return this.documentRoots
             .flatMap((doc) => doc.firstMainDocument)
-            .filter((d) => this.positionYFor(d))
-            .sort((a, b) => this.positionYFor(a)! - this.positionYFor(b)!);
+            .filter((d) => d?.root?.meta.pagePosition)
+            .sort((a, b) => a!.root!.meta!.pagePosition - b!.root!.meta.pagePosition);
     }
 
     @computed
@@ -49,8 +47,8 @@ export default class Page {
         return this.documentRoots
             .flatMap((doc) => doc.firstMainDocument)
             .filter((d): d is TaskState => d instanceof TaskState)
-            .filter((d) => this.positionYFor(d))
-            .sort((a, b) => this.positionYFor(a)! - this.positionYFor(b)!);
+            .filter((d) => d?.root?.meta.pagePosition)
+            .sort((a, b) => a!.root!.meta!.pagePosition - b!.root!.meta.pagePosition);
     }
 
     @action
@@ -66,13 +64,6 @@ export default class Page {
     @action
     loadOverview() {
         return this.store.loadAllDocuments(this);
-    }
-
-    positionYFor(doc?: iDocument<any>): number | undefined {
-        if (!doc) {
-            return;
-        }
-        return this.documentRootPositionsY.get(doc.documentRootId);
     }
 
     @action
@@ -121,11 +112,11 @@ export default class Page {
             this.documentRoots
                 .flatMap((dr) => dr.allDocuments)
                 .filter((doc): doc is TaskState => doc instanceof TaskState)
-                .filter((doc) => doc.isMain && this.positionYFor(doc))
+                .filter((doc) => doc.isMain && doc.root?.meta.pagePosition)
                 .filter((doc) =>
                     this.activeStudentGroup ? this.activeStudentGroup.userIds.has(doc.authorId) : true
                 )
-                .sort((a, b) => this.positionYFor(a)! - this.positionYFor(b)!),
+                .sort((a, b) => a.root!.meta.pagePosition - b.root!.meta.pagePosition),
             (doc) => doc.authorId
         );
     }

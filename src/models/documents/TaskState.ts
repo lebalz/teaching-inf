@@ -14,6 +14,7 @@ import { RWAccess } from '../helpers/accessPolicy';
 export interface MetaInit {
     readonly?: boolean;
     states?: StateType[];
+    pagePosition?: number;
 }
 
 export class TaskMeta extends TypeMeta<DocumentType.TaskState> {
@@ -22,7 +23,7 @@ export class TaskMeta extends TypeMeta<DocumentType.TaskState> {
     readonly taskState: StateType[];
 
     constructor(props: Partial<MetaInit>) {
-        super(DocumentType.TaskState, props.readonly ? Access.RO_User : undefined);
+        super(DocumentType.TaskState, props.readonly ? Access.RO_User : undefined, props.pagePosition);
         this.taskState =
             props.states && props.states.length > 0 ? props.states : ['unset', 'checked', 'question'];
         this.readonly = !!props.readonly;
