@@ -11,13 +11,35 @@ interface Props {
     user: UserModel;
 }
 
-const UserTable = observer((props: Props) => {
+const UserTableRow = observer((props: Props) => {
     const { user } = props;
     return (
         <tr className={clsx(styles.user)}>
             <td>{user.email}</td>
             <td>
-                <div className={clsx(styles.role)}>{user.isAdmin ? 'Admin' : 'User'}</div>
+                <div className={clsx(styles.role, 'button-group')}>
+                    {['Admin', 'User'].map((role, idx) => (
+                        <button
+                            key={idx}
+                            className={clsx(
+                                'button',
+                                'button--sm',
+                                user.isAdmin
+                                    ? role === 'Admin'
+                                        ? 'button--primary'
+                                        : 'button--secondary'
+                                    : role === 'User'
+                                      ? 'button--primary'
+                                      : 'button--secondary'
+                            )}
+                            onClick={() => {
+                                user.setAdmin(role === 'Admin');
+                            }}
+                        >
+                            {role}
+                        </button>
+                    ))}
+                </div>
             </td>
             <td>{user.firstName}</td>
             <td>{user.lastName}</td>
@@ -30,4 +52,4 @@ const UserTable = observer((props: Props) => {
     );
 });
 
-export default UserTable;
+export default UserTableRow;

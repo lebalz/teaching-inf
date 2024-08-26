@@ -1,4 +1,4 @@
-import { computed } from 'mobx';
+import { action, computed } from 'mobx';
 import { User as UserProps } from '../api/user';
 import { UserStore } from '../stores/UserStore';
 
@@ -63,5 +63,11 @@ export default class User {
     @computed
     get studentGroups() {
         return this.store.root.studentGroupStore.studentGroups.filter((group) => group.userIds.has(this.id));
+    }
+
+    @action
+    setAdmin(isAdmin: boolean) {
+        const updatedUser = new User({ ...this.props, isAdmin }, this.store);
+        this.store.update(updatedUser);
     }
 }

@@ -1,5 +1,5 @@
 import { action, computed, makeObservable, observable, reaction } from 'mobx';
-import { Role, User as UserProps, all as apiAll, currentUser } from '../api/user';
+import { Role, User as UserProps, all as apiAll, currentUser, update as apiUpdate } from '../api/user';
 import { RootStore } from './rootStore';
 import User from '../models/User';
 import _ from 'lodash';
@@ -7,7 +7,7 @@ import Storage, { PersistedData } from './utils/Storage';
 import { computedFn } from 'mobx-utils';
 import iStore from './iStore';
 
-export class UserStore extends iStore {
+export class UserStore extends iStore<`update-${string}`> {
     readonly root: RootStore;
 
     @observable accessor _viewedUserId: string | undefined = undefined;
@@ -164,6 +164,17 @@ export class UserStore extends iStore {
             })
         );
         return res;
+    }
+
+    @action
+    update(user: User) {
+        return this.withAbortController(`update-${user.id}`, async (ct) => {
+            return apiUpdate(user.id, user.props, ct.signal).then(
+                action((res) => {
+                    this.addToStore(res.data);
+                })
+            );
+        });
     }
 
     @action

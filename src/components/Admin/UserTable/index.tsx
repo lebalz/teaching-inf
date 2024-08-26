@@ -3,22 +3,20 @@ import clsx from 'clsx';
 
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
-import User from './User';
+import UserTableRow from './User';
 import Button from '../../shared/Button';
 import { mdiSortAscending, mdiSortDescending } from '@mdi/js';
 import { useStore } from '@site/src/hooks/useStore';
+import _ from 'lodash';
 
 const SIZE_S = 0.6;
 
 const UserTable = observer(() => {
     const [itemsShown, setItemsShown] = React.useState(15);
     const [filter, setFilter] = React.useState('');
-    const currentSortColumn = React.useRef<
-        'email' | 'role' | 'firstName' | 'lastName' | 'createdAt' | 'updatedAt' | 'id'
-    >('email');
     const [sortDirection, setSortDirection] = React.useState<'asc' | 'desc'>('asc');
     const [sortColumn, _setSortColumn] = React.useState<
-        'email' | 'role' | 'firstName' | 'lastName' | 'createdAt' | 'updatedAt' | 'id'
+        'email' | 'isAdmin' | 'firstName' | 'lastName' | 'createdAt' | 'updatedAt' | 'id'
     >('email');
     const userStore = useStore('userStore');
     const observerTarget = React.useRef(null);
@@ -51,7 +49,7 @@ const UserTable = observer(() => {
     }, [observerTarget, userStore.users.length]);
 
     const setSortColumn = (
-        column: 'email' | 'role' | 'firstName' | 'lastName' | 'createdAt' | 'updatedAt' | 'id'
+        column: 'email' | 'isAdmin' | 'firstName' | 'lastName' | 'createdAt' | 'updatedAt' | 'id'
     ) => {
         if (column === sortColumn) {
             setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
@@ -73,83 +71,85 @@ const UserTable = observer(() => {
                 />
                 <span className={clsx('badge', 'badge--primary')}>{`Users: ${userStore.users.length}`}</span>
             </div>
-            <table className={clsx(styles.table)}>
-                <thead>
-                    <tr>
-                        <th>
-                            <Button
-                                size={SIZE_S}
-                                iconSide="left"
-                                icon={sortColumn === 'email' && icon}
-                                text="Email"
-                                onClick={() => setSortColumn('email')}
-                            />
-                        </th>
-                        <th>
-                            <Button
-                                size={SIZE_S}
-                                iconSide="left"
-                                icon={sortColumn === 'role' && icon}
-                                text={'Admin?'}
-                                onClick={() => setSortColumn('role')}
-                            />
-                        </th>
-                        <th>
-                            <Button
-                                size={SIZE_S}
-                                iconSide="left"
-                                icon={sortColumn === 'firstName' && icon}
-                                text="Vorname"
-                                onClick={() => setSortColumn('firstName')}
-                            />
-                        </th>
-                        <th>
-                            <Button
-                                size={SIZE_S}
-                                iconSide="left"
-                                icon={sortColumn === 'lastName' && icon}
-                                text="Nachname"
-                                onClick={() => setSortColumn('lastName')}
-                            />
-                        </th>
-                        <th>
-                            <Button
-                                size={SIZE_S}
-                                iconSide="left"
-                                icon={sortColumn === 'createdAt' && icon}
-                                text="Erstellt"
-                                onClick={() => setSortColumn('createdAt')}
-                            />
-                        </th>
-                        <th>
-                            <Button
-                                size={SIZE_S}
-                                iconSide="left"
-                                icon={sortColumn === 'updatedAt' && icon}
-                                text="Aktualisiert"
-                                onClick={() => setSortColumn('updatedAt')}
-                            />
-                        </th>
-                        <th>
-                            <Button
-                                size={SIZE_S}
-                                iconSide="left"
-                                icon={sortColumn === 'id' && icon}
-                                text="ID"
-                                onClick={() => setSortColumn('id')}
-                            />
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {userStore.users
-                        .filter((user) => searchRegex.test(user.searchTerm))
-                        .slice(0, itemsShown)
-                        .map((user, idx) => {
-                            return <User key={user.id} user={user} />;
-                        })}
-                </tbody>
-            </table>
+            <div className={clsx(styles.tableWrapper)}>
+                <table className={clsx(styles.table)}>
+                    <thead>
+                        <tr>
+                            <th>
+                                <Button
+                                    size={SIZE_S}
+                                    iconSide="left"
+                                    icon={sortColumn === 'email' && icon}
+                                    text="Email"
+                                    onClick={() => setSortColumn('email')}
+                                />
+                            </th>
+                            <th>
+                                <Button
+                                    size={SIZE_S}
+                                    iconSide="left"
+                                    icon={sortColumn === 'isAdmin' && icon}
+                                    text={'Admin?'}
+                                    onClick={() => setSortColumn('isAdmin')}
+                                />
+                            </th>
+                            <th>
+                                <Button
+                                    size={SIZE_S}
+                                    iconSide="left"
+                                    icon={sortColumn === 'firstName' && icon}
+                                    text="Vorname"
+                                    onClick={() => setSortColumn('firstName')}
+                                />
+                            </th>
+                            <th>
+                                <Button
+                                    size={SIZE_S}
+                                    iconSide="left"
+                                    icon={sortColumn === 'lastName' && icon}
+                                    text="Nachname"
+                                    onClick={() => setSortColumn('lastName')}
+                                />
+                            </th>
+                            <th>
+                                <Button
+                                    size={SIZE_S}
+                                    iconSide="left"
+                                    icon={sortColumn === 'createdAt' && icon}
+                                    text="Erstellt"
+                                    onClick={() => setSortColumn('createdAt')}
+                                />
+                            </th>
+                            <th>
+                                <Button
+                                    size={SIZE_S}
+                                    iconSide="left"
+                                    icon={sortColumn === 'updatedAt' && icon}
+                                    text="Aktualisiert"
+                                    onClick={() => setSortColumn('updatedAt')}
+                                />
+                            </th>
+                            <th>
+                                <Button
+                                    size={SIZE_S}
+                                    iconSide="left"
+                                    icon={sortColumn === 'id' && icon}
+                                    text="ID"
+                                    onClick={() => setSortColumn('id')}
+                                />
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {_.orderBy(userStore.users, [sortColumn], [sortDirection])
+                            .filter((user) => searchRegex.test(user.searchTerm))
+                            .slice(0, itemsShown)
+                            .map((user, idx) => {
+                                return <UserTableRow key={user.id} user={user} />;
+                            })}
+                    </tbody>
+                </table>
+            </div>
             <div ref={observerTarget}></div>
         </div>
     );
