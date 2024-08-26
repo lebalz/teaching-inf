@@ -6,9 +6,12 @@
         position: sticky;
         top: 4em;
     }
-    table.table {
-        width: 100%;
-        border-collapse: collapse;
-        display: table;
+    .tableWrapper {
+        overflow-x: auto;
+        table.table {
+            width: 100%;
+            border-collapse: collapse;
+            display: table;
+        }
     }
 }
