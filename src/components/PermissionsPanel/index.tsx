@@ -94,7 +94,7 @@ const PermissionsPanel = observer(({ documentRootId }: Props) => {
                         <dd>
                             <GroupAccessPanel documentRoot={documentRoot} />
                         </dd>
-                        <dt>User Berechtigungen</dt>
+                        <dt>User-Berechtigungen</dt>
                         <dd>
                             <UserAccessPanel documentRoot={documentRoot} />
                         </dd>
