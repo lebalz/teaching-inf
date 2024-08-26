@@ -55,6 +55,7 @@ const TaskState = observer((props: Props) => {
     const [meta] = React.useState(new TaskMeta(props));
     const ref = React.useRef<HTMLDivElement>(null);
     const pageStore = useStore('pageStore');
+    const [animate, setAnimate] = React.useState(false);
 
     const doc = useFirstMainDocument(props.id, meta);
     React.useEffect(() => {
@@ -65,10 +66,22 @@ const TaskState = observer((props: Props) => {
 
     React.useEffect(() => {
         if (ref.current && doc.scrollTo) {
-            ref.current.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'start' });
+            ref.current.scrollIntoView({ behavior: 'auto', block: 'center', inline: 'start' });
             doc.setScrollTo(false);
+            setAnimate(true);
         }
     }, [ref, doc.scrollTo]);
+
+    React.useEffect(() => {
+        if (animate) {
+            const timeout = setTimeout(() => {
+                setAnimate(false);
+            }, 2000);
+            return () => {
+                clearTimeout(timeout);
+            };
+        }
+    }, [animate]);
 
     if (!doc) {
         return <Loader noLabel title="Laden" align="left" className={clsx(styles.state, styles.loader)} />;
@@ -85,7 +98,12 @@ const TaskState = observer((props: Props) => {
             )}
         >
             <div
-                className={clsx(styles.state, styles.checkbox, props.readonly && styles.readonly)}
+                className={clsx(
+                    styles.state,
+                    styles.checkbox,
+                    props.readonly && styles.readonly,
+                    animate && styles.animate
+                )}
                 style={{ backgroundColor: `var(${mdiBgColor[doc.taskState]})` }}
                 onClick={() => {
                     if (props.readonly) {
