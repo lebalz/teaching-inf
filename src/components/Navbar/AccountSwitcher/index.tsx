@@ -19,6 +19,11 @@ const AccountSwitcher = observer(() => {
     const location = useLocation();
 
     const klass = location.pathname.split('/')[1];
+    React.useEffect(() => {
+        if (userStore._viewedUserId) {
+            userStore.switchUser(userStore.current?.id);
+        }
+    }, [location.pathname]);
 
     if (!isBrowser || !userStore.current?.isAdmin) {
         return null;

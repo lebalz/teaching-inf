@@ -21,7 +21,12 @@ const getValue = (idx: number) => {
 const GTabs = (props: Props) => {
     const [lazy, setLazy] = React.useState(false);
     React.useEffect(() => {
-        setLazy(props.lazy || false);
+        const iDisposer = setTimeout(() => {
+            setLazy(props.lazy || false);
+        }, 200);
+        return () => {
+            clearTimeout(iDisposer);
+        };
     }, [props.lazy]);
     return (
         <Tabs
