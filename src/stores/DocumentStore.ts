@@ -24,6 +24,7 @@ import String from '../models/documents/String';
 import QuillV2 from '../models/documents/QuillV2';
 import Solution from '../models/documents/Solution';
 import { RWAccess } from '../models/helpers/accessPolicy';
+import Directory from '../models/documents/Directory';
 
 export function CreateDocumentModel<T extends DocumentType>(
     data: DocumentProps<T>,
@@ -43,6 +44,8 @@ export function CreateDocumentModel(data: DocumentProps<DocumentType>, store: Do
             return new QuillV2(data as DocumentProps<DocumentType.QuillV2>, store);
         case DocumentType.Solution:
             return new Solution(data as DocumentProps<DocumentType.Solution>, store);
+        case DocumentType.Dir:
+            return new Directory(data as DocumentProps<DocumentType.Dir>, store);
     }
 }
 class DocumentStore extends iStore {

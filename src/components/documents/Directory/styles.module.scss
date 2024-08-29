@@ -1,0 +1,33 @@
+.dir {
+    padding: 0;
+    --ifm-alert-background-color: var(--ifm-color-warning-lightest);
+    --ifm-alert-border-color: var(--ifm-color-warning-darkest);
+    --ifm-alert-foreground-color: #193c47;
+    .summary {
+        display: flex;
+        gap: 1em;
+        justify-content: space-between;
+        margin: 0.5em;
+        .dirName {
+            margin-bottom: 0;
+        }
+    }
+    .content {
+        background-color: var(--ifm-background-color);
+        color: var(--ifm-color-content);
+        border-radius: calc(var(--ifm-global-radius) - 1px);
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        padding: 4px 8px;
+        min-height: 2em;
+    }
+    div[class^='collapsibleContent'] {
+        margin-top: 0;
+        padding-top: 0;
+    }
+}
+
+.spacer {
+    flex-grow: 1;
+    flex-basis: 0;
+}
