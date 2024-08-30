@@ -8,6 +8,7 @@ import QuillV2 from '../models/documents/QuillV2';
 import { Delta } from 'quill/core';
 import Solution from '../models/documents/Solution';
 import Directory from '../models/documents/Directory';
+import File from '../models/documents/File';
 
 export enum Access {
     RO_DocumentRoot = 'RO_DocumentRoot',
@@ -28,7 +29,8 @@ export enum DocumentType {
     String = 'string',
     QuillV2 = 'quill_v2',
     Solution = 'solution',
-    Dir = 'dir'
+    Dir = 'dir',
+    File = 'file'
 }
 export interface ScriptData {
     code: string;
@@ -56,6 +58,10 @@ export interface DirData {
     name: string;
 }
 
+export interface FileData {
+    name: string;
+}
+
 export type StateType = 'checked' | 'question' | 'unset' | 'star' | 'star-half' | 'star-empty';
 
 export interface TaskStateData {
@@ -70,6 +76,7 @@ export interface TypeDataMapping {
     [DocumentType.QuillV2]: QuillV2Data;
     [DocumentType.Solution]: SolutionData;
     [DocumentType.Dir]: DirData;
+    [DocumentType.File]: FileData;
     // Add more mappings as needed
 }
 
@@ -81,6 +88,7 @@ export interface TypeModelMapping {
     [DocumentType.QuillV2]: QuillV2;
     [DocumentType.Solution]: Solution;
     [DocumentType.Dir]: Directory;
+    [DocumentType.File]: File;
     /**
      * Add more mappings as needed
      * TODO: implement the mapping in DocumentRoot.ts
@@ -89,7 +97,7 @@ export interface TypeModelMapping {
      */
 }
 
-export type DocumentTypes = Script | TaskState | ScriptVersion | String | QuillV2 | Solution | Directory;
+export type DocumentTypes = Script | TaskState | ScriptVersion | String | QuillV2 | Solution | Directory | File;
 
 export interface Document<Type extends DocumentType> {
     id: string;

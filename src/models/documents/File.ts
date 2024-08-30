@@ -5,46 +5,41 @@ import DocumentStore from '@site/src/stores/DocumentStore';
 import { TypeMeta } from '../DocumentRoot';
 import { formatDateTime } from '../helpers/date';
 import _ from 'lodash';
-import File from './File';
 
 export interface MetaInit {
     readonly?: boolean;
 
     name?: string;
-    isOpen?: boolean;
 }
 
-export class ModelMeta extends TypeMeta<DocumentType.Dir> {
-    readonly type = DocumentType.Dir;
+export class ModelMeta extends TypeMeta<DocumentType.File> {
+    readonly type = DocumentType.File;
     readonly readonly?: boolean;
-    readonly isOpen: boolean;
     readonly name: string;
     constructor(props: Partial<MetaInit>) {
-        super(DocumentType.Dir, props.readonly ? Access.RO_User : undefined);
+        super(DocumentType.File, props.readonly ? Access.RO_User : undefined);
         this.readonly = props.readonly;
-        this.name = props.name || `Ordner ${formatDateTime(new Date())}`;
-        this.isOpen = props.isOpen || false;
+        this.name = props.name || `File ${formatDateTime(new Date())}`;
     }
 
-    get defaultData(): TypeDataMapping[DocumentType.Dir] {
+    get defaultData(): TypeDataMapping[DocumentType.File] {
         return {
             name: this.name
         };
     }
 }
 
-class Directory extends iDocument<DocumentType.Dir> {
+class File extends iDocument<DocumentType.File> {
     @observable accessor name: string;
-    @observable accessor isOpen: boolean;
+    @observable accessor isOpen: boolean = false;
 
-    constructor(props: DocumentProps<DocumentType.Dir>, store: DocumentStore) {
+    constructor(props: DocumentProps<DocumentType.File>, store: DocumentStore) {
         super(props, store);
         this.name = props.data?.name || this.meta.name;
-        this.isOpen = this.meta.isOpen;
     }
 
     @action
-    setData(data: TypeDataMapping[DocumentType.Dir], from: Source, updatedAt?: Date): void {
+    setData(data: TypeDataMapping[DocumentType.File], from: Source, updatedAt?: Date): void {
         this.name = data.name;
         if (from === Source.LOCAL) {
             this.save();
@@ -54,7 +49,7 @@ class Directory extends iDocument<DocumentType.Dir> {
         }
     }
 
-    get data(): TypeDataMapping[DocumentType.Dir] {
+    get data(): TypeDataMapping[DocumentType.File] {
         return {
             name: this.name
         };
@@ -62,7 +57,7 @@ class Directory extends iDocument<DocumentType.Dir> {
 
     @computed
     get meta(): ModelMeta {
-        if (this.root?.type === DocumentType.Dir) {
+        if (this.root?.type === DocumentType.File) {
             return this.root.meta as ModelMeta;
         }
         return new ModelMeta({});
@@ -79,12 +74,9 @@ class Directory extends iDocument<DocumentType.Dir> {
     }
 
     @computed
-    get files() {
-        if (!this.root) {
-            return [];
-        }
-        return this.root.allDocuments.filter((d) => d.parentId === this.id && d.type === DocumentType.File) as File[];
+    get document() {
+        return this.store.findByParentId(this.id);
     }
 }
 
-export default Directory;
+export default File;

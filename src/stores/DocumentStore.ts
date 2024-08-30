@@ -25,6 +25,7 @@ import QuillV2 from '../models/documents/QuillV2';
 import Solution from '../models/documents/Solution';
 import { RWAccess } from '../models/helpers/accessPolicy';
 import Directory from '../models/documents/Directory';
+import File from '../models/documents/File';
 
 export function CreateDocumentModel<T extends DocumentType>(
     data: DocumentProps<T>,
@@ -46,6 +47,8 @@ export function CreateDocumentModel(data: DocumentProps<DocumentType>, store: Do
             return new Solution(data as DocumentProps<DocumentType.Solution>, store);
         case DocumentType.Dir:
             return new Directory(data as DocumentProps<DocumentType.Dir>, store);
+        case DocumentType.File:
+            return new File(data as DocumentProps<DocumentType.File>, store);
     }
 }
 class DocumentStore extends iStore {
@@ -78,6 +81,16 @@ class DocumentStore extends iStore {
                 return [];
             }
             return this.documents.filter((d) => d.documentRootId === documentRootId);
+        },
+        { keepAlive: true }
+    );
+
+    findByParentId = computedFn(
+        function (this: DocumentStore, parentId?: string) {
+            if (!parentId) {
+                return undefined as DocumentTypes | undefined;
+            }
+            return this.documents.find((d) => d.parentId === parentId);
         },
         { keepAlive: true }
     );
@@ -202,7 +215,7 @@ class DocumentStore extends iStore {
     ) {
         const rootDoc = this.root.documentRootStore.find(model.documentRootId);
         if (!rootDoc || rootDoc.isDummy) {
-            return Promise.resolve('error');
+            return Promise.resolve(`root: ${rootDoc ? 'dummy' : 'not found'}`);
         }
         if (!RWAccess.has(rootDoc.permission)) {
             return Promise.resolve('error');

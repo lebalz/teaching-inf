@@ -4,10 +4,11 @@ import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
 import { useFirstMainDocument } from '../../../hooks/useFirstMainDocument';
 import Loader from '../../Loader';
-import { MetaInit, ModelMeta } from '@site/src/models/documents/Directory';
+import { default as FileModel, MetaInit, ModelMeta } from '@site/src/models/documents/File';
 import Icon from '@mdi/react';
 import {
     mdiContentSaveEdit,
+    mdiFile,
     mdiFileEdit,
     mdiFolder,
     mdiPlusCircle,
@@ -18,46 +19,37 @@ import Details from '@theme/Details';
 import Heading from '@theme/Heading';
 import Button from '../../shared/Button';
 import SyncStatus from '../../SyncStatus';
-import NewItem from './NewItem';
 
-interface Props extends MetaInit {
-    id: string;
-    isOpen?: boolean;
+interface Props {
+    file: FileModel;
 }
 
-const Direcotry = observer((props: Props) => {
-    const [meta] = React.useState(new ModelMeta(props));
-    const doc = useFirstMainDocument(props.id, meta);
+const File = observer((props: Props) => {
     const [isEditing, setIsEditing] = React.useState(false);
     const isInitialized = React.useRef(false);
-    React.useEffect(() => {
-        isInitialized.current = true;
-    }, []);
-    if (!doc) {
-        return <Loader />;
-    }
+    const {file} = props;
     return (
         <Details
-            open={doc.isOpen}
+            open={file.isOpen}
             onToggle={(e) => {
                 if (isInitialized.current) {
-                    doc.setIsOpen(!doc.isOpen);
+                    file.setIsOpen(!file.isOpen);
                 }
             }}
             className={clsx(styles.dir)}
             summary={
                 <summary className={clsx(styles.summary)}>
-                    <Icon path={mdiFolder} size={1} className={clsx(styles.icon)} />
+                    <Icon path={mdiFile} size={1} className={clsx(styles.icon)} />
                     <div className={clsx(styles.spacer)} />
                     {isEditing ? (
                         <>
                             <input
                                 type="text"
                                 placeholder="Suche..."
-                                value={doc.name}
+                                value={file.name}
                                 className={clsx(styles.textInput)}
                                 onChange={(e) => {
-                                    doc.setName(e.target.value);
+                                    file.setName(e.target.value);
                                 }}
                                 onBlur={() => {
                                     setIsEditing(false);
@@ -67,7 +59,7 @@ const Direcotry = observer((props: Props) => {
                         </>
                     ) : (
                         <>
-                            <h4 className={clsx(styles.dirName)}>{doc.name}</h4>
+                            <h4 className={clsx(styles.dirName)}>{file.name}</h4>
                             <Button
                                 icon={mdiRenameOutline}
                                 color="primary"
@@ -81,22 +73,19 @@ const Direcotry = observer((props: Props) => {
                         </>
                     )}
                     <div>
-                        <SyncStatus model={doc} />
+                        <SyncStatus model={file} />
                     </div>
                     <div className={clsx(styles.spacer)} />
                     <div className={clsx(styles.actions)}>
-                        {doc.isOpen && (
-                            <NewItem id={doc.documentRootId} />
-                        )}
                     </div>
                 </summary>
             }
         >
             <div className={clsx(styles.content)}>
-                {doc.files.map((file) => (file.name))}
+                
             </div>
         </Details>
     );
 });
 
-export default Direcotry;
+export default File;
