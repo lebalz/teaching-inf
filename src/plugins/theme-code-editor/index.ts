@@ -36,8 +36,16 @@ const extractImports = (script: string): string[] => {
     return imports;
 };
 
+const prepareLibDir = (libDir: string) => {
+    const isRemote = /https?:\/\//.test(libDir);
+    if (isRemote) {
+        return libDir;
+    }
+    return path.join('/', libDir, '/');
+};
+
 const theme: Plugin<{ remoteHeadTags: HtmlTags[] }> = (context: LoadContext, options: ThemeOptions) => {
-    const libDir = options.libDir || DEFAULT_OPTIONS.libDir;
+    const libDir = prepareLibDir(options.libDir || DEFAULT_OPTIONS.libDir);
     const isRemote = /https?:\/\//.test(libDir);
     const isHashRouter = context.siteConfig.future?.experimental_router === 'hash';
     return {
@@ -80,7 +88,7 @@ const theme: Plugin<{ remoteHeadTags: HtmlTags[] }> = (context: LoadContext, opt
             };
         },
         async contentLoaded({ content, actions }) {
-            const { setGlobalData } = actions;
+            const { setGlobalData, createData } = actions;
             const libUrl = isRemote ? libDir : path.join(context.baseUrl, libDir, '/');
             setGlobalData({
                 libDir: libUrl

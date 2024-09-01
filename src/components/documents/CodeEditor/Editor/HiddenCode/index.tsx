@@ -2,12 +2,11 @@ import * as React from 'react';
 import styles from './styles.module.scss';
 import CodeBlock from '@theme/CodeBlock';
 import clsx from 'clsx';
-import { translate } from '@docusaurus/Translate';
 import { observer } from 'mobx-react-lite';
 import { useDocument } from '../../../useContextDocument';
 import { DocumentType } from '@site/src/api/document';
 import Icon from '@mdi/react';
-import { mdiTrayMinus, mdiTrayPlus } from '@mdi/js';
+import { mdiArrowExpandDown, mdiArrowExpandUp } from '@mdi/js';
 import _ from 'lodash';
 
 interface Props {
@@ -35,7 +34,7 @@ const HiddenCode = observer((props: Props) => {
                 </div>
             )}
             <button
-                className={clsx(styles.toggleButton, show && styles.open, styles[props.type])}
+                className={clsx(styles.toggleButton, show && styles.open, styles[props.type], script.codeLines <= 1 && styles.singleLine)}
                 onClick={() => setShow(!show)}
                 title={
                     show
@@ -44,9 +43,9 @@ const HiddenCode = observer((props: Props) => {
                 }
             >
                 <Icon
-                    path={show ? mdiTrayMinus : mdiTrayPlus}
-                    rotate={(show ? 180 : 0) + (props.type === 'post' ? 180 : 0)}
-                    size={1}
+                    path={props.type === 'pre' ?  mdiArrowExpandUp : mdiArrowExpandDown}
+                    rotate={show ? 180 : 0}
+                    size={0.8}
                 />
             </button>
         </div>

@@ -18,10 +18,11 @@ import {
 } from '@site/src/api/document';
 import DocumentStore from '@site/src/stores/DocumentStore';
 import siteConfig from '@generated/docusaurus.config';
+import globalData from '@generated/globalData';
 import ScriptVersion from './ScriptVersion';
 import { TypeMeta } from '../DocumentRoot';
 import { Props as CodeEditorProps } from '@site/src/components/documents/CodeEditor';
-const { BRYTHON_LIB_DIR } = siteConfig.customFields as { BRYTHON_LIB_DIR?: string };
+const libDir = (globalData['live-editor-theme'] as {default: {libDir: string}}).default.libDir;
 
 export interface LogMessage {
     type: 'done' | 'stdout' | 'stderr' | 'start';
@@ -187,6 +188,11 @@ export default class Script extends iDocument<DocumentType.Script> {
     }
 
     @computed
+    get codeLines() {
+        return this.code.split('\n').length;
+    }
+
+    @computed
     get data(): TypeDataMapping[DocumentType.Script] {
         return {
             code: this.code
@@ -216,7 +222,7 @@ export default class Script extends iDocument<DocumentType.Script> {
             this.preCode,
             this.postCode,
             this.codeId,
-            BRYTHON_LIB_DIR || '/bry-libs/',
+            libDir,
             siteConfig.future.experimental_router
         );
     }

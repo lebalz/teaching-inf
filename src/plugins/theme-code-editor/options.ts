@@ -29,19 +29,6 @@ export type ThemeOptions = {
      * @default '/bry-libs/'
      */
     libDir: string;
-    /**
-     * Skip copying the brython specific libraries to the `libDir`.
-     * Make sure to copy the needed python files to the custom libDir yourself.
-     * @ref [needed python files](https://github.com/lebalz/docusaurus-live-brython/tree/main/src/assets)
-     * @default false
-     */
-    skipCopyAssetsToLibDir: boolean;
-    /**
-     * Specifies the the time in milliseconds to wait before syncing current changes to the local store.
-     * This is useful to prevent storing the code on every key press.
-     * @default 1000
-     */
-    syncMaxOnceEvery: number;
 };
 
 export type Options = Partial<ThemeOptions>;
@@ -49,17 +36,13 @@ export type Options = Partial<ThemeOptions>;
 export const DEFAULT_OPTIONS: ThemeOptions = {
     brythonSrc: 'https://cdn.jsdelivr.net/npm/brython@3.12.4/brython.min.js',
     brythonStdlibSrc: 'https://cdn.jsdelivr.net/npm/brython@3.12.4/brython_stdlib.js',
-    libDir: '/bry-libs/',
-    skipCopyAssetsToLibDir: false,
-    syncMaxOnceEvery: 1000
+    libDir: '/bry-libs/'
 };
 
 const ThemeOptionSchema = Joi.object<ThemeOptions>({
     brythonSrc: Joi.string().default(DEFAULT_OPTIONS.brythonSrc),
     brythonStdlibSrc: Joi.string().default(DEFAULT_OPTIONS.brythonStdlibSrc),
-    libDir: Joi.string().default(DEFAULT_OPTIONS.libDir),
-    skipCopyAssetsToLibDir: Joi.boolean().default(DEFAULT_OPTIONS.skipCopyAssetsToLibDir),
-    syncMaxOnceEvery: Joi.number().default(DEFAULT_OPTIONS.syncMaxOnceEvery)
+    libDir: Joi.string().default(DEFAULT_OPTIONS.libDir)
 });
 
 export function validateThemeConfig({

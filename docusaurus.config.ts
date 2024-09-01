@@ -107,8 +107,7 @@ const config: Config = {
     TENANT_ID: process.env.TENANT_ID,
     /** The application id uri generated in https://portal.azure.com */
     API_URI: process.env.API_URI,
-    GIT_COMMIT_SHA: GIT_COMMIT_SHA,
-    BRYTHON_LIB_DIR: '/bry-libs/'
+    GIT_COMMIT_SHA: GIT_COMMIT_SHA
   },
 
   // Even if you don't use internationalization, you can use this field to set
@@ -264,12 +263,7 @@ const config: Config = {
   } satisfies Preset.ThemeConfig,
   plugins: ['docusaurus-plugin-sass'],
   themes: [
-    [
-      themeCodeEditor,
-      {
-        libDir: 'bry-libs',
-      }
-    ]
+    [themeCodeEditor, {}]
   ],
   stylesheets: [
     {

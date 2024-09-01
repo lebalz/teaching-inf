@@ -19,7 +19,7 @@ You can add a title to the code block by adding a `title` to the meta string.
 The space character is not supported, because it is used as a separator in the meta string of a code block. Use an underscore `_` or `-` instead.
 :::
 
-````md
+````py
 ```py live_py title=example.py
 ```
 ````
@@ -27,7 +27,7 @@ The space character is not supported, because it is used as a separator in the m
 :::tip[Use `_` in the title]
 To use an underscore, you can use the following syntax:
 
-````md
+````py
 ```py live_py title=example__file.py
 ```
 ````
@@ -44,7 +44,7 @@ print('Hello Title')
 
 Sometimes an editor with a header is visually too big. For small code snippets, you can use the `slim` mode to reduce the size of the editor. This will remove the header and hides the line numbers.
 
-````md
+````py
 ```py live_py slim
 print('Hello Slim Mode')
 ```
@@ -65,7 +65,7 @@ Slim Editor does not support persistance. The `id` attribute is ignored in slim 
 
 You can make the editor read-only by adding the `readonly` meta string.
 
-````md
+````py
 ```py live_py readonly
 print('Hello Read-Only Mode')
 ```
@@ -95,7 +95,7 @@ Yes, this only works secure if you swizzle the `Store.tsxt`/`Storage.ts` compone
 
 You can hide the download button by adding the `noDownload` meta string.
 
-````md
+````py
 ```py live_py noDownload
 print('Hello No Download Button')
 ```
@@ -111,7 +111,7 @@ print('Hello No Download Button')
 
 Whenever changes to the code were made, you can compare with the original code. You can hide the compare button by adding the `noCompare` meta string.
 
-````md
+````py
 ```py live_py noCompare
 print('Hello No Compare Button')
 ```
@@ -129,7 +129,7 @@ print('Hello No Compare Button')
 
 The reset button allows you to reset the code to the original code. You can hide the reset button by adding the `noReset` meta string.
 
-````md
+````py
 ```py live_py noReset
 print('Hello No Reset Button')
 ```
@@ -147,7 +147,7 @@ print('Hello No Reset Button')
 
 You can specify the maximum number of lines before the editor will scroll. This is useful for long code snippets. The default value is `25`.
 
-````md
+````py
 ```py live_py maxLines=5
 print('Line 1')
 print('Line 2')
@@ -464,7 +464,7 @@ smile.draw()
 
 You can persist the changes of the code editor by adding an `id` to the code block. The changes will be stored in the local storage and the content will be restored when the page is reloaded.
 
-````md
+````py
 ```py live_py id=50fa8065-0d3b-4cb1-b03f-8244a6582d60
 # changes made in this code block will be stored in the local storage
 ```
@@ -492,7 +492,7 @@ A good way to ensure unique IDs is to use a UUID. For VS Code users, the extensi
 You can save versions of the code by adding the `versioned` meta string. This will add a version history to the editor. Every Change is saved as a new version, but not more than once every 1 second (configurable through the `syncMaxOnceEvery` option in the `docusaurus.config.js`).
 
 
-````md
+````py
 ```py live_py versioned id=fe506dd7-1507-4929-ad07-302d22529d79
 print('Hello Versioned Mode')
 ```
@@ -514,7 +514,7 @@ The versioned mode only works in combination with the `id` attribute. The `id` a
 
 You can hide the version history by adding the `noHistory` meta string. This will only hide the history, but has no impact on the `versioned` prop.
 
-````md
+````py
 ```py live_py versioned noHistory id=fe506dd7-1507-4929-ad07-302d22529d79
 print('Hello No History')
 ```
@@ -526,9 +526,38 @@ print('Hello Versioned Mode')
 ```
 </BrowserWindow>
 
-## Installation
+### Pre- und Post-Code
 
-```bash
-yarn add ace-builds rc-slider react-ace react-diff-viewer-continued react-draggable svg-parser prism-react-renderer
-yarn add --dev @types/svg-parser
+Mit Kommentaren lassen sich Code-Teile zu Beginn oder am Ende verstecken und auf Wunsch aufklappen. Dies ist nützlich, um den Fokus auf den Hauptteil des Codes zu legen.
+
+````py
+```py live_py id=5ecb46e8-4ab5-428b-bb3f-467aa0d47d01
+# This is a pre code block
+from time import time
+t0 = time.time()
+PI = 3.14159265359
+### PRE
+radius = 10
+print(f'Der Umfang eines Kreises mit Radius {radius} beträgt {2 * PI * radius}')
+### POST
+print('--------------------------')
+print(f'Die Berechnung dauerte {time.time() - t0} Sekunden')
 ```
+````
+
+<BrowserWindow>
+
+```py live_py id=5ecb46e8-4ab5-428b-bb3f-467aa0d47d01
+from time import time
+t0 = time()
+PI = 3.14159265359
+### PRE
+radius = 10
+print(f'Der Umfang eines Kreises mit Radius {radius} beträgt {2 * PI * radius}')
+### POST
+print('----------------------------------------------------------')
+print(f'Die Berechnung dauerte {(time() - t0) * 1000} Millisekunden')
+```
+</BrowserWindow>
+
+## Installation
