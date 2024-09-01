@@ -107,6 +107,7 @@ const config: Config = {
     /** The application id uri generated in https://portal.azure.com */
     API_URI: process.env.API_URI,
     GIT_COMMIT_SHA: GIT_COMMIT_SHA,
+    BRYTHON_LIB_DIR: '/bry-libs/'
   },
 
   // Even if you don't use internationalization, you can use this field to set

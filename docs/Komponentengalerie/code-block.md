@@ -525,3 +525,10 @@ print('Hello No History')
 print('Hello Versioned Mode')
 ```
 </BrowserWindow>
+
+## Installation
+
+```bash
+yarn add ace-builds rc-slider react-ace react-diff-viewer-continued react-draggable svg-parser prism-react-renderer
+yarn add --dev @types/svg-parser
+```
