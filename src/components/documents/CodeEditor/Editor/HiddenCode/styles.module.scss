@@ -1,4 +1,3 @@
-
 .container {
     .toggleButton {
         position: absolute;
@@ -12,24 +11,24 @@
         border: 0;
         color: var(--ifm-color-info-darkest);
         cursor: pointer;
-    
+
         &:hover {
             color: var(--ifm-color-info);
         }
-    
+
         &.post {
             left: 50%;
             top: unset;
             bottom: 0px;
         }
-    
+
         > svg {
             transition: all 0.1s ease; /* Adjust timing as needed */
         }
-    
+
         &.open {
             color: var(--ifm-color-danger);
-    
+
             &:hover {
                 color: var(--ifm-color-danger-darkest);
             }

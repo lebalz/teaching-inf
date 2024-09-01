@@ -17,6 +17,7 @@ export interface MetaProps {
     noHistory: boolean;
     noCompare: boolean;
     maxLines?: number;
+    hideWarning: boolean;
     title: string;
 }
 
@@ -101,6 +102,7 @@ export default function CodeBlockWrapper(props: Props & MetaProps): JSX.Element 
                             versioned={!!metaProps.versioned}
                             noHistory={!!metaProps.noHistory}
                             noCompare={!!metaProps.noCompare}
+                            hideWarning={!!metaProps.hideWarning}
                             title={sanitizedTitle(title) || lang}
                             className={props.className}
                         />

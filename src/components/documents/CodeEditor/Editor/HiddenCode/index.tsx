@@ -34,7 +34,12 @@ const HiddenCode = observer((props: Props) => {
                 </div>
             )}
             <button
-                className={clsx(styles.toggleButton, show && styles.open, styles[props.type], script.codeLines <= 1 && styles.singleLine)}
+                className={clsx(
+                    styles.toggleButton,
+                    show && styles.open,
+                    styles[props.type],
+                    script.codeLines <= 1 && styles.singleLine
+                )}
                 onClick={() => setShow(!show)}
                 title={
                     show
@@ -43,7 +48,7 @@ const HiddenCode = observer((props: Props) => {
                 }
             >
                 <Icon
-                    path={props.type === 'pre' ?  mdiArrowExpandUp : mdiArrowExpandDown}
+                    path={props.type === 'pre' ? mdiArrowExpandUp : mdiArrowExpandDown}
                     rotate={show ? 180 : 0}
                     size={0.8}
                 />

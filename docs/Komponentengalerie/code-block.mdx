@@ -73,7 +73,7 @@ print('Hello Read-Only Mode')
 
 <BrowserWindow>
 
-```py live_py readonly
+```py live_py readonly hideWarning
 print('Hello Read-Only Mode')
 ```
 </BrowserWindow>
@@ -102,7 +102,7 @@ print('Hello No Download Button')
 ````
 <BrowserWindow>
 
-```py live_py noDownload
+```py live_py noDownload hideWarning
 print('Hello No Download Button')
 ```
 </BrowserWindow>
@@ -112,7 +112,7 @@ print('Hello No Download Button')
 Whenever changes to the code were made, you can compare with the original code. You can hide the compare button by adding the `noCompare` meta string.
 
 ````py
-```py live_py noCompare
+```py live_py noCompare hideWarning
 print('Hello No Compare Button')
 ```
 ````
@@ -120,7 +120,7 @@ print('Hello No Compare Button')
 <BrowserWindow>
 Make some changes and note that no compare button is shown.
 
-```py live_py noCompare
+```py live_py noCompare hideWarning
 print('Hello No Compare Button')
 ```
 </BrowserWindow>
@@ -138,7 +138,7 @@ print('Hello No Reset Button')
 
 Edit the code and note that the reset button is hidden.
 
-```py live_py noReset
+```py live_py noReset hideWarning
 print('Hello No Reset Button')
 ```
 </BrowserWindow>
@@ -159,7 +159,7 @@ print('Line 6 - scrolled')
 ````
 <BrowserWindow>
 
-```py live_py maxLines=5
+```py live_py maxLines=5 hideWarning
 print('Line 1')
 print('Line 2')
 print('Line 3')
@@ -444,7 +444,8 @@ class Grid():
 ```
 </details>
 
-```py live_py title=grid__example.py
+<BrowserWindow>
+```py live_py title=grid__example.py hideWarning
 from grid import Grid
 Grid.clear_canvas()
 smile = Grid.from_text('''
@@ -459,6 +460,7 @@ smile = Grid.from_text('''
 ''')
 smile.draw()
 ```
+</BrowserWindow>
 
 ### Persist Changes (id=uuid)
 
@@ -559,5 +561,37 @@ print('----------------------------------------------------------')
 print(f'Die Berechnung dauerte {(time() - t0) * 1000} Millisekunden')
 ```
 </BrowserWindow>
+
+### Unpersisted Code Blocks
+
+Wenn keine `id` angegeben ist, wird der Code nicht gespeichert. Dies ist nützlich, wenn Sie Code-Beispiele haben, die nicht gespeichert werden sollen.
+
+````py
+```py live_py
+print('Hello Unpersisted Code Block')
+```
+````
+<BrowserWindow>
+
+```py live_py
+print('Hello Unpersisted Code Block')
+```
+</BrowserWindow>
+
+#### Hide the Warning (hideWarning)
+Soll die Warnung ausgeblendet werden, kann der `hideWarning`-Parameter hinzugefügt werden.
+
+````py
+```py live_py hideWarning
+print('Hello Unpersisted Code Block')
+```
+````
+<BrowserWindow>
+
+```py live_py hideWarning
+print('Hello Unpersisted Code Block')
+```
+</BrowserWindow>
+
 
 ## Installation

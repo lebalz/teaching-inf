@@ -22,7 +22,7 @@ import globalData from '@generated/globalData';
 import ScriptVersion from './ScriptVersion';
 import { TypeMeta } from '../DocumentRoot';
 import { Props as CodeEditorProps } from '@site/src/components/documents/CodeEditor';
-const libDir = (globalData['live-editor-theme'] as {default: {libDir: string}}).default.libDir;
+const libDir = (globalData['live-editor-theme'] as { default: { libDir: string } }).default.libDir;
 
 export interface LogMessage {
     type: 'done' | 'stdout' | 'stderr' | 'start';
@@ -53,6 +53,7 @@ export class ScriptMeta extends TypeMeta<DocumentType.Script> {
     readonly isResettable: boolean;
     readonly canCompare: boolean;
     readonly canDownload: boolean;
+    readonly hideWarning: boolean;
 
     constructor(props: Partial<Omit<CodeEditorProps, 'id' | 'className'>>) {
         super(DocumentType.Script, props.readonly ? Access.RO_User : undefined);
@@ -70,6 +71,7 @@ export class ScriptMeta extends TypeMeta<DocumentType.Script> {
         this.isResettable = !props.noReset;
         this.canCompare = !props.noCompare;
         this.canDownload = !props.noDownload;
+        this.hideWarning = !!props.hideWarning;
     }
 
     get defaultData(): TypeDataMapping[DocumentType.Script] {
