@@ -12,8 +12,9 @@ import { DocumentType } from '@site/src/api/document';
 import Graphics from './Result/Graphics';
 import Canvas from './Result/Graphics/Canvas';
 import Turtle from './Result/Graphics/Turtle';
+import { observer } from 'mobx-react-lite';
 
-const Editor = () => {
+const Editor = observer(() => {
     const script = useDocument<DocumentType.Script>();
     return (
         <React.Fragment>
@@ -38,6 +39,6 @@ const Editor = () => {
             )}
         </React.Fragment>
     );
-};
+});
 
 export default Editor;

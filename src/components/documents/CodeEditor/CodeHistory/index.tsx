@@ -54,18 +54,6 @@ const CodeHistory = observer(() => {
                                       })}
                             </span>
                             <span className={clsx(styles.spacer)}></span>
-                            <Button
-                                icon="Sync"
-                                title={translate({
-                                    message: 'Sync Versions',
-                                    id: 'CodeHistory.LoadVersions.text'
-                                })}
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    script.loadVersions();
-                                }}
-                            />
                         </div>
                     </summary>
                 }

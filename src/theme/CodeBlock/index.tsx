@@ -1,14 +1,14 @@
 import React from 'react';
-import InitialCodeBlock from '@theme-init/CodeBlock';
-import CodeBlock, { type Props as CodeBlockType } from '@theme-init/CodeBlock';
+import CodeBlock from '@theme-original/CodeBlock';
+import type CodeBlockType from '@theme/CodeBlock';
 import type { WrapperProps } from '@docusaurus/types';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import { CodeEditorWrapper } from '@site/src/components/documents/CodeEditor';
 
 export interface MetaProps {
+    id?: string;
     live_jsx: boolean;
     live_py: boolean;
-    id?: string;
     slim: boolean;
     readonly: boolean;
     noReset: boolean;
@@ -16,17 +16,17 @@ export interface MetaProps {
     versioned: boolean;
     noHistory: boolean;
     noCompare: boolean;
-    maxLines: number;
+    maxLines?: number;
     title: string;
 }
 
 type Props = WrapperProps<typeof CodeBlockType>;
 
-const sanitizedTitle = (id: string) => {
-    if (!id) {
+const sanitizedTitle = (title?: string) => {
+    if (!title) {
         return;
     }
-    return id
+    return title
         .replace(/--/g, '<<HYPHEN>>')
         .replace(/__/g, '<<UNDERSCORE>>')
         .replace(/[-_]/g, ' ')
@@ -69,7 +69,7 @@ export const splitCode = (rawCode: string) => {
     };
 };
 
-export default function CodeBlockWrapper(props: Props): JSX.Element {
+export default function CodeBlockWrapper(props: Props & MetaProps): JSX.Element {
     const metaProps = extractMetaProps(props);
     const langMatch = ((props.className || '') as string).match(/language-(?<lang>\w*)/);
     let lang = langMatch?.groups?.lang?.toLocaleLowerCase() ?? '';
@@ -87,19 +87,20 @@ export default function CodeBlockWrapper(props: Props): JSX.Element {
                 {() => {
                     return (
                         <CodeEditorWrapper
+                            id={metaProps.id}
                             code={code}
                             lang={lang}
                             preCode={pre}
                             postCode={post}
-                            maxLines={props.maxLines && Number.parseInt(props.maxLines, 10)}
-                            readonly={!!props.readonly}
-                            noReset={!!props.noReset}
-                            noDownload={props.versioned || !!props.noDownload}
-                            slim={!!props.slim}
-                            showLineNumbers={!(!!props.slim && !/\n/.test(code))}
-                            versioned={!!props.versioned}
-                            noHistory={!!props.noHistory}
-                            noCompare={!!props.noCompare}
+                            maxLines={metaProps.maxLines && Number.parseInt(`${metaProps.maxLines}`, 10)}
+                            readonly={!!metaProps.readonly}
+                            noReset={!!metaProps.noReset}
+                            noDownload={metaProps.versioned || !!metaProps.noDownload}
+                            slim={!!metaProps.slim}
+                            showLineNumbers={!(!!metaProps.slim && !/\n/.test(code))}
+                            versioned={!!metaProps.versioned}
+                            noHistory={!!metaProps.noHistory}
+                            noCompare={!!metaProps.noCompare}
                             title={sanitizedTitle(title) || lang}
                             className={props.className}
                         />

@@ -45,13 +45,13 @@ export class ScriptMeta extends TypeMeta<DocumentType.Script> {
     readonly readonly: boolean;
     readonly versioned: boolean;
     readonly initCode: string;
-    readonly slim: boolean = false;
-    readonly hasHistory: boolean = true;
-    readonly showLineNumbers: boolean = true;
-    readonly maxLines: number = 25;
-    readonly isResettable: boolean = true;
-    readonly canCompare: boolean = true;
-    readonly canDownload: boolean = true;
+    readonly slim: boolean;
+    readonly hasHistory: boolean;
+    readonly showLineNumbers: boolean;
+    readonly maxLines: number;
+    readonly isResettable: boolean;
+    readonly canCompare: boolean;
+    readonly canDownload: boolean;
 
     constructor(props: Partial<Omit<CodeEditorProps, 'id' | 'className'>>) {
         super(DocumentType.Script, props.readonly ? Access.RO_User : undefined);
@@ -59,12 +59,12 @@ export class ScriptMeta extends TypeMeta<DocumentType.Script> {
         this.lang = props.lang || 'py';
         this.preCode = props.preCode || '';
         this.postCode = props.postCode || '';
-        this.readonly = props.readonly || false;
-        this.versioned = props.versioned || false;
+        this.readonly = !!props.readonly;
+        this.versioned = !!props.versioned;
         this.initCode = props.code || '';
-        this.slim = props.slim || false;
-        this.hasHistory = !props.noHistory;
-        this.showLineNumbers = props.showLineNumbers ?? true;
+        this.slim = !!props.slim;
+        this.hasHistory = !!props.versioned && !props.noHistory;
+        this.showLineNumbers = !!props.showLineNumbers;
         this.maxLines = props.maxLines || 25;
         this.isResettable = !props.noReset;
         this.canCompare = !props.noCompare;
@@ -305,9 +305,6 @@ export default class Script extends iDocument<DocumentType.Script> {
     get source() {
         return 'browser';
     }
-    get _lang() {
-        return this.meta.lang;
-    }
     get preCode() {
         return this.meta.preCode;
     }
@@ -316,10 +313,9 @@ export default class Script extends iDocument<DocumentType.Script> {
     }
 
     get lang() {
-        if (this.root?.meta)
-            if (this._lang === 'py') {
-                return 'python';
-            }
-        return this._lang;
+        if (this.meta.lang === 'py') {
+            return 'python';
+        }
+        return this.meta.lang;
     }
 }

@@ -8,6 +8,7 @@ import clsx from 'clsx';
 import { DocumentType } from '@site/src/api/document';
 import { useDocument } from '@site/src/components/documents/useContextDocument';
 import { observer } from 'mobx-react-lite';
+import { mdiClose } from '@mdi/js';
 export interface Props {
     controls?: JSX.Element;
     main?: JSX.Element;
@@ -23,7 +24,7 @@ const Graphics = observer((props: Props) => {
                     <span className={styles.spacer}></span>
                     {props.controls}
                     <Button
-                        icon="Close"
+                        icon={mdiClose}
                         className={clsx(styles.closeButton)}
                         onClick={() => {
                             script.stopScript();

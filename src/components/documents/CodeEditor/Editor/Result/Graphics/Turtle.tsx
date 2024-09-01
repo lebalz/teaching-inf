@@ -8,6 +8,7 @@ import clsx from 'clsx';
 import { useDocument } from '@site/src/components/documents/useContextDocument';
 import { DocumentType } from '@site/src/api/document';
 import { observer } from 'mobx-react-lite';
+import { mdiAnimationPlay, mdiDownload } from '@mdi/js';
 
 const Turtle = observer(() => {
     const script = useDocument<DocumentType.Script>();
@@ -16,7 +17,7 @@ const Turtle = observer(() => {
             controls={
                 <React.Fragment>
                     <Button
-                        icon="AnimationPlay"
+                        icon={mdiAnimationPlay}
                         onClick={() => {
                             const turtleResult = document.getElementById(
                                 DOM_ELEMENT_IDS.turtleSvgContainer(script.codeId)
@@ -30,7 +31,7 @@ const Turtle = observer(() => {
                         title="Download Animated SVG"
                     />
                     <Button
-                        icon="Download"
+                        icon={mdiDownload}
                         iconSize="12px"
                         onClick={() => {
                             const turtleResult = document.getElementById(

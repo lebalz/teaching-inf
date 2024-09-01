@@ -24,7 +24,7 @@ export interface Props extends Omit<MetaProps, 'live_jsx' | 'live_py'> {
 
 export const CodeEditorWrapper = observer((props: Props) => {
     const script = useFirstMainDocument(props.id, new ScriptMeta(props));
-    if (ExecutionEnvironment.canUseDOM || !script) {
+    if (!ExecutionEnvironment.canUseDOM || !script) {
         return <CodeBlock language={props.lang}>{props.code}</CodeBlock>;
     }
     return <CodeEditor script={script} className={props.className} />;

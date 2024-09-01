@@ -6,6 +6,7 @@ import Button from '@site/src/components/documents/CodeEditor/Button';
 import { useDocument } from '@site/src/components/documents/useContextDocument';
 import { DocumentType } from '@site/src/api/document';
 import { observer } from 'mobx-react-lite';
+import { mdiDownload } from '@mdi/js';
 
 const downloadCanvas = (canvasId: string) => {
     const canvas = document.getElementById(canvasId) as HTMLCanvasElement;
@@ -37,7 +38,7 @@ const Canvas = observer(() => {
         <Graphics
             controls={
                 <Button
-                    icon="Download"
+                    icon={mdiDownload}
                     iconSize="12px"
                     onClick={() => {
                         downloadCanvas(DOM_ELEMENT_IDS.canvasContainer(script.codeId));

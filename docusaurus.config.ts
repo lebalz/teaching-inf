@@ -14,6 +14,7 @@ import flexCardsPlugin from './src/plugins/remark-flex-cards/plugin';
 import imagePlugin from './src/plugins/remark-images/plugin';
 import mediaPlugin from './src/plugins/remark-media/plugin';
 import detailsPlugin from './src/plugins/remark-details/plugin';
+import themeCodeEditor from './src/plugins/theme-code-editor'
 import enumerateAnswersPlugin from './src/plugins/remark-enumerate-components/plugin';
 import { v4 as uuidv4 } from 'uuid';
 import matter from 'gray-matter';
@@ -262,6 +263,14 @@ const config: Config = {
     },
   } satisfies Preset.ThemeConfig,
   plugins: ['docusaurus-plugin-sass'],
+  themes: [
+    [
+      themeCodeEditor,
+      {
+        libDir: 'bry-libs',
+      }
+    ]
+  ],
   stylesheets: [
     {
       href: 'https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css',
@@ -270,7 +279,7 @@ const config: Config = {
         'sha384-odtC+0UGzzFL/6PNoE8rX/SPcQDXBJ+uRepguP4QkPCm2LBxH3FA3y+fKSiJ+AmM',
       crossorigin: 'anonymous',
     },
-  ]
+  ],
 };
 
 export default config;

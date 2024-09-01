@@ -5,15 +5,11 @@ import { observer } from 'mobx-react-lite';
 import { TENANT_ID, msalConfig } from '../authConfig';
 import Head from '@docusaurus/Head';
 import siteConfig from '@generated/docusaurus.config';
-import { useLocation } from '@docusaurus/router';
 import { AccountInfo, EventType, InteractionStatus, PublicClientApplication } from '@azure/msal-browser';
-import { setupMsalAxios, default as axiosAPI, setupNoAuthAxios } from '../api/base';
+import { setupMsalAxios, setupNoAuthAxios } from '../api/base';
 import { useStore } from '../hooks/useStore';
 import { runInAction } from 'mobx';
-import { usePluginData } from '@docusaurus/useGlobalData';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-import { DocumentRootStore } from '../stores/DocumentRootStore';
-import { InternalAxiosRequestConfig } from 'axios';
 const { NO_AUTH, TEST_USERNAME } = siteConfig.customFields as { TEST_USERNAME?: string; NO_AUTH?: boolean };
 export const msalInstance = new PublicClientApplication(msalConfig);
 

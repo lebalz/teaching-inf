@@ -159,6 +159,7 @@ class DocumentStore extends iStore {
         replaceStoreModel: boolean = false
     ): Promise<TypeModelMapping[Type] | 'error' | undefined> {
         if (!model.root || model.root?.isDummy || !this.root.sessionStore.isLoggedIn) {
+            console.log('error', !model.root, model.root?.isDummy, !this.root.sessionStore.isLoggedIn);
             return Promise.resolve('error');
         }
         if (model.isDirty) {

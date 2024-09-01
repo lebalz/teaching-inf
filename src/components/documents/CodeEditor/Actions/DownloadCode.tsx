@@ -4,13 +4,14 @@ import { translate } from '@docusaurus/Translate';
 import { observer } from 'mobx-react-lite';
 import { useDocument } from '../../useContextDocument';
 import { DocumentType } from '@site/src/api/document';
+import { mdiDownload } from '@mdi/js';
 
 const DownloadCode = observer((props: { title: string }) => {
     const script = useDocument<DocumentType.Script>();
 
     return (
         <Button
-            icon="Download"
+            icon={mdiDownload}
             onClick={() => {
                 const downloadLink = document.createElement('a');
                 const file = new Blob([script.code], { type: 'text/plain;charset=utf-8' });

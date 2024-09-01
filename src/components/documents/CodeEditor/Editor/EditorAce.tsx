@@ -17,7 +17,8 @@ import { observer } from 'mobx-react-lite';
 // import('ace-builds/src-noconflict/snippets/python'),
 
 const ALIAS_LANG_MAP_ACE = {
-    mpy: 'python'
+    mpy: 'python',
+    py: 'python'
 };
 
 const EditorAce = observer(() => {
@@ -85,7 +86,7 @@ const EditorAce = observer(() => {
                 onChange={(value: string, e: { action: 'insert' | 'remove' }) => {
                     script.setCode(value, e.action);
                 }}
-                readOnly={script.showRaw}
+                readOnly={script.meta.readonly || script.showRaw}
                 value={script.showRaw ? script.pristineCode : script.code}
                 defaultValue={script.code || '\n'}
                 name={DOM_ELEMENT_IDS.aceEditor(script.codeId)}
