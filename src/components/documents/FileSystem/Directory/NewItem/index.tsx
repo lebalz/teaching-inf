@@ -103,7 +103,7 @@ const NewItem = observer((props: Props) => {
                                         return documentStore.create({
                                             documentRootId: rootId,
                                             parentId: file.id,
-                                            type: DocumentType.Script,
+                                            type: DocumentType.QuillV2,
                                             data: {
                                                 code: '\n'
                                             }
