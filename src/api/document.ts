@@ -7,6 +7,8 @@ import { AxiosPromise } from 'axios';
 import QuillV2 from '../models/documents/QuillV2';
 import { Delta } from 'quill/core';
 import Solution from '../models/documents/Solution';
+import Directory from '../models/documents/FileSystem/Directory';
+import File from '../models/documents/FileSystem/File';
 
 export enum Access {
     RO_DocumentRoot = 'RO_DocumentRoot',
@@ -26,7 +28,9 @@ export enum DocumentType {
     TaskState = 'task_state',
     String = 'string',
     QuillV2 = 'quill_v2',
-    Solution = 'solution'
+    Solution = 'solution',
+    Dir = 'dir',
+    File = 'file'
 }
 export interface ScriptData {
     code: string;
@@ -50,6 +54,16 @@ export interface SolutionData {
     /** no content needed */
 }
 
+export interface DirData {
+    name: string;
+    isOpen: boolean;
+}
+
+export interface FileData {
+    name: string;
+    isOpen: boolean;
+}
+
 export type StateType = 'checked' | 'question' | 'unset' | 'star' | 'star-half' | 'star-empty';
 
 export interface TaskStateData {
@@ -63,6 +77,8 @@ export interface TypeDataMapping {
     [DocumentType.String]: StringData;
     [DocumentType.QuillV2]: QuillV2Data;
     [DocumentType.Solution]: SolutionData;
+    [DocumentType.Dir]: DirData;
+    [DocumentType.File]: FileData;
     // Add more mappings as needed
 }
 
@@ -73,6 +89,8 @@ export interface TypeModelMapping {
     [DocumentType.String]: String;
     [DocumentType.QuillV2]: QuillV2;
     [DocumentType.Solution]: Solution;
+    [DocumentType.Dir]: Directory;
+    [DocumentType.File]: File;
     /**
      * Add more mappings as needed
      * TODO: implement the mapping in DocumentRoot.ts
@@ -81,7 +99,15 @@ export interface TypeModelMapping {
      */
 }
 
-export type DocumentTypes = Script | TaskState | ScriptVersion | String | QuillV2 | Solution;
+export type DocumentTypes =
+    | Script
+    | TaskState
+    | ScriptVersion
+    | String
+    | QuillV2
+    | Solution
+    | Directory
+    | File;
 
 export interface Document<Type extends DocumentType> {
     id: string;
@@ -109,6 +135,10 @@ export function create<Type extends DocumentType>(
     signal: AbortSignal
 ): AxiosPromise<Document<Type>> {
     return api.post(`/documents`, data, { signal });
+}
+
+export function remove(id: string, signal: AbortSignal): AxiosPromise<void> {
+    return api.delete(`/documents/${id}`, { signal });
 }
 
 export function update<Type extends DocumentType>(
