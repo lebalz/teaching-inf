@@ -96,7 +96,7 @@ const File = observer((props: Props) => {
             }
         >
             <div className={clsx(styles.content)}>
-                {file.document && file.isOpen && (
+                {file.document && (
                     <>
                         {file.document.type === DocumentType.Script && (
                             <CodeEditorComponent script={file.document} />
