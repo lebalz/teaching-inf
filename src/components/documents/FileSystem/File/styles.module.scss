@@ -34,10 +34,6 @@
         border-top-right-radius: 0;
         padding: 1px;
         min-height: 2em;
-        &.maxHeight {
-            max-height: 5em;
-            overflow: hidden;
-        }
         .quill {
             margin-bottom: 0;
         }
