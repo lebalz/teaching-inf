@@ -7,7 +7,6 @@ import {
     find as apiFind,
     update as apiUpdate,
     create as apiCreate,
-    Access,
     DocumentTypes,
     TypeModelMapping,
     allDocuments as apiAllDocuments

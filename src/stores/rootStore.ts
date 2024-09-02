@@ -37,7 +37,6 @@ export class RootStore {
 
     @action
     load() {
-        console.log('load: models');
         this.userStore.loadCurrent().then((user) => {
             if (user) {
                 this.socketStore.reconnect();

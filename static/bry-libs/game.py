@@ -1,6 +1,7 @@
 
 from browser import timer, document # type: ignore
 from config import Config           # type: ignore
+from py_back_trace import notify
 
 import time
 class Game():
@@ -27,6 +28,8 @@ class Game():
         Game.stop_request = True
         timer.clear_timeout(Game.timeout_id)
         timer.cancel_animation_frame(Game.timeout_id)
+        del document[Config.BRYTHON_COMMUNICATOR].attrs['data--is-running']
+        notify(Config.ID, {'type': 'done', 'time': time.time()})
 
     @staticmethod
     def is_running():
@@ -60,7 +63,8 @@ def gameloop(func):
     Game.reset()
     t0 = time.now() # type: ignore
     Game.init_time = document[Config.BRYTHON_COMMUNICATOR].attrs.get('data--start-time')
-        
+    document[Config.BRYTHON_COMMUNICATOR].attrs['data--is-running'] = 1
+
     def animation_frame():
         Game.anim_id = timer.request_animation_frame(lambda t: wrap(t))
 
@@ -68,6 +72,8 @@ def gameloop(func):
         Game.sleep_requested = True
         if Game.is_running():
             Game.timeout_id = timer.set_timeout(animation_frame, ms)
+        else:
+            Game.stop()
 
     Game.sleep = sleep
     
