@@ -25,6 +25,10 @@ const BrythonCommunicator = observer(() => {
                         script.setExecuting(true);
                         break;
                     case 'done':
+                        const isRunning = current.getAttribute('data--is-running');
+                        if (isRunning) {
+                            return;
+                        }
                         script.setExecuting(false);
                         break;
                     default:
