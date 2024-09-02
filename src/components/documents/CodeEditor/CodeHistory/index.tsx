@@ -5,7 +5,6 @@ import { Prism } from 'prism-react-renderer';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import Translate, { translate } from '@docusaurus/Translate';
-import Button from '@site/src/components/documents/CodeEditor/Button';
 import DiffViewer from 'react-diff-viewer-continued';
 import Details from '@theme/Details';
 import { observer } from 'mobx-react-lite';

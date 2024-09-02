@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Button, { Color } from '@site/src/components/documents/CodeEditor/Button';
-import { translate } from '@docusaurus/Translate';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
 import { observer } from 'mobx-react-lite';

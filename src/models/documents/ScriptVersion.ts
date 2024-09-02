@@ -1,9 +1,8 @@
 import iDocument from '../iDocument';
 import { DocumentType, Document as DocumentProps, ScriptVersionData } from '@site/src/api/document';
 import DocumentStore from '@site/src/stores/DocumentStore';
-import { Version } from '@site/src/components/documents/CodeEditor/WithScript/Types';
 
-class ScriptVersion extends iDocument<DocumentType.ScriptVersion> implements Version {
+class ScriptVersion extends iDocument<DocumentType.ScriptVersion> {
     constructor(props: DocumentProps<DocumentType.ScriptVersion>, store: DocumentStore) {
         super(props, store);
     }

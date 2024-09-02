@@ -1,7 +1,6 @@
 import * as React from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
-import Script from '@site/src/models/documents/Script';
 import Header from './Header';
 import HiddenCode from './HiddenCode';
 import EditorAce from './EditorAce';

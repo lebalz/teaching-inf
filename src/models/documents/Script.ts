@@ -7,7 +7,7 @@ import {
     GRID_IMPORTS_TESTER,
     TURTLE_IMPORTS_TESTER
 } from '@site/src/components/documents/CodeEditor/constants';
-import { runCode } from '@site/src/components/documents/CodeEditor/WithScript/bryRunner';
+import { runCode } from '@site/src/components/documents/CodeEditor/utils/bryRunner';
 import iDocument, { Source } from '../iDocument';
 import {
     DocumentType,

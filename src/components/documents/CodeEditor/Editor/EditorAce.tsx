@@ -13,8 +13,6 @@ import 'ace-builds/webpack-resolver';
 import { useDocument } from '../../useContextDocument';
 import { DocumentType } from '@site/src/api/document';
 import { observer } from 'mobx-react-lite';
-// import 'ace-builds/src-noconflict/theme-textmate';
-// import('ace-builds/src-noconflict/snippets/python'),
 
 const ALIAS_LANG_MAP_ACE = {
     mpy: 'python',

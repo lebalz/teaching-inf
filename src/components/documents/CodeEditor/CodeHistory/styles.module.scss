@@ -22,10 +22,9 @@
 
 .faButton {
     margin-left: 1em;
-}
-
-.faButton:hover {
-    transform: scale(1.2);
+    &:hover {
+        transform: scale(1.2);
+    }
 }
 
 .diffViewer {
@@ -35,19 +34,24 @@
     --ifm-table-stripe-background: rgba(255, 255, 255, 0);
     font-family: monospace;
     overflow: auto;
+    table {
+        tbody {
+            tr {
+                td {
+                    padding-top: 0;
+                    padding-bottom: 0;
+                    pre {
+                        white-space: nowrap;
+                        padding-top: 0;
+                        padding-bottom: 0;
+                        line-height: 18px;
+                    }
+                }
+            }
+        }
+    }
 }
 
-.diffViewer table tbody tr td {
-    padding-top: 0;
-    padding-bottom: 0;
-}
-
-.diffViewer table tbody tr td pre {
-    white-space: nowrap;
-    padding-top: 0;
-    padding-bottom: 0;
-    line-height: 18px;
-}
 .diffHeader {
     display: flex;
     justify-content: space-between;
