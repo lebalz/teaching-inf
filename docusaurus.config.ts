@@ -259,6 +259,7 @@ const config: Config = {
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
+      additionalLanguages: ['bash', 'typescript', 'json', 'python'],
     },
   } satisfies Preset.ThemeConfig,
   plugins: ['docusaurus-plugin-sass'],

@@ -9,21 +9,21 @@ import BrowserWindow from '@site/src/components/BrowserWindow';
 print('hello world')
 ```
 
-### Title (title)
+### Title (`title`)
 
-You can add a title to the code block by adding a `title` to the meta string.
+Mit dem `title`-Parameter kann ein Titel für den Code-Block hinzugefügt werden.
 
 :::warning[Spaces]
-The space character is not supported, because it is used as a separator in the meta string of a code block. Use an underscore `_` or `-` instead.
-:::
+Ein Leerschlag wird nicht unterstützt, da er als Trennzeichen im Meta-String eines Code-Blocks verwendet wird. Verwenden Sie stattdessen einen Unterstrich `_` oder einen Bindestrich `-`.
 
+:::
 ````py
 ```py live_py title=example.py
 ```
 ````
 
 :::tip[Use `_` in the title]
-To use an underscore, you can use the following syntax:
+Um einen Unterstrich zu verwenden, können Sie die folgende Syntax verwenden:
 
 ````py
 ```py live_py title=example__file.py
@@ -37,9 +37,8 @@ print('Hello Title')
 </BrowserWindow>
 :::
 
-### Slim Mode (slim)
-
-Sometimes an editor with a header is visually too big. For small code snippets, you can use the `slim` mode to reduce the size of the editor. This will remove the header and hides the line numbers.
+### Slim Mode (`slim`)
+Manchmal ist ein Editor mit einem Header visuell zu gross. Für kleine Code-Schnipsel kann der `slim`-Modus verwendet werden, um die Grösse des Editors zu reduzieren. Dies entfernt den Header und blendet die Zeilennummern aus.
 
 ````py
 ```py live_py slim
@@ -54,13 +53,12 @@ print('Hello Slim Mode')
 ```
 </BrowserWindow>
 
-:::warning[Persistance]
-Slim Editor does not support persistance. The `id` attribute is ignored in slim mode.
+:::warning[API-Speicherung]
+Bei der Verwendung des `slim`-Modus wird der `id`-Parameter ignoriert.
 :::
 
-### Read-Only Mode (readonly)
-
-You can make the editor read-only by adding the `readonly` meta string.
+### Read-Only Mode (`readonly`)
+Ein Editor kann auch im Read-Only-Modus angezeigt werden, indem der `readonly`-Parameter hinzugefügt wird.
 
 ````py
 ```py live_py readonly
@@ -75,22 +73,16 @@ print('Hello Read-Only Mode')
 ```
 </BrowserWindow>
 
-:::tip[Works with Persisted Code]
-When the code is persisted, the read-only mode is still applied. 
-
-<details>
-<summary>Usecase: Teachers in Schools</summary>
-
-This is especially usefull in a School-Context, where some exercises/exams shall be done only during a given time, but you'd like to feedback the handed in solutions. Then the `readonly` attribute is added and the students see their edits, but can't edit it.
-
-Yes, this only works secure if you swizzle the `Store.tsxt`/`Storage.ts` component/script and introduce a custom connection to a server-backend, where the code is stored and fetched from.
-
-</details>
+::::tip[Works with Persisted Code]
+Auch wenn der Code von der API geladen wird, wird der Read-Only-Modus beibehalten.
+:::details[Use Case: Schulunterricht]
+Dies ist besonders nützlich im Schulunterricht, wenn einige Übungen/Prüfungen nur während einer bestimmten Zeit durchgeführt werden sollen, aber Sie den Schülern gerne Feedback zu den eingereichten Lösungen geben möchten. Dann wird das `readonly`-Attribut hinzugefügt und die Schüler sehen ihre Änderungen, können sie aber nicht bearbeiten.
 :::
+::::
 
-### Hide Download Button (noDownload)
+### Download Button verstecken (`noDownload`)
 
-You can hide the download button by adding the `noDownload` meta string.
+Der Download-Button ermöglicht es, den Code als Datei herunterzuladen. Mit dem `noDownload`-Meta-String kann der Download-Button ausgeblendet werden.
 
 ````py
 ```py live_py noDownload
@@ -104,9 +96,9 @@ print('Hello No Download Button')
 ```
 </BrowserWindow>
 
-### Hide the Compare Button (noCompare)
+### Vergleich-Button ausblenden (`noCompare`)
 
-Whenever changes to the code were made, you can compare with the original code. You can hide the compare button by adding the `noCompare` meta string.
+Wenn Änderungen am Code vorgenommen wurden, können Sie mit dem Originalcode vergleichen. Sie können den Vergleichsbutton ausblenden, indem Sie den `noCompare`-Meta-String hinzufügen.
 
 ````py
 ```py live_py noCompare hideWarning
@@ -115,16 +107,16 @@ print('Hello No Compare Button')
 ````
 
 <BrowserWindow>
-Make some changes and note that no compare button is shown.
+Ändere den Code und beachte, dass kein Vergleichsbutton angezeigt wird.
 
 ```py live_py noCompare hideWarning
 print('Hello No Compare Button')
 ```
 </BrowserWindow>
 
-### Hide the Reset Button (noReset)
+### Reset-Button ausblenden (`noReset`)
 
-The reset button allows you to reset the code to the original code. You can hide the reset button by adding the `noReset` meta string.
+Der Reset-Button ermöglicht es, den Code auf den ursprünglichen Code zurückzusetzen. Sie können den Reset-Button ausblenden, indem Sie den `noReset`-Meta-String hinzufügen.
 
 ````py
 ```py live_py noReset
@@ -132,17 +124,16 @@ print('Hello No Reset Button')
 ```
 ````
 <BrowserWindow>
-
-Edit the code and note that the reset button is hidden.
+Ändere den Code und beachte, dass der Reset-Button ausgeblendet ist.
 
 ```py live_py noReset hideWarning
 print('Hello No Reset Button')
 ```
 </BrowserWindow>
 
-### Max Line Number before Scroll (maxLines)
+### Max Line Number bevor gescrollt wird (`maxLines`)
 
-You can specify the maximum number of lines before the editor will scroll. This is useful for long code snippets. The default value is `25`.
+Es kann die maximale Anzahl von Zeilen angegeben werden, bevor der Editor scrollt. Dies ist nützlich für lange Code-Schnipsel. Der Standardwert ist `25`.
 
 ````py
 ```py live_py maxLines=5
@@ -167,13 +158,12 @@ print('Line 6 - scrolled')
 </BrowserWindow>
 
 ### Imports
+Standardmässig können alle Python-Skripte, die sich im Verzeichnis `static/bry-libs/` befinden, direkt aus den Code-Blöcken importiert werden. Dies ermöglicht es Ihnen, wiederverwendbare Module zu erstellen, die in Ihre Code-Blöcke importiert werden können.
 
-By default, all python scripts that are located in the `static/bry-libs/` directory can be imported directly from the code blocks. This allows you to create reusable modules that can be imported into your code blocks.
-
+Das folgende Beispiel zeigt, wie Sie ein Modul importieren und verwenden können. Das Skript `grid.py` ist standardmässig in `static/bry-libs/grid.py` enthalten und kann somit importiert werden.
 The script `grid.py` is added by default to `static/bry-libs/grid.py` when you run the dev-server.
 
-<details>
-<summary>Content of `grid.py`</summary>
+:::details[Sourcecode von `grid.py`]
 
 ```py
 from browser import document # type: ignore
@@ -439,7 +429,7 @@ class Grid():
     def __len__(self):
         return self.max
 ```
-</details>
+:::
 
 <BrowserWindow>
 ```py live_py title=grid__example.py hideWarning
@@ -459,9 +449,9 @@ smile.draw()
 ```
 </BrowserWindow>
 
-### Persist Changes (id=uuid)
+### Änderungen abspeichern (`id`=uuid)
 
-You can persist the changes of the code editor by adding an `id` to the code block. The changes will be stored in the local storage and the content will be restored when the page is reloaded.
+Änderungen im Code-Editor können durch Hinzufügen einer `id` zum Code-Block persistiert werden. Die Änderungen werden über die `teaching-api` gespeicher und der Inhalt wird beim Neuladen der Seite wiederhergestellt.
 
 ````py
 ```py live_py id=50fa8065-0d3b-4cb1-b03f-8244a6582d60
@@ -477,19 +467,18 @@ You can persist the changes of the code editor by adding an `id` to the code blo
 
 </BrowserWindow>
 
-:::warning[Unique IDs]
-Make sure that the IDs on the entire website (not just on this page) are unique, otherwise the behavior may be unexpected for your users. (The code will be overwritten by the last changed code block with the same id).
+:::warning[Eindeutige IDs]
+Stelle sicher dass die IDs auf der gesamten Website (nicht nur auf dieser Seite) eindeutig sind, ansonsten kann das Verhalten für deine Benutzer unerwartet sein. (Der Code wird durch den zuletzt geänderten Code-Block mit derselben ID überschrieben).
 :::
 
 :::tip[UUID]
-A good way to ensure unique IDs is to use a UUID. For VS Code users, the extension [UUID Generator by Motivesoft](https://marketplace.visualstudio.com/items?itemName=motivesoft.vscode-uuid-generator) is handy to insert new UUIDs with `Alt+Shift+U`.
+Ein guter Weg, um eindeutige IDs zu gewährleisten, ist die Verwendung einer UUID. Für VS Code-Benutzer ist die Erweiterung [UUID Generator von Motivesoft](https://marketplace.visualstudio.com/items?itemName=motivesoft.vscode-uuid-generator) praktisch, um neue UUIDs mit `Alt+Shift+U` einzufügen.
 :::
 
 
-### Save Versions (versioned)
+### Versionen speichern (`versioned`)
 
-You can save versions of the code by adding the `versioned` meta string. This will add a version history to the editor. Every Change is saved as a new version, but not more than once every 1 second (configurable through the `syncMaxOnceEvery` option in the `docusaurus.config.js`).
-
+Es können Versionen des Codes gespeichert werden, indem der `versioned`-Meta-String hinzugefügt wird. Dies fügt eine Versionshistorie zum Editor hinzu. Jede Änderung wird als neue Version gespeichert, aber nicht öfter als einmal alle 1 Sekunde.
 
 ````py
 ```py live_py versioned id=fe506dd7-1507-4929-ad07-302d22529d79
@@ -498,29 +487,30 @@ print('Hello Versioned Mode')
 ````
 <BrowserWindow>
 
-Try it by changing the code and then clicking on the version history details.
+Probiere es aus, indem du den Code mehrmals (min. 2x) änderst und speicherst und dann auf die Versionshistorie-Details klickst.
+
 ```py live_py versioned id=fe506dd7-1507-4929-ad07-302d22529d79
 print('Hello Versioned Mode')
 ```
 </BrowserWindow>
 
 :::warning[Only in Persisted Mode]
-The versioned mode only works in combination with the `id` attribute. The `id` attribute is used to store the versions in the local storage.
+Der `versioned`-Modus funktioniert nur in Kombination mit dem `id`-Attribut. Das `id`-Attribut wird verwendet, um die Versionen im backend zu persistieren.
 :::
 
 
-### Hide the Version History (noHistory)
+### Version History verstecken (`noHistory`)
 
-You can hide the version history by adding the `noHistory` meta string. This will only hide the history, but has no impact on the `versioned` prop.
+Die Versionen des Codes werden standardmässig angezeigt. Mit dem `noHistory`-Meta-String können Sie die Versionshistorie ausblenden.
 
 ````py
-```py live_py versioned noHistory id=fe506dd7-1507-4929-ad07-302d22529d79
+```py live_py versioned noHistory id=07300009-a743-4adc-bdc5-cacbfdf5230a
 print('Hello No History')
 ```
 ````
 
 <BrowserWindow>
-```py live_py versioned noHistory id=fe506dd7-1507-4929-ad07-302d22529d79
+```py live_py versioned noHistory id=07300009-a743-4adc-bdc5-cacbfdf5230a
 print('Hello Versioned Mode')
 ```
 </BrowserWindow>
@@ -528,6 +518,12 @@ print('Hello Versioned Mode')
 ### Pre- und Post-Code
 
 Mit Kommentaren lassen sich Code-Teile zu Beginn oder am Ende verstecken und auf Wunsch aufklappen. Dies ist nützlich, um den Fokus auf den Hauptteil des Codes zu legen.
+
+`### PRE`
+: Die Code-Sequenz **vor** dem `### POST`-Kommentar ist standardmässig eingeklappt und wird nicht angezeigt.
+`### POST`
+: Die Code-Sequenz **nach** dem `### POST`-Kommentar ist standardmässig eingeklappt und wird nicht angezeigt.
+
 
 ````py
 ```py live_py id=5ecb46e8-4ab5-428b-bb3f-467aa0d47d01
@@ -545,6 +541,7 @@ print(f'Die Berechnung dauerte {time.time() - t0} Sekunden')
 ````
 
 <BrowserWindow>
+Codeblock mit eingeklapptem Pre- und Post-Code. Die Ausklapp-Knöpfe werden angezeigt, wenn mit der Maus über den Code gefahren wird.
 
 ```py live_py id=5ecb46e8-4ab5-428b-bb3f-467aa0d47d01
 from time import time
@@ -559,9 +556,10 @@ print(f'Die Berechnung dauerte {(time() - t0) * 1000} Millisekunden')
 ```
 </BrowserWindow>
 
-### Unpersisted Code Blocks
+### Nicht abgespeicherte Code Blocks
 
-Wenn keine `id` angegeben ist, wird der Code nicht gespeichert. Dies ist nützlich, wenn Sie Code-Beispiele haben, die nicht gespeichert werden sollen.
+Wenn keine `id` angegeben ist, wird der Code nicht gespeichert, was mit einem :mdi[flash-triangle-outline]{.orange} und einem orangen Header signalisiert wird.
+Dies ist nützlich, wenn Sie Code-Beispiele haben, die nicht gespeichert werden sollen.
 
 ````py
 ```py live_py
@@ -575,7 +573,7 @@ print('Hello Unpersisted Code Block')
 ```
 </BrowserWindow>
 
-#### Hide the Warning (hideWarning)
+#### Hide the Warning (`hideWarning`)
 Soll die Warnung ausgeblendet werden, kann der `hideWarning`-Parameter hinzugefügt werden.
 
 ````py
@@ -592,3 +590,71 @@ print('Hello Unpersisted Code Block')
 
 
 ## Installation
+
+:::info[Code]
+- `src/plugins/theme-code-editor/` (ganzer Ordner)
+- `src/models/documents/Script`
+- `src/models/documents/ScriptVersion`
+- `src/components/documents/CodeEditor/` (ganzer Ordner)
+- `src/theme/CodeBlock/index.tsx`
+- `static/bry-libs/` (ganzer Ordner)
+
+Die neuen Models `Script` und `ScriptVersion` müssen unter `src/api/document.ts` und im DocumentStore `src/stores/DocumentStore.ts` registriert werden.
+:::
+
+:::info[Dependencies]
+```json
+{
+  "dependencies": {
+        "ace-builds": "^1.36.2",
+        "rc-slider": "^11.1.5",
+        "react-ace": "^12.0.0",
+        "react-diff-viewer-continued": "^3.4.0",
+        "react-draggable": "^4.4.6",
+        "svg-parser": "^2.0.4"
+  },
+  "devDependencies": {
+        "@types/fs-extra": "^11.0.4",
+        "@types/svg-parser": "^2.0.6",
+        "fs-extra": "^11.2.0"
+  }
+}
+```
+hinzufügen mit:
+```bash	
+yarn add ace-builds rc-slider react-ace react-diff-viewer-continued react-draggable svg-parser
+yarn add --dev @types/fs-extra @types/svg-parser fs-extra
+```
+:::
+
+
+:::info[`docusaurus.config.ts`]
+```ts
+import themeCodeEditor from './src/plugins/theme-code-editor'
+
+const config: Config = {
+    themes: [
+        [
+            themeCodeEditor,
+            {
+                brythonSrc: 'https://cdn.jsdelivr.net/npm/brython@3.12.4/brython.min.js',
+                brythonStdlibSrc: 'https://cdn.jsdelivr.net/npm/brython@3.12.4/brython_stdlib.js',
+                libDir: '/bry-libs/'
+            }
+        ]
+    ],
+}
+```
+Wobei
+
+`libDir`
+: der Pfad zu den importierbaren Python-Dateien.
+: Alle hier abgelegten Python-Programme können direkt aus den Code-Blöcken importiert werden.
+: Kann ein Ordner-Name innerhalb des `static`-Ordners sein (Standard: `bry-libs`, dann sind die Dateien unter `static/bry-libs/` abgelegt), oder auch eine URL zu einem anderen Webserver.
+: Muss mindestens `brython_runner.py`, `py_back_trace.py` und `config.py` enthalten, um die Brython-Integration zu ermöglichen.
+
+`brythonSrc`
+: die URL zur JS-Bibliothek von Brython
+`brythonStdlibSrc`
+: die URL zur JS-Brython-Standardbibliothek
+:::
