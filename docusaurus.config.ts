@@ -14,6 +14,7 @@ import flexCardsPlugin from './src/plugins/remark-flex-cards/plugin';
 import imagePlugin from './src/plugins/remark-images/plugin';
 import mediaPlugin from './src/plugins/remark-media/plugin';
 import detailsPlugin from './src/plugins/remark-details/plugin';
+import themeCodeEditor from './src/plugins/theme-code-editor'
 import enumerateAnswersPlugin from './src/plugins/remark-enumerate-components/plugin';
 import { v4 as uuidv4 } from 'uuid';
 import matter from 'gray-matter';
@@ -106,7 +107,7 @@ const config: Config = {
     TENANT_ID: process.env.TENANT_ID,
     /** The application id uri generated in https://portal.azure.com */
     API_URI: process.env.API_URI,
-    GIT_COMMIT_SHA: GIT_COMMIT_SHA,
+    GIT_COMMIT_SHA: GIT_COMMIT_SHA
   },
 
   // Even if you don't use internationalization, you can use this field to set
@@ -258,10 +259,13 @@ const config: Config = {
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
+      additionalLanguages: ['bash', 'typescript', 'json', 'python'],
     },
   } satisfies Preset.ThemeConfig,
   plugins: ['docusaurus-plugin-sass'],
-  themes: ['docusaurus-live-brython'],
+  themes: [
+    [themeCodeEditor, {}]
+  ],
   stylesheets: [
     {
       href: 'https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css',
@@ -270,7 +274,7 @@ const config: Config = {
         'sha384-odtC+0UGzzFL/6PNoE8rX/SPcQDXBJ+uRepguP4QkPCm2LBxH3FA3y+fKSiJ+AmM',
       crossorigin: 'anonymous',
     },
-  ]
+  ],
 };
 
 export default config;
