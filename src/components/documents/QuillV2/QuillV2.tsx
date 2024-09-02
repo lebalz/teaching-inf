@@ -58,6 +58,7 @@ export interface Props extends MetaInit {
     theme?: 'snow' | 'bubble';
     hideToolbar?: boolean;
     hideWarning?: boolean;
+    className?: string;
 }
 
 const QuillV2 = observer((props: Props) => {
@@ -283,7 +284,7 @@ const QuillV2 = observer((props: Props) => {
 
     return (
         <div
-            className={clsx(styles.quillEditor, styles.quill, 'notranslate')}
+            className={clsx(styles.quillEditor, styles.quill, 'notranslate', props.className)}
             onBlur={() => {
                 updateSource.current = undefined;
             }}

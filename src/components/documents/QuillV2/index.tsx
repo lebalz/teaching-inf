@@ -39,11 +39,9 @@ export const QuillV2Component = observer((props: QuillProps) => {
     }
 
     return (
-        <div className={clsx(props.className)}>
-            <DocContext.Provider value={quillDoc}>
-                <quill.default {...props} />
-            </DocContext.Provider>
-        </div>
+        <DocContext.Provider value={quillDoc}>
+            <quill.default {...props} />
+        </DocContext.Provider>
     );
 });
 

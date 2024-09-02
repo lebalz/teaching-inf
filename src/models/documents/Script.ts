@@ -22,6 +22,7 @@ import globalData from '@generated/globalData';
 import ScriptVersion from './ScriptVersion';
 import { TypeMeta } from '../DocumentRoot';
 import { Props as CodeEditorProps } from '@site/src/components/documents/CodeEditor';
+import File from './FileSystem/File';
 const libDir = (globalData['live-editor-theme'] as { default: { libDir: string } }).default.libDir;
 
 export interface LogMessage {
@@ -107,7 +108,10 @@ export default class Script extends iDocument<DocumentType.Script> {
     }
 
     @computed
-    get title() {
+    get title(): string {
+        if (this.parent && this.parent.type === DocumentType.File) {
+            return this.parent.name;
+        }
         return this.meta.title;
     }
 

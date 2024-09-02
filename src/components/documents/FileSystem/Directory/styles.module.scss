@@ -4,17 +4,29 @@
     --ifm-alert-border-color: var(--ifm-color-warning-darkest);
     --ifm-alert-foreground-color: #193c47;
     .summary {
-        display: flex;
         gap: 1em;
+        display: flex;
         justify-content: space-between;
         align-items: center;
         margin: 0.5em;
+        &::before {
+            top: 0.35em;
+        }
         .dirName {
             margin: 0;
         }
+        .syncState {
+            width: 1em;
+            line-height: 0;
+        }
         .actions {
-            width: 4em;
+            display: flex;
+            gap: 0.5em;
+            width: 5em;
             margin: -2px 0;
+            line-height: 0;
+            align-items: center;
+            justify-content: flex-end;
         }
     }
     .content {
@@ -23,12 +35,21 @@
         border-radius: calc(var(--ifm-global-radius) - 1px);
         border-top-left-radius: 0;
         border-top-right-radius: 0;
-        padding: 4px 8px;
+        padding: 2px;
         min-height: 2em;
     }
     div[class^='collapsibleContent'] {
         margin-top: 0;
         padding-top: 0;
+    }
+    &.isNested {
+        margin-bottom: 0em;
+        .summary {
+            margin: 2px 0.5em;
+            &::before {
+                top: 0.25em;
+            }
+        }
     }
 }
 

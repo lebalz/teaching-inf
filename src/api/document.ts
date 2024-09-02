@@ -7,8 +7,8 @@ import { AxiosPromise } from 'axios';
 import QuillV2 from '../models/documents/QuillV2';
 import { Delta } from 'quill/core';
 import Solution from '../models/documents/Solution';
-import Directory from '../models/documents/Directory';
-import File from '../models/documents/File';
+import Directory from '../models/documents/FileSystem/Directory';
+import File from '../models/documents/FileSystem/File';
 
 export enum Access {
     RO_DocumentRoot = 'RO_DocumentRoot',
@@ -56,10 +56,12 @@ export interface SolutionData {
 
 export interface DirData {
     name: string;
+    isOpen: boolean;
 }
 
 export interface FileData {
     name: string;
+    isOpen: boolean;
 }
 
 export type StateType = 'checked' | 'question' | 'unset' | 'star' | 'star-half' | 'star-empty';
@@ -133,6 +135,10 @@ export function create<Type extends DocumentType>(
     signal: AbortSignal
 ): AxiosPromise<Document<Type>> {
     return api.post(`/documents`, data, { signal });
+}
+
+export function remove(id: string, signal: AbortSignal): AxiosPromise<void> {
+    return api.delete(`/documents/${id}`, { signal });
 }
 
 export function update<Type extends DocumentType>(

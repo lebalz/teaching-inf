@@ -1,20 +1,29 @@
-.dir {
+.file {
     padding: 0;
-    --ifm-alert-background-color: var(--ifm-color-warning-lightest);
-    --ifm-alert-border-color: var(--ifm-color-warning-darkest);
+    --ifm-alert-background-color: var(--ifm-color-secondary-lightest);
+    --ifm-alert-border-color: var(--ifm-color-secondary-darkest);
     --ifm-alert-foreground-color: #193c47;
+    margin-bottom: 0.2em;
     .summary {
         display: flex;
         gap: 1em;
         justify-content: space-between;
         align-items: center;
-        margin: 0.5em;
-        .dirName {
+        margin: 0 0.5em;
+        margin-bottom: 2px;
+        .fileName {
             margin: 0;
         }
+        .syncState {
+            width: 1em;
+            line-height: 0;
+        }
         .actions {
-            width: 4em;
-            margin: -2px 0;
+            display: flex;
+            gap: 0.5em;
+            line-height: 0;
+            align-items: center;
+            justify-content: flex-end;
         }
     }
     .content {
@@ -23,8 +32,15 @@
         border-radius: calc(var(--ifm-global-radius) - 1px);
         border-top-left-radius: 0;
         border-top-right-radius: 0;
-        padding: 4px 8px;
+        padding: 1px;
         min-height: 2em;
+        &.maxHeight {
+            max-height: 5em;
+            overflow: hidden;
+        }
+        .quill {
+            margin-bottom: 0;
+        }
     }
     div[class^='collapsibleContent'] {
         margin-top: 0;
