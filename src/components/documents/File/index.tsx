@@ -2,23 +2,16 @@ import React from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
-import { useFirstMainDocument } from '../../../hooks/useFirstMainDocument';
-import Loader from '../../Loader';
-import { default as FileModel, MetaInit, ModelMeta } from '@site/src/models/documents/File';
+import { default as FileModel } from '@site/src/models/documents/File';
 import Icon from '@mdi/react';
-import {
-    mdiContentSaveEdit,
-    mdiFile,
-    mdiFileEdit,
-    mdiFolder,
-    mdiPlusCircle,
-    mdiPlusCircleOutline,
-    mdiRenameOutline
-} from '@mdi/js';
+import { mdiFile, mdiRenameOutline } from '@mdi/js';
 import Details from '@theme/Details';
-import Heading from '@theme/Heading';
 import Button from '../../shared/Button';
 import SyncStatus from '../../SyncStatus';
+import { DocumentType } from '@site/src/api/document';
+import Directory from '../Directory';
+import CodeEditorComponent from '../CodeEditor';
+import { QuillV2Component } from '../QuillV2';
 
 interface Props {
     file: FileModel;
@@ -27,12 +20,12 @@ interface Props {
 const File = observer((props: Props) => {
     const [isEditing, setIsEditing] = React.useState(false);
     const isInitialized = React.useRef(false);
-    const {file} = props;
+    const { file } = props;
     return (
         <Details
             open={file.isOpen}
             onToggle={(e) => {
-                if (isInitialized.current) {
+                if (isInitialized.current && e.currentTarget === e.target) {
                     file.setIsOpen(!file.isOpen);
                 }
             }}
@@ -45,7 +38,7 @@ const File = observer((props: Props) => {
                         <>
                             <input
                                 type="text"
-                                placeholder="Suche..."
+                                placeholder="Dateiname..."
                                 value={file.name}
                                 className={clsx(styles.textInput)}
                                 onChange={(e) => {
@@ -76,13 +69,22 @@ const File = observer((props: Props) => {
                         <SyncStatus model={file} />
                     </div>
                     <div className={clsx(styles.spacer)} />
-                    <div className={clsx(styles.actions)}>
-                    </div>
+                    <div className={clsx(styles.actions)}></div>
                 </summary>
             }
         >
             <div className={clsx(styles.content)}>
-                
+                {file.document && (
+                    <>
+                        {file.document.type === DocumentType.Dir && <Directory id={file.document.id} />}
+                        {file.document.type === DocumentType.Script && (
+                            <CodeEditorComponent script={file.document} />
+                        )}
+                        {file.document.type === DocumentType.QuillV2 && (
+                            <QuillV2Component quillDoc={file.document} />
+                        )}
+                    </>
+                )}
             </div>
         </Details>
     );

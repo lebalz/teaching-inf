@@ -83,7 +83,19 @@ class Directory extends iDocument<DocumentType.Dir> {
         if (!this.root) {
             return [];
         }
-        return this.root.allDocuments.filter((d) => d.parentId === this.id && d.type === DocumentType.File) as File[];
+        return this.root.documents.filter(
+            (d) => d.parentId === this.id && d.type === DocumentType.File
+        ) as File[];
+    }
+
+    @computed
+    get directories() {
+        if (!this.root) {
+            return [];
+        }
+        return this.root.documents.filter(
+            (d) => d.parentId === this.id && d.type === DocumentType.Dir
+        ) as Directory[];
     }
 }
 

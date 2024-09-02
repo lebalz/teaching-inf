@@ -3,21 +3,27 @@ import clsx from 'clsx';
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
 import Popup from 'reactjs-popup';
-import { mdiCodepen, mdiFileCodeOutline, mdiPlusCircleOutline, mdiScriptOutline } from '@mdi/js';
+import { mdiFileCodeOutline, mdiFileDocument, mdiFolderPlus, mdiPlusCircleOutline } from '@mdi/js';
 import Button from '@site/src/components/shared/Button';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import DefinitionList from '@site/src/components/DefinitionList';
 import { useStore } from '@site/src/hooks/useStore';
 import { DocumentType } from '@site/src/api/document';
+import Directory from '@site/src/models/documents/Directory';
+import { Delta } from 'quill/core';
 
 interface Props {
-    id: string;
+    directory: Directory;
 }
 
 const NewItem = observer((props: Props) => {
-    const documentRootStore = useStore('documentRootStore');
     const documentStore = useStore('documentStore');
+    const { directory } = props;
+    if (!directory.root) {
+        return null;
+    }
+    const rootId = directory.root.id;
     return (
         <Popup
             trigger={
@@ -29,9 +35,7 @@ const NewItem = observer((props: Props) => {
             overlayStyle={{ background: 'rgba(0,0,0,0.5)' }}
         >
             <div className={clsx('card', styles.card)}>
-                <div className={clsx('card__header', styles.header)}>
-                    Neues Element
-                </div>
+                <div className={clsx('card__header', styles.header)}>Neues Element</div>
                 <div className={clsx('card__body', styles.body)}>
                     <Tabs defaultValue="script">
                         <TabItem value="script" label="Python">
@@ -47,7 +51,8 @@ const NewItem = observer((props: Props) => {
                                         icon={mdiFileCodeOutline}
                                         onClick={async () => {
                                             const file = await documentStore.create({
-                                                documentRootId: props.id,
+                                                documentRootId: rootId,
+                                                parentId: directory.id,
                                                 type: DocumentType.File,
                                                 data: {
                                                     name: 'Python'
@@ -57,11 +62,11 @@ const NewItem = observer((props: Props) => {
                                                 return;
                                             }
                                             const script = await documentStore.create({
-                                                documentRootId: props.id,
+                                                documentRootId: rootId,
                                                 parentId: file.id,
-                                                type: DocumentType.File,
+                                                type: DocumentType.Script,
                                                 data: {
-                                                    name: 'Python'
+                                                    code: '\n'
                                                 }
                                             });
                                             console.log(script);
@@ -71,16 +76,72 @@ const NewItem = observer((props: Props) => {
                             </DefinitionList>
                         </TabItem>
                         <TabItem value="quill-v2" label="Textfeld">
-                            <div>Textfeld</div>
+                            <DefinitionList>
+                                <dt>Titel</dt>
+                                <dd>Quill</dd>
+                                <dt>Erstellen</dt>
+                                <dd>
+                                    <Button
+                                        text="Erstellen"
+                                        color="primary"
+                                        size={1}
+                                        icon={mdiFileDocument}
+                                        onClick={async () => {
+                                            const file = await documentStore.create({
+                                                documentRootId: rootId,
+                                                parentId: directory.id,
+                                                type: DocumentType.File,
+                                                data: {
+                                                    name: 'Quill'
+                                                }
+                                            });
+                                            if (!file || typeof file === 'string') {
+                                                return;
+                                            }
+                                            const quillDoc = await documentStore.create({
+                                                documentRootId: rootId,
+                                                parentId: file.id,
+                                                type: DocumentType.QuillV2,
+                                                data: {
+                                                    delta: { ops: [{ insert: '\n' }] } as Delta
+                                                }
+                                            });
+                                            console.log(quillDoc);
+                                        }}
+                                    />
+                                </dd>
+                            </DefinitionList>
                         </TabItem>
                         <TabItem value="dir" label="Ordner">
-                            <div>Ordner</div>
+                            <DefinitionList>
+                                <dt>Titel</dt>
+                                <dd>Ordner</dd>
+                                <dt>Erstellen</dt>
+                                <dd>
+                                    <Button
+                                        text="Erstellen"
+                                        color="primary"
+                                        size={1}
+                                        icon={mdiFolderPlus}
+                                        onClick={async () => {
+                                            const file = await documentStore.create({
+                                                documentRootId: rootId,
+                                                parentId: directory.id,
+                                                type: DocumentType.Dir,
+                                                data: {
+                                                    name: 'Ordner'
+                                                }
+                                            });
+                                        }}
+                                    />
+                                </dd>
+                            </DefinitionList>
                         </TabItem>
                     </Tabs>
                 </div>
             </div>
         </Popup>
-    )
+    );
 });
 
 export default NewItem;

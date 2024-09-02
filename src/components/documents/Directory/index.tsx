@@ -4,31 +4,22 @@ import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
 import { useFirstMainDocument } from '../../../hooks/useFirstMainDocument';
 import Loader from '../../Loader';
-import { MetaInit, ModelMeta } from '@site/src/models/documents/Directory';
+import { default as DirctoryModel, MetaInit, ModelMeta } from '@site/src/models/documents/Directory';
 import Icon from '@mdi/react';
-import {
-    mdiContentSaveEdit,
-    mdiFileEdit,
-    mdiFolder,
-    mdiPlusCircle,
-    mdiPlusCircleOutline,
-    mdiRenameOutline
-} from '@mdi/js';
+import { mdiFolder, mdiRenameOutline } from '@mdi/js';
 import Details from '@theme/Details';
-import Heading from '@theme/Heading';
 import Button from '../../shared/Button';
 import SyncStatus from '../../SyncStatus';
 import NewItem from './NewItem';
+import File from '../File';
 
 interface Props extends MetaInit {
     id: string;
-    isOpen?: boolean;
 }
 
-const Direcotry = observer((props: Props) => {
+const Directory = observer((props: Props) => {
     const [meta] = React.useState(new ModelMeta(props));
     const doc = useFirstMainDocument(props.id, meta);
-    const [isEditing, setIsEditing] = React.useState(false);
     const isInitialized = React.useRef(false);
     React.useEffect(() => {
         isInitialized.current = true;
@@ -36,12 +27,26 @@ const Direcotry = observer((props: Props) => {
     if (!doc) {
         return <Loader />;
     }
+    return <DirectoryComponent dir={doc} />;
+});
+
+interface DirectoryProps {
+    dir: DirctoryModel;
+}
+
+export const DirectoryComponent = observer((props: DirectoryProps) => {
+    const [isEditing, setIsEditing] = React.useState(false);
+    const isInitialized = React.useRef(false);
+    const { dir } = props;
+    React.useEffect(() => {
+        isInitialized.current = true;
+    }, []);
     return (
         <Details
-            open={doc.isOpen}
+            open={dir.isOpen}
             onToggle={(e) => {
-                if (isInitialized.current) {
-                    doc.setIsOpen(!doc.isOpen);
+                if (isInitialized.current && e.currentTarget === e.target) {
+                    dir.setIsOpen(!dir.isOpen);
                 }
             }}
             className={clsx(styles.dir)}
@@ -53,11 +58,11 @@ const Direcotry = observer((props: Props) => {
                         <>
                             <input
                                 type="text"
-                                placeholder="Suche..."
-                                value={doc.name}
+                                placeholder="Ordnername..."
+                                value={dir.name}
                                 className={clsx(styles.textInput)}
                                 onChange={(e) => {
-                                    doc.setName(e.target.value);
+                                    dir.setName(e.target.value);
                                 }}
                                 onBlur={() => {
                                     setIsEditing(false);
@@ -67,7 +72,7 @@ const Direcotry = observer((props: Props) => {
                         </>
                     ) : (
                         <>
-                            <h4 className={clsx(styles.dirName)}>{doc.name}</h4>
+                            <h4 className={clsx(styles.dirName)}>{dir.name}</h4>
                             <Button
                                 icon={mdiRenameOutline}
                                 color="primary"
@@ -81,22 +86,23 @@ const Direcotry = observer((props: Props) => {
                         </>
                     )}
                     <div>
-                        <SyncStatus model={doc} />
+                        <SyncStatus model={dir} />
                     </div>
                     <div className={clsx(styles.spacer)} />
-                    <div className={clsx(styles.actions)}>
-                        {doc.isOpen && (
-                            <NewItem id={doc.documentRootId} />
-                        )}
-                    </div>
+                    <div className={clsx(styles.actions)}>{dir.isOpen && <NewItem directory={dir} />}</div>
                 </summary>
             }
         >
             <div className={clsx(styles.content)}>
-                {doc.files.map((file) => (file.name))}
+                {dir.files.map((file) => {
+                    return <File key={file.id} file={file} />;
+                })}
+                {dir.directories.map((dir) => {
+                    return <DirectoryComponent key={dir.id} dir={dir} />;
+                })}
             </div>
         </Details>
     );
 });
 
-export default Direcotry;
+export default Directory;

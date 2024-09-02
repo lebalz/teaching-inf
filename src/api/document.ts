@@ -97,7 +97,15 @@ export interface TypeModelMapping {
      */
 }
 
-export type DocumentTypes = Script | TaskState | ScriptVersion | String | QuillV2 | Solution | Directory | File;
+export type DocumentTypes =
+    | Script
+    | TaskState
+    | ScriptVersion
+    | String
+    | QuillV2
+    | Solution
+    | Directory
+    | File;
 
 export interface Document<Type extends DocumentType> {
     id: string;
