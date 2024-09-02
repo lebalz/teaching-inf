@@ -22,13 +22,13 @@ export interface Props extends Omit<MetaProps, 'live_jsx' | 'live_py'> {
     className?: string;
 }
 
-export const CodeEditorWrapper = observer((props: Props) => {
+export const CodeEditor = observer((props: Props) => {
     const id = props.slim ? undefined : props.id;
     const script = useFirstMainDocument(id, new ScriptMeta(props));
     if (!ExecutionEnvironment.canUseDOM || !script) {
         return <CodeBlock language={props.lang}>{props.code}</CodeBlock>;
     }
-    return <CodeEditor script={script} className={props.className} />;
+    return <CodeEditorComponent script={script} className={props.className} />;
 });
 
 export interface ScriptProps {
@@ -36,7 +36,7 @@ export interface ScriptProps {
     className?: string;
 }
 
-const CodeEditor = observer((props: ScriptProps) => {
+const CodeEditorComponent = observer((props: ScriptProps) => {
     const { script } = props;
     return (
         <div className={clsx(styles.wrapper, 'notranslate', props.className)}>
@@ -57,4 +57,4 @@ const CodeEditor = observer((props: ScriptProps) => {
     );
 });
 
-export default CodeEditor;
+export default CodeEditorComponent;

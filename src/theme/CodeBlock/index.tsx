@@ -3,7 +3,7 @@ import CodeBlock from '@theme-original/CodeBlock';
 import type CodeBlockType from '@theme/CodeBlock';
 import type { WrapperProps } from '@docusaurus/types';
 import BrowserOnly from '@docusaurus/BrowserOnly';
-import { CodeEditorWrapper } from '@site/src/components/documents/CodeEditor';
+import { CodeEditor } from '@site/src/components/documents/CodeEditor';
 
 export interface MetaProps {
     id?: string;
@@ -87,7 +87,7 @@ export default function CodeBlockWrapper(props: Props & MetaProps): JSX.Element 
             <BrowserOnly fallback={<CodeBlock language={lang}>{code}</CodeBlock>}>
                 {() => {
                     return (
-                        <CodeEditorWrapper
+                        <CodeEditor
                             id={metaProps.id}
                             code={code}
                             lang={lang}
