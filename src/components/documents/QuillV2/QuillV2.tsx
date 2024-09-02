@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 import Loader from '../../Loader';
-import { MetaInit, ModelMeta } from '@site/src/models/documents/QuillV2';
+import { MetaInit } from '@site/src/models/documents/QuillV2';
 import { useQuill } from 'react-quilljs';
 import { ToolbarOptions } from '@site/src/models/documents/QuillV2/helpers/toolbar';
 import 'quill/dist/quill.snow.css'; // Add css for snow theme
@@ -16,24 +16,10 @@ import styles from './styles.module.scss';
 import clsx from 'clsx';
 import SyncStatus from '../../SyncStatus';
 import { action } from 'mobx';
-import { useFirstMainDocument } from '@site/src/hooks/useFirstMainDocument';
 import Icon from '@mdi/react';
 import { mdiFlashTriangle } from '@mdi/js';
-import { useStore } from '@site/src/hooks/useStore';
-
-export interface Props extends MetaInit {
-    id: string;
-    style?: React.CSSProperties;
-    readonly?: boolean;
-    monospace?: boolean;
-    default?: string;
-    toolbar?: ToolbarOptions;
-    toolbarExtra?: ToolbarOptions;
-    placeholder?: string;
-    theme?: 'snow' | 'bubble';
-    hideToolbar?: boolean;
-    hideWarning?: boolean;
-}
+import { useDocument } from '../useContextDocument';
+import { DocumentType } from '@site/src/api/document';
 
 const FORMATS = [
     'bold',
@@ -60,10 +46,22 @@ const FORMATS = [
     // 'video'
 ];
 
+export interface Props extends MetaInit {
+    id?: string;
+    style?: React.CSSProperties;
+    readonly?: boolean;
+    monospace?: boolean;
+    default?: string;
+    toolbar?: ToolbarOptions;
+    toolbarExtra?: ToolbarOptions;
+    placeholder?: string;
+    theme?: 'snow' | 'bubble';
+    hideToolbar?: boolean;
+    hideWarning?: boolean;
+}
+
 const QuillV2 = observer((props: Props) => {
-    const [meta] = React.useState(new ModelMeta(props));
-    const doc = useFirstMainDocument(props.id, meta);
-    const userStore = useStore('userStore');
+    const doc = useDocument<DocumentType.QuillV2>();
     const updateSource = React.useRef<'current' | undefined>(undefined);
     const [processingImage, setProcessingImage] = React.useState(false);
     const ref = React.useRef<HTMLDivElement>(null);
@@ -71,7 +69,7 @@ const QuillV2 = observer((props: Props) => {
     const { quill, quillRef, Quill } = useQuill({
         theme: theme,
         modules: {
-            toolbar: meta.toolbar,
+            toolbar: doc.meta.toolbar,
             resize: {
                 showSize: false,
                 toolbar: {
@@ -155,7 +153,7 @@ const QuillV2 = observer((props: Props) => {
      * with the props of doc
      */
     React.useEffect(() => {
-        if (quill && doc) {
+        if (quill) {
             quill.setContents(doc.delta, 'silent');
             const saveHandeler = action(() => {
                 updateSource.current = 'current';
@@ -176,10 +174,10 @@ const QuillV2 = observer((props: Props) => {
                 quill.off('text-change', saveHandeler);
             };
         }
-    }, [quill, doc, updateSource]);
+    }, [quill, updateSource]);
 
     React.useEffect(() => {
-        if (doc && quill) {
+        if (quill) {
             const isEnabled = quill.isEnabled();
             const canEdit = doc.canEdit && !props.readonly;
             if (canEdit && isEnabled) {
@@ -188,7 +186,7 @@ const QuillV2 = observer((props: Props) => {
                 quill.disable();
             }
         }
-    }, [doc, doc?.canEdit, quill]);
+    }, [doc.canEdit, quill]);
 
     /** ensure no context menu is shown when using bubble mode. Otherwise, touch-devices can't start to edit... */
     React.useEffect(() => {
@@ -237,7 +235,7 @@ const QuillV2 = observer((props: Props) => {
     }, [quill]);
 
     React.useEffect(() => {
-        if (!quill || !doc) {
+        if (!quill) {
             return;
         }
 
@@ -253,38 +251,35 @@ const QuillV2 = observer((props: Props) => {
         quill.setContents(doc.delta, 'silent');
     }, [quill, doc?.delta, updateSource]);
 
-    React.useEffect(() => {
-        if (Quill && !quill) {
-            class ImageFormat extends BaseImageFormat {
-                static formats(domNode: Element) {
-                    const formats: { [key: string]: string } = {};
-                    ['alt', 'height', 'width', 'style'].forEach((attribute) => {
-                        if (domNode.hasAttribute(attribute)) {
-                            formats[attribute] = domNode.getAttribute(attribute)!;
-                        }
-                    });
-                    return formats;
-                }
-                format(name: string, value: string) {
-                    if (['alt', 'height', 'width', 'style'].includes(name)) {
-                        if (value) {
-                            this.domNode.setAttribute(name, value);
-                        } else {
-                            this.domNode.removeAttribute(name);
-                        }
-                    } else {
-                        super.format(name, value);
+    if (Quill && !quill) {
+        class ImageFormat extends BaseImageFormat {
+            static formats(domNode: Element) {
+                const formats: { [key: string]: string } = {};
+                ['alt', 'height', 'width', 'style'].forEach((attribute) => {
+                    if (domNode.hasAttribute(attribute)) {
+                        formats[attribute] = domNode.getAttribute(attribute)!;
                     }
+                });
+                return formats;
+            }
+            format(name: string, value: string) {
+                if (['alt', 'height', 'width', 'style'].includes(name)) {
+                    if (value) {
+                        this.domNode.setAttribute(name, value);
+                    } else {
+                        this.domNode.removeAttribute(name);
+                    }
+                } else {
+                    super.format(name, value);
                 }
             }
-
-            Quill.register(ImageFormat, true);
-            /* Quill register method signature is => static register(path, target, overwrite = false)
-            Set overwrite to true to avoid warning
-            https://github.com/quilljs/quill/issues/2559#issuecomment-945605414 */
-            Quill.register('modules/resize', ResizeModule, true);
         }
-    }, [quill, Quill]);
+        Quill.register(ImageFormat, true);
+        /* Quill register method signature is => static register(path, target, overwrite = false)
+        Set overwrite to true to avoid warning
+        https://github.com/quilljs/quill/issues/2559#issuecomment-945605414 */
+        Quill.register('modules/resize', ResizeModule, true);
+    }
 
     return (
         <div
@@ -323,7 +318,7 @@ const QuillV2 = observer((props: Props) => {
                     </div>
                 )}
                 {processingImage && <Loader label="Bild Einfügen..." overlay />}
-                {doc && <SyncStatus model={doc} className={styles.saveIndicator} />}
+                <SyncStatus model={doc} className={styles.saveIndicator} />
             </div>
         </div>
     );
