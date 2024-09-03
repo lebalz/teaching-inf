@@ -12,13 +12,13 @@ import {
     mdiFileDocumentOutline,
     mdiFileOutline
 } from '@mdi/js';
-import Details from '@theme/Details';
 import SyncStatus from '../../../SyncStatus';
 import { DocumentType } from '@site/src/api/document';
 import CodeEditorComponent from '../../CodeEditor';
 import { QuillV2Component } from '../../QuillV2';
 import Actions from '../Actions';
 import EditableName from '../Directory/EditableName';
+import Details from '../Details';
 
 interface Props {
     file: FileModel;
@@ -61,23 +61,10 @@ const File = observer((props: Props) => {
     const { file } = props;
     return (
         <Details
-            open={file.isOpen}
+            model={file}
             className={clsx(styles.file)}
             summary={
-                <summary
-                    className={clsx(styles.summary)}
-                    onClick={(e) => {
-                        if (
-                            e.currentTarget === e.target ||
-                            (e.target as HTMLHeadingElement)?.tagName === 'H4'
-                        ) {
-                            file.setIsOpen(!file.isOpen);
-                        } else {
-                            e.preventDefault();
-                            e.stopPropagation();
-                        }
-                    }}
-                >
+                <summary className={clsx(styles.summary)}>
                     <Icon
                         path={file.isOpen ? getOpenIcon(file.document?.type) : getIcon(file.document?.type)}
                         size={0.8}

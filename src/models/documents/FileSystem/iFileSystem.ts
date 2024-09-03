@@ -94,6 +94,9 @@ class iFileSystem<T extends SystemType> extends iDocument<T> {
 
     @action
     setIsOpen(isOpen: boolean) {
+        if (this.isOpen === isOpen) {
+            return;
+        }
         this.setData({ isOpen: isOpen }, Source.LOCAL, new Date());
         this.saveNow();
     }

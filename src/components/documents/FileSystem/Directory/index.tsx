@@ -5,7 +5,6 @@ import { observer } from 'mobx-react-lite';
 import { default as DirctoryModel, ModelMeta } from '@site/src/models/documents/FileSystem/Directory';
 import Icon from '@mdi/react';
 import { mdiFolder, mdiFolderOpen } from '@mdi/js';
-import Details from '@theme/Details';
 import SyncStatus from '../../../SyncStatus';
 import NewItem from './NewItem';
 import File from '../File';
@@ -14,6 +13,7 @@ import EditableName from './EditableName';
 import { MetaInit } from '@site/src/models/documents/FileSystem/iFileSystem';
 import { useFirstMainDocument } from '@site/src/hooks/useFirstMainDocument';
 import Loader from '@site/src/components/Loader';
+import Details from '../Details';
 
 interface Props extends MetaInit {
     id: string;
@@ -41,20 +41,10 @@ export const DirectoryComponent = observer((props: DirectoryProps) => {
     const { dir } = props;
     return (
         <Details
-            open={dir.isOpen}
+            model={dir}
             className={clsx(styles.dir, props.isNested && styles.isNested)}
             summary={
-                <summary
-                    className={clsx(styles.summary)}
-                    onClick={(e) => {
-                        if (e.currentTarget === e.target) {
-                            dir.setIsOpen(!dir.isOpen);
-                        } else {
-                            e.preventDefault();
-                            e.stopPropagation();
-                        }
-                    }}
-                >
+                <summary className={clsx(styles.summary)}>
                     <Icon
                         path={dir.isOpen ? mdiFolderOpen : mdiFolder}
                         size={0.8}
@@ -80,12 +70,16 @@ export const DirectoryComponent = observer((props: DirectoryProps) => {
             }
         >
             <div className={clsx(styles.content)}>
-                {dir.files.map((file) => {
-                    return <File key={file.id} file={file} />;
-                })}
-                {dir.directories.map((dir) => {
-                    return <DirectoryComponent key={dir.id} dir={dir} isNested />;
-                })}
+                {dir.isOpen && (
+                    <>
+                        {dir.files.map((file) => {
+                            return <File key={file.id} file={file} />;
+                        })}
+                        {dir.directories.map((dir) => {
+                            return <DirectoryComponent key={dir.id} dir={dir} isNested />;
+                        })}
+                    </>
+                )}
             </div>
         </Details>
     );
