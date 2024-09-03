@@ -36,7 +36,7 @@ class Directory extends iFileSystem<DocumentType.Dir> {
             this.root.documents.filter(
                 (d) => d.parentId === this.id && d.type === DocumentType.File
             ) as File[],
-            ['name'],
+            [(f) => `${f.name}`.replace(/\d+/g, (n) => n.padStart(10, '0'))],
             ['asc']
         );
     }
@@ -50,7 +50,7 @@ class Directory extends iFileSystem<DocumentType.Dir> {
             this.root.documents.filter(
                 (d) => d.parentId === this.id && d.type === DocumentType.Dir
             ) as Directory[],
-            ['name'],
+            [(d) => `${d.name}`.replace(/\d+/g, (n) => n.padStart(10, '0'))],
             ['asc']
         );
     }
