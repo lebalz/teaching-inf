@@ -16,7 +16,6 @@ const ContentWrapper = observer((props: Props): JSX.Element => {
     React.useEffect(() => {
         if (pageId) {
             pageStore.addIfNotPresent(pageId, true);
-            console.log('pageId', pageId, pageStore.current);
         }
         return () => {
             pageStore.setCurrentPageId(undefined);

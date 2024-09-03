@@ -110,6 +110,11 @@ abstract class iDocument<Type extends DocumentType> {
         return this.store.root.documentRootStore.find(this.documentRootId);
     }
 
+    @computed
+    get parent() {
+        return this.store.find(this.parentId);
+    }
+
     get isInitialized() {
         /**
          * only return true if the models root document is present in the store...

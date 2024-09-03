@@ -7,7 +7,7 @@ import {
     find as apiFind,
     update as apiUpdate,
     create as apiCreate,
-    Access,
+    remove as apiDelete,
     DocumentTypes,
     TypeModelMapping,
     allDocuments as apiAllDocuments
@@ -24,6 +24,8 @@ import String from '../models/documents/String';
 import QuillV2 from '../models/documents/QuillV2';
 import Solution from '../models/documents/Solution';
 import { RWAccess } from '../models/helpers/accessPolicy';
+import Directory from '../models/documents/FileSystem/Directory';
+import File from '../models/documents/FileSystem/File';
 
 export function CreateDocumentModel<T extends DocumentType>(
     data: DocumentProps<T>,
@@ -43,9 +45,13 @@ export function CreateDocumentModel(data: DocumentProps<DocumentType>, store: Do
             return new QuillV2(data as DocumentProps<DocumentType.QuillV2>, store);
         case DocumentType.Solution:
             return new Solution(data as DocumentProps<DocumentType.Solution>, store);
+        case DocumentType.Dir:
+            return new Directory(data as DocumentProps<DocumentType.Dir>, store);
+        case DocumentType.File:
+            return new File(data as DocumentProps<DocumentType.File>, store);
     }
 }
-class DocumentStore extends iStore {
+class DocumentStore extends iStore<`delete-${string}`> {
     readonly root: RootStore;
     documents = observable.array<DocumentTypes>([]);
 
@@ -60,7 +66,7 @@ class DocumentStore extends iStore {
     }
 
     find = computedFn(
-        function (this: DocumentStore, id?: string) {
+        function (this: DocumentStore, id?: string | null) {
             if (!id) {
                 return;
             }
@@ -75,6 +81,16 @@ class DocumentStore extends iStore {
                 return [];
             }
             return this.documents.filter((d) => d.documentRootId === documentRootId);
+        },
+        { keepAlive: true }
+    );
+
+    findByParentId = computedFn(
+        function (this: DocumentStore, parentId?: string) {
+            if (!parentId) {
+                return undefined as DocumentTypes | undefined;
+            }
+            return this.documents.find((d) => d.parentId === parentId);
         },
         { keepAlive: true }
     );
@@ -199,10 +215,10 @@ class DocumentStore extends iStore {
     ) {
         const rootDoc = this.root.documentRootStore.find(model.documentRootId);
         if (!rootDoc || rootDoc.isDummy) {
-            return Promise.resolve('error');
+            return Promise.resolve(undefined);
         }
         if (!RWAccess.has(rootDoc.permission)) {
-            return Promise.resolve('error');
+            return Promise.resolve(undefined);
         }
         return this.withAbortController(`create-${model.id || uuidv4()}`, (sig) => {
             return apiCreate<Type>(model, sig.signal);
@@ -243,6 +259,19 @@ class DocumentStore extends iStore {
                 })
             );
             return models;
+        });
+    }
+
+    @action
+    apiDelete(document: iDocument<DocumentType>) {
+        if (document.authorId !== this.root.userStore.current?.id) {
+            return;
+        }
+        return this.withAbortController(`delete-${document.id}`, (sig) => {
+            return apiDelete(document.id, sig.signal);
+        }).then(({ data }) => {
+            console.log(data);
+            this.removeFromStore(document.id);
         });
     }
 }

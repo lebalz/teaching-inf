@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import Heading from '@theme/Heading';
-import styles from './styles.module.css';
+import styles from './styles.module.scss';
 import { useStore } from '@site/src/hooks/useStore';
 import { observer } from 'mobx-react-lite';
 import DefinitionList from '../DefinitionList';

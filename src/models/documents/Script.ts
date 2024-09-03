@@ -6,14 +6,8 @@ import {
     GRAPHICS_OUTPUT_TESTER,
     GRID_IMPORTS_TESTER,
     TURTLE_IMPORTS_TESTER
-} from 'docusaurus-live-brython/theme/CodeEditor/constants';
-import {
-    type LogMessage,
-    type Version,
-    type InitState,
-    Status
-} from 'docusaurus-live-brython/theme/CodeEditor/WithScript/Types';
-import { runCode } from 'docusaurus-live-brython/theme/CodeEditor/WithScript/bryRunner';
+} from '@site/src/components/documents/CodeEditor/constants';
+import { runCode } from '@site/src/components/documents/CodeEditor/utils/bryRunner';
 import iDocument, { Source } from '../iDocument';
 import {
     DocumentType,
@@ -25,12 +19,24 @@ import {
 import DocumentStore from '@site/src/stores/DocumentStore';
 import siteConfig from '@generated/docusaurus.config';
 import globalData from '@generated/globalData';
-import { ThemeOptions } from 'docusaurus-live-brython';
-import { ApiState } from '@site/src/stores/iStore';
 import ScriptVersion from './ScriptVersion';
 import { TypeMeta } from '../DocumentRoot';
+import { Props as CodeEditorProps } from '@site/src/components/documents/CodeEditor';
+import File from './FileSystem/File';
+const libDir = (globalData['live-editor-theme'] as { default: { libDir: string } }).default.libDir;
 
-const BRYTHON_CONFIG = globalData['docusaurus-live-brython'].default as ThemeOptions;
+export interface LogMessage {
+    type: 'done' | 'stdout' | 'stderr' | 'start';
+    output: string;
+    timeStamp: number;
+}
+
+interface Version {
+    code: string;
+    createdAt: Date;
+    version: number;
+    pasted?: boolean;
+}
 
 export class ScriptMeta extends TypeMeta<DocumentType.Script> {
     readonly type = DocumentType.Script;
@@ -41,16 +47,32 @@ export class ScriptMeta extends TypeMeta<DocumentType.Script> {
     readonly readonly: boolean;
     readonly versioned: boolean;
     readonly initCode: string;
+    readonly slim: boolean;
+    readonly hasHistory: boolean;
+    readonly showLineNumbers: boolean;
+    readonly maxLines: number;
+    readonly isResettable: boolean;
+    readonly canCompare: boolean;
+    readonly canDownload: boolean;
+    readonly hideWarning: boolean;
 
-    constructor(props: Partial<Omit<InitState, 'id'>>) {
+    constructor(props: Partial<Omit<CodeEditorProps, 'id' | 'className'>>) {
         super(DocumentType.Script, props.readonly ? Access.RO_User : undefined);
         this.title = props.title || '';
         this.lang = props.lang || 'py';
         this.preCode = props.preCode || '';
         this.postCode = props.postCode || '';
-        this.readonly = props.readonly || false;
-        this.versioned = props.versioned || false;
+        this.readonly = !!props.readonly;
+        this.versioned = !!props.versioned;
         this.initCode = props.code || '';
+        this.slim = !!props.slim;
+        this.hasHistory = !!props.versioned && !props.noHistory;
+        this.showLineNumbers = !!props.showLineNumbers;
+        this.maxLines = props.maxLines || 25;
+        this.isResettable = !props.noReset;
+        this.canCompare = !props.noCompare;
+        this.canDownload = !props.noDownload;
+        this.hideWarning = !!props.hideWarning;
     }
 
     get defaultData(): TypeDataMapping[DocumentType.Script] {
@@ -64,7 +86,6 @@ export default class Script extends iDocument<DocumentType.Script> {
     @observable accessor code: string;
     @observable accessor isExecuting: boolean = false;
     @observable accessor showRaw: boolean = false;
-    @observable accessor _status: Status = Status.IDLE;
     @observable accessor graphicsModalExecutionNr: number = 0;
     @observable accessor isPasted: boolean = false;
     logs = observable.array<LogMessage>([], { deep: false });
@@ -84,6 +105,14 @@ export default class Script extends iDocument<DocumentType.Script> {
 
     get isLoaded() {
         return this.isInitialized;
+    }
+
+    @computed
+    get title(): string {
+        if (this.parent && this.parent.type === DocumentType.File) {
+            return this.parent.name;
+        }
+        return this.meta.title;
     }
 
     @action
@@ -165,6 +194,11 @@ export default class Script extends iDocument<DocumentType.Script> {
     }
 
     @computed
+    get codeLines() {
+        return this.code.split('\n').length;
+    }
+
+    @computed
     get data(): TypeDataMapping[DocumentType.Script] {
         return {
             code: this.code
@@ -194,7 +228,7 @@ export default class Script extends iDocument<DocumentType.Script> {
             this.preCode,
             this.postCode,
             this.codeId,
-            BRYTHON_CONFIG.libDir,
+            libDir,
             siteConfig.future.experimental_router
         );
     }
@@ -263,38 +297,10 @@ export default class Script extends iDocument<DocumentType.Script> {
     setIsPasted(isPasted: boolean) {
         this.isPasted = isPasted;
     }
+
     @action
     setShowRaw(showRaw: boolean) {
         this.showRaw = showRaw;
-    }
-    @action
-    setStatus(status: Status) {
-        switch (status) {
-            case Status.SUCCESS:
-                this.state = ApiState.SUCCESS;
-                break;
-            case Status.ERROR:
-                this.state = ApiState.ERROR;
-                break;
-            case Status.SYNCING:
-                this.state = ApiState.SYNCING;
-                break;
-            default:
-                this.state = ApiState.IDLE;
-        }
-    }
-    @computed
-    get status() {
-        switch (this.state) {
-            case ApiState.SYNCING:
-                return Status.SYNCING;
-            case ApiState.SUCCESS:
-                return Status.SUCCESS;
-            case ApiState.ERROR:
-                return Status.ERROR;
-            default:
-                return Status.IDLE;
-        }
     }
 
     get isVersioned() {
@@ -311,9 +317,6 @@ export default class Script extends iDocument<DocumentType.Script> {
     get source() {
         return 'browser';
     }
-    get _lang() {
-        return this.meta.lang;
-    }
     get preCode() {
         return this.meta.preCode;
     }
@@ -322,10 +325,9 @@ export default class Script extends iDocument<DocumentType.Script> {
     }
 
     get lang() {
-        if (this.root?.meta)
-            if (this._lang === 'py') {
-                return 'python';
-            }
-        return this._lang;
+        if (this.meta.lang === 'py') {
+            return 'python';
+        }
+        return this.meta.lang;
     }
 }
