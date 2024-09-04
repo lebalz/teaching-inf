@@ -254,7 +254,7 @@ export class DocumentRootStore extends iStore {
     @action
     cleanupDocumentRoot(documentRoot: DocumentRoot<DocumentType>) {
         documentRoot.documents.forEach((doc) => {
-            this.root.documentStore.removeFromStore(doc.id);
+            this.root.documentStore.removeFromStore(doc);
         });
     }
 

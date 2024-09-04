@@ -51,7 +51,7 @@ const NewItem = observer((props: Props) => {
         <Popup
             trigger={
                 <span>
-                    <Button text="Neu" icon={mdiPlusCircleOutline} color="primary" size={0.7} />
+                    <Button text="Neu" icon={mdiPlusCircleOutline} color="primary" size={0.8} />
                 </span>
             }
             modal
@@ -105,7 +105,7 @@ const NewItem = observer((props: Props) => {
                                             parentId: file.id,
                                             type: DocumentType.QuillV2,
                                             data: {
-                                                code: '\n'
+                                                delta: { ops: [{ insert: '\n' }] } as Delta
                                             }
                                         });
                                     }

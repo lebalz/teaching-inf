@@ -1,6 +1,12 @@
-import { action, computed, observable } from 'mobx';
+import { action, observable } from 'mobx';
 import iDocument, { Source } from '../../iDocument';
-import { DocumentType, Document as DocumentProps, TypeDataMapping, Access } from '@site/src/api/document';
+import {
+    DocumentType,
+    Document as DocumentProps,
+    TypeDataMapping,
+    Access,
+    DocumentTypes
+} from '@site/src/api/document';
 import DocumentStore from '@site/src/stores/DocumentStore';
 import { TypeMeta } from '../../DocumentRoot';
 import { formatDateTime } from '../../helpers/date';
@@ -106,14 +112,9 @@ class iFileSystem<T extends SystemType> extends iDocument<T> {
         this.setData({ name: name }, Source.LOCAL, new Date());
     }
 
-    @computed
-    get document() {
-        return this.store.findByParentId(this.id);
-    }
-
     @action
     delete() {
-        return this.store.apiDelete(this);
+        return this.store.apiDelete(this as any as DocumentTypes);
     }
 }
 

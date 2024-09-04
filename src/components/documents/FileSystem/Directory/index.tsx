@@ -9,7 +9,7 @@ import SyncStatus from '../../../SyncStatus';
 import NewItem from './NewItem';
 import File from '../File';
 import Actions from '../Actions';
-import EditableName from './EditableName';
+import Name from '../Name';
 import { MetaInit } from '@site/src/models/documents/FileSystem/iFileSystem';
 import { useFirstMainDocument } from '@site/src/hooks/useFirstMainDocument';
 import Loader from '@site/src/components/Loader';
@@ -50,7 +50,7 @@ export const DirectoryComponent = observer((props: DirectoryProps) => {
                         size={0.8}
                         className={clsx(styles.icon)}
                     />
-                    <EditableName model={dir} className={styles.dirName} />
+                    <Name model={dir} className={styles.dirName} />
                     <div className={clsx(styles.syncState)}>
                         <SyncStatus model={dir} />
                     </div>

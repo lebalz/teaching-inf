@@ -115,6 +115,11 @@ abstract class iDocument<Type extends DocumentType> {
         return this.store.find(this.parentId);
     }
 
+    @computed
+    get children() {
+        return this.store.byParentId(this.id);
+    }
+
     get isInitialized() {
         /**
          * only return true if the models root document is present in the store...
@@ -173,6 +178,9 @@ abstract class iDocument<Type extends DocumentType> {
          * cancel pending actions and cleanup if needed...
          */
         this.stateDisposer();
+        this.children.forEach((c) => {
+            this.store.removeFromStore(c);
+        });
     }
 
     @action

@@ -17,7 +17,7 @@ import { DocumentType } from '@site/src/api/document';
 import CodeEditorComponent from '../../CodeEditor';
 import { QuillV2Component } from '../../QuillV2';
 import Actions from '../Actions';
-import EditableName from '../Directory/EditableName';
+import Name from '../Name';
 import FsDetails from '../FsDetails';
 
 interface Props {
@@ -71,7 +71,7 @@ const File = observer((props: Props) => {
                         className={clsx(styles.icon)}
                         color={getColor(file.document?.type)}
                     />
-                    <EditableName model={file} className={styles.fileName} />
+                    <Name model={file} className={styles.fileName} />
                     <div className={clsx(styles.syncState)}>
                         <SyncStatus model={file} />
                     </div>
