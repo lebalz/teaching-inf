@@ -42,26 +42,28 @@ export default function Home({ recentPosts }: Props) {
     ];
 
     return (
-        <Layout>
-            <HomepageHeader />
-            <main>
-                <div className={clsx(styles.galleryWrapper)}>
-                    <ImageGallery
-                        items={images}
-                        infinite
-                        lazyLoad
-                        showNav={false}
-                        showThumbnails={false}
-                        showFullscreenButton={false}
-                        showPlayButton={false}
-                        showBullets
-                        slideDuration={2000}
-                        slideInterval={8000}
-                        autoPlay
-                    />
-                </div>
-                <HomepageCourses />
-            </main>
-        </Layout>
+        <div className={clsx('no-search')}>
+            <Layout>
+                <HomepageHeader />
+                <main>
+                    <div className={clsx(styles.galleryWrapper)}>
+                        <ImageGallery
+                            items={images}
+                            infinite
+                            lazyLoad
+                            showNav={false}
+                            showThumbnails={false}
+                            showFullscreenButton={false}
+                            showPlayButton={false}
+                            showBullets
+                            slideDuration={2000}
+                            slideInterval={8000}
+                            autoPlay
+                        />
+                    </div>
+                    <HomepageCourses />
+                </main>
+            </Layout>
+        </div>
     );
 }

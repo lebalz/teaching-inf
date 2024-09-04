@@ -186,7 +186,6 @@ div.flex {
         }
     }
 }
-
 div[class^='navbarSearchContainer'] {
     position: static;
     padding: 0;
@@ -199,5 +198,11 @@ div[class^='navbarSearchContainer'] {
         .DocSearch-Button-Keys {
             display: none;
         }
+    }
+}
+
+div.no-search {
+    div[class^='navbarSearchContainer'] {
+        display: none;
     }
 }
