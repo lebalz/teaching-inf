@@ -13,7 +13,7 @@ import EditableName from './EditableName';
 import { MetaInit } from '@site/src/models/documents/FileSystem/iFileSystem';
 import { useFirstMainDocument } from '@site/src/hooks/useFirstMainDocument';
 import Loader from '@site/src/components/Loader';
-import Details from '../Details';
+import FsDetails from '../FsDetails';
 
 interface Props extends MetaInit {
     id: string;
@@ -40,7 +40,7 @@ interface DirectoryProps {
 export const DirectoryComponent = observer((props: DirectoryProps) => {
     const { dir } = props;
     return (
-        <Details
+        <FsDetails
             model={dir}
             className={clsx(styles.dir, props.isNested && styles.isNested)}
             summary={
@@ -81,7 +81,7 @@ export const DirectoryComponent = observer((props: DirectoryProps) => {
                     </>
                 )}
             </div>
-        </Details>
+        </FsDetails>
     );
 });
 
