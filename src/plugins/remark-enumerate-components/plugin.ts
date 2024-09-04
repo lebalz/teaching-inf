@@ -6,7 +6,7 @@
  */
 
 import type { Transformer } from 'unified';
-import type { MdxJsxFlowElement } from 'mdast-util-mdx';
+import type { MdxJsxFlowElement, MdxJsxTextElement } from 'mdast-util-mdx';
 
 export interface PluginOptions {
     componentsToEnumerate?: string[];
@@ -20,11 +20,11 @@ export interface PluginOptions {
 const plugin = function plugin(options: PluginOptions): Transformer {
     return async (root, file) => {
         const { visit } = await import('unist-util-visit');
-        const toEnumerate = new Set<string | null>(options.componentsToEnumerate || ['Answer']);
+        const toEnumerate = new Set<string | null>(options?.componentsToEnumerate || ['Answer']);
         let pagePosition = 0;
 
-        visit(root, ['mdxJsxFlowElement'], (node) => {
-            const answer = node as unknown as MdxJsxFlowElement;
+        visit(root, ['mdxJsxFlowElement', 'mdxJsxTextElement'], (node) => {
+            const answer = node as unknown as MdxJsxFlowElement | MdxJsxTextElement;
             if (!toEnumerate.has(answer.name)) {
                 return;
             }
