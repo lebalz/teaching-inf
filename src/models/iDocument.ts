@@ -173,14 +173,16 @@ abstract class iDocument<Type extends DocumentType> {
     }
 
     @action
-    cleanup() {
+    cleanup(deep?: boolean) {
         /**
          * cancel pending actions and cleanup if needed...
          */
         this.stateDisposer();
-        this.children.forEach((c) => {
-            this.store.removeFromStore(c);
-        });
+        if (deep) {
+            this.children.forEach((c) => {
+                this.store.removeFromStore(c);
+            });
+        }
     }
 
     @action

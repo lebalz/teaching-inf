@@ -40,12 +40,15 @@ export class DocumentRootStore extends iStore {
     }
 
     @action
-    addDocumentRoot(documentRoot: DocumentRoot<DocumentType>, cleanupOld: boolean = false) {
+    addDocumentRoot(
+        documentRoot: DocumentRoot<DocumentType>,
+        config: { cleanup?: boolean; deep?: boolean } = {}
+    ) {
         const old = this.find(documentRoot.id);
         if (old) {
             this.documentRoots.remove(old);
-            if (cleanupOld) {
-                this.cleanupDocumentRoot(old);
+            if (config.cleanup) {
+                this.cleanupDocumentRoot(old, config.deep);
             }
         }
         this.documentRoots.push(documentRoot);
@@ -184,7 +187,7 @@ export class DocumentRootStore extends iStore {
             return;
         }
         if (config.load.documentRoot) {
-            this.addDocumentRoot(documentRoot, true);
+            this.addDocumentRoot(documentRoot, { cleanup: true, deep: false });
         }
         if (config.load.groupPermissions) {
             data.groupPermissions.forEach((gp) => {
@@ -213,7 +216,7 @@ export class DocumentRootStore extends iStore {
         return this.withAbortController(`create-${id}`, async (signal) => {
             const { data } = await apiCreate(id, config, signal.signal);
             const docRoot = new DocumentRoot(data, meta, this);
-            this.addDocumentRoot(docRoot, true);
+            this.addDocumentRoot(docRoot, { cleanup: true, deep: false });
             return docRoot;
         });
     }
@@ -252,9 +255,9 @@ export class DocumentRootStore extends iStore {
     }
 
     @action
-    cleanupDocumentRoot(documentRoot: DocumentRoot<DocumentType>) {
+    cleanupDocumentRoot(documentRoot: DocumentRoot<DocumentType>, cleanupDeep: boolean = true) {
         documentRoot.documents.forEach((doc) => {
-            this.root.documentStore.removeFromStore(doc);
+            this.root.documentStore.removeFromStore(doc, cleanupDeep);
         });
     }
 

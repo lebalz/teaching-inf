@@ -1,9 +1,6 @@
-import { action, computed, observable } from 'mobx';
-import iDocument, { Source } from '../../iDocument';
-import { DocumentType, Document as DocumentProps, TypeDataMapping, Access } from '@site/src/api/document';
+import { computed } from 'mobx';
+import { DocumentType, Document as DocumentProps } from '@site/src/api/document';
 import DocumentStore from '@site/src/stores/DocumentStore';
-import { TypeMeta } from '../../DocumentRoot';
-import { formatDateTime } from '../../helpers/date';
 import _ from 'lodash';
 import File from './File';
 import iFileSystem, { iFSMeta, MetaInit } from './iFileSystem';

@@ -124,13 +124,13 @@ class DocumentStore extends iStore<`delete-${string}`> {
     }
 
     @action
-    removeFromStore(document?: DocumentTypes): DocumentTypes | undefined {
+    removeFromStore(document?: DocumentTypes, cleanupDeep?: boolean): DocumentTypes | undefined {
         /**
          * Removes the model to the store
          */
         if (document) {
             this.documents.remove(document);
-            document.cleanup();
+            document.cleanup(cleanupDeep);
         }
         return document;
     }
