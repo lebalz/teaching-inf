@@ -1,6 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
+import shared from '../shared.module.scss';
 import { observer } from 'mobx-react-lite';
 import { default as FileModel } from '@site/src/models/documents/FileSystem/File';
 import Icon from '@mdi/react';
@@ -62,27 +63,26 @@ const File = observer((props: Props) => {
     return (
         <FsDetails
             model={file}
-            className={clsx(styles.file)}
+            className={clsx(shared.fsItem, styles.file)}
             summary={
-                <summary className={clsx(styles.summary)}>
+                <summary className={clsx(shared.summary, styles.summary)}>
                     <Icon
                         path={file.isOpen ? getOpenIcon(file.document?.type) : getIcon(file.document?.type)}
                         size={0.8}
-                        className={clsx(styles.icon)}
+                        className={clsx(shared.icon)}
                         color={getColor(file.document?.type)}
                     />
-                    <Name model={file} className={styles.fileName} />
-                    <div className={clsx(styles.syncState)}>
+                    <Name model={file} className={shared.name} />
+                    <div className={clsx(shared.syncState)}>
                         <SyncStatus model={file} />
                     </div>
-                    <div className={clsx(styles.spacer)} />
-                    <div className={clsx(styles.actions)}>
+                    <div className={clsx(shared.actions)}>
                         <Actions item={file} />
                     </div>
                 </summary>
             }
         >
-            <div className={clsx(styles.content)}>
+            <div className={clsx(shared.content, styles.content)}>
                 {file.document && file.isOpen && (
                     <>
                         {file.document.type === DocumentType.Script && (

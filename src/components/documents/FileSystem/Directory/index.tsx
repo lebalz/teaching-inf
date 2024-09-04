@@ -1,6 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
+import shared from '../shared.module.scss';
 import { observer } from 'mobx-react-lite';
 import { default as DirctoryModel, ModelMeta } from '@site/src/models/documents/FileSystem/Directory';
 import Icon from '@mdi/react';
@@ -42,21 +43,20 @@ export const DirectoryComponent = observer((props: DirectoryProps) => {
     return (
         <FsDetails
             model={dir}
-            className={clsx(styles.dir, props.isNested && styles.isNested)}
+            className={clsx(shared.fsItem, styles.dir, props.isNested && styles.isNested)}
             summary={
-                <summary className={clsx(styles.summary)}>
+                <summary className={clsx(shared.summary, styles.summary)}>
                     <Icon
                         path={dir.isOpen ? mdiFolderOpen : mdiFolder}
                         size={0.8}
-                        className={clsx(styles.icon)}
+                        className={clsx(shared.icon)}
                     />
-                    <Name model={dir} className={styles.dirName} />
-                    <div className={clsx(styles.syncState)}>
+                    <Name model={dir} className={shared.name} />
+                    <div className={clsx(shared.syncState)}>
                         <SyncStatus model={dir} />
                     </div>
-                    <div className={clsx(styles.spacer)} />
                     <div
-                        className={clsx(styles.actions)}
+                        className={clsx(shared.actions)}
                         onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
@@ -69,7 +69,7 @@ export const DirectoryComponent = observer((props: DirectoryProps) => {
                 </summary>
             }
         >
-            <div className={clsx(styles.content)}>
+            <div className={clsx(shared.content, styles.content)}>
                 {dir.isOpen && (
                     <>
                         {dir.files.map((file) => {
