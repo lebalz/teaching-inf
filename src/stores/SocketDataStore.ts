@@ -177,7 +177,7 @@ export class SocketDataStore extends iStore<'ping'> {
                 break;
             case RecordType.Document:
                 const currentDoc = this.root.documentStore.find(id);
-                this.root.documentStore.removeFromStore(currentDoc);
+                this.root.documentStore.removeFromStore(currentDoc, true);
                 break;
             default:
                 console.log('deletedRecord', type, id);
