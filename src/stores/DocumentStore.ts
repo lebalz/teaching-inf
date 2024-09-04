@@ -117,8 +117,8 @@ class DocumentStore extends iStore<`delete-${string}`> {
         if (model.root.isDummy) {
             return;
         }
-
-        this.removeFromStore(model);
+        const old = this.find(model.id);
+        this.removeFromStore(old);
         this.documents.push(model);
         return model as TypeModelMapping[Type];
     }
