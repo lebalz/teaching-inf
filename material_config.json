@@ -1,26 +1,46 @@
 {
-    "28Gb": [
-        {
-            "from": "docs/OF-BYOD-Basics/",
-            "to": "versioned_docs/version-28Gb/01-BYOD",
-            "ignore": []
-        },
-        {
-            "from": "docs/OF-Programmieren-1/",
-            "to": "versioned_docs/version-28Gb/02-Programmieren-1",
-            "ignore": []
-        }
-    ],
-    "28Gj": [
-        {
-            "from": "docs/OF-BYOD-Basics/",
-            "to": "versioned_docs/version-28Gj/01-BYOD",
-            "ignore": []
-        },
-        {
-            "from": "docs/OF-Programmieren-1/",
-            "to": "versioned_docs/version-28Gj/02-Programmieren-1",
-            "ignore": []
-        }
-    ]
+  "28Gb": [
+    {
+      "from": "docs/OF-BYOD-Basics/",
+      "to": "versioned_docs/version-28Gb/01-BYOD",
+      "ignore": []
+    },
+    {
+      "from": "docs/OF-Programmieren-1/",
+      "to": "versioned_docs/version-28Gb/02-Programmieren-1",
+      "ignore": ["02-Turtlegrafik/_category_.json"]
+    },
+    {
+      "from": "docs/OF-Word/",
+      "to": "versioned_docs/version-28Gb/03-Word",
+      "ignore": [
+        "03-nummerierung.mdx",
+        "04-autokorrektur.mdx",
+        "05-uebung.mdx"
+      ],
+      "open": true
+    }
+  ],
+  "28Gj": [
+    {
+      "from": "docs/OF-BYOD-Basics/",
+      "to": "versioned_docs/version-28Gj/01-BYOD",
+      "ignore": []
+    },
+    {
+      "from": "docs/OF-Programmieren-1/",
+      "to": "versioned_docs/version-28Gj/02-Programmieren-1",
+      "ignore": ["02-Turtlegrafik/_category_.json"]
+    },
+    {
+      "from": "docs/OF-Word/",
+      "to": "versioned_docs/version-28Gj/03-Word",
+      "ignore": [
+        "03-nummerierung.mdx",
+        "04-autokorrektur.mdx",
+        "05-uebung.mdx"
+      ],
+      "open": true
+    }
+  ]
 }
