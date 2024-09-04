@@ -338,6 +338,12 @@ const config: Config = {
       darkTheme: prismThemes.dracula,
       additionalLanguages: ['bash', 'typescript', 'json', 'python'],
     },
+    algolia: {
+      appId: 'P2ENEETR74',
+      apiKey: 'e5251468d5a81bb7569048e52f735999',
+      indexName: 'inf-gbsl',
+      searchPagePath: 'search',
+    }
   } satisfies Preset.ThemeConfig,
   plugins: ['docusaurus-plugin-sass'],
   themes: [
