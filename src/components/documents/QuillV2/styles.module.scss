@@ -33,9 +33,6 @@
             &:global(.ql-snow) {
                 border: 0px solid var(--ifm-color-primary);
                 border-bottom-width: 1px;
-                white-space: nowrap;
-                overflow: hidden;
-                overflow-x: auto;
                 :global(.ql-stroke) {
                     fill: none;
                     stroke: var(--ifm-color-primary-contrast-foreground);

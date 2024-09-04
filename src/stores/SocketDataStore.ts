@@ -18,6 +18,7 @@ import {
 import { BACKEND_URL } from '../authConfig';
 import { DocumentRootUpdate } from '@site/src/api/documentRoot';
 import { GroupPermission, UserPermission } from '@site/src/api/permission';
+import { Document, DocumentType, DocumentTypes } from '../api/document';
 
 type TypedSocket = Socket<ServerToClientEvents, ClientToServerEvents>;
 
@@ -127,6 +128,12 @@ export class SocketDataStore extends iStore<'ping'> {
             case RecordType.GroupPermission:
                 this.root.permissionStore.handleGroupPermissionUpdate(record as GroupPermission);
                 break;
+            case RecordType.Document:
+                const doc = record as Document<any>;
+                if (doc.type === DocumentType.Dir || doc.type === DocumentType.File || doc.parentId) {
+                    this.root.documentStore.addToStore(doc);
+                }
+                break;
             default:
                 console.log('newRecord', type, record);
                 break;
@@ -167,6 +174,10 @@ export class SocketDataStore extends iStore<'ping'> {
             case RecordType.GroupPermission:
                 const currentGP = this.root.permissionStore.findGroupPermission(id);
                 this.root.permissionStore.removeFromStore(currentGP);
+                break;
+            case RecordType.Document:
+                const currentDoc = this.root.documentStore.find(id);
+                this.root.documentStore.removeFromStore(currentDoc);
                 break;
             default:
                 console.log('deletedRecord', type, id);

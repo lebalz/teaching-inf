@@ -28,65 +28,67 @@ const Actions = observer((props: Props) => {
             <Button
                 icon={mdiRenameOutline}
                 color="primary"
-                size={0.7}
+                size={0.8}
                 onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
                     item.setIsEditing(true);
                 }}
             />
-            <Popup
-                trigger={
-                    <span>
-                        <Button
-                            icon={mdiDotsHorizontalCircleOutline}
-                            size={0.8}
-                            color="black"
-                            className={clsx(styles.black)}
-                        />
-                    </span>
-                }
-                on="click"
-                position={['bottom right']}
-                arrow={false}
-                offsetX={20}
-                offsetY={5}
-                repositionOnResize
-            >
-                <div className={clsx('card', styles.card)}>
-                    <div className={clsx('card__body', styles.body)}>
-                        <div className={clsx(styles.delete, 'button-group button-group--block')}>
-                            {confirmDelete && (
+            {item.parentId && (
+                <Popup
+                    trigger={
+                        <span>
+                            <Button
+                                icon={mdiDotsHorizontalCircleOutline}
+                                size={0.8}
+                                color="black"
+                                className={clsx(styles.black)}
+                            />
+                        </span>
+                    }
+                    on="click"
+                    position={['bottom right']}
+                    arrow={false}
+                    offsetX={20}
+                    offsetY={5}
+                    repositionOnResize
+                >
+                    <div className={clsx('card', styles.card)}>
+                        <div className={clsx('card__body', styles.body)}>
+                            <div className={clsx(styles.delete, 'button-group button-group--block')}>
+                                {confirmDelete && (
+                                    <Button
+                                        icon={mdiClose}
+                                        iconSide="left"
+                                        size={1}
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            setConfirmDelete(false);
+                                        }}
+                                    />
+                                )}
                                 <Button
-                                    icon={mdiClose}
-                                    iconSide="left"
+                                    text={confirmDelete ? 'Ja' : 'Löschen'}
+                                    color="red"
+                                    icon={confirmDelete ? mdiTrashCan : mdiTrashCanOutline}
                                     size={1}
                                     onClick={(e) => {
                                         e.preventDefault();
                                         e.stopPropagation();
-                                        setConfirmDelete(false);
+                                        if (confirmDelete) {
+                                            item.delete();
+                                        } else {
+                                            setConfirmDelete(true);
+                                        }
                                     }}
                                 />
-                            )}
-                            <Button
-                                text={confirmDelete ? 'Ja' : 'Löschen'}
-                                color="red"
-                                icon={confirmDelete ? mdiTrashCan : mdiTrashCanOutline}
-                                size={1}
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    if (confirmDelete) {
-                                        item.delete();
-                                    } else {
-                                        setConfirmDelete(true);
-                                    }
-                                }}
-                            />
+                            </div>
                         </div>
                     </div>
-                </div>
-            </Popup>
+                </Popup>
+            )}
         </>
     );
 });

@@ -25,7 +25,7 @@ class File extends iFileSystem<DocumentType.File> {
 
     @computed
     get document() {
-        return this.store.findByParentId(this.id);
+        return this.children[0];
     }
 }
 

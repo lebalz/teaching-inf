@@ -85,12 +85,12 @@ class DocumentStore extends iStore<`delete-${string}`> {
         { keepAlive: true }
     );
 
-    findByParentId = computedFn(
+    byParentId = computedFn(
         function (this: DocumentStore, parentId?: string) {
             if (!parentId) {
-                return undefined as DocumentTypes | undefined;
+                return [] as DocumentTypes[];
             }
-            return this.documents.find((d) => d.parentId === parentId);
+            return this.documents.filter((d) => d.parentId === parentId);
         },
         { keepAlive: true }
     );
@@ -118,22 +118,21 @@ class DocumentStore extends iStore<`delete-${string}`> {
             return;
         }
 
-        this.removeFromStore(model.id);
+        this.removeFromStore(model);
         this.documents.push(model);
         return model as TypeModelMapping[Type];
     }
 
     @action
-    removeFromStore(id: string): DocumentTypes | undefined {
+    removeFromStore(document?: DocumentTypes): DocumentTypes | undefined {
         /**
          * Removes the model to the store
          */
-        const old = this.find(id);
-        if (old) {
-            this.documents.remove(old);
-            old.cleanup();
+        if (document) {
+            this.documents.remove(document);
+            document.cleanup();
         }
-        return old;
+        return document;
     }
 
     @action
@@ -150,7 +149,8 @@ class DocumentStore extends iStore<`delete-${string}`> {
                         return this.addToStore(data);
                     } else {
                         /** apparently the model is not present anymore - remove it from the store */
-                        return this.removeFromStore(id);
+                        const old = this.find(id);
+                        return this.removeFromStore(old);
                     }
                 })
             )
@@ -163,7 +163,8 @@ class DocumentStore extends iStore<`delete-${string}`> {
                      * the api responded with a non-2xx status code - apparently the model is not present anymore
                      * and can/should be removed from the store
                      */
-                    this.removeFromStore(id);
+                    const old = this.find(id);
+                    this.removeFromStore(old);
                     return;
                 }
             });
@@ -263,16 +264,20 @@ class DocumentStore extends iStore<`delete-${string}`> {
     }
 
     @action
-    apiDelete(document: iDocument<DocumentType>) {
+    apiDelete(document: DocumentTypes) {
         if (document.authorId !== this.root.userStore.current?.id) {
             return;
         }
         return this.withAbortController(`delete-${document.id}`, (sig) => {
             return apiDelete(document.id, sig.signal);
-        }).then(({ data }) => {
-            console.log(data);
-            this.removeFromStore(document.id);
-        });
+        })
+            .then(({ data }) => {
+                this.removeFromStore(document);
+            })
+            .catch((err) => {
+                console.warn('Error deleting document', err);
+                this.removeFromStore(document);
+            });
     }
 }
 

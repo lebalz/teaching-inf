@@ -2,14 +2,13 @@ import React from 'react';
 import type Directory from '@site/src/models/documents/FileSystem/Directory';
 import type File from '@site/src/models/documents/FileSystem/File';
 import clsx from 'clsx';
-import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
 
 interface Props {
     model: Directory | File;
     className?: string;
 }
-const EditableName = observer((props: Props) => {
+const Name = observer((props: Props) => {
     const { model } = props;
     return (
         <>
@@ -37,6 +36,23 @@ const EditableName = observer((props: Props) => {
                             model.saveNow();
                             model.setIsEditing(false);
                         }
+                        /**
+                         * prevent space from toggling the details
+                         */
+                        if (e.key === ' ') {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            const inp = e.currentTarget;
+                            const { selectionStart, selectionEnd } = inp;
+                            if (selectionStart !== null && selectionEnd !== null) {
+                                model.setName(
+                                    `${model.name.slice(0, selectionStart)} ${model.name.slice(selectionEnd)}`
+                                );
+                                setTimeout(() => {
+                                    inp.setSelectionRange(selectionStart + 1, selectionStart + 1);
+                                }, 0);
+                            }
+                        }
                     }}
                     onChange={(e) => {
                         model.setName(e.target.value);
@@ -53,4 +69,4 @@ const EditableName = observer((props: Props) => {
     );
 });
 
-export default EditableName;
+export default Name;
