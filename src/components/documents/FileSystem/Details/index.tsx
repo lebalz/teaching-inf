@@ -44,7 +44,6 @@ const Details = ({ summary, model, lazy, children, ...props }: DetailsProps): JS
     // const [open, setOpen] = useState(props.open);
 
     const summaryElement = React.isValidElement(summary) ? summary : <summary>{summary}</summary>;
-
     return (
         // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
         <details
