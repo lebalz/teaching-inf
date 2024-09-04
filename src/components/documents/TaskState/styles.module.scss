@@ -9,6 +9,9 @@
     -webkit-user-select: none;
     -moz-user-select: none;
 
+    &.inline {
+        display: inline-flex;
+    }
     .checkbox {
         font-size: 1.2rem;
         border-radius: var(--ifm-global-radius);

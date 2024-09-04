@@ -49,6 +49,7 @@ interface Props extends MetaInit {
     children?: JSX.Element;
     label?: string;
     pagePosition?: number;
+    inline?: boolean;
 }
 
 const TaskState = observer((props: Props) => {
@@ -94,7 +95,8 @@ const TaskState = observer((props: Props) => {
                 'state-component',
                 props.children && styles.noHeader,
                 'no-comments',
-                doc.root?.isDummy && styles.dummy
+                doc.root?.isDummy && styles.dummy,
+                props.inline && styles.inline
             )}
         >
             <div
