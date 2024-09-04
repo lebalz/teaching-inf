@@ -45,6 +45,7 @@ const OverviewIcon = (props: OverviewIconProps) => {
 const TaskStateOverview = observer(() => {
     const userStore = useStore('userStore');
     const pageStore = useStore('pageStore');
+    const studentGroupStore = useStore('studentGroupStore');
     const currentUser = userStore.current;
     const currentPage = pageStore.current;
     if (!currentUser || !currentPage) {
@@ -82,27 +83,62 @@ const TaskStateOverview = observer(() => {
                                     'button-group button-group--block'
                                 )}
                             >
-                                {currentPage.studentGroups.map((group, idx) => {
-                                    return (
-                                        <button
-                                            key={idx}
-                                            className={clsx(
-                                                'button',
-                                                'button--sm',
-                                                currentPage.activeStudentGroup?.id === group.id
-                                                    ? 'button--primary'
-                                                    : 'button--secondary',
-                                                styles.button
-                                            )}
-                                            onClick={() => {
-                                                currentPage.toggleActiveStudentGroup(group);
-                                            }}
-                                        >
-                                            {group.name}
-                                        </button>
-                                    );
-                                })}
+                                {studentGroupStore.studentGroups
+                                    .filter((sg) => !sg.parentId)
+                                    .map((group, idx) => {
+                                        return (
+                                            <button
+                                                key={idx}
+                                                className={clsx(
+                                                    'button',
+                                                    'button--sm',
+                                                    currentPage.activeStudentGroup?.id === group.id ||
+                                                        currentPage.activeStudentGroup?.parentIds.includes(
+                                                            group.id
+                                                        )
+                                                        ? 'button--warning'
+                                                        : 'button--secondary',
+                                                    // ,
+                                                    styles.button
+                                                )}
+                                                onClick={() => {
+                                                    currentPage.setPrimaryStudentGroup(group);
+                                                }}
+                                            >
+                                                {group.name}
+                                            </button>
+                                        );
+                                    })}
                             </div>
+                            {currentPage.childStudentGroups.length > 0 && (
+                                <div
+                                    className={clsx(
+                                        styles.studentGroupSelector,
+                                        'button-group button-group--block'
+                                    )}
+                                >
+                                    {currentPage.childStudentGroups.map((group, idx) => {
+                                        return (
+                                            <button
+                                                key={idx}
+                                                className={clsx(
+                                                    'button',
+                                                    'button--sm',
+                                                    currentPage.activeStudentGroup?.id === group.id
+                                                        ? 'button--primary'
+                                                        : 'button--secondary',
+                                                    styles.button
+                                                )}
+                                                onClick={() => {
+                                                    currentPage.toggleActiveStudentGroup(group);
+                                                }}
+                                            >
+                                                {group.name}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            )}
                             <div className={clsx(styles.overviewWrapper)}>
                                 {_.orderBy(
                                     Object.values(currentPage.taskStatesByUsers),

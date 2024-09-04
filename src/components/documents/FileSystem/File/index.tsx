@@ -18,7 +18,7 @@ import CodeEditorComponent from '../../CodeEditor';
 import { QuillV2Component } from '../../QuillV2';
 import Actions from '../Actions';
 import EditableName from '../Directory/EditableName';
-import Details from '../Details';
+import FsDetails from '../FsDetails';
 
 interface Props {
     file: FileModel;
@@ -60,7 +60,7 @@ const getOpenIcon = (type?: DocumentType) => {
 const File = observer((props: Props) => {
     const { file } = props;
     return (
-        <Details
+        <FsDetails
             model={file}
             className={clsx(styles.file)}
             summary={
@@ -94,7 +94,7 @@ const File = observer((props: Props) => {
                     </>
                 )}
             </div>
-        </Details>
+        </FsDetails>
     );
 });
 

@@ -39,6 +39,10 @@
     overflow: auto;
 }
 
+.button {
+    padding: calc(var(--ifm-button-padding-vertical) * 0.1) calc(var(--ifm-button-padding-horizontal) * 0.6);
+}
+
 @media screen and (max-width: 768px) {
     .popupCard {
         left: 50%;

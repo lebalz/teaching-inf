@@ -109,6 +109,16 @@ class StudentGroup {
         this.parentId = parentId;
         this.save();
     }
+
+    @computed
+    get parent(): StudentGroup | undefined {
+        return this.store.find(this.parentId);
+    }
+
+    @computed
+    get parentIds(): string[] {
+        return this.parent ? [this.parent.id, ...this.parent.parentIds] : [];
+    }
 }
 
 export default StudentGroup;

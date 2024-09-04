@@ -1,8 +1,8 @@
-import React, { useRef, useState, type ComponentProps, type ReactElement } from 'react';
+import React, { useRef, type ComponentProps, type ReactElement } from 'react';
 import clsx from 'clsx';
 import useIsBrowser from '@docusaurus/useIsBrowser';
 
-import { useCollapsible, Collapsible } from '@docusaurus/theme-common';
+import { Collapsible } from '@docusaurus/theme-common';
 
 import styles from './styles.module.css';
 import iFileSystem from '@site/src/models/documents/FileSystem/iFileSystem';
@@ -31,27 +31,17 @@ export type DetailsProps = {
     lazy?: boolean;
 } & ComponentProps<'details'>;
 
-const Details = ({ summary, model, lazy, children, ...props }: DetailsProps): JSX.Element => {
+const FsDetails = ({ summary, model, lazy, children, ...props }: DetailsProps): JSX.Element => {
     const isBrowser = useIsBrowser();
     const detailsRef = useRef<HTMLDetailsElement>(null);
-
-    const { collapsed, setCollapsed } = useCollapsible({
-        initialState: !model.isOpen
-    });
-    // Use a separate state for the actual details prop, because it must be set
-    // only after animation completes, otherwise close animations won't work
-    // --> use the model directly
-    // const [open, setOpen] = useState(props.open);
-
     const summaryElement = React.isValidElement(summary) ? summary : <summary>{summary}</summary>;
-
     return (
         // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
         <details
             {...props}
             ref={detailsRef}
             open={model.isOpen}
-            data-collapsed={collapsed}
+            data-collapsed={!model.isOpen}
             className={clsx(
                 'alert',
                 !/alert--/.test(props.className || '') && 'alert--info',
@@ -74,26 +64,15 @@ const Details = ({ summary, model, lazy, children, ...props }: DetailsProps): JS
                     return;
                 }
                 e.preventDefault();
-                if (collapsed) {
-                    setCollapsed(false);
-                    model.setIsOpen(true);
-                } else {
-                    setCollapsed(true);
-                    // Don't do this, it breaks close animation!
-                    // setOpen(false);
-                }
+                model.setIsOpen(!model.isOpen);
             }}
         >
             {summaryElement}
 
             <Collapsible
                 lazy={!!lazy} // Here we don't care about SEO
-                collapsed={collapsed}
+                collapsed={!model.isOpen}
                 disableSSRStyle // Allows component to work fine even with JS disabled!
-                onCollapseTransitionEnd={(newCollapsed) => {
-                    setCollapsed(newCollapsed);
-                    model.setIsOpen(!newCollapsed);
-                }}
             >
                 <div className={clsx(styles.collapsibleContent)}>{children}</div>
             </Collapsible>
@@ -101,4 +80,4 @@ const Details = ({ summary, model, lazy, children, ...props }: DetailsProps): JS
     );
 };
 
-export default Details;
+export default FsDetails;
