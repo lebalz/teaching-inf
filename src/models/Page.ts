@@ -13,8 +13,8 @@ export default class Page {
     readonly store: PageStore;
     readonly id: string;
 
-    @observable accessor primaryStudentGroupName: string | undefined = undefined;
-    @observable accessor activeStudentGroupId: string | undefined = undefined;
+    @observable.ref accessor primaryStudentGroup: StudentGroup | undefined = undefined;
+    @observable.ref accessor _activeStudentGroup: StudentGroup | undefined = undefined;
     documentRootIds = observable.set<string>();
 
     constructor(id: string, store: PageStore) {
@@ -54,10 +54,23 @@ export default class Page {
     @action
     setPrimaryStudentGroupName(name?: string) {
         const group = this.store.root.studentGroupStore.findByName(name);
+        this.setPrimaryStudentGroup(group);
+    }
+
+    @action
+    setPrimaryStudentGroup(group?: StudentGroup) {
+        if (
+            group &&
+            (group.id === this.primaryStudentGroup?.id ||
+                this._activeStudentGroup?.parentIds.includes(group.id))
+        ) {
+            this.primaryStudentGroup = undefined;
+            this._activeStudentGroup = undefined;
+            return;
+        }
+        this.primaryStudentGroup = group;
         if (group) {
-            this.primaryStudentGroupName = group.name;
-        } else {
-            this.primaryStudentGroupName = undefined;
+            this._activeStudentGroup = undefined;
         }
     }
 
@@ -68,42 +81,28 @@ export default class Page {
 
     @action
     toggleActiveStudentGroup(studentGroup: StudentGroup) {
-        if (this.activeStudentGroupId === studentGroup.id) {
-            this.activeStudentGroupId = undefined;
+        if (this._activeStudentGroup && this._activeStudentGroup.id === studentGroup.id) {
+            this._activeStudentGroup = undefined;
         } else {
-            this.activeStudentGroupId = studentGroup.id;
+            this._activeStudentGroup = studentGroup;
         }
     }
 
-    /**
-     * the student group that is selected through the current page location
-     */
     @computed
-    get primaryStudentGroup() {
-        return this.store.root.studentGroupStore.findByName(this.primaryStudentGroupName);
+    get childStudentGroups() {
+        if (this.primaryStudentGroup) {
+            return this.primaryStudentGroup.children;
+        }
+        return _.orderBy(
+            this.store.root.studentGroupStore.studentGroups.filter((sg) => !!sg.parentId),
+            ['name'],
+            ['asc']
+        );
     }
 
-    /**
-     * the student group that is selected from the user as the "active" student group
-     * --> task states will be filtered by this group
-     */
     @computed
     get activeStudentGroup() {
-        if (this.activeStudentGroupId) {
-            return this.store.root.studentGroupStore.find(this.activeStudentGroupId);
-        }
-        if (this.primaryStudentGroup) {
-            return this.primaryStudentGroup;
-        }
-        return undefined;
-    }
-
-    @computed
-    get studentGroups() {
-        if (this.primaryStudentGroup) {
-            return [this.primaryStudentGroup, ...this.primaryStudentGroup.children];
-        }
-        return _.orderBy(this.store.root.studentGroupStore.studentGroups, ['name'], ['asc']);
+        return this._activeStudentGroup || this.primaryStudentGroup;
     }
 
     @computed

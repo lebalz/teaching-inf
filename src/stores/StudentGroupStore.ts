@@ -23,7 +23,7 @@ export class StudentGroupStore extends iStore<`members-${string}`> {
     }
 
     find = computedFn(
-        function (this: StudentGroupStore, id?: string): StudentGroup | undefined {
+        function (this: StudentGroupStore, id?: string | null): StudentGroup | undefined {
             if (!id) {
                 return;
             }
