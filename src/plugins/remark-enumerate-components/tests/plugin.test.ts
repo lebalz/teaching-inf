@@ -52,14 +52,28 @@ describe('#enumerate-answers', () => {
 
     it('enumerates multiple <Answer />s', async () => {
         const input = `
-        <Answer type="state" id="8110417c-43dc-4216-8d76-e9c2d8357acc"/>
-        <Answer type="text" id="8affbdfd-1811-4e5b-b586-167f198874e6"/>
-      `;
+      <Answer type="state" id="8110417c-43dc-4216-8d76-e9c2d8357acc"/>
+      <Answer type="text" id="8affbdfd-1811-4e5b-b586-167f198874e6"/>
+    `;
         const result = await process(input);
         expect(result).toMatchInlineSnapshot(`
-        "<Answer type="state" id="8110417c-43dc-4216-8d76-e9c2d8357acc" pagePosition={1} />
+      "<Answer type="state" id="8110417c-43dc-4216-8d76-e9c2d8357acc" pagePosition={1} />
 
-        <Answer type="text" id="8affbdfd-1811-4e5b-b586-167f198874e6" pagePosition={2} />
+      <Answer type="text" id="8affbdfd-1811-4e5b-b586-167f198874e6" pagePosition={2} />
+      "
+    `);
+    });
+
+    it('enumerates inlined <Answer />s', async () => {
+        const input = `
+      ## <Answer type="state" inline id="8110417c-43dc-4216-8d76-e9c2d8357acc"/> a Title
+      And some text
+    `;
+        const result = await process(input);
+        expect(result).toMatchInlineSnapshot(`
+        "## <Answer type="state" inline id="8110417c-43dc-4216-8d76-e9c2d8357acc" pagePosition={1} /> a Title
+
+        And some text
         "
       `);
     });
