@@ -28,7 +28,7 @@ interface Props {
 }
 
 const UserTable = observer((props: Props) => {
-    const [itemsShown, setItemsShown] = React.useState(15);
+    const [itemsShown, setItemsShown] = React.useState(30);
     const [filter, setFilter] = React.useState('');
     const [sortDirection, setSortDirection] = React.useState<'asc' | 'desc'>(
         props.defaultSortDirection || 'asc'
