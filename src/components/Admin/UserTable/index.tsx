@@ -25,6 +25,7 @@ interface Props {
     filterClassName?: string;
     defaultSortColumn?: SortColumn;
     defaultSortDirection?: 'asc' | 'desc';
+    showAll?: boolean;
 }
 
 const UserTable = observer((props: Props) => {
@@ -166,7 +167,7 @@ const UserTable = observer((props: Props) => {
                     <tbody>
                         {_.orderBy(userStore.users, [sortColumn], [sortDirection])
                             .filter((user) => searchRegex.test(user.searchTerm))
-                            .slice(0, itemsShown)
+                            .slice(0, props.showAll ? userStore.users.length : itemsShown)
                             .map((user, idx) => {
                                 return <UserTableRow key={user.id} user={user} />;
                             })}
