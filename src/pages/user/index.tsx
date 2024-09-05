@@ -99,7 +99,11 @@ const UserPage = observer(() => {
                     <div>
                         <h2>User Tabelle</h2>
                         <div className={clsx(styles.userTable)}>
-                            <UserTable filterClassName={styles.filter} />
+                            <UserTable
+                                filterClassName={styles.filter}
+                                defaultSortColumn="connectedClients"
+                                defaultSortDirection="desc"
+                            />
                         </div>
                     </div>
                 )}

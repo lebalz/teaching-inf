@@ -11,18 +11,29 @@ import _ from 'lodash';
 
 const SIZE_S = 0.6;
 
+type SortColumn =
+    | 'email'
+    | 'isAdmin'
+    | 'firstName'
+    | 'lastName'
+    | 'createdAt'
+    | 'updatedAt'
+    | 'id'
+    | 'connectedClients';
 interface Props {
     className?: string;
     filterClassName?: string;
+    defaultSortColumn?: SortColumn;
+    defaultSortDirection?: 'asc' | 'desc';
 }
 
 const UserTable = observer((props: Props) => {
     const [itemsShown, setItemsShown] = React.useState(15);
     const [filter, setFilter] = React.useState('');
-    const [sortDirection, setSortDirection] = React.useState<'asc' | 'desc'>('asc');
-    const [sortColumn, _setSortColumn] = React.useState<
-        'email' | 'isAdmin' | 'firstName' | 'lastName' | 'createdAt' | 'updatedAt' | 'id' | 'connectedClients'
-    >('email');
+    const [sortDirection, setSortDirection] = React.useState<'asc' | 'desc'>(
+        props.defaultSortDirection || 'asc'
+    );
+    const [sortColumn, _setSortColumn] = React.useState<SortColumn>(props.defaultSortColumn || 'email');
     const userStore = useStore('userStore');
     const observerTarget = React.useRef(null);
     const [searchRegex, setSearchRegex] = React.useState(new RegExp(filter, 'i'));
@@ -53,17 +64,7 @@ const UserTable = observer((props: Props) => {
         };
     }, [observerTarget, userStore.users.length]);
 
-    const setSortColumn = (
-        column:
-            | 'email'
-            | 'isAdmin'
-            | 'firstName'
-            | 'lastName'
-            | 'createdAt'
-            | 'updatedAt'
-            | 'id'
-            | 'connectedClients'
-    ) => {
+    const setSortColumn = (column: SortColumn) => {
         if (column === sortColumn) {
             setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
         } else {
