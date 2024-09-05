@@ -60,7 +60,7 @@ const UserTableRow = observer((props: Props) => {
             <td>{formatDateTime(user.createdAt)}</td>
             <td>{formatDateTime(user.updatedAt)}</td>
             <td>
-                <CopyBadge value={user.id} />
+                <CopyBadge value={user.id} className={clsx(styles.nowrap)} />
             </td>
         </tr>
     );
