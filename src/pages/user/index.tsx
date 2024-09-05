@@ -103,6 +103,7 @@ const UserPage = observer(() => {
                                 filterClassName={styles.filter}
                                 defaultSortColumn="connectedClients"
                                 defaultSortDirection="desc"
+                                showAll
                             />
                         </div>
                     </div>
