@@ -20,6 +20,18 @@
                 "href": "pathname:///p/Programmieren/Algorithmen/01-algorithmen.html"
               }
             ]
+          },
+          {
+            "type": "category",
+            "label": "Word",
+            "collapsible": true,
+            "items": [
+              {
+                "type": "link",
+                "label": "Einstieg - Übersicht",
+                "href": "https://erzbe-my.sharepoint.com/:b:/g/personal/balthasar_hofer_gbsl_ch/EXmI9N4GwBRGtJNxx5Kwlq0B2YJ0cNatZwVFMgo0AxMzPw?e=YmemDY"
+              }
+            ]
           }
         ]
       }
