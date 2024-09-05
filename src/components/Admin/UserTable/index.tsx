@@ -16,7 +16,7 @@ const UserTable = observer(() => {
     const [filter, setFilter] = React.useState('');
     const [sortDirection, setSortDirection] = React.useState<'asc' | 'desc'>('asc');
     const [sortColumn, _setSortColumn] = React.useState<
-        'email' | 'isAdmin' | 'firstName' | 'lastName' | 'createdAt' | 'updatedAt' | 'id'
+        'email' | 'isAdmin' | 'firstName' | 'lastName' | 'createdAt' | 'updatedAt' | 'id' | 'connectedClients'
     >('email');
     const userStore = useStore('userStore');
     const observerTarget = React.useRef(null);
@@ -49,7 +49,15 @@ const UserTable = observer(() => {
     }, [observerTarget, userStore.users.length]);
 
     const setSortColumn = (
-        column: 'email' | 'isAdmin' | 'firstName' | 'lastName' | 'createdAt' | 'updatedAt' | 'id'
+        column:
+            | 'email'
+            | 'isAdmin'
+            | 'firstName'
+            | 'lastName'
+            | 'createdAt'
+            | 'updatedAt'
+            | 'id'
+            | 'connectedClients'
     ) => {
         if (column === sortColumn) {
             setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
@@ -75,6 +83,15 @@ const UserTable = observer(() => {
                 <table className={clsx(styles.table)}>
                     <thead>
                         <tr>
+                            <th>
+                                <Button
+                                    size={SIZE_S}
+                                    iconSide="left"
+                                    icon={sortColumn === 'connectedClients' && icon}
+                                    text="On?"
+                                    onClick={() => setSortColumn('connectedClients')}
+                                />
+                            </th>
                             <th>
                                 <Button
                                     size={SIZE_S}

@@ -1,4 +1,4 @@
-import { action, computed } from 'mobx';
+import { action, computed, observable } from 'mobx';
 import { User as UserProps } from '../api/user';
 import { UserStore } from '../stores/UserStore';
 
@@ -69,5 +69,10 @@ export default class User {
     setAdmin(isAdmin: boolean) {
         const updatedUser = new User({ ...this.props, isAdmin }, this.store);
         this.store.update(updatedUser);
+    }
+
+    @computed
+    get connectedClients() {
+        return this.store.root.socketStore.connectedClients.get(this.id) || 0;
     }
 }
