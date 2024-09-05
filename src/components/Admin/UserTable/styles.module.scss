@@ -5,6 +5,7 @@
         justify-content: space-between;
         position: sticky;
         top: 4em;
+        z-index: var(--ifm-z-index-dropdown);
     }
     .tableWrapper {
         overflow-x: auto;

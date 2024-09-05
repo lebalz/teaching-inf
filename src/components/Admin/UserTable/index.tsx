@@ -11,7 +11,12 @@ import _ from 'lodash';
 
 const SIZE_S = 0.6;
 
-const UserTable = observer(() => {
+interface Props {
+    className?: string;
+    filterClassName?: string;
+}
+
+const UserTable = observer((props: Props) => {
     const [itemsShown, setItemsShown] = React.useState(15);
     const [filter, setFilter] = React.useState('');
     const [sortDirection, setSortDirection] = React.useState<'asc' | 'desc'>('asc');
@@ -69,8 +74,8 @@ const UserTable = observer(() => {
 
     const icon = sortDirection === 'asc' ? mdiSortAscending : mdiSortDescending;
     return (
-        <div className={clsx(styles.userTable)}>
-            <div className={clsx('alert alert--primary', styles.filter)} role="alert">
+        <div className={clsx(styles.userTable, props.className)}>
+            <div className={clsx('alert alert--primary', styles.filter, props.filterClassName)} role="alert">
                 <input
                     type="search"
                     value={filter}
