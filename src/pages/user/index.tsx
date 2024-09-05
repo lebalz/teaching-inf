@@ -107,7 +107,6 @@ const UserPage = observer(() => {
                         </div>
                     </div>
                 )}
-                <h2>Usertable</h2>
                 <h2>Account</h2>
                 <DefinitionList>
                     {current?.isAdmin && (
