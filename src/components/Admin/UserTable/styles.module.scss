@@ -12,6 +12,14 @@
             width: 100%;
             border-collapse: collapse;
             display: table;
+            .user {
+                .clients {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    width: 100%;
+                }
+            }
         }
     }
 }

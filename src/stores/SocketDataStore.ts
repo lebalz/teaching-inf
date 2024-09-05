@@ -18,7 +18,7 @@ import {
 import { BACKEND_URL } from '../authConfig';
 import { DocumentRootUpdate } from '@site/src/api/documentRoot';
 import { GroupPermission, UserPermission } from '@site/src/api/permission';
-import { Document, DocumentType, DocumentTypes } from '../api/document';
+import { Document, DocumentType } from '../api/document';
 
 type TypedSocket = Socket<ServerToClientEvents, ClientToServerEvents>;
 
@@ -186,8 +186,14 @@ export class SocketDataStore extends iStore<'ping'> {
     }
 
     @action
-    updateConnectedClients({ room, count }: ConnectedClients) {
-        this.connectedClients.set(room, count);
+    updateConnectedClients(data: ConnectedClients) {
+        if (data.type === 'full') {
+            this.connectedClients.replace(data.rooms);
+        } else {
+            data.rooms.forEach(([room, count]) => {
+                this.connectedClients.set(room, count);
+            });
+        }
     }
 
     checkLogin() {

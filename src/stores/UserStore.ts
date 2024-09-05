@@ -1,5 +1,5 @@
-import { action, computed, makeObservable, observable, reaction } from 'mobx';
-import { Role, User as UserProps, all as apiAll, currentUser, update as apiUpdate } from '../api/user';
+import { action, computed, observable } from 'mobx';
+import { User as UserProps, all as apiAll, currentUser, update as apiUpdate } from '../api/user';
 import { RootStore } from './rootStore';
 import User from '../models/User';
 import _ from 'lodash';
