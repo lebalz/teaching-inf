@@ -7,7 +7,7 @@ import { default as UserModel } from '@site/src/models/User';
 import CopyBadge from '../../shared/CopyBadge';
 import { formatDateTime } from '@site/src/models/helpers/date';
 import Icon from '@mdi/react';
-import { mdiCircle, mdiSizeS } from '@mdi/js';
+import { mdiCircle } from '@mdi/js';
 
 interface Props {
     user: UserModel;
