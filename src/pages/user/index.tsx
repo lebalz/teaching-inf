@@ -14,6 +14,7 @@ import Button from '../../components/shared/Button';
 import Loader from '../../components/Loader';
 import DefinitionList from '../../components/DefinitionList';
 import Icon from '@mdi/react';
+import UserTable from '@site/src/components/Admin/UserTable';
 const { NO_AUTH } = siteConfig.customFields as { TEST_USERNAME?: string; NO_AUTH?: boolean };
 
 const LeftAlign = (text: String) => {
@@ -94,6 +95,15 @@ const UserPage = observer(() => {
                         </>
                     )}
                 </DefinitionList>
+                {userStore.current?.isAdmin && (
+                    <div>
+                        <h2>User Tabelle</h2>
+                        <div className={clsx(styles.userTable)}>
+                            <UserTable filterClassName={styles.filter} />
+                        </div>
+                    </div>
+                )}
+                <h2>Usertable</h2>
                 <h2>Account</h2>
                 <DefinitionList>
                     {current?.isAdmin && (
