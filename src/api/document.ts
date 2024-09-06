@@ -9,6 +9,7 @@ import { Delta } from 'quill/core';
 import Solution from '../models/documents/Solution';
 import Directory from '../models/documents/FileSystem/Directory';
 import File from '../models/documents/FileSystem/File';
+import Excalidoc from '../models/documents/Excalidoc';
 
 export enum Access {
     RO_DocumentRoot = 'RO_DocumentRoot',
@@ -30,7 +31,8 @@ export enum DocumentType {
     QuillV2 = 'quill_v2',
     Solution = 'solution',
     Dir = 'dir',
-    File = 'file'
+    File = 'file',
+    Excalidoc = 'excalidoc'
 }
 export interface ScriptData {
     code: string;
@@ -64,6 +66,9 @@ export interface FileData {
     isOpen: boolean;
 }
 
+export interface ExcaliData {
+}
+
 export type StateType = 'checked' | 'question' | 'unset' | 'star' | 'star-half' | 'star-empty';
 
 export interface TaskStateData {
@@ -79,6 +84,7 @@ export interface TypeDataMapping {
     [DocumentType.Solution]: SolutionData;
     [DocumentType.Dir]: DirData;
     [DocumentType.File]: FileData;
+    [DocumentType.Excalidoc]: ExcaliData;
     // Add more mappings as needed
 }
 
@@ -91,6 +97,7 @@ export interface TypeModelMapping {
     [DocumentType.Solution]: Solution;
     [DocumentType.Dir]: Directory;
     [DocumentType.File]: File;
+    [DocumentType.Excalidoc]: Excalidoc;
     /**
      * Add more mappings as needed
      * TODO: implement the mapping in DocumentRoot.ts
@@ -107,7 +114,8 @@ export type DocumentTypes =
     | QuillV2
     | Solution
     | Directory
-    | File;
+    | File
+    | Excalidoc;
 
 export interface Document<Type extends DocumentType> {
     id: string;

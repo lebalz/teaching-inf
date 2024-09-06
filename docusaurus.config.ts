@@ -23,6 +23,7 @@ import { promises as fs } from 'fs';
 const BUILD_LOCATION = __dirname;
 const GIT_COMMIT_SHA = process.env.GITHUB_SHA || Math.random().toString(36).substring(7);
 
+process.env.IS_PREACT = "false";
 const BEFORE_DEFAULT_REMARK_PLUGINS = [
   flexCardsPlugin,
   [
@@ -107,7 +108,8 @@ const config: Config = {
     TENANT_ID: process.env.TENANT_ID,
     /** The application id uri generated in https://portal.azure.com */
     API_URI: process.env.API_URI,
-    GIT_COMMIT_SHA: GIT_COMMIT_SHA
+    GIT_COMMIT_SHA: GIT_COMMIT_SHA,
+    ['process.env.IS_PREACT']: false
   },
 
   // Even if you don't use internationalization, you can use this field to set
