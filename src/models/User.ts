@@ -14,6 +14,13 @@ export default class User {
     readonly createdAt: Date;
     readonly updatedAt: Date;
 
+    @observable accessor randomNum: number = 0;
+
+    @action
+    setRandomNum(num: number) {
+        this.randomNum = num;
+    }
+
     constructor(props: UserProps, store: UserStore) {
         this.store = store;
         this.id = props.id;

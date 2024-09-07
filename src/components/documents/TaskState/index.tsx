@@ -14,7 +14,7 @@ import {
 import { StateType } from '@site/src/api/document';
 import { useFirstMainDocument } from '@site/src/hooks/useFirstMainDocument';
 import Icon from '@mdi/react';
-import { MetaInit, TaskMeta } from '@site/src/models/documents/TaskState';
+import { default as TaskStateModel, MetaInit, TaskMeta } from '@site/src/models/documents/TaskState';
 import Loader from '../../Loader';
 import { useStore } from '@site/src/hooks/useStore';
 
@@ -54,11 +54,27 @@ interface Props extends MetaInit {
 
 const TaskState = observer((props: Props) => {
     const [meta] = React.useState(new TaskMeta(props));
+    const doc = useFirstMainDocument(props.id, meta);
+    if (!doc) {
+        return <Loader noLabel title="Laden" align="left" className={clsx(styles.state, styles.loader)} />;
+    }
+    return (
+        <TaskStateComponent {...props} taskState={doc}>
+            {props.children}
+        </TaskStateComponent>
+    );
+});
+
+interface ComponentProps extends Props {
+    taskState: TaskStateModel;
+}
+
+export const TaskStateComponent = observer((props: ComponentProps) => {
     const ref = React.useRef<HTMLDivElement>(null);
     const pageStore = useStore('pageStore');
     const [animate, setAnimate] = React.useState(false);
+    const doc = props.taskState;
 
-    const doc = useFirstMainDocument(props.id, meta);
     React.useEffect(() => {
         if (doc.root && pageStore.current && !doc.root.isDummy) {
             pageStore.current.addDocumentRoot(doc);
@@ -84,9 +100,6 @@ const TaskState = observer((props: Props) => {
         }
     }, [animate]);
 
-    if (!doc) {
-        return <Loader noLabel title="Laden" align="left" className={clsx(styles.state, styles.loader)} />;
-    }
     return (
         <div
             ref={ref}

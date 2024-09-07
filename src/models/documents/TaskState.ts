@@ -37,11 +37,11 @@ export class TaskMeta extends TypeMeta<DocumentType.TaskState> {
 }
 
 class TaskState extends iDocument<DocumentType.TaskState> {
-    @observable accessor taskState: StateType;
+    @observable accessor _taskState: StateType;
     @observable accessor scrollTo: boolean = false;
     constructor(props: DocumentProps<DocumentType.TaskState>, store: DocumentStore) {
         super(props, store);
-        this.taskState = props.data?.state;
+        this._taskState = props.data?.state;
     }
 
     @action
@@ -49,7 +49,7 @@ class TaskState extends iDocument<DocumentType.TaskState> {
         if (!RWAccess.has(this.root?.permission)) {
             return;
         }
-        this.taskState = data.state;
+        this._taskState = data.state;
 
         if (from === Source.LOCAL) {
             this.saveNow();
@@ -61,8 +61,13 @@ class TaskState extends iDocument<DocumentType.TaskState> {
 
     get data(): TypeDataMapping[DocumentType.TaskState] {
         return {
-            state: this.taskState
+            state: this._taskState
         };
+    }
+
+    @computed
+    get taskState(): StateType {
+        return this.derivedData.state;
     }
 
     @computed

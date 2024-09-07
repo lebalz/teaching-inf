@@ -4,6 +4,7 @@ import DocumentStore from '../stores/DocumentStore';
 import { debounce } from 'lodash';
 import { ApiState } from '../stores/iStore';
 import { NoneAccess, ROAccess, RWAccess } from './helpers/accessPolicy';
+import type iSideEffect from './SideEffects/iSideEffect';
 
 /**
  * normally, save only once all 1000ms
@@ -40,6 +41,8 @@ abstract class iDocument<Type extends DocumentType> {
     });
 
     @observable accessor state: ApiState = ApiState.IDLE;
+
+    sideEffects = observable.array<iSideEffect<Type>>([], { deep: false });
 
     @observable.ref accessor updatedAt: Date;
     readonly stateDisposer: IReactionDisposer;
@@ -91,9 +94,21 @@ abstract class iDocument<Type extends DocumentType> {
         this.setData({ ...this._pristine }, Source.LOCAL);
     }
 
+    @action
+    registerSideEffect(se: iSideEffect<Type>) {
+        this.sideEffects.push(se);
+    }
+
     abstract get data(): TypeDataMapping[Type];
 
     abstract setData(data: TypeDataMapping[Type], from: Source, updatedAt?: Date): void;
+
+    @computed
+    get derivedData() {
+        return this.sideEffects.reduce((acc, se) => {
+            return se.transformer(acc);
+        }, this.data);
+    }
 
     @computed
     get isDirty() {

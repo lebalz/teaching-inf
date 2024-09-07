@@ -1,0 +1,118 @@
+---
+page_id: a8063ab0-49e4-46e2-a032-f075dc3eb82b
+---
+
+import React from 'react';
+import TaskState from '@site/src/components/documents/TaskState';
+import Button from '@site/src/components/shared/Button';
+import { useFirstMainDocument } from '@site/src/hooks/useFirstMainDocument';
+import BrowserWindow from '@site/src/components/BrowserWindow';
+import { TaskStateComponent } from '@site/src/components/documents/TaskState';
+import { TaskMeta } from '@site/src/models/documents/TaskState';
+import RandomState from '@site/src/models/SideEffects/RandomState';
+import { useStore } from '@site/src/hooks/useStore';
+
+# Side Effects
+
+__Side Effects__ sind Transformationen, die auf das `data` Feld eines Dokuments angewendet werden, wobei die Änderungen aber nicht persistiert werden. Über `Document.derivedData` können die transformierten Daten, bspw. fürs Anzeigen im UI, abgefragt werden.
+
+:::tip[Reaktivität]
+Ein Side Effect stellt das Feld `transformer` zur Verfügung, welches die Transformations-Funktion `(document: TypeDataMapping[Type]) => TypeDataMapping[Type]` enthält.
+Dank **mobx** ist es möglich, den `transformer` computed zu machen, um automatisch die Änderungen zu verfolgen.
+
+#### Beispiel
+```typescript title="RandomState.ts"
+const States: StateType[] = ['checked', 'question', 'unset', 'star', 'star-half', 'star-empty'] as const;
+
+class RandomState extends iSideEffect<DocumentType.TaskState> {
+    readonly store: UserStore;
+
+    constructor(userStore: UserStore) {
+        super('RandomState');
+        this.store = userStore;
+    }
+
+    @computed
+    get transformer() {
+        return (docData: TypeDataMapping[DocumentType.TaskState]) => {
+            if (!this.store.viewedUser) {
+                return docData;
+            }
+            return {
+                ...docData,
+                state: States[this.store.viewedUser.randomNum % States.length]
+            };
+        };
+    }
+}
+
+export default RandomState;
+```
+Im obigen Beispiel wird der `transformer` immer dann neu berechnet, wenn sich `this.store.viewedUser.randomNum` ändert.
+:::
+
+## Beispiel
+```tsx
+const TransformedTaskState = () => {
+    // TaskState Dokument laden
+    const doc = useFirstMainDocument('ff4e8ff4-8de8-48ea-aff8-77d198d32baf', new TaskMeta({}));
+    const userStore = useStore('userStore');
+
+    // Side Effect registrieren
+    React.useEffect(() => {
+        if (doc && doc.sideEffects.length === 0) {
+            doc.registerSideEffect(
+                new RandomState(userStore)
+            );
+        }
+    }, [doc, userStore]);
+    if (!doc) {
+        return null;
+    }
+    return (
+        <>
+            <TaskStateComponent taskState={doc} />
+            <Button 
+                onClick= {() => {
+                    userStore.viewedUser.setRandomNum(
+                        userStore.viewedUser.randomNum + 1
+                    )
+                }}
+                text="Trigger Side Effect"
+            />
+        </>
+    )
+}
+```
+
+export const TransformedTaskState = () => {
+    const doc = useFirstMainDocument('ff4e8ff4-8de8-48ea-aff8-77d198d32baf', new TaskMeta({}));
+    const userStore = useStore('userStore');
+    React.useEffect(() => {
+        if (doc && doc.sideEffects.length === 0) {
+            doc.registerSideEffect(
+                new RandomState(userStore)
+            );
+        }
+    }, [doc, userStore]);
+    if (!doc) {
+        return null;
+    }
+    return (
+        <>
+            <TaskStateComponent taskState={doc} />
+            <Button 
+                onClick= {() => {
+                    userStore.viewedUser.setRandomNum(
+                        userStore.viewedUser.randomNum + 1
+                    )
+                }}
+                text="Trigger Side Effect"
+            />
+        </>
+    )
+}
+
+<BrowserWindow>
+<TransformedTaskState />
+</BrowserWindow>
