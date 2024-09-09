@@ -16,11 +16,11 @@
 
 ## Algorithmus
 
-- <span>Sequenz <span style="background: white">👣</span></span><!-- .element: class="fragment" data-fragment-index="1" -->
-- <span>**Wiederholung** 🔁</span><!-- .element: class="fragment" data-fragment-index="2" -->
-- Bedingte Ausführung ⑂<!-- .element: class="fragment" data-fragment-index="3" -->
-- Unterprogramm: 🏷 Beschriftung einer Sequenz<!-- .element: class="fragment" data-fragment-index="4" -->
-- Parameter ⊕ ⊖<!-- .element: class="fragment" data-fragment-index="5" -->
+- Sequenz <!-- .element: class="fragment" data-fragment-index="1" --> <span style="background: white">👣</span> <!-- .element: class="fragment" data-fragment-index="1" -->
+- Wiederholung 🔁  <!-- .element: class="fragment" data-fragment-index="2" -->
+- Bedingte Ausführung ⑂  <!-- .element: class="fragment" data-fragment-index="3" -->
+- Unterprogramm: 🏷 Beschriftung einer Sequenz  <!-- .element: class="fragment" data-fragment-index="4" -->
+- Parameter ⊕ ⊖  <!-- .element: class="fragment" data-fragment-index="5" -->
 
 
 ## Struktogramme
@@ -53,7 +53,7 @@ Wie viele Zeilen Code haben Sie gebraucht?
 ## Code
 
 Wiederholter Teil:
-```py
+```python
 left(90)
 forward(17)
 right(90)
