@@ -3,6 +3,7 @@ import styles from './styles.module.scss';
 import clsx from 'clsx';
 import Link from '@docusaurus/Link';
 import siteConfig from '@generated/docusaurus.config';
+import { useStore } from '@site/src/hooks/useStore';
 const { DOCS_ONLY } = siteConfig.customFields as { DOCS_ONLY?: boolean };
 
 interface Klass {
@@ -21,6 +22,31 @@ if (!DOCS_ONLY) {
     CourseList.push({
         title: 'Gym 1',
         classes: ['28Gb', '28Gj']
+    });
+    CourseList.push({
+        title: 'Ehemalige',
+        classes: [
+            {
+                uri: 'https://ofi.24.gbsl.website',
+                label: '24'
+            },
+            {
+                uri: 'https://ef.24.gbsl.website/24ef/home',
+                label: '24 EF'
+            },
+            {
+                uri: 'https://ofi.25.gbsl.website/25h/home',
+                label: '25h'
+            },
+            {
+                uri: 'https://ofi.26.gbsl.website',
+                label: '26'
+            },
+            {
+                uri: 'https://ofi.25.gbsl.website/24w/home',
+                label: '24w'
+            }
+        ]
     });
 }
 
@@ -52,11 +78,12 @@ const CourseComponent = ({ course }: { course: Course }) => {
 };
 
 export default function HomepageCourses() {
+    const userStore = useStore('userStore');
     return (
         <section className={styles.features}>
             <div className="container">
                 <div className="row">
-                    {(DOCS_ONLY || process.env.NODE_ENV === 'development') && (
+                    {(DOCS_ONLY || process.env.NODE_ENV === 'development' || userStore.current?.isAdmin) && (
                         <CourseComponent
                             course={{ title: 'All Docs', classes: [{ label: 'Docs', uri: '/home' }] }}
                         />
