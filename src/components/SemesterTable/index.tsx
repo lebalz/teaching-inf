@@ -76,9 +76,27 @@ const getDate = (date: String) => {
 };
 
 const weekNumber = (date: Date) => {
-    var oneJan = new Date(date.getFullYear(), 0, 1);
-    var numberOfDays = Math.floor((date.getTime() - oneJan.getTime()) / (24 * 60 * 60 * 1000));
-    return Math.ceil(numberOfDays / 7) + 1;
+    // Copy date so we don't modify the original
+    const target = new Date(date.valueOf());
+
+    // ISO week date weeks start on Monday, so correct the day number
+    const dayNr = (date.getUTCDay() + 6) % 7;
+
+    // Set the target to the nearest Thursday (current date + 4 - current day number)
+    target.setUTCDate(target.getUTCDate() - dayNr + 3);
+
+    // January 4th is always in week 1 (ISO 8601)
+    const firstThursday = new Date(Date.UTC(target.getUTCFullYear(), 0, 4));
+
+    // Adjust to the nearest Thursday in the first week of the year
+    firstThursday.setUTCDate(firstThursday.getUTCDate() - ((firstThursday.getUTCDay() + 6) % 7) + 3);
+
+    // Calculate the week number
+    const weekNumber = Math.round(
+        ((target.getTime() - firstThursday.getTime()) / (24 * 60 * 60 * 1000) + 1) / 7
+    );
+
+    return weekNumber;
 };
 
 export class Row extends React.Component<RowProps> {
