@@ -206,3 +206,30 @@ div.no-search {
         display: none;
     }
 }
+
+.slim,
+.slim-table,
+.small-table {
+    overflow-x: auto;
+    table {
+        th,
+        td {
+            padding: 0.2em;
+        }
+    }
+}
+
+.no-header,
+.no-table-header {
+    overflow-x: auto;
+
+    table {
+        thead {
+            display: none;
+        }
+    }
+
+    &.top table td {
+        vertical-align: top;
+    }
+}

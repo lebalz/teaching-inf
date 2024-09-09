@@ -1,0 +1,143 @@
+:global .hero__subtitle {
+    color: black;
+}
+.image {
+    background-image: url(/img/index/robot-hand.jpg);
+    background-size: contain;
+    background-repeat: repeat;
+    border-radius: var(--ifm-global-radius);
+    padding: 0;
+}
+.color {
+    display: flex;
+    padding: 0.5em 0.5em;
+    margin: 0.2em 0;
+    box-shadow: var(--ifm-global-shadow-lw);
+    border-radius: var(--ifm-global-radius);
+    align-items: center;
+    background-color: rgba(199, 199, 199, 0.425);
+    &.property {
+        flex-wrap: wrap;
+    }
+    .label {
+        margin-right: 1em;
+        color: black;
+        padding: 0px 4px;
+        width: 60px;
+        white-space: nowrap;
+    }
+    .value {
+        color: black;
+        padding: 0px 4px;
+        border-radius: 4px;
+        margin-left: 1em;
+        width: 50px;
+        white-space: nowrap;
+        text-align: right;
+    }
+    .transformed {
+        color: black;
+        white-space: nowrap;
+    }
+    --rc-color: black;
+    &.red {
+        --rc-color: red;
+    }
+    &.green {
+        --rc-color: green;
+    }
+    &.blue {
+        --rc-color: blue;
+    }
+    &.alpha {
+        --rc-color: black;
+    }
+    &.cyan {
+        --rc-color: cyan;
+    }
+    &.magenta {
+        --rc-color: magenta;
+    }
+    &.yellow {
+        --rc-color: yellow;
+    }
+    &.key {
+        --rc-color: black;
+    }
+    :global .rc-slider-track {
+        background: var(--rc-color);
+    }
+    :global .rc-slider-handle {
+        border-color: var(--rc-color);
+    }
+}
+
+.cmyk {
+    .color {
+        .label {
+            width: 150px;
+        }
+    }
+}
+
+.copyBadge {
+    cursor: pointer;
+    position: relative;
+    transition-property: padding;
+    transition-duration: 1s;
+    font-family: monospace;
+    font-size: inherit;
+    .copyIcon {
+        display: none;
+        position: absolute;
+        right: 4px;
+    }
+    &:hover {
+        padding-right: 18px;
+        .copyIcon {
+            display: inline;
+        }
+    }
+}
+
+.tileContainer {
+    display: flex;
+    flex-wrap: wrap;
+    .tileRow {
+        display: flex;
+        flex-direction: column;
+        .colorTile {
+            flex-basis: 20px;
+            height: 20px;
+            width: 20px;
+        }
+    }
+    .colorTile {
+        flex-basis: 20px;
+        height: 20px;
+        width: 20px;
+        cursor: pointer;
+        position: relative;
+        .tooltip {
+            display: none;
+            position: absolute;
+            top: -120%;
+            left: -50%;
+            border: 1px solid var(--ifm-color-primary);
+            border-radius: 4px;
+            padding: 2px;
+            white-space: nowrap;
+            font-size: 12px;
+            background-color: var(--ifm-background-color);
+            z-index: calc(var(--ifm-z-index-fixed) - 1);
+        }
+        &:hover {
+            .tooltip {
+                display: block;
+                &:hover {
+                    display: none;
+                }
+            }
+        }
+    }
+}
