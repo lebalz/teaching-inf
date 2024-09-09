@@ -16,6 +16,7 @@
     border-radius: var(--ifm-global-radius);
     align-items: center;
     background-color: rgba(199, 199, 199, 0.425);
+    --rc-color: black;
     &.property {
         flex-wrap: wrap;
     }
@@ -39,7 +40,6 @@
         color: black;
         white-space: nowrap;
     }
-    --rc-color: black;
     &.red {
         --rc-color: red;
     }
