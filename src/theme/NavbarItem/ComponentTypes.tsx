@@ -9,9 +9,9 @@ import DocsVersionNavbarItem from '@theme/NavbarItem/DocsVersionNavbarItem';
 import DocsVersionDropdownNavbarItem from '@theme/NavbarItem/DocsVersionDropdownNavbarItem';
 
 import type { ComponentTypesObject } from '@theme/NavbarItem/ComponentTypes';
-import LoginProfileButton from '@site/src/components/Navbar/LoginProfileButton';
-import AccountSwitcher from '@site/src/components/Navbar/AccountSwitcher';
-import TaskStateOverview from '@site/src/components/documents/TaskState/TaskStateOverview';
+import LoginProfileButton from '@tdev-components/Navbar/LoginProfileButton';
+import AccountSwitcher from '@tdev-components/Navbar/AccountSwitcher';
+import TaskStateOverview from '@tdev-components/documents/TaskState/TaskStateOverview';
 
 const ComponentTypes: ComponentTypesObject = {
     default: DefaultNavbarItem,

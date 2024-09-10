@@ -4,22 +4,18 @@ import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
 import Popup from 'reactjs-popup';
 import {
-    mdiFileCodeOutline,
     mdiFileDocument,
     mdiFolderOpenOutline,
     mdiFolderPlus,
     mdiLanguagePython,
     mdiPlusCircleOutline
 } from '@mdi/js';
-import Button from '@site/src/components/shared/Button';
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-import DefinitionList from '@site/src/components/DefinitionList';
-import { useStore } from '@site/src/hooks/useStore';
-import { DocumentType } from '@site/src/api/document';
-import Directory from '@site/src/models/documents/FileSystem/Directory';
+import Button from '@tdev-components/shared/Button';
+import { useStore } from '@tdev-hooks/useStore';
+import { DocumentType } from '@tdev-api/document';
+import Directory from '@tdev-models/documents/FileSystem/Directory';
 import { Delta } from 'quill/core';
-import DocumentStore from '@site/src/stores/DocumentStore';
+import DocumentStore from '@tdev-stores/DocumentStore';
 import Icon from '@mdi/react';
 
 interface Props {

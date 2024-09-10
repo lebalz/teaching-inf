@@ -11,21 +11,21 @@ import {
     DocumentTypes,
     TypeModelMapping,
     allDocuments as apiAllDocuments
-} from '@site/src/api/document';
-import Script from '@site/src/models/documents/Script';
-import TaskState from '@site/src/models/documents/TaskState';
-import iStore from './iStore';
+} from '@tdev-api/document';
+import Script from '@tdev-models/documents/Script';
+import TaskState from '@tdev-models/documents/TaskState';
+import iStore from '@tdev-stores/iStore';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
-import iDocument, { Source } from '../models/iDocument';
-import ScriptVersion from '../models/documents/ScriptVersion';
-import { ChangedDocument } from '../api/IoEventTypes';
-import String from '../models/documents/String';
-import QuillV2 from '../models/documents/QuillV2';
-import Solution from '../models/documents/Solution';
-import { RWAccess } from '../models/helpers/accessPolicy';
-import Directory from '../models/documents/FileSystem/Directory';
-import File from '../models/documents/FileSystem/File';
+import iDocument, { Source } from '@tdev-models/iDocument';
+import ScriptVersion from '@tdev-models/documents/ScriptVersion';
+import { ChangedDocument } from '@tdev-api/IoEventTypes';
+import String from '@tdev-models/documents/String';
+import QuillV2 from '@tdev-models/documents/QuillV2';
+import Solution from '@tdev-models/documents/Solution';
+import { RWAccess } from '@tdev-models/helpers/accessPolicy';
+import Directory from '@tdev-models/documents/FileSystem/Directory';
+import File from '@tdev-models/documents/FileSystem/File';
 
 export function CreateDocumentModel<T extends DocumentType>(
     data: DocumentProps<T>,

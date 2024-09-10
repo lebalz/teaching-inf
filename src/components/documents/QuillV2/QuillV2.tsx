@@ -1,9 +1,9 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import Loader from '../../Loader';
-import { MetaInit } from '@site/src/models/documents/QuillV2';
+import Loader from '@tdev-components/Loader';
+import { MetaInit } from '@tdev-models/documents/QuillV2';
 import { useQuill } from 'react-quilljs';
-import { ToolbarOptions } from '@site/src/models/documents/QuillV2/helpers/toolbar';
+import { ToolbarOptions } from '@tdev-models/documents/QuillV2/helpers/toolbar';
 import 'quill/dist/quill.snow.css'; // Add css for snow theme
 import 'quill/dist/quill.bubble.css'; // Add css for snow theme
 import BaseImageFormat from 'quill/formats/image';
@@ -14,12 +14,12 @@ import pasteImage from './quill-img-compress/pasteImage';
 import ResizeModule from '@botom/quill-resize-module';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
-import SyncStatus from '../../SyncStatus';
+import SyncStatus from '@tdev-components/SyncStatus';
 import { action } from 'mobx';
 import Icon from '@mdi/react';
 import { mdiFlashTriangle } from '@mdi/js';
-import { useDocument } from '../useContextDocument';
-import { DocumentType } from '@site/src/api/document';
+import { useDocument } from '@tdev-hooks/useContextDocument';
+import { DocumentType } from '@tdev-api/document';
 
 const FORMATS = [
     'bold',

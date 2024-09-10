@@ -3,15 +3,15 @@ import clsx from 'clsx';
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
 import Details from '@theme/Details';
-import Loader from '../../Loader';
-import { MetaInit, ModelMeta } from '@site/src/models/documents/Solution';
-import { useDocumentRoot } from '@site/src/hooks/useDocumentRoot';
-import { Access } from '@site/src/api/document';
-import { useStore } from '@site/src/hooks/useStore';
+import Loader from '@tdev-components/Loader';
+import { MetaInit, ModelMeta } from '@tdev-models/documents/Solution';
+import { useDocumentRoot } from '@tdev-hooks/useDocumentRoot';
+import { Access } from '@tdev-api/document';
+import { useStore } from '@tdev-hooks/useStore';
 import Icon from '@mdi/react';
 import { mdiCheckAll } from '@mdi/js';
-import PermissionsPanel from '../../PermissionsPanel';
-import { NoneAccess } from '@site/src/models/helpers/accessPolicy';
+import PermissionsPanel from '@tdev-components/PermissionsPanel';
+import { NoneAccess } from '@tdev-models/helpers/accessPolicy';
 
 interface Props extends MetaInit {
     id: string;

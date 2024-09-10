@@ -1,9 +1,9 @@
 import { action, observable } from 'mobx';
-import { RootStore } from './rootStore';
+import { RootStore } from '@tdev-stores/rootStore';
 import { computedFn } from 'mobx-utils';
-import UserPermission from '../models/UserPermission';
-import GroupPermission from '../models/GroupPermission';
-import iStore from './iStore';
+import UserPermission from '@tdev-models/UserPermission';
+import GroupPermission from '@tdev-models/GroupPermission';
+import iStore from '@tdev-stores/iStore';
 import {
     GroupPermission as GroupPermissionProps,
     UserPermission as UserPermissionProps,
@@ -14,11 +14,11 @@ import {
     deleteUserPermission as deleteUserPermissionApi,
     deleteGroupPermission as deleteGroupPermissionApi,
     permissionsFor
-} from '@site/src/api/permission';
-import DocumentRoot from '../models/DocumentRoot';
-import User from '../models/User';
-import { Access } from '../api/document';
-import StudentGroup from '../models/StudentGroup';
+} from '@tdev-api/permission';
+import DocumentRoot from '@tdev-models/DocumentRoot';
+import User from '@tdev-models/User';
+import { Access } from '@tdev-api/document';
+import StudentGroup from '@tdev-models/StudentGroup';
 
 class PermissionStore extends iStore<`update-${string}`> {
     readonly root: RootStore;

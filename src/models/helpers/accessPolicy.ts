@@ -1,4 +1,4 @@
-import { Access } from '@site/src/api/document';
+import { Access } from '@tdev-api/document';
 
 /**
  * NOTE: keep in sync with the backend

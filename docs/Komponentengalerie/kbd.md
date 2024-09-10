@@ -1,7 +1,7 @@
 ---
 page_id: aa51a247-3522-4f6a-8146-851e807c17b7
 ---
-import BrowserWindow from '@site/src/components/BrowserWindow';
+import BrowserWindow from '@tdev-components/BrowserWindow';
 
 # KBD
 Tastenkombinationen und Tastenkürzel lassen sich mit `[[Taste]]` darstellen. Das Remark-Plugin wandelt dies in ein `<kbd>`-Element um.

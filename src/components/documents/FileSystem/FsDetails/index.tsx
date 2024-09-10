@@ -5,7 +5,7 @@ import useIsBrowser from '@docusaurus/useIsBrowser';
 import { Collapsible } from '@docusaurus/theme-common';
 
 import styles from './styles.module.css';
-import iFileSystem from '@site/src/models/documents/FileSystem/iFileSystem';
+import iFileSystem from '@tdev-models/documents/FileSystem/iFileSystem';
 
 function isInSummary(node: HTMLElement | null): boolean {
     if (!node) {

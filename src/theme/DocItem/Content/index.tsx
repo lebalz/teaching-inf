@@ -4,7 +4,7 @@ import type ContentType from '@theme/DocItem/Content';
 import type { WrapperProps } from '@docusaurus/types';
 import { useDoc } from '@docusaurus/plugin-content-docs/client';
 import { observer } from 'mobx-react-lite';
-import { useStore } from '@site/src/hooks/useStore';
+import { useStore } from '@tdev-hooks/useStore';
 import { useLocation } from '@docusaurus/router';
 type Props = WrapperProps<typeof ContentType>;
 

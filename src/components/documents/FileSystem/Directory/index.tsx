@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import styles from './styles.module.scss';
 import shared from '../shared.module.scss';
 import { observer } from 'mobx-react-lite';
-import { default as DirctoryModel, ModelMeta } from '@site/src/models/documents/FileSystem/Directory';
+import { default as DirctoryModel, ModelMeta } from '@tdev-models/documents/FileSystem/Directory';
 import Icon from '@mdi/react';
 import { mdiFolder, mdiFolderOpen } from '@mdi/js';
 import SyncStatus from '../../../SyncStatus';
@@ -11,9 +11,9 @@ import NewItem from './NewItem';
 import File from '../File';
 import Actions from '../Actions';
 import Name from '../Name';
-import { MetaInit } from '@site/src/models/documents/FileSystem/iFileSystem';
-import { useFirstMainDocument } from '@site/src/hooks/useFirstMainDocument';
-import Loader from '@site/src/components/Loader';
+import { MetaInit } from '@tdev-models/documents/FileSystem/iFileSystem';
+import { useFirstMainDocument } from '@tdev-hooks/useFirstMainDocument';
+import Loader from '@tdev-components/Loader';
 import FsDetails from '../FsDetails';
 
 interface Props extends MetaInit {

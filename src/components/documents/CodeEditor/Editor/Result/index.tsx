@@ -1,8 +1,8 @@
 import * as React from 'react';
 import styles from './styles.module.scss';
 import CodeBlock from '@theme/CodeBlock';
-import { DocumentType } from '@site/src/api/document';
-import { useDocument } from '../../../useContextDocument';
+import { DocumentType } from '@tdev-api/document';
+import { useDocument } from '@tdev-hooks/useContextDocument';
 import { observer } from 'mobx-react-lite';
 
 const Result = observer(() => {

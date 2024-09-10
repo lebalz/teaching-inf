@@ -1,11 +1,11 @@
 import { action, computed, observable } from 'mobx';
-import { User as UserProps, all as apiAll, currentUser, update as apiUpdate } from '../api/user';
-import { RootStore } from './rootStore';
-import User from '../models/User';
+import { User as UserProps, all as apiAll, currentUser, update as apiUpdate } from '@tdev-api/user';
+import { RootStore } from '@tdev-stores/rootStore';
+import User from '@tdev-models/User';
 import _ from 'lodash';
-import Storage, { PersistedData } from './utils/Storage';
+import Storage, { PersistedData } from '@tdev-stores/utils/Storage';
 import { computedFn } from 'mobx-utils';
-import iStore from './iStore';
+import iStore from '@tdev-stores/iStore';
 
 export class UserStore extends iStore<`update-${string}`> {
     readonly root: RootStore;

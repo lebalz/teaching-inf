@@ -1,7 +1,7 @@
 import { action, computed, observable } from 'mobx';
-import { DocumentRootBase as DocumentRootProps } from '../api/documentRoot';
-import { DocumentRootStore } from '../stores/DocumentRootStore';
-import { Access, DocumentType, TypeDataMapping, TypeModelMapping } from '../api/document';
+import { DocumentRootBase as DocumentRootProps } from '@tdev-api/documentRoot';
+import { DocumentRootStore } from '@tdev-stores/DocumentRootStore';
+import { Access, DocumentType, TypeDataMapping, TypeModelMapping } from '@tdev-api/document';
 import { highestAccess, NoneAccess, RWAccess } from './helpers/accessPolicy';
 
 export abstract class TypeMeta<T extends DocumentType> {
