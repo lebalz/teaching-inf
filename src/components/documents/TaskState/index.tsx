@@ -11,12 +11,12 @@ import {
     mdiStarHalfFull,
     mdiStarOutline
 } from '@mdi/js';
-import { StateType } from '@site/src/api/document';
-import { useFirstMainDocument } from '@site/src/hooks/useFirstMainDocument';
+import { StateType } from '@tdev-api/document';
+import { useFirstMainDocument } from '@tdev-hooks/useFirstMainDocument';
 import Icon from '@mdi/react';
-import { MetaInit, TaskMeta } from '@site/src/models/documents/TaskState';
-import Loader from '../../Loader';
-import { useStore } from '@site/src/hooks/useStore';
+import { MetaInit, TaskMeta } from '@tdev-models/documents/TaskState';
+import Loader from '@tdev-components/Loader';
+import { useStore } from '@tdev-hooks/useStore';
 
 export const mdiIcon: { [key in StateType]: string } = {
     checked: mdiCheckboxMarkedOutline,

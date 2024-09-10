@@ -9,12 +9,12 @@ import { useMsal } from '@azure/msal-react';
 import { useIsAuthenticated } from '@azure/msal-react';
 import { InteractionStatus } from '@azure/msal-browser';
 import siteConfig from '@generated/docusaurus.config';
-import { useStore } from '../../hooks/useStore';
-import Button from '../../components/shared/Button';
-import Loader from '../../components/Loader';
-import DefinitionList from '../../components/DefinitionList';
+import { useStore } from '@tdev-hooks/useStore';
+import Button from '@tdev-components/shared/Button';
+import Loader from '@tdev-components/Loader';
+import DefinitionList from '@tdev-components/DefinitionList';
 import Icon from '@mdi/react';
-import UserTable from '@site/src/components/Admin/UserTable';
+import UserTable from '@tdev-components/Admin/UserTable';
 const { NO_AUTH } = siteConfig.customFields as { TEST_USERNAME?: string; NO_AUTH?: boolean };
 
 const LeftAlign = (text: String) => {

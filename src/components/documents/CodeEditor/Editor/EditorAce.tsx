@@ -1,7 +1,7 @@
 import * as React from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
-import { DOM_ELEMENT_IDS } from '@site/src/components/documents/CodeEditor/constants';
+import { DOM_ELEMENT_IDS } from '@tdev-components/documents/CodeEditor/constants';
 import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/ext-searchbox';
 import 'ace-builds/src-noconflict/mode-python';
@@ -10,8 +10,8 @@ import 'ace-builds/src-noconflict/mode-svg';
 import 'ace-builds/src-noconflict/theme-dracula';
 import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/webpack-resolver';
-import { useDocument } from '../../useContextDocument';
-import { DocumentType } from '@site/src/api/document';
+import { useDocument } from '@tdev-hooks/useContextDocument';
+import { DocumentType } from '@tdev-api/document';
 import { observer } from 'mobx-react-lite';
 
 const ALIAS_LANG_MAP_ACE = {

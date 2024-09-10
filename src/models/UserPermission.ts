@@ -1,8 +1,8 @@
 import { action, observable } from 'mobx';
-import { Access } from '../api/document';
-import PermissionStore from '../stores/PermissionStore';
-import { UserPermission as UserPermissionProps } from '../api/permission';
-import User from './User';
+import { Access } from '@tdev-api/document';
+import PermissionStore from '@tdev-stores/PermissionStore';
+import { UserPermission as UserPermissionProps } from '@tdev-api/permission';
+import User from '@tdev-models/User';
 
 class UserPermission {
     readonly store: PermissionStore;

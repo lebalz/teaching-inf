@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
-import QuillV2 from '../documents/QuillV2';
-import String from '../documents/String';
-import TaskState from '../documents/TaskState';
-import { DocumentType } from '@site/src/api/document';
+import QuillV2 from '@tdev-components/documents/QuillV2';
+import String from '@tdev-components/documents/String';
+import TaskState from '@tdev-components/documents/TaskState';
+import { DocumentType } from '@tdev-api/document';
 
 interface Props {
     id: string;

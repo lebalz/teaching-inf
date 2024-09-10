@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
-import { ApiState } from '@site/src/stores/iStore';
-import iDocument from '@site/src/models/iDocument';
+import { ApiState } from '@tdev-stores/iStore';
+import iDocument from '@tdev-models/iDocument';
 import Icon from '@mdi/react';
-import { mdiCheckCircle, mdiCloseCircle, mdiLoading, mdiSync } from '@mdi/js';
+import { mdiCheckCircle, mdiCloseCircle, mdiSync } from '@mdi/js';
 import useIsBrowser from '@docusaurus/useIsBrowser';
 
 interface Props {

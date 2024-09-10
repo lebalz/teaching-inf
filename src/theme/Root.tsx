@@ -1,13 +1,13 @@
 import React from 'react';
 import { MsalProvider, useIsAuthenticated, useMsal } from '@azure/msal-react';
-import { StoresProvider, rootStore } from '../stores/rootStore';
+import { StoresProvider, rootStore } from '@tdev-stores/rootStore';
 import { observer } from 'mobx-react-lite';
-import { TENANT_ID, msalConfig } from '../authConfig';
+import { TENANT_ID, msalConfig } from '@tdev/authConfig';
 import Head from '@docusaurus/Head';
 import siteConfig from '@generated/docusaurus.config';
 import { AccountInfo, EventType, InteractionStatus, PublicClientApplication } from '@azure/msal-browser';
-import { setupMsalAxios, setupNoAuthAxios } from '../api/base';
-import { useStore } from '../hooks/useStore';
+import { setupMsalAxios, setupNoAuthAxios } from '@tdev-api/base';
+import { useStore } from '@tdev-hooks/useStore';
 import { runInAction } from 'mobx';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 const { NO_AUTH, TEST_USERNAME } = siteConfig.customFields as { TEST_USERNAME?: string; NO_AUTH?: boolean };

@@ -1,4 +1,4 @@
-import { removeAnimations } from '@site/src/components/documents/CodeEditor/Editor/utils/svgWithoutAnimations';
+import { removeAnimations } from '@tdev-components/documents/CodeEditor/Editor/utils/svgWithoutAnimations';
 
 const duration = (anim: SVGAnimateElement) => {
     const dur = anim.getAttribute('dur') || '';

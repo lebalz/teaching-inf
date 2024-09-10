@@ -2,10 +2,10 @@ import React from 'react';
 
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
-import { useStore } from '@site/src/hooks/useStore';
+import { useStore } from '@tdev-hooks/useStore';
 import Icon from '@mdi/react';
 import { mdiIcon } from '..';
-import TaskState from '@site/src/models/documents/TaskState';
+import TaskState from '@tdev-models/documents/TaskState';
 import { mdiColor } from '.';
 
 interface Props {

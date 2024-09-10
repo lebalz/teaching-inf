@@ -2,14 +2,12 @@ import React from 'react';
 import clsx from 'clsx';
 import styles from '../AccessPanel.module.scss';
 import { observer } from 'mobx-react-lite';
-import DocumentRoot from '@site/src/models/DocumentRoot';
-import { useStore } from '@site/src/hooks/useStore';
+import DocumentRoot from '@tdev-models/DocumentRoot';
+import { useStore } from '@tdev-hooks/useStore';
 import UserPermission from '.';
-import { mdiAccountCircle } from '@mdi/js';
 import AccessSelector from '../AccessSelector';
-import Icon from '@mdi/react';
-import Loader from '../../Loader';
-import { Access } from '@site/src/api/document';
+import Loader from '@tdev-components/Loader';
+import { Access } from '@tdev-api/document';
 
 interface Props {
     documentRoot: DocumentRoot<any>;

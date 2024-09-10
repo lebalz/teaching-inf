@@ -3,11 +3,11 @@
  */
 
 import { action, computed, observable } from 'mobx';
-import { PageStore } from '../stores/PageStore';
-import TaskState from './documents/TaskState';
+import { PageStore } from '@tdev-stores/PageStore';
+import TaskState from '@tdev-models/documents/TaskState';
 import _ from 'lodash';
-import iDocument from './iDocument';
-import StudentGroup from './StudentGroup';
+import iDocument from '@tdev-models/iDocument';
+import StudentGroup from '@tdev-models/StudentGroup';
 
 export default class Page {
     readonly store: PageStore;

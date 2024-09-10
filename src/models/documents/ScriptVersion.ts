@@ -1,6 +1,6 @@
-import iDocument from '../iDocument';
-import { DocumentType, Document as DocumentProps, ScriptVersionData } from '@site/src/api/document';
-import DocumentStore from '@site/src/stores/DocumentStore';
+import iDocument from '@tdev-models/iDocument';
+import { DocumentType, Document as DocumentProps, ScriptVersionData } from '@tdev-api/document';
+import DocumentStore from '@tdev-stores/DocumentStore';
 
 class ScriptVersion extends iDocument<DocumentType.ScriptVersion> {
     constructor(props: DocumentProps<DocumentType.ScriptVersion>, store: DocumentStore) {

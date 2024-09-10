@@ -3,14 +3,14 @@ import clsx from 'clsx';
 
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
-import { useStore } from '@site/src/hooks/useStore';
-import Button from '@site/src/components/shared/Button';
+import { useStore } from '@tdev-hooks/useStore';
+import Button from '@tdev-components/shared/Button';
 import { mdiCheckboxMultipleMarkedCircle } from '@mdi/js';
-import { Access, StateType } from '@site/src/api/document';
+import { Access, StateType } from '@tdev-api/document';
 import Icon from '@mdi/react';
 import Popup from 'reactjs-popup';
 import TaskStateList from './TaskStateList';
-import { RWAccess } from '@site/src/models/helpers/accessPolicy';
+import { RWAccess } from '@tdev-models/helpers/accessPolicy';
 import _ from 'lodash';
 
 export const mdiColor: { [key in StateType]: string } = {

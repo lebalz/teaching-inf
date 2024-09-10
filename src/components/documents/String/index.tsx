@@ -2,14 +2,14 @@ import React, { useId } from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
-import { useFirstMainDocument } from '../../../hooks/useFirstMainDocument';
-import Loader from '../../Loader';
-import { MetaInit, ModelMeta, StringAnswer } from '@site/src/models/documents/String';
-import Button from '../../shared/Button';
-import { mdiCheckCircle, mdiCloseCircle, mdiFlashTriangle, mdiHelpCircleOutline } from '@mdi/js';
+import { useFirstMainDocument } from '@tdev-hooks/useFirstMainDocument';
+import Loader from '@tdev-components/Loader';
+import { MetaInit, ModelMeta, StringAnswer } from '@tdev-models/documents/String';
+import Button from '@tdev-components/shared/Button';
 import Icon from '@mdi/react';
-import SyncStatus from '../../SyncStatus';
-import { Source } from '@site/src/models/iDocument';
+import SyncStatus from '@tdev-components/SyncStatus';
+import { Source } from '@tdev-models/iDocument';
+import { mdiCheckCircle, mdiCloseCircle, mdiFlashTriangle, mdiHelpCircleOutline } from '@mdi/js';
 
 interface Props extends MetaInit {
     id: string;

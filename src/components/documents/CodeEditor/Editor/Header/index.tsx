@@ -1,14 +1,14 @@
 import * as React from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
-import Reset from '@site/src/components/documents/CodeEditor/Actions/Reset';
-import DownloadCode from '@site/src/components/documents/CodeEditor/Actions/DownloadCode';
-import ShowRaw from '@site/src/components/documents/CodeEditor/Actions/ShowRaw';
-import RunCode from '@site/src/components/documents/CodeEditor/Actions/RunCode';
+import Reset from '@tdev-components/documents/CodeEditor/Actions/Reset';
+import DownloadCode from '@tdev-components/documents/CodeEditor/Actions/DownloadCode';
+import ShowRaw from '@tdev-components/documents/CodeEditor/Actions/ShowRaw';
+import RunCode from '@tdev-components/documents/CodeEditor/Actions/RunCode';
 import { observer } from 'mobx-react-lite';
-import { useDocument } from '../../../useContextDocument';
-import { DocumentType } from '@site/src/api/document';
-import SyncStatus from '@site/src/components/SyncStatus';
+import { useDocument } from '@tdev-hooks/useContextDocument';
+import { DocumentType } from '@tdev-api/document';
+import SyncStatus from '@tdev-components/SyncStatus';
 import Icon from '@mdi/react';
 import { mdiFlashTriangle } from '@mdi/js';
 

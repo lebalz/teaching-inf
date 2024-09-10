@@ -1,7 +1,7 @@
 import React, { useId } from 'react';
-import { Access, DocumentType } from '../api/document';
-import DocumentRoot, { TypeMeta } from '../models/DocumentRoot';
-import { useStore } from './useStore';
+import { Access, DocumentType } from '@tdev-api/document';
+import DocumentRoot, { TypeMeta } from '@tdev-models/DocumentRoot';
+import { useStore } from '@tdev-hooks/useStore';
 
 /**
  * 1. create a dummy documentRoot with default (meta) data

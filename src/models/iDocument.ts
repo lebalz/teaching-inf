@@ -1,8 +1,8 @@
 import { action, computed, IReactionDisposer, observable, reaction } from 'mobx';
-import { Document as DocumentProps, TypeDataMapping, DocumentType, Access } from '../api/document';
-import DocumentStore from '../stores/DocumentStore';
+import { Document as DocumentProps, TypeDataMapping, DocumentType } from '@tdev-api/document';
+import DocumentStore from '@tdev-stores/DocumentStore';
 import { debounce } from 'lodash';
-import { ApiState } from '../stores/iStore';
+import { ApiState } from '@tdev-stores/iStore';
 import { NoneAccess, ROAccess, RWAccess } from './helpers/accessPolicy';
 
 /**

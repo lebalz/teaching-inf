@@ -3,9 +3,9 @@ import clsx from 'clsx';
 
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
-import { default as UserModel } from '@site/src/models/User';
-import CopyBadge from '../../shared/CopyBadge';
-import { formatDateTime } from '@site/src/models/helpers/date';
+import { default as UserModel } from '@tdev-models/User';
+import CopyBadge from '@tdev-components/shared/CopyBadge';
+import { formatDateTime } from '@tdev-models/helpers/date';
 import Icon from '@mdi/react';
 import { mdiCircle } from '@mdi/js';
 
