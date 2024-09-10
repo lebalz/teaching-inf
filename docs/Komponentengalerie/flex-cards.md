@@ -1,7 +1,7 @@
 ---
 page_id: edebd470-67c3-4ebe-9e96-3674b34dff25
 ---
-import BrowserWindow from '@site/src/components/BrowserWindow';
+import BrowserWindow from '@tdev-components/BrowserWindow';
 
 # Flex Cards
 

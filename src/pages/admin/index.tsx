@@ -4,7 +4,7 @@ import styles from './styles.module.scss';
 import Layout from '@theme/Layout';
 import { observer } from 'mobx-react-lite';
 import _ from 'lodash';
-import AdminPanel from '@site/src/components/Admin/AdminPanel';
+import AdminPanel from '@tdev-components/Admin/AdminPanel';
 
 const StudentGroups = observer(() => {
     return (

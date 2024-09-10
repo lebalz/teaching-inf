@@ -2,8 +2,8 @@ import React from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
-import { default as StudentGroupModel } from '@site/src/models/StudentGroup';
-import Button from '../shared/Button';
+import { default as StudentGroupModel } from '@tdev-models/StudentGroup';
+import Button from '@tdev-components/shared/Button';
 import {
     mdiAccountMinus,
     mdiAccountReactivateOutline,
@@ -12,7 +12,7 @@ import {
     mdiContentSave,
     mdiTrashCanOutline
 } from '@mdi/js';
-import { useStore } from '@site/src/hooks/useStore';
+import { useStore } from '@tdev-hooks/useStore';
 import AddUserPopup from './AddUserPopup';
 import DefinitionList from '../DefinitionList';
 import Details from '@theme/Details';

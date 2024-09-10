@@ -1,7 +1,7 @@
 ---
 page_id: 98798b41-86ab-49c1-a3fc-21939df16a98
 ---
-import BrowserWindow from '@site/src/components/BrowserWindow';
+import BrowserWindow from '@tdev-components/BrowserWindow';
 
 # Antworten
 
@@ -41,14 +41,14 @@ Um Antworten einzuholen, kann die überall verfügbare Komponente `Answer` verwe
 
 :::info[`src/theme/MDXComponents.tsx`]
 ```tsx
-import Answer from '@site/src/components/Answer';
+import Answer from '@tdev-components/Answer';
 ```
 :::
 
 :::info[`src/theme/MDXComponents.tsx`]
 ```tsx {2,7}
 import MDXComponents from '@theme-original/MDXComponents';
-import Answer from '@site/src/components/Answer';
+import Answer from '@tdev-components/Answer';
 
 export default {
   // Re-use the default mapping

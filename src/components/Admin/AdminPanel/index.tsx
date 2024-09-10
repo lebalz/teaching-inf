@@ -2,11 +2,11 @@ import React from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
-import { useStore } from '@site/src/hooks/useStore';
+import { useStore } from '@tdev-hooks/useStore';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
-import StudentGroupPanel from '../StudentGroupPanel';
-import UserTable from '../UserTable';
+import StudentGroupPanel from '@tdev-components/Admin/StudentGroupPanel';
+import UserTable from '@tdev-components/Admin/UserTable';
 
 const AdminPanel = observer(() => {
     const userStore = useStore('userStore');

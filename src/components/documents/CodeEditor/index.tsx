@@ -2,15 +2,15 @@ import * as React from 'react';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
 import CodeBlock from '@theme/CodeBlock';
-import { useFirstMainDocument } from '@site/src/hooks/useFirstMainDocument';
-import Script, { ScriptMeta } from '@site/src/models/documents/Script';
+import { useFirstMainDocument } from '@tdev-hooks/useFirstMainDocument';
+import Script, { ScriptMeta } from '@tdev-models/documents/Script';
 import Editor from './Editor';
 import CodeHistory from './CodeHistory';
 import BrythonCommunicator from './BrythonCommunicator';
 import { MetaProps } from '@site/src/theme/CodeBlock';
 import { observer } from 'mobx-react-lite';
 import ExecutionEnvironment from '@docusaurus/ExecutionEnvironment';
-import { DocContext } from '../DocumentContext';
+import { DocContext } from '@tdev-components/documents/DocumentContext';
 
 export interface Props extends Omit<MetaProps, 'live_jsx' | 'live_py'> {
     title: string;

@@ -1,10 +1,10 @@
 import React, { useId } from 'react';
-import { Access, DocumentType } from '../api/document';
-import { TypeMeta } from '../models/DocumentRoot';
-import { CreateDocumentModel } from '../stores/DocumentStore';
-import { useDocumentRoot } from './useDocumentRoot';
-import { useStore } from './useStore';
-import { RWAccess } from '../models/helpers/accessPolicy';
+import { Access, DocumentType } from '@tdev-api/document';
+import { TypeMeta } from '@tdev-models/DocumentRoot';
+import { CreateDocumentModel } from '@tdev-stores/DocumentStore';
+import { useDocumentRoot } from '@tdev-hooks/useDocumentRoot';
+import { useStore } from '@tdev-hooks/useStore';
+import { RWAccess } from '@tdev-models/helpers/accessPolicy';
 
 /**
  * This hook provides access to the first main document of the rootDocument.

@@ -1,8 +1,8 @@
 ---
 page_id: 3972ba2a-cd84-4f16-81d2-fa8163838838
 ---
-import TaskState from '@site/src/components/documents/TaskState';
-import BrowserWindow from '@site/src/components/BrowserWindow';
+import TaskState from '@tdev-components/documents/TaskState';
+import BrowserWindow from '@tdev-components/BrowserWindow';
 
 # Task State
 
@@ -183,7 +183,7 @@ const config: Config = {
 ```
 
 ```ts title="src/theme/NavbarItem/ComponentTypes.tsx" {1,4}
-import TaskStateOverview from '@site/src/components/documents/TaskState/TaskStateOverview';
+import TaskStateOverview from '@tdev-components/documents/TaskState/TaskStateOverview';
 const ComponentTypes: ComponentTypesObject = {
     ..., // andere Komponenten
     ['custom-taskStateOverview']: TaskStateOverview

@@ -1,8 +1,8 @@
 ---
 page_id: d587a55b-f232-461d-8957-98c71d722bf6
 ---
-import String from '@site/src/components/documents/String';
-import PermissionsPanel from "@site/src/components/PermissionsPanel"
+import String from '@tdev-components/documents/String';
+import PermissionsPanel from "@tdev-components/PermissionsPanel"
 
 # String Answers
 

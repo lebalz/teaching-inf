@@ -1,11 +1,11 @@
-import { action, computed, observable, override } from 'mobx';
-import iDocument, { Source } from '../../iDocument';
-import { DocumentType, Document as DocumentProps, TypeDataMapping, Access } from '@site/src/api/document';
-import DocumentStore from '@site/src/stores/DocumentStore';
-import { TypeMeta } from '../../DocumentRoot';
+import { action, computed, observable } from 'mobx';
+import iDocument, { Source } from '@tdev-models/iDocument';
+import { DocumentType, Document as DocumentProps, TypeDataMapping, Access } from '@tdev-api/document';
+import DocumentStore from '@tdev-stores/DocumentStore';
+import { TypeMeta } from '@tdev-models/DocumentRoot';
 import { getToolbar, TOOLBAR, ToolbarModule, ToolbarOptions } from './helpers/toolbar';
 import { Delta } from 'quill/core';
-import { ApiState } from '@site/src/stores/iStore';
+import { ApiState } from '@tdev-stores/iStore';
 import _ from 'lodash';
 
 export interface MetaInit {

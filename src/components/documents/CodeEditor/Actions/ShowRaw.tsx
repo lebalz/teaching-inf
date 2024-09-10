@@ -1,7 +1,7 @@
 import * as React from 'react';
-import Button, { Color } from '@site/src/components/documents/CodeEditor/Button';
-import { useDocument } from '../../useContextDocument';
-import { DocumentType } from '@site/src/api/document';
+import Button, { Color } from '@tdev-components/documents/CodeEditor/Button';
+import { useDocument } from '@tdev-hooks/useContextDocument';
+import { DocumentType } from '@tdev-api/document';
 import { observer } from 'mobx-react-lite';
 import { mdiFileCodeOutline, mdiFileDocumentEditOutline, mdiFileEdit } from '@mdi/js';
 

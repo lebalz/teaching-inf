@@ -1,7 +1,7 @@
 ---
 page_id: 5f07e03f-2b5d-4d01-a140-eb4ec4584290
 ---
-import BrowserWindow from '@site/src/components/BrowserWindow';
+import BrowserWindow from '@tdev-components/BrowserWindow';
 
 # Math Formeln mit KaTeX
 

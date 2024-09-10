@@ -1,12 +1,9 @@
 import * as React from 'react';
-import {
-    BRYTHON_NOTIFICATION_EVENT,
-    DOM_ELEMENT_IDS
-} from '@site/src/components/documents/CodeEditor/constants';
-import { useDocument } from '../useContextDocument';
-import { DocumentType } from '@site/src/api/document';
+import { BRYTHON_NOTIFICATION_EVENT, DOM_ELEMENT_IDS } from '@tdev-components/documents/CodeEditor/constants';
+import { useDocument } from '@tdev-hooks/useContextDocument';
+import { DocumentType } from '@tdev-api/document';
 import { observer } from 'mobx-react-lite';
-import { type LogMessage } from '@site/src/models/documents/Script';
+import { type LogMessage } from '@tdev-models/documents/Script';
 
 const BrythonCommunicator = observer(() => {
     const script = useDocument<DocumentType.Script>();

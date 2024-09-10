@@ -2,11 +2,11 @@ import useIsBrowser from '@docusaurus/useIsBrowser';
 import { observer } from 'mobx-react-lite';
 import * as React from 'react';
 import type { default as QuillV2Type, Props } from './QuillV2';
-import { useFirstMainDocument } from '@site/src/hooks/useFirstMainDocument';
-import { default as QuillV2Model, ModelMeta, MetaInit } from '@site/src/models/documents/QuillV2';
+import { useFirstMainDocument } from '@tdev-hooks/useFirstMainDocument';
+import { default as QuillV2Model, ModelMeta, MetaInit } from '@tdev-models/documents/QuillV2';
 import clsx from 'clsx';
-import { DocContext } from '../DocumentContext';
-import { ToolbarOptions } from '@site/src/models/documents/QuillV2/helpers/toolbar';
+import { DocContext } from '@tdev-components/documents/DocumentContext';
+import { ToolbarOptions } from '@tdev-models/documents/QuillV2/helpers/toolbar';
 
 /**
  * Lazy load QuillV2 component - this is a workaround for SSR

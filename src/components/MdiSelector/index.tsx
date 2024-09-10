@@ -4,7 +4,7 @@ import styles from './styles.module.scss';
 import Icon from '@mdi/react';
 import * as Mdi from '@mdi/js';
 import _ from 'lodash';
-import CopyBadge from '../shared/CopyBadge';
+import CopyBadge from '@tdev-components/shared/CopyBadge';
 
 export default function MdiSelector(): JSX.Element {
     const [showNr, setShowNr] = React.useState(300);

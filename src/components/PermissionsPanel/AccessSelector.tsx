@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
-import { Access } from '@site/src/api/document';
+import { Access } from '@tdev-api/document';
 
 const AccessNames: { [key in Access]: string } = {
     [Access.RO_User]: 'RO',
