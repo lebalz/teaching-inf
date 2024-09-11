@@ -14,7 +14,12 @@ import {
 import { StateType } from '@tdev-api/document';
 import { useFirstMainDocument } from '@tdev-hooks/useFirstMainDocument';
 import Icon from '@mdi/react';
-import { default as TaskStateModel, MetaInit, TaskMeta } from '@tdev-models/documents/TaskState';
+import {
+    default as TaskStateModel,
+    MetaInit,
+    TaskMeta,
+    DEFAULT_TASK_STATES
+} from '@tdev-models/documents/TaskState';
 import Loader from '@tdev-components/Loader';
 import { useStore } from '@tdev-hooks/useStore';
 
@@ -71,6 +76,7 @@ interface ComponentProps extends Props {
 
 export const TaskStateComponent = observer((props: ComponentProps) => {
     const ref = React.useRef<HTMLDivElement>(null);
+    const [taskStates] = React.useState(props.states || DEFAULT_TASK_STATES);
     const pageStore = useStore('pageStore');
     const [animate, setAnimate] = React.useState(false);
     const doc = props.taskState;
@@ -126,7 +132,8 @@ export const TaskStateComponent = observer((props: ComponentProps) => {
                     if (readonly) {
                         return;
                     }
-                    doc.nextState();
+                    const nextState = taskStates.indexOf(doc.taskState) + 1;
+                    doc.setState(taskStates[nextState % taskStates.length]);
                 }}
                 title={readonly ? 'Nur Anzeigen' : undefined}
             >
@@ -138,7 +145,8 @@ export const TaskStateComponent = observer((props: ComponentProps) => {
                         if (readonly) {
                             return;
                         }
-                        doc.nextState();
+                        const nextState = taskStates.indexOf(doc.taskState) + 1;
+                        doc.setState(taskStates[nextState % taskStates.length]);
                     }}
                 >
                     {props.children || props.label}
