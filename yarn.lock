@@ -1245,11 +1245,6 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@botom/quill-resize-module@^2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@botom/quill-resize-module/-/quill-resize-module-2.0.1.tgz#19389b2cfba586cbdd8edd38833cfc9d7f834ef3"
-  integrity sha512-qaaAApFioSjr0hCsUZt0bJJjzD6qYCgWyZ3AgswDfulqDTtOK8lvc0CSMzE+oe75oG8Z58Cyr2dEgtVmzmn6gA==
-
 "@colors/colors@1.5.0":
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/@colors/colors/-/colors-1.5.0.tgz#bb504579c1cae923e6576a4f5da43d25f97bdbd9"
