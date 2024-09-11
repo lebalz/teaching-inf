@@ -1,19 +1,17 @@
 import {
     mdiClose,
     mdiDotsHorizontalCircleOutline,
-    mdiDotsVerticalCircleOutline,
     mdiRenameOutline,
     mdiTrashCan,
     mdiTrashCanOutline
 } from '@mdi/js';
 import styles from './styles.module.scss';
-import Button from '@site/src/components/shared/Button';
-import Directory from '@site/src/models/documents/FileSystem/Directory';
-import File from '@site/src/models/documents/FileSystem/File';
+import Button from '@tdev-components/shared/Button';
+import Directory from '@tdev-models/documents/FileSystem/Directory';
+import File from '@tdev-models/documents/FileSystem/File';
 import { observer } from 'mobx-react-lite';
 import Popup from 'reactjs-popup';
 import clsx from 'clsx';
-import Icon from '@mdi/react';
 import React from 'react';
 
 interface Props {

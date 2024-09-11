@@ -1,5 +1,5 @@
 import React from 'react';
-import { DocumentType, DocumentTypes, TypeModelMapping } from '@site/src/api/document';
+import { DocumentType, DocumentTypes, TypeModelMapping } from '@tdev-api/document';
 import { observer } from 'mobx-react-lite';
 
 export const DocContext = React.createContext<DocumentTypes | undefined>(undefined);

@@ -1,6 +1,6 @@
-import { action, computed, observable } from 'mobx';
-import { User as UserProps } from '../api/user';
-import { UserStore } from '../stores/UserStore';
+import { action, computed } from 'mobx';
+import { User as UserProps } from '@tdev-api/user';
+import { UserStore } from '@tdev-stores/UserStore';
 
 export default class User {
     readonly store: UserStore;

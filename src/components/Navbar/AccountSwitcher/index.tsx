@@ -3,11 +3,9 @@ import clsx from 'clsx';
 
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
-import { mdiAccountCircleOutline, mdiAccountSwitch, mdiCircle, mdiLogin, mdiShieldAccount } from '@mdi/js';
-import siteConfig from '@generated/docusaurus.config';
-import { ApiState } from '@site/src/stores/iStore';
-import { useStore } from '@site/src/hooks/useStore';
-import Button from '../../shared/Button';
+import { mdiAccountCircleOutline, mdiAccountSwitch, mdiShieldAccount } from '@mdi/js';
+import { useStore } from '@tdev-hooks/useStore';
+import Button from '@tdev-components/shared/Button';
 import useIsBrowser from '@docusaurus/useIsBrowser';
 import Popup from 'reactjs-popup';
 import _ from 'lodash';

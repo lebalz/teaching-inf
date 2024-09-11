@@ -1,8 +1,8 @@
 import { action, computed, observable } from 'mobx';
-import { StudentGroup as StudentGroupProps } from '../api/studentGroup';
-import { StudentGroupStore } from '../stores/StudentGroupStore';
-import { formatDateTime } from './helpers/date';
-import User from './User';
+import { StudentGroup as StudentGroupProps } from '@tdev-api/studentGroup';
+import { StudentGroupStore } from '@tdev-stores/StudentGroupStore';
+import { formatDateTime } from '@tdev-models/helpers/date';
+import User from '@tdev-models/User';
 import _ from 'lodash';
 
 class StudentGroup {

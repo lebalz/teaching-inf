@@ -1,4 +1,4 @@
-import { User } from '@site/src/api/user';
+import { User } from '@tdev-api/user';
 import { Primitive } from 'utility-types';
 import siteConfig from '@generated/docusaurus.config';
 import _ from 'lodash';

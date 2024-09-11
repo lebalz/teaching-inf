@@ -3,6 +3,7 @@ import { themes as prismThemes } from 'prism-react-renderer';
 import type { Config } from '@docusaurus/types';
 import type { VersionOptions } from '@docusaurus/plugin-content-docs';
 import type * as Preset from '@docusaurus/preset-classic';
+import path from 'path';
 
 import strongPlugin from './src/plugins/remark-strong/plugin';
 import deflistPlugin from './src/plugins/remark-deflist/plugin';
@@ -345,7 +346,28 @@ const config: Config = {
       searchPagePath: 'search',
     }
   } satisfies Preset.ThemeConfig,
-  plugins: ['docusaurus-plugin-sass'],
+  plugins: [
+    'docusaurus-plugin-sass',
+    () => {
+      return {
+        name: 'alias-configuration',
+        configureWebpack(config, isServer, utils, content) {
+          return {
+            resolve: {
+              alias: {
+                '@tdev-components': path.resolve(__dirname, './src/components'),
+                '@tdev-hooks': path.resolve(__dirname, './src/hooks'),
+                '@tdev-models': path.resolve(__dirname, './src/models'),
+                '@tdev-stores': path.resolve(__dirname, './src/stores'),
+                '@tdev-api': path.resolve(__dirname, './src/api'),
+                '@tdev': path.resolve(__dirname, './src'),
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
   themes: [
     [themeCodeEditor, {}]
   ],

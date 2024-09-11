@@ -1,16 +1,16 @@
 // import React from 'react';
 // Import the original mapper
 import MDXComponents from '@theme-original/MDXComponents';
-import DefinitionList from '../components/DefinitionList';
+import DefinitionList from '@tdev-components/DefinitionList';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
-import DefBox from '../components/CodeDefBox';
-import DefHeading from '../components/CodeDefBox/DefHeading';
-import DefContent from '../components/CodeDefBox/DefContent';
-import Figure from '../components/Figure';
-import SourceRef from '../components/Figure/SourceRef';
-import Answer from '../components/Answer';
-import Solution from '../components/documents/Solution';
+import DefBox from '@tdev-components/CodeDefBox';
+import DefHeading from '@tdev-components/CodeDefBox/DefHeading';
+import DefContent from '@tdev-components/CodeDefBox/DefContent';
+import Figure from '@tdev-components/Figure';
+import SourceRef from '@tdev-components/Figure/SourceRef';
+import Answer from '@tdev-components/Answer';
+import Solution from '@tdev-components/documents/Solution';
 
 export default {
     // Re-use the default mapping

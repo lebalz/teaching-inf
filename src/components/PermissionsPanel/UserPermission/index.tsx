@@ -2,12 +2,12 @@ import React from 'react';
 import clsx from 'clsx';
 import styles from '../Permission.module.scss';
 import { observer } from 'mobx-react-lite';
-import { default as UserPermissionModel } from '@site/src/models/UserPermission';
+import { default as UserPermissionModel } from '@tdev-models/UserPermission';
 import AccessSelector from '../AccessSelector';
-import Button from '../../shared/Button';
+import Button from '@tdev-components/shared/Button';
 import { mdiAccountCircle, mdiDelete } from '@mdi/js';
 import Icon from '@mdi/react';
-import { Access } from '@site/src/api/document';
+import { Access } from '@tdev-api/document';
 
 interface Props {
     permission: UserPermissionModel;

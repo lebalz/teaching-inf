@@ -1,12 +1,12 @@
 import * as React from 'react';
 import styles from './styles.module.scss';
-import { DOM_ELEMENT_IDS } from '@site/src/components/documents/CodeEditor/constants';
+import { DOM_ELEMENT_IDS } from '@tdev-components/documents/CodeEditor/constants';
 import Draggable from 'react-draggable';
-import { checkForButtonClick } from '@site/src/components/documents/CodeEditor/Editor/utils/checkForButtonClick';
-import Button from '@site/src/components/documents/CodeEditor/Button';
+import { checkForButtonClick } from '@tdev-components/documents/CodeEditor/Editor/utils/checkForButtonClick';
+import Button from '@tdev-components/documents/CodeEditor/Button';
 import clsx from 'clsx';
-import { DocumentType } from '@site/src/api/document';
-import { useDocument } from '@site/src/components/documents/useContextDocument';
+import { DocumentType } from '@tdev-api/document';
+import { useDocument } from '@tdev-hooks/useContextDocument';
 import { observer } from 'mobx-react-lite';
 import { mdiClose } from '@mdi/js';
 export interface Props {

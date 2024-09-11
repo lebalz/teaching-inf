@@ -1,12 +1,12 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
 import styles from './styles.module.scss';
-import Button from '../shared/Button';
+import Button from '@tdev-components/shared/Button';
 import { mdiShieldLockOutline } from '@mdi/js';
-import DocumentRoot from '@site/src/models/DocumentRoot';
+import DocumentRoot from '@tdev-models/DocumentRoot';
 import { observer } from 'mobx-react-lite';
-import { Access } from '@site/src/api/document';
-import { useStore } from '@site/src/hooks/useStore';
+import { Access } from '@tdev-api/document';
+import { useStore } from '@tdev-hooks/useStore';
 import clsx from 'clsx';
 import AccessSelector from './AccessSelector';
 import { default as UserAccessPanel } from './UserPermission/AccessPanel';
