@@ -3,14 +3,14 @@ page_id: a8063ab0-49e4-46e2-a032-f075dc3eb82b
 ---
 
 import React from 'react';
-import TaskState from '@site/src/components/documents/TaskState';
-import Button from '@site/src/components/shared/Button';
-import { useFirstMainDocument } from '@site/src/hooks/useFirstMainDocument';
-import BrowserWindow from '@site/src/components/BrowserWindow';
-import { TaskStateComponent } from '@site/src/components/documents/TaskState';
-import { TaskMeta } from '@site/src/models/documents/TaskState';
-import RandomState from '@site/src/models/SideEffects/RandomState';
-import { useStore } from '@site/src/hooks/useStore';
+import Button from '@tdev-components/shared/Button';
+import { useFirstMainDocument } from '@tdev-hooks/useFirstMainDocument';
+import BrowserWindow from '@tdev-components/BrowserWindow';
+import { TaskStateComponent } from '@tdev-components/documents/TaskState';
+import { TaskMeta, default as TaskStateModel } from '@tdev-models/documents/TaskState';
+import RandomState from '@tdev-models/SideEffects/RandomState';
+import { useStore } from '@tdev-hooks/useStore';
+import { observer } from 'mobx-react-lite';
 
 # Side Effects
 
@@ -38,81 +38,83 @@ class RandomState extends iSideEffect<DocumentType.TaskState> {
             if (!this.store.viewedUser) {
                 return docData;
             }
+            const idxOf = States.indexOf(docData.state);
+            const totalClients = this.store.users.reduce((sum, u) => sum + u.connectedClients, 0);
             return {
                 ...docData,
-                state: States[this.store.viewedUser.randomNum % States.length]
+                state: States[(idxOf + totalClients) % States.length]
             };
         };
+    }
+
+    @computed
+    get canEdit() {
+        return true;
     }
 }
 
 export default RandomState;
 ```
-Im obigen Beispiel wird der `transformer` immer dann neu berechnet, wenn sich `this.store.viewedUser.randomNum` ändert.
+Im obigen Beispiel wird der `transformer` immer dann neu berechnet, wenn sich die Anzahl verbundener clients ändert.
 :::
 
 ## Beispiel
 ```tsx
-const TransformedTaskState = () => {
-    // TaskState Dokument laden
-    const doc = useFirstMainDocument('ff4e8ff4-8de8-48ea-aff8-77d198d32baf', new TaskMeta({}));
+const TransformedTaskState = observer(() => {
+    const doc = useFirstMainDocument(
+        'ff4e8ff4-8de8-48ea-aff8-77d198d32baf',
+        new TaskMeta({states: ['checked', 'question', 'unset', 'star', 'star-half', 'star-empty']})
+    );
     const userStore = useStore('userStore');
-
-    // Side Effect registrieren
     React.useEffect(() => {
-        if (doc && doc.sideEffects.length === 0) {
+        if (doc) {
             doc.registerSideEffect(
                 new RandomState(userStore)
             );
         }
     }, [doc, userStore]);
-    if (!doc) {
-        return null;
-    }
     return (
         <>
-            <TaskStateComponent taskState={doc} />
-            <Button 
-                onClick= {() => {
-                    userStore.viewedUser.setRandomNum(
-                        userStore.viewedUser.randomNum + 1
-                    )
-                }}
-                text="Trigger Side Effect"
+            <TaskStateComponent
+                taskState={doc}
+                label="Wenn sich die anzahl verbunden Clients ändert, ändert sich der State..."
+            />
+            <TaskStateComponent
+                taskState={new TaskStateModel(doc.props, doc.store)}
+                label="TaskState ohne Side Effect"
             />
         </>
     )
-}
+})
 ```
 
-export const TransformedTaskState = () => {
-    const doc = useFirstMainDocument('ff4e8ff4-8de8-48ea-aff8-77d198d32baf', new TaskMeta({}));
+export const TransformedTaskState = observer(() => {
+    const doc = useFirstMainDocument(
+        'ff4e8ff4-8de8-48ea-aff8-77d198d32baf',
+        new TaskMeta({states: ['checked', 'question', 'unset', 'star', 'star-half', 'star-empty']})
+    );
     const userStore = useStore('userStore');
     React.useEffect(() => {
-        if (doc && doc.sideEffects.length === 0) {
+        if (doc) {
             doc.registerSideEffect(
                 new RandomState(userStore)
             );
         }
     }, [doc, userStore]);
-    if (!doc) {
-        return null;
-    }
     return (
         <>
-            <TaskStateComponent taskState={doc} />
-            <Button 
-                onClick= {() => {
-                    userStore.viewedUser.setRandomNum(
-                        userStore.viewedUser.randomNum + 1
-                    )
-                }}
-                text="Trigger Side Effect"
+            <TaskStateComponent
+                taskState={doc}
+                label="Wenn sich die anzahl verbunden Clients ändert, ändert sich der State..."
+            />
+            <TaskStateComponent
+                taskState={new TaskStateModel(doc.props, doc.store)}
+                label="TaskState ohne Side Effect"
             />
         </>
     )
-}
+})
 
 <BrowserWindow>
-<TransformedTaskState />
+    <TransformedTaskState />
 </BrowserWindow>

@@ -75,6 +75,8 @@ export const TaskStateComponent = observer((props: ComponentProps) => {
     const [animate, setAnimate] = React.useState(false);
     const doc = props.taskState;
 
+    const readonly = props.readonly || !doc.canEdit;
+
     React.useEffect(() => {
         if (doc.root && pageStore.current && !doc.root.isDummy) {
             pageStore.current.addDocumentRoot(doc);
@@ -116,24 +118,24 @@ export const TaskStateComponent = observer((props: ComponentProps) => {
                 className={clsx(
                     styles.state,
                     styles.checkbox,
-                    props.readonly && styles.readonly,
+                    readonly && styles.readonly,
                     animate && styles.animate
                 )}
                 style={{ backgroundColor: `var(${mdiBgColor[doc.taskState]})` }}
                 onClick={() => {
-                    if (props.readonly) {
+                    if (readonly) {
                         return;
                     }
                     doc.nextState();
                 }}
-                title={props.readonly ? 'Nur Anzeigen' : undefined}
+                title={readonly ? 'Nur Anzeigen' : undefined}
             >
                 <Icon path={mdiIcon[doc.taskState]} size={1} color={mdiColor[doc.taskState]} />
             </div>
             {(props.children || props.label) && (
                 <div
                     onClick={() => {
-                        if (props.readonly) {
+                        if (readonly) {
                             return;
                         }
                         doc.nextState();

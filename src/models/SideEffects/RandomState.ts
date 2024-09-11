@@ -20,11 +20,18 @@ class RandomState extends iSideEffect<DocumentType.TaskState> {
             if (!this.store.viewedUser) {
                 return docData;
             }
+            const idxOf = States.indexOf(docData.state);
+            const totalClients = this.store.users.reduce((sum, u) => sum + u.connectedClients, 0);
             return {
                 ...docData,
-                state: States[this.store.viewedUser.randomNum % States.length]
+                state: States[(idxOf + totalClients) % States.length]
             };
         };
+    }
+
+    @computed
+    get canEdit() {
+        return true;
     }
 }
 

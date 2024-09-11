@@ -96,6 +96,10 @@ abstract class iDocument<Type extends DocumentType> {
 
     @action
     registerSideEffect(se: iSideEffect<Type>) {
+        const old = this.sideEffects.find((s) => s.name === se.name);
+        if (old) {
+            this.sideEffects.remove(old);
+        }
         this.sideEffects.push(se);
     }
 
@@ -147,6 +151,9 @@ abstract class iDocument<Type extends DocumentType> {
     @computed
     get canEdit() {
         if (!this.root) {
+            return false;
+        }
+        if (this.sideEffects.some((se) => !se.canEdit)) {
             return false;
         }
         if (ROAccess.has(this.root.meta.access)) {
