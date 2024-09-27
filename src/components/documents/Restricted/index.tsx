@@ -1,15 +1,11 @@
 import React from 'react';
-import clsx from 'clsx';
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
-import Details from '@theme/Details';
 import Loader from '@tdev-components/Loader';
 import { MetaInit, ModelMeta } from '@tdev-models/documents/Solution';
 import { useDocumentRoot } from '@tdev-hooks/useDocumentRoot';
 import { Access } from '@tdev-api/document';
 import { useStore } from '@tdev-hooks/useStore';
-import Icon from '@mdi/react';
-import { mdiCheckAll } from '@mdi/js';
 import PermissionsPanel from '@tdev-components/PermissionsPanel';
 import { NoneAccess } from '@tdev-models/helpers/accessPolicy';
 
@@ -19,7 +15,7 @@ interface Props extends MetaInit {
     access?: Access;
 }
 
-const AccessControlledElement = observer((props: Props) => {
+const Restricted = observer((props: Props) => {
     const [meta] = React.useState(new ModelMeta(props));
     const docRoot = useDocumentRoot(props.id, meta, false);
     const userStore = useStore('userStore');
@@ -46,4 +42,4 @@ const AccessControlledElement = observer((props: Props) => {
     );
 });
 
-export default AccessControlledElement;
+export default Restricted;
