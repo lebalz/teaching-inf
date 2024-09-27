@@ -27,24 +27,20 @@ const AccessControlledElement = observer((props: Props) => {
         if (!!userStore.current) {
             return <Loader />;
         } else {
-            return <div></div>
+            return <div></div>;
         }
     }
     return (
         <div className={styles.wrapper}>
             {!NoneAccess.has(props.access) &&
             (!NoneAccess.has(docRoot.permission) || userStore.current?.isAdmin) ? (
-                <div>{ props.children }</div>
+                <div>{props.children}</div>
             ) : (
                 <div></div>
             )}
             <div className={styles.adminControls}>
-                {userStore.current?.isAdmin && (
-                    <PermissionsPanel documentRootId={docRoot.id} />
-                )}
-                {NoneAccess.has(docRoot.permission) && (
-                    <span className="badge badge--secondary">Hidden</span>
-                )}
+                {userStore.current?.isAdmin && <PermissionsPanel documentRootId={docRoot.id} />}
+                {NoneAccess.has(docRoot.permission) && <span className="badge badge--secondary">Hidden</span>}
             </div>
         </div>
     );
