@@ -7,15 +7,11 @@ import BrowserWindow from '@tdev-components/BrowserWindow';
 
 # Zugriffsgesteuerte Elemente
 
-Der Inhalt wird angezeigt, wenn
-- der Benutzer eingeloggt ist, und
-- entweder Zugriff auf das Dokument hat, oder Admin ist
-
-Ansonsten wird nichts angezeigt.
+Wenn ein Element nur nach einer Freigabe angezeigt werden soll, eignet sich die `<AccessControlledElement>`-Komponente  - sie versteckt ihren Inhalt, bis er freigegeben wurde.
 
 ```md
 <AccessControlledElement id="43ba2a38-9612-402f-9daf-91204ff47a71">
-Dieser Link wird nur angezeigt, wenn Sie eingeloggt sind und zur Ansicht dieses Dokuments berechtigt sind:
+Dieser Link wird nur bei entsprechender Berechtigung angezeigt:
 
 [🔗 https://test.com/nicht-oeffentlicher-link](https://test.com/nicht-oeffentlicher-link)
 </AccessControlledElement>
@@ -23,7 +19,7 @@ Dieser Link wird nur angezeigt, wenn Sie eingeloggt sind und zur Ansicht dieses 
 
 <BrowserWindow>
 <AccessControlledElement id="43ba2a38-9612-402f-9daf-91204ff47a71">
-Dieser Link wird nur angezeigt, wenn Sie eingeloggt sind und zur Ansicht dieses Dokuments berechtigt sind:
+Dieser Link wird nur bei entsprechender Berechtigung angezeigt:
 
 [🔗 https://test.com/nicht-oeffentlicher-link](https://test.com/nicht-oeffentlicher-link)
 </AccessControlledElement>
