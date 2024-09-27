@@ -25,6 +25,6 @@ Dieser Link wird nur bei entsprechender Berechtigung angezeigt:
 </AccessControlledElement>
 </BrowserWindow>
 
-:::warning[Daten sind nicht geheim]
-Obwohl das Element im Browser nicht angezeigt wird, ist sein Inhalt dennoch im Seitenquelltext enthalten. Versierte Besucher:innen können diesen also problemlos herausfinden.
+:::warning[Inhalt ist nicht geheim]
+Obwohl der zugriffsgesteuerte Inhalt bei fehlender Berechtigung nicht im Browser angezeigt wird, ist er dennoch im Seitenquelltext enthalten. Versierte Nutzer:innen können also trotzdem darauf zugreifen.
 :::
