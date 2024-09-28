@@ -26,5 +26,12 @@ Dieser Link wird nur bei entsprechender Berechtigung angezeigt:
 </BrowserWindow>
 
 :::warning[Inhalt ist nicht geheim]
-Obwohl der zugriffsbeschränkte Inhalt bei fehlender Berechtigung nicht im Browser angezeigt wird, ist er dennoch im Seitenquelltext enthalten. Versierte Nutzer:innen können also trotzdem darauf zugreifen.
+Obwohl der zugriffsbeschränkte Inhalt bei fehlender Berechtigung nicht im Browser angezeigt wird, ist er dennoch im Seitenquelltext enthalten. Versierte Nutzer:innen könnten ihn also unter Umständen trotzdem herausfinden.
 :::
+
+## Mögliche Use Cases
+- Bestimmte Nutzer:innen sollen einen Inhalt (noch) nicht sehen. Zum Beispiel:
+  - Die Lehrperson möchte den Arbeitsfortschritt steuern können (teacher-pacing).
+  - Eine Überraschung oder ein besonderer Effekt soll nicht vorweggenommen werden.
+  - Die Lehrperson möchte Inhalte zwischen verschiedenen Schüler:innen oder Lerngruppen (z.B.) differenzieren.
+- Ein bestimmtes Element ist nur für die eingeloggten und zugriffsberechtigten Besucher:innen sinnvoll (z.B. ein zugriffsbeschränkter OneDrive-Link). 
