@@ -26,7 +26,7 @@ const SampleSolutionTaskState = observer((props: Props) => {
     const [solutionMeta] = React.useState(new SolutionModelMeta({}))
     const doc = useFirstMainDocument(props.id, taskMeta);
     const solution = useFirstMainDocument(props.solutionId, solutionMeta);
-    const solutionDocRoot = useDocumentRoot(props.id, solutionMeta, false);
+    const solutionDocRoot = useDocumentRoot(props.solutionId, solutionMeta, false);
     const userStore = useStore('userStore');
 
     if (!doc) {
@@ -34,8 +34,6 @@ const SampleSolutionTaskState = observer((props: Props) => {
     }
 
     const solutionAvailable = !!solution && !NoneAccess.has(solutionDocRoot.permission);
-    console.log(solutionDocRoot, solutionAvailable);
-    // const solutionAvailable = !!solution && (!NoneAccess.has(solutionDocRoot.permission) || userStore.current?.isAdmin);
 
     const taskStates = [
         STATE_OPEN,
