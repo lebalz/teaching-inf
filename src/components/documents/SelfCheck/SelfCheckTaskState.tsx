@@ -12,15 +12,15 @@ import { SelfCheckStateType } from '@tdev-components/documents/SelfCheck/shared'
 interface Props extends MetaInit {
     id: string;
     solutionId: string;
-    keepSolution?: boolean;
+    includeQuestion: boolean;
 }
 
-const SelfCheckTaskState = observer((props: Props) => {
-    const [taskMeta] = React.useState(new TaskMeta(props));
+const SelfCheckTaskState = observer(({ id, solutionId, includeQuestion = true }: Props) => {
+    const [taskMeta] = React.useState(new TaskMeta({}));
     const [solutionMeta] = React.useState(new SolutionModelMeta({}));
-    const doc = useFirstMainDocument(props.id, taskMeta);
-    const solution = useFirstMainDocument(props.solutionId, solutionMeta);
-    const solutionDocRoot = useDocumentRoot(props.solutionId, solutionMeta, false);
+    const doc = useFirstMainDocument(id, taskMeta);
+    const solution = useFirstMainDocument(solutionId, solutionMeta);
+    const solutionDocRoot = useDocumentRoot(solutionId, solutionMeta, false);
 
     if (!doc) {
         return <Loader />;
@@ -29,21 +29,20 @@ const SelfCheckTaskState = observer((props: Props) => {
     const solutionAvailable = !!solution && !NoneAccess.has(solutionDocRoot.permission);
 
     const taskStates = [
-        SelfCheckStateType.STATE_OPEN,
-        solutionAvailable ? SelfCheckStateType.STATE_REVIEWING_SOLUTION : SelfCheckStateType.STATE_WAITING_FOR_SOLUTION,
-        solutionAvailable ? SelfCheckStateType.STATE_DONE : null
+        SelfCheckStateType.OPEN,
+        includeQuestion ? SelfCheckStateType.QUESTION : null,
+        solutionAvailable ? SelfCheckStateType.REVIEWING_SOLUTION : SelfCheckStateType.WAITING_FOR_SOLUTION,
+        solutionAvailable ? SelfCheckStateType.DONE : null
     ].filter((state) => !!state);
 
-    if (solutionAvailable && doc.taskState === SelfCheckStateType.STATE_WAITING_FOR_SOLUTION) {
-        doc.setState(SelfCheckStateType.STATE_REVIEWING_SOLUTION);
+    if (solutionAvailable && doc.taskState === SelfCheckStateType.WAITING_FOR_SOLUTION) {
+        doc.setState(SelfCheckStateType.REVIEWING_SOLUTION);
     }
-    if (!solutionAvailable && doc.taskState === SelfCheckStateType.STATE_REVIEWING_SOLUTION) {
-        doc.setState(SelfCheckStateType.STATE_WAITING_FOR_SOLUTION);
+    if (!solutionAvailable && doc.taskState === SelfCheckStateType.REVIEWING_SOLUTION) {
+        doc.setState(SelfCheckStateType.WAITING_FOR_SOLUTION);
     }
 
-    return <TaskState id={props.id} states={taskStates} />;
+    return <TaskState id={id} states={taskStates} />;
 });
-
-
 
 export default SelfCheckTaskState;
