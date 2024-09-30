@@ -23,7 +23,7 @@ const STATE_DONE: StateType = 'checked';
 
 const SampleSolutionTaskState = observer((props: Props) => {
     const [taskMeta] = React.useState(new TaskMeta(props));
-    const [solutionMeta] = React.useState(new SolutionModelMeta({}))
+    const [solutionMeta] = React.useState(new SolutionModelMeta({}));
     const doc = useFirstMainDocument(props.id, taskMeta);
     const solution = useFirstMainDocument(props.solutionId, solutionMeta);
     const solutionDocRoot = useDocumentRoot(props.solutionId, solutionMeta, false);
@@ -38,7 +38,7 @@ const SampleSolutionTaskState = observer((props: Props) => {
         STATE_OPEN,
         solutionAvailable ? STATE_REVIEWING_SOLUTION : STATE_WAITING_FOR_SOLUTION,
         solutionAvailable ? STATE_DONE : null
-    ].filter(state => !!state);
+    ].filter((state) => !!state);
 
     if (solutionAvailable && doc.taskState === STATE_WAITING_FOR_SOLUTION) {
         doc.setState(STATE_REVIEWING_SOLUTION);
@@ -47,30 +47,31 @@ const SampleSolutionTaskState = observer((props: Props) => {
         doc.setState(STATE_WAITING_FOR_SOLUTION);
     }
 
-    return (
-        <TaskState id={props.id} states={taskStates} />
-    );
+    return <TaskState id={props.id} states={taskStates} />;
 });
 
-export interface HideableProps {
+interface StateDependentProps {
     sampleSolutionTaskStateId: string;
+    alwaysVisibleForTeacher: boolean;
     children?: React.ReactNode;
 }
 
-export const StateDependent = observer((props: HideableProps) => {
-    const [taskMeta] = React.useState(new TaskMeta({}));
-    const doc = useFirstMainDocument(props.sampleSolutionTaskStateId, taskMeta);
-    const userStore = useStore('userStore');
+export const StateDependent = observer(
+    ({ sampleSolutionTaskStateId, alwaysVisibleForTeacher = true, children }: StateDependentProps) => {
+        const [taskMeta] = React.useState(new TaskMeta({}));
+        const doc = useFirstMainDocument(sampleSolutionTaskStateId, taskMeta);
+        const userStore = useStore('userStore');
 
-    if (!doc) {
-        return <Loader />
+        if (!doc) {
+            return <Loader />;
+        }
+
+        const showElement =
+            (userStore.current?.isTeacher && alwaysVisibleForTeacher) ||
+            (doc.taskState !== STATE_OPEN && doc.taskState !== STATE_DONE);
+
+        return <div>{showElement && children}</div>;
     }
-
-    const showElement = userStore.current?.isAdmin || (doc.taskState !== STATE_OPEN && doc.taskState !== STATE_DONE);
-
-    return (
-        <div>{ showElement && props.children }</div>
-    )
-});
+);
 
 export default SampleSolutionTaskState;

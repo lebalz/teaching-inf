@@ -21,4 +21,10 @@ Hallo Welt 🌍
 </Solution>
 </StateDependent>
 :::
+
+<StateDependent sampleSolutionTaskStateId="df3313a5-c18f-4220-9dfe-cf4314c1b7b9" alwaysVisibleForTeacher={false}>
+:::warning[Selbstständig korrigieren]
+Vergleiche deine Lösung nun mit der Musterlösung und korrigiere deine Antwort. Wenn die Musterlösung noch nicht freigeschaltet ist, musst du kurz warten.
+:::
+</StateDependent>
 </BrowserWindow>
