@@ -4,7 +4,7 @@ import { useFirstMainDocument } from '@tdev-hooks/useFirstMainDocument';
 import Loader from '@tdev-components/Loader';
 import TaskState from '@tdev-components/documents/TaskState';
 import { MetaInit, TaskMeta } from '@tdev-models/documents/TaskState';
-import { StateType } from '@tdev-api/document';
+import { Access, StateType } from '@tdev-api/document';
 import { ModelMeta as SolutionModelMeta } from '@tdev-models/documents/Solution';
 import { useDocumentRoot } from '@tdev-hooks/useDocumentRoot';
 import { NoneAccess } from '@tdev-models/helpers/accessPolicy';
@@ -34,6 +34,8 @@ const SampleSolutionTaskState = observer((props: Props) => {
     }
 
     const solutionAvailable = !!solution && !NoneAccess.has(solutionDocRoot.permission);
+    // const hideSolution = !userStore.current?.isAdmin && (doc.taskState === STATE_OPEN || (doc.taskState === STATE_DONE && !props.keepSolution));
+    const hideSolution = (doc.taskState === STATE_OPEN || (doc.taskState === STATE_DONE && !props.keepSolution))
 
     const taskStates = [
         STATE_OPEN,
@@ -43,16 +45,13 @@ const SampleSolutionTaskState = observer((props: Props) => {
 
     if (solutionAvailable && doc.taskState === STATE_WAITING_FOR_SOLUTION) {
         doc.setState(STATE_REVIEWING_SOLUTION);
-    } else if (!solutionAvailable && doc.taskState === STATE_REVIEWING_SOLUTION) {
+    }
+    if (!solutionAvailable && doc.taskState === STATE_REVIEWING_SOLUTION) {
         doc.setState(STATE_WAITING_FOR_SOLUTION);
     }
-
-    /*
-    if (doc.taskState === STATE_OPEN || (doc.taskState === STATE_DONE && !props.keepSolution)) {
-        console.log('I would set the solution\'s local visibility to None now...');
+    if (hideSolution) {
+        solution.meta.access = Access.None_User;
     }
-
-     */
 
     return (
         <TaskState id={props.id} states={taskStates} />
