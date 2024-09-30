@@ -27,15 +27,12 @@ const SampleSolutionTaskState = observer((props: Props) => {
     const doc = useFirstMainDocument(props.id, taskMeta);
     const solution = useFirstMainDocument(props.solutionId, solutionMeta);
     const solutionDocRoot = useDocumentRoot(props.solutionId, solutionMeta, false);
-    const userStore = useStore('userStore');
 
     if (!doc) {
         return <Loader />;
     }
 
     const solutionAvailable = !!solution && !NoneAccess.has(solutionDocRoot.permission);
-    // const hideSolution = !userStore.current?.isAdmin && (doc.taskState === STATE_OPEN || (doc.taskState === STATE_DONE && !props.keepSolution));
-    const hideSolution = (doc.taskState === STATE_OPEN || (doc.taskState === STATE_DONE && !props.keepSolution))
 
     const taskStates = [
         STATE_OPEN,
@@ -49,13 +46,31 @@ const SampleSolutionTaskState = observer((props: Props) => {
     if (!solutionAvailable && doc.taskState === STATE_REVIEWING_SOLUTION) {
         doc.setState(STATE_WAITING_FOR_SOLUTION);
     }
-    if (hideSolution) {
-        solution.meta.access = Access.None_User;
-    }
 
     return (
         <TaskState id={props.id} states={taskStates} />
     );
+});
+
+export interface HideableProps {
+    sampleSolutionTaskStateId: string;
+    children?: React.ReactNode;
+}
+
+export const StateDependent = observer((props: HideableProps) => {
+    const [taskMeta] = React.useState(new TaskMeta({}));
+    const doc = useFirstMainDocument(props.sampleSolutionTaskStateId, taskMeta);
+    const userStore = useStore('userStore');
+
+    if (!doc) {
+        return <Loader />
+    }
+
+    const showElement = userStore.current?.isAdmin || (doc.taskState !== STATE_OPEN && doc.taskState !== STATE_DONE);
+
+    return (
+        <div>{ showElement && props.children }</div>
+    )
 });
 
 export default SampleSolutionTaskState;
