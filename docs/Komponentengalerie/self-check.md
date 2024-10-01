@@ -14,7 +14,7 @@ import BrowserWindow from '@tdev-components/BrowserWindow';
 <BrowserWindow>
 <SelfCheck taskStateId="df3313a5-c18f-4220-9dfe-cf4314c1b7b9" solutionId="e92b6f49-396e-48bc-8a6c-4ca94947210d">
 :::note[1. Aufgabe]
-<SelfCheckTaskState></SelfCheckTaskState>
+<SelfCheckTaskState />
 
 Erstelle eine Lösung für die Aufgabe.
 
