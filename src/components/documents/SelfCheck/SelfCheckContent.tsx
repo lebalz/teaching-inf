@@ -31,7 +31,7 @@ const SelfCheckContent = observer(
         }
 
         const [taskMeta] = React.useState(new TaskMeta({}));
-        const doc = useFirstMainDocument(context.taskStateId, taskMeta);
+        const doc = useFirstMainDocument(context.taskStateId, taskMeta, false);
         const userStore = useStore('userStore');
 
         if (!doc) {

@@ -22,8 +22,8 @@ const SelfCheckTaskState = observer(({ includeQuestion = true, pagePosition }: P
 
     const [taskMeta] = React.useState(new TaskMeta({ pagePosition }));
     const [solutionMeta] = React.useState(new SolutionModelMeta({}));
-    const taskDoc = useFirstMainDocument(context.taskStateId, taskMeta);
-    const solutionDoc = useFirstMainDocument(context.solutionId, solutionMeta);
+    const taskDoc = useFirstMainDocument(context.taskStateId, taskMeta, false);
+    const solutionDoc = useFirstMainDocument(context.solutionId, solutionMeta, false);
     const solutionDocRoot = useDocumentRoot(context.solutionId, solutionMeta, false);
 
     if (!taskDoc) {
