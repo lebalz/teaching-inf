@@ -4,7 +4,7 @@ import { TaskMeta } from '@tdev-models/documents/TaskState';
 import { useFirstMainDocument } from '@tdev-hooks/useFirstMainDocument';
 import { useStore } from '@tdev-hooks/useStore';
 import Loader from '@tdev-components/Loader';
-import { SelfCheckStateType } from '@tdev-components/documents/SelfCheck/shared';
+import { SelfCheckStateType } from '@tdev-components/documents/SelfCheck/models';
 
 interface StateDependentProps {
     taskStateId: string;
@@ -21,8 +21,8 @@ function stateIndex(state: SelfCheckStateType) {
 const SelfCheckContainer = observer(
     ({
         taskStateId,
-        visibleFrom = SelfCheckStateType.WAITING_FOR_SOLUTION,
-        visibleTo = SelfCheckStateType.REVIEWING_SOLUTION,
+        visibleFrom = SelfCheckStateType.WaitingForSolution,
+        visibleTo = SelfCheckStateType.Reviewing,
         alwaysVisibleForTeacher = true,
         children
     }: StateDependentProps) => {

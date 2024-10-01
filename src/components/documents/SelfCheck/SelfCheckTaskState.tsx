@@ -7,7 +7,7 @@ import { MetaInit, TaskMeta } from '@tdev-models/documents/TaskState';
 import { ModelMeta as SolutionModelMeta } from '@tdev-models/documents/Solution';
 import { useDocumentRoot } from '@tdev-hooks/useDocumentRoot';
 import { NoneAccess } from '@tdev-models/helpers/accessPolicy';
-import { SelfCheckStateType } from '@tdev-components/documents/SelfCheck/shared';
+import { SelfCheckStateType } from '@tdev-components/documents/SelfCheck/models';
 
 interface Props extends MetaInit {
     id: string;
@@ -29,17 +29,17 @@ const SelfCheckTaskState = observer(({ id, solutionId, includeQuestion = true }:
     const solutionAvailable = !!solution && !NoneAccess.has(solutionDocRoot.permission);
 
     const taskStates = [
-        SelfCheckStateType.OPEN,
-        includeQuestion ? SelfCheckStateType.QUESTION : null,
-        solutionAvailable ? SelfCheckStateType.REVIEWING_SOLUTION : SelfCheckStateType.WAITING_FOR_SOLUTION,
-        solutionAvailable ? SelfCheckStateType.DONE : null
+        SelfCheckStateType.Open,
+        includeQuestion ? SelfCheckStateType.Question : null,
+        solutionAvailable ? SelfCheckStateType.Reviewing : SelfCheckStateType.WaitingForSolution,
+        solutionAvailable ? SelfCheckStateType.Done : null
     ].filter((state) => !!state);
 
-    if (solutionAvailable && doc.taskState === SelfCheckStateType.WAITING_FOR_SOLUTION) {
-        doc.setState(SelfCheckStateType.REVIEWING_SOLUTION);
+    if (solutionAvailable && doc.taskState === SelfCheckStateType.WaitingForSolution) {
+        doc.setState(SelfCheckStateType.Reviewing);
     }
-    if (!solutionAvailable && doc.taskState === SelfCheckStateType.REVIEWING_SOLUTION) {
-        doc.setState(SelfCheckStateType.WAITING_FOR_SOLUTION);
+    if (!solutionAvailable && doc.taskState === SelfCheckStateType.Reviewing) {
+        doc.setState(SelfCheckStateType.WaitingForSolution);
     }
 
     return <TaskState id={id} states={taskStates} />;
