@@ -5,9 +5,9 @@ import { useFirstMainDocument } from '@tdev-hooks/useFirstMainDocument';
 import { useStore } from '@tdev-hooks/useStore';
 import Loader from '@tdev-components/Loader';
 import { SelfCheckStateType } from '@tdev-components/documents/SelfCheck/models';
+import { SelfCheckContext } from '@tdev-components/documents/SelfCheck/shared';
 
 interface StateDependentProps {
-    taskStateId: string;
     visibleFrom?: SelfCheckStateType;
     visibleTo?: SelfCheckStateType;
     alwaysVisibleForTeacher?: boolean;
@@ -20,14 +20,18 @@ function stateIndex(state: SelfCheckStateType) {
 
 const SelfCheckContent = observer(
     ({
-        taskStateId,
         visibleFrom = SelfCheckStateType.WaitingForSolution,
         visibleTo = SelfCheckStateType.Reviewing,
         alwaysVisibleForTeacher = true,
         children
     }: StateDependentProps) => {
+        const context = React.useContext(SelfCheckContext);
+        if (!context) {
+            throw new Error('SelfCheckContent must be used within a SelfCheck');
+        }
+
         const [taskMeta] = React.useState(new TaskMeta({}));
-        const doc = useFirstMainDocument(taskStateId, taskMeta);
+        const doc = useFirstMainDocument(context.taskStateId, taskMeta);
         const userStore = useStore('userStore');
 
         if (!doc) {

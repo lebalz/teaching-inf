@@ -8,19 +8,23 @@ import { ModelMeta as SolutionModelMeta } from '@tdev-models/documents/Solution'
 import { useDocumentRoot } from '@tdev-hooks/useDocumentRoot';
 import { NoneAccess } from '@tdev-models/helpers/accessPolicy';
 import { SelfCheckStateType } from '@tdev-components/documents/SelfCheck/models';
+import { SelfCheckContext } from '@tdev-components/documents/SelfCheck/shared';
 
 interface Props extends MetaInit {
-    id: string;
-    solutionId: string;
     includeQuestion: boolean;
 }
 
-const SelfCheckTaskState = observer(({ id, solutionId, includeQuestion = true }: Props) => {
+const SelfCheckTaskState = observer(({ includeQuestion = true }: Props) => {
+    const context = React.useContext(SelfCheckContext);
+    if (!context) {
+        throw new Error('SelfCheckTaskState must be used within a SelfCheck');
+    }
+
     const [taskMeta] = React.useState(new TaskMeta({}));
     const [solutionMeta] = React.useState(new SolutionModelMeta({}));
-    const doc = useFirstMainDocument(id, taskMeta);
-    const solution = useFirstMainDocument(solutionId, solutionMeta);
-    const solutionDocRoot = useDocumentRoot(solutionId, solutionMeta, false);
+    const doc = useFirstMainDocument(context.taskStateId, taskMeta);
+    const solution = useFirstMainDocument(context.solutionId, solutionMeta);
+    const solutionDocRoot = useDocumentRoot(context.solutionId, solutionMeta, false);
 
     if (!doc) {
         return <Loader />;
@@ -42,7 +46,7 @@ const SelfCheckTaskState = observer(({ id, solutionId, includeQuestion = true }:
         doc.setState(SelfCheckStateType.WaitingForSolution);
     }
 
-    return <TaskState id={id} states={taskStates} />;
+    return <TaskState id={context.taskStateId} states={taskStates} />;
 });
 
 export default SelfCheckTaskState;
