@@ -18,7 +18,7 @@ function stateIndex(state: SelfCheckStateType) {
     return Object.values(SelfCheckStateType).indexOf(state);
 }
 
-const SelfCheckContainer = observer(
+const SelfCheckContent = observer(
     ({
         taskStateId,
         visibleFrom = SelfCheckStateType.WaitingForSolution,
@@ -46,4 +46,4 @@ const SelfCheckContainer = observer(
     }
 );
 
-export default SelfCheckContainer;
+export default SelfCheckContent;
