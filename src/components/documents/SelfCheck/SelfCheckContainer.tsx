@@ -8,15 +8,21 @@ import { SelfCheckStateType } from '@tdev-components/documents/SelfCheck/shared'
 
 interface StateDependentProps {
     taskStateId: string;
-    visibleFrom: SelfCheckStateType;
-    visibleTo: SelfCheckStateType;
-    alwaysVisibleForTeacher: boolean;
+    visibleFrom?: SelfCheckStateType;
+    visibleTo?: SelfCheckStateType;
+    alwaysVisibleForTeacher?: boolean;
     children?: React.ReactNode;
+}
+
+function stateIndex(state: SelfCheckStateType) {
+    return Object.values(SelfCheckStateType).indexOf(state);
 }
 
 const SelfCheckContainer = observer(
     ({
         taskStateId,
+        visibleFrom = SelfCheckStateType.WAITING_FOR_SOLUTION,
+        visibleTo = SelfCheckStateType.REVIEWING_SOLUTION,
         alwaysVisibleForTeacher = true,
         children
     }: StateDependentProps) => {
@@ -28,9 +34,13 @@ const SelfCheckContainer = observer(
             return <Loader />;
         }
 
+        const visibleFromIndex = stateIndex(visibleFrom);
+        const visibleToIndex = stateIndex(visibleTo);
+        const currentStateIndex = stateIndex(doc.taskState as SelfCheckStateType);
+
         const showElement =
             (userStore.current?.isTeacher && alwaysVisibleForTeacher) ||
-            (doc.taskState !== SelfCheckStateType.OPEN && doc.taskState !== SelfCheckStateType.DONE);
+            (visibleFromIndex <= currentStateIndex && currentStateIndex <= visibleToIndex);
 
         return <div>{showElement && children}</div>;
     }
