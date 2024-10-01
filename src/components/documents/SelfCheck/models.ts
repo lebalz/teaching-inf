@@ -2,6 +2,6 @@ export enum SelfCheckStateType {
     Open = 'unset',
     Question = 'question',
     WaitingForSolution = 'star-empty',
-    Reviewing = 'star-half',
+    Reviewing = 'star',
     Done = 'checked'
 }
