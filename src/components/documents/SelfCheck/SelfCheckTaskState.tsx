@@ -14,39 +14,39 @@ interface Props extends MetaInit {
     includeQuestion: boolean;
 }
 
-const SelfCheckTaskState = observer(({ includeQuestion = true }: Props) => {
+const SelfCheckTaskState = observer(({ includeQuestion = true, pagePosition }: Props) => {
     const context = React.useContext(SelfCheckContext);
     if (!context) {
         throw new Error('SelfCheckTaskState must be used within a SelfCheck');
     }
 
-    const [taskMeta] = React.useState(new TaskMeta({}));
+    const [taskMeta] = React.useState(new TaskMeta({ pagePosition }));
     const [solutionMeta] = React.useState(new SolutionModelMeta({}));
-    const doc = useFirstMainDocument(context.taskStateId, taskMeta);
-    const solution = useFirstMainDocument(context.solutionId, solutionMeta);
+    const taskDoc = useFirstMainDocument(context.taskStateId, taskMeta);
+    const solutionDoc = useFirstMainDocument(context.solutionId, solutionMeta);
     const solutionDocRoot = useDocumentRoot(context.solutionId, solutionMeta, false);
 
-    if (!doc) {
+    if (!taskDoc) {
         return <Loader />;
     }
 
-    const solutionAvailable = !!solution && !NoneAccess.has(solutionDocRoot.permission);
+    const solutionAvailable = !!solutionDoc && !NoneAccess.has(solutionDocRoot.permission);
 
-    const taskStates = [
+    const states = [
         SelfCheckStateType.Open,
         includeQuestion ? SelfCheckStateType.Question : null,
         solutionAvailable ? SelfCheckStateType.Reviewing : SelfCheckStateType.WaitingForSolution,
         solutionAvailable ? SelfCheckStateType.Done : null
     ].filter((state) => !!state);
 
-    if (solutionAvailable && doc.taskState === SelfCheckStateType.WaitingForSolution) {
-        doc.setState(SelfCheckStateType.Reviewing);
+    if (solutionAvailable && taskDoc.taskState === SelfCheckStateType.WaitingForSolution) {
+        taskDoc.setState(SelfCheckStateType.Reviewing);
     }
-    if (!solutionAvailable && doc.taskState === SelfCheckStateType.Reviewing) {
-        doc.setState(SelfCheckStateType.WaitingForSolution);
+    if (!solutionAvailable && taskDoc.taskState === SelfCheckStateType.Reviewing) {
+        taskDoc.setState(SelfCheckStateType.WaitingForSolution);
     }
 
-    return <TaskState id={context.taskStateId} states={taskStates} />;
+    return <TaskState id={context.taskStateId} states={states} pagePosition={pagePosition} />;
 });
 
 export default SelfCheckTaskState;

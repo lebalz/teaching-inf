@@ -64,7 +64,7 @@ const REMARK_PLUGINS = [
   [
     enumerateAnswersPlugin,
     {
-      componentsToEnumerate: ['Answer', 'TaskState'],
+      componentsToEnumerate: ['Answer', 'TaskState', 'SelfCheckTaskState'],
     }
   ]
 ];
