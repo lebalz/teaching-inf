@@ -233,6 +233,20 @@ export class DocumentRootStore extends iStore {
     /**
      * returns userPermissions and! groupPermissions
      */
+    usersPermissions(documentRootId: string, userId: string) {
+        const user = this.root.userStore.findById(userId);
+        if (!user) {
+            return [];
+        }
+        return this.root.permissionStore
+            .permissionsByDocumentRoot(documentRootId)
+            .filter((p) => p.isAffectingUser(user));
+    }
+
+    /**
+     * returns userPermissions and! groupPermissions
+     * // TODO: Partial duplication between this and usersPermissions; consider refactoring.
+     */
     currentUsersPermissions(documentRootId: string) {
         const currentUser = this.root.userStore.current;
         if (!currentUser) {
