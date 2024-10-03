@@ -5,11 +5,17 @@ import { SelfCheckStateType } from '@tdev-components/documents/SelfCheck/models'
 import { SelfCheckContext } from '@tdev-components/documents/SelfCheck/shared';
 import SelfCheckContent from '@tdev-components/documents/SelfCheck/SelfCheckContent';
 import Solution from '@tdev-components/documents/Solution';
+import { Access } from '@tdev-api/document';
 
 interface Props extends MetaInit {
     visibleFrom?: SelfCheckStateType;
     visibleTo?: SelfCheckStateType;
     alwaysVisibleForTeacher?: boolean;
+    standalone?: boolean;
+    title?: string;
+    open?: boolean;
+    className?: string;
+    access?: Access;
     children: JSX.Element;
 }
 
@@ -25,7 +31,16 @@ const SelfCheckSolution = observer((props: Props) => {
             visibleTo={props.visibleTo}
             visibleFrom={props.visibleFrom}
         >
-            <Solution id={context.solutionId}>{props.children}</Solution>
+            <Solution
+                id={context.solutionId}
+                standalone={props.standalone}
+                title={props.title}
+                open={props.open}
+                className={props.className}
+                access={props.access}
+            >
+                {props.children}
+            </Solution>
         </SelfCheckContent>
     );
 });

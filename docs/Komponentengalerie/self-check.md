@@ -59,7 +59,7 @@ Die Interpretation der verschiedenen Zustände ist wie folgt vorgesehen:
 | :mdi[checkbox-marked-outline]{.green} Fertig           | Die Bearbeitung der Aufgabe ist abgeschlossen - die eigene Antwort des Schülers ist nun vollständig und korrekt.                                                                                                  |
 
 ## Statusabhängige Sichtbarkeit
-Wenn gewisse Elemente (z.B. die Musterlösung, Hinweise, etc.) nur während bestimmten Zuständen sichtbar sein sollen, eignen sich die Komponenten `<SelfCheckSolution>` (für die Lösung; muss pro `<SelfCheck>` genau einmal vorhanden sein) und `<SelfCheckContent>` (für beliebige Inhalte). Das hier beschriebene Verhalten ist für beide Komponenten identisch.
+Wenn gewisse Elemente (z.B. die Musterlösung, Hinweise, etc.) nur während bestimmten Zuständen sichtbar sein sollen, eignen sich die Komponenten `<SelfCheckSolution>` (für die Lösung; muss pro `<SelfCheck>` genau einmal vorhanden sein) und `<SelfCheckContent>` (für beliebige Inhalte). Das hier beschriebene Verhalten ist für beide Komponenten identisch. Zusätzlich stehen bei der `<SelfCheckSolution>` auch alle Parameter der [`<Solution>`](./solutions.md) zur Verfügung.
 
 Standardmässig zeigen diese Komponenten ihren Inhalt nur in den Zuständen _Warten auf Musterlösung_ und _Korrektur_ an. Dies kann mit den Eigenschaften `visibleFrom` und `visibleTo` angepasst werden. Es stehen dafür je folgende Konstanten zur Verfügung:
 
@@ -82,7 +82,7 @@ Folgendes Beispiel enthält ein Selfcheck-Szenario, in dem die Musterlösung (au
 
 Erstelle auch für diese Aufgabe eine Lösung.
 
-<SelfCheckSolution>
+<SelfCheckSolution title="Lösung zur Aufgabe 3" open>
 Lösung zur zweiten Aufgabe 🥳
 </SelfCheckSolution>
 :::
@@ -114,7 +114,7 @@ Lösung zur zweiten Aufgabe 🥳
 
 Erstelle auch für diese Aufgabe eine Lösung.
 
-<SelfCheckSolution>
+<SelfCheckSolution title="Lösung zur Aufgabe 3" open>
 Lösung zur zweiten Aufgabe 🥳
 </SelfCheckSolution>
 :::
