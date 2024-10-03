@@ -82,7 +82,7 @@ Folgendes Beispiel enthält ein Selfcheck-Szenario, in dem die Musterlösung (au
 
 Erstelle auch für diese Aufgabe eine Lösung.
 
-<SelfCheckSolution title="Lösung zur Aufgabe 3" open>
+<SelfCheckSolution title="Lösung zur Aufgabe 2" open>
 Lösung zur zweiten Aufgabe 🥳
 </SelfCheckSolution>
 :::
@@ -114,7 +114,7 @@ Lösung zur zweiten Aufgabe 🥳
 
 Erstelle auch für diese Aufgabe eine Lösung.
 
-<SelfCheckSolution title="Lösung zur Aufgabe 3" open>
+<SelfCheckSolution title="Lösung zur Aufgabe 2" open>
 Lösung zur zweiten Aufgabe 🥳
 </SelfCheckSolution>
 :::
