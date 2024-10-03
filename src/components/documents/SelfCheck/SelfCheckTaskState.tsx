@@ -8,7 +8,7 @@ import { ModelMeta as SolutionModelMeta } from '@tdev-models/documents/Solution'
 import { useDocumentRoot } from '@tdev-hooks/useDocumentRoot';
 import { NoneAccess } from '@tdev-models/helpers/accessPolicy';
 import { SelfCheckStateType } from '@tdev-components/documents/SelfCheck/models';
-import { SelfCheckContext } from '@tdev-components/documents/SelfCheck/shared';
+import { SelfCheckContext, SelfCheckStateSideEffect } from '@tdev-components/documents/SelfCheck/shared';
 
 interface Props extends MetaInit {
     includeQuestion: boolean;
@@ -23,28 +23,29 @@ const SelfCheckTaskState = observer(({ includeQuestion = true, pagePosition }: P
     const [taskMeta] = React.useState(new TaskMeta({ pagePosition }));
     const [solutionMeta] = React.useState(new SolutionModelMeta({}));
     const taskDoc = useFirstMainDocument(context.taskStateId, taskMeta, false);
+    const taskDocRoot = useDocumentRoot(context.taskStateId, taskMeta, false);
     const solutionDoc = useFirstMainDocument(context.solutionId, solutionMeta, false);
     const solutionDocRoot = useDocumentRoot(context.solutionId, solutionMeta, false);
+
+    React.useEffect(() => {
+       taskDocRoot.allDocuments.forEach(doc => {
+           // TODO: Get rid of this cast.
+           (doc as any).registerSideEffect(new SelfCheckStateSideEffect(doc.authorId, solutionDocRoot));
+       })
+    }, [taskDocRoot, taskDocRoot.allDocuments, solutionDocRoot]);
 
     if (!taskDoc) {
         return <Loader />;
     }
 
-    const solutionAvailable = !!solutionDoc && !NoneAccess.has(solutionDocRoot.permission);
+    const solutionAvailableForCurrentUser = !!solutionDoc && !NoneAccess.has(solutionDocRoot.permission);
 
     const states = [
         SelfCheckStateType.Open,
         includeQuestion ? SelfCheckStateType.Question : null,
-        solutionAvailable ? SelfCheckStateType.Reviewing : SelfCheckStateType.WaitingForSolution,
-        solutionAvailable ? SelfCheckStateType.Done : null
+        SelfCheckStateType.Reviewing,
+        solutionAvailableForCurrentUser ? SelfCheckStateType.Done : null
     ].filter((state) => !!state);
-
-    if (solutionAvailable && taskDoc.taskState === SelfCheckStateType.WaitingForSolution) {
-        taskDoc.setState(SelfCheckStateType.Reviewing);
-    }
-    if (!solutionAvailable && taskDoc.taskState === SelfCheckStateType.Reviewing) {
-        taskDoc.setState(SelfCheckStateType.WaitingForSolution);
-    }
 
     return <TaskState id={context.taskStateId} states={states} pagePosition={pagePosition} />;
 });
