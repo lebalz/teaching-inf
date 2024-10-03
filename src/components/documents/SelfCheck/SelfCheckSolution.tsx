@@ -26,19 +26,8 @@ const SelfCheckSolution = observer((props: Props) => {
     }
 
     return (
-        <SelfCheckContent
-            alwaysVisibleForTeacher={props.alwaysVisibleForTeacher}
-            visibleTo={props.visibleTo}
-            visibleFrom={props.visibleFrom}
-        >
-            <Solution
-                id={context.solutionId}
-                standalone={props.standalone}
-                title={props.title}
-                open={props.open}
-                className={props.className}
-                access={props.access}
-            >
+        <SelfCheckContent {...props}>
+            <Solution {...props} id={context.solutionId}>
                 {props.children}
             </Solution>
         </SelfCheckContent>
