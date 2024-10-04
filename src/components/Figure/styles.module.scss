@@ -17,8 +17,9 @@
 
         :global &.inline {
             position: absolute;
-            bottom: 0.3em;
-            right: 0.3em;
+            bottom: 0;
+            right: 0;
+            padding: 0.3em;
             opacity: 50%;
 
             &:hover {
