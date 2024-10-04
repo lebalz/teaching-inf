@@ -54,7 +54,14 @@ const Comment = observer((props: Props) => {
                 </div>
             </div>
             {comment.isOpen && (
-                <div className={clsx(styles.content, sharedStyles.colorized, sharedStyles[comment.color], sharedStyles.active)}>
+                <div
+                    className={clsx(
+                        styles.content,
+                        sharedStyles.colorized,
+                        sharedStyles[comment.color],
+                        sharedStyles.active
+                    )}
+                >
                     {comment.isOpen && (
                         <div
                             className={clsx(styles.options, comment.optionsOpen && styles.open)}

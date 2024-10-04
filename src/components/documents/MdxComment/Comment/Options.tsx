@@ -53,7 +53,7 @@ const Options = observer((props: Props) => {
                     ))}
                 </div>
             </div>
-            
+
             <div className={clsx(styles.delete)}>
                 {confirmDelete && (
                     <Button
