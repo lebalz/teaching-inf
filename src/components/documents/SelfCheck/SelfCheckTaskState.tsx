@@ -30,9 +30,11 @@ const SelfCheckTaskState = observer(({ includeQuestion = true, pagePosition }: P
     const solutionDocRoot = useDocumentRoot(context.solutionId, solutionMeta, false);
 
     React.useEffect(() => {
-       taskDocRoot.allDocuments.forEach((doc: DocumentTypes) => {
-           (doc as TaskState).registerSideEffect(new SelfCheckStateSideEffect(doc.authorId, solutionDocRoot));
-       })
+        taskDocRoot.allDocuments.forEach((doc: DocumentTypes) => {
+            (doc as TaskState).registerSideEffect(
+                new SelfCheckStateSideEffect(doc.authorId, solutionDocRoot)
+            );
+        });
     }, [taskDocRoot, taskDocRoot.allDocuments, solutionDocRoot]);
 
     if (!taskDoc) {
