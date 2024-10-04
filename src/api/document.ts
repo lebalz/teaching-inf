@@ -9,6 +9,7 @@ import { Delta } from 'quill/core';
 import Solution from '../models/documents/Solution';
 import Directory from '../models/documents/FileSystem/Directory';
 import File from '../models/documents/FileSystem/File';
+import MdxPage from '@tdev-models/documents/MdxPage';
 
 export enum Access {
     RO_DocumentRoot = 'RO_DocumentRoot',
@@ -30,7 +31,8 @@ export enum DocumentType {
     QuillV2 = 'quill_v2',
     Solution = 'solution',
     Dir = 'dir',
-    File = 'file'
+    File = 'file',
+    MdxPage = 'mdx_page'
 }
 export interface ScriptData {
     code: string;
@@ -70,6 +72,12 @@ export interface TaskStateData {
     state: StateType;
 }
 
+export interface MdxPageData {
+    /**
+     * no content needed
+     */
+}
+
 export interface TypeDataMapping {
     [DocumentType.Script]: ScriptData;
     [DocumentType.TaskState]: TaskStateData;
@@ -79,6 +87,7 @@ export interface TypeDataMapping {
     [DocumentType.Solution]: SolutionData;
     [DocumentType.Dir]: DirData;
     [DocumentType.File]: FileData;
+    [DocumentType.MdxPage]: MdxPageData;
     // Add more mappings as needed
 }
 
@@ -91,6 +100,7 @@ export interface TypeModelMapping {
     [DocumentType.Solution]: Solution;
     [DocumentType.Dir]: Directory;
     [DocumentType.File]: File;
+    [DocumentType.MdxPage]: MdxPage;
     /**
      * Add more mappings as needed
      * TODO: implement the mapping in DocumentRoot.ts
@@ -107,7 +117,8 @@ export type DocumentTypes =
     | QuillV2
     | Solution
     | Directory
-    | File;
+    | File
+    | MdxPage;
 
 export interface Document<Type extends DocumentType> {
     id: string;

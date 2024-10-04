@@ -22,5 +22,5 @@ export default {
     SourceRef: SourceRef,
     Answer: Answer,
     Solution: Solution,
-    MdxPage: MdxPage,
+    MdxPage: MdxPage
 };
