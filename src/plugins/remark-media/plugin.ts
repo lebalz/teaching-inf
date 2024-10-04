@@ -102,7 +102,7 @@ const plugin: Plugin = function plugin(this: Processor, optionsInput?: {}): Tran
                     newNode.attributes.push(
                         toJsxAttribute('style', {
                             width: style.maxWidth || '100%',
-                            aspectRatio: '16 / 9'
+                            aspectRatio: style.height ? undefined : '16 / 9'
                         })
                     );
                     newNode.children.push(youtubeIframe);
