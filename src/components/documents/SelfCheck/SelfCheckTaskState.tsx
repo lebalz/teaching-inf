@@ -2,13 +2,15 @@ import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { useFirstMainDocument } from '@tdev-hooks/useFirstMainDocument';
 import Loader from '@tdev-components/Loader';
-import TaskState from '@tdev-components/documents/TaskState';
+import TaskStateComponent from '@tdev-components/documents/TaskState';
 import { MetaInit, TaskMeta } from '@tdev-models/documents/TaskState';
 import { ModelMeta as SolutionModelMeta } from '@tdev-models/documents/Solution';
 import { useDocumentRoot } from '@tdev-hooks/useDocumentRoot';
 import { NoneAccess } from '@tdev-models/helpers/accessPolicy';
 import { SelfCheckStateType } from '@tdev-components/documents/SelfCheck/models';
 import { SelfCheckContext, SelfCheckStateSideEffect } from '@tdev-components/documents/SelfCheck/shared';
+import { DocumentTypes } from '@tdev-api/document';
+import TaskState from '@tdev-models/documents/TaskState';
 
 interface Props extends MetaInit {
     includeQuestion: boolean;
@@ -28,9 +30,8 @@ const SelfCheckTaskState = observer(({ includeQuestion = true, pagePosition }: P
     const solutionDocRoot = useDocumentRoot(context.solutionId, solutionMeta, false);
 
     React.useEffect(() => {
-       taskDocRoot.allDocuments.forEach(doc => {
-           // TODO: Get rid of this cast.
-           (doc as any).registerSideEffect(new SelfCheckStateSideEffect(doc.authorId, solutionDocRoot));
+       taskDocRoot.allDocuments.forEach((doc: DocumentTypes) => {
+           (doc as TaskState).registerSideEffect(new SelfCheckStateSideEffect(doc.authorId, solutionDocRoot));
        })
     }, [taskDocRoot, taskDocRoot.allDocuments, solutionDocRoot]);
 
@@ -47,7 +48,7 @@ const SelfCheckTaskState = observer(({ includeQuestion = true, pagePosition }: P
         solutionAvailableForCurrentUser ? SelfCheckStateType.Done : null
     ].filter((state) => !!state);
 
-    return <TaskState id={context.taskStateId} states={states} pagePosition={pagePosition} />;
+    return <TaskStateComponent id={context.taskStateId} states={states} pagePosition={pagePosition} />;
 });
 
 export default SelfCheckTaskState;
