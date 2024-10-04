@@ -9,6 +9,10 @@ import { Delta } from 'quill/core';
 import Solution from '../models/documents/Solution';
 import Directory from '../models/documents/FileSystem/Directory';
 import File from '../models/documents/FileSystem/File';
+import MdxComment from '@tdev-models/documents/MdxComment';
+import Page from '@tdev-models/Page';
+import MdxPage from '@tdev-models/documents/MdxPage';
+import { Color } from '@tdev-components/shared/Colors';
 
 export enum Access {
     RO_DocumentRoot = 'RO_DocumentRoot',
@@ -30,7 +34,9 @@ export enum DocumentType {
     QuillV2 = 'quill_v2',
     Solution = 'solution',
     Dir = 'dir',
-    File = 'file'
+    File = 'file',
+    MdxPage = 'mdx_page',
+    MdxComment = 'mdx_comment'
 }
 export interface ScriptData {
     code: string;
@@ -70,6 +76,20 @@ export interface TaskStateData {
     state: StateType;
 }
 
+export interface MdxPageData {
+    /**
+     * no content needed
+     */
+}
+
+export interface MdxCommentData {
+    type: string;
+    nr: number;
+    commentNr: number;
+    isOpen: boolean;
+    color: Color;
+}
+
 export interface TypeDataMapping {
     [DocumentType.Script]: ScriptData;
     [DocumentType.TaskState]: TaskStateData;
@@ -79,6 +99,8 @@ export interface TypeDataMapping {
     [DocumentType.Solution]: SolutionData;
     [DocumentType.Dir]: DirData;
     [DocumentType.File]: FileData;
+    [DocumentType.MdxPage]: MdxPageData;
+    [DocumentType.MdxComment]: MdxCommentData;
     // Add more mappings as needed
 }
 
@@ -91,6 +113,8 @@ export interface TypeModelMapping {
     [DocumentType.Solution]: Solution;
     [DocumentType.Dir]: Directory;
     [DocumentType.File]: File;
+    [DocumentType.MdxPage]: MdxPage;
+    [DocumentType.MdxComment]: MdxComment;
     /**
      * Add more mappings as needed
      * TODO: implement the mapping in DocumentRoot.ts
@@ -107,7 +131,9 @@ export type DocumentTypes =
     | QuillV2
     | Solution
     | Directory
-    | File;
+    | File
+    | MdxPage
+    | MdxComment;
 
 export interface Document<Type extends DocumentType> {
     id: string;

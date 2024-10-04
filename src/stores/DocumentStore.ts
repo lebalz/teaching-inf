@@ -26,6 +26,7 @@ import Solution from '@tdev-models/documents/Solution';
 import { RWAccess } from '@tdev-models/helpers/accessPolicy';
 import Directory from '@tdev-models/documents/FileSystem/Directory';
 import File from '@tdev-models/documents/FileSystem/File';
+import MdxComment from '@tdev-models/documents/MdxComment';
 import MdxPage from '@tdev-models/documents/MdxPage';
 
 export function CreateDocumentModel<T extends DocumentType>(
@@ -52,6 +53,8 @@ export function CreateDocumentModel(data: DocumentProps<DocumentType>, store: Do
             return new File(data as DocumentProps<DocumentType.File>, store);
         case DocumentType.MdxPage:
             return new MdxPage(data as DocumentProps<DocumentType.MdxPage>, store);
+        case DocumentType.MdxComment:
+            return new MdxComment(data as DocumentProps<DocumentType.MdxComment>, store);
     }
 }
 class DocumentStore extends iStore<`delete-${string}`> {

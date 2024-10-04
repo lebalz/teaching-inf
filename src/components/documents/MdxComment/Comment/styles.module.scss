@@ -1,0 +1,24 @@
+.content {
+    border-right: 2px solid var(--comment-ico-color);
+    border-bottom-right-radius: var(--ifm-alert-border-radius);
+    position: relative;
+    .options {
+        position: absolute;
+        top: 0em;
+        right: -1em;
+        z-index: var(--ifm-z-index-dropdown);
+        display: none;
+        cursor: pointer;
+        &.open {
+            display: block;
+        }
+    }
+    &:hover {
+        .options {
+            display: block;
+        }
+    }
+    .quill {
+        --ifm-color-primary: var(--comment-ico-color);
+    }
+}
