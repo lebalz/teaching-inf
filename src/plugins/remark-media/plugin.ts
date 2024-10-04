@@ -43,7 +43,6 @@ const plugin: Plugin = function plugin(this: Processor, optionsInput?: {}): Tran
             }
             switch (directive.name) {
                 case LeafDirectiveName.VIDEO:
-                    console.log(style);
                     newNode.name = 'video';
                     if (attributes.autoplay || attributes.autoplay === '') {
                         newNode.attributes.push(toJsxAttribute('autoPlay', ''));
@@ -99,12 +98,13 @@ const plugin: Plugin = function plugin(this: Processor, optionsInput?: {}): Tran
                         data: {}
                     };
 
-                    console.log(style);
                     newNode.name = 'div';
-                    newNode.attributes.push(toJsxAttribute('style', {
-                        width: style.maxWidth || '100%',
-                        aspectRatio: '16 / 9',
-                    }));
+                    newNode.attributes.push(
+                        toJsxAttribute('style', {
+                            width: style.maxWidth || '100%',
+                            aspectRatio: '16 / 9'
+                        })
+                    );
                     newNode.children.push(youtubeIframe);
                     break;
                 case LeafDirectiveName.CIRCUITVERSE:
