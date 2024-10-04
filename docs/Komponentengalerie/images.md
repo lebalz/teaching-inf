@@ -27,6 +27,10 @@ mit einem gleichnamigen `.json`-File:
 ![Streetfood Festival --width=450px](./images/street-food.jpg)
 </BrowserWindow>
 
+:::warning[Formatierte Bildunterschrift]
+Die Bildunterschrift kann aktuell nicht formatiert werden.
+:::
+
 Wenn keine Bildunterschrift benötigt wird, kann die Quellenangabe mit `--inlineCaption` auch in das Bild hinein verschoben werden:
 
 ```md
@@ -37,9 +41,6 @@ Wenn keine Bildunterschrift benötigt wird, kann die Quellenangabe mit `--inline
 ![--width=450px --inlineCaption](./images/street-food.jpg)
 </BrowserWindow>
 
-:::warning[Formatierte Bildunterschrift]
-Die Bildunterschrift kann aktuell nicht formatiert werden.
-:::
 
 ## Installation
 
