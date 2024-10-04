@@ -124,6 +124,10 @@ const plugin: Plugin = function plugin(
                     }
                 } as MdxJsxFlowElement | MdxJsxTextElement;
 
+                if ((options as any).inlineCaption) {
+                    caption.attributes.push(toJsxAttribute('className', 'inline'));
+                }
+
                 if (cleanedAlt) {
                     const altAst = this.parse(cleanedAlt) as unknown as Parent;
                     const isWrappedByParagraph =
