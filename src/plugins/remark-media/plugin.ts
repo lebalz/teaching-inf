@@ -43,6 +43,7 @@ const plugin: Plugin = function plugin(this: Processor, optionsInput?: {}): Tran
             }
             switch (directive.name) {
                 case LeafDirectiveName.VIDEO:
+                    console.log(style);
                     newNode.name = 'video';
                     if (attributes.autoplay || attributes.autoplay === '') {
                         newNode.attributes.push(toJsxAttribute('autoPlay', ''));
@@ -84,7 +85,7 @@ const plugin: Plugin = function plugin(this: Processor, optionsInput?: {}): Tran
                         name: 'iframe',
                         attributes: [
                             toJsxAttribute('width', '100%'),
-                            toJsxAttribute('height', '100%'),
+                            toJsxAttribute('height', style.height || '100%'),
                             toJsxAttribute('src', src),
                             toJsxAttribute('title', 'YouTube video player'),
                             toJsxAttribute('frameBorder', '0'),
@@ -98,9 +99,10 @@ const plugin: Plugin = function plugin(this: Processor, optionsInput?: {}): Tran
                         data: {}
                     };
 
+                    console.log(style);
                     newNode.name = 'div';
                     newNode.attributes.push(toJsxAttribute('style', {
-                        width: style.width || '100%',
+                        width: style.maxWidth || '100%',
                         aspectRatio: '16 / 9',
                     }));
                     newNode.children.push(youtubeIframe);
