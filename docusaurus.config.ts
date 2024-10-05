@@ -181,8 +181,6 @@ const config: Config = {
           // Remove this to remove the "edit this page" links.
           editUrl:
             'https://github.com/GBSL-Informatik/teaching-dev/edit/main/',
-          remarkPlugins: REMARK_PLUGINS,
-          rehypePlugins: REHYPE_PLUGINS,
           beforeDefaultRemarkPlugins: BEFORE_DEFAULT_REMARK_PLUGINS,
         },
         pages: {
