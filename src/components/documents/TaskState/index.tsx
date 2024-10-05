@@ -7,6 +7,8 @@ import {
     mdiAccountQuestionOutline,
     mdiCheckboxBlankOutline,
     mdiCheckboxMarkedOutline,
+    mdiClockCheckOutline,
+    mdiProgressCheck,
     mdiStar,
     mdiStarHalfFull,
     mdiStarOutline
@@ -28,8 +30,10 @@ export const mdiIcon: { [key in StateType]: string } = {
     unset: mdiCheckboxBlankOutline,
     question: mdiAccountQuestionOutline,
     star: mdiStar,
-    ['star-half']: mdiStarHalfFull,
-    ['star-empty']: mdiStarOutline
+    'star-half': mdiStarHalfFull,
+    'star-empty': mdiStarOutline,
+    'clock-check': mdiClockCheckOutline,
+    'progress-check': mdiProgressCheck
 };
 
 export const mdiBgColor: { [key in StateType]: string } = {
@@ -37,8 +41,10 @@ export const mdiBgColor: { [key in StateType]: string } = {
     unset: '--ifm-color-secondary',
     question: '--ifm-color-warning',
     star: '--ifm-color-primary',
-    ['star-empty']: '--ifm-color-primary',
-    ['star-half']: '--ifm-color-primary'
+    'star-empty': '--ifm-color-primary',
+    'star-half': '--ifm-color-primary',
+    'clock-check': '--ifm-color-primary', // TODO.
+    'progress-check': '--ifm-color-primary' // TODO.
 };
 export const mdiColor: { [key in StateType]: string } = {
     checked: 'white',
@@ -46,7 +52,9 @@ export const mdiColor: { [key in StateType]: string } = {
     question: 'white',
     star: 'gold',
     'star-empty': 'gold',
-    'star-half': 'gold'
+    'star-half': 'gold',
+    'clock-check': 'gold', // TODO.
+    'progress-check': 'gold' // TODO.
 };
 
 interface Props extends MetaInit {
