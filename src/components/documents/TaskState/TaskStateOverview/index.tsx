@@ -21,7 +21,7 @@ export const mdiColor: { [key in StateType]: string } = {
     ['star-empty']: '--ifm-color-primary',
     ['star-half']: '--ifm-color-primary',
     ['clock-check']: '--ifm-color-danger',
-    ['progress-check']: '--ifm-color-info',
+    ['progress-check']: '--ifm-color-info'
 };
 
 interface OverviewIconProps {
