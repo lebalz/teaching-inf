@@ -21,6 +21,7 @@ interface OptionsInput {
     vFile?: {
         history: string[];
     };
+    inlineEmptyCaptions?: boolean;
 }
 
 const SPACER_SPAN = {
@@ -124,7 +125,10 @@ const plugin: Plugin = function plugin(
                     }
                 } as MdxJsxFlowElement | MdxJsxTextElement;
 
-                if ((options as any).inlineCaption) {
+                const { inlineCaption = false } = options as any;
+                const { inlineEmptyCaptions = true } = optionsInput;
+                const captionEmpty = /^\s*$/.test(cleanedAlt);
+                if (inlineCaption || (captionEmpty && inlineEmptyCaptions)) {
                     caption.attributes.push(toJsxAttribute('className', 'inline'));
                 }
 
