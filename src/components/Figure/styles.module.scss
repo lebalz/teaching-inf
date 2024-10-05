@@ -15,7 +15,7 @@
         margin-top: 0.5em;
         margin-bottom: 0.5em;
 
-        :global &.inline {
+        &:global(.inline) {
             position: absolute;
             bottom: 0;
             right: 0;
@@ -29,7 +29,7 @@
     }
 }
 
-:global .card__image {
+:global(.card__image) {
     figure.figure {
         width: 100%;
     }
