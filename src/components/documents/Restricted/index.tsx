@@ -36,7 +36,9 @@ const Restricted = observer((props: Props) => {
             )}
             <div className={styles.adminControls}>
                 {userStore.current?.isAdmin && <PermissionsPanel documentRootId={docRoot.id} />}
-                {NoneAccess.has(docRoot.permission) && <span className="badge badge--secondary">Hidden</span>}
+                {userStore.current?.isAdmin && NoneAccess.has(docRoot.permission) && (
+                    <span className="badge badge--secondary">Hidden</span>
+                )}
             </div>
         </div>
     );
