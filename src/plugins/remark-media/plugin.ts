@@ -9,7 +9,8 @@ enum LeafDirectiveName {
     VIDEO = 'video',
     AUDIO = 'audio',
     YOUTUBE = 'youtube',
-    CIRCUITVERSE = 'circuitverse'
+    CIRCUITVERSE = 'circuitverse',
+    LEARNINGAPPS = 'learningapps'
 }
 const DirectiveNames = Object.values(LeafDirectiveName) as string[];
 
@@ -113,6 +114,20 @@ const plugin: Plugin = function plugin(this: Processor, optionsInput?: {}): Tran
                     newNode.attributes.push(toJsxAttribute('height', style.height || '315px'));
                     newNode.attributes.push(toJsxAttribute('src', src));
                     newNode.attributes.push(toJsxAttribute('title', 'Circuit Verse'));
+                    newNode.attributes.push(toJsxAttribute('frameBorder', '0'));
+                    newNode.attributes.push(toJsxAttribute('scrolling', 'no'));
+                    newNode.attributes.push(toJsxAttribute('webkitallowfullscreen', ''));
+                    newNode.attributes.push(toJsxAttribute('mozAllowFullScreen', ''));
+                    newNode.attributes.push(toJsxAttribute('allowFullScreen', ''));
+                    break;
+                case LeafDirectiveName.LEARNINGAPPS:
+                    const appId = new URL(src).pathname.split('/')[1];
+                    const transformedSrc = `https://learningapps.org/watch?app=${appId}`;
+                    newNode.name = 'iframe';
+                    newNode.attributes.push(toJsxAttribute('width', style.width || '100%'));
+                    newNode.attributes.push(toJsxAttribute('height', style.height || '500px'));
+                    newNode.attributes.push(toJsxAttribute('src', transformedSrc));
+                    newNode.attributes.push(toJsxAttribute('title', 'Learningapps'));
                     newNode.attributes.push(toJsxAttribute('frameBorder', '0'));
                     newNode.attributes.push(toJsxAttribute('scrolling', 'no'));
                     newNode.attributes.push(toJsxAttribute('webkitallowfullscreen', ''));
