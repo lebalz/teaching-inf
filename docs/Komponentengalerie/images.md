@@ -31,15 +31,31 @@ mit einem gleichnamigen `.json`-File:
 Die Bildunterschrift kann aktuell nicht formatiert werden.
 :::
 
-Wenn keine Bildunterschrift benötigt wird, kann die Quellenangabe mit `--inlineCaption` auch in das Bild hinein verschoben werden:
+## Inlining der Quellenangabe
+Wenn keine Bildunterschrift angegeben wird, wird die Quellenangabe automatisch _inlined_ (also in das Bild hineinverschoben):
 
 ```md
-![--width=450px --inlineCaption](./images/street-food.jpg)
+![--width=450px](./images/street-food.jpg)
 ```
 
 <BrowserWindow>
-![--width=450px --inlineCaption](./images/street-food.jpg)
+![--width=450px](./images/street-food.jpg)
 </BrowserWindow>
+
+Dieses Verhalten kann mit der Plugin-Option `inlineEmptyCaptions: false` deaktiviert werden ([siehe unten](#automatisches-inlining-deaktivieren)).
+
+Zudem kann das Inlining der Quellenangabe (und Bildunterschrift, falls vorhanden) mit der Option `--inlineCaption` auch für ein einzelnes Bild erzwingen oder verhindert werden:
+
+ ```md
+![Schneebedeckte Strasse --width=450px --inlineCaption={true}](./images/snowy-street.jpg)
+```
+
+<BrowserWindow>
+![Schneebedeckte Strasse --width=450px --inlineCaption={true}](./images/snowy-street.jpg)
+</BrowserWindow>
+
+
+
 
 
 ## Installation
@@ -105,6 +121,16 @@ const config: Config = {
 
 ```
 :::
+
+### Automatisches Inlining deaktivieren
+Um das automatische Inlining von leeren Bildunterschriften zu deaktivieren, können die Plugin-Optionen wie folgt ergänzt werden:
+
+```ts
+[
+    imagePlugin,
+    { inlineEmptyCaptions: false, ... }
+]
+```
 
 ### VS Code
 Damit die Bild-Quellen einfach eingefügt werden können, kann folgendes Snippet unter hinzugefügt werden. So wird beim Eintippen von `src` in einem `.json`-File automatisch die Quellenangabe eingefügt.
