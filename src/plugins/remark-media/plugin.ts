@@ -79,19 +79,33 @@ const plugin: Plugin = function plugin(this: Processor, optionsInput?: {}): Tran
                     });
                     break;
                 case LeafDirectiveName.YOUTUBE:
-                    newNode.name = 'iframe';
-                    newNode.attributes.push(toJsxAttribute('width', style.width || '100%'));
-                    newNode.attributes.push(toJsxAttribute('height', style.height || '315px'));
-                    newNode.attributes.push(toJsxAttribute('src', src));
-                    newNode.attributes.push(toJsxAttribute('title', 'YouTube video player'));
-                    newNode.attributes.push(toJsxAttribute('frameBorder', '0'));
+                    const youtubeIframe: MdxJsxFlowElement = {
+                        type: 'mdxJsxFlowElement',
+                        name: 'iframe',
+                        attributes: [
+                            toJsxAttribute('width', '100%'),
+                            toJsxAttribute('height', style.height || '100%'),
+                            toJsxAttribute('src', src),
+                            toJsxAttribute('title', 'YouTube video player'),
+                            toJsxAttribute('frameBorder', '0'),
+                            toJsxAttribute('allowFullScreen', ''),
+                            toJsxAttribute(
+                                'allow',
+                                'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
+                            )
+                        ],
+                        children: [],
+                        data: {}
+                    };
+
+                    newNode.name = 'div';
                     newNode.attributes.push(
-                        toJsxAttribute(
-                            'allow',
-                            'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-                        )
+                        toJsxAttribute('style', {
+                            width: style.maxWidth || '100%',
+                            aspectRatio: style.height ? undefined : '16 / 9'
+                        })
                     );
-                    newNode.attributes.push(toJsxAttribute('allowFullScreen', ''));
+                    newNode.children.push(youtubeIframe);
                     break;
                 case LeafDirectiveName.CIRCUITVERSE:
                     newNode.name = 'iframe';
