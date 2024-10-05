@@ -50,26 +50,26 @@ Die im Task State verfügbaren Zustände sind abhängig davon, ob die Lösung be
 
 Die Interpretation der verschiedenen Zustände ist wie folgt vorgesehen:
 
-| Zustand                                                | Interpretation                                                                                                                                                                                                    |
-|--------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| :mdi[checkbox-blank-outline] Offen                     | Aufgabe in Bearbeitung / noch nicht begonnen.                                                                                                                                                                     |
-| :mdi[account-question-outline]{.orange} Frage          | Die Schülerin braucht zur weiteren Bearbeitung die Unterstützung der Lehrperson. Dieser Status ist optional und kann mit `<SelfCheckTaskState includeQuestion={false} />` entfernt werden.                        |
-| :mdi[star-outline]{color=gold} Warten auf Musterlösung | Der Schüler ist mit der Bearbeitung der Aufgabe fertig, die Musterlösung ist jedoch noch nicht verfügbar. Die Lehrperson kann nun die Musterlösung freischalten oder den/die Schüler:in um Überarbeitung bitten.  |
-| :mdi[star]{color=gold} Korrektur                       | Die Schülerin ist mit der Bearbeitung der Aufgabe fertig, die Musterlösung ist verfügbar. Die eigene Antwort soll nun mit der Musterlösung verglichen und bei Bedarf verbesser werden.                            |
-| :mdi[checkbox-marked-outline]{.green} Fertig           | Die Bearbeitung der Aufgabe ist abgeschlossen - die eigene Antwort des Schülers ist nun vollständig und korrekt.                                                                                                  |
+| Zustand                                                                                                 | Interpretation                                                                                                                                                                                                   |
+|---------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| :mdi[checkbox-blank-outline] Offen                                                                      | Aufgabe in Bearbeitung / noch nicht begonnen.                                                                                                                                                                    |
+| :mdi[account-question-outline]{.orange} Frage                                                           | Die Schülerin braucht zur weiteren Bearbeitung die Unterstützung der Lehrperson. Dieser Status ist optional und kann mit `<SelfCheckTaskState includeQuestion={false} />` entfernt werden.                       |
+| :mdi[clock-check-outline]{color=var(--ifm-color-secondary-contrast-foreground)} Warten auf Musterlösung | Der Schüler ist mit der Bearbeitung der Aufgabe fertig, die Musterlösung ist jedoch noch nicht verfügbar. Die Lehrperson kann nun die Musterlösung freischalten oder den/die Schüler:in um Überarbeitung bitten. |
+| :mdi[progress-check]{color=var(--ifm-color-info)} Korrektur                                             | Die Schülerin ist mit der Bearbeitung der Aufgabe fertig, die Musterlösung ist verfügbar. Die eigene Antwort soll nun mit der Musterlösung verglichen und bei Bedarf verbesser werden.                           |
+| :mdi[checkbox-marked-outline]{.green} Fertig                                                            | Die Bearbeitung der Aufgabe ist abgeschlossen - die eigene Antwort des Schülers ist nun vollständig und korrekt.                                                                                                 |
 
 ## Statusabhängige Sichtbarkeit
 Wenn gewisse Elemente (z.B. die Musterlösung, Hinweise, etc.) nur während bestimmten Zuständen sichtbar sein sollen, eignen sich die Komponenten `<SelfCheckSolution>` (für die Lösung; muss pro `<SelfCheck>` genau einmal vorhanden sein) und `<SelfCheckContent>` (für beliebige Inhalte). Das hier beschriebene Verhalten ist für beide Komponenten identisch. Zusätzlich stehen bei der `<SelfCheckSolution>` auch alle Parameter der [`<Solution>`](./solutions.md) zur Verfügung.
 
 Standardmässig zeigen diese Komponenten ihren Inhalt nur in den Zuständen _Warten auf Musterlösung_ und _Korrektur_ an. Dies kann mit den Eigenschaften `visibleFrom` und `visibleTo` angepasst werden. Es stehen dafür je folgende Konstanten zur Verfügung:
 
-| Zustand                                                | Konstante                               |
-|--------------------------------------------------------|-----------------------------------------|
-| :mdi[checkbox-blank-outline] Offen                     | `SelfCheckStateType.Open`               |
-| :mdi[account-question-outline]{.orange} Frage          | `SelfCheckStateType.Question`           |
-| :mdi[star-outline]{color=gold} Warten auf Musterlösung | `SelfCheckStateType.WaitingForSolution` |
-| :mdi[star]{color=gold} Korrektur                       | `SelfCheckStateType.Reviewing`          |
-| :mdi[checkbox-marked-outline]{.green} Fertig           | `SelfCheckStateType.Done`               |
+| Zustand                                                                                                 | Konstante                               |
+|---------------------------------------------------------------------------------------------------------|-----------------------------------------|
+| :mdi[checkbox-blank-outline] Offen                                                                      | `SelfCheckStateType.Open`               |
+| :mdi[account-question-outline]{.orange} Frage                                                           | `SelfCheckStateType.Question`           |
+| :mdi[clock-check-outline]{color=var(--ifm-color-secondary-contrast-foreground)} Warten auf Musterlösung | `SelfCheckStateType.WaitingForSolution` |
+| :mdi[progress-check]{color=var(--ifm-color-info)} Korrektur                                             | `SelfCheckStateType.Reviewing`          |
+| :mdi[checkbox-marked-outline]{.green} Fertig                                                            | `SelfCheckStateType.Done`               |
 
 Zudem zeigt sie ihren Inhalt für Lehrpersonen standardmässig immer an. Dieses Verhalten kann mit `<SelfCheckContent alwaysVisibleForTeacher={false}>` (resp. `<SelfCheckSolution alwaysVisibleForTeacher={false}>`) angepasst werden.
 

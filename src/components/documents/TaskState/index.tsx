@@ -43,8 +43,8 @@ export const mdiBgColor: { [key in StateType]: string } = {
     star: '--ifm-color-primary',
     'star-empty': '--ifm-color-primary',
     'star-half': '--ifm-color-primary',
-    'clock-check': '--ifm-color-primary', // TODO.
-    'progress-check': '--ifm-color-primary' // TODO.
+    'clock-check': '--ifm-color-secondary',
+    'progress-check': '--ifm-color-info'
 };
 export const mdiColor: { [key in StateType]: string } = {
     checked: 'white',
@@ -53,8 +53,8 @@ export const mdiColor: { [key in StateType]: string } = {
     star: 'gold',
     'star-empty': 'gold',
     'star-half': 'gold',
-    'clock-check': 'gold', // TODO.
-    'progress-check': 'gold' // TODO.
+    'clock-check': 'black',
+    'progress-check': 'white'
 };
 
 interface Props extends MetaInit {
