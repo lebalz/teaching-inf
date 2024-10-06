@@ -9,6 +9,7 @@ import { Delta } from 'quill/core';
 import Solution from '../models/documents/Solution';
 import Directory from '../models/documents/FileSystem/Directory';
 import File from '../models/documents/FileSystem/File';
+import Restricted from '@tdev-models/documents/Restricted';
 
 export enum Access {
     RO_DocumentRoot = 'RO_DocumentRoot',
@@ -30,7 +31,8 @@ export enum DocumentType {
     QuillV2 = 'quill_v2',
     Solution = 'solution',
     Dir = 'dir',
-    File = 'file'
+    File = 'file',
+    Restricted = 'restricted'
 }
 export interface ScriptData {
     code: string;
@@ -51,6 +53,10 @@ export interface QuillV2Data {
 }
 
 export interface SolutionData {
+    /** no content needed */
+}
+
+export interface RestrictedData {
     /** no content needed */
 }
 
@@ -87,6 +93,7 @@ export interface TypeDataMapping {
     [DocumentType.Solution]: SolutionData;
     [DocumentType.Dir]: DirData;
     [DocumentType.File]: FileData;
+    [DocumentType.Restricted]: RestrictedData;
     // Add more mappings as needed
 }
 
@@ -99,6 +106,7 @@ export interface TypeModelMapping {
     [DocumentType.Solution]: Solution;
     [DocumentType.Dir]: Directory;
     [DocumentType.File]: File;
+    [DocumentType.Restricted]: Restricted;
     /**
      * Add more mappings as needed
      * TODO: implement the mapping in DocumentRoot.ts

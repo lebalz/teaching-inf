@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
 import Loader from '@tdev-components/Loader';
-import { MetaInit, ModelMeta } from '@tdev-models/documents/Solution';
+import { MetaInit, ModelMeta } from '@tdev-models/documents/Restricted';
 import { useDocumentRoot } from '@tdev-hooks/useDocumentRoot';
 import { Access } from '@tdev-api/document';
 import { useStore } from '@tdev-hooks/useStore';
@@ -36,7 +36,9 @@ const Restricted = observer((props: Props) => {
             )}
             <div className={styles.adminControls}>
                 {userStore.current?.isAdmin && <PermissionsPanel documentRootId={docRoot.id} />}
-                {NoneAccess.has(docRoot.permission) && <span className="badge badge--secondary">Hidden</span>}
+                {userStore.current?.isAdmin && NoneAccess.has(docRoot.permission) && (
+                    <span className="badge badge--secondary">Hidden</span>
+                )}
             </div>
         </div>
     );
