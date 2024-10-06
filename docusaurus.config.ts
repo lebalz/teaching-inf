@@ -69,7 +69,8 @@ const REMARK_PLUGINS = [
       componentsToEnumerate: ['Answer', 'TaskState'],
     }
   ],
-  pagePlugin
+  pagePlugin,
+  commentPlugin
 ];
 const REHYPE_PLUGINS = [
   rehypeKatex
@@ -171,7 +172,7 @@ const config: Config = {
           // Remove this to remove the "edit this page" links.
           editUrl:
             'https://github.com/GBSL-Informatik/teaching-dev/edit/main/',
-          remarkPlugins: [...REMARK_PLUGINS, commentPlugin], /* TODO: revert */
+          remarkPlugins: REMARK_PLUGINS,
           rehypePlugins: REHYPE_PLUGINS,
           beforeDefaultRemarkPlugins: BEFORE_DEFAULT_REMARK_PLUGINS,
         },
@@ -181,6 +182,8 @@ const config: Config = {
           // Remove this to remove the "edit this page" links.
           editUrl:
             'https://github.com/GBSL-Informatik/teaching-dev/edit/main/',
+            remarkPlugins: REMARK_PLUGINS,
+            rehypePlugins: REHYPE_PLUGINS,
           beforeDefaultRemarkPlugins: BEFORE_DEFAULT_REMARK_PLUGINS,
         },
         pages: {
