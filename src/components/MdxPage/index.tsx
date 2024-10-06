@@ -6,14 +6,17 @@ import { useDocumentRoot } from '@tdev-hooks/useDocumentRoot';
 import { DocumentType } from '@tdev-api/document';
 import { ModelMeta } from '@tdev-models/documents/MdxPage';
 
+interface Props {
+    pageId: string;
+}
+
 /**
  * This component is used to load the current page and its content.
  */
-const MdxPage = observer(() => {
-    const { frontMatter } = useDoc();
+const MdxPage = observer((props: Props) => {
     const pageStore = useStore('pageStore');
     const userStore = useStore('userStore');
-    const pageId = (frontMatter as { page_id: string }).page_id;
+    const { pageId } = props;
     useDocumentRoot(pageId, new ModelMeta({}), false);
     React.useEffect(() => {
         if (pageId) {

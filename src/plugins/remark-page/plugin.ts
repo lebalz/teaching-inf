@@ -1,6 +1,7 @@
 import type { Transformer } from 'unified';
 import { Node, Parent } from 'unist';
 import type { MdxJsxFlowElement } from 'mdast-util-mdx';
+import { toJsxAttribute } from '../helpers';
 
 /**
  * A remark plugin that adds a `<MdxPage /> elements at the top of the current page.
@@ -10,12 +11,17 @@ import type { MdxJsxFlowElement } from 'mdast-util-mdx';
 const plugin = function plugin(): Transformer {
     return async (root, file) => {
         const { visit, EXIT } = await import('unist-util-visit');
+        const { page_id } = (file.data?.frontMatter || {}) as { page_id?: string };
+        if (!page_id) {
+            return;
+        }
         visit(root, (node, index, parent: Node | undefined) => {
+            /** add the MdxPage exactly once at the top of the document and exit */
             if (root === node && !parent) {
                 const loaderNode: MdxJsxFlowElement = {
                     type: 'mdxJsxFlowElement',
                     name: 'MdxPage',
-                    attributes: [],
+                    attributes: [toJsxAttribute('pageId', page_id)],
                     children: [],
                     data: {}
                 };
