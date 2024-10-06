@@ -32,7 +32,7 @@ export function CreateDocumentModel<T extends DocumentType>(
     data: DocumentProps<T>,
     store: DocumentStore
 ): TypeModelMapping[T];
-export function CreateDocumentModel(data: DocumentProps<DocumentType>, store: DocumentStore): DocumentTypes {
+export function CreateDocumentModel(data: DocumentProps<DocumentType>, store: DocumentStore): DocumentTypes | undefined {
     switch (data.type) {
         case DocumentType.Script:
             return new Script(data as DocumentProps<DocumentType.Script>, store);
@@ -108,9 +108,8 @@ class DocumentStore extends iStore<`delete-${string}`> {
         if (!data) {
             return;
         }
-
         const model = CreateDocumentModel(data, this);
-        if (!model.root) {
+        if (!model?.root) {
             return;
         }
 

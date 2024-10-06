@@ -1,9 +1,7 @@
 import React from 'react';
-import { useDoc } from '@docusaurus/plugin-content-docs/client';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@tdev-hooks/useStore';
 import { useDocumentRoot } from '@tdev-hooks/useDocumentRoot';
-import { DocumentType } from '@tdev-api/document';
 import { ModelMeta } from '@tdev-models/documents/MdxPage';
 
 interface Props {
