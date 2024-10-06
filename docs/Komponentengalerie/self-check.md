@@ -138,3 +138,14 @@ Lösung zur zweiten Aufgabe 🥳
 </SelfCheckContent>
 </SelfCheck>
 </BrowserWindow>
+
+## Erforderliche Konfiguration
+Damit für die Selfcheck TaskStates eine TaskState-Übersicht generiert wird, muss in `docusaurus.config.ts` bei der Konfiguration des `enumerateAnswersPlugin` der Komponententyp `SelfCheckTaskState` registriert werden:
+```ts title="docusaurus.config.ts" {4}
+[
+  enumerateAnswersPlugin,
+  {
+    componentsToEnumerate: ['SelfCheckTaskState', ...],
+  }
+]
+```
