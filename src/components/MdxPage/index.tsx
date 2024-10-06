@@ -1,10 +1,8 @@
 import React from 'react';
-import { useDoc } from '@docusaurus/plugin-content-docs/client';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@tdev-hooks/useStore';
 import { useDocumentRoot } from '@tdev-hooks/useDocumentRoot';
-import { DocumentType } from '@tdev-api/document';
-import { ModelMeta } from '@tdev-models/documents/MdxPage';
+import { DummyMeta } from '@tdev-models/DocumentRoot';
 
 interface Props {
     pageId: string;
@@ -17,7 +15,7 @@ const MdxPage = observer((props: Props) => {
     const pageStore = useStore('pageStore');
     const userStore = useStore('userStore');
     const { pageId } = props;
-    useDocumentRoot(pageId, new ModelMeta({}), false);
+    useDocumentRoot(pageId, new DummyMeta(), false);
     React.useEffect(() => {
         if (pageId) {
             pageStore.addIfNotPresent(pageId, true);

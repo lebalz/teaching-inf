@@ -15,8 +15,8 @@ import flexCardsPlugin from './src/plugins/remark-flex-cards/plugin';
 import imagePlugin from './src/plugins/remark-images/plugin';
 import mediaPlugin from './src/plugins/remark-media/plugin';
 import detailsPlugin from './src/plugins/remark-details/plugin';
-import commentPlugin from './src/plugins/remark-comments/plugin';
 import pagePlugin from './src/plugins/remark-page/plugin';
+import commentPlugin from './src/plugins/remark-comments/plugin';
 import themeCodeEditor from './src/plugins/theme-code-editor'
 import enumerateAnswersPlugin from './src/plugins/remark-enumerate-components/plugin';
 import { v4 as uuidv4 } from 'uuid';

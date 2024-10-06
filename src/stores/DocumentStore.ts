@@ -51,8 +51,6 @@ export function CreateDocumentModel(data: DocumentProps<DocumentType>, store: Do
             return new Directory(data as DocumentProps<DocumentType.Dir>, store);
         case DocumentType.File:
             return new File(data as DocumentProps<DocumentType.File>, store);
-        case DocumentType.MdxPage:
-            return new MdxPage(data as DocumentProps<DocumentType.MdxPage>, store);
         case DocumentType.MdxComment:
             return new MdxComment(data as DocumentProps<DocumentType.MdxComment>, store);
     }
@@ -111,9 +109,8 @@ class DocumentStore extends iStore<`delete-${string}`> {
         if (!data) {
             return;
         }
-
         const model = CreateDocumentModel(data, this);
-        if (!model.root) {
+        if (!model?.root) {
             return;
         }
 
