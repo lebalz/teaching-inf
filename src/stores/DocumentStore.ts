@@ -32,7 +32,7 @@ export function CreateDocumentModel<T extends DocumentType>(
     data: DocumentProps<T>,
     store: DocumentStore
 ): TypeModelMapping[T];
-export function CreateDocumentModel(data: DocumentProps<DocumentType>, store: DocumentStore): DocumentTypes | undefined {
+export function CreateDocumentModel(data: DocumentProps<DocumentType>, store: DocumentStore): DocumentTypes {
     switch (data.type) {
         case DocumentType.Script:
             return new Script(data as DocumentProps<DocumentType.Script>, store);
@@ -50,8 +50,6 @@ export function CreateDocumentModel(data: DocumentProps<DocumentType>, store: Do
             return new Directory(data as DocumentProps<DocumentType.Dir>, store);
         case DocumentType.File:
             return new File(data as DocumentProps<DocumentType.File>, store);
-        case DocumentType.MdxPage:
-            return new MdxPage(data as DocumentProps<DocumentType.MdxPage>, store);
     }
 }
 class DocumentStore extends iStore<`delete-${string}`> {
