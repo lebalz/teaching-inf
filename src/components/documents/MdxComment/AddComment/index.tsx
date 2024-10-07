@@ -11,7 +11,7 @@ import { useStore } from '@tdev-hooks/useStore';
 import { Delta } from 'quill/core';
 
 interface Props extends MdxCommentData {
-    id: string;
+    pageId: string;
 }
 
 const AddComment = observer((props: Props) => {
@@ -23,7 +23,7 @@ const AddComment = observer((props: Props) => {
                 onClick={() => {
                     documentStore
                         .create({
-                            documentRootId: props.id,
+                            documentRootId: props.pageId,
                             type: DocumentType.MdxComment,
                             data: {
                                 commentNr: props.commentNr,
@@ -36,7 +36,7 @@ const AddComment = observer((props: Props) => {
                         .then((comment) => {
                             if (comment) {
                                 return documentStore.create({
-                                    documentRootId: props.id,
+                                    documentRootId: props.pageId,
                                     parentId: comment.id,
                                     type: DocumentType.QuillV2,
                                     data: {

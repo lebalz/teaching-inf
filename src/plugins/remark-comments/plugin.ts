@@ -1,13 +1,13 @@
 import type { Transformer } from 'unified';
 import { Node, Parent } from 'unist';
 import type { MdxJsxFlowElement, MdxJsxTextElement } from 'mdast-util-mdx';
+import { toJsxAttribute } from '../helpers';
 
 const COMMENTABLE_BLOCK_TYPES = new Set([
     'paragraph',
     'blockquote',
     'heading',
     'code',
-    'list',
     'thematicBreak',
     'html',
     'jsx'
@@ -24,6 +24,10 @@ export interface PluginOptions {
  */
 const plugin = function plugin(options: PluginOptions): Transformer {
     return async (root, file) => {
+        const { page_id } = (file.data?.frontMatter || {}) as { page_id?: string };
+        if (!page_id) {
+            return;
+        }
         const { visit } = await import('unist-util-visit');
         const commentableNodes = new Set(options?.commentable || COMMENTABLE_BLOCK_TYPES);
         let nodeNr = 0;
@@ -45,61 +49,10 @@ const plugin = function plugin(options: PluginOptions): Transformer {
                         type: 'mdxJsxFlowElement',
                         name: 'MdxComment',
                         attributes: [
-                            {
-                                type: 'mdxJsxAttribute',
-                                name: 'nr',
-                                value: {
-                                    type: 'mdxJsxAttributeValueExpression',
-                                    value: `${typeNr}`,
-                                    data: {
-                                        estree: {
-                                            type: 'Program',
-                                            body: [
-                                                {
-                                                    type: 'ExpressionStatement',
-                                                    expression: {
-                                                        type: 'Literal',
-                                                        value: typeNr,
-                                                        raw: `${typeNr}`
-                                                    }
-                                                }
-                                            ],
-                                            sourceType: 'module',
-                                            comments: []
-                                        }
-                                    }
-                                }
-                            },
-                            {
-                                type: 'mdxJsxAttribute',
-                                name: 'nodeNr',
-                                value: {
-                                    type: 'mdxJsxAttributeValueExpression',
-                                    value: `${nodeNr}`,
-                                    data: {
-                                        estree: {
-                                            type: 'Program',
-                                            body: [
-                                                {
-                                                    type: 'ExpressionStatement',
-                                                    expression: {
-                                                        type: 'Literal',
-                                                        value: nodeNr,
-                                                        raw: `${nodeNr}`
-                                                    }
-                                                }
-                                            ],
-                                            sourceType: 'module',
-                                            comments: []
-                                        }
-                                    }
-                                }
-                            },
-                            {
-                                type: 'mdxJsxAttribute',
-                                name: 'type',
-                                value: node.type
-                            }
+                            toJsxAttribute('nr', typeNr),
+                            toJsxAttribute('nodeNr', nodeNr),
+                            toJsxAttribute('type', node.type),
+                            toJsxAttribute('pageId', page_id)
                         ],
                         children: [],
                         data: {}
