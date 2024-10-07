@@ -67,7 +67,7 @@ const plugin = function plugin(options: PluginOptions): Transformer {
         if (!page_id) {
             return;
         }
-        const { visit, SKIP, EXIT } = await import('unist-util-visit');
+        const { visit, SKIP } = await import('unist-util-visit');
         const commentableNodes = new Set(options?.commentable || COMMENTABLE_BLOCK_TYPES);
         const commentableJsxFlowElements = new Set(options?.commentableJsxFlowElements || []);
         const ignoredJsxFlowElements = new Set(options?.ignoreJsxFlowElements || []);

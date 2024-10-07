@@ -44,7 +44,11 @@ const Comment = observer((props: Props) => {
                     }}
                 >
                     <Stack size={1}>
-                        <Icon path={mdiCircle} size={1.2} color="var(--ifm-background-color)" />
+                        <Icon
+                            path={comment.isOpen ? mdiCommentAccountOutline : mdiCommentAccount}
+                            size={1}
+                            color="var(--ifm-background-color)"
+                        />
                         <Icon
                             path={comment.isOpen ? mdiCommentAccount : mdiCommentAccountOutline}
                             size={1}
@@ -72,7 +76,15 @@ const Comment = observer((props: Props) => {
                             }}
                         >
                             <Stack size={1}>
-                                <Icon path={mdiCircle} size={1.2} color="var(--ifm-background-color)" />
+                                <Icon
+                                    path={
+                                        comment.optionsOpen
+                                            ? mdiDotsHorizontalCircleOutline
+                                            : mdiDotsHorizontalCircle
+                                    }
+                                    size={1}
+                                    color="var(--ifm-background-color)"
+                                />
                                 <Icon
                                     path={
                                         comment.optionsOpen
