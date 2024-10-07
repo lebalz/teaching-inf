@@ -3,6 +3,7 @@ import remarkMdx from 'remark-mdx';
 import remarkDirective from 'remark-directive';
 import { describe, expect, it } from 'vitest';
 import { VFile } from 'vfile';
+import { PluginOptions } from '../plugin';
 
 const alignLeft = (content: string) => {
     return content
@@ -10,11 +11,15 @@ const alignLeft = (content: string) => {
         .map((line) => line.trimStart())
         .join('\n');
 };
-const process = async (content: string, pageId: string | null = 'd2f1b301-fbea-4289-8ab0-19c8a6c4ded0') => {
+const process = async (
+    content: string,
+    pageId: string | null = 'd2f1b301-fbea-4289-8ab0-19c8a6c4ded0',
+    options?: PluginOptions
+) => {
     const { default: plugin } = (await import('../plugin')) as any;
     const file = new VFile(alignLeft(content));
     file.data = { frontMatter: { page_id: pageId } };
-    const result = await remark().use(remarkMdx).use(remarkDirective).use(plugin).process(file);
+    const result = await remark().use(remarkMdx).use(remarkDirective).use(plugin, options).process(file);
 
     return result.value;
 };
@@ -74,20 +79,73 @@ describe('#comment', () => {
           "
         `);
     });
+    it('does not add comments to live codeblocks', async () => {
+        const input = `
+            \`\`\`py noComment
+            print('Some Code')
+            \`\`\`
+            `;
+        const result = await process(input);
+        expect(result).toMatchInlineSnapshot(`
+          "\`\`\`py noComment
+          print('Some Code')
+          \`\`\`
+          "
+        `);
+    });
     it('annotates lists', async () => {
         const input = `
             - hello
-            - bello
+            - \`bello\`
             - cello
             `;
         const result = await process(input);
         expect(result).toMatchInlineSnapshot(`
           "* hello
-            <MdxComment nr={1} nodeNr={1} type="paragraph" pageId="d2f1b301-fbea-4289-8ab0-19c8a6c4ded0" />
-          * bello
-            <MdxComment nr={2} nodeNr={2} type="paragraph" pageId="d2f1b301-fbea-4289-8ab0-19c8a6c4ded0" />
+          <MdxComment nr={1} nodeNr={1} type="listItem" pageId="d2f1b301-fbea-4289-8ab0-19c8a6c4ded0" />
+          * \`bello\`
+          <MdxComment nr={2} nodeNr={2} type="listItem" pageId="d2f1b301-fbea-4289-8ab0-19c8a6c4ded0" />
           * cello
-            <MdxComment nr={3} nodeNr={3} type="paragraph" pageId="d2f1b301-fbea-4289-8ab0-19c8a6c4ded0" />
+          <MdxComment nr={3} nodeNr={3} type="listItem" pageId="d2f1b301-fbea-4289-8ab0-19c8a6c4ded0" />
+          "
+        `);
+    });
+    it('annotates figures when specified over commentableJsxFlowElements', async () => {
+        const input = `
+            <Figure>
+                Whatever
+            </Figure>
+            `;
+        const result = await process(input, undefined, { commentableJsxFlowElements: ['Figure'] });
+        expect(result).toMatchInlineSnapshot(`
+          "<Figure>
+            Whatever
+          </Figure>
+
+          <MdxComment nr={1} nodeNr={1} type="mdxJsxFlowElement" pageId="d2f1b301-fbea-4289-8ab0-19c8a6c4ded0" />
+          "
+        `);
+    });
+    it('ignores the summary in details', async () => {
+        const input = `
+            <details>
+                <summary>
+                Bla bli blu
+                </summary>
+                Some really interesting content.
+            </details>
+            `;
+        const result = await process(input, undefined, { ignoreJsxFlowElements: ['summary'] });
+        expect(result).toMatchInlineSnapshot(`
+          "<details>
+            <summary>
+              Bla bli blu
+            </summary>
+
+            Some really interesting content.
+
+            <MdxComment nr={1} nodeNr={1} type="paragraph" pageId="d2f1b301-fbea-4289-8ab0-19c8a6c4ded0" />
+          </details>
           "
         `);
     });

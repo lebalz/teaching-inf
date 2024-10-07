@@ -70,7 +70,14 @@ const REMARK_PLUGINS = [
     }
   ],
   pagePlugin,
-  commentPlugin
+  [
+    commentPlugin,
+    {
+      commentableJsxFlowElements: [],
+      ignoreJsxFlowElements: ['summary', 'Dt'],
+      ignoreCodeBlocksWithMeta: /live_py/
+    }
+  ]
 ];
 const REHYPE_PLUGINS = [
   rehypeKatex
