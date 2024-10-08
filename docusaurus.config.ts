@@ -65,7 +65,7 @@ const REMARK_PLUGINS = [
   [
     enumerateAnswersPlugin,
     {
-      componentsToEnumerate: ['Answer', 'TaskState'],
+      componentsToEnumerate: ['Answer', 'TaskState', 'SelfCheckTaskState'],
     }
   ],
   pagePlugin
@@ -97,6 +97,8 @@ const config: Config = {
   customFields: {
     /** Use Testuser in local dev: set TEST_USERNAME to the test users email adress*/
     TEST_USERNAME: process.env.TEST_USERNAME,
+    /** User.ts#isStudent returns `true` for users matching this pattern. If unset, it returns `true` for all non-admin users. */
+    STUDENT_USERNAME_PATTERN: process.env.STUDENT_USERNAME_PATTERN,
     NO_AUTH: process.env.NODE_ENV !== 'production' && !!process.env.TEST_USERNAME,
     /** The Domain Name where the api is running */
     APP_URL: process.env.NETLIFY
