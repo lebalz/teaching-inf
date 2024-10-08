@@ -167,6 +167,11 @@ Im `src/stores/rootStore.ts` den `PageStore` registrieren.
 
 Die TaskState-Übersicht kann in der Navbar hinzugefügt werden.
 
+:::warning[Voraussetzung]
+Damit die TaskState-Übersicht gebraucht werden kann, braucht es das Plugin [👉 remark-page](../mdx-page.mdx).
+:::
+
+
 ```ts title="docusaurus.config.ts" {5-8}
 const config: Config = {
     themeConfig: {

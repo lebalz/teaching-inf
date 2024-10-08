@@ -9,6 +9,7 @@ import { Delta } from 'quill/core';
 import Solution from '../models/documents/Solution';
 import Directory from '../models/documents/FileSystem/Directory';
 import File from '../models/documents/FileSystem/File';
+import Restricted from '@tdev-models/documents/Restricted';
 import MdxComment from '@tdev-models/documents/MdxComment';
 import { Color } from '@tdev-components/shared/Colors';
 
@@ -33,7 +34,8 @@ export enum DocumentType {
     Solution = 'solution',
     Dir = 'dir',
     File = 'file',
-    MdxComment = 'mdx_comment'
+    MdxComment = 'mdx_comment',
+    Restricted = 'restricted'
 }
 export interface ScriptData {
     code: string;
@@ -57,6 +59,10 @@ export interface SolutionData {
     /** no content needed */
 }
 
+export interface RestrictedData {
+    /** no content needed */
+}
+
 export interface DirData {
     name: string;
     isOpen: boolean;
@@ -67,7 +73,15 @@ export interface FileData {
     isOpen: boolean;
 }
 
-export type StateType = 'checked' | 'question' | 'unset' | 'star' | 'star-half' | 'star-empty';
+export type StateType =
+    | 'checked'
+    | 'question'
+    | 'unset'
+    | 'star'
+    | 'star-half'
+    | 'star-empty'
+    | 'clock-check'
+    | 'progress-check';
 
 export interface TaskStateData {
     state: StateType;
@@ -90,6 +104,7 @@ export interface TypeDataMapping {
     [DocumentType.Dir]: DirData;
     [DocumentType.File]: FileData;
     [DocumentType.MdxComment]: MdxCommentData;
+    [DocumentType.Restricted]: RestrictedData;
     // Add more mappings as needed
 }
 
@@ -103,6 +118,7 @@ export interface TypeModelMapping {
     [DocumentType.Dir]: Directory;
     [DocumentType.File]: File;
     [DocumentType.MdxComment]: MdxComment;
+    [DocumentType.Restricted]: Restricted;
     /**
      * Add more mappings as needed
      * TODO: implement the mapping in DocumentRoot.ts
