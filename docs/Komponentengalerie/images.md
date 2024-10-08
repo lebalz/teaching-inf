@@ -54,9 +54,15 @@ Zudem kann das Inlining der Quellenangabe (und Bildunterschrift, falls vorhanden
 ![Schneebedeckte Strasse --width=450px --inlineCaption={true}](./images/snowy-street.jpg)
 </BrowserWindow>
 
+## Formatierung der Bildunterschrift
+Die Bildunterschrift kann mit gängigen Markdown-Formatierungen wie **Fett**, *Kursiv* oder `Code` versehen werden
 
-
-
+```md
+![**Fett**, *Kursiv* und :mdi[laptop]{.red} `Code` --width=450px](./images/fat-cursive-code.jpg)
+```
+<BrowserWindow>
+![**Fett**, *Kursiv* und :mdi[laptop]{.red} `Code` --width=450px](./images/fat-cursive-code.jpg)
+</BrowserWindow>
 
 ## Installation
 
