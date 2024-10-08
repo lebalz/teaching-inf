@@ -59,24 +59,9 @@ export default {
 
 ```ts {1,8,11,14}
 import defboxPlugin from './src/plugins/remark-code-defbox/plugin';
-const config: Config = {
-    presets: [
-        [
-            'classic',
-            {
-                docs: {
-                    beforeDefaultRemarkPlugins: [defboxPlugin]
-                },
-                blog: {
-                    beforeDefaultRemarkPlugins: [defboxPlugin]
-                },
-                pages: {
-                    beforeDefaultRemarkPlugins: [defboxPlugin]
-                },
-            }
-        ]
-    ]
-}
-
+const BEFORE_DEFAULT_REMARK_PLUGINS = [
+    /* ... */
+    defboxPlugin
+];
 ```
 :::

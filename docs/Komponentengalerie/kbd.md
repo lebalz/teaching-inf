@@ -23,24 +23,11 @@ Drücke [[Ctrl]] + [[C]] um zu kopieren.
 :::info[`docusaurus.config.ts`]
 ```ts
 import kbdPlugin from './src/plugins/remark-kbd/plugin';
-const config: Config = {
-    presets: [
-        [
-            'classic',
-            {
-                docs: {
-                    remarkPlugins: [kbdPlugin]
-                },
-                blog: {
-                    remarkPlugins: [kbdPlugin]
-                },
-                pages: {
-                    remarkPlugins: [kbdPlugin]
-                },
-            }
-        ]
-    ]
-}
+
+const REMARK_PLUGINS = [
+    /* ... */
+    kbdPlugin
+];
 ```
 :::
 

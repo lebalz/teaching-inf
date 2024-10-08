@@ -49,26 +49,12 @@ mit demselben Resultat:
 
 :::info[`docusaurus.config.ts]
 
-```ts {1,8,11,14}
+```ts
 import detailsPlugin from './src/plugins/remark-details/plugin';
-const config: Config = {
-    presets: [
-        [
-            'classic',
-            {
-                docs: {
-                    beforeDefaultRemarkPlugins: [detailsPlugin]
-                },
-                blog: {
-                    beforeDefaultRemarkPlugins: [detailsPlugin]
-                },
-                pages: {
-                    beforeDefaultRemarkPlugins: [detailsPlugin]
-                },
-            }
-        ]
-    ]
-}
+const BEFORE_DEFAULT_REMARK_PLUGINS = [
+    /* ... */
+    detailsPlugin
+];
 
 ```
 :::
