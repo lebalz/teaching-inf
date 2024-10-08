@@ -1,6 +1,7 @@
 .wrapper {
     position: relative;
     height: 0;
+    grid-column: 1/-1;
     .comment {
         position: absolute;
         right: -1em;

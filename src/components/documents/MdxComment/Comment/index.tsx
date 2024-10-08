@@ -32,7 +32,8 @@ const Comment = observer((props: Props) => {
                     sharedStyles.colorized,
                     sharedStyles.active,
                     comment.isOpen && sharedStyles.open,
-                    sharedStyles[comment.color]
+                    sharedStyles[comment.color],
+                    styles.wrapper
                 )}
             >
                 <div
