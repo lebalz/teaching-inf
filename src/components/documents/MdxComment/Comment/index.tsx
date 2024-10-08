@@ -107,6 +107,7 @@ const Comment = observer((props: Props) => {
                                     className={styles.quill}
                                     key={doc.id}
                                     theme="bubble"
+                                    placeholder="🗒️ Notiz..."
                                 />
                             );
                         })}

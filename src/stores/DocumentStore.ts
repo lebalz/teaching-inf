@@ -27,7 +27,6 @@ import { RWAccess } from '@tdev-models/helpers/accessPolicy';
 import Directory from '@tdev-models/documents/FileSystem/Directory';
 import File from '@tdev-models/documents/FileSystem/File';
 import MdxComment from '@tdev-models/documents/MdxComment';
-import MdxPage from '@tdev-models/documents/MdxPage';
 
 export function CreateDocumentModel<T extends DocumentType>(
     data: DocumentProps<T>,

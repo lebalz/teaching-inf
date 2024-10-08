@@ -94,6 +94,18 @@
         }
     }
 }
+li:has(+ .wrapper) {
+    + .wrapper {
+        .comment {
+            top: -1.5em;
+        }
+        &.active.open {
+            .comment {
+                top: -1.5em;
+            }
+        }
+    }
+}
 
 // for the commented section
 *:hover {
