@@ -168,7 +168,7 @@ Im `src/stores/rootStore.ts` den `PageStore` registrieren.
 Die TaskState-Übersicht kann in der Navbar hinzugefügt werden.
 
 :::warning[Voraussetzung]
-Damit die TaskState-Übersicht gebraucht werden kann, braucht es das Plugin [👉 remark-page](../mdx-page.mdx).
+Damit die TaskState-Übersicht gebraucht werden kann, braucht es das Plugin [👉 remark-page](./mdx-page.mdx).
 :::
 
 
