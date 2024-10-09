@@ -16,7 +16,7 @@ Unter :mdi[apple]{.black} Mac gibt es standardmässig keine Möglichkeit, Fenste
 
 Gerade wenn oft zwischen Programmen gewechselt werden soll, wäre dies aber praktisch.
 
-Das kostenlose und quelloffene Programm [👉 rectangleapp](https://rectangleapp.com/) übernimmt diese Aufgabe im nu und rüstet somit die aus Windows bekannte Funktion nach.
+Das kostenlose und quelloffene Programm [rectangleapp](https://rectangleapp.com/) übernimmt diese Aufgabe im nu und rüstet somit die aus Windows bekannte Funktion nach.
 
 Die Anordnung der Fenster kann dabei bequem mit Tastenshortcuts vorgenommen werden:
 

@@ -31,19 +31,19 @@ Some content
         expect(result).toMatchInlineSnapshot(`
         "# Details element example
 
-        Hello [👉 example](https://example.org) world!
+        Hello [example](https://example.org) world!
         "`);
     });
 
     it('does not append the prefix, if it is already there', async () => {
         const input = `# Details element example
-        Hello [👉 example](https://example.org) world!
+        Hello [example](https://example.org) world!
         `;
         const result = await process(input);
         expect(result).toMatchInlineSnapshot(`
         "# Details element example
 
-        Hello [👉 example](https://example.org) world!
+        Hello [example](https://example.org) world!
         "`);
     });
 
