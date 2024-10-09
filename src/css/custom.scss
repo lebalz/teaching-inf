@@ -233,3 +233,9 @@ div.no-search {
         vertical-align: top;
     }
 }
+
+.footnotes {
+    --ifm-list-paragraph-margin: 0;
+    --ifm-paragraph-margin-bottom: 0;
+    --ifm-list-margin: 0;
+}
