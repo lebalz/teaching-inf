@@ -15,8 +15,10 @@ import { mdiSourceCommit } from '@mdi/js';
 import defboxPlugin from './src/plugins/remark-code-defbox/plugin';
 import flexCardsPlugin from './src/plugins/remark-flex-cards/plugin';
 import imagePlugin from './src/plugins/remark-images/plugin';
+import linkAnnotationPlugin from './src/plugins/remark-link-annotation/plugin';
 import mediaPlugin from './src/plugins/remark-media/plugin';
 import detailsPlugin from './src/plugins/remark-details/plugin';
+import pagePlugin from './src/plugins/remark-page/plugin';
 import themeCodeEditor from './src/plugins/theme-code-editor'
 import enumerateAnswersPlugin from './src/plugins/remark-enumerate-components/plugin';
 import { v4 as uuidv4 } from 'uuid';
@@ -67,8 +69,16 @@ const REMARK_PLUGINS = [
   [
     enumerateAnswersPlugin,
     {
-      componentsToEnumerate: ['Answer', 'TaskState'],
+      componentsToEnumerate: ['Answer', 'TaskState', 'SelfCheckTaskState'],
     }
+  ],
+  pagePlugin,
+  [
+      linkAnnotationPlugin,
+      {
+          prefix: '👉',
+          postfix: null
+      }
   ]
 ];
 const REHYPE_PLUGINS = [
@@ -112,6 +122,8 @@ const config: Config = {
   customFields: {
     /** Use Testuser in local dev: set TEST_USERNAME to the test users email adress*/
     TEST_USERNAME: process.env.TEST_USERNAME,
+    /** User.ts#isStudent returns `true` for users matching this pattern. If unset, it returns `true` for all non-admin users. */
+    STUDENT_USERNAME_PATTERN: process.env.STUDENT_USERNAME_PATTERN,
     NO_AUTH: process.env.NODE_ENV !== 'production' && !!process.env.TEST_USERNAME,
     /** The Domain Name where the api is running */
     APP_URL: process.env.NETLIFY
