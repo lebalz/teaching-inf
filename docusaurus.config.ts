@@ -13,6 +13,7 @@ import rehypeKatex from 'rehype-katex';
 import defboxPlugin from './src/plugins/remark-code-defbox/plugin';
 import flexCardsPlugin from './src/plugins/remark-flex-cards/plugin';
 import imagePlugin from './src/plugins/remark-images/plugin';
+import linkAnnotationPlugin from './src/plugins/remark-link-annotation/plugin';
 import mediaPlugin from './src/plugins/remark-media/plugin';
 import detailsPlugin from './src/plugins/remark-details/plugin';
 import pagePlugin from './src/plugins/remark-page/plugin';
@@ -77,6 +78,13 @@ const REMARK_PLUGINS = [
       ignoreJsxFlowElements: ['summary', 'dt'],
       ignoreCodeBlocksWithMeta: /live_py/
     }
+  ],
+  [
+      linkAnnotationPlugin,
+      {
+          prefix: '👉',
+          postfix: null
+      }
   ]
 ];
 const REHYPE_PLUGINS = [
