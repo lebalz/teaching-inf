@@ -1,5 +1,6 @@
 ---
 page_id: e1405533-17b1-46d8-9168-97c6c0d1f362
+tags: [remark]
 ---
 import BrowserWindow from '@tdev-components/BrowserWindow';
 
@@ -82,43 +83,16 @@ export default {
 
 :::info[`docusaurus.config.ts]
 
-```ts {1,10-13,18-21,26-29}
+```ts
 import imagePlugin from './src/plugins/remark-images/plugin';
 
-const config: Config = {
-    presets: [
-        [
-            'classic',
-            {
-                docs: {
-                    beforeDefaultRemarkPlugins: [
-                        [
-                            imagePlugin,
-                            { tagNames: { sourceRef: 'SourceRef', figure: 'Figure' } }
-                        ]
-                    ]
-                },
-                blog: {
-                    beforeDefaultRemarkPlugins: [
-                        [
-                            imagePlugin,
-                            { tagNames: { sourceRef: 'SourceRef', figure: 'Figure' } }
-                        ]
-                    ]
-                },
-                pages: {
-                    beforeDefaultRemarkPlugins: [
-                        [
-                            imagePlugin,
-                            { tagNames: { sourceRef: 'SourceRef', figure: 'Figure' } }
-                        ]
-                    ]
-                },
-            }
-        ]
+const BEFORE_DEFAULT_REMARK_PLUGINS = [
+    /* ... */
+    [
+        imagePlugin,
+        { tagNames: { sourceRef: 'SourceRef', figure: 'Figure' } }
     ]
-}
-
+];
 ```
 :::
 
@@ -134,7 +108,7 @@ Um das automatische Inlining von leeren Bildunterschriften zu deaktivieren, kön
 
 ### VS Code
 Damit die Bild-Quellen einfach eingefügt werden können, kann folgendes Snippet unter hinzugefügt werden. So wird beim Eintippen von `src` in einem `.json`-File automatisch die Quellenangabe eingefügt.
-
+:::details[`.vscode/json.code-snippets`]
 ```json	title=".vscode/json.code-snippets"
 {
 	// Place your ofi-blog workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and 
@@ -180,3 +154,4 @@ Damit die Bild-Quellen einfach eingefügt werden können, kann folgendes Snippet
 	}
 }
 ```
+:::

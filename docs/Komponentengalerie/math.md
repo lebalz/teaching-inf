@@ -1,9 +1,11 @@
 ---
 page_id: 5f07e03f-2b5d-4d01-a140-eb4ec4584290
+tags: [remark, rehype]
 ---
 import BrowserWindow from '@tdev-components/BrowserWindow';
 
 # Math Formeln mit KaTeX
+Mathematische Formeln können mit KaTeX gerendert werden.
 
 ```md
 Let $f\colon[a,b]\to\R$ be Riemann integrable. Let $F\colon[a,b]\to\R$ be
@@ -34,3 +36,7 @@ $$
 I = \int_0^{2\pi} \sin(x)\,dx
 $$
 </BrowserWindow>
+
+## Installation
+
+[Anleitung KaTeX für Docusaurus](https://docusaurus.io/docs/markdown-features/math-equations)

@@ -26,6 +26,7 @@ import Solution from '@tdev-models/documents/Solution';
 import { RWAccess } from '@tdev-models/helpers/accessPolicy';
 import Directory from '@tdev-models/documents/FileSystem/Directory';
 import File from '@tdev-models/documents/FileSystem/File';
+import MdxPage from '@tdev-models/documents/MdxPage';
 
 export function CreateDocumentModel<T extends DocumentType>(
     data: DocumentProps<T>,
@@ -105,9 +106,8 @@ class DocumentStore extends iStore<`delete-${string}`> {
         if (!data) {
             return;
         }
-
         const model = CreateDocumentModel(data, this);
-        if (!model.root) {
+        if (!model?.root) {
             return;
         }
 

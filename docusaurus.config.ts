@@ -16,6 +16,7 @@ import imagePlugin from './src/plugins/remark-images/plugin';
 import linkAnnotationPlugin from './src/plugins/remark-link-annotation/plugin';
 import mediaPlugin from './src/plugins/remark-media/plugin';
 import detailsPlugin from './src/plugins/remark-details/plugin';
+import pagePlugin from './src/plugins/remark-page/plugin';
 import themeCodeEditor from './src/plugins/theme-code-editor'
 import enumerateAnswersPlugin from './src/plugins/remark-enumerate-components/plugin';
 import { v4 as uuidv4 } from 'uuid';
@@ -68,6 +69,7 @@ const REMARK_PLUGINS = [
       componentsToEnumerate: ['Answer', 'TaskState', 'SelfCheckTaskState'],
     }
   ],
+  pagePlugin,
   [
       linkAnnotationPlugin,
       {

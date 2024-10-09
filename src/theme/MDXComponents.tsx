@@ -9,6 +9,7 @@ import Figure from '@tdev-components/Figure';
 import SourceRef from '@tdev-components/Figure/SourceRef';
 import Answer from '@tdev-components/Answer';
 import Solution from '@tdev-components/documents/Solution';
+import MdxPage from '@tdev-components/MdxPage';
 
 export default {
     // Re-use the default mapping
@@ -20,5 +21,6 @@ export default {
     Figure: Figure,
     SourceRef: SourceRef,
     Answer: Answer,
-    Solution: Solution
+    Solution: Solution,
+    MdxPage: MdxPage
 };
