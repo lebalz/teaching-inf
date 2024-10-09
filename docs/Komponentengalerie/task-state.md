@@ -157,7 +157,7 @@ Für die Übersicht der TaskStates:
 - `src/stores/PageStore.ts`
 :::
 
-:::info[Konfigurieren]
+::::info[Konfigurieren]
 Der `DocumentType.TaskState` muss unter
 - `src/api/document.ts`
 - `src/stores/DocumentStore.ts`
@@ -165,12 +165,31 @@ registriert/implementiert werden.
 
 Im `src/stores/rootStore.ts` den `PageStore` registrieren.
 
-Die TaskState-Übersicht kann in der Navbar hinzugefügt werden.
+#### TaskState-Übersicht in der Navbar
+
 
 :::warning[Voraussetzung]
-Damit die TaskState-Übersicht gebraucht werden kann, braucht es das Plugin [👉 remark-page](./mdx-page.mdx).
+Damit die TaskState-Übersicht gebraucht werden kann, braucht es die Plugins
+- [remark-page](./mdx-page.mdx)
+- [remark-enumerate-components](./remark-enumerate-components.mdx)
+```ts title="docusaurus.config.ts" {1,5-12}
+import enumerateAnswersPlugin from './src/plugins/remark-enumerate-components/plugin';
+
+const REMARK_PLUGINS = [
+    /* ... */
+    [
+      [
+        enumerateAnswersPlugin,
+        {
+          componentsToEnumerate: ['TaskState', /*...*/],
+        }
+      ]
+    ]
+];
+```
 :::
 
+Die TaskState-Übersicht kann in der Navbar hinzugefügt werden.
 
 ```ts title="docusaurus.config.ts" {5-8}
 const config: Config = {
@@ -196,4 +215,4 @@ const ComponentTypes: ComponentTypesObject = {
 
 export default ComponentTypes;
 ```
-:::
+::::
