@@ -26,7 +26,7 @@ const MdxPage = observer((props: Props) => {
     }, [pageId]);
     React.useEffect(() => {
         const { current } = pageStore;
-        if (current && userStore.viewedUserId) {
+        if (current && userStore.viewedUserId && userStore.viewedUserId !== userStore.current?.id) {
             current.loadLinkedDocumentRoots();
         }
     }, [pageStore.current, userStore.viewedUserId]);
