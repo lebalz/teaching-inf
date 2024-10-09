@@ -1,5 +1,6 @@
 import { DocumentType } from '@tdev-api/document';
 import { useStore } from '@tdev-hooks/useStore';
+import MdxComment from '@tdev-models/documents/MdxComment';
 import _ from 'lodash';
 
 /**
@@ -13,12 +14,15 @@ export const useMdxComment = (
     commentNr: number,
     nodeType: string
 ) => {
+    const userStore = useStore('userStore');
     const documentRootStore = useStore('documentRootStore');
     const documentRoot = documentRootStore.find(pageId);
-    if (!documentRoot) {
+    if (!documentRoot || !userStore.viewedUserId) {
         return null;
     }
-    const comments = documentRoot.documents.filter((doc) => doc.type === DocumentType.MdxComment);
+    const comments = documentRoot.documents.filter(
+        (doc) => doc.type === DocumentType.MdxComment && doc.authorId === userStore.viewedUserId
+    ) as MdxComment[];
     if (comments.length === 0) {
         return null;
     }
