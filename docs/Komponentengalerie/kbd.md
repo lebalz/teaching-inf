@@ -1,5 +1,6 @@
 ---
 page_id: aa51a247-3522-4f6a-8146-851e807c17b7
+tags: [remark]
 ---
 import BrowserWindow from '@tdev-components/BrowserWindow';
 
