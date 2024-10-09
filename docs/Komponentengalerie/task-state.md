@@ -89,7 +89,7 @@ TaskState kann nicht verändert werden, wenn `readonly` gesetzt wurde.
 
 
 :::info[Gleiche ID]
-Wenn [👉 oberhalb](#zustände-selber-setzen) der Zustand verändert wird, wird er auch hier verändert.
+Wenn [oberhalb](#zustände-selber-setzen) der Zustand verändert wird, wird er auch hier verändert.
 :::
 
 ### In einer Admonition
