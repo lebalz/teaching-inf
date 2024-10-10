@@ -23,7 +23,7 @@
         margin-bottom: 0;
     }
 }
-.wrapper:hover + .content {
+.iconWrapper:hover + .content {
     .options {
         display: block;
     }
@@ -32,12 +32,12 @@
 /**
 * support deflists
 */
-dd + .wrapper + .content {
+dd + .iconWrapper + .content {
     grid-column: 2;
 }
 
 @media screen and (max-width: 620px) {
-    dd + .wrapper + .content {
+    dd + .iconWrapper + .content {
         grid-column: 1;
         margin-left: 2rem;
     }
