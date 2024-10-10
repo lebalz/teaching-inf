@@ -8,15 +8,13 @@ import MdxComment from '@tdev-models/documents/MdxComment';
 import { QuillV2Component } from '@tdev-components/documents/QuillV2';
 import Icon, { Stack } from '@mdi/react';
 import {
-    mdiCircle,
     mdiCommentAccount,
     mdiCommentAccountOutline,
-    mdiCommentOutline,
-    mdiCommentPlusOutline,
     mdiDotsHorizontalCircle,
     mdiDotsHorizontalCircleOutline
 } from '@mdi/js';
 import Options from './Options';
+import { useStore } from '@tdev-hooks/useStore';
 
 interface Props {
     comment: MdxComment;
@@ -24,6 +22,7 @@ interface Props {
 
 const Comment = observer((props: Props) => {
     const { comment } = props;
+    const userStore = useStore('userStore');
     return (
         <>
             <div
@@ -109,6 +108,7 @@ const Comment = observer((props: Props) => {
                                     key={doc.id}
                                     theme="bubble"
                                     placeholder="🗒️ Notiz..."
+                                    readonly={comment.authorId !== userStore.current?.id}
                                 />
                             );
                         })}
