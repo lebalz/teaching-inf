@@ -9,7 +9,6 @@ import Icon from '@mdi/react';
 import { mdiArrowLeftCircle, mdiArrowRightCircle, mdiDownload } from '@mdi/js';
 import Button from '@tdev-components/shared/Button';
 
-
 export interface Props {
     file: string;
     name: string;
@@ -23,14 +22,14 @@ export interface Props {
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
     'pdfjs-dist/build/pdf.worker.min.mjs',
-    import.meta.url,
+    import.meta.url
 ).toString();
 const options = {
     cMapUrl: 'cmaps/',
-    cMapPacked: true,
+    cMapPacked: true
 };
 
-const SCALE = 210/297;
+const SCALE = 0.95;
 
 const PdfViewer = (props: Props) => {
     const [numPages, setNumPages] = useState<number>(0);
@@ -167,17 +166,12 @@ const PdfViewer = (props: Props) => {
                                 onClick={previousPage}
                                 icon={mdiArrowLeftCircle}
                                 size={0.8}
+                                color="secondary"
                             />
-                            <span
-                                className={clsx('badge', 'badge--secondary')}
-                            >
+                            <span className={clsx(styles.badge, 'badge', 'badge--secondary')}>
                                 {pageNumber || (numPages ? 1 : '--')} / {numPages || '--'}
                             </span>
-                            <Button
-                                onClick={nextPage}
-                                icon={mdiArrowRightCircle}
-                                size={0.8}
-                            />
+                            <Button onClick={nextPage} icon={mdiArrowRightCircle} size={0.8} />
                         </div>
                     )}
                 </div>

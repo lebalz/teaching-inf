@@ -145,7 +145,7 @@ export interface Options {
  * @param keyAliases
  */
 export const transformAttributes = (
-    attributes: { [key: string]: string  | undefined | null },
+    attributes: { [key: string]: string | undefined | null },
     keyAliases: { [key: string]: string } = ALIASES
 ) => {
     const options: Options = {
@@ -159,11 +159,7 @@ export const transformAttributes = (
             k = keyAliases[k];
         }
         if (KnownCssProperties.includes(dashedString(k))) {
-            options.style[camelCased(k)] = value === '' 
-                ? true 
-                : !value
-                    ? false
-                    : value;
+            options.style[camelCased(k)] = value === '' ? true : !value ? false : value;
         } else if (k === 'className' && value) {
             options.className = value;
         }
@@ -172,7 +168,7 @@ export const transformAttributes = (
                 ? true
                 : value === 'false'
                   ? false
-                  : (value === '' || value === null || value === undefined)
+                  : value === '' || value === null || value === undefined
                     ? ''
                     : !Number.isNaN(Number(value))
                       ? Number(value)

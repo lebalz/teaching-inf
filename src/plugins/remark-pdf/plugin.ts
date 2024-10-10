@@ -37,8 +37,10 @@ const IMPORT_PDF_REACT_NODE: MdxjsEsm = {
     }
 };
 
-
-const PdfViewerNode = (src: string, attr: {[key: string]: string | number | boolean | string | undefined}): MdxJsxFlowElement => {
+const PdfViewerNode = (
+    src: string,
+    attr: { [key: string]: string | number | boolean | string | undefined }
+): MdxJsxFlowElement => {
     return {
         type: 'mdxJsxFlowElement',
         name: 'PdfViewer',
@@ -53,25 +55,25 @@ const PdfViewerNode = (src: string, attr: {[key: string]: string | number | bool
             requireDefaultMdastNode('file', src)
         ].filter((attr) => !!attr),
         children: []
-      };
-}
+    };
+};
 
-const plugin: Plugin = function plugin(
-    this: Processor,
-    optionsInput?: {
-    }
-): Transformer {
+const plugin: Plugin = function plugin(this: Processor, optionsInput?: {}): Transformer {
     return async (ast, vfile) => {
         let hasPdf = false;
-        
+
         visit(ast, (node, idx, parent: Parent) => {
-            if (node.type !== 'leafDirective' || (node as unknown as LeafDirective).name !== 'pdf' || idx === undefined) {
+            if (
+                node.type !== 'leafDirective' ||
+                (node as unknown as LeafDirective).name !== 'pdf' ||
+                idx === undefined
+            ) {
                 return;
             }
             hasPdf = true;
-            const directive = node as unknown as LeafDirective
+            const directive = node as unknown as LeafDirective;
             const src = (directive.children[0] as Text).value;
-            const rawAttributes = transformAttributes(directive.attributes || {});
+            const rawAttributes = transformAttributes(directive.attributes || {}, {});
             parent.children.splice(idx, 1, PdfViewerNode(src, rawAttributes.attributes));
         });
 
@@ -79,6 +81,6 @@ const plugin: Plugin = function plugin(
             (ast as unknown as Parent).children.unshift(IMPORT_PDF_REACT_NODE);
         }
     };
-}
+};
 
 export default plugin;

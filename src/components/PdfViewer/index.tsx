@@ -23,9 +23,7 @@ export const PdfViewer = observer((props: Props) => {
         return <Loader />;
     }
 
-    return (
-        <pdfViewer.default {...props} />
-    );
+    return <pdfViewer.default {...props} />;
 });
 
 export default PdfViewer;
