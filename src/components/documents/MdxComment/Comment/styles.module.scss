@@ -23,6 +23,11 @@
         margin-bottom: 0;
     }
 }
+.wrapper:hover + .content {
+    .options {
+        display: block;
+    }
+}
 
 /**
 * support deflists
