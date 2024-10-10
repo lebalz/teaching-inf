@@ -63,7 +63,10 @@ export interface PluginOptions {
  */
 const plugin = function plugin(options: PluginOptions): Transformer {
     return async (root, file) => {
-        const { page_id, no_comments } = (file.data?.frontMatter || {}) as { page_id?: string, no_comments?: boolean };
+        const { page_id, no_comments } = (file.data?.frontMatter || {}) as {
+            page_id?: string;
+            no_comments?: boolean;
+        };
         if (!page_id || no_comments) {
             return;
         }
