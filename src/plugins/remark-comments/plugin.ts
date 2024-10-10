@@ -82,6 +82,12 @@ const plugin = function plugin(options: PluginOptions): Transformer {
                     return [SKIP];
                 }
             }
+            /**
+             * skip footnote definitions
+             */
+            if (node.type === 'footnoteDefinition') {
+                return [SKIP];
+            }
             if (node.type === 'mdxJsxFlowElement' && (node as MdxJsxFlowElement).name) {
                 if (ignoredJsxFlowElements.has((node as MdxJsxFlowElement).name!)) {
                     return [SKIP];
