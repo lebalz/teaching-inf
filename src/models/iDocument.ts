@@ -1,13 +1,20 @@
 import { action, computed, IReactionDisposer, observable, reaction } from 'mobx';
-import { Document as DocumentProps, TypeDataMapping, DocumentType, Access } from '../api/document';
-import DocumentStore from '../stores/DocumentStore';
+import { Document as DocumentProps, TypeDataMapping, DocumentType } from '@tdev-api/document';
+import DocumentStore from '@tdev-stores/DocumentStore';
 import { debounce } from 'lodash';
-import { ApiState } from '../stores/iStore';
+import { ApiState } from '@tdev-stores/iStore';
+import { NoneAccess, ROAccess, RWAccess } from './helpers/accessPolicy';
+import type iSideEffect from './SideEffects/iSideEffect';
 
 /**
  * normally, save only once all 1000ms
  */
 const SAVE_DEBOUNCE_TIME = 1000;
+
+export enum Source {
+    LOCAL = 'local',
+    API = 'api'
+}
 abstract class iDocument<Type extends DocumentType> {
     readonly store: DocumentStore;
     readonly id: string;
@@ -18,6 +25,7 @@ abstract class iDocument<Type extends DocumentType> {
     readonly _pristine: TypeDataMapping[Type];
 
     readonly createdAt: Date;
+
     /**
      * save the model only after 1 second of "silence" (=no edits during this period)
      * or after 5s of permanent editing...
@@ -33,6 +41,8 @@ abstract class iDocument<Type extends DocumentType> {
     });
 
     @observable accessor state: ApiState = ApiState.IDLE;
+
+    sideEffects = observable.array<iSideEffect<Type>>([], { deep: false });
 
     @observable.ref accessor updatedAt: Date;
     readonly stateDisposer: IReactionDisposer;
@@ -81,12 +91,28 @@ abstract class iDocument<Type extends DocumentType> {
 
     @action
     reset() {
-        this.setData({ ...this._pristine }, true);
+        this.setData({ ...this._pristine }, Source.LOCAL);
+    }
+
+    @action
+    registerSideEffect(se: iSideEffect<Type>) {
+        const old = this.sideEffects.find((s) => s.name === se.name);
+        if (old) {
+            this.sideEffects.remove(old);
+        }
+        this.sideEffects.push(se);
     }
 
     abstract get data(): TypeDataMapping[Type];
 
-    abstract setData(data: TypeDataMapping[Type], persist: boolean, updatedAt?: Date): void;
+    abstract setData(data: TypeDataMapping[Type], from: Source, updatedAt?: Date): void;
+
+    @computed
+    get derivedData() {
+        return this.sideEffects.reduce((acc, se) => {
+            return se.transformer(acc);
+        }, this.data);
+    }
 
     @computed
     get isDirty() {
@@ -103,6 +129,16 @@ abstract class iDocument<Type extends DocumentType> {
         return this.store.root.documentRootStore.find(this.documentRootId);
     }
 
+    @computed
+    get parent() {
+        return this.store.find(this.parentId);
+    }
+
+    @computed
+    get children() {
+        return this.store.byParentId(this.id);
+    }
+
     get isInitialized() {
         /**
          * only return true if the models root document is present in the store...
@@ -117,17 +153,23 @@ abstract class iDocument<Type extends DocumentType> {
         if (!this.root) {
             return false;
         }
+        if (this.sideEffects.some((se) => !se.canEdit)) {
+            return false;
+        }
+        if (ROAccess.has(this.root.meta.access)) {
+            return false;
+        }
         if (this.root.isDummy) {
-            return this.root.permission === Access.RW;
+            return RWAccess.has(this.root.permission);
         }
         if (!this.store.root.userStore.current) {
-            return this.root.permission === Access.RW;
+            return RWAccess.has(this.root.access);
         }
         const userId = this.store.root.userStore.current?.id;
         if (this.authorId === userId) {
-            return this.root.permission === Access.RW;
+            return RWAccess.has(this.root.permission);
         }
-        return this.root.sharedAccess === Access.RW && this.root.permission === Access.RW;
+        return RWAccess.has(this.root.sharedAccess) && RWAccess.has(this.root.permission);
     }
 
     @computed
@@ -136,24 +178,33 @@ abstract class iDocument<Type extends DocumentType> {
             return true;
         }
         if (!this.store.root.userStore.current) {
-            return this.root.permission !== Access.None;
+            return !NoneAccess.has(this.root.permission);
         }
         const userId = this.store.root.userStore.current?.id;
-        if (this.root.permission === Access.None) {
+        if (NoneAccess.has(this.root.permission)) {
             return false;
         }
         if (this.authorId === userId) {
             return true;
         }
-        return this.root.sharedAccess !== Access.None;
+        return !NoneAccess.has(this.root.sharedAccess);
+    }
+
+    get author() {
+        return this.store.root.userStore.find(this.authorId);
     }
 
     @action
-    cleanup() {
+    cleanup(deep?: boolean) {
         /**
          * cancel pending actions and cleanup if needed...
          */
         this.stateDisposer();
+        if (deep) {
+            this.children.forEach((c) => {
+                this.store.removeFromStore(c);
+            });
+        }
     }
 
     @action

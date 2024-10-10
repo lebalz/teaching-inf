@@ -1,9 +1,10 @@
 import React, { useId } from 'react';
-import { Access, DocumentType } from '../api/document';
-import { TypeMeta } from '../models/DocumentRoot';
-import { CreateDocumentModel } from '../stores/DocumentStore';
-import { useDocumentRoot } from './useDocumentRoot';
-import { rootStore } from '../stores/rootStore';
+import { DocumentType } from '@tdev-api/document';
+import { TypeMeta } from '@tdev-models/DocumentRoot';
+import { CreateDocumentModel } from '@tdev-stores/DocumentStore';
+import { useDocumentRoot } from '@tdev-hooks/useDocumentRoot';
+import { useStore } from '@tdev-hooks/useStore';
+import { RWAccess } from '@tdev-models/helpers/accessPolicy';
 
 /**
  * This hook provides access to the first main document of the rootDocument.
@@ -12,10 +13,13 @@ import { rootStore } from '../stores/rootStore';
  */
 export const useFirstMainDocument = <Type extends DocumentType>(
     documentRootId: string | undefined,
-    meta: TypeMeta<Type>
+    meta: TypeMeta<Type>,
+    createDocument: boolean = true
 ) => {
     const defaultDocId = useId();
     const documentRoot = useDocumentRoot(documentRootId, meta);
+    const userStore = useStore('userStore');
+    const documentStore = useStore('documentStore');
     const [dummyDocument] = React.useState(
         CreateDocumentModel(
             {
@@ -28,22 +32,33 @@ export const useFirstMainDocument = <Type extends DocumentType>(
                 createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString()
             },
-            rootStore.documentStore
+            documentStore
         )
     );
     React.useEffect(() => {
-        if (documentRoot.isLoaded && !documentRoot.isDummy && !documentRoot.firstMainDocument) {
-            if (documentRoot.permission === Access.RW && rootStore.userStore.current) {
-                console.log('create first document', documentRoot.id, documentRoot.type);
-                rootStore.documentStore.create({
+        if (!userStore.current || userStore.isUserSwitched) {
+            return;
+        }
+        if (
+            documentRoot.isLoaded &&
+            !documentRoot.isDummy &&
+            !documentRoot.firstMainDocument &&
+            createDocument
+        ) {
+            /**
+             * If the user is viewing another user, we should not create a document
+             * and instead try to load the first main document of the viewed user.
+             */
+            if (RWAccess.has(documentRoot.permission)) {
+                documentStore.create({
                     documentRootId: documentRoot.id,
-                    authorId: rootStore.userStore.current.id,
+                    authorId: userStore.current.id,
                     type: documentRoot.type,
                     data: meta.defaultData
                 });
             }
         }
-    }, [documentRoot, rootStore.userStore.current]);
+    }, [documentRoot, userStore.current]);
 
     return documentRoot?.firstMainDocument || dummyDocument;
 };

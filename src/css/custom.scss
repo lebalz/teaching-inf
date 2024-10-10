@@ -15,6 +15,7 @@
 
     --ifm-code-font-size: 95%;
     --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+    --ifm-color-blue-lighter: #72a1ed;
     --ifm-color-blue: #3578e5;
     --ifm-color-blue-dark: #306cce;
     --ifm-color-blue-darker: #2d66c3;
@@ -24,6 +25,9 @@
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
     --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+    --ifm-global-shadow-lw: 0 1px 2px 0 rgba(0, 255, 234, 0.2);
+    --ifm-global-shadow-md: 0 5px 40px rgba(0, 255, 234, 0.2);
+    --ifm-global-shadow-tl: 0 12px 28px 0 rgba(0, 255, 234, 0.2), 0 2px 4px 0 rgba(0, 255, 234, 0.1);
 }
 
 strong.boxed {
@@ -90,6 +94,14 @@ html[data-theme='dark'] {
             font-size: 2rem;
         }
     }
+}
+
+kbd {
+    padding: 0.3em 0.5em;
+    padding-bottom: 0.35em;
+    padding-top: 0.25em;
+    border-radius: 0.5em;
+    box-shadow: inset 1px -2px 0 var(--ifm-color-emphasis-400);
 }
 
 div.flex {

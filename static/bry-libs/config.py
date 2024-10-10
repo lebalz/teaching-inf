@@ -1,4 +1,5 @@
 class Config():
+    ID = 'id'
     BRYTHON_COMMUNICATOR = 'py_id'
     CANVAS_OUTPUT = False
     CANVAS_ID = f'id_canvas'
@@ -8,6 +9,7 @@ class Config():
 
     @staticmethod
     def set_id(node_id):
+        Config.ID = node_id
         Config.BRYTHON_COMMUNICATOR = f'py_{node_id}'
         Config.CANVAS_ID = f'{node_id}_canvas'
         Config.GRAPHICS_ID = f'{node_id}_graphics'

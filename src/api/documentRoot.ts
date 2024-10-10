@@ -28,12 +28,31 @@ export interface Config {
     groupPermissions: Omit<GroupPermissionBase, 'id'>[];
 }
 
+export interface UpdateConfig {
+    access?: Access;
+    sharedAccess?: Access;
+}
+
+export interface DocumentRootUpdate {
+    id: string;
+    access: Access;
+    sharedAccess: Access;
+}
+
 export function find(id: string, signal: AbortSignal): AxiosPromise<DocumentRoot> {
     return api.get(`/documentRoots/${id}`, { signal });
 }
 
-export function findMany(ids: string[], signal: AbortSignal): AxiosPromise<DocumentRoot[]> {
-    return api.get(`/documentRoots?${ids.map((id) => `ids=${id}`).join('&')}`, { signal });
+export function findManyFor(
+    userId: string,
+    ids: string[],
+    ignoreMissingRoots: boolean,
+    signal: AbortSignal
+): AxiosPromise<DocumentRoot[]> {
+    return api.get(
+        `/users/${userId}/documentRoots?${ignoreMissingRoots ? 'ignoreMissingRoots=1&' : ''}${ids.map((id) => `ids=${id}`).join('&')}`,
+        { signal }
+    );
 }
 
 export function create(
@@ -42,4 +61,8 @@ export function create(
     signal: AbortSignal
 ): AxiosPromise<DocumentRoot> {
     return api.post(`/documentRoots/${id}`, data, { signal });
+}
+
+export function update(id: string, data: UpdateConfig, signal: AbortSignal): AxiosPromise<DocumentRoot> {
+    return api.put(`/documentRoots/${id}`, data, { signal });
 }

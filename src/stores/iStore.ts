@@ -1,7 +1,7 @@
 import { action, observable } from 'mobx';
 import { computedFn } from 'mobx-utils';
 import axios from 'axios';
-import { RootStore } from './rootStore';
+import { RootStore } from '@tdev-stores/rootStore';
 
 export type ApiAction =
     | `load`

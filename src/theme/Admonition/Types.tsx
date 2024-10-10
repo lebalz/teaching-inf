@@ -26,7 +26,7 @@ function AufgabeIcon() {
     );
 }
 
-function FindingAmonition(props) {
+function FindingAmonition(props: any) {
     return (
         <AdmonitionLayout
             icon={<FindingIcon />}
@@ -39,7 +39,7 @@ function FindingAmonition(props) {
     );
 }
 
-function AufgabeAmonition(props) {
+function AufgabeAmonition(props: any) {
     return (
         <AdmonitionLayout
             icon={<AufgabeIcon />}

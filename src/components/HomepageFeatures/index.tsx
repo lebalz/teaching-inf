@@ -1,13 +1,12 @@
 import clsx from 'clsx';
-import Heading from '@theme/Heading';
-import styles from './styles.module.css';
-import { useStore } from '@site/src/hooks/useStore';
+import styles from './styles.module.scss';
+import { useStore } from '@tdev-hooks/useStore';
 import { observer } from 'mobx-react-lite';
-import DefinitionList from '../DefinitionList';
-import { BACKEND_URL } from '@site/src/authConfig';
+import DefinitionList from '@tdev-components/DefinitionList';
+import { BACKEND_URL } from '@tdev/authConfig';
 import Icon from '@mdi/react';
 import { mdiCheckCircle, mdiCloseCircle, mdiConnection } from '@mdi/js';
-import Button from '../shared/Button';
+import Button from '@tdev-components/shared/Button';
 
 const HomepageFeatures = observer(() => {
     const socketStore = useStore('socketStore');
@@ -36,7 +35,7 @@ const HomepageFeatures = observer(() => {
                     {socketStore.isLive && (
                         <>
                             <dt>Clients</dt>
-                            <dd>{socketStore.connectedClients.get(userStore.current?.id ?? '') ?? 0}</dd>
+                            <dd>{socketStore.connectedClients.get(userStore.viewedUser?.id ?? '') ?? 0}</dd>
                         </>
                     )}
                     <dt>Connection</dt>

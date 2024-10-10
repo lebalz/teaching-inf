@@ -1,8 +1,8 @@
 import axios, { InternalAxiosRequestConfig } from 'axios';
 import { BACKEND_URL, apiConfig } from '../authConfig';
-import siteConfig from '@generated/docusaurus.config';
 import { InteractionRequiredAuthError } from '@azure/msal-browser';
 import { msalInstance } from '../theme/Root';
+import siteConfig from '@generated/docusaurus.config';
 const { TEST_USERNAME } = siteConfig.customFields as { TEST_USERNAME?: string };
 
 export namespace Api {

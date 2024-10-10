@@ -8,9 +8,10 @@
     user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;
-    -ms-user-select: none;
-    -khtml-user-select: none;
 
+    &.inline {
+        display: inline-flex;
+    }
     .checkbox {
         font-size: 1.2rem;
         border-radius: var(--ifm-global-radius);
@@ -20,6 +21,41 @@
         }
         &.readonly {
             filter: brightness(0.85);
+        }
+        @keyframes flash {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.8;
+            }
+        }
+
+        @keyframes shake {
+            0%,
+            100% {
+                transform: translateX(0) rotate(0deg);
+            }
+            10%,
+            30%,
+            50%,
+            70%,
+            90% {
+                transform: translateX(-2px) rotate(-5deg);
+            }
+            20%,
+            40%,
+            60%,
+            80% {
+                transform: translateX(2px) rotate(5deg);
+            }
+        }
+        &.animate {
+            animation:
+                flash 1s normal,
+                shake 1.5s normal;
+            transform-origin: center;
         }
     }
     &.dummy {

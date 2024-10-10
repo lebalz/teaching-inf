@@ -1,4 +1,8 @@
-import BrowserWindow from '@site/src/components/BrowserWindow';
+---
+page_id: edebd470-67c3-4ebe-9e96-3674b34dff25
+tags: [remark]
+---
+import BrowserWindow from '@tdev-components/BrowserWindow';
 
 # Flex Cards
 
@@ -160,26 +164,11 @@ div.flex {
 
 :::info[`docusaurus.config.ts]
 
-```ts {1,8,11,14}
+```ts
 import flexCardsPlugin from './src/plugins/remark-flex-cards/plugin';
-const config: Config = {
-    presets: [
-        [
-            'classic',
-            {
-                docs: {
-                    beforeDefaultRemarkPlugins: [flexCardsPlugin]
-                },
-                blog: {
-                    beforeDefaultRemarkPlugins: [flexCardsPlugin]
-                },
-                pages: {
-                    beforeDefaultRemarkPlugins: [flexCardsPlugin]
-                },
-            }
-        ]
-    ]
-}
-
+const BEFORE_DEFAULT_REMARK_PLUGINS = [
+    /* ... */
+    flexCardsPlugin
+];
 ```
 :::

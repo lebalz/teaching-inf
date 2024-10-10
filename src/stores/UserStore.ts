@@ -1,18 +1,17 @@
-import { action, computed, makeObservable, observable, reaction } from 'mobx';
-import { User as UserProps, find as apiFind, currentUser } from '../api/user';
-import { RootStore } from './rootStore';
-import User from '../models/User';
+import { action, computed, observable } from 'mobx';
+import { User as UserProps, all as apiAll, currentUser, update as apiUpdate } from '@tdev-api/user';
+import { RootStore } from '@tdev-stores/rootStore';
+import User from '@tdev-models/User';
 import _ from 'lodash';
-import Storage, { PersistedData } from './utils/Storage';
+import Storage, { PersistedData } from '@tdev-stores/utils/Storage';
 import { computedFn } from 'mobx-utils';
-import iStore from './iStore';
+import iStore from '@tdev-stores/iStore';
 
-export class UserStore extends iStore {
+export class UserStore extends iStore<`update-${string}`> {
     readonly root: RootStore;
 
+    @observable accessor _viewedUserId: string | undefined = undefined;
     users = observable<User>([]);
-
-    affectedEventIds = observable.set<string>([], { deep: false });
 
     constructor(root: RootStore) {
         super();
@@ -90,12 +89,62 @@ export class UserStore extends iStore {
         return this.users.find((u) => u.id === this.root.sessionStore?.currentUserId);
     }
 
+    findById(id: string) {
+        return this.users.find((user) => user.id === id);
+    }
+
+    @computed
+    get viewedUserId() {
+        if (!this.current?.isAdmin) {
+            return this.current?.id;
+        }
+        return this._viewedUserId || this.current?.id || this.root.sessionStore.userId;
+    }
+
+    @computed
+    get isUserSwitched() {
+        return !!this._viewedUserId;
+    }
+
     @action
-    loadUser(id: string) {
-        return this.withAbortController(`load-${id}`, async (ct) => {
-            return apiFind(id, ct.signal).then((res) => {
-                return this.addToStore(res.data);
-            });
+    switchUser(userId: string | undefined) {
+        if (!this.current?.isAdmin || this._viewedUserId === userId) {
+            return;
+        }
+        /**
+         * side-effect: if there are unprocessed rootDocuments in the queue, ensure they are processed
+         *
+         */
+        if (this.root.documentRootStore.queued.size > 0) {
+            this.root.documentRootStore.loadQueued.flush();
+        }
+        if (this._viewedUserId) {
+            this.root.socketStore.leaveRoom(this._viewedUserId);
+        }
+        if (userId === this.current?.id) {
+            this._viewedUserId = undefined;
+            return;
+        }
+        this._viewedUserId = userId;
+        if (userId) {
+            this.root.socketStore.joinRoom(userId);
+        }
+    }
+
+    @computed
+    get viewedUser(): User | undefined {
+        return this.find(this.viewedUserId);
+    }
+
+    @action
+    load() {
+        return this.withAbortController(`load-all`, async (ct) => {
+            return apiAll(ct.signal).then(
+                action((res) => {
+                    const models = res.data.map((d) => this.createModel(d));
+                    this.users.replace(models);
+                })
+            );
         });
     }
 
@@ -119,6 +168,17 @@ export class UserStore extends iStore {
             })
         );
         return res;
+    }
+
+    @action
+    update(user: User) {
+        return this.withAbortController(`update-${user.id}`, async (ct) => {
+            return apiUpdate(user.id, user.props, ct.signal).then(
+                action((res) => {
+                    this.addToStore(res.data);
+                })
+            );
+        });
     }
 
     @action

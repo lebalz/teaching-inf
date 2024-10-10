@@ -2,8 +2,8 @@ import React from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
-import { useFirstMainDocument } from '../../../hooks/useFirstMainDocument';
-import Loader from '../../Loader';
+import { useFirstMainDocument } from '@tdev-hooks/useFirstMainDocument';
+import Loader from '@tdev-components/Loader';
 
 interface Props extends MetaInit {
     id: string;

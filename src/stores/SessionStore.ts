@@ -1,10 +1,10 @@
 import { AccountInfo, IPublicClientApplication } from '@azure/msal-browser';
-import { action, computed, flow, flowResult, observable, reaction } from 'mobx';
-import { RootStore } from './rootStore';
-import { Role, User, currentUser, logout } from '../api/user';
-import Storage, { PersistedData, StorageKey } from './utils/Storage';
+import { action, computed, observable } from 'mobx';
+import { RootStore } from '@tdev-stores/rootStore';
+import { logout } from '@tdev-api/user';
+import Storage, { PersistedData, StorageKey } from '@tdev-stores/utils/Storage';
 import siteConfig from '@generated/docusaurus.config';
-import iStore from './iStore';
+import iStore from '@tdev-stores/iStore';
 const { NO_AUTH, TEST_USERNAME } = siteConfig.customFields as { TEST_USERNAME?: string; NO_AUTH?: boolean };
 
 class State {
@@ -20,7 +20,7 @@ export class SessionStore extends iStore {
 
     @observable.ref private accessor stateRef: State = new State();
 
-    @observable accessor authMethod: 'apiKey' | 'msal' = 'msal';
+    @observable accessor authMethod: 'apiKey' | 'msal';
 
     @observable accessor currentUserId: string | undefined;
 
@@ -73,6 +73,11 @@ export class SessionStore extends iStore {
     @computed
     get account(): AccountInfo | null | undefined {
         return this.stateRef.account;
+    }
+
+    @computed
+    get userId() {
+        return this.currentUserId || this.account?.localAccountId;
     }
 
     @action

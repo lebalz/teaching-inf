@@ -7,10 +7,10 @@ import Link from '@docusaurus/Link';
 import { useMsal, useIsAuthenticated } from '@azure/msal-react';
 import { observer } from 'mobx-react-lite';
 import { Redirect } from '@docusaurus/router';
-import { tokenRequest } from '../authConfig';
+import { tokenRequest } from '@tdev/authConfig';
 import siteConfig from '@generated/docusaurus.config';
 import Translate from '@docusaurus/Translate';
-import { useStore } from '../hooks/useStore';
+import { useStore } from '@tdev-hooks/useStore';
 const { NO_AUTH } = siteConfig.customFields as { NO_AUTH?: boolean };
 
 function HomepageHeader() {
@@ -30,7 +30,6 @@ const LoginPage = observer(() => {
     const { instance } = useMsal();
     const isAuthenticated = useIsAuthenticated();
     if (isAuthenticated || NO_AUTH) {
-        console.log('redirect');
         return <Redirect to={'/user'} />;
     }
     return (
@@ -60,7 +59,6 @@ const LoginPage = observer(() => {
 const Login = observer(() => {
     const sessionStore = useStore('sessionStore');
     if (sessionStore.isLoggedIn || NO_AUTH) {
-        console.log('redirect');
         return <Redirect to={'/user'} />;
     }
     return <LoginPage />;

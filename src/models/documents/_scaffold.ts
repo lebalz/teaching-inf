@@ -1,5 +1,5 @@
 import { action, computed, observable } from 'mobx';
-import iDocument from '../iDocument';
+import iDocument, { Source } from '@tdev-models/iDocument';
 import {
     DocumentType,
     Document as DocumentProps,
@@ -7,9 +7,9 @@ import {
     StateType,
     TypeDataMapping,
     Access
-} from '@site/src/api/document';
-import DocumentStore from '@site/src/stores/DocumentStore';
-import { TypeMeta } from '../DocumentRoot';
+} from '@tdev-api/document';
+import DocumentStore from '@tdev-stores/DocumentStore';
+import { TypeMeta } from '@tdev-models/DocumentRoot';
 
 export interface MetaInit {
     readonly?: boolean;
@@ -20,7 +20,7 @@ export class ModelMeta extends TypeMeta<DocumentType.TaskState> {
     readonly type = DocumentType.TaskState;
 
     constructor(props: Partial<MetaInit>) {
-        super(DocumentType.TaskState, props.readonly ? Access.RO : undefined);
+        super(DocumentType.TaskState, props.readonly ? Access.RO_User : undefined);
     }
 
     get defaultData(): TypeDataMapping[DocumentType.TaskState] {
@@ -34,9 +34,9 @@ class Model extends iDocument<DocumentType.TaskState> {
     }
 
     @action
-    setData(data: TypeDataMapping[DocumentType.TaskState], persist: boolean, updatedAt?: Date): void {
+    setData(data: TypeDataMapping[DocumentType.TaskState], from: Source, updatedAt?: Date): void {
         // TODO: change state according to data
-        if (persist) {
+        if (from === Source.LOCAL) {
             this.save();
         }
         if (updatedAt) {

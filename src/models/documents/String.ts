@@ -1,8 +1,8 @@
 import { action, computed, observable } from 'mobx';
-import iDocument from '../iDocument';
-import { DocumentType, Document as DocumentProps, TypeDataMapping, Access } from '@site/src/api/document';
-import DocumentStore from '@site/src/stores/DocumentStore';
-import { TypeMeta } from '../DocumentRoot';
+import iDocument, { Source } from '@tdev-models/iDocument';
+import { DocumentType, Document as DocumentProps, TypeDataMapping, Access } from '@tdev-api/document';
+import DocumentStore from '@tdev-stores/DocumentStore';
+import { TypeMeta } from '@tdev-models/DocumentRoot';
 
 export interface MetaInit {
     readonly?: boolean;
@@ -22,7 +22,7 @@ export class ModelMeta extends TypeMeta<DocumentType.String> {
     readonly checker: (val: string | undefined) => boolean;
 
     constructor(props: Partial<MetaInit>) {
-        super(DocumentType.String, props.readonly ? Access.RO : undefined);
+        super(DocumentType.String, props.readonly ? Access.RO_User : undefined);
         this.readonly = props.readonly;
         this.default = props.default;
         this.solution = props.solution;
@@ -53,10 +53,10 @@ class String extends iDocument<DocumentType.String> {
     }
 
     @action
-    setData(data: TypeDataMapping[DocumentType.String], persist: boolean, updatedAt?: Date): void {
+    setData(data: TypeDataMapping[DocumentType.String], from: Source, updatedAt?: Date): void {
         this.text = data.text;
         this.answer = StringAnswer.Unchecked;
-        if (persist) {
+        if (from === Source.LOCAL) {
             this.save();
         }
         if (updatedAt) {

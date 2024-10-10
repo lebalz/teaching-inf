@@ -1,24 +1,39 @@
 import { action, observable, runInAction } from 'mobx';
-import { RootStore } from './rootStore';
+import { RootStore } from '@tdev-stores/rootStore';
 import { computedFn } from 'mobx-utils';
-import DocumentRoot, { TypeMeta } from '../models/DocumentRoot';
+import DocumentRoot, { TypeMeta } from '@tdev-models/DocumentRoot';
 import {
-    find as apiFind,
-    create as apiCreate,
     Config,
-    findMany as apiFindMany,
+    create as apiCreate,
+    DocumentRootUpdate,
+    find as apiFind,
+    findManyFor as apiFindManyFor,
+    update as apiUpdate,
     DocumentRoot as ApiDocumentRoot
-} from '../api/documentRoot';
-import iStore from './iStore';
-import PermissionGroup from '../models/PermissionGroup';
-import PermissionUser from '../models/PermissionUser';
-import { DocumentType } from '../api/document';
+} from '@tdev-api/documentRoot';
+import iStore from '@tdev-stores/iStore';
+import GroupPermission from '@tdev-models/GroupPermission';
+import UserPermission from '@tdev-models/UserPermission';
+import { DocumentType } from '@tdev-api/document';
 import { debounce } from 'lodash';
+import User from '@tdev-models/User';
+
+type LoadConfig = {
+    documents?: boolean;
+    userPermissions?: boolean;
+    groupPermissions?: boolean;
+    documentRoot?: boolean;
+};
+
+type BatchedMeta = {
+    load: LoadConfig;
+    meta: TypeMeta<any>;
+};
 
 export class DocumentRootStore extends iStore {
     readonly root: RootStore;
     documentRoots = observable.array<DocumentRoot<DocumentType>>([]);
-    queued = new Map<string, TypeMeta<any>>();
+    queued = new Map<string, BatchedMeta>();
 
     constructor(root: RootStore) {
         super();
@@ -26,12 +41,15 @@ export class DocumentRootStore extends iStore {
     }
 
     @action
-    addDocumentRoot(documentRoot: DocumentRoot<DocumentType>, cleanupOld: boolean = false) {
+    addDocumentRoot(
+        documentRoot: DocumentRoot<DocumentType>,
+        config: { cleanup?: boolean; deep?: boolean } = {}
+    ) {
         const old = this.find(documentRoot.id);
         if (old) {
             this.documentRoots.remove(old);
-            if (cleanupOld) {
-                this.cleanupDocumentRoot(old);
+            if (config.cleanup) {
+                this.cleanupDocumentRoot(old, config.deep);
             }
         }
         this.documentRoots.push(documentRoot);
@@ -52,11 +70,19 @@ export class DocumentRootStore extends iStore {
     );
 
     @action
-    loadInNextBatch<Type extends DocumentType>(id: string, meta: TypeMeta<Type>) {
+    loadInNextBatch<Type extends DocumentType>(id: string, meta: TypeMeta<Type>, config?: LoadConfig) {
         if (this.queued.has(id)) {
             return;
         }
-        this.queued.set(id, meta);
+        this.queued.set(id, {
+            meta: meta,
+            load: config || {
+                documentRoot: true,
+                documents: true,
+                groupPermissions: true,
+                userPermissions: true
+            }
+        });
         this.loadQueued();
         if (this.queued.size > 42) {
             // max 2048 characters in URL - flush if too many
@@ -94,35 +120,55 @@ export class DocumentRootStore extends iStore {
             });
             return;
         }
+        const userId = this.root.userStore.viewedUserId;
+        const isUserSwitched = this.root.userStore.isUserSwitched;
+        /**
+         * the user is not yet loaded, but a session is active
+         */
+        if (!userId) {
+            for (const [id, meta] of current.entries()) {
+                this.queued.set(id, meta);
+            }
+            this.loadQueued();
+            return;
+        }
         /**
          * load all queued documents
          */
         const keys = [...current.keys()].sort();
         this.withAbortController(`load-queued-${keys.join('--')}`, async (signal) => {
-            const models = await apiFindMany(keys, signal.signal);
+            const models = await apiFindManyFor(userId, keys, isUserSwitched, signal.signal);
             // create all loaded models
             models.data.forEach(
                 action((data) => {
-                    const meta = current.get(data.id);
-                    if (!meta) {
+                    const config = current.get(data.id);
+                    if (!config) {
                         return;
                     }
-                    this.addApiResultToStore(data, meta);
+                    this.addApiResultToStore(data, config);
                     current.delete(data.id);
                 })
             );
-            // create all missing root documents
-            const created = await Promise.all(
-                [...current.keys()].map((id) => {
-                    return this.create(id, current.get(id) as TypeMeta<any>, {});
-                })
-            );
-            // delete all created roots from the current map
-            created
-                .filter((docRoot) => !!docRoot)
-                .forEach((docRoot) => {
-                    current.delete(docRoot.id);
-                });
+            if (!isUserSwitched) {
+                // create all missing root documents
+                const created = await Promise.all(
+                    [...current.keys()]
+                        .filter((id) => !this.find(id)?.isLoaded)
+                        .map((id) => {
+                            const config = current.get(id);
+                            if (config) {
+                                return this.create(id, config.meta, {});
+                            }
+                            return Promise.resolve(undefined);
+                        })
+                );
+                // delete all created roots from the current map
+                created
+                    .filter((docRoot) => !!docRoot)
+                    .forEach((docRoot) => {
+                        current.delete(docRoot.id);
+                    });
+            }
             // mark all remaining roots as loaded
             [...current.keys()].forEach((id) => {
                 const dummyModel = this.find(id);
@@ -134,35 +180,35 @@ export class DocumentRootStore extends iStore {
     }
 
     @action
-    load<Type extends DocumentType>(id: string, meta: TypeMeta<Type>) {
-        return this.withAbortController(`load-${id}`, async (signal) => {
-            const { data } = await apiFind(id, signal.signal);
-            if (!data) {
-                return;
-            }
-            return this.addApiResultToStore(data, meta);
-        });
-    }
-
-    @action
-    addApiResultToStore<Type extends DocumentType>(data: ApiDocumentRoot, meta: TypeMeta<Type>) {
-        const documentRoot = new DocumentRoot(data, meta, this);
-        runInAction(() => {
-            this.addDocumentRoot(documentRoot, true);
+    addApiResultToStore(data: ApiDocumentRoot, config: BatchedMeta) {
+        const documentRoot = config.load.documentRoot
+            ? new DocumentRoot(data, config.meta, this)
+            : this.find(data.id);
+        if (!documentRoot) {
+            return;
+        }
+        if (config.load.documentRoot) {
+            this.addDocumentRoot(documentRoot, { cleanup: true, deep: false });
+        }
+        if (config.load.groupPermissions) {
             data.groupPermissions.forEach((gp) => {
                 this.root.permissionStore.addGroupPermission(
-                    new PermissionGroup({ ...gp, documentRootId: documentRoot.id }, this.root.permissionStore)
+                    new GroupPermission({ ...gp, documentRootId: documentRoot.id }, this.root.permissionStore)
                 );
             });
+        }
+        if (config.load.userPermissions) {
             data.userPermissions.forEach((up) => {
                 this.root.permissionStore.addUserPermission(
-                    new PermissionUser({ ...up, documentRootId: documentRoot.id }, this.root.permissionStore)
+                    new UserPermission({ ...up, documentRootId: documentRoot.id }, this.root.permissionStore)
                 );
             });
+        }
+        if (config.load.documents) {
             data.documents.forEach((doc) => {
-                this.root.documentStore.addToStore(doc, 'persisted-root');
+                this.root.documentStore.addToStore(doc);
             });
-        });
+        }
         return documentRoot;
     }
 
@@ -171,9 +217,26 @@ export class DocumentRootStore extends iStore {
         return this.withAbortController(`create-${id}`, async (signal) => {
             const { data } = await apiCreate(id, config, signal.signal);
             const docRoot = new DocumentRoot(data, meta, this);
-            this.addDocumentRoot(docRoot, true);
+            this.addDocumentRoot(docRoot, { cleanup: true, deep: false });
             return docRoot;
         });
+    }
+
+    @action
+    handleUpdate({ id, access, sharedAccess }: DocumentRootUpdate) {
+        const model = this.find(id);
+        if (model) {
+            model.rootAccess = access;
+            model.sharedAccess = sharedAccess;
+        }
+    }
+
+    /**
+     * returns userPermissions and! groupPermissions
+     */
+    usersPermissions(documentRootId: string, userId: string) {
+        const user = this.root.userStore.findById(userId);
+        return this._permissionsByUser(documentRootId, user);
     }
 
     /**
@@ -181,12 +244,19 @@ export class DocumentRootStore extends iStore {
      */
     currentUsersPermissions(documentRootId: string) {
         const currentUser = this.root.userStore.current;
-        if (!currentUser) {
+        return this._permissionsByUser(documentRootId, currentUser);
+    }
+
+    /**
+     * returns userPermissions and! groupPermissions
+     */
+    private _permissionsByUser(documentRootId: string, user?: User) {
+        if (!user) {
             return [];
         }
         return this.root.permissionStore
             .permissionsByDocumentRoot(documentRootId)
-            .filter((p) => p.isAffectingUser(currentUser));
+            .filter((p) => p.isAffectingUser(user));
     }
 
     @action
@@ -201,9 +271,25 @@ export class DocumentRootStore extends iStore {
     }
 
     @action
-    cleanupDocumentRoot(documentRoot: DocumentRoot<DocumentType>) {
+    cleanupDocumentRoot(documentRoot: DocumentRoot<DocumentType>, cleanupDeep: boolean = true) {
         documentRoot.documents.forEach((doc) => {
-            this.root.documentStore.removeFromStore(doc.id);
+            this.root.documentStore.removeFromStore(doc, cleanupDeep);
         });
+    }
+
+    @action
+    save(documentRoot: DocumentRoot<any>) {
+        if (!this.root.sessionStore.isLoggedIn || !this.root.userStore.current?.isAdmin) {
+            return Promise.resolve('error');
+        }
+
+        const model = {
+            access: documentRoot.rootAccess,
+            sharedAccess: documentRoot.sharedAccess
+        };
+
+        return this.withAbortController(`save-${documentRoot.id}`, (signal) => {
+            return apiUpdate(documentRoot.id, model, signal.signal);
+        }).catch(() => console.warn('Error saving document root'));
     }
 }

@@ -7,7 +7,16 @@
         "types": ["docusaurus-plugin-sass"],
         "module": "esnext",
         "target": "esnext",
-        "strict": true
+        "strict": true,
+        "paths": {
+            "@tdev-components/*": ["src/components/*"],
+            "@tdev-hooks/*": ["src/hooks/*"],
+            "@tdev-models/*": ["src/models/*"],
+            "@tdev-stores/*": ["src/stores/*"],
+            "@tdev-api/*": ["src/api/*"],
+            "@tdev/*": ["src/*"],
+            "@site/*": ["./*"]
+        }
     },
     "exclude": ["src/plugins/**/*.test.ts", "node_modules", "dist", "build"]
 }

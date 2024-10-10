@@ -2,7 +2,7 @@ import React, { MouseEventHandler, type ReactNode } from 'react';
 import clsx from 'clsx';
 
 import styles from './styles.module.scss';
-import { ApiState } from '@site/src/stores/iStore';
+import { ApiState } from '@tdev-stores/iStore';
 import Link from '@docusaurus/Link';
 import { Color, getButtonColorClass } from '../Colors';
 import Icon from '@mdi/react';

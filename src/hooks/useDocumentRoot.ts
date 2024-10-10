@@ -1,7 +1,7 @@
 import React, { useId } from 'react';
-import { Access, DocumentType } from '../api/document';
-import { rootStore } from '../stores/rootStore';
-import DocumentRoot, { TypeMeta } from '../models/DocumentRoot';
+import { Access, DocumentType } from '@tdev-api/document';
+import DocumentRoot, { TypeMeta } from '@tdev-models/DocumentRoot';
+import { useStore } from '@tdev-hooks/useStore';
 
 /**
  * 1. create a dummy documentRoot with default (meta) data
@@ -19,18 +19,23 @@ export const useDocumentRoot = <Type extends DocumentType>(
     createFirstDocument: boolean = true
 ) => {
     const defaultRootDocId = useId();
+    const userStore = useStore('userStore');
+    const documentRootStore = useStore('documentRootStore');
     const [dummyDocumentRoot] = React.useState<DocumentRoot<Type>>(
         new DocumentRoot(
-            { id: id || defaultRootDocId, access: Access.RW, sharedAccess: Access.None },
+            {
+                id: id || defaultRootDocId,
+                access: Access.RW_DocumentRoot,
+                sharedAccess: Access.None_DocumentRoot
+            },
             meta,
-            rootStore.documentRootStore,
+            documentRootStore,
             true
         )
     );
 
     /** initial load */
     React.useEffect(() => {
-        const { documentRootStore } = rootStore;
         const rootDoc = documentRootStore.find(dummyDocumentRoot.id);
         if (rootDoc) {
             return;
@@ -48,9 +53,20 @@ export const useDocumentRoot = <Type extends DocumentType>(
          */
         documentRootStore.loadInNextBatch(id, meta);
         return () => {
-            rootStore.documentRootStore.removeFromStore(defaultRootDocId, false);
+            documentRootStore.removeFromStore(defaultRootDocId, false);
         };
     }, []);
 
-    return rootStore.documentRootStore.find<Type>(dummyDocumentRoot.id) || dummyDocumentRoot;
+    React.useEffect(() => {
+        if (!userStore.isUserSwitched || !id) {
+            return;
+        }
+        documentRootStore.loadInNextBatch(id, meta, {
+            documents: true,
+            userPermissions: true,
+            groupPermissions: true
+        });
+    }, [userStore.viewedUser]);
+
+    return documentRootStore.find<Type>(dummyDocumentRoot.id) || dummyDocumentRoot;
 };

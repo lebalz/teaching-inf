@@ -1,4 +1,8 @@
-import String from '@site/src/components/documents/String';
+---
+page_id: d587a55b-f232-461d-8957-98c71d722bf6
+---
+import String from '@tdev-components/documents/String';
+import PermissionsPanel from "@tdev-components/PermissionsPanel"
 
 # String Answers
 
@@ -9,6 +13,7 @@ Einzeilige Texteingabe ohne Formatierung.
 ```
 
 <String id="4caa49d4-5385-433e-9651-a48ebed29a9a" />
+<PermissionsPanel documentRootId="4caa49d4-5385-433e-9651-a48ebed29a9a" />
 
 ## Label
 
