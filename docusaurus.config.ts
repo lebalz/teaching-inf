@@ -19,6 +19,7 @@ import linkAnnotationPlugin from './src/plugins/remark-link-annotation/plugin';
 import mediaPlugin from './src/plugins/remark-media/plugin';
 import detailsPlugin from './src/plugins/remark-details/plugin';
 import pagePlugin from './src/plugins/remark-page/plugin';
+import commentPlugin from './src/plugins/remark-comments/plugin';
 import themeCodeEditor from './src/plugins/theme-code-editor'
 import enumerateAnswersPlugin from './src/plugins/remark-enumerate-components/plugin';
 import { v4 as uuidv4 } from 'uuid';
@@ -73,6 +74,14 @@ const REMARK_PLUGINS = [
     }
   ],
   pagePlugin,
+  [
+    commentPlugin,
+    {
+      commentableJsxFlowElements: ['dd'],
+      ignoreJsxFlowElements: ['summary', 'dt'],
+      ignoreCodeBlocksWithMeta: /live_py/
+    }
+  ],
   [
       linkAnnotationPlugin,
       {

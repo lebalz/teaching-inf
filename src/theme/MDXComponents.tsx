@@ -11,6 +11,7 @@ import Figure from '@tdev-components/Figure';
 import SourceRef from '@tdev-components/Figure/SourceRef';
 import Answer from '@tdev-components/Answer';
 import Solution from '@tdev-components/documents/Solution';
+import MdxComment from '@tdev-components/documents/MdxComment';
 import MdxPage from '@tdev-components/MdxPage';
 
 export default {
@@ -26,5 +27,6 @@ export default {
     SourceRef: SourceRef,
     Answer: Answer,
     Solution: Solution,
-    MdxPage: MdxPage
+    MdxPage: MdxPage,
+    MdxComment: MdxComment
 };
