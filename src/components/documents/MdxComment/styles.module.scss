@@ -5,7 +5,7 @@
     .comment {
         position: absolute;
         right: -1em;
-        top: -3em;
+        top: -2.75em;
         z-index: var(--ifm-z-index-dropdown);
         display: none;
         cursor: pointer;
@@ -19,7 +19,7 @@
         }
         &.open {
             .comment {
-                top: -1.75em;
+                top: -1.5em;
             }
         }
     }
@@ -100,10 +100,12 @@ li:has(+ .wrapper) {
         .comment {
             top: -1.5em;
         }
-        &.active.open {
-            .comment {
-                top: -1.5em;
-            }
+    }
+}
+h1:has(+ .wrapper) {
+    + .wrapper {
+        .comment {
+            top: -3em;
         }
     }
 }
