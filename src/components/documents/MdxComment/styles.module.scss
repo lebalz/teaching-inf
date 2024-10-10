@@ -95,6 +95,8 @@
         }
     }
 }
+
+dd:has(+ .wrapper),
 li:has(+ .wrapper) {
     + .wrapper {
         .comment {
@@ -106,18 +108,6 @@ h1:has(+ .wrapper) {
     + .wrapper {
         .comment {
             top: -3em;
-        }
-    }
-}
-dd:has(+ .wrapper) {
-    + .wrapper {
-        .comment {
-            top: -1.75em;
-        }
-        &.active.open {
-            .comment {
-                top: -1.75em;
-            }
         }
     }
 }

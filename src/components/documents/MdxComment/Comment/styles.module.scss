@@ -2,6 +2,7 @@
     border-right: 2px solid var(--comment-ico-color);
     border-bottom-right-radius: var(--ifm-alert-border-radius);
     position: relative;
+    margin-bottom: 0.4rem;
     .options {
         position: absolute;
         top: 0em;
@@ -22,7 +23,6 @@
         --ifm-color-primary: var(--comment-ico-color);
         margin-bottom: 0;
     }
-    margin-bottom: 0.5em;
 }
 .iconWrapper:hover + .content {
     .options {
@@ -35,6 +35,8 @@
 */
 dd + .iconWrapper + .content {
     grid-column: 2;
+    margin-left: 0.6rem;
+    margin-bottom: 0;
 }
 
 @media screen and (max-width: 620px) {
