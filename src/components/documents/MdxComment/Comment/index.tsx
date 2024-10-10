@@ -37,6 +37,10 @@ const Comment = observer((props: Props) => {
             >
                 <div
                     className={clsx(sharedStyles.comment)}
+                    onDoubleClick={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                    }}
                     onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
@@ -69,6 +73,10 @@ const Comment = observer((props: Props) => {
                     {comment.isOpen && (
                         <div
                             className={clsx(styles.options, comment.optionsOpen && styles.open)}
+                            onDoubleClick={(e) => {
+                                e.stopPropagation();
+                                e.preventDefault();
+                            }}
                             onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();

@@ -3,22 +3,9 @@ import clsx from 'clsx';
 import sharedStyles from '../styles.module.scss';
 import styles from './options.module.scss';
 import { observer } from 'mobx-react-lite';
-import { DocumentType } from '@tdev-api/document';
 import MdxComment from '@tdev-models/documents/MdxComment';
-import { QuillV2Component } from '@tdev-components/documents/QuillV2';
-import Icon, { Stack } from '@mdi/react';
-import {
-    mdiCircle,
-    mdiClose,
-    mdiCommentAccount,
-    mdiCommentAccountOutline,
-    mdiCommentOutline,
-    mdiCommentPlusOutline,
-    mdiDotsHorizontalCircleOutline,
-    mdiTrashCan,
-    mdiTrashCanOutline
-} from '@mdi/js';
-import { Color, Colors } from '@tdev-components/shared/Colors';
+import { mdiClose, mdiTrashCan, mdiTrashCanOutline } from '@mdi/js';
+import { Color } from '@tdev-components/shared/Colors';
 import Button from '@tdev-components/shared/Button';
 
 interface Props {

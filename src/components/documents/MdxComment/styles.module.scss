@@ -109,6 +109,18 @@ h1:has(+ .wrapper) {
         }
     }
 }
+dd:has(+ .wrapper) {
+    + .wrapper {
+        .comment {
+            top: -1.75em;
+        }
+        &.active.open {
+            .comment {
+                top: -1.75em;
+            }
+        }
+    }
+}
 
 // for the commented section
 *:hover {

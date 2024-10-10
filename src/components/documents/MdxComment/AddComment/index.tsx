@@ -2,10 +2,8 @@ import React from 'react';
 import clsx from 'clsx';
 import styles from '../styles.module.scss';
 import { observer } from 'mobx-react-lite';
-import { useFirstMainDocument } from '@tdev-hooks/useFirstMainDocument';
-import Loader from '@tdev-components/Loader';
 import Icon, { Stack } from '@mdi/react';
-import { mdiCircle, mdiCommentPlus, mdiCommentPlusOutline } from '@mdi/js';
+import { mdiCommentPlus, mdiCommentPlusOutline } from '@mdi/js';
 import { DocumentType, MdxCommentData } from '@tdev-api/document';
 import { useStore } from '@tdev-hooks/useStore';
 import { Delta } from 'quill/core';
@@ -20,7 +18,13 @@ const AddComment = observer((props: Props) => {
         <div className={clsx(styles.wrapper, styles.colorized)}>
             <div
                 className={clsx(styles.comment)}
-                onClick={() => {
+                onDoubleClick={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                }}
+                onClick={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
                     documentStore
                         .create({
                             documentRootId: props.pageId,
