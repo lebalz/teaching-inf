@@ -74,7 +74,7 @@ const REMARK_PLUGINS = [
   [
     commentPlugin,
     {
-      commentableJsxFlowElements: ['dd'],
+      commentableJsxFlowElements: ['dd', 'DefHeading'],
       ignoreJsxFlowElements: ['summary', 'dt'],
       ignoreCodeBlocksWithMeta: /live_py/
     }
