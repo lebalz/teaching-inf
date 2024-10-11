@@ -77,7 +77,7 @@ const REMARK_PLUGINS = [
   [
     commentPlugin,
     {
-      commentableJsxFlowElements: ['dd'],
+      commentableJsxFlowElements: ['dd', 'DefHeading', 'figcaption', 'String'],
       ignoreJsxFlowElements: ['summary', 'dt'],
       ignoreCodeBlocksWithMeta: /live_py/
     }
@@ -390,7 +390,14 @@ const config: Config = {
     }
   ],
   themes: [
-    [themeCodeEditor, {}]
+    [
+      themeCodeEditor, 
+      {
+        brythonSrc: 'https://cdn.jsdelivr.net/npm/brython@3.13.0/brython.min.js',
+        brythonStdlibSrc: 'https://cdn.jsdelivr.net/npm/brython@3.13.0/brython_stdlib.js',
+        libDir: '/bry-libs/'
+      }
+    ]
   ],
   scripts: [
     {
