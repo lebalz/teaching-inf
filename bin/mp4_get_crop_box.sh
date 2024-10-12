@@ -6,4 +6,4 @@ usage="usage: ./mp4_get_crop_box.sh path/to/movie.mp4"
 
 MP4=$1
 
-ffmpeg -ss 10 -i $MP4 -vframes 10 -vf cropdetect -f null - # show possible crop param
+ffmpeg -ss 1 -i $MP4 -vframes 30 -vf cropdetect -f null - # show possible crop param
