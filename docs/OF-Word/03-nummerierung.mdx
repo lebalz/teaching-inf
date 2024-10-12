@@ -22,15 +22,13 @@ Das Kopf- und Fusszeilen Menü öffnen (Doppelklick in den untersten Bereich ein
 
 ![--width=350](./images/word-seitenzahl.png)
 
-Soll die erste Seite (bspw. Titelblatt) keine Seitenzahl erhalten, so kann das Häckchen "Erste Seite Anders" angewählt werden:
-
-![--width=350](./images/word-seitenzahl-erste-seite-anders.png)
-
-Über die Option "Seitenzahle formatieren..." kann bspw. das Seitenzahlformat (z.B. römische Zahlen) oder der Startwert festgelegt werden.
-
-Die erste Seite, auch wenn "Erste Seite Anders" ausgewählt ist, zählt bei der Nummerierung auch dazu. Die Nummerierung muss also bei `0` starten, wenn die Seite nach dem Titelblatt die Seitenzahl `1` erhalten soll.
-
-![--width=350](./images/word-seitenzahl-format.png)
+Erste Seite anders (1)
+: Soll die erste Seite (bspw. Titelblatt) keine Seitenzahl erhalten, so kann das Häckchen "Erste Seite Anders" angewählt werden:
+: ![--width=350](./images/word-seitenzahl-erste-seite-anders.png)
+Formatieren (2)
+: Über die Option "Seitenzahle formatieren..." kann bspw. das Seitenzahlformat (z.B. römische Zahlen) oder der Startwert festgelegt werden.
+: Die erste Seite, auch wenn "Erste Seite Anders" ausgewählt ist, zählt bei der Nummerierung auch dazu. Die Nummerierung muss also bei `0` starten, wenn die Seite nach dem Titelblatt die Seitenzahl `1` erhalten soll.
+: ![--width=350](./images/word-seitenzahl-format.png)
 
 ## Überschriften Nummerieren
 
@@ -48,29 +46,66 @@ Die Formatvorlage für eine Überschrift kann geändert und über __Format > Num
 
 </div>
 
-Soll eine verschachtelte Nummerierung eingefügt werden, muss
-- zuerst der *Überschrift 1* eine einfache Nummerierung (wie oben) hinzugefügt werden
-- der Cursor im Überschriften-Text fokussiert werden
-- Über die "Liste mit mehreren Ebenen" die verschachtelte Nummerierung eingefügt werden
+Soll eine **verschachtelte Nummerierung** eingefügt werden, muss
+1. der Cursor im Überschriften-Text fokussiert werden
+2. Über die "Liste mit mehreren Ebenen" die verschachtelte Nummerierung eingefügt werden
 
 ![--width=350](./images/word-nummerierung-edit.png)
 
+::video[./images/enumerate.mp4]
+
 ### Automatisches Inhaltsverzeichnis
 
-Ein grosser Vorteil von zugewiesenen FOrmatvorlagen ist das Erzeugen von Verzeichnissen. Da Word nun "weiss", was einer Überschrift entspricht, lassen sich bspw. Inhaltsverzeichnisse autmatisch generieren und auf Knopfdruck auch aktualisieren.
+Ein grosser Vorteil von zugewiesenen **Formatvorlagen** ist das Erzeugen von Verzeichnissen. Da Word nun "weiss", was einer Überschrift entspricht, lassen sich bspw. Inhaltsverzeichnisse autmatisch generieren und auf Knopfdruck auch aktualisieren.
 
 ![](./images/word-inhaltsverzeichnis.gif)
 
+:::warning[Inhaltsverzeichnis aktualisieren]
+Nachdem das Inhaltsverzeichnis generiert wurde, muss es bei Änderungen im Dokument aktualisiert werden. 
+1. __Inhaltsverzeichnis aktualisieren__ oder[[F9]] drücken
+Nur Seitenzahlen aktualisieren (a)
+: Falls sich der Inhalt, nicht aber die Überschriften geändert haben (schneller).
+Gesamtes Inhaltsverzeichnis aktualisieren (b)
+: Falls sich die Überschriften geändert oder neue Überschriften dazugekommen sind.
+
+![](./images/inhaltsverzeichnis.png)
+:::
 
 ## Bilder
+In grösseren Arbeiten sollten Bilder nummeriert und mit einem Text versehen werden.
 
 ### Layoutoptionen
 
+Die Positionierung von Bildern kann über die Layoutoptionen gesteuert werden. Diese können über einen Rechtsklick auf das Bild und "Layoutoptionen" eingestellt werden.
+
 ![](./images/word-bilder.gif)
+
+:::warning[Mit Text in Zeile]
+Die Standardoption "Mit Text in Zeile" ist selten die richtige Wahl, da bei Textänderungen das gesamte Layout verändert wird.
+Die Option __Quadrat__ oder __Oben und unten__ sind meistens die bessere Wahl.
+:::
+
+:::tip[Kein Einfluss auf den Textfluss]
+Sollen die Bilder frei verschiebbar sein und keinen Einfluss auf den Text haben, so ist die Option __Vor den Text__ die richtige Wahl.
+
+Hilfreich ist dies bspw. beim Erstellen einer Bild-Collage.
+:::
+
+### Bildunterschrift
+Ist eine **Layoutoption** __Mit Textumbruch__ gewählt, so wird beim Beschriften eines Bildes von Word ein **Textfeld** unter dem Bild eingefügt, welches eine spezielle Nummerierung enthält (ähnlich wie bei den Überschriften).
+Damit das Bild **mit der Unterschrift** verschoben werden kann, müssen das Bild und die Unterschrift **Gruppiert** werden.
+
+1. Layoutoption __Mit Textumbruch__ wählen
+2. __:mdi[mouse-right-click] Rechtsklick auf das Bild > :mdi[image-area] Beschriftung einfügen...__
+3. Beschriftung hinzufügen, ggf. Nummerierung anpassen
+4. Bei gedrückter [[Ctrl]]-Taste den **Rahmen der Beschriftung** und das **Bild** auswählen
+5. __:mdi[mouse-right-click] Rechtsklick > :mdi[group] Gruppieren > :mdi[group] Gruppieren__
+
+::video[./images/bildbeschriftung.mp4]
 
 ## Übung
 
-:::aufgabe
+::::aufgabe
 <Answer type="state" id="213ec6ee-34bf-4726-b0b9-c0bb3bcc2ddc" />
 
 Laden Sie das Word-Dokument [ex02-machine-learning.docx](files/ex02-machine-learning.docx) herunter.
@@ -105,10 +140,9 @@ Laden Sie das Word-Dokument [ex02-machine-learning.docx](files/ex02-machine-lear
 
 </div>
 
-:::
+<Answer type="text" id="138d2c09-12da-446d-9a27-ffe5a5d24816" placeholder="✍️ Notizen..." />
 
-### Übung Schritt für Schritt im Video
-
+:::details[Schritt für Schritt im Video]
 #### Alles ausser die Bilder
 
 ::video[./images/text-exercise-2-a.mp4]
@@ -119,4 +153,6 @@ Laden Sie das Word-Dokument [ex02-machine-learning.docx](files/ex02-machine-lear
 #### Bilder, Bildverzeichnisse, Querverweise
 
 ::video[./images/text-exercise-2-b.mp4]
----
+:::
+::::
+
