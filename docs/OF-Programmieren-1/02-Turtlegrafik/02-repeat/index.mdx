@@ -418,3 +418,35 @@ hideturtle()
 </Solution>
 
 :::
+
+::::aufgabe[⭐ 10. Stern]
+Erstellen Sie folgenden Stern. Überlegen Sie sich, wie er aufgebaut ist und wie Sie ihn mit möglichst wenig Code zeichnen können.
+
+![](./images/quadrat-stern.svg)
+
+```py live_py title=stern.py id=de0335a9-6279-40b9-a6db-a012e1179f75
+from turtle import *
+
+```
+
+:::details[Hinweis]
+Der Stern besteht aus 20 Quadraten
+![](./images/quadrat-stern-erklaert.svg)
+:::
+
+<Solution id="72e99fda-c250-4381-b461-ed359b7d0be4">
+
+```py live_py slim
+from turtle import *
+
+for i in range(20):
+    for i in range(4):
+        forward(50)
+        left(90)
+    left(360/20)
+hideturtle()
+```
+
+</Solution>
+
+::::
