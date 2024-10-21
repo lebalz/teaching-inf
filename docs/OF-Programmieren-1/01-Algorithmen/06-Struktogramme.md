@@ -29,6 +29,12 @@ forward(50)
 ]} />
 :::
 
+## Parameter ⊕ ⊖
+
+Ein Unterprogramm kann mit **Parametern** aufgerufen werden.
+
+Parameter werden jeweils <u>unterstrichen</u>, so dass klar ist, welche Werte sich ändern können.
+
 
 ## Wiederholung 🔁
 
@@ -60,7 +66,6 @@ for i in range(4):
 - Der Doppelpunkt am Zeilenende zeigt an, dass eine eingerückte Sequenz (beim Programmieren spricht man von einem *Codeblock*) folgt.
 :::
 
-{/*
 ## Unterprogramm 🏷
 Eine Sequenz kann mit einem Namen versehen werden. Anstatt immer die ganze Sequenz aufzuschreiben, genügt es den Namen aufzuschreiben.
 
@@ -105,12 +110,6 @@ zick_zack()
 - Den Namen für Unterprogramm kann beliebig gewählt werden, sofern er nicht mit einer Zahl beginnt und keine Sonderzeichen enthält. **Leerschläge** und **Bindestriche** sind nicht erlaubt - stattdessen werden Unterstriche `_` verwendet: Statt `zick zack` wird der Name `zick_zack` verwendet. 
 :::
 
-## Parameter ⊕ ⊖
-
-Ein Unterprogramm kann mit **Parametern** aufgerufen werden.
-
-Parameter werden jeweils <u>unterstrichen</u>, so dass klar ist, welche Werte sich ändern können.
-
 ### Variablen
 Bei Programmen wird zwischen Parametern und Variablen unterschieden. Genau wie Paramter können diese das Ergebnis eines Algorithmus ändern. Sie werden in einem Struktogramm speziell als markiert, damit klar ist, dass eigentlich der in der Variable gespeicherte Wert gemeint ist.
 
@@ -125,6 +124,5 @@ print(f'Ich bin {grösse} cm gross')
     {type: 'step', code: <span>Ausgabe: Ich bin <span className="var">grösse</span> cm gross.</span>}
 ]} />
 :::
-*/}
 
 [^1]: Quelle: [rothe.io](https://rothe.io/?b=prog1&p=905106)

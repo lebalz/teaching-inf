@@ -57,7 +57,7 @@
         border-left: 0.4em solid var(--bordered-color);
         border-right: 0.4em solid var(--bordered-color);
         > .header {
-            margin-left: calc(min(-2 * var(--size), -2.5 * var(--indent)) - 0.4em);
+            margin-left: calc(min(-2 * var(--size), -2.2 * var(--indent)) - 0.4em);
         }
     }
     .if {
@@ -68,8 +68,8 @@
     }
     .call {
         padding-left: calc(max(var(--size), var(--indent)) + 0.4em);
-        border-left: 1px solid var(--bordered-color);
-        border-right: 1px solid var(--bordered-color);
+        border-left: 2px solid var(--bordered-color);
+        border-right: 2px solid var(--bordered-color);
     }
 
     .bordered {
@@ -79,7 +79,7 @@
             width: 0;
             height: 100%;
             position: absolute;
-            border-right: 1px solid var(--bordered-color);
+            border-right: 2px solid var(--bordered-color);
             top: 0;
             right: 0.3em;
         }
@@ -88,7 +88,7 @@
             width: 0;
             height: 100%;
             position: absolute;
-            border-left: 1px solid var(--bordered-color);
+            border-left: 2px solid var(--bordered-color);
 
             top: 0;
             left: 0.3em;
