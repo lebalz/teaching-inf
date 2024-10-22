@@ -17,7 +17,7 @@ export async function exportAsExcelSpreadsheet(group: StudentGroup) {
         to: { row: group.students.length + 1, column: 3 }
     };
 
-    const headerRow = sheet.insertRow(1, ['ID', 'Vorname', 'Nachname']);
+    const headerRow = sheet.insertRow(1, ['ID', 'Vorname', 'Nachname', 'E-Mail']);
     headerRow.eachCell((cell) => {
         cell.font = {
             bold: true
@@ -25,7 +25,7 @@ export async function exportAsExcelSpreadsheet(group: StudentGroup) {
     });
 
     group.students.forEach((student, index) => {
-        sheet.insertRow(index + 2, [student.id, student.firstName, student.lastName]);
+        sheet.insertRow(index + 2, [student.id, student.firstName, student.lastName, student.email]);
     });
 
     const buffer = await workbook.xlsx.writeBuffer();
