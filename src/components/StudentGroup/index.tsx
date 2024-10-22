@@ -10,6 +10,7 @@ import {
     mdiCircleEditOutline,
     mdiCloseCircleOutline,
     mdiContentSave,
+    mdiDownloadCircleOutline,
     mdiTrashCanOutline
 } from '@mdi/js';
 import { useStore } from '@tdev-hooks/useStore';
@@ -55,7 +56,11 @@ const StudentGroup = observer((props: Props) => {
                     )}
                 </h3>
                 {isAdmin && (
-                    <div>
+                    <div className={styles.buttons}>
+                        <Button
+                            icon={mdiDownloadCircleOutline}
+                            onClick={() => console.log(`Downloading ${group.name} (${group.id})`)} />
+                        <div>
                         {editing ? (
                             <>
                                 <Button
@@ -96,6 +101,7 @@ const StudentGroup = observer((props: Props) => {
                                 title="Bearbeiten"
                             />
                         )}
+                    </div>
                     </div>
                 )}
             </div>
