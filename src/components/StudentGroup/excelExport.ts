@@ -18,7 +18,7 @@ export async function exportAsExcelSpreadsheet(group: StudentGroup) {
     };
 
     const headerRow = sheet.insertRow(1, ['ID', 'Vorname', 'Nachname']);
-    headerRow.eachCell(cell => {
+    headerRow.eachCell((cell) => {
         cell.font = {
             bold: true
         };
@@ -30,7 +30,9 @@ export async function exportAsExcelSpreadsheet(group: StudentGroup) {
 
     const buffer = await workbook.xlsx.writeBuffer();
 
-    const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    const blob = new Blob([buffer], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    });
     const filename = `Lerngruppe ${group.name}.xlsx`;
     saveAs(blob, filename);
 }

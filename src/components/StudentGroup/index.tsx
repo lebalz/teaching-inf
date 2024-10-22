@@ -10,7 +10,7 @@ import {
     mdiCircleEditOutline,
     mdiCloseCircleOutline,
     mdiContentSave,
-    mdiDownloadCircleOutline,
+    mdiFileExcelOutline,
     mdiTrashCanOutline
 } from '@mdi/js';
 import { useStore } from '@tdev-hooks/useStore';
@@ -59,50 +59,52 @@ const StudentGroup = observer((props: Props) => {
                 {isAdmin && (
                     <div className={styles.buttons}>
                         <Button
-                            icon={mdiDownloadCircleOutline}
-                            onClick={() => exportAsExcelSpreadsheet(group)} />
+                            icon={mdiFileExcelOutline}
+                            onClick={() => exportAsExcelSpreadsheet(group)}
+                            color={'green'}
+                        />
                         <div>
-                        {editing ? (
-                            <>
+                            {editing ? (
+                                <>
+                                    <Button
+                                        onClick={() => {
+                                            group.reset();
+                                            setEditing(false);
+                                        }}
+                                        icon={mdiCloseCircleOutline}
+                                        color="black"
+                                        title="Verwerfen"
+                                    />
+                                    <Button
+                                        onClick={() => {
+                                            group.save();
+                                            setEditing(false);
+                                        }}
+                                        icon={mdiContentSave}
+                                        color="green"
+                                        title="Speichern"
+                                    />
+                                    <Button
+                                        onClick={() => {
+                                            groupStore.destroy(group);
+                                        }}
+                                        icon={mdiTrashCanOutline}
+                                        color="red"
+                                        title="Löschen"
+                                    />
+                                </>
+                            ) : (
                                 <Button
                                     onClick={() => {
-                                        group.reset();
-                                        setEditing(false);
+                                        setEditing(!editing);
+                                        setEditing(true);
                                     }}
-                                    icon={mdiCloseCircleOutline}
-                                    color="black"
-                                    title="Verwerfen"
+                                    icon={mdiCircleEditOutline}
+                                    color="orange"
+                                    title="Bearbeiten"
                                 />
-                                <Button
-                                    onClick={() => {
-                                        group.save();
-                                        setEditing(false);
-                                    }}
-                                    icon={mdiContentSave}
-                                    color="green"
-                                    title="Speichern"
-                                />
-                                <Button
-                                    onClick={() => {
-                                        groupStore.destroy(group);
-                                    }}
-                                    icon={mdiTrashCanOutline}
-                                    color="red"
-                                    title="Löschen"
-                                />
-                            </>
-                        ) : (
-                            <Button
-                                onClick={() => {
-                                    setEditing(!editing);
-                                    setEditing(true);
-                                }}
-                                icon={mdiCircleEditOutline}
-                                color="orange"
-                                title="Bearbeiten"
-                            />
-                        )}
-                    </div>
+                            )}
+                        </div>
                     </div>
                 )}
             </div>
