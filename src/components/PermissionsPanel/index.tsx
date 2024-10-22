@@ -43,7 +43,7 @@ const PermissionsPanel = observer(({ documentRootId }: Props) => {
         return (
             <div className={styles.viewedUserPermissionPanel} onClick={(e) => e.stopPropagation()}>
                 {userPermission ? (
-                    <UserPermission key={0} permission={userPermission} />
+                    <UserPermission permission={userPermission} />
                 ) : (
                     <AccessSelector
                         accessTypes={[Access.RO_User, Access.RW_User, Access.None_User]}
