@@ -41,7 +41,7 @@ const PermissionsPanel = observer(({ documentRootId }: Props) => {
             .userPermissionsByDocumentRoot(documentRoot.id)
             .find((permission) => permission.userId === viewedUser.id);
         return (
-            <div className={styles.viewedUserPermissionPanel}>
+            <div className={styles.viewedUserPermissionPanel} onClick={(e) => e.stopPropagation()}>
                 {userPermission ? (
                     <UserPermission key={0} permission={userPermission} />
                 ) : (
