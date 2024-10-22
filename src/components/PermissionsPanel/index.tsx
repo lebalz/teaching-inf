@@ -40,15 +40,19 @@ const PermissionsPanel = observer(({ documentRootId }: Props) => {
         const userPermission = permissionStore
             .userPermissionsByDocumentRoot(documentRoot.id)
             .find((permission) => permission.userId === viewedUser.id);
-        return userPermission ? (
-            <UserPermission key={0} permission={userPermission} />
-        ) : (
-            <AccessSelector
-                accessTypes={[Access.RO_User, Access.RW_User, Access.None_User]}
-                onChange={(access) => {
-                    permissionStore.createUserPermission(documentRoot, viewedUser, access);
-                }}
-            />
+        return (
+            <div className={styles.viewedUserPermissionPanel}>
+                {userPermission ? (
+                    <UserPermission key={0} permission={userPermission} />
+                ) : (
+                    <AccessSelector
+                        accessTypes={[Access.RO_User, Access.RW_User, Access.None_User]}
+                        onChange={(access) => {
+                            permissionStore.createUserPermission(documentRoot, viewedUser, access);
+                        }}
+                    />
+                )}
+            </div>
         );
     }
 
