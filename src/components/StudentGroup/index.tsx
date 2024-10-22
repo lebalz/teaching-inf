@@ -17,6 +17,7 @@ import { useStore } from '@tdev-hooks/useStore';
 import AddUserPopup from './AddUserPopup';
 import DefinitionList from '../DefinitionList';
 import Details from '@theme/Details';
+import { exportAsExcelSpreadsheet } from '@tdev-components/StudentGroup/excelExport';
 
 interface Props {
     studentGroup: StudentGroupModel;
@@ -59,7 +60,7 @@ const StudentGroup = observer((props: Props) => {
                     <div className={styles.buttons}>
                         <Button
                             icon={mdiDownloadCircleOutline}
-                            onClick={() => console.log(`Downloading ${group.name} (${group.id})`)} />
+                            onClick={() => exportAsExcelSpreadsheet(group)} />
                         <div>
                         {editing ? (
                             <>
