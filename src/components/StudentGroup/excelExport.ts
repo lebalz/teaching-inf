@@ -12,12 +12,20 @@ export async function exportAsExcelSpreadsheet(group: StudentGroup) {
 
     const sheet = workbook.addWorksheet(group.name);
 
-    // TODO: Filter cols?
-    sheet.insertRow(1, ['', 'ID', 'Vorname', 'Nachname']);
+    sheet.autoFilter = {
+        from: { row: 1, column: 1 },
+        to: { row: group.students.length + 1, column: 3 }
+    };
 
-    // TODO: Fit row width.
+    const headerRow = sheet.insertRow(1, ['ID', 'Vorname', 'Nachname']);
+    headerRow.eachCell(cell => {
+        cell.font = {
+            bold: true
+        };
+    });
+
     group.students.forEach((student, index) => {
-        sheet.insertRow(index + 2, ['', student.id, student.firstName, student.lastName]);
+        sheet.insertRow(index + 2, [student.id, student.firstName, student.lastName]);
     });
 
     const buffer = await workbook.xlsx.writeBuffer();
