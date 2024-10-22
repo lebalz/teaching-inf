@@ -30,7 +30,7 @@ const PermissionsPanel = observer(({ documentRootId }: Props) => {
     const documentRootStore = useStore('documentRootStore');
     const permissionStore = useStore('permissionStore');
     const documentRoot = documentRootStore.find(documentRootId);
-    const viewedUser = userStore.viewedUser;
+    const { viewedUser } = userStore;
 
     if (!userStore.current?.isAdmin || !documentRoot) {
         return null;
