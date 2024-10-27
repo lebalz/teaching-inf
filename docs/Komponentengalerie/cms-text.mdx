@@ -4,6 +4,7 @@ page_id: 9440f367-3529-4e8d-8477-492bd94482dc
 
 import CmsDeflistEntry from '@tdev-components/documents/CmsDeflistEntry';
 import CmsText from '@tdev-components/documents/CmsText';
+import WithCmsText from '@tdev-components/documents/CmsText/WithCmsText';
 import DefinitionList from '@tdev-components/DefinitionList';
 import BrowserWindow from '@tdev-components/BrowserWindow';
 import { observer } from 'mobx-react-lite';
@@ -31,7 +32,7 @@ Use cases:
 - Deflist entry (z.B. für Note)
 - Theoretisch (wenn shared document gut funktioniert): nicht-öffentliche infos, die nicht im Client landen sollen.
 
-## Inline-Text
+## Inline-Text aus dem CMS
 ```md
 Der Text "<CmsText id="21535ea1-47d9-4521-a7fa-392f06d08f0a"/>" wurde aus der Datenbank geladen.
 ```
@@ -50,79 +51,29 @@ Der Text "<CmsText id="2c0c085d-388a-48cd-9871-975bab0ffda3"/>" wurde aus der Da
 Der Text "<CmsText id="2c0c085d-388a-48cd-9871-975bab0ffda3"/>" wurde aus der Datenbank geladen.
 </BrowserWindow>
 
-## `DefinitionList`-Eintrag
-
-Mit der Komponente `<CmdDeflistEntry>` wird ein Eintrag in einer `DefinitionList` nur dann angezeigt, wenn der aktuelle User ein Document für diese DocumentRoot `id` besitzt. Der `<dt>`-Wert wird als Attribut gesetzt, während der `<dd>`-Wert aus dem Document ausgelesen wird.
-
-```md
-<DefinitionList>
-    <dt>Hallo</dt>
-    <dd>Das ist der erste Eintrag.</dd>
-    <dt>Welt</dt>
-    <dd>Das ist der zweite Eintrag.</dd>
-    <CmsDeflistEntry id="21535ea1-47d9-4521-a7fa-392f06d08f0a" dt="CMS-Eintrag" />
-</DefinitionList>
-```
-
+## `<WithCmsText>`
 <BrowserWindow>
-  <DefinitionList>
-      <dt>Hallo</dt>
-      <dd>Das ist der erste Eintrag.</dd>
-      <dt>Welt</dt>
-      <dd>Das ist der zweite Eintrag.</dd>
-      <CmsDeflistEntry id="21535ea1-47d9-4521-a7fa-392f06d08f0a" dt="CMS-Eintrag" />
-  </DefinitionList>
+    <WithCmsText id="21535ea1-47d9-4521-a7fa-392f06d08f0a">Der Text "<CmsText />" wurde aus der Datenbank geladen.</WithCmsText>
 </BrowserWindow>
 
-Besitzt der aktuelle User kein Document für die angegebene DocumentRoot `id`, dann wird der gesamte Eintrag nicht angezeigt:
-
-```md
-<DefinitionList>
-    <dt>Hallo</dt>
-    <dd>Das ist der erste Eintrag.</dd>
-    <dt>Welt</dt>
-    <dd>Das ist der zweite Eintrag.</dd>
-    <CmsDeflistEntry id="2c0c085d-388a-48cd-9871-975bab0ffda3" dt="CMS-Eintrag" />
-</DefinitionList>
-```
-
 <BrowserWindow>
-  <DefinitionList>
-      <dt>Hallo</dt>
-      <dd>Das ist der erste Eintrag.</dd>
-      <dt>Welt</dt>
-      <dd>Das ist der zweite Eintrag.</dd>
-      <CmsDeflistEntry id="2c0c085d-388a-48cd-9871-975bab0ffda3" dt="CMS-Eintrag" />
-  </DefinitionList>
+    <WithCmsText id="2c0c085d-388a-48cd-9871-975bab0ffda3">Der Text "<CmsText />" wurde aus der Datenbank geladen.</WithCmsText>
 </BrowserWindow>
 
-Für den `<dt>`-Eintrag kann auch ein React-Node angegeben werden:
-
-```md
-<DefinitionList>
-    <dt>Hallo</dt>
-    <dd>Das ist der erste Eintrag.</dd>
-    <dt>Welt</dt>
-    <dd>Das ist der zweite Eintrag.</dd>
-    <CmsDeflistEntry
-      id="21535ea1-47d9-4521-a7fa-392f06d08f0a"
-      dt={<span style={{color: 'blue'}}>CMS-Eintrag</span>} />
-</DefinitionList>
-```
-
+### Anwendungsbeispiel
 <BrowserWindow>
-  <DefinitionList>
-    <dt>Hallo</dt>
-    <dd>Das ist der erste Eintrag.</dd>
-    <dt>Welt</dt>
-    <dd>Das ist der zweite Eintrag.</dd>
-    <CmsDeflistEntry
-      id="21535ea1-47d9-4521-a7fa-392f06d08f0a"
-      dt={<span style={{color: 'blue'}}>CMS-Eintrag</span>} />
-  </DefinitionList>
+    <DefinitionList>
+        <dt>Hallo</dt>
+        <dd>Das ist der erste Eintrag.</dd>
+        <dt>Welt</dt>
+        <dd>Das ist der zweite Eintrag.</dd>
+        <WithCmsText id="21535ea1-47d9-4521-a7fa-392f06d08f0a">
+            <dt>CMS-Eintrag</dt>
+            <dd><CmsText /></dd>
+        </WithCmsText>
+    </DefinitionList>
 </BrowserWindow>
 
 ## TODO
-- Allenfalls so umbauen, dass man einen `<CmsTextContext>` angeben kann, und dass der ganze Context nur dann angezeigt wird, wenn ein Dokument verfügbar ist. So könnte man sich die spezifische `CmsDeflistEntry` gleich sparen. Das müsste man idealerweise aber schlau genug machen, dass man im gleichen Kontext auch auf mehrere CmsText-Elemente reagieren kann, denke ich...
 - evtl. CMS Admin-Panel: docRoot eingeben, docs mit author-name anzeigen / löschen; CSV upload
   - Achtung, Erstellung für Student durch Admin: API um eine Art "create document on behalf"-Funktionalität erweitern?
