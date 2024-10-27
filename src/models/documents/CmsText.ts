@@ -5,23 +5,21 @@ import DocumentStore from '@tdev-stores/DocumentStore';
 import { TypeMeta } from '@tdev-models/DocumentRoot';
 
 export interface MetaInit {
-    readonly?: boolean;
-    solution?: string;
     default?: string;
-    sanitizer?: (val: string) => string;
-    checker?: (val: string | undefined) => boolean;
 }
 
 export class CmsTextMeta extends TypeMeta<DocumentType.CmsText> {
     readonly type = DocumentType.CmsText;
+    readonly default: string;
 
     constructor(props: Partial<MetaInit>) {
-        super(DocumentType.CmsText, props.readonly ? Access.RO_User : undefined);
+        super(DocumentType.CmsText, undefined);
+        this.default = props.default ?? '';
     }
 
     get defaultData(): TypeDataMapping[DocumentType.CmsText] {
         return {
-            text: ''
+            text: this.default
         };
     }
 }
