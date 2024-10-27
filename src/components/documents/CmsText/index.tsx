@@ -9,7 +9,6 @@ interface Props {
 }
 
 const CmsText = observer((props: Props) => {
-
     const context = React.useContext(CmsTextContext);
 
     if (!(context || props.id) || (context && props.id)) {
