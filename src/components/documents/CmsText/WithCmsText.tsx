@@ -11,6 +11,7 @@ interface Props {
 const WithCmsText = observer(({ id, children }: Props) => {
     // Not using useFirstMainDocument() here because that would always supply a (dummy) document.
     // TODO: Factor-out this use case?
+    // TODO: Consider allowing the docRoot to be created.
     const docRoot = useDocumentRoot(id, new CmsTextMeta({}), false);
     const doc = docRoot?.firstMainDocument;
 

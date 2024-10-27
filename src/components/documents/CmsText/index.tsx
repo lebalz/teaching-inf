@@ -19,6 +19,9 @@ const CmsText = observer((props: Props) => {
     if (context) {
         cmsText = context.cmsText;
     } else {
+        // Not using useFirstMainDocument() here because that would always supply a (dummy) document.
+        // TODO: Factor-out this use case?
+        // TODO: Consider allowing the docRoot to be created.
         const docRoot = useDocumentRoot(props.id, new CmsTextMeta({}), false);
         return docRoot?.firstMainDocument?.text;
     }
