@@ -2,7 +2,6 @@
 page_id: 9440f367-3529-4e8d-8477-492bd94482dc
 ---
 
-import CmsDeflistEntry from '@tdev-components/documents/CmsDeflistEntry';
 import CmsText from '@tdev-components/documents/CmsText';
 import WithCmsText from '@tdev-components/documents/CmsText/WithCmsText';
 import DefinitionList from '@tdev-components/DefinitionList';
@@ -11,6 +10,7 @@ import { observer } from 'mobx-react-lite';
 import { useFirstMainDocument } from '@tdev-hooks/useFirstMainDocument';
 import { CmsTextMeta } from '@tdev-models/documents/CmsText';
 
+# CMS Text
 export const DocumentCreator = observer(() => {
 
     useFirstMainDocument('21535ea1-47d9-4521-a7fa-392f06d08f0a', new CmsTextMeta({
@@ -20,7 +20,6 @@ export const DocumentCreator = observer(() => {
     return <></>;
 });
 
-# CMS Text
 <DocumentCreator />
 :::info[Erstellung von Documents]
 Im Gegensatz zu vielen anderen Komponenten erstellen die Komponenten rund um CmsText bewusst **nicht** automatisch ein Document, wenn keins vorhanden ist.
