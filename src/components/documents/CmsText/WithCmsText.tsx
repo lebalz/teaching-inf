@@ -1,13 +1,14 @@
 import { CmsTextContext } from '@tdev-components/documents/CmsText/shared';
 import { useDocumentRoot } from '@tdev-hooks/useDocumentRoot';
 import { CmsTextMeta } from '@tdev-models/documents/CmsText';
+import { observer } from 'mobx-react-lite';
 
 interface Props {
     id: string;
     children?: React.ReactNode;
 }
 
-const WithCmsText = ({ id, children }: Props) => {
+const WithCmsText = observer(({ id, children }: Props) => {
     // Not using useFirstMainDocument() here because that would always supply a (dummy) document.
     // TODO: Factor-out this use case?
     const docRoot = useDocumentRoot(id, new CmsTextMeta({}), false);
@@ -18,6 +19,6 @@ const WithCmsText = ({ id, children }: Props) => {
     ) : (
         <></>
     );
-};
+});
 
 export default WithCmsText;
