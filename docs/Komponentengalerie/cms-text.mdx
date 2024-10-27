@@ -22,14 +22,14 @@ export const DocumentCreator = observer(() => {
 
 <DocumentCreator />
 :::info[Erstellung von Documents]
-Im Gegensatz zu vielen anderen Komponenten erstellen die Komponenten rund um CmsText bewusst **nicht** automatisch ein Document, wenn keins vorhanden ist.
+Im Gegensatz zu vielen anderen Komponenten erstellen die Komponenten rund um CMS-Text bewusst **nicht** automatisch ein Document, wenn keins vorhanden ist.
 
-Diese Gallery-Page ist so aufgesetzt, dass für die DocumentRoot-ID `21535ea1-47d9-4521-a7fa-392f06d08f0a` automatisch ein CmsText-Document erzeugt wird.
+Diese Gallery-Page ist so aufgesetzt, dass für die DocumentRoot-ID `21535ea1-47d9-4521-a7fa-392f06d08f0a` automatisch ein CmsText-Document erzeugt wird. Für die ID `2c0c085d-388a-48cd-9871-975bab0ffda3` wird kein Document erstellt.
 :::
 
-Use cases:
-- Deflist entry (z.B. für Note)
-- Theoretisch (wenn shared document gut funktioniert): nicht-öffentliche infos, die nicht im Client landen sollen.
+Soll ein bestimmter Wert nicht fix im Markdown hinterlegt, sondern aus der Datenbank geladen werden, eignet sich die Komponente `<CmsText>`.
+
+Ein möglicher Anwendungsfall ist die Bereitstellung individualisierter Informationen (z.B. Noten).
 
 ## Inline-Text aus dem CMS
 ```md
@@ -50,16 +50,44 @@ Der Text "<CmsText id="2c0c085d-388a-48cd-9871-975bab0ffda3"/>" wurde aus der Da
 Der Text "<CmsText id="2c0c085d-388a-48cd-9871-975bab0ffda3"/>" wurde aus der Datenbank geladen.
 </BrowserWindow>
 
-## `<WithCmsText>`
+## Einfluss auf umliegende Elemente
+In vielen Fällen kann es nützlich sein, auch umliegende Elemente nur dann anzuzeigen, wenn ein bestimmter CMS-Text verfügbar ist. Dazu kann die Komponente `<WithCmsText>` verwendet werden.
+```md
+<WithCmsText id="21535ea1-47d9-4521-a7fa-392f06d08f0a">Der Text "<CmsText />" wurde aus der Datenbank geladen.</WithCmsText>
+```
+
 <BrowserWindow>
     <WithCmsText id="21535ea1-47d9-4521-a7fa-392f06d08f0a">Der Text "<CmsText />" wurde aus der Datenbank geladen.</WithCmsText>
 </BrowserWindow>
+
+Ist der entsprechende CMS-Text nicht verfügbar, wird der gesamte Inhalt dieser Klammer ausgeblendet:
+
+```md
+<WithCmsText id="2c0c085d-388a-48cd-9871-975bab0ffda3">Der Text "<CmsText />" wurde aus der Datenbank geladen.</WithCmsText>
+```
 
 <BrowserWindow>
     <WithCmsText id="2c0c085d-388a-48cd-9871-975bab0ffda3">Der Text "<CmsText />" wurde aus der Datenbank geladen.</WithCmsText>
 </BrowserWindow>
 
 ### Anwendungsbeispiel
+Diese Funktion kann beispielsweise dann nützlich sein, wenn ein Eintrag in einer `<DefinitionList>` nur angezeigt werden soll, sofern für den `<dd>`-Wert ein CMS-Text zur Verfügung steht.
+
+```md
+<BrowserWindow>
+    <DefinitionList>
+        <dt>Hallo</dt>
+        <dd>Das ist der erste Eintrag.</dd>
+        <dt>Welt</dt>
+        <dd>Das ist der zweite Eintrag.</dd>
+        <WithCmsText id="21535ea1-47d9-4521-a7fa-392f06d08f0a">
+            <dt>CMS-Eintrag</dt>
+            <dd><CmsText /></dd>
+        </WithCmsText>
+    </DefinitionList>
+</BrowserWindow>
+```
+
 <BrowserWindow>
     <DefinitionList>
         <dt>Hallo</dt>
@@ -73,6 +101,32 @@ Der Text "<CmsText id="2c0c085d-388a-48cd-9871-975bab0ffda3"/>" wurde aus der Da
     </DefinitionList>
 </BrowserWindow>
 
-## TODO
-- evtl. CMS Admin-Panel: docRoot eingeben, docs mit author-name anzeigen / löschen; CSV upload
-  - Achtung, Erstellung für Student durch Admin: API um eine Art "create document on behalf"-Funktionalität erweitern?
+Ist der entsprechende CMS-Text nicht verfügbar, wird der gesamte Eintrag nicht angezeigt:
+
+```md
+<BrowserWindow>
+    <DefinitionList>
+        <dt>Hallo</dt>
+        <dd>Das ist der erste Eintrag.</dd>
+        <dt>Welt</dt>
+        <dd>Das ist der zweite Eintrag.</dd>
+        <WithCmsText id="2c0c085d-388a-48cd-9871-975bab0ffda3">
+            <dt>CMS-Eintrag</dt>
+            <dd><CmsText /></dd>
+        </WithCmsText>
+    </DefinitionList>
+</BrowserWindow>
+```
+
+<BrowserWindow>
+    <DefinitionList>
+        <dt>Hallo</dt>
+        <dd>Das ist der erste Eintrag.</dd>
+        <dt>Welt</dt>
+        <dd>Das ist der zweite Eintrag.</dd>
+        <WithCmsText id="2c0c085d-388a-48cd-9871-975bab0ffda3">
+            <dt>CMS-Eintrag</dt>
+            <dd><CmsText /></dd>
+        </WithCmsText>
+    </DefinitionList>
+</BrowserWindow>
