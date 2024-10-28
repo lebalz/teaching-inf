@@ -2,15 +2,17 @@ import { CmsTextContext, useFirstCmsTextDocumentIfExists } from '@tdev-component
 import { observer } from 'mobx-react-lite';
 
 interface Props {
-    id: string;
+    entries: { [key: string]: string };
     children?: React.ReactNode;
 }
 
-const WithCmsText = observer(({ id, children }: Props) => {
-    const doc = useFirstCmsTextDocumentIfExists(id);
+const WithCmsText = observer(({ entries, children }: Props) => {
 
-    return doc ? (
-        <CmsTextContext.Provider value={{ cmsText: doc.text }}>{children}</CmsTextContext.Provider>
+    const allDocumentsAvailable = Object.values(entries)
+        .every(documentRootId => !!useFirstCmsTextDocumentIfExists(documentRootId));
+
+    return allDocumentsAvailable ? (
+        <CmsTextContext.Provider value={{ entries }}>{children}</CmsTextContext.Provider>
     ) : (
         <></>
     );

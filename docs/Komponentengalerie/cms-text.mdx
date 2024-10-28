@@ -37,7 +37,7 @@ Der Text "<CmsText id="21535ea1-47d9-4521-a7fa-392f06d08f0a"/>" wurde aus der Da
 ```
 
 <BrowserWindow>
-Der Text "<CmsText id="21535ea1-47d9-4521-a7fa-392f06d08f0a"/>" wurde aus der Datenbank geladen.
+    Der Text "<CmsText id="21535ea1-47d9-4521-a7fa-392f06d08f0a"/>" wurde aus der Datenbank geladen.
 </BrowserWindow>
 
 Besitzt der aktuelle User kein Document für die angegebene DocumentRoot-ID, dann bleibt der Text leer:
@@ -47,86 +47,134 @@ Der Text "<CmsText id="2c0c085d-388a-48cd-9871-975bab0ffda3"/>" wurde aus der Da
 ```
 
 <BrowserWindow>
-Der Text "<CmsText id="2c0c085d-388a-48cd-9871-975bab0ffda3"/>" wurde aus der Datenbank geladen.
+    Der Text "<CmsText id="2c0c085d-388a-48cd-9871-975bab0ffda3"/>" wurde aus der Datenbank geladen.
 </BrowserWindow>
 
 ## Einfluss auf umliegende Elemente
 In vielen Fällen kann es nützlich sein, auch umliegende Elemente nur dann anzuzeigen, wenn ein bestimmter CMS-Text verfügbar ist. Dazu kann die Komponente `<WithCmsText>` verwendet werden.
+
 ```md
-<WithCmsText id="21535ea1-47d9-4521-a7fa-392f06d08f0a">Der Text "<CmsText />" wurde aus der Datenbank geladen.</WithCmsText>
+<WithCmsText entries={{demo: "21535ea1-47d9-4521-a7fa-392f06d08f0a"}}>
+    Der Text "<CmsText name="demo" />" wurde aus der Datenbank geladen.
+</WithCmsText>
 ```
 
 <BrowserWindow>
-    <WithCmsText id="21535ea1-47d9-4521-a7fa-392f06d08f0a">Der Text "<CmsText />" wurde aus der Datenbank geladen.</WithCmsText>
+    <WithCmsText entries={{demo: "21535ea1-47d9-4521-a7fa-392f06d08f0a"}}>
+        Der Text "<CmsText name="demo" />" wurde aus der Datenbank geladen.
+    </WithCmsText>
 </BrowserWindow>
 
-Ist der entsprechende CMS-Text nicht verfügbar, wird der gesamte Inhalt dieser Klammer ausgeblendet:
-
+Ist einer der in `entries` aufgeführten CMS-Texte nicht verfügbar, wird der gesamte Inhalt dieser Klammer ausgeblendet:
 ```md
-<WithCmsText id="2c0c085d-388a-48cd-9871-975bab0ffda3">Der Text "<CmsText />" wurde aus der Datenbank geladen.</WithCmsText>
+<WithCmsText entries={{demo: "2c0c085d-388a-48cd-9871-975bab0ffda3"}}>
+    Der Text "<CmsText name="demo" />" wurde aus der Datenbank geladen.
+</WithCmsText>
 ```
 
 <BrowserWindow>
-    <WithCmsText id="2c0c085d-388a-48cd-9871-975bab0ffda3">Der Text "<CmsText />" wurde aus der Datenbank geladen.</WithCmsText>
+    <WithCmsText entries={{text: "2c0c085d-388a-48cd-9871-975bab0ffda3"}}>
+        Der Text "<CmsText name="demo" />" wurde aus der Datenbank geladen.
+    </WithCmsText>
 </BrowserWindow>
 
 ### Anwendungsbeispiel
 Diese Funktion kann beispielsweise dann nützlich sein, wenn ein Eintrag in einer `<DefinitionList>` nur angezeigt werden soll, sofern für den `<dd>`-Wert ein CMS-Text zur Verfügung steht.
 
 ```md
-<BrowserWindow>
+<WithCmsText entries={{demo: "21535ea1-47d9-4521-a7fa-392f06d08f0a"}}>
     <DefinitionList>
         <dt>Hallo</dt>
         <dd>Das ist der erste Eintrag.</dd>
         <dt>Welt</dt>
         <dd>Das ist der zweite Eintrag.</dd>
-        <WithCmsText id="21535ea1-47d9-4521-a7fa-392f06d08f0a">
-            <dt>CMS-Eintrag</dt>
-            <dd><CmsText /></dd>
-        </WithCmsText>
+        <dt>CMS-Eintrag</dt>
+        <dd><CmsText name="demo" /></dd>
+        <dt>Anderer CMS-Eintrag</dt>
+        <dt><CmsText id="2c0c085d-388a-48cd-9871-975bab0ffda3" /></dt>
     </DefinitionList>
-</BrowserWindow>
+</WithCmsText>
 ```
 
 <BrowserWindow>
-    <DefinitionList>
-        <dt>Hallo</dt>
-        <dd>Das ist der erste Eintrag.</dd>
-        <dt>Welt</dt>
-        <dd>Das ist der zweite Eintrag.</dd>
-        <WithCmsText id="21535ea1-47d9-4521-a7fa-392f06d08f0a">
+    <WithCmsText entries={{demo: "21535ea1-47d9-4521-a7fa-392f06d08f0a"}}>
+        <DefinitionList>
+            <dt>Hallo</dt>
+            <dd>Das ist der erste Eintrag.</dd>
+            <dt>Welt</dt>
+            <dd>Das ist der zweite Eintrag.</dd>
             <dt>CMS-Eintrag</dt>
-            <dd><CmsText /></dd>
-        </WithCmsText>
-    </DefinitionList>
+            <dd><CmsText name="demo" /></dd>
+            <dt>Anderer CMS-Eintrag</dt>
+            <dt><CmsText id="2c0c085d-388a-48cd-9871-975bab0ffda3" /></dt>
+        </DefinitionList>
+    </WithCmsText>
 </BrowserWindow>
-
-Ist der entsprechende CMS-Text nicht verfügbar, wird der gesamte Eintrag nicht angezeigt:
 
 ```md
-<BrowserWindow>
+<WithCmsText entries={{
+        a: "21535ea1-47d9-4521-a7fa-392f06d08f0a",
+        b: "2c0c085d-388a-48cd-9871-975bab0ffda3"}}>
     <DefinitionList>
         <dt>Hallo</dt>
         <dd>Das ist der erste Eintrag.</dd>
         <dt>Welt</dt>
         <dd>Das ist der zweite Eintrag.</dd>
-        <WithCmsText id="2c0c085d-388a-48cd-9871-975bab0ffda3">
-            <dt>CMS-Eintrag</dt>
-            <dd><CmsText /></dd>
-        </WithCmsText>
+        <dt>CMS-Eintrag</dt>
+        <dd><CmsText name="a" /></dd>
+        <dt>Anderer CMS-Eintrag</dt>
+        <dt><CmsText name="b" /></dt>
     </DefinitionList>
-</BrowserWindow>
+</WithCmsText>
 ```
 
 <BrowserWindow>
+    <WithCmsText entries={{
+            a: "21535ea1-47d9-4521-a7fa-392f06d08f0a",
+            b: "2c0c085d-388a-48cd-9871-975bab0ffda3"}}>
+        <DefinitionList>
+            <dt>Hallo</dt>
+            <dd>Das ist der erste Eintrag.</dd>
+            <dt>Welt</dt>
+            <dd>Das ist der zweite Eintrag.</dd>
+            <dt>CMS-Eintrag</dt>
+            <dd><CmsText name="a" /></dd>
+            <dt>Anderer CMS-Eintrag</dt>
+            <dt><CmsText name="b" /></dt>
+        </DefinitionList>
+    </WithCmsText>
+</BrowserWindow>
+
+```md
+<WithCmsText entries={{demo: "21535ea1-47d9-4521-a7fa-392f06d08f0a"}}>
     <DefinitionList>
         <dt>Hallo</dt>
         <dd>Das ist der erste Eintrag.</dd>
         <dt>Welt</dt>
         <dd>Das ist der zweite Eintrag.</dd>
-        <WithCmsText id="2c0c085d-388a-48cd-9871-975bab0ffda3">
-            <dt>CMS-Eintrag</dt>
-            <dd><CmsText /></dd>
+        <dt>CMS-Eintrag</dt>
+        <dd><CmsText name="demo" /></dd>
+        <WithCmsText entries={{demo: "2c0c085d-388a-48cd-9871-975bab0ffda3"}}>
+            <dt>Anderer CMS-Eintrag</dt>
+            <dt><CmsText id="demo" /></dt>
         </WithCmsText>
     </DefinitionList>
+</WithCmsText>
+```
+
+<BrowserWindow>
+    <WithCmsText entries={{demo: "21535ea1-47d9-4521-a7fa-392f06d08f0a"}}>
+        <DefinitionList>
+            <dt>Hallo</dt>
+            <dd>Das ist der erste Eintrag.</dd>
+            <dt>Welt</dt>
+            <dd>Das ist der zweite Eintrag.</dd>
+            <dt>CMS-Eintrag</dt>
+            <dd><CmsText name="demo" /></dd>
+            <WithCmsText entries={{demo: "2c0c085d-388a-48cd-9871-975bab0ffda3"}}>
+                <dt>Anderer CMS-Eintrag</dt>
+                <dt><CmsText id="demo" /></dt>
+            </WithCmsText>
+        </DefinitionList>
+    </WithCmsText>
 </BrowserWindow>

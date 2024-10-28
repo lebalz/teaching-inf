@@ -4,20 +4,13 @@ import React from 'react';
 
 interface Props {
     id?: string;
+    name?: string;
 }
 
-const CmsText = observer(({ id }: Props) => {
-    const context = React.useContext(CmsTextContext);
+const CmsText = observer(({ id, name }: Props) => {
 
-    let cmsText: string | undefined;
-
-    if (context && !id) {
-        cmsText = context.cmsText;
-    } else if (!context && id) {
-        cmsText = useFirstCmsTextDocumentIfExists(id)?.text;
-    } else {
-        throw new Error('Either provide an id property or use inside <WithCmsText> (but not both)');
-    }
+    const contextId = name ? React.useContext(CmsTextContext)?.entries[name] : undefined;
+    const cmsText = useFirstCmsTextDocumentIfExists(id || contextId)?.text;
 
     return cmsText ? (
         <>
