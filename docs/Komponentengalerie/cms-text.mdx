@@ -91,8 +91,10 @@ Ist einer der in `entries` aufgeführten CMS-Texte nicht verfügbar, wird der ge
     </WithCmsText>
 </BrowserWindow>
 
-### Anwendungsbeispiel
-Diese Funktion kann beispielsweise dann nützlich sein, wenn ein Eintrag in einer `<DefinitionList>` nur angezeigt werden soll, sofern für den `<dd>`-Wert ein CMS-Text zur Verfügung steht.
+### Anwendungsbeispiele
+Im folgenden Beispiel wird die gesamte `<DefinitionList>` nur dann angezeigt, wenn der Eintrag für die DocumentRoot-ID `21535ea1-47d9-4521-a7fa-392f06d08f0a` vorhanden ist. In dem Fall steht der entsprechende CMS-Text innerhalb der `<WithCmsText>`-Klammer unter dem Namen `demo` zur Verfügung.
+
+Zusätzlich wird ein weiterer CMS-Text mit der ID `2c0c085d-388a-48cd-9871-975bab0ffda3` verwendet. Wenn dort das entsprechende Dokument fehlt, bleibt der Eintrag einfach leer.
 
 ```md
 <WithCmsText entries={{demo: "21535ea1-47d9-4521-a7fa-392f06d08f0a"}}>
@@ -123,6 +125,8 @@ Diese Funktion kann beispielsweise dann nützlich sein, wenn ein Eintrag in eine
         </DefinitionList>
     </WithCmsText>
 </BrowserWindow>
+
+Bei mehreren Einträgen zeigt die `<WithCmsText>`-Klammer ihren Inhalt nur dann an, wenn alle entsprechenden Documents vorhanden sind:
 
 ```md
 <WithCmsText entries={{
@@ -157,6 +161,8 @@ Diese Funktion kann beispielsweise dann nützlich sein, wenn ein Eintrag in eine
         </DefinitionList>
     </WithCmsText>
 </BrowserWindow>
+
+`<WithCmsText>`-Klammern können auch verschachtelt genutzt werden:
 
 ```md
 <WithCmsText entries={{demo: "21535ea1-47d9-4521-a7fa-392f06d08f0a"}}>
