@@ -1,29 +1,22 @@
 import { observer } from 'mobx-react-lite';
-import { useDocumentRoot } from '@tdev-hooks/useDocumentRoot';
-import { CmsTextMeta } from '@tdev-models/documents/CmsText';
-import { CmsTextContext } from '@tdev-components/documents/CmsText/shared';
+import { CmsTextContext, useFirstCmsTextDocumentIfExists } from '@tdev-components/documents/CmsText/shared';
 import React from 'react';
 
 interface Props {
     id?: string;
 }
 
-const CmsText = observer((props: Props) => {
+const CmsText = observer(({ id }: Props) => {
     const context = React.useContext(CmsTextContext);
 
-    if (!(context || props.id) || (context && props.id)) {
-        throw new Error('Either provide an id property or use inside <WithCmsText> (but not both)');
-    }
+    let cmsText: string | undefined;
 
-    let cmsText: string;
-    if (context) {
+    if (context && !id) {
         cmsText = context.cmsText;
+    } else if (!context && id) {
+        cmsText = useFirstCmsTextDocumentIfExists(id)?.text;
     } else {
-        // Not using useFirstMainDocument() here because that would always supply a (dummy) document.
-        // TODO: Factor-out this use case?
-        // TODO: Consider allowing the docRoot to be created.
-        const docRoot = useDocumentRoot(props.id, new CmsTextMeta({}), false);
-        return docRoot?.firstMainDocument?.text;
+        throw new Error('Either provide an id property or use inside <WithCmsText> (but not both)');
     }
 
     return cmsText ? (

@@ -1,6 +1,4 @@
-import { CmsTextContext } from '@tdev-components/documents/CmsText/shared';
-import { useDocumentRoot } from '@tdev-hooks/useDocumentRoot';
-import { CmsTextMeta } from '@tdev-models/documents/CmsText';
+import { CmsTextContext, useFirstCmsTextDocumentIfExists } from '@tdev-components/documents/CmsText/shared';
 import { observer } from 'mobx-react-lite';
 
 interface Props {
@@ -9,11 +7,7 @@ interface Props {
 }
 
 const WithCmsText = observer(({ id, children }: Props) => {
-    // Not using useFirstMainDocument() here because that would always supply a (dummy) document.
-    // TODO: Factor-out this use case?
-    // TODO: Consider allowing the docRoot to be created.
-    const docRoot = useDocumentRoot(id, new CmsTextMeta({}), false);
-    const doc = docRoot?.firstMainDocument;
+    const doc = useFirstCmsTextDocumentIfExists(id);
 
     return doc ? (
         <CmsTextContext.Provider value={{ cmsText: doc.text }}>{children}</CmsTextContext.Provider>
