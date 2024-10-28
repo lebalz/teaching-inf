@@ -21,11 +21,24 @@ export const DocumentCreator = observer(() => {
 });
 
 <DocumentCreator />
-:::info[Erstellung von Documents]
+::::info[Erstellung von Documents]
 Im Gegensatz zu vielen anderen Komponenten erstellen die Komponenten rund um CMS-Text bewusst **nicht** automatisch ein Document, wenn keins vorhanden ist.
 
 Diese Gallery-Page ist so aufgesetzt, dass für die DocumentRoot-ID `21535ea1-47d9-4521-a7fa-392f06d08f0a` automatisch ein CmsText-Document erzeugt wird. Für die ID `2c0c085d-388a-48cd-9871-975bab0ffda3` wird kein Document erstellt.
+
+:::details[Implementierung]
+Das Dokument wird hier im `.mdx` wie folgt erzeugt:
+```tsx
+export const DocumentCreator = observer(() => {
+    useFirstMainDocument('21535ea1-47d9-4521-a7fa-392f06d08f0a', new CmsTextMeta({
+        default: 'CMS-Text aus der Datenbank 📚'
+    }));
+    return <></>;
+});
+<DocumentCreator />
+```
 :::
+::::
 
 Soll ein bestimmter Wert nicht fix im Markdown hinterlegt, sondern aus der Datenbank geladen werden, eignet sich die Komponente `<CmsText>`.
 
