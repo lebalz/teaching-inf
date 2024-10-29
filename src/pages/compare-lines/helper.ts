@@ -1,4 +1,4 @@
-export const areIdenticalLines3D = (
+const areIdenticalLines3D = (
     p1: [number, number, number],
     d1: [number, number, number],
     p2: [number, number, number],
@@ -33,3 +33,4 @@ export const areIdenticalLines3D = (
         Math.abs(crossProductWithDifference[2]) < epsilon
     );
 };
+export default areIdenticalLines3D;
