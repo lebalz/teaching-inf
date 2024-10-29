@@ -8,7 +8,6 @@ interface Props {
 }
 
 const CmsText = observer(({ id, name }: Props) => {
-
     const contextId = name ? React.useContext(CmsTextContext)?.entries[name] : undefined;
     const cmsText = useFirstCmsTextDocumentIfExists(id || contextId)?.text;
 

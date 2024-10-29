@@ -3,7 +3,7 @@ import { useDocumentRoot } from '@tdev-hooks/useDocumentRoot';
 import CmsText, { CmsTextMeta } from '@tdev-models/documents/CmsText';
 
 interface CmsTextContextType {
-    entries: {[key: string]: string}
+    entries: { [key: string]: string };
 }
 
 export const CmsTextContext = React.createContext<CmsTextContextType | undefined>(undefined);
