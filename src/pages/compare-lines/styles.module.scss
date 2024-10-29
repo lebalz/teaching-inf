@@ -1,0 +1,97 @@
+main {
+    margin: 0.5em;
+    .line {
+        display: flex;
+        align-items: baseline;
+        gap: 2em;
+    }
+    .equation {
+        display: flex;
+        align-items: center;
+        font-size: 2em;
+        sub {
+            font-size: 0.5em;
+            transform: translateY(70%);
+        }
+    }
+    .vector {
+        display: flex;
+        align-items: center;
+        position: relative;
+
+        &::before,
+        &::after {
+            content: '(';
+            font-size: 60px;
+            transform: scaleX(0.6) translateY(-10%);
+        }
+
+        &::after {
+            content: ')';
+        }
+        .content {
+            display: flex;
+            flex-direction: column;
+            input {
+                text-align: center;
+            }
+        }
+    }
+    .param {
+        margin-left: 10px;
+        font-style: italic;
+    }
+
+    .vectorText {
+        display: inline-block;
+        position: relative;
+        padding-top: 5px; /* Padding to adjust the arrow over the text */
+        margin-left: 15px;
+    }
+
+    .vectorText::before {
+        content: '→'; /* Unicode for right arrow */
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+        text-align: center;
+        font-size: 24px; /* Adjust size as needed */
+        line-height: 0; /* Removes extra space typically added by characters */
+        transform: translateX(-2px) translateY(15px);
+    }
+    .equals {
+        margin: 0 10px;
+    }
+    .result {
+        margin-top: 1em;
+        font-size: 1.6em;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    main {
+        .line {
+            flex-direction: column;
+            gap: 1em;
+            margin-top: 1em;
+            p {
+                margin-bottom: 0;
+            }
+        }
+        .equation {
+            font-size: 1.2em;
+        }
+        .vector {
+            &::before,
+            &::after {
+                font-size: 40px;
+            }
+        }
+        .vectorText::before {
+            font-size: 18px;
+            transform: translateX(-2px) translateY(10px);
+        }
+    }
+}
