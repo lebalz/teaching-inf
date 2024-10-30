@@ -7,9 +7,9 @@ interface Props {
 }
 
 const WithCmsText = observer(({ entries, children }: Props) => {
-    const allDocumentsAvailable = Object.values(entries).every(
+    const allDocumentsAvailable = Object.values(entries).map(
         (documentRootId) => !!useFirstCmsTextDocumentIfExists(documentRootId)
-    );
+    ).every(Boolean);
 
     return allDocumentsAvailable ? (
         <CmsTextContext.Provider value={{ entries }}>{children}</CmsTextContext.Provider>
