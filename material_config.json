@@ -13,7 +13,7 @@
         {
             "from": "docs/OF-Word/",
             "to": "versioned_docs/version-28Gb/03-Word",
-            "ignore": ["04-autokorrektur.mdx", "05-uebung.mdx"],
+            "ignore": ["05-uebung.mdx"],
             "open": true
         }
     ],
@@ -31,7 +31,7 @@
         {
             "from": "docs/OF-Word/",
             "to": "versioned_docs/version-28Gj/03-Word",
-            "ignore": ["04-autokorrektur.mdx", "05-uebung.mdx"],
+            "ignore": ["05-uebung.mdx"],
             "open": true
         }
     ]
