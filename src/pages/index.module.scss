@@ -61,3 +61,8 @@
         }
     }
 }
+:global(#__docusaurus) {
+    :global(main) {
+        margin: 0;
+    }
+}
