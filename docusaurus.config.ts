@@ -328,6 +328,7 @@ const config: Config = {
       'rsdoctor',
       {
         rsdoctorOptions: {
+          /* Options */
         },
       },
     ],
