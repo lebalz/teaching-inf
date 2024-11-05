@@ -1,6 +1,6 @@
 require('dotenv').config();
 import { themes as prismThemes } from 'prism-react-renderer';
-import type { Config } from '@docusaurus/types';
+import type { Config, CurrentBundler } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 import path from 'path';
 
@@ -96,6 +96,16 @@ const REHYPE_PLUGINS = [
 
 const pdfjsDistPath = path.dirname(require.resolve('pdfjs-dist/package.json'));
 const cMapsDir = path.join(pdfjsDistPath, 'cmaps');
+const getCopyPlugin = (
+  currentBundler: CurrentBundler
+): typeof CopyWebpackPlugin => {
+  if (currentBundler.name === 'rspack') {
+    // @ts-expect-error: this exists only in Rspack
+    return currentBundler.instance.CopyRspackPlugin;
+  }
+  return CopyWebpackPlugin;
+}
+
 
 const config: Config = {
   title: 'Teaching-Dev',
@@ -337,9 +347,7 @@ const config: Config = {
       return {
         name: 'pdfjs-copy-dependencies',
         configureWebpack(config, isServer, {currentBundler}) {
-            if (currentBundler.name !== 'rspack') {
-              return {};
-            }
+          const Plugin = getCopyPlugin(currentBundler);
             return {
                 resolve: {
                   alias: {
@@ -347,8 +355,7 @@ const config: Config = {
                   }
                 },
                 plugins: [
-                  // @ts-expect-error: this exists only in Rspack
-                  new currentBundler.instance.CopyRspackPlugin({
+                  new Plugin({
                     patterns: [
                       {
                         from: cMapsDir,
