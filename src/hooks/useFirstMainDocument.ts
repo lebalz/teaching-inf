@@ -6,6 +6,8 @@ import { useDocumentRoot } from '@tdev-hooks/useDocumentRoot';
 import { useStore } from '@tdev-hooks/useStore';
 import { RWAccess } from '@tdev-models/helpers/accessPolicy';
 
+export const DUMMY_DOCUMENT_ID = 'dummy' as const;
+
 /**
  * This hook provides access to the first main document of the rootDocument.
  * This is especially useful, when the DocumentType is expected to have only
@@ -26,7 +28,7 @@ export const useFirstMainDocument = <Type extends DocumentType>(
                 id: defaultDocId,
                 type: meta.type,
                 data: meta.defaultData,
-                authorId: 'dummy',
+                authorId: DUMMY_DOCUMENT_ID,
                 documentRootId: documentRoot.id,
                 parentId: null,
                 createdAt: new Date().toISOString(),
