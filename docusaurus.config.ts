@@ -324,6 +324,13 @@ const config: Config = {
   } satisfies Preset.ThemeConfig,
   plugins: [
     'docusaurus-plugin-sass',
+    process.env.RSDOCTOR === 'true' && [
+      'rsdoctor',
+      {
+        rsdoctorOptions: {
+        },
+      },
+    ],
     () => {
       return {
         name: 'alias-configuration',
