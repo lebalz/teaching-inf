@@ -94,6 +94,8 @@ const REHYPE_PLUGINS = [
   rehypeKatex
 ]
 
+const pdfjsDistPath = path.dirname(require.resolve('pdfjs-dist/package.json'));
+const cMapsDir = path.join(pdfjsDistPath, 'cmaps');
 
 const config: Config = {
   title: 'Teaching-Dev',
@@ -333,8 +335,11 @@ const config: Config = {
     },
     () => {
       return {
-        name: 'pdfjd-copy-dependencies',
-        configureWebpack(config, isServer, utils) {
+        name: 'pdfjs-copy-dependencies',
+        configureWebpack(config, isServer, {currentBundler}) {
+            if (currentBundler.name !== 'rspack') {
+              return {};
+            }
             return {
                 resolve: {
                   alias: {
@@ -342,19 +347,15 @@ const config: Config = {
                   }
                 },
                 plugins: [
-                    new CopyWebpackPlugin({
-                        patterns: [
-                            // pdf-cmaps
-                            {
-                              from: 'node_modules/pdfjs-dist/cmaps/',
-                              to: 'cmaps/'
-                            },
-                            {
-                                from: 'node_modules/pdfjs-dist/build/pdf.worker.mjs',
-                                to: 'pdf.worker.mjs'
-                            }
-                        ]
-                    }),
+                  // @ts-expect-error: this exists only in Rspack
+                  new currentBundler.instance.CopyRspackPlugin({
+                    patterns: [
+                      {
+                        from: cMapsDir,
+                        to: 'cmaps/'
+                      }
+                    ]
+                  })
                 ]
             };
         }
