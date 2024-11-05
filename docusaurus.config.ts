@@ -134,6 +134,29 @@ const config: Config = {
     API_URI: process.env.API_URI,
     GIT_COMMIT_SHA: GIT_COMMIT_SHA
   },
+  future: {
+    experimental_faster: {
+      /**
+       * no config options for swcJsLoader so far. 
+       * Instead configure it over the jsLoader in the next step 
+       */
+      swcJsLoader: false, 
+      swcJsMinimizer: true,
+      swcHtmlMinimizer: true,
+      lightningCssMinimizer: true,
+      rspackBundler: true,
+      mdxCrossCompilerCache: true,
+    },
+  },
+  webpack: {
+    jsLoader: (isServer) => ({
+      loader: 'builtin:swc-loader', // (only works with Rspack)
+      options: {
+        ...require("@docusaurus/faster").getSwcLoaderOptions({isServer}),
+        decorators: true
+      },
+    }),
+  },
 
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
