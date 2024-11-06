@@ -1,6 +1,6 @@
 import { visit, CONTINUE, SKIP, EXIT } from 'unist-util-visit';
 import type { Plugin, Processor, Transformer } from 'unified';
-import type { MdxJsxFlowElement } from 'mdast-util-mdx';
+import type { MdxJsxFlowElement, MdxJsxTextElement } from 'mdast-util-mdx';
 import { Parent, PhrasingContent, RootContent, Text } from 'mdast';
 
 // match to determine if the line is an opening tag
@@ -24,6 +24,12 @@ const createMdxJsxFlowElementNode = (name: string, children: RootContent[] = [],
             _mdxExplicitJsx: true
         }
     } as MdxJsxFlowElement;
+};
+const createMdxJsxTextElementNode = (name: string, children: RootContent[] = [], className?: string) => {
+    return {
+        ...createMdxJsxFlowElementNode(name, children, className),
+        type: 'mdxJsxTextElement'
+    } as MdxJsxTextElement;
 };
 
 const plugin: Plugin = function plugin(
@@ -50,17 +56,17 @@ const plugin: Plugin = function plugin(
     };
 
     const getDTNode = (children: RootContent[]) => {
-        return createMdxJsxFlowElementNode(
+        return createMdxJsxTextElementNode(
             DT,
-            [{ type: 'paragraph', children: children } as RootContent],
+            children,
             classNames.dt
         );
     };
 
     const getDDNode = (children: RootContent[]) => {
-        return createMdxJsxFlowElementNode(
+        return createMdxJsxTextElementNode(
             DD,
-            [{ type: 'paragraph', children: children } as RootContent],
+            children,
             classNames.dd
         );
     };
