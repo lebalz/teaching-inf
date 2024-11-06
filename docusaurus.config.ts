@@ -1,6 +1,6 @@
 require('dotenv').config();
 import { themes as prismThemes } from 'prism-react-renderer';
-import type { Config } from '@docusaurus/types';
+import type { Config, CurrentBundler } from '@docusaurus/types';
 import type { VersionOptions } from '@docusaurus/plugin-content-docs';
 import type * as Preset from '@docusaurus/preset-classic';
 import path from 'path';
@@ -97,6 +97,18 @@ const REHYPE_PLUGINS = [
   rehypeKatex
 ]
 
+const pdfjsDistPath = path.dirname(require.resolve('pdfjs-dist/package.json'));
+const cMapsDir = path.join(pdfjsDistPath, 'cmaps');
+const getCopyPlugin = (
+  currentBundler: CurrentBundler
+): typeof CopyWebpackPlugin => {
+  if (currentBundler.name === 'rspack') {
+    // @ts-expect-error: this exists only in Rspack
+    return currentBundler.instance.CopyRspackPlugin;
+  }
+  return CopyWebpackPlugin;
+}
+
 const VERSIONS: { [version: string]: VersionOptions } = {
   current: {
       label: 'Material',
@@ -150,6 +162,29 @@ const config: Config = {
     /** The application id uri generated in https://portal.azure.com */
     API_URI: process.env.API_URI,
     GIT_COMMIT_SHA: GIT_COMMIT_SHA
+  },
+  future: {
+    experimental_faster: {
+      /**
+       * no config options for swcJsLoader so far. 
+       * Instead configure it over the jsLoader in the next step 
+       */
+      swcJsLoader: false, 
+      swcJsMinimizer: true,
+      swcHtmlMinimizer: true,
+      lightningCssMinimizer: true,
+      rspackBundler: true,
+      mdxCrossCompilerCache: true,
+    },
+  },
+  webpack: {
+    jsLoader: (isServer) => ({
+      loader: 'builtin:swc-loader', // (only works with Rspack)
+      options: {
+        ...require("@docusaurus/faster").getSwcLoaderOptions({isServer}),
+        decorators: true
+      },
+    }),
   },
 
   // Even if you don't use internationalization, you can use this field to set
@@ -372,6 +407,14 @@ const config: Config = {
   } satisfies Preset.ThemeConfig,
   plugins: [
     'docusaurus-plugin-sass',
+    process.env.RSDOCTOR === 'true' && [
+      'rsdoctor',
+      {
+        rsdoctorOptions: {
+          /* Options */
+        },
+      },
+    ],
     () => {
       return {
         name: 'alias-configuration',
@@ -393,8 +436,9 @@ const config: Config = {
     },
     () => {
       return {
-        name: 'pdfjd-copy-dependencies',
-        configureWebpack(config, isServer, utils) {
+        name: 'pdfjs-copy-dependencies',
+        configureWebpack(config, isServer, {currentBundler}) {
+          const Plugin = getCopyPlugin(currentBundler);
             return {
                 resolve: {
                   alias: {
@@ -402,19 +446,14 @@ const config: Config = {
                   }
                 },
                 plugins: [
-                    new CopyWebpackPlugin({
-                        patterns: [
-                            // pdf-cmaps
-                            {
-                              from: 'node_modules/pdfjs-dist/cmaps/',
-                              to: 'cmaps/'
-                            },
-                            {
-                                from: 'node_modules/pdfjs-dist/build/pdf.worker.mjs',
-                                to: 'pdf.worker.mjs'
-                            }
-                        ]
-                    }),
+                  new Plugin({
+                    patterns: [
+                      {
+                        from: cMapsDir,
+                        to: 'cmaps/'
+                      }
+                    ]
+                  })
                 ]
             };
         }
