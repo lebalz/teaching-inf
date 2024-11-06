@@ -25,4 +25,4 @@ Die Anordnung der Fenster kann dabei bequem mit Tastenshortcuts vorgenommen werd
 Viel spass damit 😎
 
 
-[![--width=200px --float=right](images/logo.jpg)](https://rectangleapp.com/)
+[https://rectangleapp.com/](https://rectangleapp.com/)
