@@ -378,16 +378,17 @@ const config: Config = {
               ],
           }
       ],
-      copyright: `<a 
-                class="footer__link-item"
-                href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.de"
-              >
-                <img style="height: 1.6em" src="${BASE_URL}img/by-nc-sa.eu.svg" alt="CC-BY-NC-SA"> 
-                Text und Bilder von Balthasar Hofer, Ausnahmen sind gekennzeichnet. 
+      copyright: `<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.de">
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                  <img style="height: 1.6em" src="${BASE_URL}img/by-nc-sa.eu.svg" alt="CC-BY-NC-SA">
+                  <div>
+                    Text und Bilder von Balthasar Hofer, Ausnahmen sind gekennzeichnet. 
+                  </div>
+                </div>
               </a>
-              <br />
               <a 
                 class="badge badge--primary"
+                style="margin-top: 0.5rem;"
                 href="https://github.com/lebalz/teaching-inf/commit/${GIT_COMMIT_SHA}"
               >
                   <svg viewBox="0 0 24 24" role="presentation" style="width: 0.9rem; height: 0.9rem; transform: translateY(15%) rotate(90deg); transform-origin: center center;"><path d="${mdiSourceCommit}" style="fill: currentcolor;"></path></svg> ${GIT_COMMIT_SHA.substring(0, 7)}
