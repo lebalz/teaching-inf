@@ -1,0 +1,15 @@
+.footer {
+    margin-top: 3rem;
+    .sources {
+        display: flex;
+        flex-wrap: wrap;
+        .copyright {
+            display: flex;
+            margin-right: 0.3em;
+            align-items: center;
+        }
+    }
+    :global(.theme-doc-footer.docusaurus-mt-lg) {
+        margin-top: 0.5rem;
+    }
+}
