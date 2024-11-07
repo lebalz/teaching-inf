@@ -1,4 +1,5 @@
-import type { Transformer } from 'unified';
+import type { Plugin, Transformer } from 'unified';
+import type { Root } from 'mdast';
 import { Node, Parent } from 'unist';
 import type { MdxJsxFlowElement } from 'mdast-util-mdx';
 import { toJsxAttribute } from '../helpers';
@@ -61,7 +62,9 @@ export interface PluginOptions {
  * This is useful to support comments within mdx documents.
  * A `page_id` in the frontmatter is required to generate the comments.
  */
-const plugin = function plugin(options: PluginOptions): Transformer {
+const plugin: Plugin<PluginOptions[], Root> = function plugin(
+    options = {}
+): Transformer<Root> {
     return async (root, file) => {
         const { page_id, no_comments } = (file.data?.frontMatter || {}) as {
             page_id?: string;

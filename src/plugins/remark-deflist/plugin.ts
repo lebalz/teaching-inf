@@ -1,7 +1,7 @@
 import { visit, CONTINUE, SKIP, EXIT } from 'unist-util-visit';
 import type { Plugin, Processor, Transformer } from 'unified';
 import type { MdxJsxFlowElement, MdxJsxTextElement } from 'mdast-util-mdx';
-import { Parent, PhrasingContent, RootContent, Text } from 'mdast';
+import { BlockContent, Parent, PhrasingContent, Root, RootContent, Text } from 'mdast';
 
 // match to determine if the line is an opening tag
 const DD_REGEX = /(\r?\n):[ \t]+(.*?)/;
@@ -12,6 +12,19 @@ type ActionStates =
     | 'COLLECT_DT_BODY'
     | 'COLLECT_DD_BODY'
     | 'ADD_TO_DL';
+
+interface OptionsInput {
+    classNames?: {
+        dl?: string;
+        dt?: string;
+        dd?: string;
+    };
+    tagNames?: {
+        dl?: string;
+        dt?: string;
+        dd?: string;
+    };
+};
 
 const createMdxJsxFlowElementNode = (name: string, children: RootContent[] = [], className?: string) => {
     const attributes = className ? [{ type: 'mdxJsxAttribute', name: 'className', value: className }] : [];
@@ -32,21 +45,10 @@ const createMdxJsxTextElementNode = (name: string, children: RootContent[] = [],
     } as MdxJsxTextElement;
 };
 
-const plugin: Plugin = function plugin(
-    this: Processor,
-    optionsInput?: {
-        classNames?: {
-            dl?: string;
-            dt?: string;
-            dd?: string;
-        };
-        tagNames?: {
-            dl?: string;
-            dt?: string;
-            dd?: string;
-        };
-    }
-): Transformer {
+const plugin: Plugin<OptionsInput[], Root> = function plugin(
+    this,
+    optionsInput = {}
+): Transformer<Root> {
     const { classNames, tagNames } = { tagNames: {}, classNames: {}, ...(optionsInput || {}) };
     const DL = tagNames.dl || 'dl';
     const DT = tagNames.dt || 'dt';
@@ -63,14 +65,14 @@ const plugin: Plugin = function plugin(
         return createMdxJsxTextElementNode(DD, children, classNames.dd);
     };
     return async (ast, vfile) => {
-        visit(ast, (node, _idx, parent: Parent) => {
-            if (_idx === undefined) {
+        visit(ast, (node, _idx, parent) => {
+            if (_idx === undefined || !parent) {
                 return CONTINUE;
             }
             let idx = _idx as number;
             if (node.type === 'paragraph') {
                 let action: ActionStates = 'SEEK_DD_START';
-                visit(node, (cNode, _cIdx, cParent: Parent) => {
+                visit(node, (cNode, _cIdx, cParent) => {
                     /**
                      * RULE: only visit the direct children of the paragraph
                      *       --> only "SKIP" or "EXIT" are returned (except on the first visit)
@@ -83,11 +85,10 @@ const plugin: Plugin = function plugin(
                     switch (action) {
                         case 'SEEK_DD_START':
                             if (cNode.type === 'text') {
-                                const text = cNode as unknown as Text;
-                                const ddMatch = text.value.match(DD_REGEX);
+                                const ddMatch = cNode.value.match(DD_REGEX);
                                 if (ddMatch) {
-                                    const pre = text.value.slice(0, ddMatch.index);
-                                    const dd = text.value.slice(ddMatch.index);
+                                    const pre = cNode.value.slice(0, ddMatch.index);
+                                    const dd = cNode.value.slice(ddMatch.index);
                                     if (pre.trim()) {
                                         cParent.children.splice(cIdx, 0, {
                                             type: 'text',
@@ -131,7 +132,7 @@ const plugin: Plugin = function plugin(
                                             const post = text.value.slice(
                                                 (newLineMatch.index || 0) + newLineMatch[0].length
                                             );
-                                            const newChildren: RootContent[] = [];
+                                            const newChildren: PhrasingContent[] = [];
                                             const dtNodes = dtParent.children.splice(
                                                 dtIdx + 1,
                                                 cIdx - (dtIdx + 1)
@@ -178,20 +179,17 @@ const plugin: Plugin = function plugin(
                                 idx++;
                                 cIdx = 0;
                             }
-                            const hasDL =
-                                idx > 0 &&
-                                parent.children[idx - 1].type === 'mdxJsxFlowElement' &&
-                                (parent.children[idx - 1] as MdxJsxFlowElement).name === DL;
-                            const node2move = cParent.children.splice(cIdx, 1)[0] as MdxJsxFlowElement;
-                            if (node2move.name === DT) {
+                            const dlCandidate = idx > 0 ? parent.children[idx - 1] : undefined;
+                            const hasDL = dlCandidate?.type === 'mdxJsxFlowElement' && dlCandidate.name === DL;
+                            const node2move = cParent.children.splice(cIdx, 1)[0];
+                            if (node2move.type === 'mdxJsxTextElement' && node2move.name === DT) {
                                 action = 'COLLECT_DD_BODY';
                             } else {
                                 action = 'SEEK_CONSECUTIVE_DD_START';
                             }
 
                             if (hasDL) {
-                                const dl = parent.children[idx - 1] as MdxJsxFlowElement;
-                                dl.children.push(node2move);
+                                dlCandidate.children.push(node2move as unknown as MdxJsxFlowElement);
                             } else {
                                 const dl = getDLNode([node2move]);
                                 parent.children.splice(idx, 0, dl);
@@ -245,10 +243,9 @@ const plugin: Plugin = function plugin(
                             return [SKIP, cIdx];
                         case 'SEEK_CONSECUTIVE_DD_START':
                             if (cNode.type === 'text') {
-                                const text = cNode as unknown as Text;
-                                const ddMatch = text.value.match(DD_CONSECUTIVE_REGEX);
+                                const ddMatch = cNode.value.match(DD_CONSECUTIVE_REGEX);
                                 if (ddMatch) {
-                                    const dd = text.value.slice(ddMatch.index);
+                                    const dd = cNode.value.slice(ddMatch.index);
                                     cParent.children.splice(cIdx, 1, {
                                         type: 'text',
                                         value: dd.trimStart().slice(1).trimStart() // remove leading colon

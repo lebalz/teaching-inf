@@ -1,21 +1,22 @@
-import { visit } from 'unist-util-visit';
-import type { Plugin, Processor, Transformer } from 'unified';
-import { Paragraph, Parent } from 'mdast';
+import type { Plugin, Transformer } from 'unified';
+import { Paragraph, Root } from 'mdast';
 import { ContainerDirective } from 'mdast-util-directive';
 import { MdxJsxFlowElement } from 'mdast-util-mdx';
 
-const plugin: Plugin = function plugin(
-    this: Processor,
-    optionsInput?: {
-        tagNames?: {
-            definition?: string;
-        };
-    }
-): Transformer {
-    const TAG_NAME = optionsInput?.tagNames?.definition || 'def';
+interface PluginOptions {
+    tagNames?: {
+        definition?: string;
+    };
+}
 
-    return async (ast, vfile) => {
-        visit(ast, (node, idx, parent: Parent) => {
+const plugin: Plugin<PluginOptions[], Root> = function plugin(this, optionsInput = {}): Transformer<Root> {
+    const TAG_NAME = optionsInput?.tagNames?.definition || 'def';
+    return async (root) => {
+        const { visit } = await import('unist-util-visit');
+        visit(root, (node, idx, parent) => {
+            if (!parent) {
+                return;
+            }
             if (
                 node.type !== 'containerDirective' ||
                 (node as unknown as ContainerDirective).name !== TAG_NAME ||
