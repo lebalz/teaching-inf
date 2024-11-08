@@ -1,9 +1,8 @@
 import { visit } from 'unist-util-visit';
-import type { Plugin, Processor, Transformer } from 'unified';
+import type { Plugin, Transformer } from 'unified';
 import type { MdxJsxFlowElement } from 'mdast-util-mdx';
-import type { LeafDirective } from 'mdast-util-directive';
 import { requireDefaultMdastNode, toJsxAttribute, transformAttributes } from '../helpers';
-import { Link, Parent, Text } from 'mdast';
+import { Link, Root, Text } from 'mdast';
 
 enum LeafDirectiveName {
     VIDEO = 'video',
@@ -14,25 +13,21 @@ enum LeafDirectiveName {
 }
 const DirectiveNames = Object.values(LeafDirectiveName) as string[];
 
-const plugin: Plugin = function plugin(this: Processor, optionsInput?: {}): Transformer {
+const plugin: Plugin<unknown[], Root> = function plugin(): Transformer<Root> {
     return async (ast, vfile) => {
-        visit(ast, (node, idx, parent: Parent) => {
-            if (
-                node.type !== 'leafDirective' ||
-                !DirectiveNames.includes((node as unknown as LeafDirective).name)
-            ) {
+        visit(ast, 'leafDirective', (node, idx, parent) => {
+            if (!DirectiveNames.includes(node.name) || !parent) {
                 return;
             }
-            const directive = node as unknown as LeafDirective;
-            const { attributes, className, style } = transformAttributes((directive.attributes as any) || {});
-            const newNode: MdxJsxFlowElement = {
+            const { attributes, style } = transformAttributes(node.attributes || {});
+            const newNode = {
                 type: 'mdxJsxFlowElement',
                 name: '',
                 attributes: [],
                 children: [],
                 data: {}
-            };
-            const rawChild = directive.children[0];
+            } as MdxJsxFlowElement;
+            const rawChild = node.children[0];
             const src =
                 rawChild.type === 'text'
                     ? (rawChild as Text).value
@@ -40,9 +35,9 @@ const plugin: Plugin = function plugin(this: Processor, optionsInput?: {}): Tran
                       ? (rawChild as Link).url
                       : undefined;
             if (!src) {
-                throw new Error(`Invalid child for ${directive.name} directive in ${vfile.path}`);
+                throw new Error(`Invalid child for ${node.name} directive in ${vfile.path}`);
             }
-            switch (directive.name) {
+            switch (node.name) {
                 case LeafDirectiveName.VIDEO:
                     newNode.name = 'video';
                     if (attributes.autoplay || attributes.autoplay === '') {
@@ -116,7 +111,7 @@ const plugin: Plugin = function plugin(this: Processor, optionsInput?: {}): Tran
                     newNode.attributes.push(toJsxAttribute('title', 'Circuit Verse'));
                     newNode.attributes.push(toJsxAttribute('frameBorder', '0'));
                     newNode.attributes.push(toJsxAttribute('scrolling', 'no'));
-                    newNode.attributes.push(toJsxAttribute('webkitallowfullscreen', ''));
+                    newNode.attributes.push(toJsxAttribute('webkitAllowFullScreen', ''));
                     newNode.attributes.push(toJsxAttribute('mozAllowFullScreen', ''));
                     newNode.attributes.push(toJsxAttribute('allowFullScreen', ''));
                     break;

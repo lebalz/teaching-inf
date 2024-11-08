@@ -16,7 +16,7 @@ const process = async (content: string) => {
     return result.value;
 };
 
-describe('#flex', () => {
+describe('#details', () => {
     it("does nothing if there's no flex", async () => {
         const input = `# Heading
 
