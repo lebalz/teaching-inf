@@ -176,8 +176,7 @@ const plugin: Plugin<OptionsInput[], Root> = function plugin(this, optionsInput 
                             cIdx = 0;
                         }
                         const dlCandidate = idx > 0 ? parent.children[idx - 1] : undefined;
-                        const hasDL =
-                            dlCandidate?.type === 'mdxJsxFlowElement' && dlCandidate.name === DL;
+                        const hasDL = dlCandidate?.type === 'mdxJsxFlowElement' && dlCandidate.name === DL;
                         const node2move = cParent.children.splice(cIdx, 1)[0];
                         if (node2move.type === 'mdxJsxTextElement' && node2move.name === DT) {
                             action = 'COLLECT_DD_BODY';

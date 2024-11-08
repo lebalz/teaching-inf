@@ -56,9 +56,7 @@ const generateContent = (
     return {
         type: 'mdxJsxFlowElement',
         name: 'div',
-        attributes: [
-            toJsxAttribute('className', DEFAULT_CLASSES[type].content)
-        ],
+        attributes: [toJsxAttribute('className', DEFAULT_CLASSES[type].content)],
         children: [],
         data: {
             type: 'content',
@@ -73,9 +71,7 @@ const generateImage = (
     return {
         type: 'mdxJsxFlowElement',
         name: 'div',
-        attributes: [
-            toJsxAttribute('className', 'card__image')
-        ],
+        attributes: [toJsxAttribute('className', 'card__image')],
         children: [image],
         data: {
             type: 'image',
@@ -88,9 +84,7 @@ const generateItem = (type: ContainerDirectiveName, className?: string): MdxJsxF
     return {
         type: 'mdxJsxFlowElement',
         name: 'div',
-        attributes: [
-            toJsxAttribute('className', `${DEFAULT_CLASSES[type].item} ${className || ''}`.trim())
-        ],
+        attributes: [toJsxAttribute('className', `${DEFAULT_CLASSES[type].item} ${className || ''}`.trim())],
         children: [],
         data: {
             _mdxExplicitJsx: true
@@ -183,7 +177,10 @@ const visitor = (ast: Root | MdxJsxFlowElement) => {
             type: 'mdxJsxFlowElement',
             name: 'div',
             attributes: [
-                toJsxAttribute('className', `${DEFAULT_CLASSES[type].container} ${attributes.className}`.trim())
+                toJsxAttribute(
+                    'className',
+                    `${DEFAULT_CLASSES[type].container} ${attributes.className}`.trim()
+                )
             ],
             children: container.children as (BlockContent | DefinitionContent)[]
         } as MdxJsxFlowElement;

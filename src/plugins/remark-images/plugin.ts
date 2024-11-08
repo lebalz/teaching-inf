@@ -27,9 +27,7 @@ interface OptionsInput {
 const SPACER_SPAN = {
     type: 'mdxJsxTextElement',
     name: 'span',
-    attributes: [
-        toJsxAttribute('style', { flexGrow: 1 })
-    ],
+    attributes: [toJsxAttribute('style', { flexGrow: 1 })],
     children: []
 } as MdxJsxTextElement;
 

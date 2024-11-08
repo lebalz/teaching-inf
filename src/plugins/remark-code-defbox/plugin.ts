@@ -20,13 +20,7 @@ const plugin: Plugin<PluginOptions[], Root> = function plugin(this, optionsInput
                 node.children.find((c) => c.type === 'paragraph' && c.data?.directiveLabel) as Paragraph
             )?.children;
             const content = node.children.slice(heading ? 1 : 0);
-            const depth = Math.max(Math.min(Number(node.attributes!.h) || 3, 6), 1) as
-                | 1
-                | 2
-                | 3
-                | 4
-                | 5
-                | 6;
+            const depth = Math.max(Math.min(Number(node.attributes!.h) || 3, 6), 1) as 1 | 2 | 3 | 4 | 5 | 6;
             const defbox: MdxJsxFlowElement = {
                 type: 'mdxJsxFlowElement',
                 name: 'DefBox',
