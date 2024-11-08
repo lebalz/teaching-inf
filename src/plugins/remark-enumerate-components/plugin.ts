@@ -8,6 +8,7 @@
 import type { Plugin, Transformer } from 'unified';
 import type { MdxJsxFlowElement, MdxJsxTextElement } from 'mdast-util-mdx';
 import type { Root } from 'mdast';
+import { toJsxAttribute } from '../helpers';
 
 export interface PluginOptions {
     componentsToEnumerate?: string[];
@@ -30,31 +31,7 @@ const plugin: Plugin<PluginOptions[], Root> = function plugin(options = {}): Tra
                 return;
             }
             pagePosition = pagePosition + 1;
-            answer.attributes.push({
-                type: 'mdxJsxAttribute',
-                name: 'pagePosition',
-                value: {
-                    type: 'mdxJsxAttributeValueExpression',
-                    value: `${pagePosition}`,
-                    data: {
-                        estree: {
-                            type: 'Program',
-                            body: [
-                                {
-                                    type: 'ExpressionStatement',
-                                    expression: {
-                                        type: 'Literal',
-                                        value: pagePosition,
-                                        raw: `${pagePosition}`
-                                    }
-                                }
-                            ],
-                            sourceType: 'module',
-                            comments: []
-                        }
-                    }
-                }
-            });
+            answer.attributes.push(toJsxAttribute('pagePosition', pagePosition));
         });
     };
 };

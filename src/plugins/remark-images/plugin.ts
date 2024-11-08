@@ -28,47 +28,7 @@ const SPACER_SPAN = {
     type: 'mdxJsxTextElement',
     name: 'span',
     attributes: [
-        {
-            type: 'mdxJsxAttribute',
-            name: 'style',
-            value: {
-                type: 'mdxJsxAttributeValueExpression',
-                value: '{flexGrow: 1}',
-                data: {
-                    estree: {
-                        type: 'Program',
-                        body: [
-                            {
-                                type: 'ExpressionStatement',
-                                expression: {
-                                    type: 'ObjectExpression',
-                                    properties: [
-                                        {
-                                            type: 'Property',
-                                            method: false,
-                                            shorthand: false,
-                                            computed: false,
-                                            key: {
-                                                type: 'Identifier',
-                                                name: 'flexGrow'
-                                            },
-                                            value: {
-                                                type: 'Literal',
-                                                value: 1,
-                                                raw: '1'
-                                            },
-                                            kind: 'init'
-                                        }
-                                    ]
-                                }
-                            }
-                        ],
-                        sourceType: 'module',
-                        comments: []
-                    }
-                }
-            }
-        }
+        toJsxAttribute('style', { flexGrow: 1 })
     ],
     children: []
 } as MdxJsxTextElement;
