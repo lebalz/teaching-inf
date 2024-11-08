@@ -13,7 +13,7 @@ export interface PluginOptions<T extends readonly string[] = readonly string[]> 
         summary?: string;
     };
     classNames?: {
-        [key in T[number] | 'details' | 'summary']: string;
+        [key in T[number] | 'details' | 'summary']?: string;
     };
 }
 
