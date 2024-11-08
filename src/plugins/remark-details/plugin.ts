@@ -3,27 +3,31 @@ import type { Plugin, Transformer } from 'unified';
 import type { Root } from 'mdast';
 import type { MdxJsxAttribute, MdxJsxFlowElement } from 'mdast-util-mdx';
 
-interface PluginOptions {
+// TODO: How to type this?
+//       TS doesn't enforce that only keys of directiveNames can be used in
+//       the classNames
+export interface PluginOptions<T extends readonly string[] = readonly string[]> {
+    directiveNames?: T;
     tagNames?: {
         details?: string;
         summary?: string;
     };
     classNames?: {
-        details?: string;
-        summary?: string;
+        [key in T[number] | 'details' | 'summary']?: string;
     };
 }
 
 const plugin: Plugin<PluginOptions[], Root> = function plugin(optionsInput = {}): Transformer<Root> {
     const TAG_NAMES = { details: 'details', summary: 'summary', ...optionsInput.tagNames };
-    const getClassNameAttribute = (tag: 'details' | 'summary'): MdxJsxAttribute[] => {
+    const DIRECTIVE_NAMES = new Set(['details', ...(optionsInput.directiveNames || [])]);
+    const getClassNameAttribute = (tag: string): MdxJsxAttribute[] => {
         const className = (optionsInput.classNames || {})[tag];
         return className ? [{ type: 'mdxJsxAttribute', name: 'className', value: className }] : [];
     };
 
     return async (ast, vfile) => {
         visit(ast, 'containerDirective', (node, idx, parent) => {
-            if (!parent || node.name !== 'details') {
+            if (!parent || !DIRECTIVE_NAMES.has(node.name)) {
                 return;
             }
             const label = node.children.filter(
@@ -44,7 +48,7 @@ const plugin: Plugin<PluginOptions[], Root> = function plugin(optionsInput = {})
             const details = {
                 type: 'mdxJsxFlowElement',
                 name: TAG_NAMES.details,
-                attributes: [...getClassNameAttribute('details')],
+                attributes: [...getClassNameAttribute(node.name)],
                 children: children
             } as MdxJsxFlowElement;
             parent.children.splice(idx || 0, 1, details);
