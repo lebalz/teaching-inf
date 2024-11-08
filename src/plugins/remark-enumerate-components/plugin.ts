@@ -5,8 +5,9 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import type { Transformer } from 'unified';
+import type { Plugin, Transformer } from 'unified';
 import type { MdxJsxFlowElement, MdxJsxTextElement } from 'mdast-util-mdx';
+import type { Root } from 'mdast';
 
 export interface PluginOptions {
     componentsToEnumerate?: string[];
@@ -17,14 +18,14 @@ export interface PluginOptions {
  * to the specified components.
  * This is useful to sort components in the order they appear in the document.
  */
-const plugin = function plugin(options: PluginOptions): Transformer {
+const plugin: Plugin<PluginOptions[], Root> = function plugin(options = {}): Transformer<Root> {
     return async (root, file) => {
         const { visit } = await import('unist-util-visit');
         const toEnumerate = new Set<string | null>(options?.componentsToEnumerate || ['Answer']);
         let pagePosition = 0;
 
         visit(root, ['mdxJsxFlowElement', 'mdxJsxTextElement'], (node) => {
-            const answer = node as unknown as MdxJsxFlowElement | MdxJsxTextElement;
+            const answer = node as MdxJsxFlowElement | MdxJsxTextElement;
             if (!toEnumerate.has(answer.name)) {
                 return;
             }

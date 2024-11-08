@@ -1,10 +1,9 @@
 import { visit, SKIP } from 'unist-util-visit';
-import type { Plugin, Processor, Transformer } from 'unified';
+import type { Plugin, Transformer } from 'unified';
 import type { MdxJsxFlowElement } from 'mdast-util-mdx';
-import { BlockContent, Content, DefinitionContent, Image, Paragraph, Parent } from 'mdast';
+import { BlockContent, DefinitionContent, Image, Paragraph, Parent, Root } from 'mdast';
 import { ContainerDirective, LeafDirective } from 'mdast-util-directive';
 import { Options, toJsxAttribute, transformAttributes } from '../helpers';
-import { Node } from 'unist';
 
 /** for creating cards or flex: :::cards, :::flex */
 enum ContainerDirectiveName {
@@ -112,12 +111,12 @@ const generateItem = (type: ContainerDirectiveName, className?: string): MdxJsxF
 };
 
 const visitChildren = (
-    block: Node,
+    block: Parent | MdxJsxFlowElement,
     type: ContainerDirectiveName,
     defaultStyle: { [key: string]: string | number | boolean } = {}
 ) => {
     const items: Parent[] = [];
-    visit(block, (node, idx, parent: Parent) => {
+    visit(block, (node, idx, parent) => {
         if (!parent) {
             return;
         }
@@ -168,16 +167,16 @@ const visitChildren = (
             content = generateContent(type);
             item.children.push(content as MdxJsxFlowElement);
         }
-        content.children.push(node as Content);
+        content.children.push(node as BlockContent);
         parent.children.splice(idx || 0, 1);
         /** since the current position was removed, visit the current index again */
         return [SKIP, idx];
     });
 };
 
-const visitor = (ast: Node) => {
-    visit(ast, (node, idx, parent: Parent) => {
-        if (node.type !== 'containerDirective') {
+const visitor = (ast: Root | MdxJsxFlowElement) => {
+    visit(ast, 'containerDirective', (node, idx, parent) => {
+        if (!parent) {
             return;
         }
         const container = node as ContainerDirective;
@@ -202,10 +201,7 @@ const visitor = (ast: Node) => {
                     value: `${DEFAULT_CLASSES[type].container} ${attributes.className}`.trim()
                 }
             ],
-            children: container.children as (BlockContent | DefinitionContent)[],
-            data: {
-                _mdxExplicitJsx: true
-            }
+            children: container.children as (BlockContent | DefinitionContent)[]
         } as MdxJsxFlowElement;
         if (Object.keys(attributes.style).length > 0) {
             block.attributes.push(toJsxAttribute('style', attributes.style));
@@ -216,7 +212,7 @@ const visitor = (ast: Node) => {
     });
 };
 
-const plugin: Plugin = function plugin(this: Processor, optionsInput?: {}): Transformer {
+const plugin: Plugin<unknown[], Root> = function plugin(this): Transformer<Root> {
     return async (ast, vfile) => {
         visitor(ast);
     };
