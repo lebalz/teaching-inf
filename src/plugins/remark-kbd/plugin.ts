@@ -2,6 +2,7 @@ import { visit, CONTINUE, SKIP } from 'unist-util-visit';
 import type { Plugin, Transformer } from 'unified';
 import type { MdxJsxTextElement } from 'mdast-util-mdx';
 import { Root, Text } from 'mdast';
+import { toJsxAttribute } from '../helpers';
 
 type ActionStates = 'SPLIT_BRACKETS' | 'CREATE_KBD';
 
@@ -11,7 +12,7 @@ interface OptionsInput {
 
 const plugin: Plugin<OptionsInput[], Root> = function plugin(optionsInput = {}): Transformer<Root> {
     const KBD_ATTRIBUTES = optionsInput.className
-        ? [{ type: 'mdxJsxAttribute', name: 'className', value: optionsInput.className }]
+        ? [toJsxAttribute('className', optionsInput.className)]
         : [];
     let actionState: ActionStates = 'SPLIT_BRACKETS';
 
