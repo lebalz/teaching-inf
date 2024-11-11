@@ -3,8 +3,10 @@ import { TypeMeta } from '@tdev-models/DocumentRoot';
 import { useStore } from '@tdev-hooks/useStore';
 import { useFirstMainDocument } from './useFirstMainDocument';
 import { Config } from '@tdev-api/documentRoot';
+import React from 'react';
 
 export const DUMMY_DOCUMENT_ID = 'dummy' as const;
+const WAIT_FOR_LOGIN = 300;
 
 /**
  * This hook provides access to the first main document of the rootDocument.
@@ -21,14 +23,18 @@ export const useFirstRealMainDocument = <Type extends DocumentType>(
     createDocument: boolean = true,
     access: Partial<Config> = {}
 ) => {
+    const [t0] = React.useState(Date.now());
     const sessionStore = useStore('sessionStore');
     const mainDoc = useFirstMainDocument(documentRootId, meta, createDocument, access);
-    if (
-        !!documentRootId &&
-        sessionStore.isLoggedIn &&
-        (mainDoc.authorId === DUMMY_DOCUMENT_ID || !mainDoc.root || mainDoc.root.isDummy)
-    ) {
-        return;
+    const hasId = !!documentRootId;
+    if (hasId) {
+        if (sessionStore.isLoggedIn) {
+            if (mainDoc.authorId === DUMMY_DOCUMENT_ID || !mainDoc.root || mainDoc.root.isDummy) {
+                return;
+            }
+        } else if (Date.now() - t0 < WAIT_FOR_LOGIN) {
+            return;
+        }
     }
     return mainDoc;
 };
