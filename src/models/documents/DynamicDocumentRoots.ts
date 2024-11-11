@@ -67,6 +67,10 @@ class DynamicDocumentRoots extends iDocument<DocumentType.DynamicDocumentRoots> 
         if (!this._dynamicDocumentRoots.find((dr) => dr.id === id)) {
             return;
         }
+        const ddRoot = this.dynamicDocumentRoots.find((dr) => dr.id === id);
+        if (ddRoot) {
+            this.store.root.documentRootStore.destroy(ddRoot);
+        }
         this.setData(
             {
                 documentRoots: this._dynamicDocumentRoots.filter((dr) => dr.id !== id)
@@ -75,10 +79,6 @@ class DynamicDocumentRoots extends iDocument<DocumentType.DynamicDocumentRoots> 
             new Date()
         );
         this.saveNow();
-        const ddRoot = this.dynamicDocumentRoots.find((dr) => dr.id === id);
-        if (ddRoot) {
-            this.store.root.documentRootStore.destroy(ddRoot);
-        }
     }
 
     get data(): TypeDataMapping[DocumentType.DynamicDocumentRoots] {
