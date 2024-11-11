@@ -14,7 +14,7 @@ import {
 import iStore from '@tdev-stores/iStore';
 import GroupPermission from '@tdev-models/GroupPermission';
 import UserPermission from '@tdev-models/UserPermission';
-import { DocumentType } from '@tdev-api/document';
+import { Access, DocumentType } from '@tdev-api/document';
 import { debounce } from 'lodash';
 import User from '@tdev-models/User';
 
@@ -28,6 +28,7 @@ type LoadConfig = {
 type BatchedMeta = {
     load: LoadConfig;
     meta: TypeMeta<any>;
+    access: Partial<Config>;
 };
 
 export class DocumentRootStore extends iStore {
@@ -70,18 +71,19 @@ export class DocumentRootStore extends iStore {
     );
 
     @action
-    loadInNextBatch<Type extends DocumentType>(id: string, meta: TypeMeta<Type>, config?: LoadConfig) {
+    loadInNextBatch<Type extends DocumentType>(id: string, meta: TypeMeta<Type>, loadConfig?: LoadConfig, accessConfig?: Partial<Config>) {
         if (this.queued.has(id)) {
             return;
         }
         this.queued.set(id, {
             meta: meta,
-            load: config || {
+            load: loadConfig || {
                 documentRoot: true,
                 documents: true,
                 groupPermissions: true,
                 userPermissions: true
-            }
+            },
+            access: accessConfig || {}
         });
         this.loadQueued();
         if (this.queued.size > 42) {
@@ -103,6 +105,10 @@ export class DocumentRootStore extends iStore {
         maxWait: 15
     });
 
+    /**
+     * loads all queued documentRoots. When a document root was not found,
+     * it will be **created** (when the user is logged in). 
+     */
     @action
     _loadQueued() {
         const current = new Map([...this.queued]);
@@ -157,7 +163,7 @@ export class DocumentRootStore extends iStore {
                         .map((id) => {
                             const config = current.get(id);
                             if (config) {
-                                return this.create(id, config.meta, {});
+                                return this.create(id, config.meta, config.access);
                             }
                             return Promise.resolve(undefined);
                         })

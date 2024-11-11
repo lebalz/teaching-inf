@@ -1,6 +1,7 @@
 require('dotenv').config();
 import { themes as prismThemes } from 'prism-react-renderer';
 import type { Config, CurrentBundler } from '@docusaurus/types';
+import dynamicRouterPlugin, { Config as DynamicRouteConfig} from './src/plugins/plugin-dynamic-routes';
 import type * as Preset from '@docusaurus/preset-classic';
 import path from 'path';
 
@@ -324,6 +325,17 @@ const config: Config = {
   } satisfies Preset.ThemeConfig,
   plugins: [
     'docusaurus-plugin-sass',
+    [
+      dynamicRouterPlugin,
+      {
+        routes: [
+          {
+            path: '/rooms/',
+            component: '@tdev-components/Message/RoomsLandingPage',
+          }
+        ]
+      } satisfies DynamicRouteConfig
+    ],
     process.env.RSDOCTOR === 'true' && [
       'rsdoctor',
       {

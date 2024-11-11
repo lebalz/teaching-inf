@@ -23,12 +23,15 @@ import { ChangedDocument } from '@tdev-api/IoEventTypes';
 import String from '@tdev-models/documents/String';
 import QuillV2 from '@tdev-models/documents/QuillV2';
 import Solution from '@tdev-models/documents/Solution';
-import { RWAccess } from '@tdev-models/helpers/accessPolicy';
+import { ROAccess, RWAccess } from '@tdev-models/helpers/accessPolicy';
 import Directory from '@tdev-models/documents/FileSystem/Directory';
 import File from '@tdev-models/documents/FileSystem/File';
 import MdxComment from '@tdev-models/documents/MdxComment';
 import Restricted from '@tdev-models/documents/Restricted';
 import CmsText from '@tdev-models/documents/CmsText';
+import TextMessage from '@tdev-models/documents/TextMessage';
+import DynamicDocumentRoots from '@tdev-models/documents/DynamicDocumentRoots';
+import DynamicDocumentRoot from '@tdev-models/documents/DynamicDocumentRoot';
 
 export function CreateDocumentModel<T extends DocumentType>(
     data: DocumentProps<T>,
@@ -58,6 +61,12 @@ export function CreateDocumentModel(data: DocumentProps<DocumentType>, store: Do
             return new Restricted(data as DocumentProps<DocumentType.Restricted>, store);
         case DocumentType.CmsText:
             return new CmsText(data as DocumentProps<DocumentType.CmsText>, store);
+        case DocumentType.TextMessage:
+            return new TextMessage(data as DocumentProps<DocumentType.TextMessage>, store);
+        case DocumentType.DynamicDocumentRoot:
+            return new DynamicDocumentRoot(data as DocumentProps<DocumentType.DynamicDocumentRoot>, store);
+        case DocumentType.DynamicDocumentRoots:
+            return new DynamicDocumentRoots(data as DocumentProps<DocumentType.DynamicDocumentRoots>, store);
     }
 }
 class DocumentStore extends iStore<`delete-${string}`> {
@@ -226,7 +235,8 @@ class DocumentStore extends iStore<`delete-${string}`> {
         if (!rootDoc || rootDoc.isDummy) {
             return Promise.resolve(undefined);
         }
-        if (!RWAccess.has(rootDoc.permission)) {
+        const hasAccess = RWAccess.has(rootDoc.permission) || this.root.userStore.current?.isAdmin;
+        if (!hasAccess) {
             return Promise.resolve(undefined);
         }
         return this.withAbortController(`create-${model.id || uuidv4()}`, (sig) => {
