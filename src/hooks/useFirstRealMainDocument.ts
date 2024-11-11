@@ -26,7 +26,7 @@ export const useFirstRealMainDocument = <Type extends DocumentType>(
     if (
         !!documentRootId &&
         sessionStore.isLoggedIn &&
-        (mainDoc.authorId === DUMMY_DOCUMENT_ID || mainDoc.root?.isDummy)
+        (mainDoc.authorId === DUMMY_DOCUMENT_ID || !mainDoc.root || mainDoc.root.isDummy)
     ) {
         return;
     }
