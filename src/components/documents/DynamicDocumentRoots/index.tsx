@@ -9,6 +9,9 @@ import PermissionsPanel from '@tdev-components/PermissionsPanel';
 import { useDocumentRoot } from '@tdev-hooks/useDocumentRoot';
 import { Access, DocumentType } from '@tdev-api/document';
 import { useStore } from '@tdev-hooks/useStore';
+import ConfigureDocumentRoots from './ConfigureDocumentRoots';
+import Button from '@tdev-components/shared/Button';
+import { mdiTrashCan } from '@mdi/js';
 
 interface Props extends MetaInit {
     id: string;
@@ -23,6 +26,7 @@ const DynamicDocumentRoots = observer((props: Props) => {
     const doc = useFirstRealMainDocument(props.id, meta, false);
     const userStore = useStore('userStore');
     const documentStore = useStore('documentStore');
+    const documentRootStore = useStore('documentRootStore');
     const user = userStore.current;
     React.useEffect(() => {
         if (docRoot && !doc && user?.isAdmin) {
@@ -50,9 +54,24 @@ const DynamicDocumentRoots = observer((props: Props) => {
     }
     return (
         <div>
+            <ConfigureDocumentRoots dynamicDocumentRoots={doc} />
             {docRoot.id}
             <br />
             {doc.id}
+            {doc.dynamicDocumentRoots.map((root) => {
+                return (
+                    <div key={root.id}>
+                        {root.id} - {(root.meta as any).name}
+                        <Button
+                            color="red"
+                            icon={mdiTrashCan}
+                            onClick={() => {
+                                doc.removeDynamicDocumentRoot(root.id);
+                            }}
+                        />
+                    </div>
+                );
+            })}
             <PermissionsPanel documentRootId={props.id} />
         </div>
     );

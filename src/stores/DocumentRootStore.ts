@@ -6,7 +6,7 @@ import {
     Config,
     create as apiCreate,
     DocumentRootUpdate,
-    find as apiFind,
+    remove as apiDelete,
     findManyFor as apiFindManyFor,
     update as apiUpdate,
     DocumentRoot as ApiDocumentRoot
@@ -302,5 +302,19 @@ export class DocumentRootStore extends iStore {
         return this.withAbortController(`save-${documentRoot.id}`, (signal) => {
             return apiUpdate(documentRoot.id, model, signal.signal);
         }).catch(() => console.warn('Error saving document root'));
+    }
+
+    @action
+    destroy(documentRoot: DocumentRoot<any>) {
+        if (!this.root.sessionStore.isLoggedIn || !this.root.userStore.current?.isAdmin) {
+            return Promise.resolve('error');
+        }
+        return this.withAbortController(`destroy-${documentRoot.id}`, (signal) => {
+            return apiDelete(documentRoot.id, signal.signal);
+        })
+            .then(() => {
+                this.removeFromStore(documentRoot.id);
+            })
+            .catch(() => console.warn('Error destroying document root'));
     }
 }

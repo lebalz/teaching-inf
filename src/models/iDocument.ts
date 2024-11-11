@@ -1,7 +1,7 @@
 import { action, computed, IReactionDisposer, observable, reaction } from 'mobx';
 import { Document as DocumentProps, TypeDataMapping, DocumentType } from '@tdev-api/document';
 import DocumentStore from '@tdev-stores/DocumentStore';
-import { debounce } from 'lodash';
+import _, { debounce } from 'lodash';
 import { ApiState } from '@tdev-stores/iStore';
 import { NoneAccess, ROAccess, RWAccess } from './helpers/accessPolicy';
 import type iSideEffect from './SideEffects/iSideEffect';
@@ -116,7 +116,7 @@ abstract class iDocument<Type extends DocumentType> {
 
     @computed
     get isDirty() {
-        return this._pristine !== this.data;
+        return !_.isEqual(this._pristine, this.data);
     }
 
     @computed

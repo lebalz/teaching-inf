@@ -3,6 +3,8 @@ import iDocument, { Source } from '@tdev-models/iDocument';
 import { DocumentType, Document as DocumentProps, TypeDataMapping, Access } from '@tdev-api/document';
 import DocumentStore from '@tdev-stores/DocumentStore';
 import { TypeMeta } from '@tdev-models/DocumentRoot';
+import { DocumentRootStore } from '@tdev-stores/DocumentRootStore';
+import DynamicDocumentRoots from './DynamicDocumentRoots';
 
 export interface MetaInit {
     readonly?: boolean;
@@ -10,11 +12,36 @@ export interface MetaInit {
 
 export class ModelMeta extends TypeMeta<DocumentType.DynamicDocumentRoot> {
     readonly type = DocumentType.DynamicDocumentRoot;
-    readonly name: string;
+    readonly store: DocumentStore;
+    readonly rootDocumentId: string;
+    readonly parentDocumentId: string;
 
-    constructor(props: Partial<MetaInit>, name: string) {
+    constructor(
+        props: Partial<MetaInit>,
+        rootDocumentId: string,
+        parentDocumentId: string,
+        documentStore: DocumentStore
+    ) {
         super(DocumentType.DynamicDocumentRoot, props.readonly ? Access.RO_User : undefined);
-        this.name = name;
+        this.store = documentStore;
+        this.rootDocumentId = rootDocumentId;
+        this.parentDocumentId = parentDocumentId;
+    }
+
+    @computed
+    get parentDocument(): DynamicDocumentRoots | undefined {
+        return this.store.find(this.parentDocumentId) as DynamicDocumentRoots;
+    }
+
+    @computed
+    get name(): string {
+        if (!this.parentDocument) {
+            return 'Dynamische Dokumentenwurzel';
+        }
+        return (
+            this.parentDocument._dynamicDocumentRoots.find((doc) => doc.id === this.rootDocumentId)?.name ||
+            'Dynamische Dokumentenwurzel'
+        );
     }
 
     get defaultData(): TypeDataMapping[DocumentType.DynamicDocumentRoot] {
