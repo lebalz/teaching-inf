@@ -2,6 +2,7 @@ import React, { useId } from 'react';
 import { Access, DocumentType } from '@tdev-api/document';
 import DocumentRoot, { TypeMeta } from '@tdev-models/DocumentRoot';
 import { useStore } from '@tdev-hooks/useStore';
+import { Config } from '@tdev-api/documentRoot';
 
 /**
  * 1. create a dummy documentRoot with default (meta) data
@@ -16,7 +17,8 @@ import { useStore } from '@tdev-hooks/useStore';
 export const useDocumentRoot = <Type extends DocumentType>(
     id: string | undefined,
     meta: TypeMeta<Type>,
-    createFirstDocument: boolean = true
+    createFirstDocument: boolean = true,
+    access: Partial<Config> = {}
 ) => {
     const defaultRootDocId = useId();
     const userStore = useStore('userStore');
@@ -51,7 +53,7 @@ export const useDocumentRoot = <Type extends DocumentType>(
         /**
          * load the documentRoot and it's documents from the api.
          */
-        documentRootStore.loadInNextBatch(id, meta);
+        documentRootStore.loadInNextBatch(id, meta, undefined, access);
         return () => {
             documentRootStore.removeFromStore(defaultRootDocId, false);
         };
@@ -63,6 +65,7 @@ export const useDocumentRoot = <Type extends DocumentType>(
         }
         documentRootStore.loadInNextBatch(id, meta, {
             documents: true,
+            documentRoot: false,
             userPermissions: true,
             groupPermissions: true
         });

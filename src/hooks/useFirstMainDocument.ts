@@ -5,6 +5,7 @@ import { CreateDocumentModel } from '@tdev-stores/DocumentStore';
 import { useDocumentRoot } from '@tdev-hooks/useDocumentRoot';
 import { useStore } from '@tdev-hooks/useStore';
 import { RWAccess } from '@tdev-models/helpers/accessPolicy';
+import { Config } from '@tdev-api/documentRoot';
 
 export const DUMMY_DOCUMENT_ID = 'dummy' as const;
 
@@ -19,10 +20,11 @@ export const DUMMY_DOCUMENT_ID = 'dummy' as const;
 export const useFirstMainDocument = <Type extends DocumentType>(
     documentRootId: string | undefined,
     meta: TypeMeta<Type>,
-    createDocument: boolean = true
+    createDocument: boolean = true,
+    access: Partial<Config> = {}
 ) => {
     const defaultDocId = useId();
-    const documentRoot = useDocumentRoot(documentRootId, meta);
+    const documentRoot = useDocumentRoot(documentRootId, meta, undefined, access);
     const userStore = useStore('userStore');
     const documentStore = useStore('documentStore');
     const [dummyDocument] = React.useState(

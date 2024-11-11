@@ -2,6 +2,7 @@ import { DocumentType } from '@tdev-api/document';
 import { TypeMeta } from '@tdev-models/DocumentRoot';
 import { useStore } from '@tdev-hooks/useStore';
 import { useFirstMainDocument } from './useFirstMainDocument';
+import { Config } from '@tdev-api/documentRoot';
 
 export const DUMMY_DOCUMENT_ID = 'dummy' as const;
 
@@ -17,10 +18,11 @@ export const DUMMY_DOCUMENT_ID = 'dummy' as const;
 export const useFirstRealMainDocument = <Type extends DocumentType>(
     documentRootId: string | undefined,
     meta: TypeMeta<Type>,
-    createDocument: boolean = true
+    createDocument: boolean = true,
+    access: Partial<Config> = {}
 ) => {
     const sessionStore = useStore('sessionStore');
-    const mainDoc = useFirstMainDocument(documentRootId, meta, createDocument);
+    const mainDoc = useFirstMainDocument(documentRootId, meta, createDocument, access);
     if (
         !!documentRootId &&
         sessionStore.isLoggedIn &&
