@@ -16,7 +16,10 @@ interface Props extends MetaInit {
 
 const DynamicDocumentRoots = observer((props: Props) => {
     const [meta] = React.useState(new ModelMeta(props));
-    const docRoot = useDocumentRoot(props.id, meta, false, {access: Access.RO_DocumentRoot, sharedAccess: Access.RO_DocumentRoot});
+    const docRoot = useDocumentRoot(props.id, meta, false, {
+        access: Access.RO_DocumentRoot,
+        sharedAccess: Access.RO_DocumentRoot
+    });
     const doc = useFirstRealMainDocument(props.id, meta, false);
     const userStore = useStore('userStore');
     const documentStore = useStore('documentStore');
@@ -38,19 +41,21 @@ const DynamicDocumentRoots = observer((props: Props) => {
     }
     if (!doc) {
         return (
-        <div>
-            {docRoot.id} - {docRoot.sharedAccess}
-            <PermissionsPanel documentRootId={props.id} />
-            <Loader />
-        </div>
+            <div>
+                {docRoot.id} - {docRoot.sharedAccess}
+                <PermissionsPanel documentRootId={props.id} />
+                <Loader />
+            </div>
         );
     }
-    return <div>
-        {docRoot.id}
-        <br />
-        {doc.id}
-        <PermissionsPanel documentRootId={props.id} />
-    </div>;
+    return (
+        <div>
+            {docRoot.id}
+            <br />
+            {doc.id}
+            <PermissionsPanel documentRootId={props.id} />
+        </div>
+    );
 });
 
 export default DynamicDocumentRoots;

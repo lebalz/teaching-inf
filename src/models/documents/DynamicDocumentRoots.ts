@@ -25,12 +25,11 @@ export class ModelMeta extends TypeMeta<DocumentType.DynamicDocumentRoots> {
     get defaultData(): TypeDataMapping[DocumentType.DynamicDocumentRoots] {
         return {
             documentRoots: []
-        }
+        };
     }
 }
 
 class DynamicDocumentRoots extends iDocument<DocumentType.DynamicDocumentRoots> {
-
     dynamicDocumentRoots = observable.array<DynamicDocumentRoot>([]);
 
     constructor(props: DocumentProps<DocumentType.DynamicDocumentRoots>, store: DocumentStore) {

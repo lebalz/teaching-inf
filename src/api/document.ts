@@ -15,7 +15,7 @@ import { Color } from '@tdev-components/shared/Colors';
 import CmsText from '@tdev-models/documents/CmsText';
 import TextMessage from '@tdev-models/documents/TextMessage';
 import DynamicDocumentRoots from '@tdev-models/documents/DynamicDocumentRoots';
-import {default as DynamicDocumentRootModel } from '@tdev-models/documents/DynamicDocumentRoot';
+import { default as DynamicDocumentRootModel } from '@tdev-models/documents/DynamicDocumentRoot';
 
 export enum Access {
     RO_DocumentRoot = 'RO_DocumentRoot',

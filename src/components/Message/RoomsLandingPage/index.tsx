@@ -54,7 +54,7 @@ const Rooms = observer((props: Props): JSX.Element => {
         <>
             <div className={clsx(styles.wrapper)}>
                 <div className={clsx(styles.rooms)}>
-                    <h1>{((documentRoot.meta as ModelMeta).name)}</h1>
+                    <h1>{(documentRoot.meta as ModelMeta).name}</h1>
                     {/* <Conversation room={room} />
                     <NewMessage room={room} /> */}
                 </div>

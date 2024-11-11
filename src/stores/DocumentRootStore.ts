@@ -71,7 +71,12 @@ export class DocumentRootStore extends iStore {
     );
 
     @action
-    loadInNextBatch<Type extends DocumentType>(id: string, meta: TypeMeta<Type>, loadConfig?: LoadConfig, accessConfig?: Partial<Config>) {
+    loadInNextBatch<Type extends DocumentType>(
+        id: string,
+        meta: TypeMeta<Type>,
+        loadConfig?: LoadConfig,
+        accessConfig?: Partial<Config>
+    ) {
         if (this.queued.has(id)) {
             return;
         }
@@ -107,7 +112,7 @@ export class DocumentRootStore extends iStore {
 
     /**
      * loads all queued documentRoots. When a document root was not found,
-     * it will be **created** (when the user is logged in). 
+     * it will be **created** (when the user is logged in).
      */
     @action
     _loadQueued() {
