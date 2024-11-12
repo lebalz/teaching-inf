@@ -30,6 +30,7 @@ export class ModelMeta extends TypeMeta<DocumentType.DynamicDocumentRoots> {
 }
 
 class DynamicDocumentRoots extends iDocument<DocumentType.DynamicDocumentRoots> {
+    readonly type = DocumentType.DynamicDocumentRoots;
     _dynamicDocumentRoots = observable.array<DynamicDocumentRoot>([]);
 
     constructor(props: DocumentProps<DocumentType.DynamicDocumentRoots>, store: DocumentStore) {
@@ -41,9 +42,11 @@ class DynamicDocumentRoots extends iDocument<DocumentType.DynamicDocumentRoots> 
     @action
     setData(data: TypeDataMapping[DocumentType.DynamicDocumentRoots], from: Source, updatedAt?: Date): void {
         this._dynamicDocumentRoots.replace(data.documentRoots);
-        this.loadDynamicDocumentRoots();
+        // this.loadDynamicDocumentRoots();
         if (from === Source.LOCAL) {
             this.save();
+        } else {
+            this.loadDynamicDocumentRoots();
         }
         if (updatedAt) {
             this.updatedAt = new Date(updatedAt);
@@ -52,14 +55,24 @@ class DynamicDocumentRoots extends iDocument<DocumentType.DynamicDocumentRoots> 
 
     @action
     addDynamicDocumentRoot(id: string, name: string) {
-        this.setData(
-            {
-                documentRoots: [...this._dynamicDocumentRoots, { id, name }]
-            },
-            Source.LOCAL,
-            new Date()
-        );
-        this.saveNow();
+        this.store.root.documentRootStore
+            .create(id, new DynamicDocRootMeta({}, id, this.id, this.store.root.documentStore), {})
+            .then((dynRoot) => {
+                this.setData(
+                    {
+                        documentRoots: [...this._dynamicDocumentRoots, { id, name }]
+                    },
+                    Source.LOCAL,
+                    new Date()
+                );
+                return this.saveNow();
+            })
+            .catch((e) => {
+                const createdDynDoc = this.store.root.documentRootStore.find(id);
+                if (createdDynDoc) {
+                    this.store.root.documentRootStore.destroy(createdDynDoc);
+                }
+            });
     }
 
     @action
@@ -69,16 +82,29 @@ class DynamicDocumentRoots extends iDocument<DocumentType.DynamicDocumentRoots> 
         }
         const ddRoot = this.dynamicDocumentRoots.find((dr) => dr.id === id);
         if (ddRoot) {
-            this.store.root.documentRootStore.destroy(ddRoot);
+            this.store.root.documentRootStore
+                .destroy(ddRoot)
+                .then(
+                    action(() => {
+                        this.setData(
+                            { documentRoots: this._dynamicDocumentRoots.filter((dr) => dr.id !== id) },
+                            Source.LOCAL,
+                            new Date()
+                        );
+                        this.saveNow();
+                    })
+                )
+                .catch((e) => {
+                    console.log('No permission to delete document root');
+                });
+        } else {
+            this.setData(
+                { documentRoots: this._dynamicDocumentRoots.filter((dr) => dr.id !== id) },
+                Source.LOCAL,
+                new Date()
+            );
+            this.saveNow();
         }
-        this.setData(
-            {
-                documentRoots: this._dynamicDocumentRoots.filter((dr) => dr.id !== id)
-            },
-            Source.LOCAL,
-            new Date()
-        );
-        this.saveNow();
     }
 
     get data(): TypeDataMapping[DocumentType.DynamicDocumentRoots] {

@@ -197,6 +197,17 @@ class DocumentRoot<T extends DocumentType> {
     save() {
         return this.store.save(this).catch(() => console.log('Failed to update document root'));
     }
+
+    @computed
+    get canCreate() {
+        if (this.store.root.userStore.isUserSwitched) {
+            return false;
+        }
+        if (this.store.root.userStore.current?.isAdmin) {
+            return true;
+        }
+        return RWAccess.has(this.permission);
+    }
 }
 
 export default DocumentRoot;

@@ -16,15 +16,21 @@ import {
     ServerToClientEvents
 } from '../api/IoEventTypes';
 import { BACKEND_URL } from '../authConfig';
-import { DocumentRootUpdate } from '@tdev-api/documentRoot';
+import { DocumentRoot, DocumentRootUpdate } from '@tdev-api/documentRoot';
 import { GroupPermission, UserPermission } from '@tdev-api/permission';
 import { Document, DocumentType } from '../api/document';
+import { TypeMeta } from '@tdev-models/DocumentRoot';
 
 type TypedSocket = Socket<ServerToClientEvents, ClientToServerEvents>;
 /**
  * Records that should be created when a IoEvent.NEW_RECORD event is received.
  */
-const RecordsToCreate = new Set<DocumentType>([DocumentType.Dir, DocumentType.File, DocumentType.MdxComment]);
+const RecordsToCreate = new Set<DocumentType>([
+    DocumentType.Dir,
+    DocumentType.File,
+    DocumentType.MdxComment,
+    DocumentType.DynamicDocumentRoots
+]);
 
 export class SocketDataStore extends iStore<'ping'> {
     readonly root: RootStore;
@@ -138,6 +144,21 @@ export class SocketDataStore extends iStore<'ping'> {
                     this.root.documentStore.addToStore(doc);
                 }
                 break;
+            case RecordType.DocumentRoot:
+                const docRoot = record as DocumentRoot;
+                const current = this.root.documentRootStore.find(docRoot.id);
+                if (current) {
+                    this.root.documentRootStore.addApiResultToStore(docRoot, {
+                        meta: current.meta,
+                        load: {
+                            documentRoot: true,
+                            documents: false,
+                            groupPermissions: true,
+                            userPermissions: true
+                        }
+                    });
+                }
+                break;
             default:
                 console.log('newRecord', type, record);
                 break;
@@ -164,7 +185,6 @@ export class SocketDataStore extends iStore<'ping'> {
 
     @action
     updateDocument(change: ChangedDocument) {
-        console.log('changedDocument', change.updatedAt, change.id, change.data);
         this.root.documentStore.handleUpdate(change);
     }
 

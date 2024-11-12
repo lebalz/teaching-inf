@@ -168,7 +168,7 @@ export class DocumentRootStore extends iStore {
                         .map((id) => {
                             const config = current.get(id);
                             if (config) {
-                                return this.create(id, config.meta, config.access);
+                                return this.create(id, config.meta, config.access).catch(() => undefined);
                             }
                             return Promise.resolve(undefined);
                         })
@@ -191,7 +191,7 @@ export class DocumentRootStore extends iStore {
     }
 
     @action
-    addApiResultToStore(data: ApiDocumentRoot, config: BatchedMeta) {
+    addApiResultToStore(data: ApiDocumentRoot, config: Omit<BatchedMeta, 'access'>) {
         const documentRoot = config.load.documentRoot
             ? new DocumentRoot(data, config.meta, this)
             : this.find(data.id);
@@ -307,7 +307,7 @@ export class DocumentRootStore extends iStore {
     @action
     destroy(documentRoot: DocumentRoot<any>) {
         if (!this.root.sessionStore.isLoggedIn || !this.root.userStore.current?.isAdmin) {
-            return Promise.resolve('error');
+            return Promise.reject('error');
         }
         return this.withAbortController(`destroy-${documentRoot.id}`, (signal) => {
             return apiDelete(documentRoot.id, signal.signal);

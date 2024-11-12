@@ -24,7 +24,7 @@ export const useFirstMainDocument = <Type extends DocumentType>(
     access: Partial<Config> = {}
 ) => {
     const defaultDocId = useId();
-    const documentRoot = useDocumentRoot(documentRootId, meta, undefined, access);
+    const documentRoot = useDocumentRoot(documentRootId, meta, true, access);
     const userStore = useStore('userStore');
     const documentStore = useStore('documentStore');
     const [dummyDocument] = React.useState(
@@ -44,23 +44,18 @@ export const useFirstMainDocument = <Type extends DocumentType>(
     );
     React.useEffect(() => {
         if (!userStore.current || userStore.isUserSwitched) {
-            return;
-        }
-        if (
-            documentRoot.isLoaded &&
-            !documentRoot.isDummy &&
-            !documentRoot.firstMainDocument &&
-            createDocument
-        ) {
             /**
              * If the user is viewing another user, we should not create a document
              * and instead try to load the first main document of the viewed user.
              */
-            if (RWAccess.has(documentRoot.permission)) {
+            return;
+        }
+        if (documentRoot.isLoaded && !documentRoot.isDummy && !documentRoot.firstMainDocument) {
+            if (createDocument && documentRoot.canCreate) {
                 documentStore.create({
                     documentRootId: documentRoot.id,
                     authorId: userStore.current.id,
-                    type: documentRoot.type,
+                    type: meta.type,
                     data: meta.defaultData
                 });
             }

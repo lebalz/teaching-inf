@@ -26,13 +26,24 @@ export const useFirstRealMainDocument = <Type extends DocumentType>(
     const [t0] = React.useState(Date.now());
     const sessionStore = useStore('sessionStore');
     const mainDoc = useFirstMainDocument(documentRootId, meta, createDocument, access);
+    const [loginDelayElapsed, setLoginDelayElapsed] = React.useState(false);
+    React.useEffect(() => {
+        if (loginDelayElapsed) {
+            return;
+        }
+        const tId = setTimeout(() => {
+            setLoginDelayElapsed(true);
+        }, WAIT_FOR_LOGIN);
+        return () => clearTimeout(tId);
+    }, []);
+
     const hasId = !!documentRootId;
     if (hasId) {
         if (sessionStore.isLoggedIn) {
             if (mainDoc.authorId === DUMMY_DOCUMENT_ID || !mainDoc.root || mainDoc.root.isDummy) {
                 return;
             }
-        } else if (Date.now() - t0 < WAIT_FOR_LOGIN) {
+        } else if (!loginDelayElapsed) {
             return;
         }
     }
