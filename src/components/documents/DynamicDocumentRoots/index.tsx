@@ -4,22 +4,18 @@ import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
 import { useFirstRealMainDocument } from '@tdev-hooks/useFirstRealMainDocument';
 import Loader from '@tdev-components/Loader';
-import {
-    default as DynamicDocumentRootsModel,
-    MetaInit,
-    ModelMeta
-} from '@tdev-models/documents/DynamicDocumentRoots';
+import { MetaInit, ModelMeta } from '@tdev-models/documents/DynamicDocumentRoots';
 import PermissionsPanel from '@tdev-components/PermissionsPanel';
-import { useDocumentRoot } from '@tdev-hooks/useDocumentRoot';
-import { Access, DocumentType } from '@tdev-api/document';
+import { Access } from '@tdev-api/document';
 import { useStore } from '@tdev-hooks/useStore';
-import ConfigureDocumentRoots from './ConfigureDocumentRoots';
+import AddDynamicDocumentRoot from './AddDynamicDocumentRoot';
 import Button from '@tdev-components/shared/Button';
 import { mdiTrashCan } from '@mdi/js';
-import { action } from 'mobx';
+import DynamicDocumentRoot from './DynamicDocumentRoot';
 
 interface Props extends MetaInit {
     id: string;
+    name?: string;
 }
 
 const DynamicDocumentRoots = observer((props: Props) => {
@@ -30,27 +26,6 @@ const DynamicDocumentRoots = observer((props: Props) => {
         access: Access.RO_DocumentRoot,
         sharedAccess: Access.RO_DocumentRoot
     });
-    const documentStore = useStore('documentStore');
-    const documentRootStore = useStore('documentRootStore');
-    // const docRoot = documentRootStore.find(props.id);
-    // const doc = docRoot?.firstMainDocument as DynamicDocumentRootsModel;
-    // const docRoot = useDocumentRoot(props.id, meta, user?.isAdmin, { access: Access.RO_DocumentRoot, sharedAccess: Access.RO_DocumentRoot });
-    // const doc = docRoot?.firstMainDocument as DynamicDocumentRootsModel;
-    // React.useEffect(() => {
-    //     if (docRoot && !doc && user?.isAdmin) {
-    //         documentStore.create({
-    //             documentRootId: docRoot.id,
-    //             type: DocumentType.DynamicDocumentRoots,
-    //             data: {
-    //                 documentRoots: []
-    //             }
-    //         });
-    //     }
-    // }, [docRoot, doc, user]);
-
-    // if (!doc) {
-    //     return <Loader />;
-    // }
     if (!doc) {
         return (
             <div>
@@ -61,28 +36,19 @@ const DynamicDocumentRoots = observer((props: Props) => {
         );
     }
     return (
-        <div>
-            <ConfigureDocumentRoots dynamicDocumentRoots={doc} />
-            {props.id} - {doc.root!.sharedAccess}
-            <br />
-            {doc.id}
-            {doc.dynamicDocumentRoots.map((root) => {
-                return (
-                    <div key={root.id}>
-                        {root.id} - {(root.meta as any).name}
-                        {doc.root!.hasRWAccess && (
-                            <Button
-                                color="red"
-                                icon={mdiTrashCan}
-                                onClick={() => {
-                                    doc.removeDynamicDocumentRoot(root.id);
-                                }}
-                            />
-                        )}
-                    </div>
-                );
-            })}
-            <PermissionsPanel documentRootId={props.id} />
+        <div className={clsx('card', styles.docRoots)}>
+            <div className={clsx(styles.header, 'card__header')}>
+                <h3>{props.name || 'Gruppe'}</h3>
+                <PermissionsPanel documentRootId={props.id} position={['top right', 'bottom right']} />
+            </div>
+            <div className={clsx(styles.body, 'card__body')}>
+                <div className={clsx(styles.actions)}>
+                    <AddDynamicDocumentRoot dynamicDocumentRoots={doc} />
+                </div>
+                {doc._dynamicDocumentRoots.map((root) => {
+                    return <DynamicDocumentRoot key={root.id} id={root.id} dynamicRootsDocumentId={doc.id} />;
+                })}
+            </div>
         </div>
     );
 });

@@ -53,6 +53,15 @@ class DynamicDocumentRoots extends iDocument<DocumentType.DynamicDocumentRoots> 
     }
 
     @action
+    setName(id: string, name: string) {
+        const renamedRoots = [
+            { id: id, name: name },
+            ...this._dynamicDocumentRoots.filter((dr) => dr.id !== id)
+        ];
+        this.setData({ documentRoots: renamedRoots }, Source.LOCAL, new Date());
+    }
+
+    @action
     addDynamicDocumentRoot(id: string, name: string) {
         this.store.root.documentRootStore
             .create(id, new DynamicDocRootMeta({}, id, this.id, this.store.root.documentStore), {})

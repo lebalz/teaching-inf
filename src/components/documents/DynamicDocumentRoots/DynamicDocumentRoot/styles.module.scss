@@ -1,0 +1,13 @@
+.dynamicDocRoot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .roomName {
+        font-weight: bold;
+    }
+
+    .actions {
+        display: flex;
+    }
+}

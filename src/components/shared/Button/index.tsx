@@ -143,6 +143,7 @@ const Button = (props: Props) => {
             onClick={props.onClick}
             style={style}
             disabled={props.disabled}
+            title={props.title}
         >
             <ButtonInner {...props} />
         </button>

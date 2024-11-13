@@ -38,10 +38,20 @@ export class ModelMeta extends TypeMeta<DocumentType.DynamicDocumentRoot> {
         if (!this.parentDocument) {
             return 'Dynamische Dokumentenwurzel';
         }
-        return (
-            this.parentDocument._dynamicDocumentRoots.find((doc) => doc.id === this.rootDocumentId)?.name ||
-            'Dynamische Dokumentenwurzel'
-        );
+        const title = this.parentDocument._dynamicDocumentRoots.find(
+            (doc) => doc.id === this.rootDocumentId
+        )?.name;
+        return title === undefined ? 'Dynamische Dokumentenwurzel' : title;
+    }
+
+    @action
+    destroy(): void {
+        this.parentDocument?.removeDynamicDocumentRoot(this.rootDocumentId);
+    }
+
+    @action
+    setName(name: string): void {
+        this.parentDocument?.setName(this.rootDocumentId, name);
     }
 
     get defaultData(): TypeDataMapping[DocumentType.DynamicDocumentRoot] {

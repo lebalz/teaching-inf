@@ -14,18 +14,14 @@ import { default as GroupAccessPanel } from './GroupPermission/AccessPanel';
 import DefinitionList from '../DefinitionList';
 import { action } from 'mobx';
 import UserPermission from '@tdev-components/PermissionsPanel/UserPermission';
+import { PopupPosition } from 'reactjs-popup/dist/types';
 
 interface Props {
     documentRootId: string;
+    position?: PopupPosition | PopupPosition[];
 }
 
-interface AccessRadioButtonProps {
-    targetAccess: Access;
-    accessProp: 'rootAccess' | 'sharedAccess';
-    documentRoot: DocumentRoot<any>;
-}
-
-const PermissionsPanel = observer(({ documentRootId }: Props) => {
+const PermissionsPanel = observer(({ documentRootId, position }: Props) => {
     const userStore = useStore('userStore');
     const documentRootStore = useStore('documentRootStore');
     const permissionStore = useStore('permissionStore');
@@ -72,6 +68,7 @@ const PermissionsPanel = observer(({ documentRootId }: Props) => {
             on="click"
             closeOnDocumentClick
             closeOnEscape
+            position={position}
             onOpen={action(() => {
                 permissionStore.loadPermissions(documentRoot);
             })}
