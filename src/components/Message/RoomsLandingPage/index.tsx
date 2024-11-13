@@ -17,6 +17,7 @@ import { ModelMeta as RootsMeta } from '@tdev-models/documents/DynamicDocumentRo
 import { ModelMeta } from '@tdev-models/documents/DynamicDocumentRoot';
 import { useDocumentRoot } from '@tdev-hooks/useDocumentRoot';
 import DynamicDocumentRoots from '@tdev-components/documents/DynamicDocumentRoots';
+import PermissionsPanel from '@tdev-components/PermissionsPanel';
 
 const NoRoom = () => {
     return (
@@ -31,8 +32,9 @@ const NotCreated = () => {
     return (
         <div className={clsx('alert alert--warning', styles.alert)} role="alert">
             <Icon path={mdiEmoticonSad} size={1} color="var(--ifm-color-warning)" />
-            Dieser Raum wurde noch nicht erzeugt. Warten auf die Lehrperson!
-            <Loader />
+            Dieser Raum wurde noch nicht erzeugt. Warten auf die Lehrperson
+            <div style={{ flexGrow: 1, flexBasis: 0 }} />
+            <Loader noLabel />
         </div>
     );
 };
@@ -58,7 +60,7 @@ const Rooms = observer((props: Props): JSX.Element => {
     const [meta] = React.useState(
         new ModelMeta({}, props.documentRootId, props.dynamicDocumentId, documentStore)
     );
-    const documentRoot = useDocumentRoot(props.documentRootId, meta, false);
+    const documentRoot = useDocumentRoot(props.documentRootId, meta, false, {}, true);
 
     if (!documentRoot || documentRoot.type !== DocumentType.DynamicDocumentRoot) {
         return <NoRoom />;
@@ -67,14 +69,21 @@ const Rooms = observer((props: Props): JSX.Element => {
         <>
             <div className={clsx(styles.wrapper)}>
                 <div className={clsx(styles.rooms)}>
-                    <h1>{(documentRoot.meta as ModelMeta).name}</h1>
-                    {/* <Conversation room={room} />
-                    <NewMessage room={room} /> */}
+                    <h1 className={clsx(styles.name)}>
+                        {meta.name}{' '}
+                        <PermissionsPanel
+                            documentRootId={props.documentRootId}
+                            position={['top right', 'bottom right']}
+                        />
+                    </h1>
+                    <Conversation group={documentRoot} />
+                    <NewMessage group={documentRoot} />
                 </div>
             </div>
         </>
     );
 });
+
 interface WithParentRootProps {
     path: string;
 }
@@ -83,7 +92,7 @@ const WithParentRoot = observer((props: WithParentRootProps): JSX.Element => {
     const routeParams = matchPath<PathParams>(props.path, PATHNAME_PATTERN);
     const { parentRootId, documentRootId } = routeParams?.params || {};
     const [rootsMeta] = React.useState(new RootsMeta({}));
-    const dynDocRoots = useDocumentRoot(parentRootId, rootsMeta, false);
+    const dynDocRoots = useDocumentRoot(parentRootId, rootsMeta, false, {}, true);
     if (!userStore.current) {
         return <NoUser />;
     }
@@ -92,6 +101,9 @@ const WithParentRoot = observer((props: WithParentRootProps): JSX.Element => {
     }
     if (!dynDocRoots) {
         return <Loader />;
+    }
+    if (dynDocRoots.isDummy) {
+        return <NotCreated />;
     }
     if (!documentRootId || !dynDocRoots.firstMainDocument?.id) {
         return <DynamicDocumentRoots id={parentRootId} />;

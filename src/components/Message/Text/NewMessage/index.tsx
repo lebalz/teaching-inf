@@ -2,37 +2,38 @@ import React from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
-import { default as TextMessageModel } from '@tdev-models/Messages/Text';
 import { mdiSend } from '@mdi/js';
 import { useStore } from '@tdev-hooks/useStore';
 import Button from '@tdev-components/shared/Button';
-import { MessageType } from '@tdev-models/Messages/iMessage';
+import DocumentRoot from '@tdev-models/DocumentRoot';
+import { DocumentType } from '@tdev-api/document';
 
 interface Props {
-    room: string;
+    group: DocumentRoot<DocumentType.DynamicDocumentRoot>;
 }
 
 const NewMessage = observer((props: Props) => {
+    const { group } = props;
     const [message, setMessage] = React.useState('');
     const userStore = useStore('userStore');
-    const userMessageStore = useStore('userMessageStore');
+    const documentStore = useStore('documentStore');
     const sendMessage = () => {
         if (!userStore.current || message.trim() === '') {
             return;
         }
-        const msg = new TextMessageModel(
-            {
-                type: MessageType.Text,
+        documentStore
+            .create({
+                documentRootId: group.id,
+                type: DocumentType.TextMessage,
                 data: {
                     text: message
-                },
-                senderId: userStore.current.id,
-                room: props.room
-            },
-            userMessageStore
-        );
-        msg.deliver();
-        setMessage('');
+                }
+            })
+            .then((msg) => {
+                if (msg) {
+                    setMessage('');
+                }
+            });
     };
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {

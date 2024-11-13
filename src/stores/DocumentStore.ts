@@ -120,7 +120,7 @@ class DocumentStore extends iStore<`delete-${string}`> {
         /**
          * Adds a new model to the store. Existing models with the same id are replaced.
          */
-        if (!data) {
+        if (!data || !data.data) {
             return;
         }
         const model = CreateDocumentModel(data, this);

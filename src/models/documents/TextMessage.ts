@@ -53,6 +53,16 @@ class TextMessage extends iDocument<DocumentType.TextMessage> {
         }
         return new ModelMeta({});
     }
+
+    @computed
+    get isAuthor(): boolean {
+        return this.authorId === this.store.root.userStore.viewedUserId;
+    }
+
+    @computed
+    get sentToday(): boolean {
+        return this.createdAt.toDateString() === new Date().toDateString();
+    }
 }
 
 export default TextMessage;

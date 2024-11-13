@@ -23,6 +23,11 @@ type LoadConfig = {
     userPermissions?: boolean;
     groupPermissions?: boolean;
     documentRoot?: boolean;
+    /**
+     * if a document root should not be created when it is not found,
+     * set `skipCreate` to true
+     */
+    skipCreate?: boolean;
 };
 
 type BatchedMeta = {
@@ -82,11 +87,13 @@ export class DocumentRootStore extends iStore {
         }
         this.queued.set(id, {
             meta: meta,
-            load: loadConfig || {
+            load: {
                 documentRoot: true,
                 documents: true,
                 groupPermissions: true,
-                userPermissions: true
+                userPermissions: true,
+                skipCreate: false,
+                ...(loadConfig || {})
             },
             access: accessConfig || {}
         });
@@ -161,10 +168,11 @@ export class DocumentRootStore extends iStore {
                 })
             );
             if (!isUserSwitched) {
+                console.log(current.values());
                 // create all missing root documents
                 const created = await Promise.all(
                     [...current.keys()]
-                        .filter((id) => !this.find(id)?.isLoaded)
+                        .filter((id) => !this.find(id)?.isLoaded && !current.get(id)!.load.skipCreate)
                         .map((id) => {
                             const config = current.get(id);
                             if (config) {

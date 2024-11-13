@@ -19,7 +19,6 @@ import { BACKEND_URL } from '../authConfig';
 import { DocumentRoot, DocumentRootUpdate } from '@tdev-api/documentRoot';
 import { GroupPermission, UserPermission } from '@tdev-api/permission';
 import { Document, DocumentType } from '../api/document';
-import { TypeMeta } from '@tdev-models/DocumentRoot';
 
 type TypedSocket = Socket<ServerToClientEvents, ClientToServerEvents>;
 /**
@@ -29,7 +28,8 @@ const RecordsToCreate = new Set<DocumentType>([
     DocumentType.Dir,
     DocumentType.File,
     DocumentType.MdxComment,
-    DocumentType.DynamicDocumentRoots
+    DocumentType.DynamicDocumentRoots,
+    DocumentType.TextMessage
 ]);
 
 export class SocketDataStore extends iStore<'ping'> {

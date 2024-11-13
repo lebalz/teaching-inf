@@ -40,6 +40,9 @@ class DynamicDocumentRoots extends iDocument<DocumentType.DynamicDocumentRoots> 
 
     @action
     setData(data: TypeDataMapping[DocumentType.DynamicDocumentRoots], from: Source, updatedAt?: Date): void {
+        if (!data) {
+            return;
+        }
         this.dynamicDocumentRoots.replace(data.documentRoots);
         if (from === Source.LOCAL) {
             this.save();
@@ -65,7 +68,10 @@ class DynamicDocumentRoots extends iDocument<DocumentType.DynamicDocumentRoots> 
     @action
     addDynamicDocumentRoot(id: string, name: string) {
         this.store.root.documentRootStore
-            .create(id, new DynamicDocRootMeta({}, id, this.id, this.store.root.documentStore), {})
+            .create(id, new DynamicDocRootMeta({}, id, this.id, this.store.root.documentStore), {
+                access: Access.None_DocumentRoot,
+                sharedAccess: Access.RO_DocumentRoot
+            })
             .then((dynRoot) => {
                 this.setData(
                     {

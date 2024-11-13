@@ -18,7 +18,8 @@ export const useDocumentRoot = <Type extends DocumentType>(
     id: string | undefined,
     meta: TypeMeta<Type>,
     createFirstDocument: boolean = true,
-    access: Partial<Config> = {}
+    access: Partial<Config> = {},
+    skipCreate?: boolean
 ) => {
     const defaultRootDocId = useId();
     const userStore = useStore('userStore');
@@ -53,7 +54,7 @@ export const useDocumentRoot = <Type extends DocumentType>(
         /**
          * load the documentRoot and it's documents from the api.
          */
-        documentRootStore.loadInNextBatch(id, meta, undefined, access);
+        documentRootStore.loadInNextBatch(id, meta, { skipCreate: !!skipCreate }, access);
         return () => {
             documentRootStore.removeFromStore(defaultRootDocId, false);
         };
@@ -64,10 +65,8 @@ export const useDocumentRoot = <Type extends DocumentType>(
             return;
         }
         documentRootStore.loadInNextBatch(id, meta, {
-            documents: true,
             documentRoot: false,
-            userPermissions: true,
-            groupPermissions: true
+            skipCreate: true
         });
     }, [userStore.viewedUser]);
 

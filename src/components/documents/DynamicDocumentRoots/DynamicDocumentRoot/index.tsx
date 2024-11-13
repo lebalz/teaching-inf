@@ -30,10 +30,7 @@ const DynamicDocumentRoot = observer((props: Props) => {
     const [meta] = React.useState(new ModelMeta({}, props.id, props.dynamicRootsDocumentId, documentStore));
     const [edit, setEdit] = React.useState(false);
     const [title, setTitle] = React.useState('');
-    const docRoot = useDocumentRoot(props.id, meta, false, {
-        access: Access.None_DocumentRoot,
-        sharedAccess: Access.None_DocumentRoot
-    });
+    const docRoot = useDocumentRoot(props.id, meta, false, {}, true);
     if (!docRoot || docRoot.isDummy) {
         return (
             <div>
