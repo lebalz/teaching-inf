@@ -29,7 +29,7 @@ const AddDynamicDocumentRoot = observer((props: Props) => {
                     const newId = uuidv4();
                     dynamicDocumentRoots.addDynamicDocumentRoot(
                         newId,
-                        `Neue Gruppe (${dynamicDocumentRoots._dynamicDocumentRoots.length + 1})`
+                        `Neue Gruppe (${dynamicDocumentRoots.dynamicDocumentRoots.length + 1})`
                     );
                 }}
             />

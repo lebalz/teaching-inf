@@ -45,7 +45,7 @@ const DynamicDocumentRoots = observer((props: Props) => {
                 <div className={clsx(styles.actions)}>
                     <AddDynamicDocumentRoot dynamicDocumentRoots={doc} />
                 </div>
-                {doc._dynamicDocumentRoots.map((root) => {
+                {doc.dynamicDocumentRoots.map((root) => {
                     return <DynamicDocumentRoot key={root.id} id={root.id} dynamicRootsDocumentId={doc.id} />;
                 })}
             </div>

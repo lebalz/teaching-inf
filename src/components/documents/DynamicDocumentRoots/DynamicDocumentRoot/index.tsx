@@ -2,17 +2,22 @@ import React from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
-import { useFirstRealMainDocument } from '@tdev-hooks/useFirstRealMainDocument';
 import Loader from '@tdev-components/Loader';
 import { MetaInit } from '@tdev-models/documents/DynamicDocumentRoots';
 import PermissionsPanel from '@tdev-components/PermissionsPanel';
 import { Access } from '@tdev-api/document';
 import { useStore } from '@tdev-hooks/useStore';
 import Button from '@tdev-components/shared/Button';
-import { mdiCircleEditOutline, mdiCloseCircle, mdiLocationEnter, mdiTextBoxEdit, mdiTrashCan } from '@mdi/js';
+import {
+    mdiCircleEditOutline,
+    mdiCloseCircle,
+    mdiContentSaveOutline,
+    mdiLocationEnter,
+    mdiTrashCan
+} from '@mdi/js';
 import { useDocumentRoot } from '@tdev-hooks/useDocumentRoot';
 import { ModelMeta } from '@tdev-models/documents/DynamicDocumentRoot';
-import Link from '@docusaurus/Link';
+import { NoneAccess } from '@tdev-models/helpers/accessPolicy';
 
 interface Props extends MetaInit {
     id: string;
@@ -21,8 +26,10 @@ interface Props extends MetaInit {
 
 const DynamicDocumentRoot = observer((props: Props) => {
     const documentStore = useStore('documentStore');
+    const userStore = useStore('userStore');
     const [meta] = React.useState(new ModelMeta({}, props.id, props.dynamicRootsDocumentId, documentStore));
     const [edit, setEdit] = React.useState(false);
+    const [title, setTitle] = React.useState('');
     const docRoot = useDocumentRoot(props.id, meta, false, {
         access: Access.None_DocumentRoot,
         sharedAccess: Access.None_DocumentRoot
@@ -40,10 +47,23 @@ const DynamicDocumentRoot = observer((props: Props) => {
             {edit ? (
                 <input
                     type="text"
-                    value={meta.name}
-                    defaultValue="Dynamische Dokumentenwurzel"
+                    value={title}
+                    placeholder="Dynamische Dokumentenwurzel"
                     onChange={(e) => {
-                        meta.setName(e.target.value);
+                        setTitle(e.target.value);
+                    }}
+                    autoFocus
+                    onKeyDown={(e) => {
+                        const save = e.key === 'Enter' || ((e.ctrlKey || e.metaKey) && e.key === 's');
+                        if (save) {
+                            meta.setName(title);
+                            setEdit(false);
+                            e.preventDefault();
+                            e.stopPropagation();
+                        }
+                        if (e.key === 'Escape') {
+                            setEdit(false);
+                        }
                     }}
                 />
             ) : (
@@ -52,21 +72,40 @@ const DynamicDocumentRoot = observer((props: Props) => {
             <Button
                 text="Zum Raum"
                 color="blue"
-                href={`/rooms/${docRoot.id}`}
+                href={`/rooms/${meta.parentRoot?.id}/${docRoot.id}`}
+                disabled={
+                    !meta.parentRoot || (NoneAccess.has(docRoot.permission) && !userStore.current?.isAdmin)
+                }
                 icon={mdiLocationEnter}
                 iconSide="left"
             />
 
             <div className={clsx(styles.actions)}>
-                {docRoot.hasRWAccess && (
+                {meta.parentRoot?.hasRWAccess && (
                     <>
                         <Button
                             color={edit ? 'black' : 'orange'}
                             icon={edit ? mdiCloseCircle : mdiCircleEditOutline}
                             onClick={() => {
-                                setEdit(!edit);
+                                if (edit) {
+                                    setEdit(false);
+                                } else {
+                                    setTitle(meta.name);
+                                    setEdit(true);
+                                }
                             }}
                         />
+                        {edit && (
+                            <Button
+                                color={'green'}
+                                icon={mdiContentSaveOutline}
+                                disabled={meta.name === title || title === ''}
+                                onClick={() => {
+                                    meta.setName(title);
+                                    setEdit(false);
+                                }}
+                            />
+                        )}
                         <Button
                             color="red"
                             icon={mdiTrashCan}

@@ -13,17 +13,26 @@ import React from 'react';
 import Conversation from '../Text/Conversation';
 import NewMessage from '../Text/NewMessage';
 import { DocumentType } from '@tdev-api/document';
+import { ModelMeta as RootsMeta } from '@tdev-models/documents/DynamicDocumentRoots';
 import { ModelMeta } from '@tdev-models/documents/DynamicDocumentRoot';
-
-interface Props {
-    path: string;
-}
+import { useDocumentRoot } from '@tdev-hooks/useDocumentRoot';
+import DynamicDocumentRoots from '@tdev-components/documents/DynamicDocumentRoots';
 
 const NoRoom = () => {
     return (
         <div className={clsx('alert alert--warning', styles.alert)} role="alert">
             <Icon path={mdiEmoticonSad} size={1} color="var(--ifm-color-warning)" />
             Kein Raum ausgewählt!
+        </div>
+    );
+};
+
+const NotCreated = () => {
+    return (
+        <div className={clsx('alert alert--warning', styles.alert)} role="alert">
+            <Icon path={mdiEmoticonSad} size={1} color="var(--ifm-color-warning)" />
+            Dieser Raum wurde noch nicht erzeugt. Warten auf die Lehrperson!
+            <Loader />
         </div>
     );
 };
@@ -37,16 +46,20 @@ const NoUser = () => {
     );
 };
 
-const Rooms = observer((props: Props): JSX.Element => {
-    const userStore = useStore('userStore');
-    const documentRootStore = useStore('documentRootStore');
-    const routeParams = matchPath(props.path, '/rooms/:documentRootId');
-    const documentRootId = ((routeParams?.params as { documentRootId: string }) || {}).documentRootId;
-    const documentRoot = documentRootStore.find<DocumentType.DynamicDocumentRoot>(documentRootId);
+type PathParams = { parentRootId: string; documentRootId: string };
+const PATHNAME_PATTERN = '/rooms/:parentRootId/:documentRootId?' as const;
 
-    if (!userStore.current) {
-        return <NoUser />;
-    }
+interface Props {
+    dynamicDocumentId: string;
+    documentRootId: string;
+}
+const Rooms = observer((props: Props): JSX.Element => {
+    const documentStore = useStore('documentStore');
+    const [meta] = React.useState(
+        new ModelMeta({}, props.documentRootId, props.dynamicDocumentId, documentStore)
+    );
+    const documentRoot = useDocumentRoot(props.documentRootId, meta, false);
+
     if (!documentRoot || documentRoot.type !== DocumentType.DynamicDocumentRoot) {
         return <NoRoom />;
     }
@@ -62,12 +75,37 @@ const Rooms = observer((props: Props): JSX.Element => {
         </>
     );
 });
+interface WithParentRootProps {
+    path: string;
+}
+const WithParentRoot = observer((props: WithParentRootProps): JSX.Element => {
+    const userStore = useStore('userStore');
+    const routeParams = matchPath<PathParams>(props.path, PATHNAME_PATTERN);
+    const { parentRootId, documentRootId } = routeParams?.params || {};
+    const [rootsMeta] = React.useState(new RootsMeta({}));
+    const dynDocRoots = useDocumentRoot(parentRootId, rootsMeta, false);
+    if (!userStore.current) {
+        return <NoUser />;
+    }
+    if (!parentRootId) {
+        return <NoRoom />;
+    }
+    if (!dynDocRoots) {
+        return <Loader />;
+    }
+    if (!documentRootId || !dynDocRoots.firstMainDocument?.id) {
+        return <DynamicDocumentRoots id={parentRootId} />;
+    }
+    return <Rooms documentRootId={documentRootId} dynamicDocumentId={dynDocRoots.firstMainDocument.id} />;
+});
 
 const RoomsLandingPage = observer(() => {
     const location = useLocation();
     return (
         <Layout title={`Räume`} description="Nachrichtenräume">
-            <BrowserOnly fallback={<Loader />}>{() => <Rooms path={location.pathname} />}</BrowserOnly>
+            <BrowserOnly fallback={<Loader />}>
+                {() => <WithParentRoot path={location.pathname} />}
+            </BrowserOnly>
         </Layout>
     );
 });

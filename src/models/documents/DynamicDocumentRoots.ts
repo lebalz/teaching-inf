@@ -31,21 +31,18 @@ export class ModelMeta extends TypeMeta<DocumentType.DynamicDocumentRoots> {
 
 class DynamicDocumentRoots extends iDocument<DocumentType.DynamicDocumentRoots> {
     readonly type = DocumentType.DynamicDocumentRoots;
-    _dynamicDocumentRoots = observable.array<DynamicDocumentRoot>([]);
+    dynamicDocumentRoots = observable.array<DynamicDocumentRoot>([]);
 
     constructor(props: DocumentProps<DocumentType.DynamicDocumentRoots>, store: DocumentStore) {
         super(props, store);
-        this._dynamicDocumentRoots.replace(props.data.documentRoots);
-        this.loadDynamicDocumentRoots();
+        this.dynamicDocumentRoots.replace(props.data.documentRoots);
     }
 
     @action
     setData(data: TypeDataMapping[DocumentType.DynamicDocumentRoots], from: Source, updatedAt?: Date): void {
-        this._dynamicDocumentRoots.replace(data.documentRoots);
+        this.dynamicDocumentRoots.replace(data.documentRoots);
         if (from === Source.LOCAL) {
             this.save();
-        } else {
-            this.loadDynamicDocumentRoots();
         }
         if (updatedAt) {
             this.updatedAt = new Date(updatedAt);
@@ -56,9 +53,13 @@ class DynamicDocumentRoots extends iDocument<DocumentType.DynamicDocumentRoots> 
     setName(id: string, name: string) {
         const renamedRoots = [
             { id: id, name: name },
-            ...this._dynamicDocumentRoots.filter((dr) => dr.id !== id)
+            ...this.dynamicDocumentRoots.filter((dr) => dr.id !== id)
         ];
         this.setData({ documentRoots: renamedRoots }, Source.LOCAL, new Date());
+    }
+
+    containsDynamicDocumentRoot(id: string): boolean {
+        return this.dynamicDocumentRoots.some((dr) => dr.id === id);
     }
 
     @action
@@ -68,7 +69,7 @@ class DynamicDocumentRoots extends iDocument<DocumentType.DynamicDocumentRoots> 
             .then((dynRoot) => {
                 this.setData(
                     {
-                        documentRoots: [...this._dynamicDocumentRoots, { id, name }]
+                        documentRoots: [...this.dynamicDocumentRoots, { id, name }]
                     },
                     Source.LOCAL,
                     new Date()
@@ -85,12 +86,12 @@ class DynamicDocumentRoots extends iDocument<DocumentType.DynamicDocumentRoots> 
 
     @action
     removeDynamicDocumentRoot(id: string) {
-        if (!this._dynamicDocumentRoots.find((dr) => dr.id === id)) {
+        if (!this.dynamicDocumentRoots.find((dr) => dr.id === id)) {
             return;
         }
-        const ddRoot = this.dynamicDocumentRoots.find((dr) => dr.id === id);
+        const ddRoot = this.linkedDynamicDocumentRoots.find((dr) => dr.id === id);
         this.setData(
-            { documentRoots: this._dynamicDocumentRoots.filter((dr) => dr.id !== id) },
+            { documentRoots: this.dynamicDocumentRoots.filter((dr) => dr.id !== id) },
             Source.LOCAL,
             new Date()
         );
@@ -105,27 +106,14 @@ class DynamicDocumentRoots extends iDocument<DocumentType.DynamicDocumentRoots> 
 
     get data(): TypeDataMapping[DocumentType.DynamicDocumentRoots] {
         return {
-            documentRoots: this._dynamicDocumentRoots.slice()
+            documentRoots: this.dynamicDocumentRoots.slice()
         };
     }
 
-    @action
-    loadDynamicDocumentRoots() {
-        this._dynamicDocumentRoots.forEach((dynamicDocumentRoot) => {
-            if (this.store.root.documentRootStore.find(dynamicDocumentRoot.id)) {
-                return;
-            }
-            this.store.root.documentRootStore.loadInNextBatch(
-                dynamicDocumentRoot.id,
-                new DynamicDocRootMeta({}, dynamicDocumentRoot.id, this.id, this.store.root.documentStore)
-            );
-        });
-    }
-
     @computed
-    get dynamicDocumentRoots(): DocumentRoot<DocumentType>[] {
-        return this._dynamicDocumentRoots
-            .map((dr) => this.store.root.documentRootStore.find(dr.id))
+    get linkedDynamicDocumentRoots(): DocumentRoot<DocumentType.DynamicDocumentRoot>[] {
+        return this.dynamicDocumentRoots
+            .map((dr) => this.store.root.documentRootStore.find<DocumentType.DynamicDocumentRoot>(dr.id))
             .filter((d) => !!d);
     }
 

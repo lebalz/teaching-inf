@@ -2,7 +2,7 @@ import { action, computed } from 'mobx';
 import iDocument, { Source } from '@tdev-models/iDocument';
 import { DocumentType, Document as DocumentProps, TypeDataMapping, Access } from '@tdev-api/document';
 import DocumentStore from '@tdev-stores/DocumentStore';
-import { TypeMeta } from '@tdev-models/DocumentRoot';
+import DocumentRoot, { TypeMeta } from '@tdev-models/DocumentRoot';
 import { DocumentRootStore } from '@tdev-stores/DocumentRootStore';
 import DynamicDocumentRoots from './DynamicDocumentRoots';
 
@@ -34,11 +34,16 @@ export class ModelMeta extends TypeMeta<DocumentType.DynamicDocumentRoot> {
     }
 
     @computed
+    get parentRoot(): DocumentRoot<DocumentType.DynamicDocumentRoots> | undefined {
+        return this.parentDocument?.root as DocumentRoot<DocumentType.DynamicDocumentRoots>;
+    }
+
+    @computed
     get name(): string {
         if (!this.parentDocument) {
             return 'Dynamische Dokumentenwurzel';
         }
-        const title = this.parentDocument._dynamicDocumentRoots.find(
+        const title = this.parentDocument.dynamicDocumentRoots.find(
             (doc) => doc.id === this.rootDocumentId
         )?.name;
         return title === undefined ? 'Dynamische Dokumentenwurzel' : title;
@@ -51,7 +56,11 @@ export class ModelMeta extends TypeMeta<DocumentType.DynamicDocumentRoot> {
 
     @action
     setName(name: string): void {
-        this.parentDocument?.setName(this.rootDocumentId, name);
+        if (!this.parentDocument) {
+            return;
+        }
+        this.parentDocument.setName(this.rootDocumentId, name);
+        this.parentDocument.saveNow();
     }
 
     get defaultData(): TypeDataMapping[DocumentType.DynamicDocumentRoot] {
