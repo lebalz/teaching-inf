@@ -261,7 +261,6 @@ class DocumentStore extends iStore<`delete-${string}`> {
         return this.withAbortController(`load-docs-${rootIds.join('::')}`, (sig) => {
             return apiAllDocuments(rootIds, sig.signal);
         }).then(({ data }) => {
-            console.log(data);
             const models = Promise.all(
                 data.map((doc) => {
                     return this.addToStore(doc);
