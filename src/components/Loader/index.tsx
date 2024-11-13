@@ -15,6 +15,14 @@ interface Props {
 }
 
 const Loader = (props: Props) => {
+    /**
+     * Prevent the spinner from spinning when it is not rendered
+     * on the screen. This prevents rehydration issues.
+     */
+    const [isRendered, setRendered] = React.useState(false);
+    React.useEffect(() => {
+        setRendered(true);
+    }, []);
     return (
         <div
             className={clsx(
@@ -25,7 +33,7 @@ const Loader = (props: Props) => {
             )}
             title={props.title}
         >
-            <Icon path={mdiLoading} spin size={props.size || 1} className={styles.icon} />
+            <Icon path={mdiLoading} spin={isRendered} size={props.size || 1} className={styles.icon} />
             {!props.noLabel && (
                 <span className={clsx('badge', styles.badge)}>{props.label || 'Laden...'}</span>
             )}
