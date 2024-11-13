@@ -70,13 +70,15 @@ const DynamicDocumentRoots = observer((props: Props) => {
                 return (
                     <div key={root.id}>
                         {root.id} - {(root.meta as any).name}
-                        <Button
-                            color="red"
-                            icon={mdiTrashCan}
-                            onClick={() => {
-                                doc.removeDynamicDocumentRoot(root.id);
-                            }}
-                        />
+                        {doc.root!.hasRWAccess && (
+                            <Button
+                                color="red"
+                                icon={mdiTrashCan}
+                                onClick={() => {
+                                    doc.removeDynamicDocumentRoot(root.id);
+                                }}
+                            />
+                        )}
                     </div>
                 );
             })}

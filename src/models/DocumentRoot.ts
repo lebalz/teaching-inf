@@ -199,7 +199,7 @@ class DocumentRoot<T extends DocumentType> {
     }
 
     @computed
-    get canCreate() {
+    get hasRWAccess() {
         if (this.store.root.userStore.isUserSwitched) {
             return false;
         }

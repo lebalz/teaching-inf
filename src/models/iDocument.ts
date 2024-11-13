@@ -22,7 +22,7 @@ abstract class iDocument<Type extends DocumentType> {
     readonly parentId: string | null | undefined;
     readonly documentRootId: string;
     readonly type: Type;
-    readonly _pristine: TypeDataMapping[Type];
+    @observable.ref accessor _pristine: TypeDataMapping[Type];
 
     readonly createdAt: Date;
 
@@ -225,6 +225,9 @@ abstract class iDocument<Type extends DocumentType> {
                     this.state = ApiState.ERROR;
                 } else {
                     this.state = ApiState.SUCCESS;
+                    if (this.isDirty) {
+                        this._pristine = { ...this.data };
+                    }
                 }
             })
         );

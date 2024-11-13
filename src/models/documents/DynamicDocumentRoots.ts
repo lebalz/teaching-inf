@@ -42,7 +42,6 @@ class DynamicDocumentRoots extends iDocument<DocumentType.DynamicDocumentRoots> 
     @action
     setData(data: TypeDataMapping[DocumentType.DynamicDocumentRoots], from: Source, updatedAt?: Date): void {
         this._dynamicDocumentRoots.replace(data.documentRoots);
-        // this.loadDynamicDocumentRoots();
         if (from === Source.LOCAL) {
             this.save();
         } else {
@@ -81,30 +80,18 @@ class DynamicDocumentRoots extends iDocument<DocumentType.DynamicDocumentRoots> 
             return;
         }
         const ddRoot = this.dynamicDocumentRoots.find((dr) => dr.id === id);
-        if (ddRoot) {
-            this.store.root.documentRootStore
-                .destroy(ddRoot)
-                .then(
-                    action(() => {
-                        this.setData(
-                            { documentRoots: this._dynamicDocumentRoots.filter((dr) => dr.id !== id) },
-                            Source.LOCAL,
-                            new Date()
-                        );
-                        this.saveNow();
-                    })
-                )
-                .catch((e) => {
+        this.setData(
+            { documentRoots: this._dynamicDocumentRoots.filter((dr) => dr.id !== id) },
+            Source.LOCAL,
+            new Date()
+        );
+        (this.saveNow() || Promise.resolve()).then(() => {
+            if (ddRoot) {
+                this.store.root.documentRootStore.destroy(ddRoot).catch((e) => {
                     console.log('No permission to delete document root');
                 });
-        } else {
-            this.setData(
-                { documentRoots: this._dynamicDocumentRoots.filter((dr) => dr.id !== id) },
-                Source.LOCAL,
-                new Date()
-            );
-            this.saveNow();
-        }
+            }
+        });
     }
 
     get data(): TypeDataMapping[DocumentType.DynamicDocumentRoots] {
