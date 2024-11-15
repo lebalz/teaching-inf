@@ -1,25 +1,26 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import Loader from '../../Loader';
-import { MetaInit } from '@site/src/models/documents/QuillV2';
+import Loader from '@tdev-components/Loader';
+import { MetaInit } from '@tdev-models/documents/QuillV2';
 import { useQuill } from 'react-quilljs';
-import { ToolbarOptions } from '@site/src/models/documents/QuillV2/helpers/toolbar';
+import { ToolbarOptions } from '@tdev-models/documents/QuillV2/helpers/toolbar';
 import 'quill/dist/quill.snow.css'; // Add css for snow theme
 import 'quill/dist/quill.bubble.css'; // Add css for snow theme
 import BaseImageFormat from 'quill/formats/image';
 import { downscaleImage } from './quill-img-compress/downscaleImage';
+import ImageResize from './quill-img-resize';
 import { file2b64 } from './quill-img-compress/file2b64';
 import dropImage from './quill-img-compress/dropImage';
 import pasteImage from './quill-img-compress/pasteImage';
-import ResizeModule from '@botom/quill-resize-module';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
-import SyncStatus from '../../SyncStatus';
+import SyncStatus from '@tdev-components/SyncStatus';
 import { action } from 'mobx';
 import Icon from '@mdi/react';
 import { mdiFlashTriangle } from '@mdi/js';
-import { useDocument } from '../useContextDocument';
-import { DocumentType } from '@site/src/api/document';
+import { useDocument } from '@tdev-hooks/useContextDocument';
+import { DocumentType } from '@tdev-api/document';
+import { Delta } from 'quill/core';
 
 const FORMATS = [
     'bold',
@@ -71,18 +72,9 @@ const QuillV2 = observer((props: Props) => {
         theme: theme,
         modules: {
             toolbar: doc.meta.toolbar,
-            resize: {
-                showSize: false,
-                toolbar: {
-                    alingTools: true,
-                    sizeTools: true
-                },
-                locale: {
-                    altTip: 'Alt-Taste gedrückt halten, um das Seitenverhältnis beizubehalten',
-                    floatLeft: '',
-                    floatRight: '',
-                    center: '',
-                    restore: ''
+            imageResize: {
+                handleStyles: {
+                    borderRadius: '50%'
                 }
             }
         },
@@ -156,7 +148,24 @@ const QuillV2 = observer((props: Props) => {
     React.useEffect(() => {
         if (quill) {
             quill.setContents(doc.delta, 'silent');
-            const saveHandeler = action(() => {
+            const saveHandeler = action((change?: Delta) => {
+                if (change) {
+                    const retainsOnly = change.ops.every((op) => op.retain !== undefined);
+                    const dataAttrsOnly =
+                        retainsOnly &&
+                        change.ops.every(
+                            (op) =>
+                                !op.attributes ||
+                                Object.keys(op.attributes).every((k) => k.startsWith('data-'))
+                        );
+                    /**
+                     * ignore changes that only retain the current content
+                     * and do only change data attributes (which shall not be saved)
+                     */
+                    if (dataAttrsOnly) {
+                        return;
+                    }
+                }
                 updateSource.current = 'current';
                 doc.setDelta(quill.getContents());
             });
@@ -256,7 +265,10 @@ const QuillV2 = observer((props: Props) => {
         class ImageFormat extends BaseImageFormat {
             static formats(domNode: Element) {
                 const formats: { [key: string]: string } = {};
-                ['alt', 'height', 'width', 'style'].forEach((attribute) => {
+                /**
+                 * only those attributes are allowed to be set for the local editor
+                 */
+                ['alt', 'height', 'width', 'style', 'data-selected'].forEach((attribute) => {
                     if (domNode.hasAttribute(attribute)) {
                         formats[attribute] = domNode.getAttribute(attribute)!;
                     }
@@ -264,6 +276,9 @@ const QuillV2 = observer((props: Props) => {
                 return formats;
             }
             format(name: string, value: string) {
+                /**
+                 * only those attributes are allowed to be set and restored from external sources
+                 */
                 if (['alt', 'height', 'width', 'style'].includes(name)) {
                     if (value) {
                         this.domNode.setAttribute(name, value);
@@ -279,7 +294,7 @@ const QuillV2 = observer((props: Props) => {
         /* Quill register method signature is => static register(path, target, overwrite = false)
         Set overwrite to true to avoid warning
         https://github.com/quilljs/quill/issues/2559#issuecomment-945605414 */
-        Quill.register('modules/resize', ResizeModule, true);
+        Quill.register('modules/imageResize', ImageResize, true);
     }
 
     return (

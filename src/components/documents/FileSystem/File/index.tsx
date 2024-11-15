@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import styles from './styles.module.scss';
 import shared from '../shared.module.scss';
 import { observer } from 'mobx-react-lite';
-import { default as FileModel } from '@site/src/models/documents/FileSystem/File';
+import { default as FileModel } from '@tdev-models/documents/FileSystem/File';
 import Icon from '@mdi/react';
 import {
     mdiFile,
@@ -14,7 +14,7 @@ import {
     mdiFileOutline
 } from '@mdi/js';
 import SyncStatus from '../../../SyncStatus';
-import { DocumentType } from '@site/src/api/document';
+import { DocumentType } from '@tdev-api/document';
 import CodeEditorComponent from '../../CodeEditor';
 import { QuillV2Component } from '../../QuillV2';
 import Actions from '../Actions';

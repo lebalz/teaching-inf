@@ -1,9 +1,9 @@
 import { action, computed, observable } from 'mobx';
-import iStore from './iStore';
-import { RootStore } from './rootStore';
-import Page from '../models/Page';
+import iStore from '@tdev-stores/iStore';
+import { RootStore } from '@tdev-stores/rootStore';
+import Page from '@tdev-models/Page';
 import { computedFn } from 'mobx-utils';
-import { allDocuments as apiAllDocuments } from '../api/document';
+import { allDocuments as apiAllDocuments } from '@tdev-api/document';
 
 export class PageStore extends iStore {
     readonly root: RootStore;

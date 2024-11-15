@@ -1,6 +1,6 @@
 import React from 'react';
-import type Directory from '@site/src/models/documents/FileSystem/Directory';
-import type File from '@site/src/models/documents/FileSystem/File';
+import type Directory from '@tdev-models/documents/FileSystem/Directory';
+import type File from '@tdev-models/documents/FileSystem/File';
 import clsx from 'clsx';
 import { observer } from 'mobx-react-lite';
 

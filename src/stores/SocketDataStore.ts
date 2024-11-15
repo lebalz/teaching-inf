@@ -1,8 +1,8 @@
-import { RootStore } from './rootStore';
+import { RootStore } from '@tdev-stores/rootStore';
 import { io, Socket } from 'socket.io-client';
 import { action, observable, reaction } from 'mobx';
-import { checkLogin as pingApi, default as api } from '../api/base';
-import iStore from './iStore';
+import { checkLogin as pingApi, default as api } from '@tdev-api/base';
+import iStore from '@tdev-stores/iStore';
 import {
     ChangedDocument,
     ChangedRecord,
@@ -16,11 +16,15 @@ import {
     ServerToClientEvents
 } from '../api/IoEventTypes';
 import { BACKEND_URL } from '../authConfig';
-import { DocumentRootUpdate } from '@site/src/api/documentRoot';
-import { GroupPermission, UserPermission } from '@site/src/api/permission';
+import { DocumentRootUpdate } from '@tdev-api/documentRoot';
+import { GroupPermission, UserPermission } from '@tdev-api/permission';
 import { Document, DocumentType } from '../api/document';
 
 type TypedSocket = Socket<ServerToClientEvents, ClientToServerEvents>;
+/**
+ * Records that should be created when a IoEvent.NEW_RECORD event is received.
+ */
+const RecordsToCreate = new Set<DocumentType>([DocumentType.Dir, DocumentType.File, DocumentType.MdxComment]);
 
 export class SocketDataStore extends iStore<'ping'> {
     readonly root: RootStore;
@@ -130,7 +134,7 @@ export class SocketDataStore extends iStore<'ping'> {
                 break;
             case RecordType.Document:
                 const doc = record as Document<any>;
-                if (doc.type === DocumentType.Dir || doc.type === DocumentType.File || doc.parentId) {
+                if (RecordsToCreate.has(doc.type) || doc.parentId) {
                     this.root.documentStore.addToStore(doc);
                 }
                 break;

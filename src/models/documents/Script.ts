@@ -6,23 +6,22 @@ import {
     GRAPHICS_OUTPUT_TESTER,
     GRID_IMPORTS_TESTER,
     TURTLE_IMPORTS_TESTER
-} from '@site/src/components/documents/CodeEditor/constants';
-import { runCode } from '@site/src/components/documents/CodeEditor/utils/bryRunner';
-import iDocument, { Source } from '../iDocument';
+} from '@tdev-components/documents/CodeEditor/constants';
+import { runCode } from '@tdev-components/documents/CodeEditor/utils/bryRunner';
+import iDocument, { Source } from '@tdev-models/iDocument';
 import {
     DocumentType,
     Document as DocumentProps,
     ScriptVersionData,
     Access,
     TypeDataMapping
-} from '@site/src/api/document';
-import DocumentStore from '@site/src/stores/DocumentStore';
+} from '@tdev-api/document';
+import DocumentStore from '@tdev-stores/DocumentStore';
 import siteConfig from '@generated/docusaurus.config';
 import globalData from '@generated/globalData';
 import ScriptVersion from './ScriptVersion';
-import { TypeMeta } from '../DocumentRoot';
-import { Props as CodeEditorProps } from '@site/src/components/documents/CodeEditor';
-import File from './FileSystem/File';
+import { TypeMeta } from '@tdev-models/DocumentRoot';
+import { Props as CodeEditorProps } from '@tdev-components/documents/CodeEditor';
 const libDir = (globalData['live-editor-theme'] as { default: { libDir: string } }).default.libDir;
 
 export interface LogMessage {
@@ -67,7 +66,7 @@ export class ScriptMeta extends TypeMeta<DocumentType.Script> {
         this.initCode = props.code || '';
         this.slim = !!props.slim;
         this.hasHistory = !!props.versioned && !props.noHistory;
-        this.showLineNumbers = !!props.showLineNumbers;
+        this.showLineNumbers = props.showLineNumbers === undefined ? true : props.showLineNumbers;
         this.maxLines = props.maxLines || 25;
         this.isResettable = !props.noReset;
         this.canCompare = !props.noCompare;

@@ -1,7 +1,8 @@
 ---
 page_id: aa51a247-3522-4f6a-8146-851e807c17b7
+tags: [remark]
 ---
-import BrowserWindow from '@site/src/components/BrowserWindow';
+import BrowserWindow from '@tdev-components/BrowserWindow';
 
 # KBD
 Tastenkombinationen und Tastenkürzel lassen sich mit `[[Taste]]` darstellen. Das Remark-Plugin wandelt dies in ein `<kbd>`-Element um.
@@ -23,24 +24,11 @@ Drücke [[Ctrl]] + [[C]] um zu kopieren.
 :::info[`docusaurus.config.ts`]
 ```ts
 import kbdPlugin from './src/plugins/remark-kbd/plugin';
-const config: Config = {
-    presets: [
-        [
-            'classic',
-            {
-                docs: {
-                    remarkPlugins: [kbdPlugin]
-                },
-                blog: {
-                    remarkPlugins: [kbdPlugin]
-                },
-                pages: {
-                    remarkPlugins: [kbdPlugin]
-                },
-            }
-        ]
-    ]
-}
+
+const REMARK_PLUGINS = [
+    /* ... */
+    kbdPlugin
+];
 ```
 :::
 

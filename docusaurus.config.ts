@@ -1,7 +1,8 @@
 require('dotenv').config();
 import { themes as prismThemes } from 'prism-react-renderer';
-import type { Config } from '@docusaurus/types';
+import type { Config, CurrentBundler } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
+import path from 'path';
 
 import strongPlugin from './src/plugins/remark-strong/plugin';
 import deflistPlugin from './src/plugins/remark-deflist/plugin';
@@ -12,13 +13,18 @@ import rehypeKatex from 'rehype-katex';
 import defboxPlugin from './src/plugins/remark-code-defbox/plugin';
 import flexCardsPlugin from './src/plugins/remark-flex-cards/plugin';
 import imagePlugin from './src/plugins/remark-images/plugin';
+import linkAnnotationPlugin from './src/plugins/remark-link-annotation/plugin';
 import mediaPlugin from './src/plugins/remark-media/plugin';
 import detailsPlugin from './src/plugins/remark-details/plugin';
+import pagePlugin from './src/plugins/remark-page/plugin';
+import pdfPlugin from './src/plugins/remark-pdf/plugin';
+import commentPlugin from './src/plugins/remark-comments/plugin';
 import themeCodeEditor from './src/plugins/theme-code-editor'
 import enumerateAnswersPlugin from './src/plugins/remark-enumerate-components/plugin';
 import { v4 as uuidv4 } from 'uuid';
 import matter from 'gray-matter';
 import { promises as fs } from 'fs';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
 
 const BUILD_LOCATION = __dirname;
 const GIT_COMMIT_SHA = process.env.GITHUB_SHA || Math.random().toString(36).substring(7);
@@ -64,13 +70,42 @@ const REMARK_PLUGINS = [
   [
     enumerateAnswersPlugin,
     {
-      componentsToEnumerate: ['Answer', 'TaskState'],
+      componentsToEnumerate: ['Answer', 'TaskState', 'SelfCheckTaskState'],
     }
+  ],
+  pdfPlugin,
+  pagePlugin,
+  [
+    commentPlugin,
+    {
+      commentableJsxFlowElements: ['dd', 'DefHeading', 'figcaption', 'String'],
+      ignoreJsxFlowElements: ['summary', 'dt'],
+      ignoreCodeBlocksWithMeta: /live_py/
+    }
+  ],
+  [
+      linkAnnotationPlugin,
+      {
+          prefix: '👉',
+          postfix: null
+      }
   ]
 ];
 const REHYPE_PLUGINS = [
   rehypeKatex
 ]
+
+const pdfjsDistPath = path.dirname(require.resolve('pdfjs-dist/package.json'));
+const cMapsDir = path.join(pdfjsDistPath, 'cmaps');
+const getCopyPlugin = (
+  currentBundler: CurrentBundler
+): typeof CopyWebpackPlugin => {
+  if (currentBundler.name === 'rspack') {
+    // @ts-expect-error: this exists only in Rspack
+    return currentBundler.instance.CopyRspackPlugin;
+  }
+  return CopyWebpackPlugin;
+}
 
 
 const config: Config = {
@@ -95,6 +130,8 @@ const config: Config = {
   customFields: {
     /** Use Testuser in local dev: set TEST_USERNAME to the test users email adress*/
     TEST_USERNAME: process.env.TEST_USERNAME,
+    /** User.ts#isStudent returns `true` for users matching this pattern. If unset, it returns `true` for all non-admin users. */
+    STUDENT_USERNAME_PATTERN: process.env.STUDENT_USERNAME_PATTERN,
     NO_AUTH: process.env.NODE_ENV !== 'production' && !!process.env.TEST_USERNAME,
     /** The Domain Name where the api is running */
     APP_URL: process.env.NETLIFY
@@ -110,6 +147,29 @@ const config: Config = {
     API_URI: process.env.API_URI,
     GIT_COMMIT_SHA: GIT_COMMIT_SHA,
     ['process.env.IS_PREACT']: false
+  },
+  future: {
+    experimental_faster: {
+      /**
+       * no config options for swcJsLoader so far. 
+       * Instead configure it over the jsLoader in the next step 
+       */
+      swcJsLoader: false, 
+      swcJsMinimizer: true,
+      swcHtmlMinimizer: true,
+      lightningCssMinimizer: true,
+      rspackBundler: true,
+      mdxCrossCompilerCache: true,
+    },
+  },
+  webpack: {
+    jsLoader: (isServer) => ({
+      loader: 'builtin:swc-loader', // (only works with Rspack)
+      options: {
+        ...require("@docusaurus/faster").getSwcLoaderOptions({isServer}),
+        decorators: true
+      },
+    }),
   },
 
   // Even if you don't use internationalization, you can use this field to set
@@ -179,8 +239,8 @@ const config: Config = {
           // Remove this to remove the "edit this page" links.
           editUrl:
             'https://github.com/GBSL-Informatik/teaching-dev/edit/main/',
-          remarkPlugins: REMARK_PLUGINS,
-          rehypePlugins: REHYPE_PLUGINS,
+            remarkPlugins: REMARK_PLUGINS,
+            rehypePlugins: REHYPE_PLUGINS,
           beforeDefaultRemarkPlugins: BEFORE_DEFAULT_REMARK_PLUGINS,
         },
         pages: {
@@ -264,9 +324,70 @@ const config: Config = {
       additionalLanguages: ['bash', 'typescript', 'json', 'python'],
     },
   } satisfies Preset.ThemeConfig,
-  plugins: ['docusaurus-plugin-sass'],
+  plugins: [
+    'docusaurus-plugin-sass',
+    process.env.RSDOCTOR === 'true' && [
+      'rsdoctor',
+      {
+        rsdoctorOptions: {
+          /* Options */
+        },
+      },
+    ],
+    () => {
+      return {
+        name: 'alias-configuration',
+        configureWebpack(config, isServer, utils, content) {
+          return {
+            resolve: {
+              alias: {
+                '@tdev-components': path.resolve(__dirname, './src/components'),
+                '@tdev-hooks': path.resolve(__dirname, './src/hooks'),
+                '@tdev-models': path.resolve(__dirname, './src/models'),
+                '@tdev-stores': path.resolve(__dirname, './src/stores'),
+                '@tdev-api': path.resolve(__dirname, './src/api'),
+                '@tdev': path.resolve(__dirname, './src'),
+              }
+            }
+          }
+        }
+      }
+    },
+    () => {
+      return {
+        name: 'pdfjs-copy-dependencies',
+        configureWebpack(config, isServer, {currentBundler}) {
+          const Plugin = getCopyPlugin(currentBundler);
+            return {
+                resolve: {
+                  alias: {
+                    canvas: false
+                  }
+                },
+                plugins: [
+                  new Plugin({
+                    patterns: [
+                      {
+                        from: cMapsDir,
+                        to: 'cmaps/'
+                      }
+                    ]
+                  })
+                ]
+            };
+        }
+      }
+    }
+  ],
   themes: [
-    [themeCodeEditor, {}]
+    [
+      themeCodeEditor, 
+      {
+        brythonSrc: 'https://cdn.jsdelivr.net/npm/brython@3.13.0/brython.min.js',
+        brythonStdlibSrc: 'https://cdn.jsdelivr.net/npm/brython@3.13.0/brython_stdlib.js',
+        libDir: '/bry-libs/'
+      }
+    ]
   ],
   stylesheets: [
     {

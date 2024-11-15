@@ -3,7 +3,6 @@ import remarkMdx from 'remark-mdx';
 import remarkDirective from 'remark-directive';
 import { describe, expect, it } from 'vitest';
 import { fileURLToPath } from 'url';
-import path from 'path';
 const __filename = fileURLToPath(import.meta.url);
 
 const alignLeft = (content: string) => {
@@ -24,7 +23,7 @@ const process = async (content: string) => {
     return result.value;
 };
 
-describe('#iamge', () => {
+describe('#image', () => {
     it("does nothing if there's no image", async () => {
         const input = `# Heading
 
@@ -61,13 +60,7 @@ describe('#iamge', () => {
         <figure options={{"width":"200px"}}>
           ![Caption](https://example.com/image.png)
 
-          <figcaption>
-            <span style={{flexGrow: 1}} />
-
-            Caption
-
-            <span style={{flexGrow: 1}} />
-          </figcaption>
+          <figcaption><span style={{"flexGrow":1}} />Caption<span style={{"flexGrow":1}} /></figcaption>
         </figure>
         "
       `);
@@ -84,13 +77,7 @@ describe('#iamge', () => {
       <figure options={{"maxWidth":"200px"}}>
         ![Caption](https://example.com/image.png)
 
-        <figcaption>
-          <span style={{flexGrow: 1}} />
-
-          Caption
-
-          <span style={{flexGrow: 1}} />
-        </figcaption>
+        <figcaption><span style={{"flexGrow":1}} />Caption<span style={{"flexGrow":1}} /></figcaption>
       </figure>
       "
     `);
@@ -107,13 +94,7 @@ describe('#iamge', () => {
           <figure>
             ![image](https://example.com/image.png)
 
-            <figcaption>
-              <span style={{flexGrow: 1}} />
-
-              image
-
-              <span style={{flexGrow: 1}} />
-            </figcaption>
+            <figcaption><span style={{"flexGrow":1}} />image<span style={{"flexGrow":1}} /></figcaption>
           </figure>
           "
         `);
@@ -128,17 +109,9 @@ describe('#iamge', () => {
           "# Heading
 
           <figure>
-            ![image [foo.bar](https://foo.bar)](https://example.com/image.png)
+            ![image foo.bar](https://example.com/image.png)
 
-            <figcaption>
-              <span style={{flexGrow: 1}} />
-
-              image 
-
-              [foo.bar](https://foo.bar)
-
-              <span style={{flexGrow: 1}} />
-            </figcaption>
+            <figcaption><span style={{"flexGrow":1}} />image [foo.bar](https://foo.bar)<span style={{"flexGrow":1}} /></figcaption>
           </figure>
           "
         `);
@@ -155,11 +128,7 @@ describe('#iamge', () => {
           <figure>
             ![](assets/placeholder.svg)
 
-            <figcaption>
-              <span style={{flexGrow: 1}} />
-
-              <SourceRef bib={{"author":"Flanoz","source":"https://commons.wikimedia.org/wiki/File:Placeholder_view_vector.svg","licence":"CC 0","licence_url":"https://creativecommons.org/publicdomain/zero/1.0/deed.en","edited":false}} />
-            </figcaption>
+            <figcaption className="inline"><span style={{"flexGrow":1}} /><SourceRef bib={{"author":"Flanoz","source":"https://commons.wikimedia.org/wiki/File:Placeholder_view_vector.svg","licence":"CC 0","licence_url":"https://creativecommons.org/publicdomain/zero/1.0/deed.en","edited":false}} /></figcaption>
           </figure>
           "
         `);
@@ -173,8 +142,37 @@ describe('#iamge', () => {
         expect(result).toMatchInlineSnapshot(`
       "# Heading
 
-      Hello <figure>![](assets/placeholder.svg)<figcaption><span style={{flexGrow: 1}} /><SourceRef bib={{"author":"Flanoz","source":"https://commons.wikimedia.org/wiki/File:Placeholder_view_vector.svg","licence":"CC 0","licence_url":"https://creativecommons.org/publicdomain/zero/1.0/deed.en","edited":false}} /></figcaption></figure> my friend.
+      Hello <figure>![](assets/placeholder.svg)<figcaption className="inline"><span style={{"flexGrow":1}} /><SourceRef bib={{"author":"Flanoz","source":"https://commons.wikimedia.org/wiki/File:Placeholder_view_vector.svg","licence":"CC 0","licence_url":"https://creativecommons.org/publicdomain/zero/1.0/deed.en","edited":false}} /></figcaption></figure> my friend.
       "
     `);
+    });
+
+    it('processes caption as markdown', async () => {
+        const input = `
+      ![a **bold** caption](assets/placeholder.svg)
+      `;
+        const result = await process(input);
+        expect(result).toMatchInlineSnapshot(`
+        "<figure>
+          ![a bold caption](assets/placeholder.svg)
+
+          <figcaption><span style={{"flexGrow":1}} />a **bold** caption<span style={{"flexGrow":1}} /><SourceRef bib={{"author":"Flanoz","source":"https://commons.wikimedia.org/wiki/File:Placeholder_view_vector.svg","licence":"CC 0","licence_url":"https://creativecommons.org/publicdomain/zero/1.0/deed.en","edited":false}} /></figcaption>
+        </figure>
+        "
+      `);
+    });
+    it('processes caption as markdown and supports links', async () => {
+        const input = `
+      ![a [link](https://link.com) caption](assets/placeholder.svg)
+      `;
+        const result = await process(input);
+        expect(result).toMatchInlineSnapshot(`
+        "<figure>
+          ![a link caption](assets/placeholder.svg)
+
+          <figcaption><span style={{"flexGrow":1}} />a [link](https://link.com) caption<span style={{"flexGrow":1}} /><SourceRef bib={{"author":"Flanoz","source":"https://commons.wikimedia.org/wiki/File:Placeholder_view_vector.svg","licence":"CC 0","licence_url":"https://creativecommons.org/publicdomain/zero/1.0/deed.en","edited":false}} /></figcaption>
+        </figure>
+        "
+      `);
     });
 });

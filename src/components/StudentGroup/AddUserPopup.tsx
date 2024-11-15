@@ -2,11 +2,11 @@ import React from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
-import { default as StudentGroupModel } from '@site/src/models/StudentGroup';
+import { default as StudentGroupModel } from '@tdev-models/StudentGroup';
 import Button from '../shared/Button';
-import { mdiAccountPlus, mdiAccountRemove, mdiMinusCircle } from '@mdi/js';
+import { mdiAccountPlus } from '@mdi/js';
 import Popup from 'reactjs-popup';
-import { useStore } from '@site/src/hooks/useStore';
+import { useStore } from '@tdev-hooks/useStore';
 
 interface Props {
     studentGroup: StudentGroupModel;

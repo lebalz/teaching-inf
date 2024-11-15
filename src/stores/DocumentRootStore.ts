@@ -1,7 +1,7 @@
 import { action, observable, runInAction } from 'mobx';
-import { RootStore } from './rootStore';
+import { RootStore } from '@tdev-stores/rootStore';
 import { computedFn } from 'mobx-utils';
-import DocumentRoot, { TypeMeta } from '../models/DocumentRoot';
+import DocumentRoot, { TypeMeta } from '@tdev-models/DocumentRoot';
 import {
     Config,
     create as apiCreate,
@@ -10,12 +10,13 @@ import {
     findManyFor as apiFindManyFor,
     update as apiUpdate,
     DocumentRoot as ApiDocumentRoot
-} from '../api/documentRoot';
-import iStore from './iStore';
-import GroupPermission from '../models/GroupPermission';
-import UserPermission from '../models/UserPermission';
-import { DocumentType } from '../api/document';
+} from '@tdev-api/documentRoot';
+import iStore from '@tdev-stores/iStore';
+import GroupPermission from '@tdev-models/GroupPermission';
+import UserPermission from '@tdev-models/UserPermission';
+import { DocumentType } from '@tdev-api/document';
 import { debounce } from 'lodash';
+import User from '@tdev-models/User';
 
 type LoadConfig = {
     documents?: boolean;
@@ -233,14 +234,29 @@ export class DocumentRootStore extends iStore {
     /**
      * returns userPermissions and! groupPermissions
      */
+    usersPermissions(documentRootId: string, userId: string) {
+        const user = this.root.userStore.findById(userId);
+        return this._permissionsByUser(documentRootId, user);
+    }
+
+    /**
+     * returns userPermissions and! groupPermissions
+     */
     currentUsersPermissions(documentRootId: string) {
         const currentUser = this.root.userStore.current;
-        if (!currentUser) {
+        return this._permissionsByUser(documentRootId, currentUser);
+    }
+
+    /**
+     * returns userPermissions and! groupPermissions
+     */
+    private _permissionsByUser(documentRootId: string, user?: User) {
+        if (!user) {
             return [];
         }
         return this.root.permissionStore
             .permissionsByDocumentRoot(documentRootId)
-            .filter((p) => p.isAffectingUser(currentUser));
+            .filter((p) => p.isAffectingUser(user));
     }
 
     @action

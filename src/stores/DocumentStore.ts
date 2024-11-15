@@ -2,31 +2,34 @@ import { action, observable } from 'mobx';
 import { RootStore } from './rootStore';
 import { computedFn } from 'mobx-utils';
 import {
+    allDocuments as apiAllDocuments,
+    create as apiCreate,
     Document as DocumentProps,
     DocumentType,
-    find as apiFind,
-    update as apiUpdate,
-    create as apiCreate,
-    remove as apiDelete,
     DocumentTypes,
+    find as apiFind,
+    remove as apiDelete,
     TypeModelMapping,
-    allDocuments as apiAllDocuments
-} from '@site/src/api/document';
-import Script from '@site/src/models/documents/Script';
-import TaskState from '@site/src/models/documents/TaskState';
-import iStore from './iStore';
+    update as apiUpdate
+} from '@tdev-api/document';
+import Script from '@tdev-models/documents/Script';
+import TaskState from '@tdev-models/documents/TaskState';
+import iStore from '@tdev-stores/iStore';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
-import iDocument, { Source } from '../models/iDocument';
-import ScriptVersion from '../models/documents/ScriptVersion';
-import { ChangedDocument } from '../api/IoEventTypes';
-import String from '../models/documents/String';
-import QuillV2 from '../models/documents/QuillV2';
-import Solution from '../models/documents/Solution';
-import { RWAccess } from '../models/helpers/accessPolicy';
-import Directory from '../models/documents/FileSystem/Directory';
-import File from '../models/documents/FileSystem/File';
-import Excalidoc from '../models/documents/Excalidoc';
+import iDocument, { Source } from '@tdev-models/iDocument';
+import ScriptVersion from '@tdev-models/documents/ScriptVersion';
+import { ChangedDocument } from '@tdev-api/IoEventTypes';
+import String from '@tdev-models/documents/String';
+import QuillV2 from '@tdev-models/documents/QuillV2';
+import Solution from '@tdev-models/documents/Solution';
+import { RWAccess } from '@tdev-models/helpers/accessPolicy';
+import Directory from '@tdev-models/documents/FileSystem/Directory';
+import File from '@tdev-models/documents/FileSystem/File';
+import MdxComment from '@tdev-models/documents/MdxComment';
+import Restricted from '@tdev-models/documents/Restricted';
+import CmsText from '@tdev-models/documents/CmsText';
+import Excalidoc from '@tdev-models/documents/Excalidoc';
 
 export function CreateDocumentModel<T extends DocumentType>(
     data: DocumentProps<T>,
@@ -50,6 +53,12 @@ export function CreateDocumentModel(data: DocumentProps<DocumentType>, store: Do
             return new Directory(data as DocumentProps<DocumentType.Dir>, store);
         case DocumentType.File:
             return new File(data as DocumentProps<DocumentType.File>, store);
+        case DocumentType.MdxComment:
+            return new MdxComment(data as DocumentProps<DocumentType.MdxComment>, store);
+        case DocumentType.Restricted:
+            return new Restricted(data as DocumentProps<DocumentType.Restricted>, store);
+        case DocumentType.CmsText:
+            return new CmsText(data as DocumentProps<DocumentType.CmsText>, store);
         case DocumentType.Excalidoc:
             return new Excalidoc(data as DocumentProps<DocumentType.Excalidoc>, store);
     }
@@ -108,9 +117,8 @@ class DocumentStore extends iStore<`delete-${string}`> {
         if (!data) {
             return;
         }
-
         const model = CreateDocumentModel(data, this);
-        if (!model.root) {
+        if (!model?.root) {
             return;
         }
 

@@ -3,9 +3,9 @@ import clsx from 'clsx';
 
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
-import { default as UserModel } from '@site/src/models/User';
-import CopyBadge from '../../shared/CopyBadge';
-import { formatDateTime } from '@site/src/models/helpers/date';
+import { default as UserModel } from '@tdev-models/User';
+import CopyBadge from '@tdev-components/shared/CopyBadge';
+import { formatDateTime } from '@tdev-models/helpers/date';
 import Icon from '@mdi/react';
 import { mdiCircle } from '@mdi/js';
 
@@ -59,6 +59,11 @@ const UserTableRow = observer((props: Props) => {
             <td>{user.lastName}</td>
             <td>{formatDateTime(user.createdAt)}</td>
             <td>{formatDateTime(user.updatedAt)}</td>
+            <td>
+                {user.studentGroups.map((group) => (
+                    <span className={clsx('badge badge--primary', styles.groupBadge)}>{group.name}</span>
+                ))}
+            </td>
             <td>
                 <CopyBadge value={user.id} className={clsx(styles.nowrap)} />
             </td>

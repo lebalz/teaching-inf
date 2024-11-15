@@ -2,10 +2,10 @@ import React from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
-import { useStore } from '@site/src/hooks/useStore';
-import Button from '../../shared/Button';
+import { useStore } from '@tdev-hooks/useStore';
+import Button from '@tdev-components/shared/Button';
 import { mdiPlusCircleOutline } from '@mdi/js';
-import StudentGroup from '../../StudentGroup';
+import StudentGroup from '@tdev-components/StudentGroup';
 import _ from 'lodash';
 
 const StudentGroupPanel = observer(() => {

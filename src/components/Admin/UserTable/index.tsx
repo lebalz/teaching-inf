@@ -3,10 +3,10 @@ import clsx from 'clsx';
 
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
-import UserTableRow from './User';
-import Button from '../../shared/Button';
+import UserTableRow from '@tdev-components/Admin/UserTable/User';
+import Button from '@tdev-components/shared/Button';
 import { mdiSortAscending, mdiSortDescending } from '@mdi/js';
-import { useStore } from '@site/src/hooks/useStore';
+import { useStore } from '@tdev-hooks/useStore';
 import _ from 'lodash';
 
 const SIZE_S = 0.6;
@@ -18,6 +18,7 @@ type SortColumn =
     | 'lastName'
     | 'createdAt'
     | 'updatedAt'
+    | 'groups'
     | 'id'
     | 'connectedClients';
 interface Props {
@@ -151,6 +152,15 @@ const UserTable = observer((props: Props) => {
                                     icon={sortColumn === 'updatedAt' && icon}
                                     text="Aktualisiert"
                                     onClick={() => setSortColumn('updatedAt')}
+                                />
+                            </th>
+                            <th>
+                                <Button
+                                    size={SIZE_S}
+                                    iconSide="left"
+                                    icon={sortColumn === 'groups' && icon}
+                                    text="Lerngruppen"
+                                    onClick={() => setSortColumn('groups')}
                                 />
                             </th>
                             <th>

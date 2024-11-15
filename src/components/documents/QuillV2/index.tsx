@@ -2,11 +2,12 @@ import useIsBrowser from '@docusaurus/useIsBrowser';
 import { observer } from 'mobx-react-lite';
 import * as React from 'react';
 import type { default as QuillV2Type, Props } from './QuillV2';
-import { useFirstMainDocument } from '@site/src/hooks/useFirstMainDocument';
-import { default as QuillV2Model, ModelMeta, MetaInit } from '@site/src/models/documents/QuillV2';
-import clsx from 'clsx';
-import { DocContext } from '../DocumentContext';
-import { ToolbarOptions } from '@site/src/models/documents/QuillV2/helpers/toolbar';
+import { DUMMY_DOCUMENT_ID, useFirstMainDocument } from '@tdev-hooks/useFirstMainDocument';
+import { default as QuillV2Model, ModelMeta } from '@tdev-models/documents/QuillV2';
+import { DocContext } from '@tdev-components/documents/DocumentContext';
+import { useStore } from '@tdev-hooks/useStore';
+import Loader from '@tdev-components/Loader';
+import { useFirstRealMainDocument } from '@tdev-hooks/useFirstRealMainDocument';
 
 /**
  * Lazy load QuillV2 component - this is a workaround for SSR
@@ -17,7 +18,15 @@ import { ToolbarOptions } from '@site/src/models/documents/QuillV2/helpers/toolb
  */
 
 export const QuillV2 = observer((props: Props) => {
-    const doc = useFirstMainDocument(props.id, new ModelMeta(props));
+    const doc = useFirstRealMainDocument(props.id, new ModelMeta(props));
+    /**
+     * if the user is logged in but the document is not loaded yet, show a loader.
+     * This prevents quill from rendering before the document is loaded
+     * (which leads to react quill using the wrong quill instance)
+     */
+    if (!doc) {
+        return <Loader />;
+    }
     return <QuillV2Component quillDoc={doc} {...props} />;
 });
 

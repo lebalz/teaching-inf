@@ -1,6 +1,6 @@
 import { computed } from 'mobx';
-import { DocumentType, Document as DocumentProps } from '@site/src/api/document';
-import DocumentStore from '@site/src/stores/DocumentStore';
+import { DocumentType, Document as DocumentProps } from '@tdev-api/document';
+import DocumentStore from '@tdev-stores/DocumentStore';
 import _ from 'lodash';
 import iFileSystem, { iFSMeta, MetaInit } from './iFileSystem';
 

@@ -1,7 +1,7 @@
 import { action, computed, observable } from 'mobx';
-import { DocumentRootBase as DocumentRootProps } from '../api/documentRoot';
-import { DocumentRootStore } from '../stores/DocumentRootStore';
-import { Access, DocumentType, TypeDataMapping, TypeModelMapping } from '../api/document';
+import { DocumentRootBase as DocumentRootProps } from '@tdev-api/documentRoot';
+import { DocumentRootStore } from '@tdev-stores/DocumentRootStore';
+import { Access, DocumentType, TypeDataMapping, TypeModelMapping } from '@tdev-api/document';
 import { highestAccess, NoneAccess, RWAccess } from './helpers/accessPolicy';
 
 export abstract class TypeMeta<T extends DocumentType> {
@@ -14,6 +14,15 @@ export abstract class TypeMeta<T extends DocumentType> {
         this.pagePosition = pagePosition || 0;
     }
     abstract get defaultData(): TypeDataMapping[T];
+}
+
+export class DummyMeta extends TypeMeta<DocumentType> {
+    constructor() {
+        super('dummy' as DocumentType);
+    }
+    get defaultData() {
+        return {};
+    }
 }
 
 class DocumentRoot<T extends DocumentType> {
@@ -101,6 +110,14 @@ class DocumentRoot<T extends DocumentType> {
     @computed
     get permission() {
         return highestAccess(new Set([...this.permissions.map((p) => p.access), this.access]));
+    }
+
+    permissionsForUser(userId: string) {
+        return [...this.store.usersPermissions(this.id, userId)];
+    }
+
+    permissionForUser(userId: string) {
+        return highestAccess(new Set([...this.permissionsForUser(userId).map((p) => p.access), this.access]));
     }
 
     get documents() {

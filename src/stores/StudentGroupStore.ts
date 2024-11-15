@@ -1,8 +1,8 @@
 import { action, observable } from 'mobx';
-import { RootStore } from './rootStore';
+import { RootStore } from '@tdev-stores/rootStore';
 import { computedFn } from 'mobx-utils';
-import StudentGroup from '../models/StudentGroup';
-import iStore from './iStore';
+import StudentGroup from '@tdev-models/StudentGroup';
+import iStore from '@tdev-stores/iStore';
 import {
     create as apiCreate,
     all as apiAll,

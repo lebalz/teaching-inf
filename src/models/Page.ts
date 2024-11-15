@@ -2,12 +2,12 @@
  * A Markdown or MDX Page
  */
 
-import { action, computed, observable } from 'mobx';
-import { PageStore } from '../stores/PageStore';
-import TaskState from './documents/TaskState';
+import { action, computed, observable, ObservableSet } from 'mobx';
+import { PageStore } from '@tdev-stores/PageStore';
+import TaskState from '@tdev-models/documents/TaskState';
 import _ from 'lodash';
-import iDocument from './iDocument';
-import StudentGroup from './StudentGroup';
+import iDocument from '@tdev-models/iDocument';
+import StudentGroup from '@tdev-models/StudentGroup';
 
 export default class Page {
     readonly store: PageStore;
@@ -15,11 +15,12 @@ export default class Page {
 
     @observable.ref accessor primaryStudentGroup: StudentGroup | undefined = undefined;
     @observable.ref accessor _activeStudentGroup: StudentGroup | undefined = undefined;
-    documentRootIds = observable.set<string>();
+    documentRootIds: ObservableSet<string>;
 
     constructor(id: string, store: PageStore) {
         this.id = id;
         this.store = store;
+        this.documentRootIds = observable.set<string>([id]);
     }
 
     @action
@@ -74,8 +75,11 @@ export default class Page {
         }
     }
 
+    /**
+     * loads all linked document roots (added by #addDocumentRoot)
+     */
     @action
-    loadOverview() {
+    loadLinkedDocumentRoots() {
         return this.store.loadAllDocuments(this);
     }
 

@@ -3,8 +3,8 @@ import styles from './styles.module.scss';
 import CodeBlock from '@theme/CodeBlock';
 import clsx from 'clsx';
 import { observer } from 'mobx-react-lite';
-import { useDocument } from '../../../useContextDocument';
-import { DocumentType } from '@site/src/api/document';
+import { useDocument } from '@tdev-hooks/useContextDocument';
+import { DocumentType } from '@tdev-api/document';
 import Icon from '@mdi/react';
 import { mdiArrowExpandDown, mdiArrowExpandUp } from '@mdi/js';
 import _ from 'lodash';
@@ -27,7 +27,12 @@ const HiddenCode = observer((props: Props) => {
                     <CodeBlock
                         language="python"
                         showLineNumbers={false}
-                        className={clsx(styles.hiddenCode, styles.pre, show && styles.open)}
+                        className={clsx(
+                            styles.hiddenCode,
+                            styles.pre,
+                            show && styles.open,
+                            script.meta.slim && styles.slim
+                        )}
                     >
                         {code}
                     </CodeBlock>
