@@ -24,9 +24,7 @@ export class ModelMeta extends TypeMeta<DocumentType.Excalidoc> {
     }
 
     get defaultData(): TypeDataMapping[DocumentType.Excalidoc] {
-        return {
-            
-        };
+        return {};
     }
 }
 

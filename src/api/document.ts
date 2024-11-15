@@ -1,19 +1,19 @@
-import type Script from '../models/documents/Script';
-import type ScriptVersion from '../models/documents/ScriptVersion';
-import type TaskState from '../models/documents/TaskState';
-import type String from '../models/documents/String';
+import type Script from '@tdev-models/documents/Script';
+import type ScriptVersion from '@tdev-models/documents/ScriptVersion';
+import type TaskState from '@tdev-models/documents/TaskState';
+import type String from '@tdev-models/documents/String';
 import api from './base';
 import { AxiosPromise } from 'axios';
-import QuillV2 from '../models/documents/QuillV2';
+import QuillV2 from '@tdev-models/documents/QuillV2';
 import { Delta } from 'quill/core';
-import Solution from '../models/documents/Solution';
-import Directory from '../models/documents/FileSystem/Directory';
-import File from '../models/documents/FileSystem/File';
+import Solution from '@tdev-models/documents/Solution';
+import Directory from '@tdev-models/documents/FileSystem/Directory';
+import File from '@tdev-models/documents/FileSystem/File';
 import Restricted from '@tdev-models/documents/Restricted';
 import MdxComment from '@tdev-models/documents/MdxComment';
 import { Color } from '@tdev-components/shared/Colors';
 import CmsText from '@tdev-models/documents/CmsText';
-import Excalidoc from '../models/documents/Excalidoc';
+import Excalidoc from '@tdev-models/documents/Excalidoc';
 
 export enum Access {
     RO_DocumentRoot = 'RO_DocumentRoot',
@@ -81,8 +81,7 @@ export interface FileData {
     isOpen: boolean;
 }
 
-export interface ExcaliData {
-}
+export interface ExcaliData {}
 
 export type StateType =
     | 'checked'

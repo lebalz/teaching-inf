@@ -1,7 +1,7 @@
 import useIsBrowser from '@docusaurus/useIsBrowser';
 import { observer } from 'mobx-react-lite';
 import * as React from 'react';
-import type { default as ExcalidocType, Props } from './Excalidoc';
+import type { default as ExcalidocType, Props } from './index';
 import { useFirstMainDocument } from '@site/src/hooks/useFirstMainDocument';
 import { default as ExcalidocModel, ModelMeta } from '@site/src/models/documents/Excalidoc';
 import clsx from 'clsx';
@@ -30,7 +30,7 @@ export const ExcalidocComponent = observer((props: ExcaliProps) => {
     const [excali, setExcalidoc] = React.useState<{ default: typeof ExcalidocType }>();
     const { excaliDoc } = props;
     React.useEffect(() => {
-        import('./Excalidoc').then((quill) => {
+        import('./index').then((quill) => {
             setExcalidoc(quill);
         });
     }, []);

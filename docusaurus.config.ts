@@ -377,6 +377,20 @@ const config: Config = {
             };
         }
       }
+    },
+    () => {
+      return {
+          name: 'excalidraw-definde-process-env',
+          configureWebpack(config, isServer, {currentBundler}) {
+            return {
+              plugins: [
+                new currentBundler.instance.DefinePlugin({
+                  'process.env.IS_PREACT': JSON.stringify('false')
+                }),
+              ]
+            }
+          }
+      }
     }
   ],
   themes: [

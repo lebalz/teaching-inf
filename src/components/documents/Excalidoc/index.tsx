@@ -2,11 +2,11 @@ import React from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
-import { useFirstMainDocument } from '../../../hooks/useFirstMainDocument';
+import { useFirstMainDocument } from '@tdev-hooks//useFirstMainDocument';
 import Loader from '../../Loader';
 import { MetaInit, ModelMeta } from '@site/src/models/documents/Excalidoc';
 import { Excalidraw } from '@excalidraw/excalidraw';
-import { useDocument } from '../useContextDocument';
+import { useDocument } from '@tdev-hooks/useContextDocument';
 import { DocumentType } from '@site/src/api/document';
 
 export interface Props extends MetaInit {
@@ -20,7 +20,7 @@ const Excalidoc = observer((props: Props) => {
         return <Loader />;
     }
     return (
-        <div>
+        <div style={{ height: '600px', width: '100%' }}>
             <Excalidraw />
         </div>
     );
