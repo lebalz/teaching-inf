@@ -19,28 +19,28 @@ const Excalidoc = observer((props: Props) => {
     const renderedSceneVersion = React.useRef(0);
     const apiSceneVersion = React.useRef(0);
     const [excalidrawAPI, setExcalidrawAPI] = React.useState<ExcalidrawImperativeAPI>();
-    const ExcalidrawLib = useExcalidraw();
+    const Lib = useExcalidraw();
     const doc = useFirstRealMainDocument(props.id, meta);
 
     React.useEffect(() => {
         if (excalidrawAPI && doc && !initialized.current) {
             console.log('Excalidraw API initialized');
-            const restoredData = ExcalidrawLib!.restore(doc.data, {}, []);
+            const restoredData = Lib!.restore(doc.data, {}, []);
 
             excalidrawAPI.updateScene(restoredData);
             excalidrawAPI.addFiles(Object.values(restoredData.files));
-            renderedSceneVersion.current = ExcalidrawLib!.getSceneVersion(restoredData.elements);
+            renderedSceneVersion.current = Lib!.getSceneVersion(restoredData.elements);
             apiSceneVersion.current = renderedSceneVersion.current;
 
             const unsubscribe = excalidrawAPI.onChange((elements, appState, files) => {
-                const version = ExcalidrawLib!.getSceneVersion(elements);
+                const version = Lib!.getSceneVersion(elements);
                 if (version === renderedSceneVersion.current) {
                     return;
                 }
                 renderedSceneVersion.current = version;
-                const nonDeletedElements = ExcalidrawLib!.getNonDeletedElements(elements);
-                apiSceneVersion.current = ExcalidrawLib!.getSceneVersion(nonDeletedElements);
-                const restoredData = ExcalidrawLib!.restore({ elements: elements, files: files }, {}, []);
+                const nonDeletedElements = Lib!.getNonDeletedElements(elements);
+                apiSceneVersion.current = Lib!.getSceneVersion(nonDeletedElements);
+                const restoredData = Lib!.restore({ elements: elements, files: files }, {}, []);
                 doc.setData(
                     {
                         files: restoredData.files,
@@ -52,11 +52,11 @@ const Excalidoc = observer((props: Props) => {
             const rDisposer = reaction(
                 () => doc.data,
                 (data) => {
-                    const newVersion = ExcalidrawLib!.getSceneVersion(data.elements);
+                    const newVersion = Lib!.getSceneVersion(data.elements);
                     if (newVersion === apiSceneVersion.current) {
                         return;
                     }
-                    const restoredData = ExcalidrawLib!.restore(data, {}, []);
+                    const restoredData = Lib!.restore(data, {}, []);
                     excalidrawAPI.addFiles(Object.values(restoredData.files));
                     excalidrawAPI.updateScene(restoredData);
                     excalidrawAPI.addFiles(Object.values(restoredData.files));
@@ -72,12 +72,12 @@ const Excalidoc = observer((props: Props) => {
         }
     }, [excalidrawAPI, doc]);
 
-    if (!doc || !ExcalidrawLib) {
+    if (!doc || !Lib) {
         return <Loader />;
     }
     return (
         <div style={{ height: '600px', width: '100%' }}>
-            <ExcalidrawLib.Excalidraw excalidrawAPI={(api) => setExcalidrawAPI(api)} />
+            <Lib.Excalidraw excalidrawAPI={(api) => setExcalidrawAPI(api)} />
         </div>
     );
 });
