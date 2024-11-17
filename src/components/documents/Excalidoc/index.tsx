@@ -27,10 +27,14 @@ const Excalidoc = observer((props: Props) => {
     React.useEffect(() => {
         if (excalidrawAPI && doc && !initialized.current) {
             console.log('Excalidraw API initialized');
-            const restoredData = Lib!.restore(doc.data, {
-                objectsSnapModeEnabled: true,
-                zenModeEnabled: true,
-            }, []);
+            const restoredData = Lib!.restore(
+                doc.data,
+                {
+                    objectsSnapModeEnabled: true,
+                    zenModeEnabled: true
+                },
+                []
+            );
 
             excalidrawAPI.updateScene(restoredData);
             excalidrawAPI.addFiles(Object.values(restoredData.files));
