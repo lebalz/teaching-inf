@@ -7,7 +7,6 @@ import type { ExcalidrawImperativeAPI } from '@excalidraw/excalidraw/types/types
 import { Source } from '@tdev-models/iDocument';
 import { useFirstRealMainDocument } from '@tdev-hooks/useFirstRealMainDocument';
 import { reaction } from 'mobx';
-import { getSceneVersion, restore } from '@excalidraw/excalidraw';
 import _ from 'lodash';
 
 export interface Props extends MetaInit {
@@ -18,30 +17,34 @@ const Excalidoc = observer((props: Props) => {
     const [meta] = React.useState(new ModelMeta(props));
     const initialized = React.useRef<boolean>(false);
     const renderedSceneVersion = React.useRef(0);
+    const apiSceneVersion = React.useRef(0);
     const [excalidrawAPI, setExcalidrawAPI] = React.useState<ExcalidrawImperativeAPI>();
-    const Excalidraw = useExcalidraw();
+    const ExcalidrawLib = useExcalidraw();
     const doc = useFirstRealMainDocument(props.id, meta);
 
     React.useEffect(() => {
         if (excalidrawAPI && doc && !initialized.current) {
             console.log('Excalidraw API initialized');
-            const restoredData = restore(doc.data, {}, []);
+            const restoredData = ExcalidrawLib!.restore(doc.data, {}, []);
 
             excalidrawAPI.updateScene(restoredData);
             excalidrawAPI.addFiles(Object.values(restoredData.files));
-            renderedSceneVersion.current = doc.sceneVersion;
+            renderedSceneVersion.current = ExcalidrawLib!.getSceneVersion(restoredData.elements);
+            apiSceneVersion.current = renderedSceneVersion.current;
 
             const unsubscribe = excalidrawAPI.onChange((elements, appState, files) => {
-                const version = getSceneVersion(elements);
-                if (version === doc.sceneVersion) {
+                const version = ExcalidrawLib!.getSceneVersion(elements);
+                if (version === renderedSceneVersion.current) {
                     return;
                 }
                 renderedSceneVersion.current = version;
-                const restoredData = restore({ elements: elements, files: files }, {}, []);
+                const nonDeletedElements = ExcalidrawLib!.getNonDeletedElements(elements);
+                apiSceneVersion.current = ExcalidrawLib!.getSceneVersion(nonDeletedElements);
+                const restoredData = ExcalidrawLib!.restore({ elements: elements, files: files }, {}, []);
                 doc.setData(
                     {
                         files: restoredData.files,
-                        elements: restoredData.elements
+                        elements: nonDeletedElements
                     },
                     Source.LOCAL
                 );
@@ -49,14 +52,16 @@ const Excalidoc = observer((props: Props) => {
             const rDisposer = reaction(
                 () => doc.data,
                 (data) => {
-                    if (doc.localSceneVersion === renderedSceneVersion.current) {
+                    const newVersion = ExcalidrawLib!.getSceneVersion(data.elements);
+                    if (newVersion === apiSceneVersion.current) {
                         return;
                     }
-                    const restoredData = restore(data, {}, []);
+                    const restoredData = ExcalidrawLib!.restore(data, {}, []);
                     excalidrawAPI.addFiles(Object.values(restoredData.files));
                     excalidrawAPI.updateScene(restoredData);
                     excalidrawAPI.addFiles(Object.values(restoredData.files));
-                    renderedSceneVersion.current = doc.localSceneVersion;
+                    renderedSceneVersion.current = newVersion;
+                    apiSceneVersion.current = newVersion;
                 }
             );
             initialized.current = true;
@@ -67,12 +72,12 @@ const Excalidoc = observer((props: Props) => {
         }
     }, [excalidrawAPI, doc]);
 
-    if (!doc || !Excalidraw) {
+    if (!doc || !ExcalidrawLib) {
         return <Loader />;
     }
     return (
         <div style={{ height: '600px', width: '100%' }}>
-            <Excalidraw excalidrawAPI={(api) => setExcalidrawAPI(api)} />
+            <ExcalidrawLib.Excalidraw excalidrawAPI={(api) => setExcalidrawAPI(api)} />
         </div>
     );
 });
