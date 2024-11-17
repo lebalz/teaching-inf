@@ -7,6 +7,7 @@ import type { ExcalidrawImperativeAPI } from '@excalidraw/excalidraw/types/types
 import { Source } from '@tdev-models/iDocument';
 import { useFirstRealMainDocument } from '@tdev-hooks/useFirstRealMainDocument';
 import { reaction } from 'mobx';
+import { useColorMode } from '@docusaurus/theme-common';
 import _ from 'lodash';
 
 export interface Props extends MetaInit {
@@ -21,11 +22,15 @@ const Excalidoc = observer((props: Props) => {
     const [excalidrawAPI, setExcalidrawAPI] = React.useState<ExcalidrawImperativeAPI>();
     const Lib = useExcalidraw();
     const doc = useFirstRealMainDocument(props.id, meta);
+    const { colorMode } = useColorMode();
 
     React.useEffect(() => {
         if (excalidrawAPI && doc && !initialized.current) {
             console.log('Excalidraw API initialized');
-            const restoredData = Lib!.restore(doc.data, {}, []);
+            const restoredData = Lib!.restore(doc.data, {
+                objectsSnapModeEnabled: true,
+                zenModeEnabled: true,
+            }, []);
 
             excalidrawAPI.updateScene(restoredData);
             excalidrawAPI.addFiles(Object.values(restoredData.files));
@@ -77,7 +82,21 @@ const Excalidoc = observer((props: Props) => {
     }
     return (
         <div style={{ height: '600px', width: '100%' }}>
-            <Lib.Excalidraw excalidrawAPI={(api) => setExcalidrawAPI(api)} />
+            <Lib.Excalidraw
+                excalidrawAPI={(api) => setExcalidrawAPI(api)}
+                objectsSnapModeEnabled
+                langCode="de-DE"
+                theme={colorMode === 'dark' ? 'dark' : 'light'}
+                UIOptions={{ canvasActions: { toggleTheme: false } }}
+            >
+                <Lib.MainMenu>
+                    <Lib.MainMenu.DefaultItems.Export />
+                    <Lib.MainMenu.DefaultItems.SaveAsImage />
+                    <Lib.MainMenu.DefaultItems.ChangeCanvasBackground />
+                    <Lib.MainMenu.DefaultItems.ClearCanvas />
+                    <Lib.MainMenu.DefaultItems.Help />
+                </Lib.MainMenu>
+            </Lib.Excalidraw>
         </div>
     );
 });
