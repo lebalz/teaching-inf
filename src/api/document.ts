@@ -14,6 +14,8 @@ import MdxComment from '@tdev-models/documents/MdxComment';
 import { Color } from '@tdev-components/shared/Colors';
 import CmsText from '@tdev-models/documents/CmsText';
 import Excalidoc from '@tdev-models/documents/Excalidoc';
+import type { ExcalidrawElement } from '@excalidraw/excalidraw/types/element/types';
+import type { BinaryFiles } from '@excalidraw/excalidraw/types/types';
 
 export enum Access {
     RO_DocumentRoot = 'RO_DocumentRoot',
@@ -81,7 +83,10 @@ export interface FileData {
     isOpen: boolean;
 }
 
-export interface ExcaliData {}
+export interface ExcaliData {
+    files: BinaryFiles;
+    elements: readonly ExcalidrawElement[];
+}
 
 export type StateType =
     | 'checked'
