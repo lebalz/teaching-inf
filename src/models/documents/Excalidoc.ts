@@ -1,11 +1,10 @@
 import { action, computed, observable } from 'mobx';
-import iDocument, { Source } from '../iDocument';
+import iDocument, { Source } from '@tdev-models/iDocument';
 import { DocumentType, Document as DocumentProps, TypeDataMapping, Access } from '@site/src/api/document';
 import DocumentStore from '@site/src/stores/DocumentStore';
-import { TypeMeta } from '../DocumentRoot';
+import { TypeMeta } from '@tdev-models/DocumentRoot';
 import type { BinaryFiles } from '@excalidraw/excalidraw/types/types';
 import type { ExcalidrawElement } from '@excalidraw/excalidraw/types/element/types';
-// import { getNonDeletedElements, getSceneVersion } from '@excalidraw/excalidraw';
 
 export interface MetaInit {
     readonly?: boolean;
