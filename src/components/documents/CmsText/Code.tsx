@@ -1,13 +1,13 @@
 import { observer } from 'mobx-react-lite';
 import { CmsTextContext, useFirstCmsTextDocumentIfExists } from '@tdev-components/documents/CmsText/shared';
 import React from 'react';
-import CodeBlock, { Props as CodeBlockProps} from '@theme/CodeBlock';
-import PermissionsPanel from "@tdev-components/PermissionsPanel"
+import CodeBlock, { Props as CodeBlockProps } from '@theme/CodeBlock';
+import PermissionsPanel from '@tdev-components/PermissionsPanel';
 
 interface Props {
     id?: string;
     name?: string;
-    codeBlockProps?: CodeBlockProps
+    codeBlockProps?: CodeBlockProps;
 }
 
 const CmsCode = observer((props: Props) => {
@@ -16,12 +16,8 @@ const CmsCode = observer((props: Props) => {
 
     return cmsText ? (
         <>
-            <CodeBlock
-                {...(props.codeBlockProps || {})}
-            >
-                {cmsText}
-            </CodeBlock>
             {props.id && <PermissionsPanel documentRootId={props.id} />}
+            <CodeBlock {...(props.codeBlockProps || {})}>{cmsText}</CodeBlock>
         </>
     ) : (
         <></>
