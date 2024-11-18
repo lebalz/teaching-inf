@@ -85,26 +85,39 @@ class DynamicDocumentRoots extends iDocument<DocumentType.DynamicDocumentRoots> 
             .catch((e) => {
                 const createdDynDoc = this.store.root.documentRootStore.find(id);
                 if (createdDynDoc) {
-                    this.store.root.documentRootStore.destroy(createdDynDoc);
+                    this.store.root.documentRootStore.destroy(createdDynDoc).then((success) => {
+                        if (!success) {
+                            console.error('Failed to remove dynamic document root');
+                        }
+                    });
                 }
             });
     }
 
     @action
     removeDynamicDocumentRoot(id: string) {
-        if (!this.dynamicDocumentRoots.find((dr) => dr.id === id)) {
+        const ddRoot = this.dynamicDocumentRoots.find((dr) => dr.id === id);
+        if (!ddRoot) {
             return;
         }
-        const ddRoot = this.linkedDynamicDocumentRoots.find((dr) => dr.id === id);
+        const linkedRoot = this.linkedDynamicDocumentRoots.find((dr) => dr.id === id);
+        /** first remove the doc root from the state, otherwise it will be recreated immediately... */
         this.setData(
             { documentRoots: this.dynamicDocumentRoots.filter((dr) => dr.id !== id) },
             Source.LOCAL,
             new Date()
         );
         (this.saveNow() || Promise.resolve()).then(() => {
-            if (ddRoot) {
-                this.store.root.documentRootStore.destroy(ddRoot).catch((e) => {
-                    console.log('No permission to delete document root');
+            if (linkedRoot) {
+                this.store.root.documentRootStore.destroy(linkedRoot).then((success) => {
+                    if (!success) {
+                        /** undo the removal */
+                        this.setData(
+                            { documentRoots: [...this.dynamicDocumentRoots, ddRoot] },
+                            Source.LOCAL,
+                            new Date()
+                        );
+                    }
                 });
             }
         });

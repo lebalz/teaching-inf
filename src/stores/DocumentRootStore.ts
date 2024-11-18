@@ -322,7 +322,11 @@ export class DocumentRootStore extends iStore {
         })
             .then(() => {
                 this.removeFromStore(documentRoot.id);
+                return true;
             })
-            .catch(() => console.warn('Error destroying document root'));
+            .catch(() => {
+                console.warn('Error destroying document root');
+                return false;
+            });
     }
 }
