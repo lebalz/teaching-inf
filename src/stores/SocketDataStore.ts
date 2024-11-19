@@ -19,6 +19,7 @@ import { BACKEND_URL } from '../authConfig';
 import { DocumentRoot, DocumentRootUpdate } from '@tdev-api/documentRoot';
 import { GroupPermission, UserPermission } from '@tdev-api/permission';
 import { Document, DocumentType } from '../api/document';
+import { NoneAccess } from '@tdev-models/helpers/accessPolicy';
 
 type TypedSocket = Socket<ServerToClientEvents, ClientToServerEvents>;
 /**
@@ -147,12 +148,19 @@ export class SocketDataStore extends iStore<'ping'> {
             case RecordType.DocumentRoot:
                 const docRoot = record as DocumentRoot;
                 const current = this.root.documentRootStore.find(docRoot.id);
+                /**
+                 * this would be a dummy document root - this only happens in cases
+                 * where only admins are allowed to create document roots, e.g. for
+                 * message rooms.
+                 */
                 if (current) {
                     this.root.documentRootStore.addApiResultToStore(docRoot, {
                         meta: current.meta,
                         load: {
                             documentRoot: true,
-                            documents: false,
+                            documents: NoneAccess.has(
+                                current.permission
+                            ) /** only load the documents, when the current permission is None */,
                             groupPermissions: true,
                             userPermissions: true
                         }

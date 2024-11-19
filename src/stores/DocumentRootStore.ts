@@ -1,4 +1,4 @@
-import { action, observable, runInAction } from 'mobx';
+import { action, observable } from 'mobx';
 import { RootStore } from '@tdev-stores/rootStore';
 import { computedFn } from 'mobx-utils';
 import DocumentRoot, { TypeMeta } from '@tdev-models/DocumentRoot';
@@ -14,9 +14,10 @@ import {
 import iStore from '@tdev-stores/iStore';
 import GroupPermission from '@tdev-models/GroupPermission';
 import UserPermission from '@tdev-models/UserPermission';
-import { Access, DocumentType } from '@tdev-api/document';
+import { DocumentType } from '@tdev-api/document';
 import { debounce } from 'lodash';
 import User from '@tdev-models/User';
+import { NoneAccess } from '@tdev-models/helpers/accessPolicy';
 
 type LoadConfig = {
     documents?: boolean;
@@ -244,9 +245,23 @@ export class DocumentRootStore extends iStore {
     @action
     handleUpdate({ id, access, sharedAccess }: DocumentRootUpdate) {
         const model = this.find(id);
-        if (model) {
-            model.rootAccess = access;
-            model.sharedAccess = sharedAccess;
+        if (model && this.root.userStore.current) {
+            const old = model.permission;
+            let needsReload = false;
+            if (access !== model.rootAccess) {
+                model.rootAccess = access;
+                const current = model.permission;
+                needsReload = NoneAccess.has(old) && !NoneAccess.has(current);
+            }
+            if (sharedAccess !== model.sharedAccess) {
+                needsReload =
+                    needsReload || (NoneAccess.has(model.sharedAccess) && !NoneAccess.has(sharedAccess));
+                model.sharedAccess = sharedAccess;
+            }
+            if (needsReload) {
+                this.reload(model);
+                console.log('reload model', model.id);
+            }
         }
     }
 
@@ -293,6 +308,16 @@ export class DocumentRootStore extends iStore {
     cleanupDocumentRoot(documentRoot: DocumentRoot<DocumentType>, cleanupDeep: boolean = true) {
         documentRoot.documents.forEach((doc) => {
             this.root.documentStore.removeFromStore(doc, cleanupDeep);
+        });
+    }
+
+    @action
+    reload(documentRoot: DocumentRoot<any>) {
+        this.loadInNextBatch(documentRoot.id, documentRoot.meta, {
+            documentRoot: true,
+            documents: true,
+            groupPermissions: true,
+            userPermissions: true
         });
     }
 
