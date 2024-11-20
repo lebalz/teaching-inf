@@ -161,13 +161,25 @@ const config: Config = {
     },
   },
   webpack: {
-    jsLoader: (isServer) => ({
-      loader: 'builtin:swc-loader', // (only works with Rspack)
-      options: {
-        ...require("@docusaurus/faster").getSwcLoaderOptions({isServer}),
-        decorators: true
-      },
-    }),
+    jsLoader: (isServer) => {
+      const defaultOptions = require("@docusaurus/faster").getSwcLoaderOptions({isServer});
+      return {
+        loader: 'builtin:swc-loader', // (only works with Rspack)
+        options: {
+          ...defaultOptions,
+          jsc: {
+            parser: {
+              ...defaultOptions.jsc.parser,
+              decorators: true
+            },
+            transform: {
+              ...defaultOptions.jsc.transform,
+              decoratorVersion: '2022-03'
+            }
+          }
+        },
+      }
+    },
   },
 
   // Even if you don't use internationalization, you can use this field to set
