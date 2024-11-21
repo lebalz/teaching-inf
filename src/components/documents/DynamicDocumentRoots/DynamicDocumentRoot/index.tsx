@@ -50,6 +50,7 @@ const DynamicDocumentRoot = observer((props: Props) => {
                         setTitle(e.target.value);
                     }}
                     autoFocus
+                    className={clsx(styles.roomName)}
                     onKeyDown={(e) => {
                         const save = e.key === 'Enter' || ((e.ctrlKey || e.metaKey) && e.key === 's');
                         if (save) {
@@ -75,8 +76,8 @@ const DynamicDocumentRoot = observer((props: Props) => {
                 }
                 icon={mdiLocationEnter}
                 iconSide="left"
+                textClassName={clsx(styles.roomButton)}
             />
-
             <div className={clsx(styles.actions)}>
                 {meta.parentRoot?.hasRWAccess && (
                     <>

@@ -2,12 +2,24 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-
+    overflow: auto;
     .roomName {
         font-weight: bold;
+        flex-basis: 50%;
+        text-overflow: clip;
+        overflow: auto;
+        white-space: nowrap;
     }
 
     .actions {
         display: flex;
+    }
+}
+
+@media screen and (max-width: 520px) {
+    .dynamicDocRoot {
+        .roomButton {
+            display: none;
+        }
     }
 }

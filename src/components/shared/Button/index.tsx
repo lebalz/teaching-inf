@@ -29,6 +29,7 @@ export interface Base {
     text?: string;
     active?: boolean;
     className?: string;
+    textClassName?: string /* can be used to disable the text over css with `display: none` */;
     disabled?: boolean;
     size?: number;
     color?: Color | string;
@@ -85,15 +86,29 @@ const ButtonInner = (props: Props) => {
         <>
             {props.icon && iconSide === 'left' && <ButtonIcon {...props} className={clsx(undefined)} />}
             <span
-                className={clsx(styles.spacer, textAndIcon && iconSide === 'left' && styles.borderLeft)}
+                className={clsx(
+                    styles.spacer,
+                    textAndIcon && iconSide === 'left' && styles.borderLeft,
+                    props.textClassName
+                )}
             ></span>
-            {props.text && <span>{props.text}</span>}
+            {props.text && (
+                <span className={clsx(styles.text, textAndIcon && styles[iconSide], props.textClassName)}>
+                    {props.text}
+                </span>
+            )}
             {props.children && props.children}
             {props.icon && iconSide === 'center' && <ButtonIcon {...props} className={clsx(undefined)} />}
             <span
-                className={clsx(styles.spacer, textAndIcon && iconSide === 'right' && styles.borderRight)}
+                className={clsx(
+                    styles.spacer,
+                    textAndIcon && iconSide === 'right' && styles.borderRight,
+                    props.textClassName
+                )}
             ></span>
-            {props.icon && iconSide === 'right' && <ButtonIcon {...props} className={clsx(undefined)} />}
+            {props.icon && iconSide === 'right' && (
+                <ButtonIcon {...props} className={clsx(props.textClassName)} />
+            )}
         </>
     );
 };
