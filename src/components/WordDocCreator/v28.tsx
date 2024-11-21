@@ -103,7 +103,7 @@ Abbildungsverzeichnis
             title: `Word Prüfung GBSL`,
             keywords: `ofi, msword, test, ${name}`,
             background: {
-                color: color,
+                color: color
             },
             sections: [
                 {
@@ -198,7 +198,7 @@ Abbildungsverzeichnis
                     generateFromUrl(viewedUser);
                 }}
                 color="green"
-                iconSide='left'
+                iconSide="left"
             />
         </>
     );
