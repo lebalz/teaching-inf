@@ -71,9 +71,7 @@ const DynamicDocumentRoot = observer((props: Props) => {
                 text="Zum Raum"
                 color="blue"
                 href={`/rooms/${meta.parentRoot?.id}/${docRoot.id}`}
-                disabled={
-                    !meta.parentRoot || (NoneAccess.has(docRoot.permission) && !userStore.current?.isAdmin)
-                }
+                disabled={!meta.parentRoot || NoneAccess.has(docRoot.permission)}
                 icon={mdiLocationEnter}
                 iconSide="left"
                 textClassName={clsx(styles.roomButton)}
@@ -113,7 +111,7 @@ const DynamicDocumentRoot = observer((props: Props) => {
                         />
                     </>
                 )}
-                <PermissionsPanel documentRootId={docRoot.id} position={['top right', 'bottom right']} />
+                <PermissionsPanel documentRootId={docRoot.id} position={['bottom right', 'top right']} />
             </div>
         </div>
     );

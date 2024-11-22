@@ -8,6 +8,7 @@ import { mdiEmoticonSadOutline } from '@mdi/js';
 interface Props {
     size?: number;
     header?: string;
+    children?: React.ReactNode;
 }
 
 const NoAccess = observer((props: Props) => {
@@ -18,6 +19,7 @@ const NoAccess = observer((props: Props) => {
                 <Icon path={mdiEmoticonSadOutline} size={props.size || 3} color="var(--ifm-color-primary)" />
             </div>
             <div className={clsx(styles.text)}>Keine Berechtigung</div>
+            {props.children}
         </div>
     );
 });

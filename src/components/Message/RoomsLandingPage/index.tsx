@@ -68,7 +68,16 @@ const Rooms = observer((props: Props): JSX.Element => {
         return <NoRoom />;
     }
     if (NoneAccess.has(documentRoot.permission)) {
-        return <NoAccess header={meta.name} />;
+        return (
+            <>
+                <NoAccess header={meta.name}>
+                    <PermissionsPanel
+                        documentRootId={props.documentRootId}
+                        position={['top right', 'bottom right']}
+                    />
+                </NoAccess>
+            </>
+        );
     }
     return (
         <>
