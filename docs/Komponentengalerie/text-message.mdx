@@ -45,3 +45,36 @@ Ein mögliches Beispiel für die Struktur der Daten des `DynamicDocumentRoots`:
 `type`
 : Der Typ des Raums. Dieser bestimmt, welche Komponenten und welche Logik für den Raum verwendet wird.
 
+## Installation
+
+:::info[Code]
+- `src/plugins/plugin-dynamic-routes`
+- `src/models/DynamicDocumentRoots.ts`
+- `src/models/DynamicDocumentRoot.ts`
+- `src/components/Rooms`
+- `src/components/documents/DynamicDocumentRoots`
+:::
+
+:::info[`docusaurus.config.ts`]
+Die Landing-Page für die Räume `/rooms/<documentRootId>/<dynamicDocumentRootId>` muss im Docusaurus Router registriert werden.
+
+```ts
+import dynamicRouterPlugin, { Config as DynamicRouteConfig} from './src/plugins/plugin-dynamic-routes';
+
+const config: Config = {
+    plugins: [
+        [
+            dynamicRouterPlugin,
+            {
+                routes: [
+                    {
+                        path: '/rooms/',
+                        component: '@tdev-components/Rooms',
+                    }
+                ]
+            } satisfies DynamicRouteConfig
+        ],
+    ]
+} 
+```
+:::
