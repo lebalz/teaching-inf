@@ -19,7 +19,7 @@ import PermissionsPanel from '@tdev-components/PermissionsPanel';
 import { NoneAccess } from '@tdev-models/helpers/accessPolicy';
 import NoAccess from '@tdev-components/shared/NoAccess';
 import TextMessages from './TextMessages';
-import KindSelector from '@tdev-components/documents/DynamicDocumentRoots/KindSelector';
+import RoomKindSelector from '@tdev-components/documents/DynamicDocumentRoots/RoomKindSelector';
 
 const NoRoom = () => {
     return (
@@ -36,7 +36,7 @@ const NoType = ({ dynamicRoot }: { dynamicRoot: DynamicDocumentRootMeta }) => {
             <Icon path={mdiEmoticonSad} size={1} color="var(--ifm-color-warning)" />
             Unbekannter Raum-Typ "{dynamicRoot.props?.kind}"
             <div style={{ flexGrow: 1, flexBasis: 0 }} />
-            <KindSelector dynamicRoot={dynamicRoot} />
+            <RoomKindSelector dynamicRoot={dynamicRoot} />
         </div>
     );
 };

@@ -54,10 +54,16 @@ class DynamicDocumentRoot extends TypeMeta<DocumentType.DynamicDocumentRoot> {
         if (!this.parentDocument) {
             return 'Dynamische Dokumentenwurzel';
         }
-        const title = this.parentDocument.dynamicDocumentRoots.find(
-            (doc) => doc.id === this.rootDocumentId
-        )?.name;
+        const title = this.props?.name;
         return title === undefined ? 'Dynamische Dokumentenwurzel' : title;
+    }
+
+    @computed
+    get kind(): RoomKind | undefined {
+        if (!this.parentDocument) {
+            return undefined;
+        }
+        return this.props?.kind;
     }
 
     @action

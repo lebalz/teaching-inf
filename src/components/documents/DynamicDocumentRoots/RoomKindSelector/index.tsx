@@ -9,17 +9,17 @@ interface Props {
     dynamicRoot: DynamicDocumentRoot;
 }
 
-const RoomTypeLabel: { [key in RoomKind]: string } = {
+export const RoomKindLabel: { [key in RoomKind]: string } = {
     [RoomKind.Messages]: 'Textnachrichten'
 };
 
-const RoomTypeDescription: { [key in RoomKind]: string } = {
+export const RoomKindDescription: { [key in RoomKind]: string } = {
     [RoomKind.Messages]: 'Textnachrichten können in einem Chat versandt- und empfangen werden.'
 };
 
 const ValidRoomKind = new Set<string>(Object.values(RoomKind));
 
-const KindSelector = observer((props: Props) => {
+const RoomKindSelector = observer((props: Props) => {
     const { dynamicRoot } = props;
     const invalidRoomKind = !ValidRoomKind.has(dynamicRoot.props?.kind || '');
     return (
@@ -37,8 +37,8 @@ const KindSelector = observer((props: Props) => {
                     </option>
                 )}
                 {Object.values(RoomKind).map((type) => (
-                    <option key={type} value={type} title={RoomTypeDescription[type]}>
-                        {RoomTypeLabel[type]}
+                    <option key={type} value={type} title={RoomKindDescription[type]}>
+                        {RoomKindLabel[type]}
                     </option>
                 ))}
             </select>
@@ -46,4 +46,4 @@ const KindSelector = observer((props: Props) => {
     );
 });
 
-export default KindSelector;
+export default RoomKindSelector;
