@@ -9,8 +9,6 @@ import PermissionsPanel from '@tdev-components/PermissionsPanel';
 import { Access } from '@tdev-api/document';
 import { useStore } from '@tdev-hooks/useStore';
 import AddDynamicDocumentRoot from './AddDynamicDocumentRoot';
-import Button from '@tdev-components/shared/Button';
-import { mdiTrashCan } from '@mdi/js';
 import DynamicDocumentRoot from './DynamicDocumentRoot';
 
 interface Props extends MetaInit {

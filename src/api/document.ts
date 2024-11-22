@@ -15,7 +15,7 @@ import { Color } from '@tdev-components/shared/Colors';
 import CmsText from '@tdev-models/documents/CmsText';
 import TextMessage from '@tdev-models/documents/TextMessage';
 import DynamicDocumentRoots from '@tdev-models/documents/DynamicDocumentRoots';
-import { default as DynamicDocumentRootModel } from '@tdev-models/documents/DynamicDocumentRoot';
+import { DynamicDocumentRootModel } from '@tdev-models/documents/DynamicDocumentRoot';
 
 export enum Access {
     RO_DocumentRoot = 'RO_DocumentRoot',
@@ -116,13 +116,13 @@ export interface DynamicDocumentRootData {
     /** such a document is never created - it's only the document root that is needed */
 }
 
-export enum RoomType {
+export enum RoomKind {
     Messages = 'text_messages'
 }
 export interface DynamicDocumentRoot {
     id: string;
     name: string;
-    type: RoomType;
+    kind: RoomKind;
 }
 
 export interface DynamicDocumentRootsData {

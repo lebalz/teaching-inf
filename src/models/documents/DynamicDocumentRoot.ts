@@ -1,16 +1,22 @@
 import { action, computed } from 'mobx';
 import iDocument, { Source } from '@tdev-models/iDocument';
-import { DocumentType, Document as DocumentProps, TypeDataMapping, Access } from '@tdev-api/document';
+import {
+    DocumentType,
+    Document as DocumentProps,
+    DynamicDocumentRoot as DynamicDocumentRootProps,
+    TypeDataMapping,
+    Access,
+    RoomKind
+} from '@tdev-api/document';
 import DocumentStore from '@tdev-stores/DocumentStore';
 import DocumentRoot, { TypeMeta } from '@tdev-models/DocumentRoot';
-import { DocumentRootStore } from '@tdev-stores/DocumentRootStore';
 import DynamicDocumentRoots from './DynamicDocumentRoots';
 
 export interface MetaInit {
     readonly?: boolean;
 }
 
-export class ModelMeta extends TypeMeta<DocumentType.DynamicDocumentRoot> {
+class DynamicDocumentRoot extends TypeMeta<DocumentType.DynamicDocumentRoot> {
     readonly type = DocumentType.DynamicDocumentRoot;
     readonly store: DocumentStore;
     readonly rootDocumentId: string;
@@ -31,6 +37,11 @@ export class ModelMeta extends TypeMeta<DocumentType.DynamicDocumentRoot> {
     @computed
     get parentDocument(): DynamicDocumentRoots | undefined {
         return this.store.find(this.parentDocumentId) as DynamicDocumentRoots;
+    }
+
+    @computed
+    get props(): DynamicDocumentRootProps | undefined {
+        return this.parentDocument?.dynamicDocumentRoots.find((ddr) => ddr.id === this.rootDocumentId);
     }
 
     @computed
@@ -63,12 +74,21 @@ export class ModelMeta extends TypeMeta<DocumentType.DynamicDocumentRoot> {
         this.parentDocument.saveNow();
     }
 
+    @action
+    setKind(type: RoomKind): void {
+        if (!this.parentDocument) {
+            return;
+        }
+        this.parentDocument.setKind(this.rootDocumentId, type);
+        this.parentDocument.saveNow();
+    }
+
     get defaultData(): TypeDataMapping[DocumentType.DynamicDocumentRoot] {
         return {};
     }
 }
 
-class DynamicDocumentRoot extends iDocument<DocumentType.DynamicDocumentRoot> {
+export class DynamicDocumentRootModel extends iDocument<DocumentType.DynamicDocumentRoot> {
     constructor(props: DocumentProps<DocumentType.DynamicDocumentRoot>, store: DocumentStore) {
         super(props, store);
         throw new Error('Model not implemented.');
@@ -84,7 +104,7 @@ class DynamicDocumentRoot extends iDocument<DocumentType.DynamicDocumentRoot> {
     }
 
     @computed
-    get meta(): ModelMeta {
+    get meta(): DynamicDocumentRoot {
         throw new Error('Method not implemented.');
     }
 }

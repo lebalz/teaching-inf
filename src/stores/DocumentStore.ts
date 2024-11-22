@@ -31,7 +31,7 @@ import Restricted from '@tdev-models/documents/Restricted';
 import CmsText from '@tdev-models/documents/CmsText';
 import TextMessage from '@tdev-models/documents/TextMessage';
 import DynamicDocumentRoots from '@tdev-models/documents/DynamicDocumentRoots';
-import DynamicDocumentRoot from '@tdev-models/documents/DynamicDocumentRoot';
+import { DynamicDocumentRootModel } from '@tdev-models/documents/DynamicDocumentRoot';
 
 export function CreateDocumentModel<T extends DocumentType>(
     data: DocumentProps<T>,
@@ -64,7 +64,10 @@ export function CreateDocumentModel(data: DocumentProps<DocumentType>, store: Do
         case DocumentType.TextMessage:
             return new TextMessage(data as DocumentProps<DocumentType.TextMessage>, store);
         case DocumentType.DynamicDocumentRoot:
-            return new DynamicDocumentRoot(data as DocumentProps<DocumentType.DynamicDocumentRoot>, store);
+            return new DynamicDocumentRootModel(
+                data as DocumentProps<DocumentType.DynamicDocumentRoot>,
+                store
+            );
         case DocumentType.DynamicDocumentRoots:
             return new DynamicDocumentRoots(data as DocumentProps<DocumentType.DynamicDocumentRoots>, store);
     }

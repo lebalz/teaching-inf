@@ -6,11 +6,11 @@ import {
     TypeDataMapping,
     Access,
     DynamicDocumentRoot,
-    RoomType
+    RoomKind
 } from '@tdev-api/document';
 import DocumentStore from '@tdev-stores/DocumentStore';
 import DocumentRoot, { TypeMeta } from '@tdev-models/DocumentRoot';
-import { ModelMeta as DynamicDocRootMeta } from '@tdev-models/documents/DynamicDocumentRoot';
+import { default as DynamicDocRootMeta } from '@tdev-models/documents/DynamicDocumentRoot';
 
 export interface MetaInit {
     readonly?: boolean;
@@ -66,12 +66,25 @@ class DynamicDocumentRoots extends iDocument<DocumentType.DynamicDocumentRoots> 
         this.setData({ documentRoots: renamedRoots }, Source.LOCAL, new Date());
     }
 
+    @action
+    setKind(id: string, kind: RoomKind) {
+        const current = this.dynamicDocumentRoots.find((dr) => dr.id === id);
+        if (!current) {
+            return;
+        }
+        const renamedRoots = [
+            { ...current, kind: kind },
+            ...this.dynamicDocumentRoots.filter((dr) => dr.id !== id)
+        ];
+        this.setData({ documentRoots: renamedRoots }, Source.LOCAL, new Date());
+    }
+
     containsDynamicDocumentRoot(id: string): boolean {
         return this.dynamicDocumentRoots.some((dr) => dr.id === id);
     }
 
     @action
-    addDynamicDocumentRoot(id: string, name: string, type: RoomType) {
+    addDynamicDocumentRoot(id: string, name: string, kind: RoomKind) {
         this.store.root.documentRootStore
             .create(id, new DynamicDocRootMeta({}, id, this.id, this.store.root.documentStore), {
                 access: Access.None_DocumentRoot,
@@ -80,7 +93,7 @@ class DynamicDocumentRoots extends iDocument<DocumentType.DynamicDocumentRoots> 
             .then((dynRoot) => {
                 this.setData(
                     {
-                        documentRoots: [...this.dynamicDocumentRoots, { id, name, type }]
+                        documentRoots: [...this.dynamicDocumentRoots, { id, name, kind }]
                     },
                     Source.LOCAL,
                     new Date()

@@ -10,15 +10,16 @@ import { mdiAccountAlert, mdiEmoticonSad } from '@mdi/js';
 import { useStore } from '@tdev-hooks/useStore';
 import styles from './styles.module.scss';
 import React from 'react';
-import { DocumentType, DynamicDocumentRoot, RoomType } from '@tdev-api/document';
+import { DocumentType, DynamicDocumentRoot, RoomKind } from '@tdev-api/document';
 import { ModelMeta as RootsMeta } from '@tdev-models/documents/DynamicDocumentRoots';
-import { ModelMeta as DynamicDocumentRootMeta } from '@tdev-models/documents/DynamicDocumentRoot';
+import { default as DynamicDocumentRootMeta } from '@tdev-models/documents/DynamicDocumentRoot';
 import { useDocumentRoot } from '@tdev-hooks/useDocumentRoot';
 import DynamicDocumentRoots from '@tdev-components/documents/DynamicDocumentRoots';
 import PermissionsPanel from '@tdev-components/PermissionsPanel';
 import { NoneAccess } from '@tdev-models/helpers/accessPolicy';
 import NoAccess from '@tdev-components/shared/NoAccess';
 import TextMessages from './TextMessages';
+import KindSelector from '@tdev-components/documents/DynamicDocumentRoots/KindSelector';
 
 const NoRoom = () => {
     return (
@@ -29,11 +30,13 @@ const NoRoom = () => {
     );
 };
 
-const NoType = ({ type }: { type: string }) => {
+const NoType = ({ dynamicRoot }: { dynamicRoot: DynamicDocumentRootMeta }) => {
     return (
         <div className={clsx('alert alert--warning', styles.alert)} role="alert">
             <Icon path={mdiEmoticonSad} size={1} color="var(--ifm-color-warning)" />
-            Unbekannter Raum-Typ "{type}"
+            Unbekannter Raum-Typ "{dynamicRoot.props?.kind}"
+            <div style={{ flexGrow: 1, flexBasis: 0 }} />
+            <KindSelector dynamicRoot={dynamicRoot} />
         </div>
     );
 };
@@ -63,15 +66,16 @@ const PATHNAME_PATTERN = '/rooms/:parentRootId/:documentRootId?' as const;
 
 interface Props {
     roomProps: DynamicDocumentRoot;
-    parentRootId: string;
+    parentDocumentId: string;
 }
 const RoomComponent = observer((props: Props): JSX.Element => {
     const documentStore = useStore('documentStore');
-    const { roomProps: dynamicDocumentRoot } = props;
+    const drStore = useStore('documentRootStore');
+    const { roomProps } = props;
     const [dynamicRoot] = React.useState(
-        new DynamicDocumentRootMeta({}, dynamicDocumentRoot.id, props.parentRootId, documentStore)
+        new DynamicDocumentRootMeta({}, roomProps.id, props.parentDocumentId, documentStore)
     );
-    const documentRoot = useDocumentRoot(dynamicDocumentRoot.id, dynamicRoot, false, {}, true);
+    const documentRoot = useDocumentRoot(roomProps.id, dynamicRoot, false, {}, true);
 
     if (!documentRoot || documentRoot.type !== DocumentType.DynamicDocumentRoot) {
         return <NoRoom />;
@@ -81,18 +85,18 @@ const RoomComponent = observer((props: Props): JSX.Element => {
             <>
                 <NoAccess header={dynamicRoot.name}>
                     <PermissionsPanel
-                        documentRootId={dynamicDocumentRoot.id}
+                        documentRootId={roomProps.id}
                         position={['top right', 'bottom right']}
                     />
                 </NoAccess>
             </>
         );
     }
-    switch (dynamicDocumentRoot.type) {
-        case RoomType.Messages:
-            return <TextMessages documentRoot={documentRoot} roomProps={dynamicDocumentRoot} />;
+    switch (roomProps.kind) {
+        case RoomKind.Messages:
+            return <TextMessages documentRoot={documentRoot} roomProps={roomProps} />;
         default:
-            return <NoType type={dynamicDocumentRoot.type} />;
+            return <NoType dynamicRoot={dynamicRoot} />;
     }
 });
 
@@ -100,22 +104,18 @@ interface WithParentRootProps {
     path: string;
 }
 const WithParentRoot = observer((props: WithParentRootProps): JSX.Element => {
-    const userStore = useStore('userStore');
     const routeParams = matchPath<PathParams>(props.path, PATHNAME_PATTERN);
     const { parentRootId, documentRootId } = routeParams?.params || {};
     const [rootsMeta] = React.useState(new RootsMeta({}));
     const dynDocRoots = useDocumentRoot(parentRootId, rootsMeta, false, {}, true);
-    if (!userStore.current) {
-        return <NoUser />;
+    if (dynDocRoots.isDummy) {
+        return <NotCreated />;
     }
     if (!parentRootId) {
         return <NoRoom />;
     }
     if (!dynDocRoots) {
         return <Loader />;
-    }
-    if (dynDocRoots.isDummy) {
-        return <NotCreated />;
     }
     if (!documentRootId || !dynDocRoots.firstMainDocument?.id) {
         return <DynamicDocumentRoots id={parentRootId} />;
@@ -126,7 +126,7 @@ const WithParentRoot = observer((props: WithParentRootProps): JSX.Element => {
     if (!dynamicRoot) {
         return <DynamicDocumentRoots id={parentRootId} />;
     }
-    return <RoomComponent roomProps={dynamicRoot} parentRootId={parentRootId} />;
+    return <RoomComponent roomProps={dynamicRoot} parentDocumentId={dynDocRoots.firstMainDocument.id} />;
 });
 
 const Rooms = observer(() => {

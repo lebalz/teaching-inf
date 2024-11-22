@@ -16,7 +16,7 @@ import {
     mdiTrashCan
 } from '@mdi/js';
 import { useDocumentRoot } from '@tdev-hooks/useDocumentRoot';
-import { ModelMeta } from '@tdev-models/documents/DynamicDocumentRoot';
+import { default as DynamicDocumentRootMeta } from '@tdev-models/documents/DynamicDocumentRoot';
 import { NoneAccess } from '@tdev-models/helpers/accessPolicy';
 
 interface Props extends MetaInit {
@@ -26,8 +26,9 @@ interface Props extends MetaInit {
 
 const DynamicDocumentRoot = observer((props: Props) => {
     const documentStore = useStore('documentStore');
-    const userStore = useStore('userStore');
-    const [meta] = React.useState(new ModelMeta({}, props.id, props.dynamicRootsDocumentId, documentStore));
+    const [meta] = React.useState(
+        new DynamicDocumentRootMeta({}, props.id, props.dynamicRootsDocumentId, documentStore)
+    );
     const [edit, setEdit] = React.useState(false);
     const [title, setTitle] = React.useState('');
     const docRoot = useDocumentRoot(props.id, meta, false, {}, true);

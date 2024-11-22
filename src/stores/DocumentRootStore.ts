@@ -169,7 +169,6 @@ export class DocumentRootStore extends iStore {
                 })
             );
             if (!isUserSwitched) {
-                console.log(current.values());
                 // create all missing root documents
                 const created = await Promise.all(
                     [...current.keys()]
