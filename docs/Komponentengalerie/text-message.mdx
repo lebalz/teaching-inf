@@ -6,4 +6,42 @@ import DynamicDocumentRoots from '@tdev-components/documents/DynamicDocumentRoot
 
 # Textnachrichten
 
+Textnachrichten ermöglichen einen simplen Chat - dies ist eher ein PoC und die Basis für weitere, unterrichtsrelevante Interaktionsmöglichkeiten.
+
 <DynamicDocumentRoots id="37cb6ae1-4f9f-437b-8120-26d41f69976f" />
+
+
+## Technischer Hintergrund
+
+Die `DocumentRoot` wird verwendet, um in MDX-Dokumenten bspw. Antworten User-Basiert abzuspeichern - es ist das Elternelement für alle Antworten und jede User:in kann dann ein eigenes `Document` hinzufügen. Über die `DocumentRoot` werden auch die Berechtigungen festgelegt.
+
+Für interaktive Anwendung (wie einen (Gruppen)-Chat), die nicht ganze Klassen betreffen, braucht es dynamisch generierte `DocumentRoots`. Um diese dynamischen `DocumentRoots` wiederzufinden, wird ein Dokument `DynamicDocumentRoots` erzeugt und in diesem die `DocumentRoots` abgespeichert. Das mentale Modell dazu: Es werden Räume erzeugt, die von einer `DocumentRoot` verwaltet werden, die Raum-Logik entspricht dann jedoch direkt der `DocumentRoot`-Logik. Dadurch funktionieren sowohl "Live-Änderungen" wie auch die Berechtigungen.
+
+Jeder Raum hat einen Namen und eine Raum-Typ (bspw. für den Chat ist dies `text_messages`).
+
+Ein mögliches Beispiel für die Struktur der Daten des `DynamicDocumentRoots`:
+
+```json
+{
+    "documentRoots": [
+        {
+            "id": "dbc4e980-51d9-4036-b8f5-c26d07fa6dd9",
+            "name": "FooBar",
+            "type": "text_messages"
+        },
+        {
+            "id": "c35f8a75-a0a7-4a82-8e7f-da53e8e4f9b4",
+            "name": "🧁🍰🎂",
+            "type": "text_messages"
+        }
+    ]
+}
+```
+
+`id`
+: Die eindeutige ID des dynamischen `DocumentRoot`
+`name`
+: Der Namen des Raums. Dieser wird bspw. im Chat angezeigt.
+`type`
+: Der Typ des Raums. Dieser bestimmt, welche Komponenten und welche Logik für den Raum verwendet wird.
+

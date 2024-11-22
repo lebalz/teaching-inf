@@ -10,22 +10,30 @@ import { mdiAccountAlert, mdiEmoticonSad } from '@mdi/js';
 import { useStore } from '@tdev-hooks/useStore';
 import styles from './styles.module.scss';
 import React from 'react';
-import Conversation from '../Text/Conversation';
-import NewMessage from '../Text/NewMessage';
-import { DocumentType } from '@tdev-api/document';
+import { DocumentType, DynamicDocumentRoot, RoomType } from '@tdev-api/document';
 import { ModelMeta as RootsMeta } from '@tdev-models/documents/DynamicDocumentRoots';
-import { ModelMeta } from '@tdev-models/documents/DynamicDocumentRoot';
+import { ModelMeta as DynamicDocumentRootMeta } from '@tdev-models/documents/DynamicDocumentRoot';
 import { useDocumentRoot } from '@tdev-hooks/useDocumentRoot';
 import DynamicDocumentRoots from '@tdev-components/documents/DynamicDocumentRoots';
 import PermissionsPanel from '@tdev-components/PermissionsPanel';
 import { NoneAccess } from '@tdev-models/helpers/accessPolicy';
 import NoAccess from '@tdev-components/shared/NoAccess';
+import TextMessages from './TextMessages';
 
 const NoRoom = () => {
     return (
         <div className={clsx('alert alert--warning', styles.alert)} role="alert">
             <Icon path={mdiEmoticonSad} size={1} color="var(--ifm-color-warning)" />
             Kein Raum ausgewählt!
+        </div>
+    );
+};
+
+const NoType = ({ type }: { type: string }) => {
+    return (
+        <div className={clsx('alert alert--warning', styles.alert)} role="alert">
+            <Icon path={mdiEmoticonSad} size={1} color="var(--ifm-color-warning)" />
+            Unbekannter Raum-Typ "{type}"
         </div>
     );
 };
@@ -54,15 +62,16 @@ type PathParams = { parentRootId: string; documentRootId: string };
 const PATHNAME_PATTERN = '/rooms/:parentRootId/:documentRootId?' as const;
 
 interface Props {
-    dynamicDocumentId: string;
-    documentRootId: string;
+    roomProps: DynamicDocumentRoot;
+    parentRootId: string;
 }
-const Rooms = observer((props: Props): JSX.Element => {
+const RoomComponent = observer((props: Props): JSX.Element => {
     const documentStore = useStore('documentStore');
-    const [meta] = React.useState(
-        new ModelMeta({}, props.documentRootId, props.dynamicDocumentId, documentStore)
+    const { roomProps: dynamicDocumentRoot } = props;
+    const [dynamicRoot] = React.useState(
+        new DynamicDocumentRootMeta({}, dynamicDocumentRoot.id, props.parentRootId, documentStore)
     );
-    const documentRoot = useDocumentRoot(props.documentRootId, meta, false, {}, true);
+    const documentRoot = useDocumentRoot(dynamicDocumentRoot.id, dynamicRoot, false, {}, true);
 
     if (!documentRoot || documentRoot.type !== DocumentType.DynamicDocumentRoot) {
         return <NoRoom />;
@@ -70,32 +79,21 @@ const Rooms = observer((props: Props): JSX.Element => {
     if (NoneAccess.has(documentRoot.permission)) {
         return (
             <>
-                <NoAccess header={meta.name}>
+                <NoAccess header={dynamicRoot.name}>
                     <PermissionsPanel
-                        documentRootId={props.documentRootId}
+                        documentRootId={dynamicDocumentRoot.id}
                         position={['top right', 'bottom right']}
                     />
                 </NoAccess>
             </>
         );
     }
-    return (
-        <>
-            <div className={clsx(styles.wrapper)}>
-                <div className={clsx(styles.rooms)}>
-                    <h1 className={clsx(styles.name)}>
-                        {meta.name}{' '}
-                        <PermissionsPanel
-                            documentRootId={props.documentRootId}
-                            position={['top right', 'bottom right']}
-                        />
-                    </h1>
-                    <Conversation group={documentRoot} />
-                    <NewMessage group={documentRoot} />
-                </div>
-            </div>
-        </>
-    );
+    switch (dynamicDocumentRoot.type) {
+        case RoomType.Messages:
+            return <TextMessages documentRoot={documentRoot} roomProps={dynamicDocumentRoot} />;
+        default:
+            return <NoType type={dynamicDocumentRoot.type} />;
+    }
 });
 
 interface WithParentRootProps {
@@ -122,10 +120,16 @@ const WithParentRoot = observer((props: WithParentRootProps): JSX.Element => {
     if (!documentRootId || !dynDocRoots.firstMainDocument?.id) {
         return <DynamicDocumentRoots id={parentRootId} />;
     }
-    return <Rooms documentRootId={documentRootId} dynamicDocumentId={dynDocRoots.firstMainDocument.id} />;
+    const dynamicRoot = dynDocRoots.firstMainDocument.dynamicDocumentRoots.find(
+        (ddr) => ddr.id === documentRootId
+    );
+    if (!dynamicRoot) {
+        return <DynamicDocumentRoots id={parentRootId} />;
+    }
+    return <RoomComponent roomProps={dynamicRoot} parentRootId={parentRootId} />;
 });
 
-const RoomsLandingPage = observer(() => {
+const Rooms = observer(() => {
     const location = useLocation();
     return (
         <Layout title={`Räume`} description="Nachrichtenräume">
@@ -136,4 +140,4 @@ const RoomsLandingPage = observer(() => {
     );
 });
 
-export default RoomsLandingPage;
+export default Rooms;
