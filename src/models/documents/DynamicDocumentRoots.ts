@@ -5,7 +5,8 @@ import {
     Document as DocumentProps,
     TypeDataMapping,
     Access,
-    DynamicDocumentRoot
+    DynamicDocumentRoot,
+    RoomType
 } from '@tdev-api/document';
 import DocumentStore from '@tdev-stores/DocumentStore';
 import DocumentRoot, { TypeMeta } from '@tdev-models/DocumentRoot';
@@ -54,8 +55,12 @@ class DynamicDocumentRoots extends iDocument<DocumentType.DynamicDocumentRoots> 
 
     @action
     setName(id: string, name: string) {
+        const current = this.dynamicDocumentRoots.find((dr) => dr.id === id);
+        if (!current) {
+            return;
+        }
         const renamedRoots = [
-            { id: id, name: name },
+            { ...current, name: name },
             ...this.dynamicDocumentRoots.filter((dr) => dr.id !== id)
         ];
         this.setData({ documentRoots: renamedRoots }, Source.LOCAL, new Date());
@@ -66,7 +71,7 @@ class DynamicDocumentRoots extends iDocument<DocumentType.DynamicDocumentRoots> 
     }
 
     @action
-    addDynamicDocumentRoot(id: string, name: string) {
+    addDynamicDocumentRoot(id: string, name: string, type: RoomType) {
         this.store.root.documentRootStore
             .create(id, new DynamicDocRootMeta({}, id, this.id, this.store.root.documentStore), {
                 access: Access.None_DocumentRoot,
@@ -75,7 +80,7 @@ class DynamicDocumentRoots extends iDocument<DocumentType.DynamicDocumentRoots> 
             .then((dynRoot) => {
                 this.setData(
                     {
-                        documentRoots: [...this.dynamicDocumentRoots, { id, name }]
+                        documentRoots: [...this.dynamicDocumentRoots, { id, name, type }]
                     },
                     Source.LOCAL,
                     new Date()

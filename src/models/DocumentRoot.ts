@@ -203,10 +203,12 @@ class DocumentRoot<T extends DocumentType> {
         if (this.store.root.userStore.isUserSwitched) {
             return false;
         }
-        if (this.store.root.userStore.current?.isAdmin) {
-            return true;
-        }
         return RWAccess.has(this.permission);
+    }
+
+    @computed
+    get hasAdminRWAccess() {
+        return this.hasRWAccess || !!this.store.root.userStore.current?.isAdmin;
     }
 }
 

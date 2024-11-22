@@ -76,9 +76,6 @@
         "vfile": "^6.0.3",
         "vitest": "^2.0.5"
     },
-    "resolutions": {
-        "@rspack/core": "1.1.1"
-    },
     "browserslist": {
         "production": [
             ">0.5%",

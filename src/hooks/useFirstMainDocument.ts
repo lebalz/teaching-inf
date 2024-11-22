@@ -51,7 +51,7 @@ export const useFirstMainDocument = <Type extends DocumentType>(
             return;
         }
         if (documentRoot.isLoaded && !documentRoot.isDummy && !documentRoot.firstMainDocument) {
-            if (createDocument && documentRoot.hasRWAccess) {
+            if (createDocument && documentRoot.hasAdminRWAccess) {
                 documentStore.create({
                     documentRootId: documentRoot.id,
                     authorId: userStore.current.id,

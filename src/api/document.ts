@@ -116,10 +116,15 @@ export interface DynamicDocumentRootData {
     /** such a document is never created - it's only the document root that is needed */
 }
 
+export enum RoomType {
+    Messages = 'text_messages'
+}
 export interface DynamicDocumentRoot {
     id: string;
     name: string;
+    type: RoomType;
 }
+
 export interface DynamicDocumentRootsData {
     documentRoots: DynamicDocumentRoot[];
 }

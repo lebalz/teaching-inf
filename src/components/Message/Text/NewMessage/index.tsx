@@ -54,8 +54,15 @@ const NewMessage = observer((props: Props) => {
                 placeholder="Neue Nachricht"
                 onChange={(e) => setMessage(e.target.value)}
                 onKeyDown={handleKeyDown}
+                disabled={!group.hasRWAccess}
             />
-            <Button icon={mdiSend} onClick={sendMessage} className={clsx(styles.button)} size={1.1} />
+            <Button
+                icon={mdiSend}
+                onClick={sendMessage}
+                className={clsx(styles.button)}
+                size={1.1}
+                disabled={!group.hasRWAccess}
+            />
         </div>
     );
 });

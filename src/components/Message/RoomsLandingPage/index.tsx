@@ -18,6 +18,8 @@ import { ModelMeta } from '@tdev-models/documents/DynamicDocumentRoot';
 import { useDocumentRoot } from '@tdev-hooks/useDocumentRoot';
 import DynamicDocumentRoots from '@tdev-components/documents/DynamicDocumentRoots';
 import PermissionsPanel from '@tdev-components/PermissionsPanel';
+import { NoneAccess } from '@tdev-models/helpers/accessPolicy';
+import NoAccess from '@tdev-components/shared/NoAccess';
 
 const NoRoom = () => {
     return (
@@ -64,6 +66,9 @@ const Rooms = observer((props: Props): JSX.Element => {
 
     if (!documentRoot || documentRoot.type !== DocumentType.DynamicDocumentRoot) {
         return <NoRoom />;
+    }
+    if (NoneAccess.has(documentRoot.permission)) {
+        return <NoAccess header={meta.name} />;
     }
     return (
         <>
