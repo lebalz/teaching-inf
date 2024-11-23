@@ -41,7 +41,7 @@ const Excalidoc = observer((props: Props) => {
             renderedSceneVersion.current = Lib!.getSceneVersion(restoredData.elements);
             apiSceneVersion.current = renderedSceneVersion.current;
 
-            const unsubscribe = excalidrawAPI.onChange((elements, appState, files) => {
+            const onChangeDisposer = excalidrawAPI.onChange((elements, appState, files) => {
                 const version = Lib!.getSceneVersion(elements);
                 if (version === renderedSceneVersion.current) {
                     return;
@@ -52,10 +52,13 @@ const Excalidoc = observer((props: Props) => {
                 const restoredData = Lib!.restore({ elements: elements, files: files }, {}, []);
                 doc.setData(
                     {
+                        image: '',
                         files: restoredData.files,
                         elements: nonDeletedElements
                     },
-                    Source.LOCAL
+                    Source.LOCAL,
+                    new Date(),
+                    Lib!
                 );
             });
             const rDisposer = reaction(
@@ -75,14 +78,21 @@ const Excalidoc = observer((props: Props) => {
             );
             initialized.current = true;
             return () => {
-                unsubscribe();
+                onChangeDisposer();
                 rDisposer();
             };
         }
     }, [excalidrawAPI, doc]);
 
-    if (!doc || !Lib) {
+    if (!doc) {
         return <Loader />;
+    }
+    if (!Lib) {
+        return (
+            <div style={{ height: '600px', width: '100%' }}>
+                <img src={doc.data.image} />
+            </div>
+        );
     }
     return (
         <div style={{ height: '600px', width: '100%' }}>
