@@ -4,24 +4,22 @@ import styles from './styles.module.scss';
 import { MetaInit, ModelMeta } from '@site/src/models/documents/Excalidoc';
 import Loader from '@tdev-components/Loader';
 import { useExcalidraw } from '@tdev-hooks/useExcalidraw';
-import type { ExcalidrawImperativeAPI } from '@excalidraw/excalidraw/types/types';
-import { Source } from '@tdev-models/iDocument';
 import { useFirstRealMainDocument } from '@tdev-hooks/useFirstRealMainDocument';
-import { reaction } from 'mobx';
-import { useColorMode } from '@docusaurus/theme-common';
 import _ from 'lodash';
 import Preview from './Preview';
 import Editor from './Editor';
 import SyncStatus from '@tdev-components/SyncStatus';
-import { mdiCircleEditOutline, mdiClose, mdiLoading, mdiSyncCircle } from '@mdi/js';
+import { mdiCircleEditOutline, mdiClose, mdiLoading } from '@mdi/js';
 import clsx from 'clsx';
 import Button from '@tdev-components/shared/Button';
-import { ApiState } from '@tdev-stores/iStore';
+import { LibraryItems } from '@excalidraw/excalidraw/types/types';
 
 export const DEFAULT_HEIGHT = '600px' as const;
 
 export interface Props extends MetaInit {
     id: string;
+    height?: string;
+    libraryItems?: LibraryItems | Promise<LibraryItems>;
 }
 
 const Excalidoc = observer((props: Props) => {
@@ -37,7 +35,7 @@ const Excalidoc = observer((props: Props) => {
         return (
             <div
                 className={clsx('card', styles.excalidraw, styles.preview)}
-                style={{ height: DEFAULT_HEIGHT }}
+                style={{ height: props.height || DEFAULT_HEIGHT }}
             >
                 <div className={clsx(styles.actions)}>
                     <SyncStatus model={doc} />
@@ -55,7 +53,10 @@ const Excalidoc = observer((props: Props) => {
         );
     }
     return (
-        <div style={{ height: DEFAULT_HEIGHT, width: '100%' }} className={clsx(styles.excalidraw)}>
+        <div
+            style={{ height: props.height || DEFAULT_HEIGHT, width: '100%' }}
+            className={clsx(styles.excalidraw)}
+        >
             <div className={styles.actions}>
                 <SyncStatus model={doc} />
                 <Button
@@ -66,7 +67,7 @@ const Excalidoc = observer((props: Props) => {
                 />
             </div>
 
-            <Editor Lib={Lib} id={props.id} meta={meta} />
+            <Editor Lib={Lib} id={props.id} meta={meta} libraryItems={props.libraryItems} />
         </div>
     );
 });

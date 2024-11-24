@@ -1,25 +1,19 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import Excalidoc, { MetaInit, ModelMeta } from '@site/src/models/documents/Excalidoc';
-import type { ExcalidrawImperativeAPI } from '@excalidraw/excalidraw/types/types';
+import { MetaInit, ModelMeta } from '@site/src/models/documents/Excalidoc';
+import type { ExcalidrawImperativeAPI, LibraryItems } from '@excalidraw/excalidraw/types/types';
 import { Source } from '@tdev-models/iDocument';
 import { reaction } from 'mobx';
 import { useColorMode } from '@docusaurus/theme-common';
 import type { default as ExcalidrawLib } from '@excalidraw/excalidraw';
 import _ from 'lodash';
-import { DEFAULT_HEIGHT } from '..';
-import clsx from 'clsx';
-import styles from './styles.module.scss';
-import SyncStatus from '@tdev-components/SyncStatus';
-import Button from '@tdev-components/shared/Button';
-import { mdiClose } from '@mdi/js';
 import { useFirstRealMainDocument } from '@tdev-hooks/useFirstRealMainDocument';
-import Loader from '@tdev-components/Loader';
 
 export interface Props extends MetaInit {
     Lib: typeof ExcalidrawLib;
     id: string;
     meta: ModelMeta;
+    libraryItems?: LibraryItems | Promise<LibraryItems>;
 }
 
 const Editor = observer((props: Props) => {
@@ -32,7 +26,7 @@ const Editor = observer((props: Props) => {
     const { colorMode } = useColorMode();
     React.useEffect(() => {
         if (excalidrawAPI && excalidoc && !initialized.current) {
-            excalidrawAPI.scrollToContent();
+            excalidrawAPI.scrollToContent(excalidoc.elements, { fitToViewport: true });
             renderedSceneVersion.current = Lib.getSceneVersion(excalidoc.elements);
             apiSceneVersion.current = renderedSceneVersion.current;
             const onChangeDisposer = excalidrawAPI.onChange((elements, appState, files) => {
@@ -43,7 +37,13 @@ const Editor = observer((props: Props) => {
                 renderedSceneVersion.current = version;
                 const nonDeletedElements = Lib.getNonDeletedElements(elements);
                 apiSceneVersion.current = Lib.getSceneVersion(nonDeletedElements);
-                const restoredData = Lib.restore({ elements: elements, files: files }, {}, []);
+                const restoredData = Lib.restore(
+                    {
+                        files: files
+                    },
+                    {},
+                    elements
+                );
                 excalidoc.setData(
                     {
                         image: '',
@@ -62,17 +62,16 @@ const Editor = observer((props: Props) => {
                     if (newVersion === apiSceneVersion.current) {
                         return;
                     }
-                    console.log('rScene changed', newVersion);
+                    const currentElements = excalidrawAPI.getSceneElementsIncludingDeleted();
                     const restoredData = Lib.restore(
                         { elements: elements, files: excalidoc.data.files },
                         {},
-                        []
+                        currentElements
                     );
-                    excalidrawAPI.addFiles(Object.values(restoredData.files));
-                    excalidrawAPI.updateScene(restoredData);
-                    excalidrawAPI.addFiles(Object.values(restoredData.files));
                     renderedSceneVersion.current = newVersion;
                     apiSceneVersion.current = newVersion;
+                    excalidrawAPI.addFiles(Object.values(restoredData.files));
+                    excalidrawAPI.updateScene(restoredData);
                 }
             );
             initialized.current = true;
@@ -94,7 +93,9 @@ const Editor = observer((props: Props) => {
                 appState: {
                     objectsSnapModeEnabled: true,
                     zenModeEnabled: true
-                }
+                },
+                scrollToContent: true,
+                libraryItems: props.libraryItems
             }}
             excalidrawAPI={(api) => setExcalidrawAPI(api)}
             objectsSnapModeEnabled
