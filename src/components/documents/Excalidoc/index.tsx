@@ -1,5 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
+import styles from './styles.module.scss';
 import { MetaInit, ModelMeta } from '@site/src/models/documents/Excalidoc';
 import Loader from '@tdev-components/Loader';
 import { useExcalidraw } from '@tdev-hooks/useExcalidraw';
@@ -9,108 +10,63 @@ import { useFirstRealMainDocument } from '@tdev-hooks/useFirstRealMainDocument';
 import { reaction } from 'mobx';
 import { useColorMode } from '@docusaurus/theme-common';
 import _ from 'lodash';
+import Preview from './Preview';
+import Editor from './Editor';
+import SyncStatus from '@tdev-components/SyncStatus';
+import { mdiCircleEditOutline, mdiClose, mdiLoading, mdiSyncCircle } from '@mdi/js';
+import clsx from 'clsx';
+import Button from '@tdev-components/shared/Button';
+import { ApiState } from '@tdev-stores/iStore';
+
+export const DEFAULT_HEIGHT = '600px' as const;
 
 export interface Props extends MetaInit {
     id: string;
 }
 
 const Excalidoc = observer((props: Props) => {
-    const [meta] = React.useState(new ModelMeta(props));
-    const initialized = React.useRef<boolean>(false);
-    const renderedSceneVersion = React.useRef(0);
-    const apiSceneVersion = React.useRef(0);
-    const [excalidrawAPI, setExcalidrawAPI] = React.useState<ExcalidrawImperativeAPI>();
+    const [edit, setEdit] = React.useState(false);
     const Lib = useExcalidraw();
+    const [meta] = React.useState(new ModelMeta(props));
     const doc = useFirstRealMainDocument(props.id, meta);
-    const { colorMode } = useColorMode();
-
-    React.useEffect(() => {
-        if (excalidrawAPI && doc && !initialized.current) {
-            console.log('Excalidraw API initialized');
-            const restoredData = Lib!.restore(
-                doc.data,
-                {
-                    objectsSnapModeEnabled: true,
-                    zenModeEnabled: true
-                },
-                []
-            );
-
-            excalidrawAPI.updateScene(restoredData);
-            excalidrawAPI.addFiles(Object.values(restoredData.files));
-            renderedSceneVersion.current = Lib!.getSceneVersion(restoredData.elements);
-            apiSceneVersion.current = renderedSceneVersion.current;
-
-            const onChangeDisposer = excalidrawAPI.onChange((elements, appState, files) => {
-                const version = Lib!.getSceneVersion(elements);
-                if (version === renderedSceneVersion.current) {
-                    return;
-                }
-                renderedSceneVersion.current = version;
-                const nonDeletedElements = Lib!.getNonDeletedElements(elements);
-                apiSceneVersion.current = Lib!.getSceneVersion(nonDeletedElements);
-                const restoredData = Lib!.restore({ elements: elements, files: files }, {}, []);
-                doc.setData(
-                    {
-                        image: '',
-                        files: restoredData.files,
-                        elements: nonDeletedElements
-                    },
-                    Source.LOCAL,
-                    new Date(),
-                    Lib!
-                );
-            });
-            const rDisposer = reaction(
-                () => doc.data,
-                (data) => {
-                    const newVersion = Lib!.getSceneVersion(data.elements);
-                    if (newVersion === apiSceneVersion.current) {
-                        return;
-                    }
-                    const restoredData = Lib!.restore(data, {}, []);
-                    excalidrawAPI.addFiles(Object.values(restoredData.files));
-                    excalidrawAPI.updateScene(restoredData);
-                    excalidrawAPI.addFiles(Object.values(restoredData.files));
-                    renderedSceneVersion.current = newVersion;
-                    apiSceneVersion.current = newVersion;
-                }
-            );
-            initialized.current = true;
-            return () => {
-                onChangeDisposer();
-                rDisposer();
-            };
-        }
-    }, [excalidrawAPI, doc]);
 
     if (!doc) {
         return <Loader />;
     }
-    if (!Lib) {
+    if (!Lib || !edit) {
         return (
-            <div style={{ height: '600px', width: '100%' }}>
-                <img src={doc.data.image} />
+            <div
+                className={clsx('card', styles.excalidraw, styles.preview)}
+                style={{ height: DEFAULT_HEIGHT }}
+            >
+                <div className={clsx(styles.actions)}>
+                    <SyncStatus model={doc} />
+                    <Button
+                        icon={Lib ? mdiCircleEditOutline : mdiLoading}
+                        spin={!Lib}
+                        onClick={() => setEdit(true)}
+                        color="orange"
+                        className={clsx(styles.edit)}
+                        disabled={!Lib || !doc.canEdit}
+                    />
+                </div>
+                <Preview id={props.id} meta={meta} />
             </div>
         );
     }
     return (
-        <div style={{ height: '600px', width: '100%' }}>
-            <Lib.Excalidraw
-                excalidrawAPI={(api) => setExcalidrawAPI(api)}
-                objectsSnapModeEnabled
-                langCode="de-DE"
-                theme={colorMode === 'dark' ? 'dark' : 'light'}
-                UIOptions={{ canvasActions: { toggleTheme: false } }}
-            >
-                <Lib.MainMenu>
-                    <Lib.MainMenu.DefaultItems.Export />
-                    <Lib.MainMenu.DefaultItems.SaveAsImage />
-                    <Lib.MainMenu.DefaultItems.ChangeCanvasBackground />
-                    <Lib.MainMenu.DefaultItems.ClearCanvas />
-                    <Lib.MainMenu.DefaultItems.Help />
-                </Lib.MainMenu>
-            </Lib.Excalidraw>
+        <div style={{ height: DEFAULT_HEIGHT, width: '100%' }} className={clsx(styles.excalidraw)}>
+            <div className={styles.actions}>
+                <SyncStatus model={doc} />
+                <Button
+                    onClick={() => {
+                        setEdit(false);
+                    }}
+                    icon={mdiClose}
+                />
+            </div>
+
+            <Editor Lib={Lib} id={props.id} meta={meta} />
         </div>
     );
 });

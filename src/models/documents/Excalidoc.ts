@@ -89,11 +89,13 @@ class Excalidoc extends iDocument<DocumentType.Excalidoc> {
                     .then((blob) => {
                         return blobToBase64(blob);
                     })
-                    .then((base64String) => {
-                        if (typeof base64String === 'string') {
-                            this.image = base64String;
-                        }
-                    })
+                    .then(
+                        action((base64String) => {
+                            if (typeof base64String === 'string') {
+                                this.image = base64String;
+                            }
+                        })
+                    )
                     .catch((e) => {
                         console.warn('Failed to export excalidraw to blob', e);
                     });
@@ -103,6 +105,7 @@ class Excalidoc extends iDocument<DocumentType.Excalidoc> {
             // TODO: fix this, if needed
             this.elements = data.elements;
             this.files = data.files;
+            this.image = data.image;
         }
         if (updatedAt) {
             this.updatedAt = new Date(updatedAt);

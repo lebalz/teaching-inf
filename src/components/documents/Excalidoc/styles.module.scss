@@ -1,0 +1,17 @@
+.excalidraw {
+    position: relative;
+    &.preview {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .actions {
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: var(--ifm-z-index-dropdown);
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+}

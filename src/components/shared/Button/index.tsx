@@ -2,7 +2,6 @@ import React, { MouseEventHandler, type ReactNode } from 'react';
 import clsx from 'clsx';
 
 import styles from './styles.module.scss';
-import { ApiState } from '@tdev-stores/iStore';
 import Link from '@docusaurus/Link';
 import { Color, getButtonColorClass } from '../Colors';
 import Icon from '@mdi/react';
@@ -20,8 +19,6 @@ export const POPUP_BUTTON_STYLE = clsx(
 export interface Base {
     onClick?: MouseEventHandler<HTMLButtonElement>;
     title?: string;
-    apiState?: ApiState;
-    apiIconSize?: number;
     href?: string;
     target?: '_blank' | `_self`;
     iconSide?: 'left' | 'right';
@@ -32,6 +29,7 @@ export interface Base {
     disabled?: boolean;
     size?: number;
     color?: Color | string;
+    spin?: boolean | number;
 }
 interface IconProps extends Base {
     icon: ReactNode | string;
@@ -63,8 +61,6 @@ export const extractSharedProps = (props: Base) => {
         noOutline: props.noOutline,
         href: props.href,
         disabled: props.disabled,
-        apiState: props.apiState,
-        apiIconSize: props.apiIconSize,
         color: props.color,
         size: props.size
     };
@@ -73,7 +69,7 @@ export const extractSharedProps = (props: Base) => {
 export const ButtonIcon = (props: Props) => {
     let icon = props.icon;
     if (typeof icon === 'string') {
-        icon = <Icon path={icon} size={props.size || 1} />;
+        icon = <Icon path={icon} size={props.size || 1} spin={props.spin} />;
     }
     return <>{icon && <span className={clsx(styles.icon, props.className)}>{icon}</span>}</>;
 };
