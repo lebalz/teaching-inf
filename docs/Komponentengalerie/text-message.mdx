@@ -63,6 +63,84 @@ Ein mögliches Beispiel für die Struktur der Daten des `DynamicDocumentRoots`:
 - `src/components/documents/DynamicDocumentRoots`
 :::
 
+:::info[Models]
+
+```tsx title="src/api/document.ts"
+export enum DocumentType {
+    /* ... */
+    TextMessage = 'text_message',
+    DynamicDocumentRoot = 'dynamic_document_root',
+    DynamicDocumentRoots = 'dynamic_document_roots'
+}
+
+export interface TextMessageData {
+    text: string;
+}
+
+export interface DynamicDocumentRootData {
+    /** such a document is never created - it's only the document root that is needed */
+}
+
+export enum RoomKind {
+    Messages = 'text_messages'
+}
+export interface DynamicDocumentRoot {
+    id: string;
+    name: string;
+    kind: RoomKind;
+}
+
+export interface DynamicDocumentRootsData {
+    documentRoots: DynamicDocumentRoot[];
+}
+export interface TypeDataMapping {
+    /* ... */
+    [DocumentType.TextMessage]: TextMessageData;
+    [DocumentType.DynamicDocumentRoot]: DynamicDocumentRootData;
+    [DocumentType.DynamicDocumentRoots]: DynamicDocumentRootsData;
+}
+
+export interface TypeModelMapping {
+    /* ... */
+    [DocumentType.TextMessage]: TextMessage;
+    [DocumentType.DynamicDocumentRoot]: DynamicDocumentRootModel;
+    [DocumentType.DynamicDocumentRoots]: DynamicDocumentRoots;
+}
+
+export type DocumentTypes =
+    /* ... */
+    | TextMessage
+    | DynamicDocumentRootModel
+    | DynamicDocumentRoots
+```
+:::
+
+:::info[Stores]
+```tsx title="src/stores/DocumentStore.ts" {4-12}
+export function CreateDocumentModel(data: DocumentProps<DocumentType>, store: DocumentStore): DocumentTypes {
+    switch (data.type) {
+        /* ... */
+        case DocumentType.TextMessage:
+            return new TextMessage(data as DocumentProps<DocumentType.TextMessage>, store);
+        case DocumentType.DynamicDocumentRoot:
+            return new DynamicDocumentRootModel(
+                data as DocumentProps<DocumentType.DynamicDocumentRoot>,
+                store
+            );
+        case DocumentType.DynamicDocumentRoots:
+            return new DynamicDocumentRoots(data as DocumentProps<DocumentType.DynamicDocumentRoots>, store);
+    }
+}
+```
+
+```ts title="src/stores/SocketDataStore.ts" {4}
+/**
+ * Records that should be created when a IoEvent.NEW_RECORD event is received.
+ */
+const RecordsToCreate = new Set<DocumentType>([DocumentType.DynamicDocumentRoots, DocumentType.TextMessage /* ... */]);
+/* ... */
+```
+:::
 :::info[`docusaurus.config.ts`]
 Die Landing-Page für die Räume `/rooms/<documentRootId>/<dynamicDocumentRootId>` muss im Docusaurus Router registriert werden.
 

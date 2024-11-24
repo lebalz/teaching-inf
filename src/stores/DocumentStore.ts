@@ -23,7 +23,7 @@ import { ChangedDocument } from '@tdev-api/IoEventTypes';
 import String from '@tdev-models/documents/String';
 import QuillV2 from '@tdev-models/documents/QuillV2';
 import Solution from '@tdev-models/documents/Solution';
-import { ROAccess, RWAccess } from '@tdev-models/helpers/accessPolicy';
+import { RWAccess } from '@tdev-models/helpers/accessPolicy';
 import Directory from '@tdev-models/documents/FileSystem/Directory';
 import File from '@tdev-models/documents/FileSystem/File';
 import MdxComment from '@tdev-models/documents/MdxComment';
