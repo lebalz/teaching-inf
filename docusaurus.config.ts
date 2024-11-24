@@ -29,7 +29,6 @@ import CopyWebpackPlugin from 'copy-webpack-plugin';
 const BUILD_LOCATION = __dirname;
 const GIT_COMMIT_SHA = process.env.GITHUB_SHA || Math.random().toString(36).substring(7);
 
-process.env.IS_PREACT = "false";
 const BEFORE_DEFAULT_REMARK_PLUGINS = [
   flexCardsPlugin,
   [
@@ -145,8 +144,7 @@ const config: Config = {
     TENANT_ID: process.env.TENANT_ID,
     /** The application id uri generated in https://portal.azure.com */
     API_URI: process.env.API_URI,
-    GIT_COMMIT_SHA: GIT_COMMIT_SHA,
-    ['process.env.IS_PREACT']: false
+    GIT_COMMIT_SHA: GIT_COMMIT_SHA
   },
   future: {
     experimental_faster: {
@@ -348,27 +346,6 @@ const config: Config = {
     ],
     () => {
       return {
-        name: 'load-.excalidraw-as-.json',
-        configureWebpack(config, isServer, utils, content) {
-          return {
-            module: {
-              rules: [
-                {
-                  test: /\.excalidraw$/,
-                  type: 'json',
-                },
-                {
-                  test: /\.excalidrawlib$/,
-                  type: 'json',
-                }
-              ]
-            }
-          }
-        }
-      }
-    },
-    () => {
-      return {
         name: 'alias-configuration',
         configureWebpack(config, isServer, utils, content) {
           return {
@@ -413,9 +390,21 @@ const config: Config = {
     },
     () => {
       return {
-          name: 'excalidraw-definde-process-env',
+          name: 'excalidraw-config',
           configureWebpack(config, isServer, {currentBundler}) {
             return {
+              module: {
+                rules: [
+                  {
+                    test: /\.excalidraw$/,
+                    type: 'json',
+                  },
+                  {
+                    test: /\.excalidrawlib$/,
+                    type: 'json',
+                  }
+                ]
+              },
               plugins: [
                 new currentBundler.instance.DefinePlugin({
                   'process.env.IS_PREACT': JSON.stringify('false')
