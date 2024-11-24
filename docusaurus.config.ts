@@ -348,6 +348,27 @@ const config: Config = {
     ],
     () => {
       return {
+        name: 'load-.excalidraw-as-.json',
+        configureWebpack(config, isServer, utils, content) {
+          return {
+            module: {
+              rules: [
+                {
+                  test: /\.excalidraw$/,
+                  type: 'json',
+                },
+                {
+                  test: /\.excalidrawlib$/,
+                  type: 'json',
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    () => {
+      return {
         name: 'alias-configuration',
         configureWebpack(config, isServer, utils, content) {
           return {

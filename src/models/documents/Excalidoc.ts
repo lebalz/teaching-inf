@@ -9,20 +9,29 @@ import type { default as ExcalidrawLib } from '@excalidraw/excalidraw';
 
 export interface MetaInit {
     readonly?: boolean;
+    defaultFiles?: BinaryFiles;
+    defaultElements?: readonly ExcalidrawElement[];
+    defaultImage?: string;
 }
 
 export class ModelMeta extends TypeMeta<DocumentType.Excalidoc> {
     readonly type = DocumentType.Excalidoc;
+    readonly defaultElements: readonly ExcalidrawElement[];
+    readonly defaultFiles: BinaryFiles;
+    readonly defaultImage: string;
 
     constructor(props: Partial<MetaInit>) {
         super(DocumentType.Excalidoc, props.readonly ? Access.RO_User : undefined);
+        this.defaultElements = props.defaultElements || [];
+        this.defaultFiles = props.defaultFiles || {};
+        this.defaultImage = props.defaultImage || '';
     }
 
     get defaultData(): TypeDataMapping[DocumentType.Excalidoc] {
         return {
-            elements: [],
-            files: {},
-            image: ''
+            elements: this.defaultElements,
+            files: this.defaultFiles,
+            image: this.defaultImage
         };
     }
 }

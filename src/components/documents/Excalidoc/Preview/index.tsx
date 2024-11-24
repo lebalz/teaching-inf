@@ -5,6 +5,7 @@ import { ModelMeta } from '@site/src/models/documents/Excalidoc';
 import _ from 'lodash';
 import clsx from 'clsx';
 import { useFirstRealMainDocument } from '@tdev-hooks/useFirstRealMainDocument';
+import Image from './Image';
 
 export interface Props {
     id: string;
@@ -17,15 +18,7 @@ const Preview = observer((props: Props) => {
     if (!excalidoc) {
         return null;
     }
-    const hasImage = !!excalidoc.data.image;
-    return (
-        <div className={clsx('card__image', styles.image)}>
-            <img
-                src={excalidoc.data.image || require('./images/excalidraw-logo.png').default}
-                className={clsx(!hasImage && styles.default)}
-            />
-        </div>
-    );
+    return <Image image={excalidoc.data.image} />;
 });
 
 export default Preview;

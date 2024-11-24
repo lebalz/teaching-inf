@@ -13,7 +13,9 @@ export interface Props extends MetaInit {
     Lib: typeof ExcalidrawLib;
     id: string;
     meta: ModelMeta;
-    libraryItems?: LibraryItems | Promise<LibraryItems>;
+    libraryItems?: LibraryItems;
+    allowImageInsertion?: boolean;
+    readonly?: boolean;
 }
 
 const Editor = observer((props: Props) => {
@@ -37,17 +39,10 @@ const Editor = observer((props: Props) => {
                 renderedSceneVersion.current = version;
                 const nonDeletedElements = Lib.getNonDeletedElements(elements);
                 apiSceneVersion.current = Lib.getSceneVersion(nonDeletedElements);
-                const restoredData = Lib.restore(
-                    {
-                        files: files
-                    },
-                    {},
-                    elements
-                );
                 excalidoc.setData(
                     {
                         image: '',
-                        files: restoredData.files,
+                        files: files,
                         elements: nonDeletedElements
                     },
                     Source.LOCAL,
@@ -62,16 +57,18 @@ const Editor = observer((props: Props) => {
                     if (newVersion === apiSceneVersion.current) {
                         return;
                     }
-                    const currentElements = excalidrawAPI.getSceneElementsIncludingDeleted();
-                    const restoredData = Lib.restore(
-                        { elements: elements, files: excalidoc.data.files },
-                        {},
-                        currentElements
+                    const restoredElements = Lib.restoreElements(
+                        elements,
+                        excalidrawAPI.getSceneElementsIncludingDeleted()
                     );
                     renderedSceneVersion.current = newVersion;
                     apiSceneVersion.current = newVersion;
-                    excalidrawAPI.addFiles(Object.values(restoredData.files));
-                    excalidrawAPI.updateScene(restoredData);
+                    excalidrawAPI.updateScene({
+                        elements: restoredElements,
+                        commitToHistory: true
+                    });
+                    excalidrawAPI.addFiles(Object.values(excalidoc.files));
+                    excalidrawAPI.setToast({ message: 'Änderungen übernommen', duration: 2000 });
                 }
             );
             initialized.current = true;
@@ -88,11 +85,11 @@ const Editor = observer((props: Props) => {
     return (
         <Lib.Excalidraw
             initialData={{
-                elements: excalidoc.elements,
+                elements: [...excalidoc.elements],
                 files: excalidoc.files,
                 appState: {
                     objectsSnapModeEnabled: true,
-                    zenModeEnabled: true
+                    zenModeEnabled: !props.libraryItems
                 },
                 scrollToContent: true,
                 libraryItems: props.libraryItems
@@ -101,7 +98,11 @@ const Editor = observer((props: Props) => {
             objectsSnapModeEnabled
             langCode="de-DE"
             theme={colorMode === 'dark' ? 'dark' : 'light'}
-            UIOptions={{ canvasActions: { toggleTheme: false } }}
+            UIOptions={{
+                canvasActions: { toggleTheme: false },
+                tools: { image: !!props.allowImageInsertion }
+            }}
+            viewModeEnabled={props.readonly || !excalidoc.canEdit}
         >
             <Lib.MainMenu>
                 <Lib.MainMenu.DefaultItems.Export />
