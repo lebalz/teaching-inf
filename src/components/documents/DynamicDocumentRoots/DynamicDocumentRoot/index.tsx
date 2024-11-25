@@ -5,7 +5,6 @@ import { observer } from 'mobx-react-lite';
 import Loader from '@tdev-components/Loader';
 import { MetaInit } from '@tdev-models/documents/DynamicDocumentRoots';
 import PermissionsPanel from '@tdev-components/PermissionsPanel';
-import { Access } from '@tdev-api/document';
 import { useStore } from '@tdev-hooks/useStore';
 import Button from '@tdev-components/shared/Button';
 import {
