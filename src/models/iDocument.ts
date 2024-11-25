@@ -214,23 +214,29 @@ abstract class iDocument<Type extends DocumentType> {
     }
 
     @action
-    _save() {
+    _save(onBeforeSave: () => Promise<void> = () => Promise.resolve()) {
         /**
          * call the api to save the code...
          */
         this.state = ApiState.SYNCING;
-        return this.store.save(this).then(
-            action((res) => {
-                if (res === 'error') {
-                    this.state = ApiState.ERROR;
-                } else {
-                    this.state = ApiState.SUCCESS;
-                    if (this.isDirty) {
-                        this._pristine = { ...this.data };
-                    }
-                }
+        return onBeforeSave()
+            .then(() => {
+                return this.store.save(this).then(
+                    action((res) => {
+                        if (res === 'error') {
+                            this.state = ApiState.ERROR;
+                        } else {
+                            this.state = ApiState.SUCCESS;
+                            if (this.isDirty) {
+                                this._pristine = { ...this.data };
+                            }
+                        }
+                    })
+                );
             })
-        );
+            .catch((e) => {
+                console.warn('OnBeforeSave failed for', this.id, e);
+            });
     }
 }
 

@@ -29,6 +29,7 @@ import File from '@tdev-models/documents/FileSystem/File';
 import MdxComment from '@tdev-models/documents/MdxComment';
 import Restricted from '@tdev-models/documents/Restricted';
 import CmsText from '@tdev-models/documents/CmsText';
+import Excalidoc from '@tdev-models/documents/Excalidoc';
 import TextMessage from '@tdev-models/documents/TextMessage';
 import DynamicDocumentRoots from '@tdev-models/documents/DynamicDocumentRoots';
 import { DynamicDocumentRootModel } from '@tdev-models/documents/DynamicDocumentRoot';
@@ -61,6 +62,8 @@ export function CreateDocumentModel(data: DocumentProps<DocumentType>, store: Do
             return new Restricted(data as DocumentProps<DocumentType.Restricted>, store);
         case DocumentType.CmsText:
             return new CmsText(data as DocumentProps<DocumentType.CmsText>, store);
+        case DocumentType.Excalidoc:
+            return new Excalidoc(data as DocumentProps<DocumentType.Excalidoc>, store);
         case DocumentType.TextMessage:
             return new TextMessage(data as DocumentProps<DocumentType.TextMessage>, store);
         case DocumentType.DynamicDocumentRoot:

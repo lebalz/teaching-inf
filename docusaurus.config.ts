@@ -399,6 +399,32 @@ const config: Config = {
             };
         }
       }
+    },
+    () => {
+      return {
+          name: 'excalidraw-config',
+          configureWebpack(config, isServer, {currentBundler}) {
+            return {
+              module: {
+                rules: [
+                  {
+                    test: /\.excalidraw$/,
+                    type: 'json',
+                  },
+                  {
+                    test: /\.excalidrawlib$/,
+                    type: 'json',
+                  }
+                ]
+              },
+              plugins: [
+                new currentBundler.instance.DefinePlugin({
+                  'process.env.IS_PREACT': JSON.stringify('false')
+                }),
+              ]
+            }
+          }
+      }
     }
   ],
   themes: [

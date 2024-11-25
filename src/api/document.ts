@@ -1,14 +1,14 @@
-import type Script from '../models/documents/Script';
-import type ScriptVersion from '../models/documents/ScriptVersion';
-import type TaskState from '../models/documents/TaskState';
-import type String from '../models/documents/String';
+import type Script from '@tdev-models/documents/Script';
+import type ScriptVersion from '@tdev-models/documents/ScriptVersion';
+import type TaskState from '@tdev-models/documents/TaskState';
+import type String from '@tdev-models/documents/String';
 import api from './base';
 import { AxiosPromise } from 'axios';
-import QuillV2 from '../models/documents/QuillV2';
+import QuillV2 from '@tdev-models/documents/QuillV2';
 import { Delta } from 'quill/core';
-import Solution from '../models/documents/Solution';
-import Directory from '../models/documents/FileSystem/Directory';
-import File from '../models/documents/FileSystem/File';
+import Solution from '@tdev-models/documents/Solution';
+import Directory from '@tdev-models/documents/FileSystem/Directory';
+import File from '@tdev-models/documents/FileSystem/File';
 import Restricted from '@tdev-models/documents/Restricted';
 import MdxComment from '@tdev-models/documents/MdxComment';
 import { Color } from '@tdev-components/shared/Colors';
@@ -16,6 +16,9 @@ import CmsText from '@tdev-models/documents/CmsText';
 import TextMessage from '@tdev-models/documents/TextMessage';
 import DynamicDocumentRoots from '@tdev-models/documents/DynamicDocumentRoots';
 import { DynamicDocumentRootModel } from '@tdev-models/documents/DynamicDocumentRoot';
+import Excalidoc from '@tdev-models/documents/Excalidoc';
+import type { ExcalidrawElement } from '@excalidraw/excalidraw/types/element/types';
+import type { BinaryFiles } from '@excalidraw/excalidraw/types/types';
 
 export enum Access {
     RO_DocumentRoot = 'RO_DocumentRoot',
@@ -41,6 +44,7 @@ export enum DocumentType {
     MdxComment = 'mdx_comment',
     Restricted = 'restricted',
     CmsText = 'cms_text',
+    Excalidoc = 'excalidoc',
     TextMessage = 'text_message',
     DynamicDocumentRoot = 'dynamic_document_root',
     DynamicDocumentRoots = 'dynamic_document_roots'
@@ -84,6 +88,12 @@ export interface DirData {
 export interface FileData {
     name: string;
     isOpen: boolean;
+}
+
+export interface ExcaliData {
+    files: BinaryFiles;
+    elements: readonly ExcalidrawElement[];
+    image: string;
 }
 
 export type StateType =
@@ -141,6 +151,7 @@ export interface TypeDataMapping {
     [DocumentType.MdxComment]: MdxCommentData;
     [DocumentType.Restricted]: RestrictedData;
     [DocumentType.CmsText]: CmsTextData;
+    [DocumentType.Excalidoc]: ExcaliData;
     [DocumentType.TextMessage]: TextMessageData;
     [DocumentType.DynamicDocumentRoot]: DynamicDocumentRootData;
     [DocumentType.DynamicDocumentRoots]: DynamicDocumentRootsData;
@@ -159,6 +170,7 @@ export interface TypeModelMapping {
     [DocumentType.MdxComment]: MdxComment;
     [DocumentType.Restricted]: Restricted;
     [DocumentType.CmsText]: CmsText;
+    [DocumentType.Excalidoc]: Excalidoc;
     [DocumentType.TextMessage]: TextMessage;
     [DocumentType.DynamicDocumentRoot]: DynamicDocumentRootModel;
     [DocumentType.DynamicDocumentRoots]: DynamicDocumentRoots;
@@ -182,6 +194,7 @@ export type DocumentTypes =
     | MdxComment
     | Restricted
     | CmsText
+    | Excalidoc
     | TextMessage
     | DynamicDocumentRootModel
     | DynamicDocumentRoots;
