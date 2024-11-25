@@ -13,6 +13,9 @@ import Restricted from '@tdev-models/documents/Restricted';
 import MdxComment from '@tdev-models/documents/MdxComment';
 import { Color } from '@tdev-components/shared/Colors';
 import CmsText from '@tdev-models/documents/CmsText';
+import TextMessage from '@tdev-models/documents/TextMessage';
+import DynamicDocumentRoots from '@tdev-models/documents/DynamicDocumentRoots';
+import { DynamicDocumentRootModel } from '@tdev-models/documents/DynamicDocumentRoot';
 import Excalidoc from '@tdev-models/documents/Excalidoc';
 import type { ExcalidrawElement } from '@excalidraw/excalidraw/types/element/types';
 import type { BinaryFiles } from '@excalidraw/excalidraw/types/types';
@@ -41,8 +44,12 @@ export enum DocumentType {
     MdxComment = 'mdx_comment',
     Restricted = 'restricted',
     CmsText = 'cms_text',
-    Excalidoc = 'excalidoc'
+    Excalidoc = 'excalidoc',
+    TextMessage = 'text_message',
+    DynamicDocumentRoot = 'dynamic_document_root',
+    DynamicDocumentRoots = 'dynamic_document_roots'
 }
+
 export interface ScriptData {
     code: string;
 }
@@ -110,6 +117,28 @@ export interface MdxCommentData {
     isOpen: boolean;
     color: Color;
 }
+
+export interface TextMessageData {
+    text: string;
+}
+
+export interface DynamicDocumentRootData {
+    /** such a document is never created - it's only the document root that is needed */
+}
+
+export enum RoomType {
+    Messages = 'text_messages'
+}
+export interface DynamicDocumentRoot {
+    id: string;
+    name: string;
+    type: RoomType;
+}
+
+export interface DynamicDocumentRootsData {
+    documentRoots: DynamicDocumentRoot[];
+}
+
 export interface TypeDataMapping {
     [DocumentType.Script]: ScriptData;
     [DocumentType.TaskState]: TaskStateData;
@@ -123,6 +152,9 @@ export interface TypeDataMapping {
     [DocumentType.Restricted]: RestrictedData;
     [DocumentType.CmsText]: CmsTextData;
     [DocumentType.Excalidoc]: ExcaliData;
+    [DocumentType.TextMessage]: TextMessageData;
+    [DocumentType.DynamicDocumentRoot]: DynamicDocumentRootData;
+    [DocumentType.DynamicDocumentRoots]: DynamicDocumentRootsData;
     // Add more mappings as needed
 }
 
@@ -139,6 +171,9 @@ export interface TypeModelMapping {
     [DocumentType.Restricted]: Restricted;
     [DocumentType.CmsText]: CmsText;
     [DocumentType.Excalidoc]: Excalidoc;
+    [DocumentType.TextMessage]: TextMessage;
+    [DocumentType.DynamicDocumentRoot]: DynamicDocumentRootModel;
+    [DocumentType.DynamicDocumentRoots]: DynamicDocumentRoots;
     /**
      * Add more mappings as needed
      * TODO: implement the mapping in DocumentRoot.ts
@@ -159,7 +194,10 @@ export type DocumentTypes =
     | MdxComment
     | Restricted
     | CmsText
-    | Excalidoc;
+    | Excalidoc
+    | TextMessage
+    | DynamicDocumentRootModel
+    | DynamicDocumentRoots;
 
 export interface Document<Type extends DocumentType> {
     id: string;
