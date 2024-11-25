@@ -10,6 +10,8 @@ import { Access } from '@tdev-api/document';
 import { useStore } from '@tdev-hooks/useStore';
 import AddDynamicDocumentRoot from './AddDynamicDocumentRoot';
 import DynamicDocumentRoot from './DynamicDocumentRoot';
+import NoAccess from '@tdev-components/shared/NoAccess';
+import { NotCreated } from '@tdev-components/Rooms';
 
 interface Props extends MetaInit {
     id: string;
@@ -33,9 +35,8 @@ const DynamicDocumentRoots = observer((props: Props) => {
     if (!doc) {
         return (
             <div>
-                {props.id}
                 <PermissionsPanel documentRootId={props.id} />
-                <Loader />
+                <NotCreated />
             </div>
         );
     }

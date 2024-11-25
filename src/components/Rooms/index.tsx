@@ -41,7 +41,7 @@ const NoType = ({ dynamicRoot }: { dynamicRoot: DynamicDocumentRootMeta }) => {
     );
 };
 
-const NotCreated = () => {
+export const NotCreated = () => {
     return (
         <div className={clsx('alert alert--warning', styles.alert)} role="alert">
             <Icon path={mdiEmoticonSad} size={1} color="var(--ifm-color-warning)" />
