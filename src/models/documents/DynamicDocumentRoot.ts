@@ -6,7 +6,7 @@ import {
     DynamicDocumentRoot as DynamicDocumentRootProps,
     TypeDataMapping,
     Access,
-    RoomKind
+    RoomType
 } from '@tdev-api/document';
 import DocumentStore from '@tdev-stores/DocumentStore';
 import DocumentRoot, { TypeMeta } from '@tdev-models/DocumentRoot';
@@ -59,11 +59,11 @@ class DynamicDocumentRoot extends TypeMeta<DocumentType.DynamicDocumentRoot> {
     }
 
     @computed
-    get kind(): RoomKind | undefined {
+    get roomType(): RoomType | undefined {
         if (!this.parentDocument) {
             return undefined;
         }
-        return this.props?.kind;
+        return this.props?.type;
     }
 
     @action
@@ -81,11 +81,11 @@ class DynamicDocumentRoot extends TypeMeta<DocumentType.DynamicDocumentRoot> {
     }
 
     @action
-    setKind(type: RoomKind): void {
+    setRoomType(type: RoomType): void {
         if (!this.parentDocument) {
             return;
         }
-        this.parentDocument.setKind(this.rootDocumentId, type);
+        this.parentDocument.setRoomType(this.rootDocumentId, type);
         this.parentDocument.saveNow();
     }
 

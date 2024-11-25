@@ -5,7 +5,7 @@ import { useStore } from '@tdev-hooks/useStore';
 import { v4 as uuidv4 } from 'uuid';
 import Button from '@tdev-components/shared/Button';
 import { mdiPlusCircleOutline } from '@mdi/js';
-import { RoomKind } from '@tdev-api/document';
+import { RoomType } from '@tdev-api/document';
 
 interface Props extends MetaInit {
     dynamicDocumentRoots: DynamicDocumentRoots;
@@ -31,7 +31,7 @@ const AddDynamicDocumentRoot = observer((props: Props) => {
                     dynamicDocumentRoots.addDynamicDocumentRoot(
                         newId,
                         `Neue Gruppe (${dynamicDocumentRoots.dynamicDocumentRoots.length + 1})`,
-                        RoomKind.Messages
+                        RoomType.Messages
                     );
                 }}
             />

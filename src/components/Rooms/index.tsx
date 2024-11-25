@@ -10,7 +10,7 @@ import { mdiAccountAlert, mdiEmoticonSad } from '@mdi/js';
 import { useStore } from '@tdev-hooks/useStore';
 import styles from './styles.module.scss';
 import React from 'react';
-import { DocumentType, DynamicDocumentRoot, RoomKind } from '@tdev-api/document';
+import { DocumentType, DynamicDocumentRoot, RoomType } from '@tdev-api/document';
 import { ModelMeta as RootsMeta } from '@tdev-models/documents/DynamicDocumentRoots';
 import { default as DynamicDocumentRootMeta } from '@tdev-models/documents/DynamicDocumentRoot';
 import { useDocumentRoot } from '@tdev-hooks/useDocumentRoot';
@@ -19,7 +19,7 @@ import PermissionsPanel from '@tdev-components/PermissionsPanel';
 import { NoneAccess } from '@tdev-models/helpers/accessPolicy';
 import NoAccess from '@tdev-components/shared/NoAccess';
 import TextMessages from './TextMessages';
-import RoomKindSelector from '@tdev-components/documents/DynamicDocumentRoots/RoomKindSelector';
+import RoomTypeSelector from '@tdev-components/documents/DynamicDocumentRoots/RoomTypeSelector';
 
 const NoRoom = () => {
     return (
@@ -34,9 +34,9 @@ const NoType = ({ dynamicRoot }: { dynamicRoot: DynamicDocumentRootMeta }) => {
     return (
         <div className={clsx('alert alert--warning', styles.alert)} role="alert">
             <Icon path={mdiEmoticonSad} size={1} color="var(--ifm-color-warning)" />
-            Unbekannter Raum-Typ "{dynamicRoot.props?.kind}"
+            Unbekannter Raum-Typ "{dynamicRoot.props?.type}"
             <div style={{ flexGrow: 1, flexBasis: 0 }} />
-            <RoomKindSelector dynamicRoot={dynamicRoot} />
+            <RoomTypeSelector dynamicRoot={dynamicRoot} />
         </div>
     );
 };
@@ -92,8 +92,8 @@ const RoomComponent = observer((props: Props): JSX.Element => {
             </>
         );
     }
-    switch (roomProps.kind) {
-        case RoomKind.Messages:
+    switch (roomProps.type) {
+        case RoomType.Messages:
             return <TextMessages documentRoot={documentRoot} roomProps={roomProps} />;
         default:
             return <NoType dynamicRoot={dynamicRoot} />;
