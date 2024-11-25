@@ -22,7 +22,13 @@ const DynamicDocumentRoots = observer((props: Props) => {
     const user = userStore.current;
     const doc = useFirstRealMainDocument(props.id, meta, user?.isAdmin, {
         access: Access.RO_DocumentRoot,
-        sharedAccess: Access.RO_DocumentRoot
+        /**
+         * there is only one document root for dynamic document roots
+         * -> we can use RW_DocumentRoot here to give every user with
+         *    "RW_UserAccess" or "RW_GroupAccess" access to the document root
+         *    and provide the ability to actually create and manipulate rooms.
+         */
+        sharedAccess: Access.RW_DocumentRoot
     });
     if (!doc) {
         return (

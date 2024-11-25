@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import Button from '@tdev-components/shared/Button';
 import { mdiPlusCircleOutline } from '@mdi/js';
 import { RoomType } from '@tdev-api/document';
+import { RWAccess } from '@tdev-models/helpers/accessPolicy';
 
 interface Props extends MetaInit {
     dynamicDocumentRoots: DynamicDocumentRoots;
@@ -26,6 +27,7 @@ const AddDynamicDocumentRoot = observer((props: Props) => {
                 title='Neue "Document Root" hinzufügen'
                 icon={mdiPlusCircleOutline}
                 iconSide="left"
+                disabled={!RWAccess.has(dynamicDocumentRoots.root?.permission)}
                 onClick={() => {
                     const newId = uuidv4();
                     dynamicDocumentRoots.addDynamicDocumentRoot(

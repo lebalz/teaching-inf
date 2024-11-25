@@ -90,17 +90,23 @@ class DynamicDocumentRoots extends iDocument<DocumentType.DynamicDocumentRoots> 
                 access: Access.None_DocumentRoot,
                 sharedAccess: Access.RO_DocumentRoot
             })
-            .then((dynRoot) => {
-                this.setData(
-                    {
-                        documentRoots: [...this.dynamicDocumentRoots, { id, name, type: roomType }]
-                    },
-                    Source.LOCAL,
-                    new Date()
-                );
-                return this.saveNow();
-            })
+            .then(
+                action((dynRoot) => {
+                    this.setData(
+                        {
+                            documentRoots: [
+                                ...this.dynamicDocumentRoots,
+                                { id: id, name: name, type: roomType }
+                            ]
+                        },
+                        Source.LOCAL,
+                        new Date()
+                    );
+                    return this.saveNow();
+                })
+            )
             .catch((e) => {
+                console.log('Failed to create dynamic document root', e);
                 const createdDynDoc = this.store.root.documentRootStore.find(id);
                 if (createdDynDoc) {
                     this.store.root.documentRootStore.destroy(createdDynDoc).then((success) => {

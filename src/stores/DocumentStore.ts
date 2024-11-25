@@ -254,7 +254,7 @@ class DocumentStore extends iStore<`delete-${string}`> {
             )
             .catch((err) => {
                 if (!axios.isCancel(err)) {
-                    console.warn('Error saving document', err);
+                    console.warn('Error creating document', err);
                 }
                 return undefined;
             });

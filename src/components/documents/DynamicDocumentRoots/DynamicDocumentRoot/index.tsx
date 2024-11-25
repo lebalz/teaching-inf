@@ -47,7 +47,7 @@ const DynamicDocumentRoot = observer((props: Props) => {
                 <input
                     type="text"
                     value={title}
-                    placeholder="Dynamische Dokumentenwurzel"
+                    placeholder="Dynamische Document Root"
                     onChange={(e) => {
                         setTitle(e.target.value);
                     }}
