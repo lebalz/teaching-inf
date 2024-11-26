@@ -3,7 +3,6 @@ import Popup from 'reactjs-popup';
 import styles from './styles.module.scss';
 import Button from '@tdev-components/shared/Button';
 import { mdiShieldLockOutline } from '@mdi/js';
-import DocumentRoot from '@tdev-models/DocumentRoot';
 import { observer } from 'mobx-react-lite';
 import { Access } from '@tdev-api/document';
 import { useStore } from '@tdev-hooks/useStore';
@@ -15,6 +14,7 @@ import DefinitionList from '../DefinitionList';
 import { action } from 'mobx';
 import UserPermission from '@tdev-components/PermissionsPanel/UserPermission';
 import { PopupPosition } from 'reactjs-popup/dist/types';
+import useIsMobileView from '@tdev-hooks/useIsMobileView';
 
 interface Props {
     documentRootId: string;
@@ -25,6 +25,7 @@ const PermissionsPanel = observer(({ documentRootId, position }: Props) => {
     const userStore = useStore('userStore');
     const documentRootStore = useStore('documentRootStore');
     const permissionStore = useStore('permissionStore');
+    const isMobileView = useIsMobileView(470);
     const documentRoot = documentRootStore.find(documentRootId);
     const { viewedUser } = userStore;
 
@@ -67,8 +68,11 @@ const PermissionsPanel = observer(({ documentRootId, position }: Props) => {
             }
             on="click"
             closeOnDocumentClick
+            overlayStyle={{ background: isMobileView ? 'rgba(0,0,0,0.5)' : undefined }}
             closeOnEscape
             position={position}
+            keepTooltipInside=".markdown"
+            modal={isMobileView}
             onOpen={action(() => {
                 permissionStore.loadPermissions(documentRoot);
             })}
