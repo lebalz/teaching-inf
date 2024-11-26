@@ -96,6 +96,7 @@ const Editor = observer((props: Props) => {
         }, 50);
         document.addEventListener('scroll', onscroll);
         return () => {
+            onscroll.cancel();
             document.removeEventListener('scroll', onscroll);
         };
     }, [excalidrawAPI]);

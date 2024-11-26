@@ -13,6 +13,7 @@ const useIsMobileView = (mobileViewWidth: number = 768) => {
         handleResize(); // Initial check
 
         return () => {
+            handleResize.cancel();
             window.removeEventListener('resize', handleResize);
         };
     }, [mobileViewWidth]);
