@@ -27,6 +27,7 @@ const Editor = observer((props: Props) => {
     const apiSceneVersion = React.useRef(0);
     const [excalidrawAPI, setExcalidrawAPI] = React.useState<ExcalidrawImperativeAPI>();
     const { colorMode } = useColorMode();
+
     React.useEffect(() => {
         if (excalidrawAPI && excalidoc && !initialized.current) {
             excalidrawAPI.scrollToContent(excalidoc.elements, { fitToViewport: true });
@@ -80,6 +81,25 @@ const Editor = observer((props: Props) => {
             };
         }
     }, [excalidrawAPI, excalidoc]);
+
+    /**
+     * ensure that excalidraw has a correct offset and scroll position
+     * for cursors.
+     * Reading the docs, this should not be needed: https://docs.excalidraw.com/docs/@excalidraw/excalidraw/api/props/excalidraw-api#refresh
+     * But somehow, this bug's for the viewMode...
+     */
+    React.useEffect(() => {
+        const onscroll = _.debounce(() => {
+            if (excalidrawAPI) {
+                excalidrawAPI.refresh();
+            }
+        }, 50);
+        document.addEventListener('scroll', onscroll);
+        return () => {
+            document.removeEventListener('scroll', onscroll);
+        };
+    }, [excalidrawAPI]);
+
     if (!excalidoc || !Lib) {
         return null;
     }
@@ -95,8 +115,8 @@ const Editor = observer((props: Props) => {
                 scrollToContent: true,
                 libraryItems: props.libraryItems
             }}
-            excalidrawAPI={(api) => setExcalidrawAPI(api)}
             objectsSnapModeEnabled
+            excalidrawAPI={(api) => setExcalidrawAPI(api)}
             langCode="de-DE"
             theme={colorMode === 'dark' ? 'dark' : 'light'}
             UIOptions={{
