@@ -24,11 +24,7 @@ const TextMessages = observer((props: Props): JSX.Element => {
         <div className={clsx(styles.wrapper)}>
             <div className={clsx(styles.rooms)}>
                 <h1 className={clsx(styles.name)}>
-                    {dynamicDocumentRoot.name}{' '}
-                    <PermissionsPanel
-                        documentRootId={documentRoot.id}
-                        position={['top right', 'bottom right']}
-                    />
+                    {dynamicDocumentRoot.name} <PermissionsPanel documentRootId={documentRoot.id} />
                 </h1>
                 <Conversation group={documentRoot} />
                 <NewMessage group={documentRoot} />

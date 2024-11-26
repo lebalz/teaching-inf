@@ -119,7 +119,7 @@ const DynamicDocumentRoot = observer((props: Props) => {
                         />
                     </>
                 )}
-                <PermissionsPanel documentRootId={docRoot.id} position={['bottom right', 'top right']} />
+                <PermissionsPanel documentRootId={docRoot.id} />
             </div>
         </div>
     );

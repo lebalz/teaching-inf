@@ -44,7 +44,7 @@ const DynamicDocumentRoots = observer((props: Props) => {
         <div className={clsx('card', styles.docRoots)}>
             <div className={clsx(styles.header, 'card__header')}>
                 <h3>{props.name || 'Gruppe'}</h3>
-                <PermissionsPanel documentRootId={props.id} position={['top right', 'bottom right']} />
+                <PermissionsPanel documentRootId={props.id} />
             </div>
             <div className={clsx(styles.body, 'card__body')}>
                 <div className={clsx(styles.actions)}>
