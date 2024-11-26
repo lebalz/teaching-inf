@@ -8,24 +8,26 @@ import { useColorMode } from '@docusaurus/theme-common';
 import type { default as ExcalidrawLib } from '@excalidraw/excalidraw';
 import _ from 'lodash';
 import { useFirstRealMainDocument } from '@tdev-hooks/useFirstRealMainDocument';
+import { useDocument } from '@tdev-hooks/useDocument';
+import { DocumentType } from '@tdev-api/document';
 
 export interface Props extends MetaInit {
     Lib: typeof ExcalidrawLib;
-    id: string;
-    meta: ModelMeta;
+    documentId: string;
     libraryItems?: LibraryItems;
     allowImageInsertion?: boolean;
     readonly?: boolean;
 }
 
 const Editor = observer((props: Props) => {
-    const { Lib, meta } = props;
-    const excalidoc = useFirstRealMainDocument(props.id, meta);
+    const { Lib, documentId } = props;
+    const excalidoc = useDocument<DocumentType.Excalidoc>(documentId);
     const renderedSceneVersion = React.useRef(0);
     const initialized = React.useRef<boolean>(false);
     const apiSceneVersion = React.useRef(0);
     const [excalidrawAPI, setExcalidrawAPI] = React.useState<ExcalidrawImperativeAPI>();
     const { colorMode } = useColorMode();
+
     React.useEffect(() => {
         if (excalidrawAPI && excalidoc && !initialized.current) {
             excalidrawAPI.scrollToContent(excalidoc.elements, { fitToViewport: true });
@@ -79,6 +81,26 @@ const Editor = observer((props: Props) => {
             };
         }
     }, [excalidrawAPI, excalidoc]);
+
+    /**
+     * ensure that excalidraw has a correct offset and scroll position
+     * for cursors.
+     * Reading the docs, this should not be needed: https://docs.excalidraw.com/docs/@excalidraw/excalidraw/api/props/excalidraw-api#refresh
+     * But somehow, this bug's for the viewMode...
+     */
+    React.useEffect(() => {
+        const onscroll = _.debounce(() => {
+            if (excalidrawAPI) {
+                excalidrawAPI.refresh();
+            }
+        }, 50);
+        document.addEventListener('scroll', onscroll);
+        return () => {
+            onscroll.cancel();
+            document.removeEventListener('scroll', onscroll);
+        };
+    }, [excalidrawAPI]);
+
     if (!excalidoc || !Lib) {
         return null;
     }
@@ -94,8 +116,8 @@ const Editor = observer((props: Props) => {
                 scrollToContent: true,
                 libraryItems: props.libraryItems
             }}
-            excalidrawAPI={(api) => setExcalidrawAPI(api)}
             objectsSnapModeEnabled
+            excalidrawAPI={(api) => setExcalidrawAPI(api)}
             langCode="de-DE"
             theme={colorMode === 'dark' ? 'dark' : 'light'}
             UIOptions={{

@@ -84,10 +84,7 @@ const RoomComponent = observer((props: Props): JSX.Element => {
         return (
             <>
                 <NoAccess header={dynamicRoot.name}>
-                    <PermissionsPanel
-                        documentRootId={roomProps.id}
-                        position={['top right', 'bottom right']}
-                    />
+                    <PermissionsPanel documentRootId={roomProps.id} />
                 </NoAccess>
             </>
         );
