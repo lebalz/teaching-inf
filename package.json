@@ -37,6 +37,7 @@
         "@docusaurus/preset-classic": "^3.6.3",
         "@docusaurus/theme-classic": "^3.6.3",
         "@docusaurus/theme-common": "^3.6.3",
+        "@excalidraw/excalidraw": "^0.17.6",
         "@mdi/js": "^7.4.47",
         "@mdi/react": "^1.6.1",
         "@mdx-js/react": "^3.0.0",
