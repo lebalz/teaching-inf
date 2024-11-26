@@ -15,20 +15,21 @@ import Button from '@tdev-components/shared/Button';
 import { LibraryItems } from '@excalidraw/excalidraw/types/types';
 import Image from './Preview/Image';
 import PermissionsPanel from '@tdev-components/PermissionsPanel';
+import { useDocument } from '@tdev-hooks/useDocument';
+import { DocumentType } from '@tdev-api/document';
 
 export const DEFAULT_HEIGHT = '600px' as const;
 
-export interface Props extends MetaInit {
+interface ExcaliProps {
     id: string;
     height?: string;
     allowImageInsertion?: boolean;
     libraryItems?: LibraryItems;
     useExcalidrawViewer?: boolean;
 }
+export interface Props extends MetaInit, ExcaliProps {}
 
 const Excalidoc = observer((props: Props) => {
-    const [edit, setEdit] = React.useState(false);
-    const Lib = useExcalidraw();
     const [meta] = React.useState(new ModelMeta(props));
     const doc = useFirstRealMainDocument(props.id, meta);
 
@@ -43,12 +44,23 @@ const Excalidoc = observer((props: Props) => {
             </div>
         );
     }
+    return <ExcalidocComponent {...props} documentId={doc.id} />;
+});
+
+export const ExcalidocComponent = observer((props: Omit<ExcaliProps, 'id'> & { documentId: string }) => {
+    const [edit, setEdit] = React.useState(false);
+    const Lib = useExcalidraw();
+    const doc = useDocument<DocumentType.Excalidoc>(props.documentId);
+
+    if (!doc) {
+        return <Loader />;
+    }
     if (!Lib || (!edit && !props.useExcalidrawViewer)) {
         return (
             <div className={clsx('card', styles.excalidraw, styles.preview)}>
                 <div className={clsx(styles.actions)}>
                     <SyncStatus model={doc} />
-                    <PermissionsPanel documentRootId={props.id} />
+                    <PermissionsPanel documentRootId={doc.documentRootId} />
                     <Button
                         icon={Lib ? mdiCircleEditOutline : mdiLoading}
                         spin={!Lib}
@@ -58,7 +70,7 @@ const Excalidoc = observer((props: Props) => {
                         disabled={!Lib}
                     />
                 </div>
-                <Preview id={props.id} meta={meta} />
+                <Preview documentId={doc.id} />
             </div>
         );
     }
@@ -69,7 +81,7 @@ const Excalidoc = observer((props: Props) => {
         >
             <div className={styles.actions}>
                 <SyncStatus model={doc} />
-                <PermissionsPanel documentRootId={props.id} />
+                <PermissionsPanel documentRootId={doc.documentRootId} />
                 {props.useExcalidrawViewer && !edit && (
                     <Button
                         icon={Lib ? mdiCircleEditOutline : mdiLoading}
@@ -93,8 +105,7 @@ const Excalidoc = observer((props: Props) => {
             </div>
             <Editor
                 Lib={Lib}
-                id={props.id}
-                meta={meta}
+                documentId={doc.id}
                 libraryItems={props.libraryItems}
                 allowImageInsertion={props.allowImageInsertion}
                 readonly={!edit}

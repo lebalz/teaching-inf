@@ -8,19 +8,20 @@ import { useColorMode } from '@docusaurus/theme-common';
 import type { default as ExcalidrawLib } from '@excalidraw/excalidraw';
 import _ from 'lodash';
 import { useFirstRealMainDocument } from '@tdev-hooks/useFirstRealMainDocument';
+import { useDocument } from '@tdev-hooks/useDocument';
+import { DocumentType } from '@tdev-api/document';
 
 export interface Props extends MetaInit {
     Lib: typeof ExcalidrawLib;
-    id: string;
-    meta: ModelMeta;
+    documentId: string;
     libraryItems?: LibraryItems;
     allowImageInsertion?: boolean;
     readonly?: boolean;
 }
 
 const Editor = observer((props: Props) => {
-    const { Lib, meta } = props;
-    const excalidoc = useFirstRealMainDocument(props.id, meta);
+    const { Lib, documentId } = props;
+    const excalidoc = useDocument<DocumentType.Excalidoc>(documentId);
     const renderedSceneVersion = React.useRef(0);
     const initialized = React.useRef<boolean>(false);
     const apiSceneVersion = React.useRef(0);
