@@ -3,4 +3,6 @@
 !02-Programmieren-1/02-Turtlegrafik/_category_.json
 03-Word/*
 02-Programmieren-1/10-IN-Biber/*
-03-Word/_category_.json
+04-Webseiten/*
+!04-Webseiten/04-netlify/
+04-Webseiten/_category_.json
