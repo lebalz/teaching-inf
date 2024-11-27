@@ -1,0 +1,100 @@
+---
+page_id: b6f2c134-c3fb-4790-aa63-38821b09c6f9
+---
+
+# HTML
+
+HTML ist eine Abkürzung und steht für **H**yper**t**ext **M**arkup **L**anguage. Es ist eine **Auszeichnungssprache**, die verwendet wird, um Inhalte im Web zu strukturieren und zu formatieren. HTML ist die Grundlage für jede Webseite im Internet.
+
+Die Struktur eines Textes wird in HTML durch __Tags__ definiert.
+
+:::cards{flexBasis=250px}
+```html
+<name>Inhalt</name>
+```
+- Tags werden nie angezeigt, sondern nur der Inhalt zwischen den Tags.
+- Es gibt öffnende Tags (`<name>`)...
+- ...und schliessende Tags (`</name>`).
+::br
+Tags können auch verschachtelt werden:
+```html
+<überschrift>
+    Eine <fett>wichtige</fett> Information
+</überschrift>
+```
+wobei Zeilenumbrüche keine Rolle spielen - obige Struktur ist gleichbedeutend mit:
+```html
+<überschrift>Eine <fett>wichtige</fett> Information</überschrift>
+```
+:::
+
+## Tag-Namen
+Das [World Wide Web Consortium](https://www.w3.org/) (W3C) hat ab 1994 die Spezifikationen für HTML festgelegt, wobei sie auch die Tag-Namen für verschiedene Struktur-Elemente eines Dokuments festgelegt haben.
+
+`h1`
+: Überschrift 1. Die grösste Überschrift
+`h2`
+: Überschrift 2. Eine etwas kleinere Überschrift
+`h3`, `h4`, `h5`, `h6`
+: Überschriften 3 bis 6. Immer kleiner werdende Überschriften
+`p`
+: Absatz oder Paragraph - wie in Word...
+`a`
+: Link. Verknüpfung zu einer anderen Webseite.
+`ul`
+: Ungeordnete Liste. Eine Liste ohne Nummerierung.
+`ol`
+: Geordnete Liste. Eine Liste mit Nummerierung.
+`li`
+: Listenelement. Ein Element in einer Liste.
+`b`
+: Fett. Text fett darstellen.
+`i`
+: Kursiv. Text kursiv darstellen.
+`u`
+: Unterstrichen. Text unterstrichen darstellen.
+`div`
+: Division. Ein Container für andere Elemente.
+`span`
+: Ein Container für Inline-Elemente.
+
+### Attribute
+
+Für einige Elemente braucht es zusätzliche Informationen, damit sie korrekt dargestellt werden können. Beispielsweise muss bei einem Bild angegeben werden, wo das Bild zu finden ist! Diese Information wird in einem __Attribut__ gespeichert.
+
+```html
+<img src="bild.jpg">
+```
+:::warning[Kein schliessendes Tag]
+Es gibt einige wenige Tags, wie das Bild-Tag `<img>`, die kein schliessendes Tag haben. Sie werden auch als __leere Tags__ bezeichnet.
+:::
+
+Weitere Attribute sind:
+
+`alt`
+: Alternativer Text, der angezeigt wird, wenn das Bild nicht geladen werden kann.
+`width`
+: Breite des Bildes.
+`height`
+: Höhe des Bildes.
+`href`
+: Der Link, auf den verwiesen wird.
+: z.B. `<a href="https://www.google.com">Google</a>`
+
+## Beispiel
+
+::codepen[https://codepen.io/lebalz/pen/KwPKbpJ]{defaultTab=html,result height=700px}
+
+
+## VS Code
+
+VS Code ist ein Text-Editor, mit dem man HTML-Dateien praktisch bearbeiten kann.
+
+:::aufgabe[VS Code installieren]
+<Answer type="state" id="f6a96a4c-ada7-420a-9090-49098a499ac5" />
+
+Installation
+: [VS Code](https://code.visualstudio.com/) herunterladen und installieren.
+
+Markieren Sie diese Aufgabe als erledigt, wenn Sie VS Code installiert haben.
+:::
