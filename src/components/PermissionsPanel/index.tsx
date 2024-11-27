@@ -22,6 +22,7 @@ interface Props {
 }
 
 const PermissionsPanel = observer(({ documentRootId, position }: Props) => {
+    const [isOpen, setIsOpen] = React.useState(false);
     const userStore = useStore('userStore');
     const documentRootStore = useStore('documentRootStore');
     const permissionStore = useStore('permissionStore');
@@ -62,7 +63,8 @@ const PermissionsPanel = observer(({ documentRootId, position }: Props) => {
                             e.preventDefault();
                         }}
                         icon={mdiShieldLockOutline}
-                        color="secondary"
+                        noOutline={isOpen}
+                        color={isOpen ? 'primary' : 'secondary'}
                     />
                 </span>
             }
@@ -70,12 +72,25 @@ const PermissionsPanel = observer(({ documentRootId, position }: Props) => {
             closeOnDocumentClick
             overlayStyle={{ background: isMobileView ? 'rgba(0,0,0,0.5)' : undefined }}
             closeOnEscape
-            position={position}
+            position={
+                position || [
+                    'bottom right',
+                    'bottom left',
+                    'bottom center',
+                    'left center',
+                    'top left',
+                    'top right',
+                    'right center',
+                    'top center'
+                ]
+            }
             keepTooltipInside=".markdown"
             modal={isMobileView}
             onOpen={action(() => {
                 permissionStore.loadPermissions(documentRoot);
+                setIsOpen(true);
             })}
+            onClose={() => setIsOpen(false)}
         >
             <div className={clsx(styles.wrapper, 'card')}>
                 <div className={clsx('card__header', styles.header)}>
