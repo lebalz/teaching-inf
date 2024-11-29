@@ -1,7 +1,11 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { MetaInit, ModelMeta } from '@site/src/models/documents/Excalidoc';
-import type { ExcalidrawImperativeAPI, LibraryItems } from '@excalidraw/excalidraw/types/types';
+import type {
+    ExcalidrawImperativeAPI,
+    LibraryItems,
+    NormalizedZoomValue
+} from '@excalidraw/excalidraw/types/types';
 import { Source } from '@tdev-models/iDocument';
 import { reaction } from 'mobx';
 import { useColorMode } from '@docusaurus/theme-common';
@@ -111,7 +115,10 @@ const Editor = observer((props: Props) => {
                 files: excalidoc.files,
                 appState: {
                     objectsSnapModeEnabled: true,
-                    zenModeEnabled: !props.libraryItems
+                    zenModeEnabled: !props.libraryItems,
+                    zoom: {
+                        value: 1.0 as NormalizedZoomValue // 100 %
+                    }
                 },
                 scrollToContent: true,
                 libraryItems: props.libraryItems
