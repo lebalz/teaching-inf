@@ -56,7 +56,6 @@ const NewItem = observer((props: Props) => {
         return null;
     }
     const rootId = directory.root.id;
-    console.log(mdiLanguagePython);
     return (
         <Popup
             trigger={
