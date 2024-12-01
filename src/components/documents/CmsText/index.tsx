@@ -1,25 +1,26 @@
 import { observer } from 'mobx-react-lite';
 import { CmsTextContext, useFirstCmsTextDocumentIfExists } from '@tdev-components/documents/CmsText/shared';
 import React from 'react';
-import PermissionsPanel from '@tdev-components/PermissionsPanel';
+import CmsActions from './CmsActions';
 
 export interface Props {
     id?: string;
-    showPermissionsPanel?: boolean;
+    showActions?: boolean;
+    hideImportButton?: boolean;
     name?: string;
 }
 
-const CmsText = observer(({ id, name, showPermissionsPanel }: Props) => {
+const CmsText = observer(({ id, name, showActions }: Props) => {
     const contextId = name ? React.useContext(CmsTextContext)?.entries[name] : undefined;
     const rootId = id || contextId;
     const cmsText = useFirstCmsTextDocumentIfExists(rootId);
     if (!cmsText || !cmsText.canDisplay) {
-        return showPermissionsPanel && rootId ? <PermissionsPanel documentRootId={rootId} /> : null;
+        return showActions && rootId ? <CmsActions rootId={rootId} /> : null;
     }
 
     return (
         <>
-            {showPermissionsPanel && rootId && <PermissionsPanel documentRootId={rootId} />}
+            {showActions && rootId && <CmsActions rootId={rootId} />}
             {cmsText.text}
         </>
     );

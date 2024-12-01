@@ -10,7 +10,6 @@ import BrowserWindow from '@tdev-components/BrowserWindow';
 import { observer } from 'mobx-react-lite';
 import { useFirstMainDocument } from '@tdev-hooks/useFirstMainDocument';
 import { CmsTextMeta } from '@tdev-models/documents/CmsText';
-import FromXlsxClipboard from '@tdev-components/shared/FromXlsxClipboard'
 
 # CMS Text
 export const DocumentCreator = observer(() => {
@@ -24,8 +23,6 @@ export const DocumentCreator = observer(() => {
 });
 
 <DocumentCreator />
-
-<FromXlsxClipboard matchUsers onDone={(table) => console.log(JSON.stringify(table, null, 2))}/>
 
 ::::info[Erstellung von Documents]
 Im Gegensatz zu vielen anderen Komponenten erstellen die Komponenten rund um CMS-Text bewusst **nicht** automatisch ein Document, wenn keins vorhanden ist.
@@ -90,7 +87,7 @@ CMS Text kann auch nützlich sein, um bspw. Prüfungsinhalte erst zur gegebenen 
 ```md
 <BrowserWindow>
 Diskutieren Sie das nachfolgende Zitat:
-> <CmsText id="21535ea1-47d9-4521-a7fa-392f06d08f0a" showPermissionsPanel/>
+> <CmsText id="21535ea1-47d9-4521-a7fa-392f06d08f0a" showActions/>
 
 </BrowserWindow>
 ```
@@ -98,7 +95,7 @@ Diskutieren Sie das nachfolgende Zitat:
 <BrowserWindow>
 Diskutieren Sie das nachfolgende Zitat:
 
-> <CmsText id="21535ea1-47d9-4521-a7fa-392f06d08f0a" showPermissionsPanel/>
+> <CmsText id="21535ea1-47d9-4521-a7fa-392f06d08f0a" showActions/>
 
 </BrowserWindow>
 
@@ -120,7 +117,7 @@ import CmsCode from '@tdev-components/documents/CmsText/Code';
     codeBlockProps={{
         language: 'python'
     }}
-    showPermissionsPanel
+    showActions
 />
 `codeBlockProps` entspricht den Props der Komponente `@theme/CodeBlock`.
 <CmsCode 
@@ -130,7 +127,7 @@ import CmsCode from '@tdev-components/documents/CmsText/Code';
         showLineNumbers: true,
         title: 'Hello World'
     }}
-    showPermissionsPanel
+    showActions
 />
 ```
 
@@ -146,7 +143,7 @@ import CmsCode from '@tdev-components/documents/CmsText/Code';
     codeBlockProps={{
         language: 'python'
     }}
-    showPermissionsPanel
+    showActions
 />
 `codeBlockProps` entspricht den Props der Komponente `@theme/CodeBlock`.
 <CmsCode 
@@ -156,7 +153,7 @@ import CmsCode from '@tdev-components/documents/CmsText/Code';
         showLineNumbers: true,
         title: 'Hello World'
     }}
-    showPermissionsPanel
+    showActions
 />
 </BrowserWindow>
 
@@ -304,3 +301,4 @@ Bei mehreren Einträgen zeigt die `<WithCmsText>`-Klammer ihren Inhalt nur dann 
         </DefinitionList>
     </WithCmsText>
 </BrowserWindow>
+

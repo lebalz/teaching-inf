@@ -11,6 +11,14 @@ import { mdiCheckboxBlank, mdiCheckboxBlankBadge, mdiCheckboxBlankOutline, mdiCh
 interface Props {
     matchUsers?: boolean;
     onDone?: (table?: string[][]) => void;
+    importLabel?: string;
+    cancelLabel?: string;
+    cancelIcon?: string;
+    /* ensures the returned table has a header row 
+        - containing either the provided header infos
+        - or default header values
+    */
+    includeHeader?: boolean;
 }
 
 const FromXlsxClipboard = observer((props: Props) => {
@@ -83,21 +91,37 @@ const FromXlsxClipboard = observer((props: Props) => {
             <div className="card__footer">
                 <div className={clsx('button-group', 'button-group--block')}>
                     <Button
-                        text="Abbrechen"
+                        text={props.cancelIcon ? (undefined as any) : props.cancelLabel || 'Abbrechen'}
                         onClick={() => {
                             if (props.onDone) {
                                 props.onDone();
                             }
                         }}
+                        icon={props.cancelIcon}
+                        title={props.cancelIcon ? props.cancelLabel || 'Abbrechen' : undefined}
                         color="black"
                     />
                     <Button
-                        text="Importieren"
+                        text={props.importLabel || 'Importieren'}
                         onClick={() => {
                             if (props.onDone) {
-                                props.onDone(table.slice(withHeader ? 1 : 0));
+                                if (props.includeHeader) {
+                                    if (withHeader) {
+                                        props.onDone(table);
+                                    } else {
+                                        const size = table[0].length;
+                                        const hTable = [[], ...table];
+                                        for (let i = 0; i < size; i++) {
+                                            hTable[0].push(`Spalte ${i + 1}`);
+                                        }
+                                        props.onDone(hTable);
+                                    }
+                                } else {
+                                    props.onDone(table.slice(withHeader ? 1 : 0));
+                                }
                             }
                         }}
+                        disabled={table.length === 0}
                         color="primary"
                     />
                 </div>

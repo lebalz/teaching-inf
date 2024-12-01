@@ -8,5 +8,15 @@
     td {
         padding: 0 2px;
         text-align: left;
+        &.highlight {
+            background-color: var(--docusaurus-highlighted-code-line-bg);
+        }
+        &.empty {
+            color: var(--ifm-color-danger);
+            background: var(--ifm-color-danger-lightest);
+        }
+    }
+    &.selecteable {
+        cursor: pointer;
     }
 }
