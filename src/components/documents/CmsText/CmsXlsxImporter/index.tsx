@@ -8,23 +8,25 @@ import FromXlsxClipboard from '@tdev-components/shared/FromXlsxClipboard';
 import { mdiClose, mdiFileExcelOutline } from '@mdi/js';
 import { useStore } from '@tdev-hooks/useStore';
 import Table from '@tdev-components/shared/Table';
-import { translate } from '@docusaurus/Translate';
-import { Access } from '@tdev-api/document';
+import { Access, DocumentType } from '@tdev-api/document';
 import AccessSelector from '@tdev-components/PermissionsPanel/AccessSelector';
 import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import { CmsTextEntries } from '../WithCmsText';
+import DocumentStore from '@tdev-stores/DocumentStore';
+import PermissionStore from '@tdev-stores/PermissionStore';
+import { asUserAccess } from '@tdev-models/helpers/accessPolicy';
+import CmsText from '@tdev-models/documents/CmsText';
+import { Source } from '@tdev-models/iDocument';
 
 interface Props {
     className?: string;
-    toAssign: { id: string; name?: string }[];
+    toAssign: CmsTextEntries;
 }
 
-const COLORS = [
-    ...['primary', 'success', 'warning', 'danger', 'info', 'secondary'].map(
-        (c) => `var(--ifm-color-${c}-lightest)`
-    )
-] as const;
+const COLORS = ['primary', 'success', 'warning', 'danger', 'info', 'secondary'] as const;
+const IFM_COLORS = [...COLORS.map((c) => `var(--ifm-color-${c}-lightest)`)] as const;
 
 interface AssignedColumn {
     id: string;
@@ -32,20 +34,17 @@ interface AssignedColumn {
     name?: string;
 }
 
-const getPreview = (table: string[][], selectedColumn: number, cmsFor: string, sharedPermission: Access) => {
+const getPreview = (table: string[][], selectedColumn: number, docRootId: string) => {
     const preview = table
         .flatMap((row) => {
-            if (row[selectedColumn].trim().length === 0) {
+            if ((row[selectedColumn] || '').trim().length === 0) {
                 return null;
             }
             return {
-                cmsData: {
-                    for: cmsFor,
+                authorId: row[0],
+                documentRootId: docRootId,
+                data: {
                     text: row[selectedColumn]
-                },
-                userPermission: {
-                    access: sharedPermission,
-                    userId: row[0]
                 }
             };
         })
@@ -53,17 +52,46 @@ const getPreview = (table: string[][], selectedColumn: number, cmsFor: string, s
     return JSON.stringify(preview, null, 2);
 };
 
-const createCmsTexts = (table: string[][], assigned: AssignedColumn[], sharedPermission: Access) => {
-    return Promise.resolve();
+const createCmsTexts = (documentStore: DocumentStore, table: string[][], assignments: AssignedColumn[]) => {
+    const { documentRootStore } = documentStore.root;
+
+    const promises = assignments.flatMap((assignment) => {
+        const documentRoot = documentRootStore.find(assignment.id);
+        if (!documentRoot) {
+            return Promise.resolve();
+        }
+        return table.flatMap((row) => {
+            const userId = row[0];
+            const doc = documentRoot.allDocuments.find((d) => d.isMain && d.authorId === userId) as CmsText;
+            if (doc) {
+                // update the document with the new text when needed
+                if (doc.text === row[assignment.idx]) {
+                    return Promise.resolve();
+                }
+                doc.setData({ text: row[assignment.idx] }, Source.LOCAL);
+                return doc.saveNow();
+            }
+            // create a new document with the text
+            return documentStore.create({
+                type: DocumentType.CmsText,
+                authorId: userId,
+                documentRootId: assignment.id,
+                data: { text: row[assignment.idx] }
+            });
+        });
+    });
+    return Promise.all(promises);
 };
 
 const CmsXlsxImporter = observer((props: Props) => {
     const { toAssign } = props;
     const ref = React.useRef(null);
     const userStore = useStore('userStore');
+    const documentStore = useStore('documentStore');
     const [table, setTable] = React.useState<string[][]>([]);
-    const [sharedPermission, setSharedPermission] = React.useState<Access>(Access.RO_User);
-    const [assigned, setAssigned] = React.useState<AssignedColumn[]>([]);
+    const [assigned, setAssigned] = React.useState<AssignedColumn[]>([
+        { id: Object.values(toAssign)[0], idx: -1, name: Object.keys(toAssign)[0] }
+    ]);
     const [isOpen, setIsOpen] = React.useState(false);
     const reset = () => {
         setTable([]);
@@ -72,10 +100,14 @@ const CmsXlsxImporter = observer((props: Props) => {
     const closeTooltip = () => {
         (ref.current as any)?.close();
     };
-    const isSingleAssignment = toAssign.length === 1;
+    const assignmentCount = Object.values(toAssign).length;
+    const isSingleAssignment = assignmentCount === 1;
     if (!userStore.current?.isAdmin || userStore.isUserSwitched) {
         return null;
     }
+    const currentAssignment = assigned.find((b) => b.idx === -1);
+
+    const persistedAssignments = assigned.filter((a) => a.idx >= 0);
     return (
         <Popup
             trigger={
@@ -128,87 +160,125 @@ const CmsXlsxImporter = observer((props: Props) => {
                     )}
                     {table.length > 0 && (
                         <>
-                            <div className={clsx('badge', 'badge--primary')}>
-                                {table.length} Zeile{table.length > 1 ? 'n' : ''}
-                            </div>
-                            {toAssign.length > 1 && (
-                                <div>
-                                    {toAssign.map((assign, i) => {
-                                        return (
-                                            <Button
-                                                onClick={() => {
-                                                    setAssigned([
-                                                        ...assigned.filter((a) => a.idx >= 0),
-                                                        { id: assign.id, name: assign.name, idx: -1 }
-                                                    ]);
-                                                }}
-                                                text={assign.name || assign.id}
-                                                active={assigned.find((a) => a.id === assign.id)?.idx === -1}
-                                                color={
-                                                    COLORS[
-                                                        assigned.findIndex((a) => a.id === assign.id) %
-                                                            COLORS.length
-                                                    ]
-                                                }
-                                            />
-                                        );
-                                    })}
-                                </div>
+                            {assignmentCount > 1 && (
+                                <>
+                                    {currentAssignment && (
+                                        <p>
+                                            Wählen die Spalte für den CMS Text{' '}
+                                            <span
+                                                className={clsx(
+                                                    'badge',
+                                                    `badge--${COLORS[assigned.findIndex((a) => a.id === currentAssignment?.id) % COLORS.length]}`
+                                                )}
+                                            >
+                                                {currentAssignment?.name ||
+                                                    currentAssignment?.id.substring(0, 7)}
+                                            </span>{' '}
+                                            aus.
+                                        </p>
+                                    )}
+                                    <div className={clsx(styles.names, 'button-group', 'button--block')}>
+                                        {Object.entries(toAssign).map(([name, docRootId], i) => {
+                                            return (
+                                                <Button
+                                                    onClick={() => {
+                                                        setAssigned([
+                                                            ...persistedAssignments.filter(
+                                                                (a) => a.id !== docRootId
+                                                            ),
+                                                            { id: docRootId, name: name, idx: -1 }
+                                                        ]);
+                                                    }}
+                                                    text={name || docRootId}
+                                                    active={
+                                                        assigned.find((a) => a.id === docRootId)?.idx === -1
+                                                    }
+                                                    color={
+                                                        COLORS[
+                                                            assigned.findIndex((a) => a.id === docRootId) %
+                                                                COLORS.length
+                                                        ]
+                                                    }
+                                                />
+                                            );
+                                        })}
+                                    </div>
+                                </>
                             )}
                             <Table
                                 cells={table}
                                 withHeader
-                                highlightedColumns={assigned.map((a, idx) => ({
+                                highlightedColumns={persistedAssignments.map((a, idx) => ({
                                     index: a.idx,
-                                    color: COLORS[idx % COLORS.length]
+                                    color: IFM_COLORS[idx % IFM_COLORS.length]
                                 }))}
+                                trimmedCells={{ [0]: 7 }}
                                 onSelectColumn={(idx) => {
                                     if (isSingleAssignment) {
                                         if (assigned.find((a) => a.idx === idx)) {
                                             setAssigned([]);
                                         } else {
-                                            setAssigned([{ id: toAssign[0].id, idx }]);
+                                            setAssigned([{ id: Object.values(toAssign)[0], idx }]);
                                         }
                                     } else {
-                                        const assignTo = assigned.find((a) => a.idx === -1);
-                                        if (!assignTo) {
+                                        const assignNext = Object.entries(toAssign).find(
+                                            ([_name, docRootId]) => !assigned.find((b) => b.id === docRootId)
+                                        );
+                                        if (!currentAssignment) {
+                                            if (assignNext) {
+                                                setAssigned([
+                                                    ...assigned,
+                                                    { id: assignNext[1], idx: idx, name: assignNext[0] }
+                                                ]);
+                                            }
                                             return;
                                         }
-                                        setAssigned([
-                                            ...assigned.filter((a) => a.idx !== -1),
-                                            { id: assignTo.id, idx: idx, name: assignTo.name }
-                                        ]);
+                                        const newAssignments = [
+                                            ...assigned.filter((a) => a.id !== currentAssignment.id),
+                                            {
+                                                id: currentAssignment.id,
+                                                idx: idx,
+                                                name: currentAssignment.name
+                                            }
+                                        ];
+                                        if (assignNext) {
+                                            newAssignments.push({
+                                                id: assignNext[1],
+                                                idx: -1,
+                                                name: assignNext[0]
+                                            });
+                                        }
+                                        setAssigned(newAssignments);
                                     }
                                 }}
                             />
-                            <AccessSelector
-                                accessTypes={[Access.RO_User, Access.RW_User, Access.None_User]}
-                                access={sharedPermission}
-                                onChange={(access) => setSharedPermission(access)}
-                            />
-                            {assigned.length > 0 && (
+                            {persistedAssignments.length > 0 && (
                                 <>
-                                    {assigned.length > 1 && (
-                                        <Tabs>
-                                            {assigned.map((assign, i) => (
-                                                <TabItem value={assign.id} label={assign.name || assign.id}>
+                                    {persistedAssignments.length > 1 && (
+                                        <Tabs className={clsx(styles.tabs)}>
+                                            {persistedAssignments.map((assign, i) => (
+                                                <TabItem
+                                                    value={assign.id}
+                                                    label={assign.name || assign.id}
+                                                    key={assign.id}
+                                                >
                                                     <CodeBlock
                                                         language="json"
                                                         showLineNumbers
                                                         title="Vorschau"
+                                                        className={clsx(styles.previewCode)}
                                                     >
                                                         {getPreview(
                                                             table.slice(1),
                                                             assign.idx,
-                                                            assign.name || assign.id,
-                                                            sharedPermission
+                                                            assign.name || assign.id
                                                         )}
                                                     </CodeBlock>
                                                 </TabItem>
                                             ))}
                                         </Tabs>
                                     )}
-                                    {assigned.length === 1 && (
+                                    {persistedAssignments.length === 1 && (
                                         <CodeBlock
                                             language="json"
                                             showLineNumbers
@@ -217,9 +287,8 @@ const CmsXlsxImporter = observer((props: Props) => {
                                         >
                                             {getPreview(
                                                 table.slice(1),
-                                                assigned[0].idx,
-                                                assigned[0].name || assigned[0].id,
-                                                sharedPermission
+                                                persistedAssignments[0].idx,
+                                                persistedAssignments[0].name || persistedAssignments[0].id
                                             )}
                                         </CodeBlock>
                                     )}
@@ -241,12 +310,16 @@ const CmsXlsxImporter = observer((props: Props) => {
                             <Button
                                 text={'CMS Texte erstellen'}
                                 onClick={() => {
-                                    createCmsTexts(table, assigned, sharedPermission).then(() => {
-                                        closeTooltip();
-                                    });
+                                    createCmsTexts(documentStore, table, persistedAssignments)
+                                        .then(() => {
+                                            closeTooltip();
+                                        })
+                                        .catch((e) => {
+                                            console.error(e);
+                                        });
                                 }}
                                 color="primary"
-                                disabled={assigned.length === 0}
+                                disabled={persistedAssignments.length === 0}
                             />
                         </div>
                     </div>

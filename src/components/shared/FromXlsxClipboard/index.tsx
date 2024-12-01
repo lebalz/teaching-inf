@@ -84,7 +84,9 @@ const FromXlsxClipboard = observer((props: Props) => {
                         />
                     </div>
                     <div className={clsx(styles.preview)}>
-                        {table.length > 0 && <Table cells={table} withHeader={withHeader} />}
+                        {table.length > 0 && (
+                            <Table cells={table} withHeader={withHeader} trimmedCells={{ [0]: 7 }} />
+                        )}
                     </div>
                 </div>
             </div>

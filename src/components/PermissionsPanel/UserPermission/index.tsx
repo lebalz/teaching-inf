@@ -26,7 +26,7 @@ const UserPermission = observer((props: Props) => {
                 accessTypes={[Access.RO_User, Access.RW_User, Access.None_User]}
                 access={permission.access}
                 onChange={(access) => {
-                    permission.access = access;
+                    permission.setAccess(access);
                 }}
             />
             <span className={clsx(styles.actions)}>

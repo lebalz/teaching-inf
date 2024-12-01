@@ -26,7 +26,7 @@ const GroupPermission = observer((props: Props) => {
                 accessTypes={[Access.RO_StudentGroup, Access.RW_StudentGroup, Access.None_StudentGroup]}
                 access={permission.access}
                 onChange={(access) => {
-                    permission.access = access;
+                    permission.setAccess(access);
                 }}
             />
             <span className={clsx(styles.actions)}>

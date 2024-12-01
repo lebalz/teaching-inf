@@ -4,17 +4,26 @@ import PermissionsPanel from '@tdev-components/PermissionsPanel';
 import CmsXlsxImporter from '../CmsXlsxImporter';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
+import { CmsTextEntries } from '../WithCmsText';
 
 interface Props {
-    rootId: string;
+    entries: CmsTextEntries;
     className?: string;
 }
 
 const CmsActions = observer((props: Props) => {
+    const { entries } = props;
+    const documentRootIds = Object.values(entries);
+    if (documentRootIds.length === 0) {
+        return null;
+    }
     return (
         <div className={clsx(styles.actions, props.className)}>
-            <CmsXlsxImporter toAssign={[{ id: props.rootId }]} />
-            <PermissionsPanel documentRootId={props.rootId} />
+            <CmsXlsxImporter toAssign={entries} />
+            {documentRootIds.length === 1 ? (
+                <PermissionsPanel documentRootId={documentRootIds[0]} />
+            ) : /** TODO: what to do here? */
+            null}
         </div>
     );
 });

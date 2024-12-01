@@ -14,10 +14,14 @@ interface Props {
     className?: string;
     onSelectColumn?: (index: number) => void;
     highlightedColumns?: HighlightedColumn[];
+    trimmedCells?: { [key: number]: number };
 }
 
 const Table = observer((props: Props) => {
     const toHighlight = new Map(props.highlightedColumns?.map((c) => [c.index, c.color]) || []);
+    const trimmedCells = new Map<number, number>(
+        Object.entries(props.trimmedCells || {}).map(([k, v]) => [parseInt(k), v])
+    );
     return (
         <table className={clsx(styles.table, props.className, props.onSelectColumn && styles.selecteable)}>
             {props.withHeader && (
@@ -58,8 +62,9 @@ const Table = observer((props: Props) => {
                                         e.preventDefault();
                                     }
                                 }}
+                                title={trimmedCells.has(j) ? `${cell}` : undefined}
                             >
-                                {cell}
+                                {trimmedCells.has(j) ? `${cell}`.substring(0, trimmedCells.get(j)) : cell}
                             </td>
                         ))}
                     </tr>
