@@ -114,6 +114,21 @@ const PermissionsPanel = observer((props: Props) => {
                     <h3>Berechtigungen Festlegen</h3>
                 </div>
                 <div className={clsx('card__body', styles.cardBody)}>
+                    {documentRoots.length > 1 && (
+                        <div>
+                            <small>
+                                Für{' '}
+                                <span
+                                    className="badge badge--warning"
+                                    title={documentRoots.map((dr) => dr.id).join('\n')}
+                                    style={{ cursor: 'pointer' }}
+                                >
+                                    {documentRoots.length}
+                                </span>{' '}
+                                DocumentRoots
+                            </small>
+                        </div>
+                    )}
                     <DefinitionList className={styles.popupContentContainer} small>
                         <dt>Allgemeine Berechtigung</dt>
                         <dd>

@@ -1,6 +1,8 @@
 import { CmsTextContext, useFirstCmsTextDocumentIfExists } from '@tdev-components/documents/CmsText/shared';
 import { observer } from 'mobx-react-lite';
-import CmsActions from './CmsActions';
+import CmsActions from '../CmsActions';
+import styles from './styles.module.scss';
+import clsx from 'clsx';
 
 export type Name = string & { __nameBrand: 'Name' };
 export type DocumentRootId = string & { __nameBrand: 'DocumentRootId' };
@@ -21,7 +23,7 @@ const WithCmsText = observer((props: Props) => {
 
     return allDocumentsAvailable ? (
         <CmsTextContext.Provider value={{ entries }}>
-            {showActions && <CmsActions entries={entries} />}
+            {showActions && <CmsActions entries={entries} className={clsx(styles.actions, 'shadow--lw')} />}
             {children}
         </CmsTextContext.Provider>
     ) : (
