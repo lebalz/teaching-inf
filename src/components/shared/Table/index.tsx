@@ -1,7 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
-import { observer } from 'mobx-react-lite';
 
 interface HighlightedColumn {
     index: number;
@@ -17,7 +16,7 @@ interface Props {
     trimmedCells?: { [key: number]: number };
 }
 
-const Table = observer((props: Props) => {
+const Table = (props: Props) => {
     const toHighlight = new Map(props.highlightedColumns?.map((c) => [c.index, c.color]) || []);
     const trimmedCells = new Map<number, number>(
         Object.entries(props.trimmedCells || {}).map(([k, v]) => [parseInt(k), v])
@@ -55,7 +54,10 @@ const Table = observer((props: Props) => {
                                     toHighlight.has(j) && styles.highlight,
                                     toHighlight.has(j) && `${cell}`.trim().length === 0 && styles.empty
                                 )}
-                                style={{ backgroundColor: toHighlight.get(j) }}
+                                style={{
+                                    backgroundColor:
+                                        `${cell}`.trim().length > 0 ? toHighlight.get(j) : undefined
+                                }}
                                 onClick={(e) => {
                                     if (props.onSelectColumn) {
                                         props.onSelectColumn(j);
@@ -72,6 +74,6 @@ const Table = observer((props: Props) => {
             </tbody>
         </table>
     );
-});
+};
 
 export default Table;

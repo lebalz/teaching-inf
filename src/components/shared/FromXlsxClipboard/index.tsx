@@ -1,12 +1,11 @@
 import React from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
-import { observer } from 'mobx-react-lite';
 import TextAreaInput from '../TextAreaInput';
 import { useStore } from '@tdev-hooks/useStore';
 import Button from '../Button';
 import Table from '../Table';
-import { mdiCheckboxBlank, mdiCheckboxBlankBadge, mdiCheckboxBlankOutline, mdiCheckboxMarked } from '@mdi/js';
+import { mdiCheckboxBlankOutline, mdiCheckboxMarked } from '@mdi/js';
 
 interface Props {
     matchUsers?: boolean;
@@ -21,7 +20,7 @@ interface Props {
     includeHeader?: boolean;
 }
 
-const FromXlsxClipboard = observer((props: Props) => {
+const FromXlsxClipboard = (props: Props) => {
     const [table, setTable] = React.useState<string[][]>([]);
     const [text, setText] = React.useState('');
     const [withHeader, setWithHeader] = React.useState(true);
@@ -129,6 +128,6 @@ const FromXlsxClipboard = observer((props: Props) => {
             </div>
         </div>
     );
-});
+};
 
 export default FromXlsxClipboard;
