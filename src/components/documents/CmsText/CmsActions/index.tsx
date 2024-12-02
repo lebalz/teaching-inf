@@ -5,6 +5,7 @@ import CmsXlsxImporter from '../CmsXlsxImporter';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
 import { CmsTextEntries } from '../WithCmsText';
+import AccessSelector from '@tdev-components/PermissionsPanel/AccessSelector';
 
 interface Props {
     entries: CmsTextEntries;
@@ -20,10 +21,7 @@ const CmsActions = observer((props: Props) => {
     return (
         <div className={clsx(styles.actions, props.className)}>
             <CmsXlsxImporter toAssign={entries} />
-            {documentRootIds.length === 1 ? (
-                <PermissionsPanel documentRootId={documentRootIds[0]} />
-            ) : /** TODO: what to do here? */
-            null}
+            <PermissionsPanel documentRootIds={documentRootIds} />
         </div>
     );
 });
