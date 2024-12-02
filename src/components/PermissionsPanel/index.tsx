@@ -160,8 +160,8 @@ const PermissionsPanel = observer((props: Props) => {
                                     Access.None_DocumentRoot
                                 ]}
                                 access={
-                                    documentRoots.every((dr) => dr.rootAccess === firstRoot.rootAccess)
-                                        ? firstRoot.rootAccess
+                                    documentRoots.every((dr) => dr.sharedAccess === firstRoot.sharedAccess)
+                                        ? firstRoot.sharedAccess
                                         : undefined
                                 }
                                 onChange={(access) => {

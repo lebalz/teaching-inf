@@ -70,7 +70,7 @@ const AccessPanel = observer((props: Props) => {
                         )
                         .map((groupPermissions, idx) => (
                             <div key={groupPermissions[0].id} className={clsx(styles.item)}>
-                                <GroupPermission key={idx} permissions={groupPermissions} />
+                                <GroupPermission permissions={groupPermissions} />
                             </div>
                         ))}
                     {studentGroupStore.studentGroups
@@ -92,7 +92,14 @@ const AccessPanel = observer((props: Props) => {
                                         ]}
                                         onChange={(access) => {
                                             documentRoots.forEach((dr) => {
-                                                permissionStore.createGroupPermission(dr, group, access);
+                                                const currentPermission = dr.groupPermissions.find(
+                                                    (gp) => gp.groupId === group.id
+                                                );
+                                                if (currentPermission) {
+                                                    currentPermission.setAccess(access);
+                                                } else {
+                                                    permissionStore.createGroupPermission(dr, group, access);
+                                                }
                                             });
                                         }}
                                         mark={activePermissionLevels.get(group.id)}

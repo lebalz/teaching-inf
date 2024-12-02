@@ -69,7 +69,7 @@ const AccessPanel = observer((props: Props) => {
                         )
                         .map((userPermissions, idx) => (
                             <div key={userPermissions[0].id} className={clsx(styles.item)}>
-                                <UserPermission key={idx} permissions={userPermissions} />
+                                <UserPermission permissions={userPermissions} />
                             </div>
                         ))}
                     {userStore.users
@@ -87,7 +87,14 @@ const AccessPanel = observer((props: Props) => {
                                         accessTypes={[Access.RO_User, Access.RW_User, Access.None_User]}
                                         onChange={(access) => {
                                             documentRoots.forEach((dr) => {
-                                                permissionStore.createUserPermission(dr, user, access);
+                                                const currentPermission = dr.userPermissions.find(
+                                                    (up) => up.userId === user.id
+                                                );
+                                                if (currentPermission) {
+                                                    currentPermission.setAccess(access);
+                                                } else {
+                                                    permissionStore.createUserPermission(dr, user, access);
+                                                }
                                             });
                                         }}
                                         mark={activePermissionLevels.get(user.id)}

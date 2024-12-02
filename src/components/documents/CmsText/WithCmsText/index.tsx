@@ -27,7 +27,7 @@ const WithCmsText = observer((props: Props) => {
             {children}
         </CmsTextContext.Provider>
     ) : (
-        <></>
+        <>{showActions && <CmsActions entries={entries} className={clsx(styles.actions, 'shadow--lw')} />}</>
     );
 });
 
