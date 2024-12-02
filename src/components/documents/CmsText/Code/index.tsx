@@ -6,6 +6,7 @@ import PermissionsPanel from '@tdev-components/PermissionsPanel';
 import { Props as DefaultCmsProps } from '..';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
+import { useStore } from '@tdev-hooks/useStore';
 
 interface Props extends DefaultCmsProps {
     codeBlockProps?: CodeBlockProps;
@@ -13,10 +14,11 @@ interface Props extends DefaultCmsProps {
 
 const CmsCode = observer((props: Props) => {
     const { id, name, showPermissionsPanel } = props;
+    const userStore = useStore('userStore');
     const contextId = name ? React.useContext(CmsTextContext)?.entries[name] : undefined;
     const rootId = id || contextId;
     const cmsText = useFirstCmsTextDocumentIfExists(rootId);
-    if (!cmsText || !cmsText.canDisplay) {
+    if (!cmsText || (!cmsText.canDisplay && !userStore.isUserSwitched)) {
         return showPermissionsPanel && rootId ? <PermissionsPanel documentRootId={rootId} /> : null;
     }
     if (showPermissionsPanel && rootId) {
