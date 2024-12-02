@@ -8,17 +8,15 @@ import FromXlsxClipboard from '@tdev-components/shared/FromXlsxClipboard';
 import { mdiClose, mdiFileExcelOutline } from '@mdi/js';
 import { useStore } from '@tdev-hooks/useStore';
 import Table from '@tdev-components/shared/Table';
-import { Access, DocumentType } from '@tdev-api/document';
-import AccessSelector from '@tdev-components/PermissionsPanel/AccessSelector';
+import { DocumentType } from '@tdev-api/document';
 import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import { CmsTextEntries } from '../WithCmsText';
 import DocumentStore from '@tdev-stores/DocumentStore';
-import PermissionStore from '@tdev-stores/PermissionStore';
-import { asUserAccess } from '@tdev-models/helpers/accessPolicy';
 import CmsText from '@tdev-models/documents/CmsText';
 import { Source } from '@tdev-models/iDocument';
+import { ApiState } from '@tdev-stores/iStore';
 
 interface Props {
     className?: string;
@@ -92,6 +90,7 @@ const CmsXlsxImporter = observer((props: Props) => {
     const [assigned, setAssigned] = React.useState<AssignedColumn[]>([
         { id: Object.values(toAssign)[0], idx: -1, name: Object.keys(toAssign)[0] }
     ]);
+    const [ready, setReady] = React.useState(false);
     const [isOpen, setIsOpen] = React.useState(false);
     const reset = () => {
         setTable([]);
@@ -125,6 +124,16 @@ const CmsXlsxImporter = observer((props: Props) => {
             overlayStyle={{ background: 'rgba(0,0,0,0.5)' }}
             onOpen={() => {
                 setIsOpen(true);
+                documentStore.apiLoadDocumentsFrom(Object.values(toAssign)).then((models) => {
+                    if (
+                        documentStore.apiStateFor(`load-docs-${Object.values(toAssign).join('::')}`) ===
+                        ApiState.SUCCESS
+                    ) {
+                        setReady(true);
+                    } else {
+                        console.log('Error loading documents');
+                    }
+                });
             }}
             closeOnEscape={false}
             onClose={() => {
@@ -199,6 +208,7 @@ const CmsXlsxImporter = observer((props: Props) => {
                                                                 COLORS.length
                                                         ]
                                                     }
+                                                    key={docRootId}
                                                 />
                                             );
                                         })}
@@ -310,7 +320,7 @@ const CmsXlsxImporter = observer((props: Props) => {
                             <Button
                                 text={'CMS Texte erstellen'}
                                 onClick={() => {
-                                    createCmsTexts(documentStore, table, persistedAssignments)
+                                    createCmsTexts(documentStore, table.slice(1), persistedAssignments)
                                         .then(() => {
                                             closeTooltip();
                                         })

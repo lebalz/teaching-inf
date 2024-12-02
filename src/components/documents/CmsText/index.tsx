@@ -3,6 +3,7 @@ import { CmsTextContext, useFirstCmsTextDocumentIfExists } from '@tdev-component
 import React from 'react';
 import CmsActions from './CmsActions';
 import { CmsTextEntries } from './WithCmsText';
+import { useStore } from '@tdev-hooks/useStore';
 
 export interface Props {
     id?: string;
@@ -12,9 +13,10 @@ export interface Props {
 
 const CmsText = observer(({ id, name, showActions }: Props) => {
     const contextId = name ? React.useContext(CmsTextContext)?.entries[name] : undefined;
+    const userStore = useStore('userStore');
     const rootId = id || contextId;
     const cmsText = useFirstCmsTextDocumentIfExists(rootId);
-    if (!cmsText || !cmsText.canDisplay) {
+    if (!cmsText || (!cmsText.canDisplay && !userStore.isUserSwitched)) {
         return showActions && rootId ? <CmsActions entries={{ [rootId]: rootId } as CmsTextEntries} /> : null;
     }
 

@@ -13,10 +13,10 @@ import { CmsTextMeta } from '@tdev-models/documents/CmsText';
 
 # CMS Text
 export const DocumentCreator = observer(() => {
-    useFirstMainDocument('21535ea1-47d9-4521-a7fa-392f06d08f0a', new CmsTextMeta({
+    useFirstMainDocument('30918f4b-8400-42d9-8e1f-f19d27357494', new CmsTextMeta({
         default: 'CMS-Text aus der Datenbank 📚'
     }));
-    useFirstMainDocument('5b72150a-947b-4cf2-b616-727ff77c5119', new CmsTextMeta({
+    useFirstMainDocument('f6b64809-e570-4a88-9a84-6c57e0240e38', new CmsTextMeta({
         default: `print('Hello CMS Code!')`
     }));
     return null;
@@ -29,12 +29,12 @@ Im Gegensatz zu vielen anderen Komponenten erstellen die Komponenten rund um CMS
 
 Diese Gallery-Page ist so aufgesetzt, dass für einige DocumentRoot-IDs automatisch ein CmsText-Document erzeugt wird:
 
-`21535ea1`
+`30918f4b`
 : Inhalt: "CMS-Text aus der Datenbank 📚"
-: UUID: `21535ea1-47d9-4521-a7fa-392f06d08f0a`
-`5b72150a`
+: UUID: `30918f4b-8400-42d9-8e1f-f19d27357494`
+`f6b64809`
 : Inhalt: `print('Hello CMS Code!')`
-: UUID: `5b72150a-947b-4cf2-b616-727ff77c5119`
+: UUID: `f6b64809-e570-4a88-9a84-6c57e0240e38`
 
 
 Für die ID `2c0c085d-388a-48cd-9871-975bab0ffda3` wird kein Document erstellt.
@@ -43,10 +43,10 @@ Für die ID `2c0c085d-388a-48cd-9871-975bab0ffda3` wird kein Document erstellt.
 Das Dokument wird hier im `.mdx` wie folgt erzeugt:
 ```tsx
 export const DocumentCreator = observer(() => {
-    useFirstMainDocument('21535ea1-47d9-4521-a7fa-392f06d08f0a', new CmsTextMeta({
+    useFirstMainDocument('30918f4b-8400-42d9-8e1f-f19d27357494', new CmsTextMeta({
         default: 'CMS-Text aus der Datenbank 📚'
     }));
-    useFirstMainDocument('5b72150a-947b-4cf2-b616-727ff77c5119', new CmsTextMeta({
+    useFirstMainDocument('f6b64809-e570-4a88-9a84-6c57e0240e38', new CmsTextMeta({
         default: `print('Hello CMS Code!')`
     }));
     return null;
@@ -64,11 +64,11 @@ Ein möglicher Anwendungsfall ist die Bereitstellung individualisierter Informat
 ```md
 import CmsText from '@tdev-components/documents/CmsText';
 
-Der Text "<CmsText id="21535ea1-47d9-4521-a7fa-392f06d08f0a"/>" wurde aus der Datenbank geladen.
+Der Text "<CmsText id="30918f4b-8400-42d9-8e1f-f19d27357494"/>" wurde aus der Datenbank geladen.
 ```
 
 <BrowserWindow>
-    Der Text "<CmsText id="21535ea1-47d9-4521-a7fa-392f06d08f0a"/>" wurde aus der Datenbank geladen.
+    Der Text "<CmsText id="30918f4b-8400-42d9-8e1f-f19d27357494"/>" wurde aus der Datenbank geladen.
 </BrowserWindow>
 
 Besitzt der aktuelle User kein Document für die angegebene DocumentRoot-ID, dann bleibt der Text leer:
@@ -87,7 +87,7 @@ CMS Text kann auch nützlich sein, um bspw. Prüfungsinhalte erst zur gegebenen 
 ```md
 <BrowserWindow>
 Diskutieren Sie das nachfolgende Zitat:
-> <CmsText id="21535ea1-47d9-4521-a7fa-392f06d08f0a" showActions/>
+> <CmsText id="30918f4b-8400-42d9-8e1f-f19d27357494" showActions/>
 
 </BrowserWindow>
 ```
@@ -95,7 +95,7 @@ Diskutieren Sie das nachfolgende Zitat:
 <BrowserWindow>
 Diskutieren Sie das nachfolgende Zitat:
 
-> <CmsText id="21535ea1-47d9-4521-a7fa-392f06d08f0a" showActions/>
+> <CmsText id="30918f4b-8400-42d9-8e1f-f19d27357494" showActions/>
 
 </BrowserWindow>
 
@@ -107,13 +107,13 @@ Es können auch Code-Blöcke aus dem CMS geladen werden:
 import CmsCode from '@tdev-components/documents/CmsText/Code';
 
 <CmsCode 
-    id="5b72150a-947b-4cf2-b616-727ff77c5119"
+    id="f6b64809-e570-4a88-9a84-6c57e0240e38"
     codeBlockProps={{
         language: 'python'
     }}
 />
 <CmsCode 
-    id="5b72150a-947b-4cf2-b616-727ff77c5119"
+    id="f6b64809-e570-4a88-9a84-6c57e0240e38"
     codeBlockProps={{
         language: 'python'
     }}
@@ -121,7 +121,7 @@ import CmsCode from '@tdev-components/documents/CmsText/Code';
 />
 `codeBlockProps` entspricht den Props der Komponente `@theme/CodeBlock`.
 <CmsCode 
-    id="5b72150a-947b-4cf2-b616-727ff77c5119"
+    id="f6b64809-e570-4a88-9a84-6c57e0240e38"
     codeBlockProps={{
         language: 'python',
         showLineNumbers: true,
@@ -133,13 +133,13 @@ import CmsCode from '@tdev-components/documents/CmsText/Code';
 
 <BrowserWindow>
 <CmsCode 
-    id="5b72150a-947b-4cf2-b616-727ff77c5119"
+    id="f6b64809-e570-4a88-9a84-6c57e0240e38"
     codeBlockProps={{
         language: 'python'
     }}
 />
 <CmsCode 
-    id="5b72150a-947b-4cf2-b616-727ff77c5119"
+    id="f6b64809-e570-4a88-9a84-6c57e0240e38"
     codeBlockProps={{
         language: 'python'
     }}
@@ -147,7 +147,7 @@ import CmsCode from '@tdev-components/documents/CmsText/Code';
 />
 `codeBlockProps` entspricht den Props der Komponente `@theme/CodeBlock`.
 <CmsCode 
-    id="5b72150a-947b-4cf2-b616-727ff77c5119"
+    id="f6b64809-e570-4a88-9a84-6c57e0240e38"
     codeBlockProps={{
         language: 'python',
         showLineNumbers: true,
@@ -161,13 +161,13 @@ import CmsCode from '@tdev-components/documents/CmsText/Code';
 In vielen Fällen kann es nützlich sein, auch umliegende Elemente nur dann anzuzeigen, wenn ein bestimmter CMS-Text verfügbar ist. Dazu kann die Komponente `<WithCmsText>` verwendet werden.
 
 ```md
-<WithCmsText entries={{demo: "21535ea1-47d9-4521-a7fa-392f06d08f0a"}}>
+<WithCmsText entries={{demo: "30918f4b-8400-42d9-8e1f-f19d27357494"}}>
     Der Text "<CmsText name="demo" />" wurde aus der Datenbank geladen.
 </WithCmsText>
 ```
 
 <BrowserWindow>
-    <WithCmsText entries={{demo: "21535ea1-47d9-4521-a7fa-392f06d08f0a"}}>
+    <WithCmsText entries={{demo: "30918f4b-8400-42d9-8e1f-f19d27357494"}}>
         Der Text "<CmsText name="demo" />" wurde aus der Datenbank geladen.
     </WithCmsText>
 </BrowserWindow>
@@ -186,14 +186,14 @@ Ist einer der in `entries` aufgeführten CMS-Texte nicht verfügbar, wird der ge
 </BrowserWindow>
 
 ### Anwendungsbeispiele
-Im folgenden Beispiel wird die gesamte `<DefinitionList>` nur dann angezeigt, wenn der Eintrag für die DocumentRoot-ID `21535ea1-47d9-4521-a7fa-392f06d08f0a` vorhanden ist. In dem Fall steht der entsprechende CMS-Text innerhalb der `<WithCmsText>`-Klammer unter dem Namen `demo` zur Verfügung.
+Im folgenden Beispiel wird die gesamte `<DefinitionList>` nur dann angezeigt, wenn der Eintrag für die DocumentRoot-ID `30918f4b-8400-42d9-8e1f-f19d27357494` vorhanden ist. In dem Fall steht der entsprechende CMS-Text innerhalb der `<WithCmsText>`-Klammer unter dem Namen `demo` zur Verfügung.
 
 Zusätzlich wird ein weiterer CMS-Text mit der ID `2c0c085d-388a-48cd-9871-975bab0ffda3` verwendet. Wenn dort das entsprechende Dokument fehlt, bleibt der Eintrag einfach leer.
 
 ```md
 <WithCmsText entries={{
-    demo: "21535ea1-47d9-4521-a7fa-392f06d08f0a", 
-    code: "5b72150a-947b-4cf2-b616-727ff77c5119"
+    demo: "30918f4b-8400-42d9-8e1f-f19d27357494", 
+    code: "f6b64809-e570-4a88-9a84-6c57e0240e38"
 }}>
     <DefinitionList>
         <dt>Hallo</dt>
@@ -211,7 +211,7 @@ Zusätzlich wird ein weiterer CMS-Text mit der ID `2c0c085d-388a-48cd-9871-975ba
 ```
 
 <BrowserWindow>
-    <WithCmsText entries={{demo: "21535ea1-47d9-4521-a7fa-392f06d08f0a", code: "5b72150a-947b-4cf2-b616-727ff77c5119"}} showActions>
+    <WithCmsText entries={{demo: "30918f4b-8400-42d9-8e1f-f19d27357494", code: "f6b64809-e570-4a88-9a84-6c57e0240e38"}} showActions>
         <DefinitionList>
             <dt>Hallo</dt>
             <dd>Das ist der erste Eintrag.</dd>
@@ -231,7 +231,7 @@ Bei mehreren Einträgen zeigt die `<WithCmsText>`-Klammer ihren Inhalt nur dann 
 
 ```md
 <WithCmsText entries={{
-        a: "21535ea1-47d9-4521-a7fa-392f06d08f0a",
+        a: "30918f4b-8400-42d9-8e1f-f19d27357494",
         b: "2c0c085d-388a-48cd-9871-975bab0ffda3"}}>
     <DefinitionList>
         <dt>Hallo</dt>
@@ -249,7 +249,7 @@ Bei mehreren Einträgen zeigt die `<WithCmsText>`-Klammer ihren Inhalt nur dann 
 <BrowserWindow>
     <WithCmsText
         entries={{
-            a: '21535ea1-47d9-4521-a7fa-392f06d08f0a',
+            a: '30918f4b-8400-42d9-8e1f-f19d27357494',
             b: '2c0c085d-388a-48cd-9871-975bab0ffda3'
         }}
     >
@@ -269,7 +269,7 @@ Bei mehreren Einträgen zeigt die `<WithCmsText>`-Klammer ihren Inhalt nur dann 
 `<WithCmsText>`-Klammern können auch verschachtelt genutzt werden:
 
 ```md
-<WithCmsText entries={{demo: "21535ea1-47d9-4521-a7fa-392f06d08f0a"}}>
+<WithCmsText entries={{demo: "30918f4b-8400-42d9-8e1f-f19d27357494"}}>
     <DefinitionList>
         <dt>Hallo</dt>
         <dd>Das ist der erste Eintrag.</dd>
@@ -286,7 +286,7 @@ Bei mehreren Einträgen zeigt die `<WithCmsText>`-Klammer ihren Inhalt nur dann 
 ```
 
 <BrowserWindow>
-    <WithCmsText entries={{demo: "21535ea1-47d9-4521-a7fa-392f06d08f0a"}}>
+    <WithCmsText entries={{demo: "30918f4b-8400-42d9-8e1f-f19d27357494"}}>
         <DefinitionList>
             <dt>Hallo</dt>
             <dd>Das ist der erste Eintrag.</dd>

@@ -7,6 +7,7 @@ import styles from './styles.module.scss';
 import clsx from 'clsx';
 import CmsActions from '../CmsActions';
 import { CmsTextEntries } from '../WithCmsText';
+import { useStore } from '@tdev-hooks/useStore';
 
 interface Props extends DefaultCmsProps {
     codeBlockProps?: CodeBlockProps;
@@ -14,10 +15,11 @@ interface Props extends DefaultCmsProps {
 
 const CmsCode = observer((props: Props) => {
     const { id, name, showActions } = props;
+    const userStore = useStore('userStore');
     const contextId = name ? React.useContext(CmsTextContext)?.entries[name] : undefined;
     const documentRootId = id || contextId;
     const cmsText = useFirstCmsTextDocumentIfExists(documentRootId);
-    if (!cmsText || !cmsText.canDisplay) {
+    if (!cmsText || (!cmsText.canDisplay && !userStore.isUserSwitched)) {
         return showActions && documentRootId ? (
             <CmsActions entries={{ [documentRootId]: documentRootId } as CmsTextEntries} />
         ) : null;

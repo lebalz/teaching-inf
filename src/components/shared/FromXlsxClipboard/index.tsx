@@ -55,7 +55,6 @@ const FromXlsxClipboard = observer((props: Props) => {
                 row.push('');
             }
         });
-        console.log(text, rows, content);
         setTable(content);
     }, [text, withHeader]);
 
