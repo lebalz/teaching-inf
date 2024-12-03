@@ -45,7 +45,7 @@
         "ace-builds": "^1.36.2",
         "axios": "^1.7.2",
         "clsx": "^2.0.0",
-        "docusaurus-plugin-sass": "^0.2.5",
+        "docusaurus-plugin-sass": "^0.2.6",
         "docx": "^9.0.3",
         "dotenv": "^16.4.5",
         "exceljs": "^4.4.0",
