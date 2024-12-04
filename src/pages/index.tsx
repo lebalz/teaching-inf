@@ -6,6 +6,7 @@ import styles from './index.module.scss';
 import HomepageCourses from '../components/HomepageCourses';
 import ImageGallery from 'react-image-gallery';
 import { Content } from '@theme/BlogPostPage';
+import Winter from '@tdev-components/WinterTheme/Winter';
 
 function HomepageHeader() {
     const { siteConfig } = useDocusaurusContext();
@@ -46,6 +47,7 @@ export default function Home({ recentPosts }: Props) {
             <Layout>
                 <HomepageHeader />
                 <main>
+                    <Winter zIndex={1} />
                     <div className={clsx(styles.galleryWrapper)}>
                         <ImageGallery
                             items={images}

@@ -11399,6 +11399,13 @@ react-router@5.3.4, react-router@^5.3.4:
     tiny-invariant "^1.0.2"
     tiny-warning "^1.0.0"
 
+react-snowfall@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/react-snowfall/-/react-snowfall-2.2.0.tgz#0856a72c4d29d27a6a14301c0f5deb51296fb4df"
+  integrity sha512-dRk7vEHq/ZUOG+JHk2k/hH3HmliOWGXr4rKRDeW4mjWuHeI1r5h0Lc1r2jnTtUS1im702d6tCmNGymlNTdhXYg==
+  dependencies:
+    react-fast-compare "^3.2.2"
+
 react@^18.0.0:
   version "18.3.1"
   resolved "https://registry.yarnpkg.com/react/-/react-18.3.1.tgz#49ab892009c53933625bd16b2533fc754cab2891"
