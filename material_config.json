@@ -8,9 +8,7 @@
         {
             "from": "docs/OF-Programmieren-1/",
             "to": "versioned_docs/version-28Gb/02-Programmieren-1",
-            "ignore": [
-                "02-Turtlegrafik/_category_.json"
-            ]
+            "ignore": ["02-Turtlegrafik/_category_.json"]
         },
         {
             "from": "docs/OF-Word/",
@@ -39,9 +37,7 @@
         {
             "from": "docs/OF-Programmieren-1/",
             "to": "versioned_docs/version-28Gj/02-Programmieren-1",
-            "ignore": [
-                "02-Turtlegrafik/_category_.json"
-            ]
+            "ignore": ["02-Turtlegrafik/_category_.json"]
         },
         {
             "from": "docs/OF-Word/",
