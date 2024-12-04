@@ -83,14 +83,16 @@ export default function HomepageCourses() {
         <section className={styles.features}>
             <div className="container">
                 <div className="row">
+                    {CourseList.map((course, idx) => (
+                        <CourseComponent key={idx} course={course} />
+                    ))}
+                </div>
+                <div className="row">
                     {(DOCS_ONLY || process.env.NODE_ENV === 'development' || userStore.current?.isAdmin) && (
                         <CourseComponent
                             course={{ title: 'All Docs', classes: [{ label: 'Docs', uri: '/home' }] }}
                         />
                     )}
-                    {CourseList.map((course, idx) => (
-                        <CourseComponent key={idx} course={course} />
-                    ))}
                 </div>
             </div>
         </section>
