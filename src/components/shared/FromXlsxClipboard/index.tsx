@@ -72,6 +72,9 @@ const FromXlsxClipboard = (props: Props) => {
                             onChange={setText}
                             className={clsx(styles.textArea)}
                             placeholder="Excel-Zellen hier einfügen"
+                            monospace
+                            showTabButton
+                            tabClassName={clsx(styles.tabButton)}
                         />
                         <Button
                             icon={withHeader ? mdiCheckboxMarked : mdiCheckboxBlankOutline}

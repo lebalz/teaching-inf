@@ -13,4 +13,7 @@
         outline: none;
         box-shadow: 0 0 8px var(--ifm-link-hover-color);
     }
+    &.monospace {
+        font-family: var(--ifm-font-family-monospace);
+    }
 }
