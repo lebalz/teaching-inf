@@ -53,7 +53,7 @@ const createCmsTexts = (documentStore: DocumentStore, table: string[][], assignm
     return Promise.all(promises);
 };
 
-const CmsXlsxImporter = observer((props: Props) => {
+const CmsImporter = observer((props: Props) => {
     const { toAssign } = props;
     const ref = React.useRef(null);
     const userStore = useStore('userStore');
@@ -196,4 +196,4 @@ const CmsXlsxImporter = observer((props: Props) => {
     );
 });
 
-export default CmsXlsxImporter;
+export default CmsImporter;

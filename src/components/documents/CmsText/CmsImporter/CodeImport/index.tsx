@@ -22,9 +22,9 @@ const CodeImport = observer((props: Props) => {
             </div>
             <div className="card__body">
                 <div className={clsx(styles.main)}>
+                    <UserTable />
                     <div className={clsx(styles.input)}>
-                        {/* <UserTable /> */}
-                        <CodeEditor />
+                        <CodeEditor aceClassName={clsx(styles.editor)} />
                     </div>
                 </div>
             </div>

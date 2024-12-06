@@ -19,6 +19,7 @@ const ALIAS_LANG_MAP_ACE = {
 interface Props {
     defaultValue?: string;
     className?: string;
+    aceClassName?: string;
     lang?: string;
     onChange?: (code: string) => void;
     value?: string;
@@ -32,7 +33,7 @@ const CodeEditor = (props: Props) => {
     return (
         <div className={clsx(styles.editor, props.className)}>
             <AceEditor
-                className={clsx(styles.ace)}
+                className={clsx(styles.ace, props.aceClassName)}
                 style={{
                     width: '100%',
                     lineHeight: 'var(--ifm-pre-line-height)',
