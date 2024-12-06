@@ -5,6 +5,7 @@ import clsx from 'clsx';
 import CodeEditor from '@tdev-components/shared/CodeEditor';
 import UserTable from '@tdev-components/Admin/UserTable';
 import Button from '@tdev-components/shared/Button';
+import SelectUser from '@tdev-components/Admin/SelectUser';
 
 interface Props {
     onDone: (data: string[][]) => void;
@@ -22,7 +23,7 @@ const CodeImport = observer((props: Props) => {
             </div>
             <div className="card__body">
                 <div className={clsx(styles.main)}>
-                    <UserTable />
+                    <SelectUser mode="single" />
                     <div className={clsx(styles.input)}>
                         <CodeEditor aceClassName={clsx(styles.editor)} />
                     </div>
