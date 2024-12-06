@@ -10,6 +10,7 @@ import BrowserWindow from '@tdev-components/BrowserWindow';
 import { observer } from 'mobx-react-lite';
 import { useFirstMainDocument } from '@tdev-hooks/useFirstMainDocument';
 import { CmsTextMeta } from '@tdev-models/documents/CmsText';
+import CodeEditor from '@tdev-components/shared/CodeEditor'
 
 # CMS Text
 export const DocumentCreator = observer(() => {
@@ -23,6 +24,8 @@ export const DocumentCreator = observer(() => {
 });
 
 <DocumentCreator />
+
+<CodeEditor name="hello" onChange={(c) => console.log(c)} />
 
 ::::info[Erstellung von Documents]
 Im Gegensatz zu vielen anderen Komponenten erstellen die Komponenten rund um CMS-Text bewusst **nicht** automatisch ein Document, wenn keins vorhanden ist.

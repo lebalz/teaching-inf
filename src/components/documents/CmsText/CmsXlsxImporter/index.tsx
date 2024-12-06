@@ -4,8 +4,7 @@ import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
 import Popup from 'reactjs-popup';
 import Button from '@tdev-components/shared/Button';
-import FromXlsxClipboard from '@tdev-components/shared/FromXlsxClipboard';
-import { mdiClose, mdiFileExcelOutline } from '@mdi/js';
+import { mdiCodeBlockBraces, mdiFileExcel, mdiFileExcelOutline } from '@mdi/js';
 import { useStore } from '@tdev-hooks/useStore';
 import { DocumentType } from '@tdev-api/document';
 import { CmsTextEntries } from '../WithCmsText';
@@ -15,6 +14,8 @@ import { Source } from '@tdev-models/iDocument';
 import { ApiState } from '@tdev-stores/iStore';
 import AssignColumns, { type AssignedColumn } from '@tdev-components/shared/FromXlsxClipboard/AssignColumns';
 import ImportPreview from './ImportPreview';
+import XlsxImport from './XlsxImport';
+import CodeImport from './CodeImport';
 
 interface Props {
     className?: string;
@@ -57,6 +58,7 @@ const CmsXlsxImporter = observer((props: Props) => {
     const ref = React.useRef(null);
     const userStore = useStore('userStore');
     const documentStore = useStore('documentStore');
+    const [mode, setMode] = React.useState<'xlsx' | 'code'>('xlsx');
     const [table, setTable] = React.useState<string[][]>([]);
     const [assigned, setAssigned] = React.useState<AssignedColumn[]>([]);
     const [ready, setReady] = React.useState(false);
@@ -112,24 +114,41 @@ const CmsXlsxImporter = observer((props: Props) => {
                 </div>
                 <div className={clsx('card__body', styles.cardBody)}>
                     {table.length === 0 ? (
-                        <FromXlsxClipboard
-                            matchUsers
-                            onDone={(table) => {
-                                const newTable = table?.filter(
-                                    (row) => row.length > 0 && row[0].trim().length > 0
-                                );
-                                /**
-                                 * table includes header
-                                 */
-                                if (!newTable || newTable.length <= 1) {
-                                    return closeTooltip();
-                                }
-                                setTable(newTable);
-                            }}
-                            importLabel="Weiter"
-                            cancelIcon={mdiClose}
-                            includeHeader
-                        />
+                        <>
+                            <div className={clsx('button-group', 'button-group--block')}>
+                                <Button
+                                    icon={mdiFileExcel}
+                                    text={'Excel'}
+                                    onClick={() => {
+                                        setMode('xlsx');
+                                    }}
+                                    color={mode === 'xlsx' ? 'green' : undefined}
+                                />
+                                <Button
+                                    icon={mdiCodeBlockBraces}
+                                    text={'Code'}
+                                    onClick={() => {
+                                        setMode('code');
+                                    }}
+                                    color={mode === 'code' ? 'blue' : undefined}
+                                />
+                            </div>
+                            {mode === 'xlsx' ? (
+                                <XlsxImport
+                                    onDone={(data) => {
+                                        setTable(data);
+                                    }}
+                                    onClose={closeTooltip}
+                                />
+                            ) : (
+                                <CodeImport
+                                    onDone={(data) => {
+                                        // setTable(data);
+                                    }}
+                                    onClose={closeTooltip}
+                                />
+                            )}
+                        </>
                     ) : (
                         <>
                             <AssignColumns
