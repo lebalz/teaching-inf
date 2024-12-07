@@ -5,11 +5,11 @@ import CmsImporter from '../CmsImporter';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
 import { CmsTextEntries } from '../WithCmsText';
-import AccessSelector from '@tdev-components/PermissionsPanel/AccessSelector';
 
 interface Props {
     entries: CmsTextEntries;
     className?: string;
+    importMode?: 'xlsx' | 'code';
 }
 
 const CmsActions = observer((props: Props) => {
@@ -20,7 +20,7 @@ const CmsActions = observer((props: Props) => {
     }
     return (
         <div className={clsx(styles.actions, props.className)}>
-            <CmsImporter toAssign={entries} />
+            <CmsImporter toAssign={entries} importMode={props.importMode} />
             <PermissionsPanel documentRootIds={documentRootIds} />
         </div>
     );

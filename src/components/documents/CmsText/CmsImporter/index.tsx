@@ -4,7 +4,7 @@ import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
 import Popup from 'reactjs-popup';
 import Button from '@tdev-components/shared/Button';
-import { mdiCodeBlockBraces, mdiFileExcel, mdiFileExcelOutline } from '@mdi/js';
+import { mdiCodeBlockBraces, mdiDatabaseImport, mdiFileExcel, mdiFileExcelOutline } from '@mdi/js';
 import { useStore } from '@tdev-hooks/useStore';
 import { DocumentType } from '@tdev-api/document';
 import { CmsTextEntries } from '../WithCmsText';
@@ -20,6 +20,7 @@ import CodeImport from './CodeImport';
 interface Props {
     className?: string;
     toAssign: CmsTextEntries;
+    importMode?: 'xlsx' | 'code';
 }
 
 const createCmsTexts = (documentStore: DocumentStore, table: string[][], assignments: AssignedColumn[]) => {
@@ -58,7 +59,7 @@ const CmsImporter = observer((props: Props) => {
     const ref = React.useRef(null);
     const userStore = useStore('userStore');
     const documentStore = useStore('documentStore');
-    const [mode, setMode] = React.useState<'xlsx' | 'code'>('xlsx');
+    const [mode, setMode] = React.useState<'xlsx' | 'code'>(props.importMode || 'xlsx');
     const [table, setTable] = React.useState<string[][]>([]);
     const [assigned, setAssigned] = React.useState<AssignedColumn[]>([]);
     const [ready, setReady] = React.useState(false);
@@ -79,8 +80,8 @@ const CmsImporter = observer((props: Props) => {
                 <span className={clsx(styles.importer, props.className)}>
                     <Button
                         onClick={(e) => e.preventDefault()}
-                        icon={mdiFileExcelOutline}
-                        color={'green'}
+                        icon={mdiDatabaseImport}
+                        color={'blue'}
                         noOutline={isOpen}
                     />
                 </span>
@@ -122,7 +123,8 @@ const CmsImporter = observer((props: Props) => {
                                     onClick={() => {
                                         setMode('xlsx');
                                     }}
-                                    color={mode === 'xlsx' ? 'green' : undefined}
+                                    active={mode === 'xlsx'}
+                                    color="green"
                                 />
                                 <Button
                                     icon={mdiCodeBlockBraces}
@@ -130,7 +132,8 @@ const CmsImporter = observer((props: Props) => {
                                     onClick={() => {
                                         setMode('code');
                                     }}
-                                    color={mode === 'code' ? 'blue' : undefined}
+                                    active={mode === 'code'}
+                                    color="blue"
                                 />
                             </div>
                             {mode === 'xlsx' ? (
