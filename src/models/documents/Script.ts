@@ -159,15 +159,16 @@ export default class Script extends iDocument<DocumentType.Script> {
         // nop
     }
 
+    @computed
     get versions(): ScriptVersion[] {
         return (this.root?.documents || []).filter(
-            (doc) => doc.type === DocumentType.ScriptVersion
+            (doc) => doc.type === DocumentType.ScriptVersion && doc.authorId === this.authorId
         ) as ScriptVersion[];
     }
 
     @action
     _addVersion(version: Version) {
-        if (!this.isVersioned) {
+        if (!this.isVersioned || this.store.root.userStore.isUserSwitched) {
             return;
         }
         const versionData: ScriptVersionData = {
