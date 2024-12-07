@@ -206,10 +206,10 @@ class DocumentStore extends iStore<`delete-${string}`> {
             const hasAdminAccess =
                 this.root.userStore.current?.isAdmin && model.authorId === this.root.userStore.current.id;
             if (!model.canEdit && !hasAdminAccess) {
-                return Promise.resolve(undefined);
+                return Promise.resolve('error');
             }
             if (!RWAccess.has(model.root.permission) && !hasAdminAccess) {
-                return Promise.resolve(undefined);
+                return Promise.resolve('error');
             }
             return this.withAbortController(`save-${id}`, (sig) => {
                 return apiUpdate(model.id, model.data, sig.signal);
