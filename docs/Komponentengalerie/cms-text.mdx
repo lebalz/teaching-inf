@@ -198,8 +198,7 @@ Zusätzlich wird ein weiterer CMS-Text mit der ID `2c0c085d-388a-48cd-9871-975ba
     entries={{
         demo: "30918f4b-8400-42d9-8e1f-f19d27357494", 
         code: "f6b64809-e570-4a88-9a84-6c57e0240e38"
-    }} 
-    showActions
+    }}
 >
     <DefinitionList>
         <dt>Hallo</dt>
@@ -211,7 +210,7 @@ Zusätzlich wird ein weiterer CMS-Text mit der ID `2c0c085d-388a-48cd-9871-975ba
         <dt>CMS-Code</dt>
         <dd><CmsCode name="code" codeBlockProps={{language: 'py'}} /></dd>
         <dt>Anderer CMS-Eintrag</dt>
-        <dt><CmsText id="2c0c085d-388a-48cd-9871-975bab0ffda3" /></dt>
+        <dd><CmsText id="2c0c085d-388a-48cd-9871-975bab0ffda3" /></dd>
     </DefinitionList>
 </WithCmsText>
 ```
@@ -222,7 +221,6 @@ Zusätzlich wird ein weiterer CMS-Text mit der ID `2c0c085d-388a-48cd-9871-975ba
             demo: "30918f4b-8400-42d9-8e1f-f19d27357494", 
             code: "f6b64809-e570-4a88-9a84-6c57e0240e38"
         }}
-        showActions
     >
         <DefinitionList>
             <dt>Hallo</dt>
@@ -234,7 +232,7 @@ Zusätzlich wird ein weiterer CMS-Text mit der ID `2c0c085d-388a-48cd-9871-975ba
             <dt>CMS-Code</dt>
             <dd><CmsCode name="code" codeBlockProps={{language: 'py'}} /></dd>
             <dt>Anderer CMS-Eintrag</dt>
-            <dt><CmsText id="2c0c085d-388a-48cd-9871-975bab0ffda3" /></dt>
+            <dd><CmsText id="2c0c085d-388a-48cd-9871-975bab0ffda3" /></dd>
         </DefinitionList>
     </WithCmsText>
 </BrowserWindow>
@@ -247,7 +245,6 @@ Bei mehreren Einträgen zeigt die `<WithCmsText>`-Klammer ihren Inhalt nur dann 
         a: "30918f4b-8400-42d9-8e1f-f19d27357494",
         b: "2c0c085d-388a-48cd-9871-975bab0ffda3"
     }}
-    showActions
 >
     <DefinitionList>
         <dt>Hallo</dt>
@@ -257,7 +254,7 @@ Bei mehreren Einträgen zeigt die `<WithCmsText>`-Klammer ihren Inhalt nur dann 
         <dt>CMS-Eintrag</dt>
         <dd><CmsText name="a" /></dd>
         <dt>Anderer CMS-Eintrag</dt>
-        <dt><CmsText name="b" /></dt>
+        <dd><CmsText name="b" /></dd>
     </DefinitionList>
 </WithCmsText>
 ```
@@ -268,7 +265,6 @@ Bei mehreren Einträgen zeigt die `<WithCmsText>`-Klammer ihren Inhalt nur dann 
             a: '30918f4b-8400-42d9-8e1f-f19d27357494',
             b: '2c0c085d-388a-48cd-9871-975bab0ffda3'
         }}
-        showActions
     >
         <DefinitionList>
             <dt>Hallo</dt>
@@ -278,7 +274,7 @@ Bei mehreren Einträgen zeigt die `<WithCmsText>`-Klammer ihren Inhalt nur dann 
             <dt>CMS-Eintrag</dt>
             <dd><CmsText name="a" /></dd>
             <dt>Anderer CMS-Eintrag</dt>
-            <dt><CmsText name="b" /></dt>
+            <dd><CmsText name="b" /></dd>
         </DefinitionList>
     </WithCmsText>
 </BrowserWindow>
@@ -296,7 +292,7 @@ Bei mehreren Einträgen zeigt die `<WithCmsText>`-Klammer ihren Inhalt nur dann 
         <dd><CmsText name="demo" /></dd>
         <WithCmsText entries={{demo: "2c0c085d-388a-48cd-9871-975bab0ffda3"}}>
             <dt>Anderer CMS-Eintrag</dt>
-            <dt><CmsText id="demo" /></dt>
+            <dd><CmsText name="demo" /></dd>
         </WithCmsText>
     </DefinitionList>
 </WithCmsText>
@@ -313,7 +309,7 @@ Bei mehreren Einträgen zeigt die `<WithCmsText>`-Klammer ihren Inhalt nur dann 
             <dd><CmsText name="demo" /></dd>
             <WithCmsText entries={{demo: "2c0c085d-388a-48cd-9871-975bab0ffda3"}}>
                 <dt>Anderer CMS-Eintrag</dt>
-                <dt><CmsText id="demo" /></dt>
+                <dd><CmsText name="demo" /></dd>
             </WithCmsText>
         </DefinitionList>
     </WithCmsText>
@@ -321,7 +317,7 @@ Bei mehreren Einträgen zeigt die `<WithCmsText>`-Klammer ihren Inhalt nur dann 
 
 ## CMS-Texte hochladen
 
-Um CMS-Texte hochzuladen, kann mit dem Attribut `showActions` ein Upload-Formular für Admins angezeigt. Dieses Formular ermöglicht das Hochladen von Texten für die angegebene DocumentRootId (oder im Falle eines `WithCmsText`s auch für mehrere DocumentRootIds).
+Beim `WithCmsText` wird standardmässig ein Upload-Formular für Admins angezeigt. Dieses Formular ermöglicht das Hochladen von Texten für die angegebene DocumentRootId (oder im Falle eines `WithCmsText`s auch für mehrere DocumentRootIds). Für einzelne CMS-Texte kann das Formular mit `showActions` angezeigt werden.
 
 Die CMS-Texte werden "im Namen des Users" erstellt, d.h. der User, der das Formular ausfüllt, wird als Autor des CMS-Textes gesetzt.
 
@@ -336,8 +332,7 @@ Im Beispiel unten können die CMS-Texte `demo` und `code` hochgeladen werden und
     entries={{
         demo: "30918f4b-8400-42d9-8e1f-f19d27357494", 
         code: "f6b64809-e570-4a88-9a84-6c57e0240e38"
-    }} 
-    showActions
+    }}
 >
     CMS-Eintrag
     : <CmsText name="demo" showActions/>
@@ -351,8 +346,7 @@ Im Beispiel unten können die CMS-Texte `demo` und `code` hochgeladen werden und
         entries={{
             demo: "30918f4b-8400-42d9-8e1f-f19d27357494", 
             code: "f6b64809-e570-4a88-9a84-6c57e0240e38"
-        }} 
-        showActions
+        }}
     >
         CMS-Eintrag
         : <CmsText name="demo" showActions/>
@@ -360,3 +354,7 @@ Im Beispiel unten können die CMS-Texte `demo` und `code` hochgeladen werden und
         : <CmsCode name="code" codeBlockProps={{language: 'py'}} showActions/>
     </WithCmsText>
 </BrowserWindow>
+
+:::info[Anmerkung: `hideActions`]
+Das Berechtigungs- und Hochlade-Panel kann mit `hideActions` ausgeblendet werden.
+:::
