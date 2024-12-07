@@ -13,6 +13,12 @@ import { CmsTextMeta } from '@tdev-models/documents/CmsText';
 import CodeEditor from '@tdev-components/shared/CodeEditor'
 
 # CMS Text
+
+Soll ein bestimmter Wert nicht fix im Markdown hinterlegt, sondern aus der Datenbank geladen werden, eignet sich die Komponente `<CmsText>`.
+
+Ein möglicher Anwendungsfall ist die Bereitstellung individualisierter Informationen (z.B. Noten, Prüfungsfragen, ...).
+
+
 export const DocumentCreator = observer(() => {
     useFirstMainDocument('30918f4b-8400-42d9-8e1f-f19d27357494', new CmsTextMeta({
         default: 'CMS-Text aus der Datenbank 📚'
@@ -24,8 +30,6 @@ export const DocumentCreator = observer(() => {
 });
 
 <DocumentCreator />
-
-<CodeEditor name="hello" onChange={(c) => console.log(c)} />
 
 ::::info[Erstellung von Documents]
 Im Gegensatz zu vielen anderen Komponenten erstellen die Komponenten rund um CMS-Text bewusst **nicht** automatisch ein Document, wenn keins vorhanden ist.
@@ -58,10 +62,6 @@ export const DocumentCreator = observer(() => {
 ```
 :::
 ::::
-
-Soll ein bestimmter Wert nicht fix im Markdown hinterlegt, sondern aus der Datenbank geladen werden, eignet sich die Komponente `<CmsText>`.
-
-Ein möglicher Anwendungsfall ist die Bereitstellung individualisierter Informationen (z.B. Noten, Prüfungsfragen, ...).
 
 ## Inline-Text aus dem CMS
 ```md

@@ -26,7 +26,14 @@ interface Props {
 
 const AssignColumns = (props: Props) => {
     const { table, toAssign, onChange } = props;
-    const [assigned, setAssigned] = React.useState<AssignedColumn[]>([]);
+
+    const count = Object.values(toAssign).length;
+    const isSingleAssignment = count === 1;
+    const [assigned, setAssigned] = React.useState<AssignedColumn[]>(
+        isSingleAssignment && table[0].length === 2
+            ? [{ id: Object.values(toAssign)[0], idx: 1, name: Object.keys(toAssign)[0] }]
+            : []
+    );
     const [currentAssignment, setCurrentAssignment] = React.useState<AssignedColumn | null>({
         id: Object.values(toAssign)[0],
         idx: -1,
@@ -35,9 +42,6 @@ const AssignColumns = (props: Props) => {
     React.useEffect(() => {
         onChange(assigned);
     }, [onChange, assigned]);
-
-    const count = Object.values(toAssign).length;
-    const isSingleAssignment = count === 1;
     const colorIdxMap = new Map(Object.values(toAssign).map((id, idx) => [id, idx % COLORS.length]));
 
     return (

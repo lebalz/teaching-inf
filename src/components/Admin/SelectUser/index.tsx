@@ -21,12 +21,6 @@ import _ from 'lodash';
 import PageStudentGroupFilter from '@tdev-components/shared/PageStudentGroupFilter';
 import TextInput from '@tdev-components/shared/TextInput';
 
-interface Props {
-    className?: string;
-    filterClassName?: string;
-    mode: 'single' | 'multiple';
-}
-
 const IconMap = {
     none: mdiCircleOutline,
     some: mdiCircleMultiple,
@@ -37,6 +31,13 @@ const IconColor = {
     some: 'orange',
     all: 'green'
 };
+interface Props {
+    className?: string;
+    filterClassName?: string;
+    tableClassName?: string;
+    mode: 'single' | 'multiple';
+    onChange?: (ids: string[]) => void;
+}
 
 const SelectUser = observer((props: Props) => {
     const [filter, setFilter] = React.useState('');
@@ -48,6 +49,12 @@ const SelectUser = observer((props: Props) => {
     React.useEffect(() => {
         setSearchRegex(new RegExp(filter, 'i'));
     }, [filter]);
+
+    React.useEffect(() => {
+        if (props.onChange) {
+            props.onChange(ids);
+        }
+    }, [ids]);
 
     if (!currentPage) {
         return null;
@@ -67,7 +74,7 @@ const SelectUser = observer((props: Props) => {
                 <span className={clsx('badge', 'badge--primary')}>{`Users: ${users.length}`}</span>
             </div>
             <PageStudentGroupFilter />
-            <div className={clsx(styles.tableWrapper)}>
+            <div className={clsx(styles.tableWrapper, props.tableClassName)}>
                 <table className={clsx(styles.table)}>
                     <thead>
                         <tr>

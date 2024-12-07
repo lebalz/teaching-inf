@@ -143,7 +143,7 @@ const CmsImporter = observer((props: Props) => {
                             ) : (
                                 <CodeImport
                                     onDone={(data) => {
-                                        // setTable(data);
+                                        setTable(data);
                                     }}
                                     onClose={closeTooltip}
                                 />
