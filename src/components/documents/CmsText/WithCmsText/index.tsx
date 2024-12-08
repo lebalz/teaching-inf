@@ -13,6 +13,7 @@ interface Props {
     entries: CmsTextEntries;
     hideActions?: boolean;
     children?: React.ReactNode;
+    mode?: 'xlsx' | 'code';
 }
 
 const WithCmsText = observer((props: Props) => {
@@ -23,11 +24,25 @@ const WithCmsText = observer((props: Props) => {
 
     return allDocumentsAvailable ? (
         <CmsTextContext.Provider value={{ entries }}>
-            {!hideActions && <CmsActions entries={entries} className={clsx(styles.actions, 'shadow--lw')} />}
+            {!hideActions && (
+                <CmsActions
+                    entries={entries}
+                    className={clsx(styles.actions, 'shadow--lw')}
+                    mode={props.mode}
+                />
+            )}
             {children}
         </CmsTextContext.Provider>
     ) : (
-        <>{!hideActions && <CmsActions entries={entries} className={clsx(styles.actions, 'shadow--lw')} />}</>
+        <>
+            {!hideActions && (
+                <CmsActions
+                    entries={entries}
+                    className={clsx(styles.actions, 'shadow--lw')}
+                    mode={props.mode}
+                />
+            )}
+        </>
     );
 });
 

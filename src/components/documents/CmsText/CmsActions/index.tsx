@@ -9,7 +9,7 @@ import { CmsTextEntries } from '../WithCmsText';
 interface Props {
     entries: CmsTextEntries;
     className?: string;
-    importMode?: 'xlsx' | 'code';
+    mode?: 'xlsx' | 'code';
 }
 
 const CmsActions = observer((props: Props) => {
@@ -20,7 +20,7 @@ const CmsActions = observer((props: Props) => {
     }
     return (
         <div className={clsx(styles.actions, props.className)}>
-            <CmsImporter toAssign={entries} importMode={props.importMode} />
+            <CmsImporter toAssign={entries} mode={props.mode} />
             <PermissionsPanel documentRootIds={documentRootIds} />
         </div>
     );

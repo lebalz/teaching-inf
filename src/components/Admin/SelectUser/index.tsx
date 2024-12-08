@@ -54,7 +54,23 @@ const SelectUser = observer((props: Props) => {
         if (props.onChange) {
             props.onChange(ids);
         }
+        console.log(ids);
     }, [ids]);
+
+    /**
+     * this effect ensures that only displayed users are selected
+     */
+    React.useEffect(() => {
+        if (currentPage?.activeStudentGroup) {
+            setIds(
+                ids.filter((id) => currentPage.activeStudentGroup?.students.map((s) => s.id).includes(id))
+            );
+        } else if (currentPage?.primaryStudentGroup) {
+            setIds(
+                ids.filter((id) => currentPage.primaryStudentGroup?.students.map((s) => s.id).includes(id))
+            );
+        }
+    }, [currentPage?.activeStudentGroup, currentPage?.primaryStudentGroup]);
 
     if (!currentPage) {
         return null;
@@ -105,7 +121,7 @@ const SelectUser = observer((props: Props) => {
                             .map((user, idx) => {
                                 const selected = ids.includes(user.id);
                                 return (
-                                    <tr>
+                                    <tr key={user.id}>
                                         <td>
                                             <Button
                                                 noBorder

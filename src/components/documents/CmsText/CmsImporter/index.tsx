@@ -20,7 +20,7 @@ import CodeImport from './CodeImport';
 interface Props {
     className?: string;
     toAssign: CmsTextEntries;
-    importMode?: 'xlsx' | 'code';
+    mode?: 'xlsx' | 'code';
 }
 
 const createCmsTexts = (documentStore: DocumentStore, table: string[][], assignments: AssignedColumn[]) => {
@@ -59,7 +59,7 @@ const CmsImporter = observer((props: Props) => {
     const ref = React.useRef(null);
     const userStore = useStore('userStore');
     const documentStore = useStore('documentStore');
-    const [mode, setMode] = React.useState<'xlsx' | 'code'>(props.importMode || 'xlsx');
+    const [mode, setMode] = React.useState<'xlsx' | 'code'>(props.mode || 'xlsx');
     const [table, setTable] = React.useState<string[][]>([]);
     const [assigned, setAssigned] = React.useState<AssignedColumn[]>([]);
     const [ready, setReady] = React.useState(false);
@@ -88,6 +88,7 @@ const CmsImporter = observer((props: Props) => {
             }
             on="click"
             modal
+            nested
             overlayStyle={{ background: 'rgba(0,0,0,0.5)' }}
             onOpen={() => {
                 setIsOpen(true);
@@ -102,7 +103,7 @@ const CmsImporter = observer((props: Props) => {
                     }
                 });
             }}
-            closeOnEscape={false}
+            closeOnEscape={true}
             onClose={() => {
                 setIsOpen(false);
                 reset();

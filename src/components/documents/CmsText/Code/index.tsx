@@ -30,6 +30,7 @@ const CmsCode = observer((props: Props) => {
                 <CmsActions
                     entries={{ [documentRootId]: documentRootId } as CmsTextEntries}
                     className={clsx(styles.codeBlock)}
+                    mode="code"
                 />
                 <CodeBlock {...(props.codeBlockProps || {})}>{cmsText.text}</CodeBlock>
             </div>
