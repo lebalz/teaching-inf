@@ -23,35 +23,40 @@ interface Props {
     mode?: 'xlsx' | 'code';
 }
 
-const createCmsTexts = (documentStore: DocumentStore, table: string[][], assignments: AssignedColumn[]) => {
+const createCmsTexts = async (
+    documentStore: DocumentStore,
+    table: string[][],
+    assignments: AssignedColumn[]
+) => {
     const { documentRootStore } = documentStore.root;
 
-    const promises = assignments.flatMap((assignment) => {
+    for (const assignment of assignments) {
         const documentRoot = documentRootStore.find(assignment.id);
         if (!documentRoot) {
-            return Promise.resolve();
+            continue;
         }
-        return table.flatMap((row) => {
+
+        for (const row of table) {
             const userId = row[0];
             const doc = documentRoot.allDocuments.find((d) => d.isMain && d.authorId === userId) as CmsText;
+
             if (doc) {
                 // update the document with the new text when needed
-                if (doc.text === row[assignment.idx]) {
-                    return Promise.resolve();
+                if (doc.text !== row[assignment.idx]) {
+                    doc.setData({ text: row[assignment.idx] }, Source.LOCAL);
+                    await doc.saveNow();
                 }
-                doc.setData({ text: row[assignment.idx] }, Source.LOCAL);
-                return doc.saveNow();
+            } else {
+                // create a new document with the text
+                await documentStore.create({
+                    type: DocumentType.CmsText,
+                    authorId: userId,
+                    documentRootId: assignment.id,
+                    data: { text: row[assignment.idx] }
+                });
             }
-            // create a new document with the text
-            return documentStore.create({
-                type: DocumentType.CmsText,
-                authorId: userId,
-                documentRootId: assignment.id,
-                data: { text: row[assignment.idx] }
-            });
-        });
-    });
-    return Promise.all(promises);
+        }
+    }
 };
 
 const CmsImporter = observer((props: Props) => {
@@ -162,6 +167,7 @@ const CmsImporter = observer((props: Props) => {
                                 table={table}
                                 toAssign={toAssign}
                                 trimmedCells={{ [0]: 7 }}
+                                tableClassName={clsx(styles.assignTable)}
                             />
                             <ImportPreview tableWithHeader={table} assignments={assigned} />
                         </>
