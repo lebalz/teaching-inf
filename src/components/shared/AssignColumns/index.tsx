@@ -73,7 +73,7 @@ const AssignColumns = (props: Props) => {
                                     text={name || id}
                                     noOutline={currentAssignment?.id === id}
                                     color={COLORS[colorIdxMap.get(id)!]}
-                                    key={id}
+                                    key={`assign-${id}`}
                                 />
                             );
                         })}
