@@ -12,7 +12,7 @@ import DocumentStore from '@tdev-stores/DocumentStore';
 import CmsText from '@tdev-models/documents/CmsText';
 import { Source } from '@tdev-models/iDocument';
 import { ApiState } from '@tdev-stores/iStore';
-import AssignColumns, { type AssignedColumn } from '@tdev-components/shared/FromXlsxClipboard/AssignColumns';
+import AssignColumns, { type AssignedColumn } from '@tdev-components/shared/AssignColumns';
 import ImportPreview from './ImportPreview';
 import XlsxImport from './XlsxImport';
 import CodeImport from './CodeImport';
