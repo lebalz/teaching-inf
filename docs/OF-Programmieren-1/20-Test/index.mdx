@@ -1,0 +1,31 @@
+---
+page_id: 1fb6cbf9-ea8f-4610-ac73-2870ad9df03b
+---
+
+import CmsText from '@tdev-components/documents/CmsText';
+import WithCmsText from '@tdev-components/documents/CmsText/WithCmsText';
+
+# Tests
+
+
+<WithCmsText 
+    entries={{
+        name: 'e32b7668-ab20-4e4b-a22f-5ad7a61fd11d',
+        theorie: '8c4426a5-3cff-449e-a5c6-dee183a3eeb2',
+        praktisch: 'c53e4197-06fa-4428-a1cb-062f30d96868',
+        grade: '30a0e692-aba7-4fc9-ab73-1812579bb783'
+    }}
+>
+    ## Kurzprobe Programmieren 1
+
+    Name
+    : <CmsText name="name"/>
+    Zählt
+    : 0.5
+    Theorie Teil
+    : <CmsText name="theorie"/> / 8
+    Praktischer Teil
+    : <CmsText name="praktisch"/> / 9
+    Note
+    : <CmsText name="grade"/>
+</WithCmsText>
