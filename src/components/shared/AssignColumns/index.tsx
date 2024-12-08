@@ -60,7 +60,7 @@ const AssignColumns = (props: Props) => {
             {count > 1 && (
                 <>
                     <div className={clsx(styles.names, 'button-group', 'button--block')}>
-                        {Object.entries(toAssign).map(([name, id]) => {
+                        {Object.entries(toAssign).map(([name, id], idx) => {
                             return (
                                 <Button
                                     onClick={() => {
@@ -73,7 +73,7 @@ const AssignColumns = (props: Props) => {
                                     text={name || id}
                                     noOutline={currentAssignment?.id === id}
                                     color={COLORS[colorIdxMap.get(id)!]}
-                                    key={`assign-${id}`}
+                                    key={idx}
                                 />
                             );
                         })}
