@@ -22,6 +22,7 @@ interface Props {
     toAssign: AssignableColumns;
     onChange: (assigned: AssignedColumn[]) => void;
     trimmedCells?: { [key: number]: number };
+    tableClassName?: string;
 }
 
 const AssignColumns = (props: Props) => {
@@ -87,6 +88,7 @@ const AssignColumns = (props: Props) => {
                     index: a.idx,
                     color: IFM_COLORS[colorIdxMap.get(a.id)!]
                 }))}
+                className={clsx(props.tableClassName)}
                 trimmedCells={props.trimmedCells}
                 onSelectColumn={(idx) => {
                     if (isSingleAssignment) {
