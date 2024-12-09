@@ -113,7 +113,7 @@ const PermissionsPanel = observer((props: Props) => {
                     'top center'
                 ]
             }
-            keepTooltipInside=".markdown"
+            keepTooltipInside="#__docusaurus"
             modal={isMobileView}
             onOpen={action(() => {
                 documentRoots.forEach((dr) => permissionStore.loadPermissions(dr));
