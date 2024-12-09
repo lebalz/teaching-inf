@@ -4,7 +4,7 @@ sidebar_custom_props:
 page_id: 5604d4bd-d35b-4b52-8df9-1b3f9cc054b8
 ---
 
-import Strukto from '@site/src/components/VisualizationTools/Strukto';
+import Strukto from '@tdev-components/VisualizationTools/Strukto';
 
 # Struktogramme
 

@@ -22,7 +22,7 @@ Wiederverwenden
 
 ```py
 anzahl = 12
-print(anzahl)
+print(anzahl) # => 12
 ```
 
 
