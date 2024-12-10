@@ -71,14 +71,7 @@ const PermissionsPanel = observer((props: Props) => {
                 className={clsx(styles.viewedUserPermissionPanel, props.className)}
                 onClick={(e) => e.stopPropagation()}
             >
-                {userPermissions.length === documentRoots.length ? (
-                    <UserPermission permissions={userPermissions} />
-                ) : (
-                    <MissingPermissionsBadge
-                        available={userPermissions.length}
-                        total={documentRoots.length}
-                    />
-                )}
+                <UserPermission permissions={userPermissions} />
             </div>
         );
     }
