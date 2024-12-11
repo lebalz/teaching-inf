@@ -350,15 +350,77 @@ Some content
 
     it('does not : after an inline element', async () => {
         const input = `# Details element example
-      - \`a\`: bla
-      - \`b\`: list
+    - \`a\`: bla
+    - \`b\`: list
+    `;
+        const result = await process(input);
+        expect(result).toMatchInlineSnapshot(`
+      "# Details element example
+
+      * \`a\`: bla
+      * \`b\`: list
+      "
+    `);
+    });
+
+    it('adds :::dd content to the current deflist', async () => {
+        const input = `# Details with block content
+      Start
+
+      Code
+      : Hello World
+      :::dd
+      \`\`\`py
+      print('Hello World')
+      \`\`\`
+      :::
       `;
         const result = await process(input);
         expect(result).toMatchInlineSnapshot(`
-        "# Details element example
+          "# Details with block content
 
-        * \`a\`: bla
-        * \`b\`: list
+          Start
+
+          <dl>
+            <dt>Code</dt>
+
+            <dd>Hello World</dd>
+
+            <dd>
+              \`\`\`py
+              print('Hello World')
+              \`\`\`
+            </dd>
+          </dl>
+          "
+        `);
+    });
+    it('handles :::dd as the first child of deflist', async () => {
+        const input = `# Details with block content
+    Start
+
+    Code
+    :::dd
+    \`\`\`py
+    print('Hello World')
+    \`\`\`
+    :::
+    `;
+        const result = await process(input);
+        expect(result).toMatchInlineSnapshot(`
+        "# Details with block content
+
+        Start
+
+        <dl>
+          <dt>Code</dt>
+
+          <dd>
+            \`\`\`py
+            print('Hello World')
+            \`\`\`
+          </dd>
+        </dl>
         "
       `);
     });
