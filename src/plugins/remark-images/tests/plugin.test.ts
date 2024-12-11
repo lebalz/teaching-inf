@@ -1,8 +1,14 @@
+import { visit } from 'unist-util-visit';
+import type { MdxJsxAttribute, MdxJsxTextElement } from 'mdast-util-mdx';
 import { remark } from 'remark';
 import remarkMdx from 'remark-mdx';
 import remarkDirective from 'remark-directive';
 import { describe, expect, it } from 'vitest';
 import { fileURLToPath } from 'url';
+import { CaptionVisitor } from '../plugin';
+import { VFile } from 'vfile';
+import { Parent } from 'mdast';
+
 const __filename = fileURLToPath(import.meta.url);
 
 const alignLeft = (content: string) => {
@@ -12,13 +18,15 @@ const alignLeft = (content: string) => {
         .join('\n');
 };
 
-const process = async (content: string) => {
+const process = async (content: string, captionVisitors: CaptionVisitor[] = []) => {
     const { default: plugin } = await import('../plugin');
+    const file = new VFile({ value: alignLeft(content), history: [__filename] });
+
     const result = await remark()
         .use(remarkMdx)
         .use(remarkDirective)
-        .use(plugin as any, { vFile: { history: [__filename] } } as any)
-        .process(alignLeft(content));
+        .use(plugin, { captionVisitors: captionVisitors })
+        .process(file);
 
     return result.value;
 };
@@ -194,5 +202,46 @@ describe('#image', () => {
         </figure>
         "
       `);
+    });
+    it('processes caption and applies additional visitors', async () => {
+        const visitor = (ast: Parent, source: string, config: { tagName?: string; className?: string }) => {
+            visit(ast, 'strong', (node, idx, parent) => {
+                if (!parent || node.position === undefined || idx === undefined) {
+                    return;
+                }
+                const startOg = node.position.start.offset || 0;
+                const endOg = node.position.end.offset;
+
+                const strToOperateOn = source.substring(startOg, endOg);
+                const wasUnderscored = strToOperateOn.startsWith('__') && strToOperateOn.endsWith('__');
+                if (wasUnderscored) {
+                    parent.children.splice(idx, 1, {
+                        type: 'mdxJsxTextElement',
+                        name: config.tagName || 'strong',
+                        attributes: config.className
+                            ? [{ type: 'mdxJsxAttribute', name: 'className', value: config.className }]
+                            : [],
+                        children: node.children
+                    } as MdxJsxTextElement);
+                }
+            });
+        };
+        const captionVisitor: CaptionVisitor = (ast, source) => {
+            visitor(ast, source, {
+                className: 'boxed'
+            });
+        };
+        const input = `
+      ![a [__link__](https://link.com) caption](assets/placeholder.svg)
+      `;
+        const result = await process(input, [captionVisitor]);
+        expect(result).toMatchInlineSnapshot(`
+          "<figure>
+            ![a link caption](assets/placeholder.svg)
+
+            <figcaption><span style={{"flexGrow":1}} />a [<strong className="boxed">link</strong>](https://link.com) caption<span style={{"flexGrow":1}} /><SourceRef bib={{"author":"Flanoz","source":"https://commons.wikimedia.org/wiki/File:Placeholder_view_vector.svg","licence":"CC 0","licence_url":"https://creativecommons.org/publicdomain/zero/1.0/deed.en","edited":false}} /></figcaption>
+          </figure>
+          "
+        `);
     });
 });

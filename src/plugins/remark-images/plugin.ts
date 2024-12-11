@@ -12,16 +12,16 @@ const DEFAULT_TAG_NAMES = {
     sourceRef: 'SourceRef'
 };
 
+export type CaptionVisitor = (captionAst: Parent, rawCaption: string) => void;
+
 interface OptionsInput {
     tagNames?: {
         figure?: string;
         figcaption?: string;
         sourceRef?: string;
     };
-    vFile?: {
-        history: string[];
-    };
     inlineEmptyCaptions?: boolean;
+    captionVisitors?: CaptionVisitor[];
 }
 
 const SPACER_SPAN = {
@@ -89,7 +89,7 @@ const plugin: Plugin<OptionsInput[], Root> = function plugin(
     optionsInput = { tagNames: DEFAULT_TAG_NAMES }
 ): Transformer<Root> {
     return async (ast, vfile) => {
-        const dir = path.dirname(vfile.history[0] || optionsInput?.vFile?.history[0] || '');
+        const dir = path.dirname(vfile.history[0] || '');
         const bibPromises = [] as Promise<any>[];
         unshiftImagesFromParagraphs(ast);
         visit(ast, 'image', (node, idx, parent) => {
@@ -137,6 +137,9 @@ const plugin: Plugin<OptionsInput[], Root> = function plugin(
 
             if (cleanedAlt) {
                 const altAst = this.parse(cleanedAlt) as Parent;
+                if (optionsInput?.captionVisitors) {
+                    optionsInput.captionVisitors.forEach((visitor) => visitor(altAst, cleanedAlt));
+                }
                 /* flatten paragraphs by only using their child nodes */
                 const altNodes = altAst.children.flatMap((n) =>
                     n.type === 'paragraph' ? n.children : (n as PhrasingContent)
