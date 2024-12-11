@@ -111,13 +111,12 @@ const plugin: Plugin<OptionsInput[], Root> = function plugin(
                 return SKIP;
             }
             node.alt = cleanedText(node.alt || '');
-            const jsxType = parent.type === 'paragraph' ? 'mdxJsxTextElement' : 'mdxJsxFlowElement';
             const figure = {
-                type: jsxType,
+                type: 'mdxJsxFlowElement',
                 name: optionsInput?.tagNames?.figure || DEFAULT_TAG_NAMES.figure,
                 attributes: Object.keys(options).length > 0 ? [toJsxAttribute('options', options)] : [],
-                children: [node]
-            } as MdxJsxFlowElement | MdxJsxTextElement;
+                children: [node] as unknown as BlockContent[]
+            } as MdxJsxFlowElement;
 
             /**
              * Add alt as caption
