@@ -134,17 +134,37 @@ describe('#image', () => {
         `);
     });
 
-    it('wraps inline image to inlined figure', async () => {
+    it('unwraps inline image to figures', async () => {
         const input = `# Heading
-            Hello ![](assets/placeholder.svg) my friend.
+              Hello ![](assets/placeholder.svg) my friend.
+          `;
+        const result = await process(input);
+        expect(result).toMatchInlineSnapshot(`
+            "# Heading
+
+            Hello
+
+            <figure>
+              ![](assets/placeholder.svg)
+
+              <figcaption className="inline"><span style={{"flexGrow":1}} /><SourceRef bib={{"author":"Flanoz","source":"https://commons.wikimedia.org/wiki/File:Placeholder_view_vector.svg","licence":"CC 0","licence_url":"https://creativecommons.org/publicdomain/zero/1.0/deed.en","edited":false}} /></figcaption>
+            </figure>
+
+            my friend.
+            "
+          `);
+    });
+    it('prevents unwrapping inline image when @inline is present', async () => {
+        const input = `# Heading
+            Hello ![@inline --width=50px](assets/placeholder.svg) my friend.
         `;
         const result = await process(input);
         expect(result).toMatchInlineSnapshot(`
-      "# Heading
+          "# Heading
 
-      Hello <figure>![](assets/placeholder.svg)<figcaption className="inline"><span style={{"flexGrow":1}} /><SourceRef bib={{"author":"Flanoz","source":"https://commons.wikimedia.org/wiki/File:Placeholder_view_vector.svg","licence":"CC 0","licence_url":"https://creativecommons.org/publicdomain/zero/1.0/deed.en","edited":false}} /></figcaption></figure> my friend.
-      "
-    `);
+          Hello ![](assets/placeholder.svg) my friend.
+          "
+        `);
     });
 
     it('processes caption as markdown', async () => {

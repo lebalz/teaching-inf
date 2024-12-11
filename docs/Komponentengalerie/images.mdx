@@ -65,6 +65,21 @@ Die Bildunterschrift kann mit gängigen Markdown-Formatierungen wie **Fett**, *K
 ![**Fett**, *Kursiv*, :mdi[laptop]{.red} `Code` und [Links](#formatierung-der-bildunterschrift) --width=450px](./images/fat-cursive-code.jpg)
 </BrowserWindow>
 
+## Markdown Inline-Bilder (`@inline`)
+Bilder mit Unterschriften (= HTML `<figure>`s mit `<figcaption>`s) dürfen nicht innerhalb von Paragraphen `<p>` vorkommen. Standardmässig werden Bilder deshalb immer in eigene Block-Elemente umgewandelt. Mit der Option `@inline` können Bilder jedoch auch als echte Inline-Elemente gerendert werden, dann aber ohne Bildunterschrift und Quellenangabe.
+
+```md
+Hallo, das ist nun ein ![@inline](./images/logo.svg) Inline Bild.
+```
+
+<BrowserWindow>
+Hallo, das ist nun ein ![@inline](./images/logo.svg) Inline Bild.
+</BrowserWindow>
+
+:::warning[Inline-Bilder]
+Inline-Bilder können nicht mit CSS-Styles, Bildunterschriften oder Quellenangaben versehen werden. Optionen wie `--width` oder `--height` werden zwar vom `alt` entfernt, haben jedoch keinen Einfluss auf die Ausgabe.
+:::
+
 ## Installation
 
 :::info[Code]
