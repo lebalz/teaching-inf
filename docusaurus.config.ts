@@ -6,7 +6,7 @@ import type { VersionOptions } from '@docusaurus/plugin-content-docs';
 import type * as Preset from '@docusaurus/preset-classic';
 import path from 'path';
 
-import strongPlugin from './src/plugins/remark-strong/plugin';
+import strongPlugin, { visitor as captionVisitor } from './src/plugins/remark-strong/plugin';
 import deflistPlugin from './src/plugins/remark-deflist/plugin';
 import mdiPlugin from './src/plugins/remark-mdi/plugin';
 import kbdPlugin from './src/plugins/remark-kbd/plugin';
@@ -15,7 +15,7 @@ import rehypeKatex from 'rehype-katex';
 import { mdiSourceCommit } from '@mdi/js';
 import defboxPlugin from './src/plugins/remark-code-defbox/plugin';
 import flexCardsPlugin from './src/plugins/remark-flex-cards/plugin';
-import imagePlugin from './src/plugins/remark-images/plugin';
+import imagePlugin, { CaptionVisitor } from './src/plugins/remark-images/plugin';
 import linkAnnotationPlugin from './src/plugins/remark-link-annotation/plugin';
 import mediaPlugin from './src/plugins/remark-media/plugin';
 import detailsPlugin from './src/plugins/remark-details/plugin';
@@ -36,16 +36,6 @@ const BASE_URL = '/';
 const BEFORE_DEFAULT_REMARK_PLUGINS = [
   flexCardsPlugin,
   [
-    imagePlugin,
-    { tagNames: { sourceRef: 'SourceRef', figure: 'Figure' } }
-  ],
-  detailsPlugin,
-  defboxPlugin
-];
-
-const REMARK_PLUGINS = [
-  [strongPlugin, { className: 'boxed' }],
-  [
     deflistPlugin,
     {
       tagNames: {
@@ -53,6 +43,24 @@ const REMARK_PLUGINS = [
       },
     }
   ],
+  [
+    imagePlugin,
+    { 
+      tagNames: { 
+        sourceRef: 'SourceRef', 
+        figure: 'Figure'
+      },
+      captionVisitors: [
+        (ast, caption) => captionVisitor(ast, caption, { className: 'boxed' })
+      ] satisfies CaptionVisitor[]
+    }
+  ],
+  detailsPlugin,
+  defboxPlugin
+];
+
+const REMARK_PLUGINS = [
+  [strongPlugin, { className: 'boxed' }],
   [
     mdiPlugin,
     {
