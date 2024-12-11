@@ -56,6 +56,27 @@ describe('#image', () => {
         `);
     });
 
+    it('wraps consecutive images in separate figure', async () => {
+        const input = `# Heading
+
+          ![](https://example.com/image.png)
+          ![](https://example.com/image.png)
+      `;
+        const result = await process(input);
+        expect(result).toMatchInlineSnapshot(`
+          "# Heading
+
+          <figure>
+            ![](https://example.com/image.png)
+          </figure>
+
+          <figure>
+            ![](https://example.com/image.png)
+          </figure>
+          "
+        `);
+    });
+
     it('sets width with --width=', async () => {
         const input = `# Heading
 
@@ -171,6 +192,67 @@ describe('#image', () => {
           "# Heading
 
           Hello ![](assets/placeholder.svg) my friend.
+          "
+        `);
+    });
+    it('wraps inlined with post content', async () => {
+        const input = `# Heading
+
+            ![](https://example.com/image.png) hello 
+        `;
+        const result = await process(input);
+        expect(result).toMatchInlineSnapshot(`
+          "# Heading
+
+          <figure>
+            ![](https://example.com/image.png)
+          </figure>
+
+          hello
+          "
+        `);
+    });
+    it('wraps inlined with pre and post content', async () => {
+        const input = `# Heading
+
+            hello ![](https://example.com/image.png) bello 
+        `;
+        const result = await process(input);
+        expect(result).toMatchInlineSnapshot(`
+          "# Heading
+
+          hello
+
+          <figure>
+            ![](https://example.com/image.png)
+          </figure>
+
+          bello
+          "
+        `);
+    });
+    it('wraps multiple inlined with post content', async () => {
+        const input = `# Heading
+
+            cello ![](https://example.com/image.png) hello ![](https://example.com/image.png) bello
+        `;
+        const result = await process(input);
+        expect(result).toMatchInlineSnapshot(`
+          "# Heading
+
+          cello
+
+          <figure>
+            ![](https://example.com/image.png)
+          </figure>
+
+          hello
+
+          <figure>
+            ![](https://example.com/image.png)
+          </figure>
+
+          bello
           "
         `);
     });
