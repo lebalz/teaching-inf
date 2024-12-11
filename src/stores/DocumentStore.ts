@@ -209,10 +209,10 @@ class DocumentStore extends iStore<`delete-${string}`> {
                 (model.authorId === this.root.userStore.current.id ||
                     ADMIN_EDITABLE_DOCUMENTS.includes(model.type));
             if (!model.canEdit && !hasAdminAccess) {
-                return Promise.resolve(undefined);
+                return Promise.resolve('error');
             }
             if (!RWAccess.has(model.root.permission) && !hasAdminAccess) {
-                return Promise.resolve(undefined);
+                return Promise.resolve('error');
             }
             const onBehalfOf = model.authorId !== this.root.userStore.current?.id && hasAdminAccess;
             return this.withAbortController(`save-${id}`, (sig) => {
