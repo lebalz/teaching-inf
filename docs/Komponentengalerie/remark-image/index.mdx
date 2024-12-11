@@ -28,10 +28,6 @@ mit einem gleichnamigen `.json`-File:
 ![Streetfood Festival --width=450px](./images/street-food.jpg)
 </BrowserWindow>
 
-:::warning[Formatierte Bildunterschrift]
-Die Bildunterschrift kann aktuell nicht formatiert werden.
-:::
-
 ## Inlining der Quellenangabe
 Wenn keine Bildunterschrift angegeben wird, wird die Quellenangabe automatisch _inlined_ (also in das Bild hineinverschoben):
 
@@ -59,10 +55,10 @@ Zudem kann das Inlining der Quellenangabe (und Bildunterschrift, falls vorhanden
 Die Bildunterschrift kann mit gängigen Markdown-Formatierungen wie **Fett**, *Kursiv* oder `Code` versehen werden
 
 ```md
-![**Fett**, *Kursiv*, :mdi[laptop]{.red} `Code` und [Links](#) --width=450px](./images/fat-cursive-code.jpg)
+![**Fett**, *Kursiv*, :mdi[laptop]{.red}, __boxed__, `Code` und [Links](#) --width=450px](./images/fat-cursive-code.jpg)
 ```
 <BrowserWindow>
-![**Fett**, *Kursiv*, :mdi[laptop]{.red} `Code` und [Links](#formatierung-der-bildunterschrift) --width=450px](./images/fat-cursive-code.jpg)
+![**Fett**, *Kursiv*, :mdi[laptop]{.red}, __boxed__, `Code` und [Links](#formatierung-der-bildunterschrift) --width=450px](./images/fat-cursive-code.jpg)
 </BrowserWindow>
 
 ## Markdown Inline-Bilder (`@inline`)
@@ -80,6 +76,20 @@ Hallo, das ist nun ein ![@inline](./images/logo.svg) Inline Bild.
 Inline-Bilder können nicht mit CSS-Styles, Bildunterschriften oder Quellenangaben versehen werden. Optionen wie `--width` oder `--height` werden zwar vom `alt` entfernt, haben jedoch keinen Einfluss auf die Ausgabe.
 :::
 
+## Konfiguration
+
+`tagNames`
+: Die Namen der HTML-Tags, die für die Bild- und Quellenangaben verwendet werden sollen.
+: `{ figure?: string, figCaption?: string, sourceRef?: string }`
+: Standard: `{ figure: 'figure', figCaption: 'figcaption', sourceRef: 'SourceRef' }`
+`inlineEmptyCaptions`
+: Sollen Quellenverweise über dem Bild angezeigt werden, falls keine Bildbeschriftung vorhanden ist?
+: Standard: `true`
+`captionVisitors`
+: Die Alt-Texte werden standardmässig nicht in einen `mdast` übersetzt, weshalb dies im `remark-images`-Plugin nachgeholt wird. Da zusätzlich auch die `--option`-Tags entfernt werden, sind die Positions-Angaben des ursprünglichen Alt-Textes nicht mehr verfügbar.
+: Plugins, die auf den unprozessierten Markdown-Text zugreifen müssen, funktionieren deshalb nicht.
+: Mit `captionVisitors` können zusätzliche Plugins hinzugefügt werden, die den Alt-Text verarbeiten - für [remark-strong](../remark-strong/index.mdx) ist dies nötig.
+: Standard: `[]`
 ## Installation
 
 :::info[Code]
@@ -102,7 +112,7 @@ export default {
 ```
 :::
 
-:::info[`docusaurus.config.ts`]
+::::info[`docusaurus.config.ts`]
 
 ```ts
 import imagePlugin from './src/plugins/remark-images/plugin';
@@ -115,7 +125,24 @@ const BEFORE_DEFAULT_REMARK_PLUGINS = [
     ]
 ];
 ```
+:::details[Konfiguration fürs Zusammenspiel mit [remark-strong](../remark-strong/index.mdx)]
+```ts title="docusaurus.config.ts" {4-12}
+import { visitor as captionVisitor } from './src/plugins/remark-strong/plugin';
+const BEFORE_DEFAULT_REMARK_PLUGINS = [
+	/* ... */
+  [
+    imagePlugin,
+      {
+        tagNames: { sourceRef: 'SourceRef', figure: 'Figure' }
+        captionVisitors: [
+          (ast, caption) => captionVisitor(ast, caption, { className: 'boxed' })
+        ] satisfies CaptionVisitor[]
+      }
+  ]
+];
+```
 :::
+::::
 
 ### Automatisches Inlining deaktivieren
 Um das automatische Inlining von leeren Bildunterschriften zu deaktivieren, können die Plugin-Optionen wie folgt ergänzt werden:
