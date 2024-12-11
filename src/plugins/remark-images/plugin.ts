@@ -40,11 +40,12 @@ const trimText = (nodes: PhrasingContent[], location: 'start' | 'end') => {
             textNode.value = textNode.value.trimEnd();
         }
     }
+    return nodes;
 };
 
 const unshiftImagesFromParagraphs = (ast: Root) => {
     visit(ast, 'paragraph', (node, idx, parent) => {
-        if (!parent) {
+        if (!parent || idx === undefined) {
             return;
         }
         const imageIndex = node.children.findIndex((n) => n.type === 'image');
@@ -55,30 +56,45 @@ const unshiftImagesFromParagraphs = (ast: Root) => {
                 return CONTINUE;
             }
             if (node.children.length === 0) {
-                parent.children.splice(idx || 0, 1, image);
+                parent.children.splice(idx, 1, image);
             } else if (imageIndex === 0) {
                 /** was the first child */
                 trimText(node.children, 'start');
-                parent.children.unshift(image as any as BlockContent);
+                const first = node.children[0];
+                if (first?.type === 'text' && first.value.length === 0) {
+                    node.children.shift();
+                }
+                parent.children.splice(idx, 0, image as any as BlockContent);
             } else if (imageIndex === node.children.length) {
                 /** was the last child */
                 trimText(node.children, 'end');
+                const last = node.children[node.children.length - 1];
+                if (last?.type === 'text' && last.value.length === 0) {
+                    node.children.pop();
+                }
                 parent.children.push(image as any as BlockContent);
             } else {
                 const preChildren = node.children.splice(0, imageIndex);
                 trimText(preChildren, 'end');
                 const postChildren = node.children.slice();
                 trimText(postChildren, 'start');
-                const preImageParagraph: Paragraph = {
-                    children: preChildren,
-                    type: 'paragraph'
-                };
-                /** is in between */
-                const postImageParagraph: Paragraph = {
-                    children: postChildren,
-                    type: 'paragraph'
-                };
-                parent.children.splice(idx || 0, 1, preImageParagraph, image, postImageParagraph);
+                let spliceTo = idx;
+                if (preChildren.some((n) => n.type !== 'text' || n.value.length > 0)) {
+                    parent.children.splice(spliceTo, 0, {
+                        children: preChildren.filter((n) => n.type !== 'text' || n.value.length > 0),
+                        type: 'paragraph'
+                    });
+                    spliceTo++;
+                }
+                parent.children.splice(spliceTo, 1, image);
+                spliceTo++;
+                if (postChildren.some((n) => n.type !== 'text' || n.value.length > 0)) {
+                    parent.children.splice(spliceTo, 0, {
+                        children: postChildren.filter((n) => n.type !== 'text' || n.value.length > 0),
+                        type: 'paragraph'
+                    });
+                    spliceTo++;
+                }
             }
         }
     });
