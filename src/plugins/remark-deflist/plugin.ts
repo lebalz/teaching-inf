@@ -128,6 +128,7 @@ const plugin: Plugin<OptionsInput[], Root> = function plugin(this, optionsInput 
                         } else if (sibling.type === 'mdxJsxFlowElement' && sibling.name === DD) {
                         }
                     }
+                    mergeConsecutive = false;
                     visit(node, (cNode, _cIdx, cParent) => {
                         /**
                          * RULE: only visit the direct children of the paragraph
@@ -315,6 +316,9 @@ const plugin: Plugin<OptionsInput[], Root> = function plugin(this, optionsInput 
                         }
                         return SKIP;
                     });
+                    if (action === 'SEEK_CONSECUTIVE_DD_START') {
+                        return [CONTINUE, _idx];
+                    }
                     break;
                 case 'containerDirective':
                     if (node.name !== 'dd') {
@@ -348,15 +352,18 @@ const plugin: Plugin<OptionsInput[], Root> = function plugin(this, optionsInput 
                                 children: paragraph
                             });
                         }
-                        return CONTINUE;
+                        mergeConsecutive = true;
+                        return [CONTINUE, _idx];
                     }
                     if (sibling.type !== 'mdxJsxFlowElement' || sibling.name !== DL) {
                         return CONTINUE;
                     }
                     const ddChild = parent.children.splice(_idx, 1)[0] as Parent;
                     sibling.children.push(createMdxJsxFlowElementNode(DD, ddChild.children, classNames.dd));
-                    return CONTINUE;
+                    mergeConsecutive = true;
+                    return [CONTINUE, _idx];
             }
+            return CONTINUE;
         });
     };
 };

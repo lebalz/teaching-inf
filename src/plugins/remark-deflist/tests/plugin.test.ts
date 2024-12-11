@@ -397,15 +397,15 @@ Some content
     });
     it('handles :::dd as the first child of deflist', async () => {
         const input = `# Details with block content
-    Start
+          Start
 
-    Code
-    :::dd
-    \`\`\`py
-    print('Hello World')
-    \`\`\`
-    :::
-    `;
+          Code
+          :::dd
+          \`\`\`py
+          print('Hello World')
+          \`\`\`
+          :::
+          `;
         const result = await process(input);
         expect(result).toMatchInlineSnapshot(`
         "# Details with block content
@@ -423,5 +423,123 @@ Some content
         </dl>
         "
       `);
+    });
+    it('handles multiple consecutive :::dd as the first child of deflist', async () => {
+        const input = `# Details with block content
+            Start
+
+            Code
+            :::dd
+            \`\`\`py
+            print('Hello World')
+            \`\`\`
+            :::
+            :::dd
+            \`\`\`py
+            print('Hello Second')
+            \`\`\`
+            :::
+            `;
+        const result = await process(input);
+        expect(result).toMatchInlineSnapshot(`
+          "# Details with block content
+
+          Start
+
+          <dl>
+            <dt>Code</dt>
+
+            <dd>
+              \`\`\`py
+              print('Hello World')
+              \`\`\`
+            </dd>
+
+            <dd>
+              \`\`\`py
+              print('Hello Second')
+              \`\`\`
+            </dd>
+          </dl>
+          "
+        `);
+    });
+    it('handles multiple consecutive :::dd definitions', async () => {
+        const input = `# Details with block content
+            Start
+
+            Code
+            :::dd
+            \`\`\`py
+            print('Hello World')
+            \`\`\`
+            :::
+            : and more
+            Other
+            : whatever
+            :::dd
+            \`\`\`py
+            print('Hello Second')
+            \`\`\`
+            :::
+            `;
+        const result = await process(input);
+        expect(result).toMatchInlineSnapshot(`
+          "# Details with block content
+
+          Start
+
+          <dl>
+            <dt>Code</dt>
+
+            <dd>
+              \`\`\`py
+              print('Hello World')
+              \`\`\`
+            </dd>
+
+            <dd>and more</dd>
+
+            <dt>Other</dt>
+
+            <dd>whatever</dd>
+
+            <dd>
+              \`\`\`py
+              print('Hello Second')
+              \`\`\`
+            </dd>
+          </dl>
+          "
+        `);
+    });
+    it('handles multiple deflists beside each other', async () => {
+        const input = `# Details with block content
+          Start
+
+          Code
+          : hello
+
+          :::dd
+          whatever
+          :::
+          `;
+        const result = await process(input);
+        expect(result).toMatchInlineSnapshot(`
+          "# Details with block content
+
+          Start
+
+          <dl>
+            <dt>Code</dt>
+
+            <dd>hello</dd>
+
+            <dd>
+              whatever
+            </dd>
+          </dl>
+          "
+        `);
     });
 });

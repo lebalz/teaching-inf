@@ -33,6 +33,14 @@ const GIT_COMMIT_SHA = process.env.GITHUB_SHA || Math.random().toString(36).subs
 const BEFORE_DEFAULT_REMARK_PLUGINS = [
   flexCardsPlugin,
   [
+    deflistPlugin,
+    {
+      tagNames: {
+        dl: 'Dl',
+      },
+    }
+  ],
+  [
     imagePlugin,
     { 
       tagNames: { 
@@ -50,14 +58,6 @@ const BEFORE_DEFAULT_REMARK_PLUGINS = [
 
 const REMARK_PLUGINS = [
   [strongPlugin, { className: 'boxed' }],
-  [
-    deflistPlugin,
-    {
-      tagNames: {
-        dl: 'Dl',
-      },
-    }
-  ],
   [
     mdiPlugin,
     {
