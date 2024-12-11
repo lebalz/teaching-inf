@@ -9,7 +9,7 @@ import BrowserWindow from '@tdev-components/BrowserWindow';
 Bilder können im Markdown-Style eingebunden werden. Der `alt`-Text wird automatisch als Bildunterschrift hinzugefügt, wobei zusätzliche Eigenschaften wie die Breite oder Höhe des Bildes zuerst extrahiert werden. Zudem wird eine Quellenangabe hinzugefügt, falls sich beim Bildpfad ein gleichnamiges `.json`-File befindet, welches die Bildinformationen enthält.
 
 ```md
-![Streetfood Festival --width=300px](./images/street-food.jpg)
+![Streetfood Festival --width=300px](../images/street-food.jpg)
 ```
 
 mit einem gleichnamigen `.json`-File:
@@ -25,18 +25,18 @@ mit einem gleichnamigen `.json`-File:
 ```
 
 <BrowserWindow>
-![Streetfood Festival --width=450px](./images/street-food.jpg)
+![Streetfood Festival --width=450px](../images/street-food.jpg)
 </BrowserWindow>
 
 ## Inlining der Quellenangabe
 Wenn keine Bildunterschrift angegeben wird, wird die Quellenangabe automatisch _inlined_ (also in das Bild hineinverschoben):
 
 ```md
-![--width=450px](./images/street-food.jpg)
+![--width=450px](../images/street-food.jpg)
 ```
 
 <BrowserWindow>
-![--width=450px](./images/street-food.jpg)
+![--width=450px](../images/street-food.jpg)
 </BrowserWindow>
 
 Dieses Verhalten kann mit der Plugin-Option `inlineEmptyCaptions: false` deaktiviert werden ([siehe unten](#automatisches-inlining-deaktivieren)).
@@ -44,11 +44,11 @@ Dieses Verhalten kann mit der Plugin-Option `inlineEmptyCaptions: false` deaktiv
 Zudem kann das Inlining der Quellenangabe (und Bildunterschrift, falls vorhanden) mit der Option `--inlineCaption` auch für ein einzelnes Bild erzwingen oder verhindert werden:
 
  ```md
-![Schneebedeckte Strasse --width=450px --inlineCaption={true}](./images/snowy-street.jpg)
+![Schneebedeckte Strasse --width=450px --inlineCaption={true}](../images/snowy-street.jpg)
 ```
 
 <BrowserWindow>
-![Schneebedeckte Strasse --width=450px --inlineCaption={true}](./images/snowy-street.jpg)
+![Schneebedeckte Strasse --width=450px --inlineCaption={true}](../images/snowy-street.jpg)
 </BrowserWindow>
 
 ## Formatierung der Bildunterschrift
