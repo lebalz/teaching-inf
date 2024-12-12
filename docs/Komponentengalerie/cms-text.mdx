@@ -5,6 +5,7 @@ page_id: 9440f367-3529-4e8d-8477-492bd94482dc
 import CmsText from '@tdev-components/documents/CmsText';
 import CmsCode from '@tdev-components/documents/CmsText/Code';
 import WithCmsText from '@tdev-components/documents/CmsText/WithCmsText';
+import CmsLink from '@tdev-components/documents/CmsText/Link';
 import DefinitionList from '@tdev-components/DefinitionList';
 import BrowserWindow from '@tdev-components/BrowserWindow';
 import { observer } from 'mobx-react-lite';
@@ -26,6 +27,9 @@ export const DocumentCreator = observer(() => {
     useFirstMainDocument('f6b64809-e570-4a88-9a84-6c57e0240e38', new CmsTextMeta({
         default: `print('Hello CMS Code!')`
     }));
+    useFirstMainDocument('a859498b-aab2-4ce8-baa2-1feb1d623571', new CmsTextMeta({
+        default: `#cms-link`
+    }));
     return null;
 });
 
@@ -42,6 +46,9 @@ Diese Gallery-Page ist so aufgesetzt, dass für einige DocumentRoot-IDs automati
 `f6b64809`
 : Inhalt: `print('Hello CMS Code!')`
 : UUID: `f6b64809-e570-4a88-9a84-6c57e0240e38`
+`a859498b`
+: Inhalt: `#cms-link`
+: UUID: `a859498b-aab2-4ce8-baa2-1feb1d623571`
 
 
 Für die ID `2c0c085d-388a-48cd-9871-975bab0ffda3` wird kein Document erstellt.
@@ -55,6 +62,9 @@ export const DocumentCreator = observer(() => {
     }));
     useFirstMainDocument('f6b64809-e570-4a88-9a84-6c57e0240e38', new CmsTextMeta({
         default: `print('Hello CMS Code!')`
+    }));
+    useFirstMainDocument('a859498b-aab2-4ce8-baa2-1feb1d623571', new CmsTextMeta({
+        default: `#cms-link`
     }));
     return null;
 });
@@ -158,6 +168,30 @@ import CmsCode from '@tdev-components/documents/CmsText/Code';
     }}
     showActions
 />
+</BrowserWindow>
+
+## CMS-Link
+
+Es ist möglich, CMS-Texte als Links zu verwenden:
+
+```md
+import CmsLink from '@tdev-components/documents/CmsText/Link';
+
+Ohne Link-Text: <CmsLink id="a859498b-aab2-4ce8-baa2-1feb1d623571" />
+<CmsLink id="a859498b-aab2-4ce8-baa2-1feb1d623571">
+    👉 Hier gehts zur Prüfung
+</CmsLink>
+
+Mit Bedienelement: <CmsLink showActions id="a859498b-aab2-4ce8-baa2-1feb1d623571" />
+```
+
+<BrowserWindow>
+Ohne Link-Text: <CmsLink id="a859498b-aab2-4ce8-baa2-1feb1d623571" />
+<CmsLink id="a859498b-aab2-4ce8-baa2-1feb1d623571">
+    👉 Hier gehts zur Prüfung
+</CmsLink>
+
+Mit Bedienelement: <CmsLink showActions id="a859498b-aab2-4ce8-baa2-1feb1d623571" />
 </BrowserWindow>
 
 ## Einfluss auf umliegende Elemente
