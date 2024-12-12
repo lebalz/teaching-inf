@@ -1,27 +1,34 @@
 import { observer } from 'mobx-react-lite';
 import { CmsTextContext, useFirstCmsTextDocumentIfExists } from '@tdev-components/documents/CmsText/shared';
 import React from 'react';
-import PermissionsPanel from '@tdev-components/PermissionsPanel';
+import CmsActions from './CmsActions';
+import { CmsTextEntries } from './WithCmsText';
 import { useStore } from '@tdev-hooks/useStore';
 
 export interface Props {
     id?: string;
-    showPermissionsPanel?: boolean;
+    showActions?: boolean;
     name?: string;
+    mode?: 'xlsx' | 'code';
 }
 
-const CmsText = observer(({ id, name, showPermissionsPanel }: Props) => {
+const CmsText = observer((props: Props) => {
+    const { id, name, showActions } = props;
     const contextId = name ? React.useContext(CmsTextContext)?.entries[name] : undefined;
     const userStore = useStore('userStore');
     const rootId = id || contextId;
     const cmsText = useFirstCmsTextDocumentIfExists(rootId);
     if (!cmsText || (!cmsText.canDisplay && !userStore.isUserSwitched)) {
-        return showPermissionsPanel && rootId ? <PermissionsPanel documentRootId={rootId} /> : null;
+        return showActions && rootId ? (
+            <CmsActions entries={{ [rootId]: rootId } as CmsTextEntries} mode={props.mode} />
+        ) : null;
     }
 
     return (
         <>
-            {showPermissionsPanel && rootId && <PermissionsPanel documentRootId={rootId} />}
+            {showActions && rootId && (
+                <CmsActions entries={{ [rootId]: rootId } as CmsTextEntries} mode={props.mode} />
+            )}
             {cmsText.text}
         </>
     );
