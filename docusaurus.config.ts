@@ -285,7 +285,7 @@ const config: Config = {
       },
       items: [
         {
-          to: '/docs/Komponentengalerie',
+          to: '/docs/gallery',
           label: 'Galerie',
           position: 'left',
         },
@@ -317,7 +317,7 @@ const config: Config = {
           items: [
             {
               label: 'Galerie',
-              to: '/docs/Komponentengalerie',
+              to: '/docs/gallery',
             },
           ],
         },
