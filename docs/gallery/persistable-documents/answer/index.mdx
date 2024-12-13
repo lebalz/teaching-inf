@@ -8,14 +8,14 @@ import BrowserWindow from '@tdev-components/BrowserWindow';
 Um Antworten einzuholen, kann die überall verfügbare Komponente `Answer` verwendet werden (sie muss nicht importiert werden). Abhängig vom übergebenen Typ wird die Antwort in einer anderen Form dargestellt.
 
 `string`
-: `<String />` Komponente [String](./string-answers.md)
+: `<String />` Komponente [String](./string-answers/index.mdx)
 : Einzeilige Antwort
 `text`
-: `<QuillV2 />` Komponente [QuillV2](./quill-v2.mdx)
+: `<QuillV2 />` Komponente [QuillV2](./quill-v2/index.mdx)
 : Mehrzeilige Antwort mit WYSIWYG-Editor
 : optionaler Typ: `quill-v2`
 `state`
-: `<TaskState />` Komponente [TaskState](./task-state.md)
+: `<TaskState />` Komponente [TaskState](./task-state/index.mdx)
 : Zustandsauswahl
 : optionaler Typ: `task-state`
 
@@ -61,7 +61,7 @@ export default {
 
 :::warning[Voraussetzung]
 Damit auch TaskStates, die von einer `<Answer />` Komponente dargestellt werden, in die **Seitenübersicht** aufgenommen werden, braucht es das Plugin `remark-enumerate-components`
-- [remark-enumerate-components](./remark-enumerate-components.mdx)
+- [remark-enumerate-components](../../../app-architecture/remark-plugins/enumerate-components/index.mdx)
 
 mit der Konfiguration
 
