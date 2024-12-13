@@ -30,6 +30,7 @@
         "@mdi/react": "^1.6.1",
         "@mdx-js/react": "^3.0.0",
         "@types/lodash": "^4.17.7",
+        "@yudiel/react-qr-scanner": "^2.0.8",
         "ace-builds": "^1.36.2",
         "axios": "^1.7.2",
         "clsx": "^2.0.0",
