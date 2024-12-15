@@ -51,6 +51,8 @@ const ScannerComponent = (props: { Lib: typeof QrScannerLib } & Props) => {
             const deviceId = Storage.get('QrScannerDeviceId', undefined);
             if (devices.find((d) => d.deviceId === deviceId)) {
                 setDeviceId(deviceId);
+            } else {
+                Storage.remove('QrScannerDeviceId');
             }
         }
     }, [devices]);
