@@ -1,6 +1,11 @@
 .qr {
     width: 15em;
+    max-width: 100%;
+
     .generator {
         height: 15em;
+        .qrImage {
+            width: 100%;
+        }
     }
 }
