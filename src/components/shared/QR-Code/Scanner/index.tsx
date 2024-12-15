@@ -25,34 +25,16 @@ const ScannerComponent = (props: { Lib: typeof QrScannerLib } & Props) => {
     const { Lib } = props;
     const [qr, setQr] = React.useState('');
     const [stop, setStop] = React.useState(false);
-    const [deviceId, setDeviceId] = React.useState<string | undefined>(undefined);
+    const [deviceId, setDeviceId] = React.useState<string | undefined>(
+        Storage.get('QrScannerDeviceId', undefined)
+    );
     const devices = Lib.useDevices();
     const deviceIdx = devices.findIndex((d) => d.deviceId === deviceId);
-    /** ensure the video feed is resumed after changing the tab */
-    React.useLayoutEffect(() => {
-        const handleVisibilityChange = () => {
-            if (document.visibilityState === 'visible') {
-                if (qr || !Lib) {
-                    return;
-                }
-                setStop(true);
-                setTimeout(() => {
-                    setStop(false);
-                }, 10);
-            }
-        };
-        document.addEventListener('visibilitychange', handleVisibilityChange);
-        return () => {
-            document.removeEventListener('visibilitychange', handleVisibilityChange);
-        };
-    }, [qr]);
     React.useEffect(() => {
-        if (devices.length > 1) {
-            const deviceId = Storage.get('QrScannerDeviceId', undefined);
-            if (devices.find((d) => d.deviceId === deviceId)) {
-                setDeviceId(deviceId);
-            } else {
+        if (devices.length > 0 && deviceId) {
+            if (!devices.find((d) => d.deviceId === deviceId)) {
                 Storage.remove('QrScannerDeviceId');
+                setDeviceId(undefined);
             }
         }
     }, [devices]);
