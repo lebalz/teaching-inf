@@ -9,7 +9,7 @@ import TextAreaInput from '@tdev-components/shared/TextAreaInput';
 interface Props {
     text: string;
     showText?: boolean;
-    width?: string | number;
+    size?: string | number;
     className?: string;
     isLink?: boolean;
     withInput?: boolean;
@@ -36,7 +36,7 @@ const Generator = (props: Props) => {
     const showFooter = props.showText;
 
     return (
-        <div className={clsx('card', styles.qr, props.className)} style={{ width: props.width }}>
+        <div className={clsx('card', styles.qr, props.className)} style={{ width: props.size }}>
             <div className={clsx(styles.generator, 'card__body')}>
                 <div ref={ref}>
                     <QRCodeCanvas
