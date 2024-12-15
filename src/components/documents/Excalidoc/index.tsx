@@ -55,7 +55,10 @@ const Excalidoc = observer((props: Props) => {
 
 export const ExcalidocComponent = observer((props: Omit<ExcaliProps, 'id'> & { documentId: string }) => {
     const [edit, setEdit] = React.useState(false);
-    const Lib = useClientLib<typeof ExcalidrawLib>(() => import('@excalidraw/excalidraw'));
+    const Lib = useClientLib<typeof ExcalidrawLib>(
+        () => import('@excalidraw/excalidraw'),
+        '@excalidraw/excalidraw'
+    );
     const doc = useDocument<DocumentType.Excalidoc>(props.documentId);
 
     if (!doc) {

@@ -1,17 +1,19 @@
 import React from 'react';
 
-let cachedLib: any = null;
-export const useClientLib = <T>(dynImport: () => Promise<T>): T | null => {
-    const [Lib, setLib] = React.useState<T>(cachedLib);
+const cachedLibs = new Map<string, any>();
+export const useClientLib = <T>(dynamicImport: () => Promise<T>, moduleName?: string): T | null => {
+    const [Lib, setLib] = React.useState<T>(moduleName ? cachedLibs.get(moduleName) : null);
     React.useEffect(() => {
         if (Lib) {
             setLib(Lib);
             return;
         }
-        dynImport().then((Lib) => {
+        dynamicImport().then((Lib) => {
             setLib(Lib);
-            cachedLib = Lib;
+            if (moduleName) {
+                cachedLibs.set(moduleName, Lib);
+            }
         });
     }, []);
-    return Lib;
+    return Lib || null;
 };
