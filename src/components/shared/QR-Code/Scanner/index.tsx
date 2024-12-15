@@ -24,7 +24,6 @@ const Scanner = observer((props: Props) => {
 const ScannerComponent = (props: { Lib: typeof QrScannerLib } & Props) => {
     const { Lib } = props;
     const [qr, setQr] = React.useState('');
-    const [stop, setStop] = React.useState(false);
     const [deviceId, setDeviceId] = React.useState<string | undefined>(
         Storage.get('QrScannerDeviceId', undefined)
     );
@@ -42,7 +41,7 @@ const ScannerComponent = (props: { Lib: typeof QrScannerLib } & Props) => {
         <div className={clsx('card', styles.qr)}>
             <div className={clsx(styles.scanner, 'card__body')}>
                 <Lib.Scanner
-                    paused={!!qr || stop}
+                    paused={!!qr}
                     onScan={(result) => {
                         setQr(result[0].rawValue);
                     }}
