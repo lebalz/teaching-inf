@@ -1,7 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
-import { observer } from 'mobx-react-lite';
 import Loader from '@tdev-components/Loader';
 import Button from '@tdev-components/shared/Button';
 import { useClientLib } from '@tdev-hooks/useClientLib';
@@ -11,10 +10,11 @@ import { mdiCameraFlipOutline } from '@mdi/js';
 import CodeBlock from '@theme/CodeBlock';
 
 interface Props {
-    redirect?: string;
-    target?: '_blank' | '_self';
+    redirect?: boolean;
+    inNewTab?: boolean;
+    onScan?: (qr: string) => void;
 }
-const Scanner = observer((props: Props) => {
+const Scanner = (props: Props) => {
     const Lib = useClientLib<typeof QrScannerLib>(
         () => import('@yudiel/react-qr-scanner'),
         '@yudiel/react-qr-scanner'
@@ -23,7 +23,7 @@ const Scanner = observer((props: Props) => {
         return <Loader />;
     }
     return <ScannerComponent Lib={Lib} {...props} />;
-});
+};
 
 const ScannerComponent = (props: { Lib: typeof QrScannerLib } & Props) => {
     const { Lib } = props;
@@ -56,10 +56,13 @@ const ScannerComponent = (props: { Lib: typeof QrScannerLib } & Props) => {
                     onScan={(result) => {
                         clearErrorMessage();
                         setQr(result[0].rawValue);
+                        if (props.onScan) {
+                            props.onScan(result[0].rawValue);
+                        }
                         if (props.redirect) {
                             try {
                                 const url = new URL(result[0].rawValue);
-                                if (props.target === '_blank') {
+                                if (props.inNewTab) {
                                     window.open(url.href, '_blank');
                                 } else {
                                     window.location.href = url.href;
