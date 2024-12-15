@@ -91,6 +91,7 @@ const ScannerComponent = (props: { Lib: typeof QrScannerLib } & Props) => {
                             setDeviceId(devices[nextDeviceIdx].deviceId);
                             Storage.set('QrScannerDeviceId', devices[nextDeviceIdx].deviceId);
                         }}
+                        iconSide="left"
                     />
                 )}
                 {qr && (
