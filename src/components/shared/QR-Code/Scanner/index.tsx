@@ -12,6 +12,7 @@ import CodeBlock from '@theme/CodeBlock';
 interface Props {
     redirect?: boolean;
     inNewTab?: boolean;
+    hideOpenLinkButton?: boolean;
     onScan?: (qr: string) => void;
 }
 const Scanner = (props: Props) => {
@@ -116,12 +117,14 @@ const ScannerComponent = (props: { Lib: typeof QrScannerLib } & Props) => {
                                     color="secondary"
                                     onClick={() => setQr('')}
                                 />
-                                <Button
-                                    className={clsx('button--block')}
-                                    color="primary"
-                                    text="Besuchen"
-                                    href={qr}
-                                />
+                                {!props.hideOpenLinkButton && (
+                                    <Button
+                                        className={clsx('button--block')}
+                                        color="primary"
+                                        text="Besuchen"
+                                        href={qr}
+                                    />
+                                )}
                             </div>
                         </>
                     )}

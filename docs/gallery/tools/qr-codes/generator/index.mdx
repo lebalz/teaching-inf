@@ -13,24 +13,33 @@ QR Codes sind praktisch um Inhalte wie URLs oder anderes schnell zu teilen.
 ```mdx
 import QrGenerator from '@tdev-components/shared/QR-Code/Generator';
 
-<QrGenerator content="Hello World" />
+<QrGenerator text="Hello World" />
 ```
 
 <BrowserWindow>
-    <Generator content="Hello World" />
+    <Generator text="Hello World" />
 </BrowserWindow>
 
 ## Inhalt anzeigen
 
 ```mdx
-import QrGenerator from '@tdev-components/shared/QR-Code/Generator';
-
-<QrGenerator showText content="Hello World" />
+<QrGenerator showText text="Hello World" />
 ```
 
 <BrowserWindow>
-    <Generator showText content="Hello World" />
+    <Generator showText text="Hello World" />
 </BrowserWindow>
+
+## Mit Texteingabe
+
+```mdx
+<QrGenerator withInput text="Hello World" />
+```
+
+<BrowserWindow>
+    <Generator withInput text="Hello World" />
+</BrowserWindow>
+
 
 ## Installation
 
