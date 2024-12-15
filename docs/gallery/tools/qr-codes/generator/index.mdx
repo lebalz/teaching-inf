@@ -1,0 +1,33 @@
+---
+page_id: e831b10f-8331-4e6f-a6d5-8503cbffec54
+tags: ["tools"]
+---
+
+import Generator from '@tdev-components/shared/QR-Code/Generator';
+import BrowserWindow from '@tdev-components/BrowserWindow';
+
+# QR Code Generator
+
+QR Codes sind praktisch um Inhalte wie URLs oder anderes schnell zu teilen. 
+
+```mdx
+import QrGenerator from '@tdev-components/shared/QR-Code/Generator';
+
+<QrGenerator content="Hello World" />
+```
+
+<BrowserWindow>
+<Generator content="Hello World" />
+</BrowserWindow>
+
+## Installation
+
+:::info[Code]
+- `src/components/shared/QR-Code/Generator`
+:::
+
+:::info[npm]
+```bash
+yarn add qrcode.react
+```
+:::
