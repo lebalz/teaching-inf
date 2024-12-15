@@ -11,22 +11,29 @@ import DeviceSelector from './DeviceSelector';
 interface Props {}
 const Scanner = observer((props: Props) => {
     const [qr, setQr] = React.useState('');
+    const [stop, setStop] = React.useState(false);
     const Lib = useClientLib<typeof QrScannerLib>(
         () => import('@yudiel/react-qr-scanner'),
         '@yudiel/react-qr-scanner'
     );
-    React.useEffect(() => {
+    /** ensure the video feed is resumed after changing the tab */
+    React.useLayoutEffect(() => {
         const handleVisibilityChange = () => {
             if (document.visibilityState === 'visible') {
-                // Tab is focused again
-                console.log('Tab is focused again');
+                if (qr || !Lib) {
+                    return;
+                }
+                setStop(true);
+                setTimeout(() => {
+                    setStop(false);
+                }, 10);
             }
         };
         document.addEventListener('visibilitychange', handleVisibilityChange);
         return () => {
             document.removeEventListener('visibilitychange', handleVisibilityChange);
         };
-    }, []);
+    }, [qr]);
     if (!Lib) {
         return <Loader />;
     }
@@ -34,11 +41,18 @@ const Scanner = observer((props: Props) => {
         <div className={clsx('card', styles.qr)}>
             <div className={clsx(styles.scanner, 'card__body')}>
                 <Lib.Scanner
-                    paused={!!qr}
+                    paused={!!qr || stop}
                     onScan={(result) => {
                         setQr(result[0].rawValue);
                     }}
                     allowMultiple={false}
+                    components={{
+                        audio: false,
+                        torch: true,
+                        finder: true,
+                        zoom: true,
+                        onOff: true
+                    }}
                 />
             </div>
             <div className={clsx('card__body')}>
