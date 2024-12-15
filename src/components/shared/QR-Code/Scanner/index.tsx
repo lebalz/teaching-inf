@@ -3,13 +3,14 @@ import clsx from 'clsx';
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
 import Loader from '@tdev-components/Loader';
-import { useQrScanner } from '@tdev-hooks/useQrScanner';
 import Button from '@tdev-components/shared/Button';
+import { useClientLib } from '@tdev-hooks/useClientLib';
+import type { default as QrScannerLib } from '@yudiel/react-qr-scanner';
 
 interface Props {}
 const Scanner = observer((props: Props) => {
     const [qr, setQr] = React.useState('');
-    const Lib = useQrScanner();
+    const Lib = useClientLib<typeof QrScannerLib>(() => import('@yudiel/react-qr-scanner'));
     if (!Lib) {
         return <Loader />;
     }
