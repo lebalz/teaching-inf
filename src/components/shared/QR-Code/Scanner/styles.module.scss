@@ -5,3 +5,10 @@
         height: 15em;
     }
 }
+
+.error {
+    :global(.theme-code-block-highlighted-line) {
+        color: var(--ifm-color-danger-darker) !important;
+        background: transparent;
+    }
+}

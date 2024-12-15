@@ -8,8 +8,12 @@ import { useClientLib } from '@tdev-hooks/useClientLib';
 import type { default as QrScannerLib } from '@yudiel/react-qr-scanner';
 import Storage from '@tdev-stores/utils/Storage';
 import { mdiCameraFlipOutline } from '@mdi/js';
+import CodeBlock from '@theme/CodeBlock';
 
-interface Props {}
+interface Props {
+    redirect?: string;
+    target?: '_blank' | '_self';
+}
 const Scanner = observer((props: Props) => {
     const Lib = useClientLib<typeof QrScannerLib>(
         () => import('@yudiel/react-qr-scanner'),
@@ -23,12 +27,12 @@ const Scanner = observer((props: Props) => {
 
 const ScannerComponent = (props: { Lib: typeof QrScannerLib } & Props) => {
     const { Lib } = props;
+    const [error, setError] = React.useState<string | undefined>();
     const [qr, setQr] = React.useState('');
     const [deviceId, setDeviceId] = React.useState<string | undefined>(
         Storage.get('QrScannerDeviceId', undefined)
     );
     const devices = Lib.useDevices();
-    const deviceIdx = devices.findIndex((d) => d.deviceId === deviceId);
     React.useEffect(() => {
         if (devices.length > 0 && deviceId) {
             if (!devices.find((d) => d.deviceId === deviceId)) {
@@ -37,13 +41,36 @@ const ScannerComponent = (props: { Lib: typeof QrScannerLib } & Props) => {
             }
         }
     }, [devices]);
+    const clearErrorMessage = () => {
+        if (error) {
+            setError(undefined);
+        }
+    };
+    const deviceIdx = devices.findIndex((d) => d.deviceId === deviceId);
+    const showFooter = qr || devices.length > 1 || error;
     return (
         <div className={clsx('card', styles.qr)}>
             <div className={clsx(styles.scanner, 'card__body')}>
                 <Lib.Scanner
                     paused={!!qr}
                     onScan={(result) => {
+                        clearErrorMessage();
                         setQr(result[0].rawValue);
+                        if (props.redirect) {
+                            try {
+                                const url = new URL(result[0].rawValue);
+                                if (props.target === '_blank') {
+                                    window.open(url.href, '_blank');
+                                } else {
+                                    window.location.href = url.href;
+                                }
+                            } catch (e) {
+                                setError(`Invalide URL: "${result[0].rawValue}"`);
+                            }
+                        }
+                    }}
+                    onError={(err) => {
+                        setError('Die Kamera konnte nicht gestartet werden.');
                     }}
                     constraints={{
                         deviceId: deviceId
@@ -58,43 +85,50 @@ const ScannerComponent = (props: { Lib: typeof QrScannerLib } & Props) => {
                     }}
                 />
             </div>
-            <div className="card__footer">
-                {devices.length > 1 && (
-                    <Button
-                        icon={mdiCameraFlipOutline}
-                        text={
-                            devices.length > 2
-                                ? `${(deviceIdx >= 0 ? deviceIdx : 0) + 1}/${devices.length}`
-                                : ''
-                        }
-                        onClick={() => {
-                            const nextDeviceIdx = ((deviceIdx >= 0 ? deviceIdx : 0) + 1) % devices.length;
-                            setDeviceId(devices[nextDeviceIdx].deviceId);
-                            Storage.set('QrScannerDeviceId', devices[nextDeviceIdx].deviceId);
-                        }}
-                        iconSide="left"
-                    />
-                )}
-                {qr && (
-                    <>
-                        <small>{qr}</small>
-                        <div className="button-group button-group--block">
-                            <Button
-                                className={clsx('button--block')}
-                                text="Neu scannen"
-                                color="secondary"
-                                onClick={() => setQr('')}
-                            />
-                            <Button
-                                className={clsx('button--block')}
-                                color="primary"
-                                text="Besuchen"
-                                href={qr}
-                            />
-                        </div>
-                    </>
-                )}
-            </div>
+            {showFooter && (
+                <div className="card__footer">
+                    {devices.length > 1 && (
+                        <Button
+                            icon={mdiCameraFlipOutline}
+                            text={
+                                devices.length > 2
+                                    ? `${(deviceIdx >= 0 ? deviceIdx : 0) + 1}/${devices.length}`
+                                    : ''
+                            }
+                            onClick={() => {
+                                const nextDeviceIdx = ((deviceIdx >= 0 ? deviceIdx : 0) + 1) % devices.length;
+                                setDeviceId(devices[nextDeviceIdx].deviceId);
+                                Storage.set('QrScannerDeviceId', devices[nextDeviceIdx].deviceId);
+                            }}
+                            iconSide="left"
+                        />
+                    )}
+                    {qr && (
+                        <>
+                            <small>{qr}</small>
+                            <div className="button-group button-group--block">
+                                <Button
+                                    className={clsx('button--block')}
+                                    text="Neu scannen"
+                                    color="secondary"
+                                    onClick={() => setQr('')}
+                                />
+                                <Button
+                                    className={clsx('button--block')}
+                                    color="primary"
+                                    text="Besuchen"
+                                    href={qr}
+                                />
+                            </div>
+                        </>
+                    )}
+                    {error && (
+                        <CodeBlock title="Fehlermeldung" metastring="{1-99}" className={clsx(styles.error)}>
+                            {error}
+                        </CodeBlock>
+                    )}
+                </div>
+            )}
         </div>
     );
 };
