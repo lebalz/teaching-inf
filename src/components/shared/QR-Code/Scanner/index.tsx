@@ -27,6 +27,7 @@ const ScannerComponent = (props: { Lib: typeof QrScannerLib } & Props) => {
     const [stop, setStop] = React.useState(false);
     const [deviceId, setDeviceId] = React.useState<string | undefined>(undefined);
     const devices = Lib.useDevices();
+    const deviceIdx = devices.findIndex((d) => d.deviceId === deviceId);
     /** ensure the video feed is resumed after changing the tab */
     React.useLayoutEffect(() => {
         const handleVisibilityChange = () => {
@@ -46,7 +47,6 @@ const ScannerComponent = (props: { Lib: typeof QrScannerLib } & Props) => {
         };
     }, [qr]);
     React.useEffect(() => {
-        console.log('devices', devices);
         if (devices.length > 1) {
             const deviceId = Storage.get('QrScannerDeviceId', undefined);
             if (devices.find((d) => d.deviceId === deviceId)) {
@@ -83,12 +83,11 @@ const ScannerComponent = (props: { Lib: typeof QrScannerLib } & Props) => {
                         icon={mdiCameraFlipOutline}
                         text={
                             devices.length > 2
-                                ? `${(devices.findIndex((d) => d.deviceId === deviceId) || 0) + 1}/${devices.length}`
+                                ? `${(deviceIdx >= 0 ? deviceIdx : 0) + 1}/${devices.length}`
                                 : ''
                         }
                         onClick={() => {
-                            const nextDeviceIdx =
-                                (devices.findIndex((d) => d.deviceId === deviceId) || 0) % devices.length;
+                            const nextDeviceIdx = ((deviceIdx >= 0 ? deviceIdx : 0) + 1) % devices.length;
                             setDeviceId(devices[nextDeviceIdx].deviceId);
                             Storage.set('QrScannerDeviceId', devices[nextDeviceIdx].deviceId);
                         }}
