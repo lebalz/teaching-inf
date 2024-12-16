@@ -5,6 +5,12 @@ import styles from './styles.module.scss';
 import { QRCodeCanvas } from 'qrcode.react';
 import Link from '@docusaurus/Link';
 import TextAreaInput from '@tdev-components/shared/TextAreaInput';
+import useIsBrowser from '@docusaurus/useIsBrowser';
+
+const MdiPathToBase64 = (path: string, color: string = '#306cce') => {
+    const img = `<svg viewBox="0 0 24 24" role="presentation" style="width: 32px; height: 32px;" xmlns="http://www.w3.org/2000/svg"><path d="${path}" style="fill: ${color};"></path></svg>`;
+    return `data:image/svg+xml;base64,${window.btoa(img)}`;
+};
 
 interface Props {
     text: string;
@@ -14,11 +20,18 @@ interface Props {
     isLink?: boolean;
     withInput?: boolean;
     qrProps?: React.ComponentProps<typeof QRCodeCanvas>;
+    /**
+     * Mdi icon path - will be embedded in svg and transformed to base64
+     */
+    icon?: string;
+    iconColor?: string;
+    iconSize?: number;
 }
 const Generator = (props: Props) => {
     const [text, setText] = React.useState(props.text || '');
     const [width, setWidth] = React.useState<number | undefined>(208); // 13 * 16 = 208, 1em = 16px
     const ref = React.useRef<HTMLDivElement>(null);
+    const isBrowser = useIsBrowser();
     React.useLayoutEffect(() => {
         const element = ref.current;
         if (element) {
@@ -44,6 +57,18 @@ const Generator = (props: Props) => {
                         value={text}
                         size={width}
                         className={clsx(styles.qrImage)}
+                        imageSettings={
+                            props.icon && isBrowser
+                                ? {
+                                      height: props.iconSize ?? 32,
+                                      width: props.iconSize ?? 32,
+                                      excavate: true,
+                                      opacity: 1,
+                                      ...(props.qrProps?.imageSettings || {}),
+                                      src: MdiPathToBase64(props.icon, props.iconColor)
+                                  }
+                                : undefined
+                        }
                     />
                 </div>
                 {props.withInput && (
