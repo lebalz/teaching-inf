@@ -4,6 +4,8 @@ import React from 'react';
 import CmsActions from './CmsActions';
 import { CmsTextEntries } from './WithCmsText';
 import { useStore } from '@tdev-hooks/useStore';
+import clsx from 'clsx';
+import Popup from 'reactjs-popup';
 
 export interface Props {
     id?: string;
@@ -11,6 +13,20 @@ export interface Props {
     name?: string;
     mode?: 'xlsx' | 'code';
 }
+
+export const EmptyContent = (props: { className?: string }) => {
+    return (
+        <Popup
+            trigger={<span className={clsx(props.className, 'badge', 'badge--danger')}>-</span>}
+            position="top center"
+            on="hover"
+        >
+            <div className={clsx('card')}>
+                <div className={clsx('card__body')}>⚠️ Leerer Inhalt</div>
+            </div>
+        </Popup>
+    );
+};
 
 const CmsText = observer((props: Props) => {
     const { id, name, showActions } = props;
@@ -30,6 +46,7 @@ const CmsText = observer((props: Props) => {
                 <CmsActions entries={{ [rootId]: rootId } as CmsTextEntries} mode={props.mode} />
             )}
             {cmsText.text}
+            {cmsText.text === '' && <EmptyContent />}
         </>
     );
 });

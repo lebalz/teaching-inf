@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { CmsTextContext, useFirstCmsTextDocumentIfExists } from '@tdev-components/documents/CmsText/shared';
 import React from 'react';
-import { Props as DefaultCmsProps } from '..';
+import { Props as DefaultCmsProps, EmptyContent } from '..';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
 import CmsActions from '../CmsActions';
@@ -35,7 +35,12 @@ const CmsLink = observer((props: Props) => {
         );
     }
 
-    return <Link to={cmsText.text}>{props.children || cmsText.text}</Link>;
+    return (
+        <Link to={cmsText.text}>
+            {props.children || cmsText.text}
+            {cmsText.text === '' && <EmptyContent />}
+        </Link>
+    );
 });
 
 export default CmsLink;
