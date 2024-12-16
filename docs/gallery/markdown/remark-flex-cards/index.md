@@ -158,6 +158,17 @@ div.flex {
             }
         }
     }
+    
+    &[style*='justify-content: space-around'],
+    &[style*='justify-content: space-between'],
+    &[style*='justify-content: center'],
+    &[style*='justify-content: flex-end'],
+    &[style*='justify-content: end'],
+    &[style*='justify-content: space-evenly'] {
+        > div.item {
+            flex-grow: 0;
+        }
+    }
 }
 ```
 :::

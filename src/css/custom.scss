@@ -109,7 +109,6 @@ div.flex {
     flex-wrap: wrap;
     gap: 0.4em;
     margin-bottom: 1em;
-
     > div.item {
         flex-grow: 1;
         flex-shrink: 1;
@@ -149,6 +148,17 @@ div.flex {
             &.code__card {
                 padding: 0;
             }
+        }
+    }
+
+    &[style*='justify-content: space-around'],
+    &[style*='justify-content: space-between'],
+    &[style*='justify-content: center'],
+    &[style*='justify-content: flex-end'],
+    &[style*='justify-content: end'],
+    &[style*='justify-content: space-evenly'] {
+        > div.item {
+            flex-grow: 0;
         }
     }
 }
