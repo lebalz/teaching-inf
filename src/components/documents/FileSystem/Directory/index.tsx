@@ -15,6 +15,7 @@ import { MetaInit } from '@tdev-models/documents/FileSystem/iFileSystem';
 import { useFirstMainDocument } from '@tdev-hooks/useFirstMainDocument';
 import Loader from '@tdev-components/Loader';
 import FsDetails from '../FsDetails';
+import MoveItem from '../Actions/MoveItem';
 
 interface Props extends MetaInit {
     id: string;
@@ -72,6 +73,7 @@ export const DirectoryComponent = observer((props: DirectoryProps) => {
             <div className={clsx(shared.content, styles.content)}>
                 {dir.isOpen && (
                     <>
+                        {dir.files.length > 0 && <MoveItem item={dir.files[0]} />}
                         {dir.files.map((file) => {
                             return <File key={file.id} file={file} />;
                         })}
