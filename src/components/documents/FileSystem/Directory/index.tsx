@@ -73,7 +73,6 @@ export const DirectoryComponent = observer((props: DirectoryProps) => {
             <div className={clsx(shared.content, styles.content)}>
                 {dir.isOpen && (
                     <>
-                        {dir.files.length > 0 && <MoveItem item={dir.files[0]} />}
                         {dir.files.map((file) => {
                             return <File key={file.id} file={file} />;
                         })}

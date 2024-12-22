@@ -28,6 +28,8 @@ import { DocumentType } from '@tdev-api/document';
 import Icon, { Stack } from '@mdi/react';
 import { getNumericCircleIcon } from '@tdev-components/shared/numberIcons';
 import DirTree from './DirTree';
+import { useStore } from '@tdev-hooks/useStore';
+import { action } from 'mobx';
 
 interface Props {
     item: File | Directory;
@@ -35,6 +37,7 @@ interface Props {
 
 const MoveItem = observer((props: Props) => {
     const { item } = props;
+    const documentStore = useStore('documentStore');
     const root = item.path.filter((p) => p.type === DocumentType.Dir)[0];
     if (!root) {
         return null;
@@ -48,9 +51,10 @@ const MoveItem = observer((props: Props) => {
                 <DirTree
                     dir={root}
                     fileType={item.type}
-                    moveTo={(to) => {
-                        item.parentId;
-                    }}
+                    moveTo={action((to) => {
+                        documentStore.relinkParent(item, to);
+                    })}
+                    item={item}
                 />
             </div>
         </div>

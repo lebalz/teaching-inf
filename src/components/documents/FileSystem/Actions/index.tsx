@@ -94,20 +94,19 @@ const Actions = observer((props: Props) => {
                                         <span>
                                             <Button
                                                 text="Verschieben"
-                                                color="black"
+                                                color="blue"
                                                 icon={
                                                     item.type === DocumentType.Dir
                                                         ? mdiFolderMove
                                                         : mdiFileMove
                                                 }
                                                 size={1}
-                                                onClick={(e) => {
-                                                    e.preventDefault();
-                                                    e.stopPropagation();
-                                                }}
                                             />
                                         </span>
                                     }
+                                    modal
+                                    overlayStyle={{ background: 'rgba(0,0,0,0.5)' }}
+                                    on="click"
                                 >
                                     <MoveItem item={item} />
                                 </Popup>
