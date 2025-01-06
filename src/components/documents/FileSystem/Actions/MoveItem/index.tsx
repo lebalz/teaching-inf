@@ -1,32 +1,10 @@
-import {
-    mdiCircle,
-    mdiClose,
-    mdiDotsHorizontalCircleOutline,
-    mdiFileMove,
-    mdiFileMoveOutline,
-    mdiFolder,
-    mdiFolderMove,
-    mdiFolderMoveOutline,
-    mdiFolderOpen,
-    mdiFolderOpenOutline,
-    mdiFolderOutline,
-    mdiNumeric0Circle,
-    mdiOneUp,
-    mdiRenameOutline,
-    mdiTrashCan,
-    mdiTrashCanOutline
-} from '@mdi/js';
 import styles from './styles.module.scss';
-import Button from '@tdev-components/shared/Button';
 import Directory from '@tdev-models/documents/FileSystem/Directory';
 import File from '@tdev-models/documents/FileSystem/File';
 import { observer } from 'mobx-react-lite';
-import Popup from 'reactjs-popup';
 import clsx from 'clsx';
 import React from 'react';
 import { DocumentType } from '@tdev-api/document';
-import Icon, { Stack } from '@mdi/react';
-import { getNumericCircleIcon } from '@tdev-components/shared/numberIcons';
 import DirTree from './DirTree';
 import { useStore } from '@tdev-hooks/useStore';
 import { action } from 'mobx';
