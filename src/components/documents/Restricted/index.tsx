@@ -17,7 +17,9 @@ interface Props extends MetaInit {
 
 const Restricted = observer((props: Props) => {
     const [meta] = React.useState(new ModelMeta(props));
-    const docRoot = useDocumentRoot(props.id, meta, false);
+    const docRoot = useDocumentRoot(props.id, meta, false, {
+        access: props.access || Access.None_DocumentRoot
+    });
     const userStore = useStore('userStore');
     if (!docRoot || docRoot.isDummy) {
         if (!!userStore.current) {
