@@ -1,101 +1,217 @@
 [
     {
-        "cells": ["15.08.2024", "Einstieg", "Informatik, BYOD"]
+        "cells": [
+            "15.08.2024",
+            "Einstieg",
+            "Informatik, BYOD"
+        ]
     },
     {
-        "cells": ["22.08.2024", "ICT", "BYOD Basics"]
+        "cells": [
+            "22.08.2024",
+            "ICT",
+            "BYOD Basics"
+        ]
     },
     {
-        "cells": ["29.08.2024", "ICT", "BYOD Basics"]
+        "cells": [
+            "29.08.2024",
+            "ICT",
+            "BYOD Basics"
+        ]
     },
     {
-        "cells": ["05.09.2024", "Digitale Dokumente", "Struktur von Dokumenten"]
+        "cells": [
+            "05.09.2024",
+            "Digitale Dokumente",
+            "Struktur von Dokumenten"
+        ]
     },
     {
-        "cells": ["12.09.2024", "Digitale Dokumente", "Word Grundlagen"]
+        "cells": [
+            "12.09.2024",
+            "Digitale Dokumente",
+            "Word Grundlagen"
+        ]
     },
     {
-        "cells": ["19.09.2024", "Kennenlernwoche GYM1", ""],
+        "cells": [
+            "19.09.2024",
+            "Kennenlernwoche GYM1",
+            ""
+        ],
         "type": "holiday"
     },
     {
-        "cells": ["26.09.2024", "Herbstferien", ""],
+        "cells": [
+            "26.09.2024",
+            "Herbstferien",
+            ""
+        ],
         "type": "holiday"
     },
     {
-        "cells": ["03.10.2024", "Herbstferien", ""],
+        "cells": [
+            "03.10.2024",
+            "Herbstferien",
+            ""
+        ],
         "type": "holiday"
     },
     {
-        "cells": ["10.10.2024", "Herbstferien", ""],
+        "cells": [
+            "10.10.2024",
+            "Herbstferien",
+            ""
+        ],
         "type": "holiday"
     },
     {
-        "cells": ["14.10.2024", "Beginn BYOD-Tests", ""],
+        "cells": [
+            "14.10.2024",
+            "Beginn BYOD-Tests",
+            ""
+        ],
         "type": "test"
     },
     {
-        "cells": ["17.10.2024", "Digitale Dokumente", "Formatvorlagen in Word"]
+        "cells": [
+            "17.10.2024",
+            "Digitale Dokumente",
+            "Formatvorlagen in Word"
+        ]
     },
     {
-        "cells": ["24.10.2024", "Digitale Dokumente", "Formatvorlagen in Word"]
+        "cells": [
+            "24.10.2024",
+            "Digitale Dokumente",
+            "Formatvorlagen in Word"
+        ]
     },
     {
-        "cells": ["31.10.2024", "Digitale Dokumente", "Inhaltsverzeichnis und Seitennummerierung in Word"]
+        "cells": [
+            "31.10.2024",
+            "Digitale Dokumente",
+            "Inhaltsverzeichnis und Seitennummerierung in Word"
+        ]
     },
     {
-        "cells": ["7.11.2024", "Informatik Biber", "Wettbewerb"],
+        "cells": [
+            "7.11.2024",
+            "Informatik Biber",
+            "Wettbewerb"
+        ],
         "type": "event"
     },
     {
-        "cells": ["14.11.2024", "Digitale Dokumente", "Gemeinsames Arbeiten an Dokumenten"]
+        "cells": [
+            "14.11.2024",
+            "Digitale Dokumente",
+            "Gemeinsames Arbeiten an Dokumenten"
+        ]
     },
     {
-        "cells": ["21.11.2024", "ICT", "Kurztest Office"],
+        "cells": [
+            "21.11.2024",
+            "ICT",
+            "Kurztest Office"
+        ],
         "type": "test"
     },
     {
-        "cells": ["28.11.2024", "Webseiten", "HTML"]
+        "cells": [
+            "28.11.2024",
+            "Webseiten",
+            "HTML"
+        ]
     },
     {
-        "cells": ["05.12.2024", "Webseiten", "CSS"]
+        "cells": [
+            "05.12.2024",
+            "Webseiten",
+            "CSS"
+        ]
     },
     {
-        "cells": ["12.12.2024", "Webseiten", "Suchmaschinen"]
+        "cells": [
+            "12.12.2024",
+            "Webseiten",
+            "Suchmaschinen"
+        ]
     },
     {
-        "cells": ["19.12.2024", "Webseiten", "Steckbrief Webseite"]
+        "cells": [
+            "19.12.2024",
+            "Webseiten",
+            "Steckbrief Webseite"
+        ]
     },
     {
-        "cells": ["26.12.2024", "Winterferien", ""],
+        "cells": [
+            "26.12.2024",
+            "Winterferien",
+            ""
+        ],
         "type": "holiday"
     },
     {
-        "cells": ["02.01.2025", "Winterferien", ""],
+        "cells": [
+            "02.01.2025",
+            "Winterferien",
+            ""
+        ],
         "type": "holiday"
     },
     {
-        "cells": ["09.01.2025", "Programmieren 1", "Micro:Bit 🤖"]
+        "cells": [
+            "09.01.2025",
+            "Programmieren 1",
+            "Verlinken, CSS Frameworks"
+        ]
     },
     {
-        "cells": ["16.01.2025", "Programmieren 1", "Micro:Bit 🤖"]
+        "cells": [
+            "16.01.2025",
+            "Programmieren 1",
+            "CV Erstellen"
+        ]
     },
     {
-        "cells": ["23.01.2025", "Programmieren 1", "Micro:Bit 🤖"]
+        "cells": [
+            "23.01.2025",
+            "Programmieren 1",
+            "Micro:Bit 🤖"
+        ]
     },
     {
-        "cells": ["23.01.2025", "Notenschluss", ""],
+        "cells": [
+            "23.01.2025",
+            "Notenschluss",
+            ""
+        ],
         "type": "event"
     },
     {
-        "cells": ["30.01.2025", "Programmieren 1", "Wiederholung"]
+        "cells": [
+            "30.01.2025",
+            "Programmieren 1",
+            "Wiederholung"
+        ]
     },
     {
-        "cells": ["03.02.2025", "Beginn Semester 2", ""],
+        "cells": [
+            "03.02.2025",
+            "Beginn Semester 2",
+            ""
+        ],
         "type": "event"
     },
     {
-        "cells": ["04.02.2025", "Programmieren 1", "Test"],
+        "cells": [
+            "04.02.2025",
+            "Programmieren 1",
+            "Test"
+        ],
         "type": "test"
     }
 ]
