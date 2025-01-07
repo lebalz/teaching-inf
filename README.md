@@ -18,3 +18,12 @@ This website is built using [Docusaurus](https://docusaurus.io/), a modern stati
 | TEST_USERNAME            | Development |                         | `admin.bar@bazz.ch` | To log in offline. Must correspond to a user email found in the API's database.\*                                                                                  |
 
 \* To change users, clear LocalStorage to delete the API key created upon first authentication.<br/>
+
+
+## Upgrade
+
+To upgrade docusaurus, run:
+
+```bash
+yarn upgrade @docusaurus/core@latest @docusaurus/faster@latest @docusaurus/preset-classic@latest @docusaurus/theme-classic@latest @docusaurus/theme-common@latest @docusaurus/module-type-aliases@latest @docusaurus/plugin-rsdoctor@latest @docusaurus/tsconfig@latest @docusaurus/types@latest
+```
