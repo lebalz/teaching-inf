@@ -47,10 +47,11 @@ const Solution = observer((props: Props) => {
                                 {userStore.current?.isAdmin && (
                                     <AccessBadge
                                         access={
-                                            (userStore.viewedUserId
+                                            userStore.viewedUserId
                                                 ? docRoot.permissionForUser(userStore.viewedUserId)
-                                                : docRoot.permission) || docRoot.rootAccess
+                                                : docRoot.permission
                                         }
+                                        defaultAccess={docRoot.rootAccess}
                                     />
                                 )}
                                 <Icon
