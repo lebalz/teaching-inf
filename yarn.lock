@@ -8353,7 +8353,7 @@ mkdirp-classic@^0.5.2, mkdirp-classic@^0.5.3:
   dependencies:
     minimist "^1.2.6"
 
-mobx-react-lite@^4.0.7:
+mobx-react-lite@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/mobx-react-lite/-/mobx-react-lite-4.1.0.tgz#6a03ed2d94150848213cfebd7d172e123528a972"
   integrity sha512-QEP10dpHHBeQNv1pks3WnHRCem2Zp636lq54M2nKO2Sarr13pL4u6diQXf65yzXUn0mkk18SyIDCm9UOJYTi1w==
@@ -8365,7 +8365,7 @@ mobx-utils@^6.0.8:
   resolved "https://registry.yarnpkg.com/mobx-utils/-/mobx-utils-6.1.0.tgz#98f749b1ede18a9f40b89b9b296bcc625b085ddf"
   integrity sha512-P3qUVDFp3Kv5HXD7EIGJn3zlgJJnN+/ZpFHWQ+u6YNN1xDxY53iMvsQ9fM8kauTVdDmt7ulDgDQtDrOxb1NS9Q==
 
-mobx@^6.13.1:
+mobx@^6.13.5:
   version "6.13.5"
   resolved "https://registry.yarnpkg.com/mobx/-/mobx-6.13.5.tgz#957d9df88c7f8b4baa7c6f8bdcb6d68b432a6ed5"
   integrity sha512-/HTWzW2s8J1Gqt+WmUj5Y0mddZk+LInejADc79NJadrWla3rHzmRHki/mnEUH1AvOmbNTZ1BRbKxr8DSgfdjMA==
