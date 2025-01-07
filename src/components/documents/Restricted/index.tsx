@@ -8,6 +8,7 @@ import { Access } from '@tdev-api/document';
 import { useStore } from '@tdev-hooks/useStore';
 import PermissionsPanel from '@tdev-components/PermissionsPanel';
 import { NoneAccess } from '@tdev-models/helpers/accessPolicy';
+import AccessBadge from '@tdev-components/PermissionsPanel/AccessBadge';
 
 interface Props extends MetaInit {
     id: string;
@@ -38,8 +39,15 @@ const Restricted = observer((props: Props) => {
             )}
             <div className={styles.adminControls}>
                 {userStore.current?.isAdmin && <PermissionsPanel documentRootId={docRoot.id} />}
-                {userStore.current?.isAdmin && NoneAccess.has(docRoot.permission) && (
-                    <span className="badge badge--secondary">Hidden</span>
+                {userStore.current?.isAdmin && (
+                    <AccessBadge
+                        access={
+                            userStore.viewedUserId
+                                ? docRoot.permissionForUser(userStore.viewedUserId)
+                                : docRoot.permission
+                        }
+                        defaultAccess={docRoot.rootAccess}
+                    />
                 )}
             </div>
         </div>
