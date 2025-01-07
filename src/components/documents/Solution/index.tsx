@@ -43,7 +43,8 @@ const Solution = observer((props: Props) => {
                                 {userStore.current?.isAdmin && (
                                     <PermissionsPanel documentRootId={docRoot.id} />
                                 )}
-                                {NoneAccess.has(docRoot.permission) && (
+                                {!userStore.isUserSwitched && NoneAccess.has(docRoot.permission) && (
+                                    /* only show the "Hidden" Badge when user is **not switched**  */
                                     <span className="badge badge--secondary">Hidden</span>
                                 )}
                                 <Icon
