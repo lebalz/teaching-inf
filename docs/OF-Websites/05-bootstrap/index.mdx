@@ -2,7 +2,7 @@
 page_id: c3469a92-685a-404e-a28b-15975ac975a5
 ---
 
-# Bootstrap
+# CV mit Bootstrap
 
 Mit __CSS__ können wir Webseiten gestalten, indem wir für jeden HTML-Tag eigene Regeln schreiben. CSS Frameworks wie Bootstrap oder Tailwind CSS enthalten bereits fertige **Gestaltungsregeln**, die wir einfach verwenden können. Diese fertigen Regeln werden über sogenannte __Klassen__ den HTML-Elementen zugewiesen - ähnlich wie Aufkleber, die man auf Objekte klebt.
 
@@ -81,12 +81,12 @@ Der gezeigt HTML-Code bezieht sich nun immer auf den Inhalt zwischen den `<body>
 </div>
 ```
 
-:::aufgabe[Schritt 1]
+:::aufgabe[Schritt 2]
 <Answer type="state" id="9769736d-8242-4294-ad95-c1ddb7166363" />
 
 Fügen Sie den gezeigten HTML-Code zwischen die `<body></body>` Tags ein. Überprüfen Sie, dass die Webseite in VS-Code in der Live-Vorschau wie folgt angezeigt wird.
 
-![](./images/cv-s2.jpg)
+![--width=450px](./images/cv-s2.jpg)
 :::
 
     </TabItem>
@@ -117,7 +117,7 @@ Nun soll Übersicht hübscher dargestellt werden. Dazu werden nun einige Bootstr
 
 Mit der Klasse `row` wird eine Zeile definiert - in Bootstrap ist eine Zeile in __12__ gleichgrosse Spalten unterteilt. Mit der Klasse `col-4` wird dann beschrieben, dass das erste `<div>` 4 Spalten gross, das zweite `<div>` 8 Spalten gross sein soll.
 
-![--width=300px](./images/cv-3.2-bs-row-col.png)
+![--width=450px](./images/cv-3.2-bs-row-col.png)
 
 
 ```html {2,3,6}
@@ -389,7 +389,7 @@ Fügen Sie die weiteren Abschnitte hinzu, wobei Sie
 
 Als letztes wird die Überschrift hinzugefügt. Dazu braucht es ein Bild von Ihnen, welches Sie im Ordner `bilder` ablegen. Betrachten Sie dann den untenstehenden Code:
 
-```html showLineNumbers
+```html {3,10,19} showLineNumbers
 <div class="row align-items-center">
     <div class="col-sm-4">
         <img src="./bilder/photo.jpg" class="rounded img-fluid">
@@ -438,9 +438,9 @@ Inhaltlich sind wir fertig! Die einzelnen Abschnitte sind aber aktuell noch sehr
 
 ![](./images/margin.png)
 
-Der Abstand eines Elements kann auf jede Seite einzeln festgelegt werden. Mit `m-4` kann der Abstand mit nur einem Befehl gleichmässig auf alle Seiten festgelegt werden. Die Zahlen von 1 bis 5 geben die Stärke des Abstands an.
+Der Abstand eines Elements kann auf jede Seite einzeln festgelegt werden. Mit `m-4` kann der Abstand mit nur einem Befehl gleichmässig auf alle Seiten festgelegt werden. Die Zahlen von **1 bis 5** geben die Stärke des Abstands an.
 
-```html{1}
+```html {1}
 <div class="row mt-4">
     <div class="col-sm-4">
         <h4>Übersicht</h4>
