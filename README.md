@@ -28,3 +28,12 @@ yarn add --dev gulp@^4.0.2 gulp-connect@^5.7.0
 # present reveal.js
 yarn present
 ```
+
+
+## Upgrade
+
+To upgrade docusaurus, run:
+
+```bash
+yarn upgrade @docusaurus/core@latest @docusaurus/faster@latest @docusaurus/preset-classic@latest @docusaurus/theme-classic@latest @docusaurus/theme-common@latest @docusaurus/module-type-aliases@latest @docusaurus/plugin-rsdoctor@latest @docusaurus/tsconfig@latest @docusaurus/types@latest
+```
