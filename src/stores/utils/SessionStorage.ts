@@ -1,33 +1,26 @@
-import { User } from '@tdev-api/user';
-import { Primitive } from 'utility-types';
 import siteConfig from '@generated/docusaurus.config';
 import _ from 'lodash';
 import MemoryStorage from './MemoryStorage';
 
-export type PersistedData = {
-    user?: User;
-};
-
 export const StorageKey = Object.freeze({
-    SessionStore: _.upperFirst(_.camelCase(`SessionStore${siteConfig.projectName || ''}`)),
-    QrScannerDeviceId: 'QrScannerDeviceId'
+    GithubToken: _.upperFirst(_.camelCase(`GithubToken${siteConfig.projectName || ''}`))
 });
 
 /**
  * @see https://github.com/outline/outline/blob/main/shared/utils/Storage.ts
- * Storage is a wrapper class for localStorage that allow safe usage when
- * localStorage is not available.
+ * Storage is a wrapper class for sessionStorage that allow safe usage when
+ * sessionStorage is not available.
  */
-class Storage {
-    interface: typeof localStorage | MemoryStorage;
+class SessionStorage {
+    interface: typeof sessionStorage | MemoryStorage;
 
     public constructor() {
         try {
-            localStorage.setItem('test', 'test');
-            localStorage.removeItem('test');
-            this.interface = localStorage;
+            sessionStorage.setItem('test', 'test');
+            sessionStorage.removeItem('test');
+            this.interface = sessionStorage;
         } catch (_err) {
-            console.log('localStorage not available, falling back to memory storage');
+            console.log('sessionStorage not available, falling back to memory storage');
             this.interface = new MemoryStorage();
         }
     }
@@ -85,4 +78,4 @@ class Storage {
     }
 }
 
-export default new Storage();
+export default new SessionStorage();

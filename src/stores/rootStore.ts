@@ -9,6 +9,7 @@ import PermissionStore from '@tdev-stores/PermissionStore';
 import DocumentStore from '@tdev-stores/DocumentStore';
 import { PageStore } from '@tdev-stores/PageStore';
 import { AdminStore } from './AdminStore';
+import { GithubStore } from './GithubStore';
 
 export class RootStore {
     documentRootStore: DocumentRootStore;
@@ -20,6 +21,7 @@ export class RootStore {
     documentStore: DocumentStore;
     pageStore: PageStore;
     adminStore: AdminStore;
+    githubStore: GithubStore;
 
     // @observable accessor initialized = false;
     constructor() {
@@ -32,6 +34,7 @@ export class RootStore {
         this.documentStore = new DocumentStore(this);
         this.pageStore = new PageStore(this);
         this.adminStore = new AdminStore(this);
+        this.githubStore = new GithubStore(this);
 
         if (this.sessionStore.isLoggedIn) {
             this.load();
