@@ -152,10 +152,10 @@ export class GithubStore extends iStore {
     @action
     fetchFiles(branch: string = '', path: string = '') {
         if (!this.octokit) {
-            return;
+            return Promise.resolve([]);
         }
 
-        this.octokit.repos
+        return this.octokit.repos
             .getContent({
                 owner: organizationName!,
                 repo: projectName!,
@@ -166,9 +166,8 @@ export class GithubStore extends iStore {
                     const entries = res.data;
                     if (Array.isArray(entries)) {
                         if (entries.length === 0) {
-                            return;
+                            return [];
                         }
-                        console.log('Entries:', entries[0].url, new URLSearchParams(entries[0].url));
                         const branch = new URL(entries[0].url).searchParams.get('ref');
                         if (branch) {
                             if (!this.entries.has(branch)) {
