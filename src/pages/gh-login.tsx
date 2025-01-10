@@ -11,10 +11,10 @@ import { tokenRequest } from '@tdev/authConfig';
 import siteConfig from '@generated/docusaurus.config';
 import Translate from '@docusaurus/Translate';
 import { useStore } from '@tdev-hooks/useStore';
-const { NO_AUTH } = siteConfig.customFields as { NO_AUTH?: boolean };
-
+const { APP_URL } = siteConfig.customFields as { APP_URL?: string };
+const callback = `${APP_URL || 'http://localhost:3000'}/gh-callback`;
 const LOGIN_URL =
-    'https://github.com/login/oauth/authorize?client_id=Iv23ligDNwu0p1z92UTe&scope=repo' as const;
+    `https://github.com/login/oauth/authorize?client_id=Iv23ligDNwu0p1z92UTe&scope=repo&redirect_uri=${encodeURIComponent(callback)}` as const;
 
 function HomepageHeader() {
     const { siteConfig } = useDocusaurusContext();
