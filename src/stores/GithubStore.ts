@@ -9,6 +9,7 @@ import siteConfig from '@generated/docusaurus.config';
 import Dir from '@tdev-models/github/Dir';
 import File from '@tdev-models/github/File';
 import { computedFn } from 'mobx-utils';
+import _ from 'lodash';
 const { organizationName, projectName } = siteConfig;
 if (!organizationName || !projectName) {
     throw new Error('"organizationName" and "projectName" must be set in docusaurus.config.ts');
@@ -29,6 +30,10 @@ export class GithubStore extends iStore {
     @observable accessor branch: string | undefined;
     /* contains branch <-> rootDirectory */
     entries = observable.map<string, IObservableArray<Dir | File>>([], { deep: false });
+
+    @observable.ref accessor branches: RestEndpointMethodTypes['repos']['listBranches']['response']['data'] =
+        [];
+    @observable.ref accessor pulls: RestEndpointMethodTypes['pulls']['list']['response']['data'] = [];
 
     @observable accessor initialized = false;
 
@@ -122,7 +127,7 @@ export class GithubStore extends iStore {
 
     @action
     load() {
-        this.fetchFiles();
+        return Promise.all([this.fetchFiles(), this.fetchPulls(), this.fetchBranches()]);
     }
 
     findEntry = computedFn(function (
@@ -148,6 +153,96 @@ export class GithubStore extends iStore {
         const ref = parentPath.endsWith('/') ? parentPath.replace(/\/+$/, '') : parentPath;
         return this.entries.get(branch)!.filter((entry) => entry.parentPath === ref);
     });
+
+    @action
+    fetchBranches() {
+        if (!this.octokit) {
+            return Promise.resolve([]);
+        }
+        return this.octokit.repos
+            .listBranches({ repo: projectName!, owner: organizationName! })
+            .then((res) => {
+                if (res.status === 200) {
+                    this.branches = res.data;
+                }
+            });
+    }
+
+    @action
+    fetchPulls() {
+        if (!this.octokit) {
+            return Promise.resolve([]);
+        }
+        return this.octokit.pulls
+            .list({ repo: projectName!, owner: organizationName!, state: 'open' })
+            .then((res) => {
+                if (res.status === 200) {
+                    this.pulls = res.data.filter(
+                        (pull) =>
+                            pull.head.repo.name.toLowerCase() === projectName!.toLowerCase() &&
+                            pull.head.repo.owner.login.toLowerCase() === organizationName!.toLowerCase()
+                    );
+                }
+            });
+    }
+
+    @computed
+    get nextPrName() {
+        const maxNum = Math.max(1, ...this.pulls.map((p) => p.number));
+        return `cms/pr-${maxNum + 1}`;
+    }
+
+    @action
+    createNewBranchAndPull(name: string) {
+        if (!this.octokit) {
+            return Promise.resolve();
+        }
+        return this.octokit.git
+            .getRef({
+                owner: organizationName!,
+                repo: projectName!,
+                ref: 'heads/main' // or whatever base branch
+            })
+            .then((refRes) => {
+                return this.octokit!.git.createRef({
+                    owner: organizationName!,
+                    repo: projectName!,
+                    ref: `refs/heads/${name}`,
+                    sha: refRes.data.object.sha
+                });
+            })
+            .then(async (branchRes) => {
+                const content = new TextEncoder().encode(`${new Date().toISOString()}: ${name}\n🚀`);
+                const base64Content = btoa(String.fromCharCode(...content));
+                await this.octokit!.repos.createOrUpdateFileContents({
+                    owner: organizationName!,
+                    repo: projectName!,
+                    path: `${name}.txt`, // File path in repo
+                    message: `Init ${name}`,
+                    content: base64Content,
+                    branch: branchRes.data.ref
+                });
+                return branchRes;
+            })
+            .then((branchRes) => {
+                return this.octokit!.pulls.create({
+                    owner: organizationName!,
+                    repo: projectName!,
+                    title: name,
+                    head: branchRes.data.ref,
+                    base: 'main', // or whatever base branch
+                    body: 'New PR from CMS'
+                });
+            })
+            .then(() => {
+                return new Promise((resolve) => setTimeout(resolve, 3000));
+            })
+            .then(
+                action(() => {
+                    return this.load();
+                })
+            );
+    }
 
     @action
     fetchFiles(branch: string = '', path: string = '') {

@@ -16,6 +16,8 @@ import CodeBlock from '@theme/CodeBlock';
 import Button from '@tdev-components/shared/Button';
 import File from '@tdev-components/Github/iFile/File';
 import Dir from '@tdev-components/Github/iFile/Dir';
+import { ApiState } from '@tdev-stores/iStore';
+import { mdiLoading } from '@mdi/js';
 
 function HomepageHeader() {
     const { siteConfig } = useDocusaurusContext();
@@ -31,6 +33,7 @@ function HomepageHeader() {
 
 const GhCallback = observer(() => {
     const githubStore = useStore('githubStore');
+    const [apiState, setApiState] = React.useState(ApiState.IDLE);
     return (
         <Layout>
             <HomepageHeader />
@@ -38,6 +41,17 @@ const GhCallback = observer(() => {
                 <CodeBlock className="language-json" title="Github Token">
                     {JSON.stringify({ accessToken: githubStore.accessToken }, null, 2)}
                 </CodeBlock>
+                <Button
+                    text={`Create PR: ${githubStore.nextPrName}`}
+                    onClick={() => {
+                        setApiState(ApiState.SYNCING);
+                        githubStore.createNewBranchAndPull(githubStore.nextPrName).then(() => {
+                            setApiState(ApiState.IDLE);
+                        });
+                    }}
+                    icon={apiState === ApiState.SYNCING ? mdiLoading : undefined}
+                    spin={apiState === ApiState.SYNCING}
+                />
                 <details>
                     <CodeBlock className="language-json" title="Github Token">
                         {JSON.stringify(
@@ -47,6 +61,23 @@ const GhCallback = observer(() => {
                         )}
                     </CodeBlock>
                 </details>
+                <h4>Branches</h4>
+                <ul>
+                    {githubStore.branches.map((branch, idx) => {
+                        return <li key={idx}>{branch.name}</li>;
+                    })}
+                </ul>
+                <h4>Pulls</h4>
+                <ul>
+                    {githubStore.pulls.map((pull, idx) => {
+                        return (
+                            <li
+                                key={idx}
+                            >{`#${pull.number}: ${pull.title} --> ${pull.head.ref} ${pull.head.repo.owner.login}`}</li>
+                        );
+                    })}
+                </ul>
+                <h4>Files</h4>
                 <ul>
                     {githubStore.currentBranch.map((entry, idx) => {
                         if (entry.type === 'file') {
