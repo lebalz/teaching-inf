@@ -18,6 +18,7 @@ import File from '@tdev-components/Github/iFile/File';
 import Dir from '@tdev-components/Github/iFile/Dir';
 import { ApiState } from '@tdev-stores/iStore';
 import { mdiLoading } from '@mdi/js';
+import MdxEditor from '@tdev-components/MdxEditor';
 
 function HomepageHeader() {
     const { siteConfig } = useDocusaurusContext();
@@ -38,6 +39,7 @@ const GhCallback = observer(() => {
         <Layout>
             <HomepageHeader />
             <main>
+                <MdxEditor />
                 <CodeBlock className="language-json" title="Github Token">
                     {JSON.stringify({ accessToken: githubStore.accessToken }, null, 2)}
                 </CodeBlock>
