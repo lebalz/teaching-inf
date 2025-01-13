@@ -30,7 +30,6 @@ const MdxEditor = observer((props: Props) => {
                 Lib.thematicBreakPlugin(),
                 Lib.markdownShortcutPlugin(),
                 Lib.tablePlugin(),
-                Lib.directivesPlugin(),
                 Lib.diffSourcePlugin({ diffMarkdown: file._pristine, viewMode: 'rich-text' }),
                 Lib.codeBlockPlugin({ defaultCodeBlockLanguage: 'py' }),
                 Lib.codeMirrorPlugin({

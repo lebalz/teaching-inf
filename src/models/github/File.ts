@@ -1,6 +1,7 @@
 import { GithubStore } from '@tdev-stores/GithubStore';
 import { action, computed, observable } from 'mobx';
 import { FileProps, iFileStub } from './FileStub';
+import { ApiState } from '@tdev-stores/iStore';
 
 class File extends iFileStub {
     readonly type = 'file';
@@ -11,6 +12,7 @@ class File extends iFileStub {
     refContent: string;
 
     @observable accessor _isEditing: boolean = false;
+    @observable accessor apiState: ApiState = ApiState.IDLE;
 
     constructor(props: FileProps, store: GithubStore) {
         super(props, store);
@@ -46,6 +48,12 @@ class File extends iFileStub {
         if (isInit) {
             this._pristine = content;
         }
+    }
+
+    @action
+    save(commitMessage?: string) {
+        this.apiState = ApiState.SYNCING;
+        this.store.saveFile(this, commitMessage);
     }
 
     @computed

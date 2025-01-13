@@ -8,8 +8,9 @@ import styles from './styles.module.scss';
 import ImagePreview from './ImagePreview';
 import Icon from '@mdi/react';
 import Button from '@tdev-components/shared/Button';
-import { mdiCircleEditOutline, mdiContentSave } from '@mdi/js';
+import { mdiCircleEditOutline, mdiContentSave, mdiLoading } from '@mdi/js';
 import { useStore } from '@tdev-hooks/useStore';
+import { ApiState } from '@tdev-stores/iStore';
 interface Props {
     file: FileModel | FileStub;
 }
@@ -36,12 +37,13 @@ const File = observer((props: Props) => {
             />
             {file.type === 'file' && file.isDirty && (
                 <Button
-                    icon={mdiContentSave}
+                    icon={file.apiState === ApiState.SYNCING ? mdiLoading : mdiContentSave}
+                    spin={file.apiState === ApiState.SYNCING}
                     color="green"
                     size={0.7}
                     disabled={githubStore.isOnMainBranch}
                     onClick={() => {
-                        githubStore.createOrUpdateFile(file.path, file.content, file.sha);
+                        file.save();
                     }}
                 />
             )}

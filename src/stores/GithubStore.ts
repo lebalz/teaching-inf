@@ -293,21 +293,31 @@ export class GithubStore extends iStore {
     }
 
     @action
-    createOrUpdateFile(path: string, content: string, sha?: string, commitMessage?: string) {
-        const { branch } = this;
-        if (!this.octokit || !branch) {
+    saveFile(file: File, commitMessage?: string) {
+        return this.createOrUpdateFile(file.path, file.content, file.branch, file.sha, commitMessage);
+    }
+
+    @action
+    createOrUpdateFile(
+        path: string,
+        content: string,
+        branchName: string,
+        sha?: string,
+        commitMessage?: string
+    ) {
+        if (!this.octokit || !branchName) {
             return Promise.resolve();
         }
         const textContent = new TextEncoder().encode(content);
         const base64Content = btoa(String.fromCharCode(...textContent));
-        const current = this.findEntry(branch.name, path) as File | undefined;
+        const current = this.findEntry(branchName, path) as File | undefined;
         return this.octokit!.repos.createOrUpdateFileContents({
             owner: organizationName!,
             repo: projectName!,
             path: path, // File path in repo
             message: commitMessage || (sha ? `Update: ${path}` : `Create ${path}`),
             content: base64Content,
-            branch: branch.name,
+            branch: branchName,
             sha: sha
         }).then(
             action((res) => {
@@ -320,14 +330,14 @@ export class GithubStore extends iStore {
                         // file updated
                         if (current) {
                             const file = new File({ ...resContent, content: content }, this);
-                            this.addFileToStore(branch.name, file);
+                            this.addFileToStore(branchName, file);
                             file.setEditing(true);
                         }
                         break;
                     case 201:
                         // file created
                         const file = new File({ ...resContent, content: content }, this);
-                        this.addFileToStore(branch.name, file);
+                        this.addFileToStore(branchName, file);
                         break;
                 }
             })
