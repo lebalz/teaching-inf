@@ -40,34 +40,33 @@ const MdxEditor = observer((props: Props) => {
                     toolbarContents: () => (
                         <>
                             {' '}
-                            <Lib.UndoRedo />
-                            <Lib.BoldItalicUnderlineToggles />
-                            <Lib.ListsToggle />
-                            <Lib.InsertCodeBlock />
-                            <Lib.CreateLink />
-                            <Lib.CodeToggle />
-                            <Lib.BlockTypeSelect />
-                            <Lib.InsertFrontmatter />
                             <Lib.DiffSourceToggleWrapper>
+                                <Lib.InsertTable />
+                                <Lib.BoldItalicUnderlineToggles />
+                                <Lib.ListsToggle />
+                                <Lib.InsertCodeBlock />
+                                <Lib.CreateLink />
+                                <Lib.CodeToggle />
+                                <Lib.BlockTypeSelect />
+                                <Lib.InsertAdmonition />
+                                <Lib.InsertFrontmatter />
                                 <Lib.UndoRedo />
+                                <Lib.ConditionalContents
+                                    options={[
+                                        {
+                                            when: (editor) => editor?.editorType === 'codeblock',
+                                            contents: () => <Lib.ChangeCodeMirrorLanguage />
+                                        },
+                                        {
+                                            fallback: () => (
+                                                <>
+                                                    <Lib.InsertCodeBlock />
+                                                </>
+                                            )
+                                        }
+                                    ]}
+                                />
                             </Lib.DiffSourceToggleWrapper>
-                            <Lib.InsertTable />
-                            <Lib.ConditionalContents
-                                options={[
-                                    {
-                                        when: (editor) => editor?.editorType === 'codeblock',
-                                        contents: () => <Lib.ChangeCodeMirrorLanguage />
-                                    },
-                                    {
-                                        fallback: () => (
-                                            <>
-                                                <Lib.InsertCodeBlock />
-                                                <Lib.InsertAdmonition />
-                                            </>
-                                        )
-                                    }
-                                ]}
-                            />
                         </>
                     )
                 })
