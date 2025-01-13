@@ -17,6 +17,7 @@ import {
     directivesPlugin,
     EditorInFocus,
     frontmatterPlugin,
+    GenericJsxEditor,
     headingsPlugin,
     InsertCodeBlock,
     InsertFrontmatter,
@@ -30,6 +31,7 @@ import {
     markdownShortcutPlugin,
     MDXEditor,
     NestedLexicalEditor,
+    PropertyPopover,
     quotePlugin,
     tablePlugin,
     thematicBreakPlugin,
@@ -54,6 +56,7 @@ import Icon from '@mdi/react';
 import { mdiClose, mdiDotsVerticalCircleOutline, mdiFormatListCheckbox } from '@mdi/js';
 import Button from '@tdev-components/shared/Button';
 import { InsertJsxElements } from './toolbar/InsertJsxOptions';
+import GenericAttributeEditor from './GenericAttributeEditor';
 
 export interface Props {
     file: File;
@@ -124,10 +127,23 @@ const CmsMdxEditor = observer((props: Props) => {
                             hasChildren: true,
                             source: '@tdev-components/BrowserWindow',
                             defaultExport: true,
-                            props: [],
-                            Editor: () => {
+                            props: [
+                                { name: 'url', type: 'string', required: false },
+                                { name: 'minHeight', type: 'number', required: false },
+                                { name: 'maxHeight', type: 'number', required: false }
+                            ],
+                            Editor: ({ descriptor, mdastNode }) => {
+                                const url = mdastNode.attributes.find(
+                                    (attr) => attr.type === 'mdxJsxAttribute' && attr.name === 'url'
+                                );
                                 return (
-                                    <BrowserWindow>
+                                    <BrowserWindow url={url?.value as string}>
+                                        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                            <GenericAttributeEditor
+                                                descriptor={descriptor}
+                                                mdastNode={mdastNode}
+                                            />
+                                        </div>
                                         <NestedLexicalEditor<MdxJsxFlowElement>
                                             getContent={(node) => node.children}
                                             // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -168,7 +184,10 @@ const CmsMdxEditor = observer((props: Props) => {
                                                 icon={mdiClose}
                                             />
                                         </div>
-                                        <div className="card__body" style={{ justifySelf: 'center' }}>
+                                        <div
+                                            className="card__body"
+                                            style={{ display: 'flex', justifyContent: 'center' }}
+                                        >
                                             <Icon
                                                 path={mdiFormatListCheckbox}
                                                 size={3}

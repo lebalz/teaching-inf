@@ -24,7 +24,7 @@ export default function BrowserWindow({
     children,
     minHeight,
     maxHeight,
-    url = 'http://localhost:3000',
+    url,
     style,
     bodyStyle
 }: Props): React.ReactNode {
@@ -39,7 +39,9 @@ export default function BrowserWindow({
                     <span className={styles.dot} style={{ background: '#fbbe3c' }} />
                     <span className={styles.dot} style={{ background: '#58cb42' }} />
                 </div>
-                <div className={clsx(styles.browserWindowAddressBar, 'text--truncate')}>{url}</div>
+                <div className={clsx(styles.browserWindowAddressBar, 'text--truncate')}>
+                    {url || 'http://localhost:3000'}
+                </div>
                 <div className={styles.browserWindowMenuIcon}>
                     <div>
                         <span className={styles.bar} />
