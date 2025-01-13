@@ -18,19 +18,14 @@ interface Props {
     url?: string;
     style?: CSSProperties;
     bodyStyle?: CSSProperties;
+    className?: string;
 }
 
-export default function BrowserWindow({
-    children,
-    minHeight,
-    maxHeight,
-    url,
-    style,
-    bodyStyle
-}: Props): React.ReactNode {
+export default function BrowserWindow(props: Props): React.ReactNode {
+    const { children, minHeight, maxHeight, url, className, style, bodyStyle } = props;
     return (
         <div
-            className={styles.browserWindow}
+            className={clsx(styles.browserWindow, className)}
             style={{ ...style, minHeight, maxHeight, overflowY: maxHeight ? 'auto' : undefined }}
         >
             <div className={styles.browserWindowHeader}>

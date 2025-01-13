@@ -82,6 +82,9 @@
         "vfile": "^6.0.3",
         "vitest": "^2.0.5"
     },
+    "peerDependencies": {
+        "react-hook-form": "*"
+    },
     "browserslist": {
         "production": [
             ">0.5%",

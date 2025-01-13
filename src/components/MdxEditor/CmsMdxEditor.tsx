@@ -3,8 +3,6 @@ import { observer } from 'mobx-react-lite';
 import {
     BlockTypeSelect,
     BoldItalicUnderlineToggles,
-    ButtonOrDropdownButton,
-    ChangeAdmonitionType,
     ChangeCodeMirrorLanguage,
     codeBlockPlugin,
     codeMirrorPlugin,
@@ -13,15 +11,11 @@ import {
     CreateLink,
     diffSourcePlugin,
     DiffSourceToggleWrapper,
-    DirectiveNode,
     directivesPlugin,
-    EditorInFocus,
     frontmatterPlugin,
-    GenericJsxEditor,
     headingsPlugin,
     InsertCodeBlock,
     InsertFrontmatter,
-    insertJsx$,
     InsertTable,
     jsxPlugin,
     linkDialogPlugin,
@@ -30,33 +24,22 @@ import {
     ListsToggle,
     markdownShortcutPlugin,
     MDXEditor,
-    NestedLexicalEditor,
-    PropertyPopover,
     quotePlugin,
     tablePlugin,
     thematicBreakPlugin,
     toolbarPlugin,
-    UndoRedo,
-    useLexicalNodeRemove,
-    usePublisher
+    UndoRedo
 } from '@mdxeditor/editor';
 import _ from 'lodash';
 import '@mdxeditor/editor/style.css';
 import File from '@tdev-models/github/File';
-import { MdxJsxFlowElement } from 'mdast-util-mdx';
-import {
-    AdmonitionDirectiveDescriptor,
-    AdmonitionKind
-} from './directive-editors/AdmonitionDirectiveDescriptor';
-import { BlockContent, Paragraph, RootContent } from 'mdast';
+import { AdmonitionDirectiveDescriptor } from './JsxPluginDescriptors/directive-editors/AdmonitionDescriptor';
 import '@mdxeditor/editor/style.css';
 import { InsertAdmonition } from './toolbar/InsertAdmonition';
-import BrowserWindow from '@tdev-components/BrowserWindow';
-import Icon from '@mdi/react';
-import { mdiClose, mdiDotsVerticalCircleOutline, mdiFormatListCheckbox } from '@mdi/js';
-import Button from '@tdev-components/shared/Button';
 import { InsertJsxElements } from './toolbar/InsertJsxOptions';
-import GenericAttributeEditor from './GenericAttributeEditor';
+import BrowserWindowDescriptor from './JsxPluginDescriptors/BrowserWindowDescriptor';
+import DocCardListDescriptor from './JsxPluginDescriptors/DocCardListDescriptor';
+import { MdiDescriptor } from './JsxPluginDescriptors/directive-editors/MdiDescriptor';
 
 export interface Props {
     file: File;
@@ -74,7 +57,7 @@ const CmsMdxEditor = observer((props: Props) => {
                 linkPlugin(),
                 linkDialogPlugin(),
                 quotePlugin(),
-                directivesPlugin({ directiveDescriptors: [AdmonitionDirectiveDescriptor] }),
+                directivesPlugin({ directiveDescriptors: [AdmonitionDirectiveDescriptor, MdiDescriptor] }),
                 thematicBreakPlugin(),
                 markdownShortcutPlugin(),
                 tablePlugin(),
@@ -120,85 +103,7 @@ const CmsMdxEditor = observer((props: Props) => {
                     )
                 }),
                 jsxPlugin({
-                    jsxComponentDescriptors: [
-                        {
-                            name: 'BrowserWindow',
-                            kind: 'flow',
-                            hasChildren: true,
-                            source: '@tdev-components/BrowserWindow',
-                            defaultExport: true,
-                            props: [
-                                { name: 'url', type: 'string', required: false },
-                                { name: 'minHeight', type: 'number', required: false },
-                                { name: 'maxHeight', type: 'number', required: false }
-                            ],
-                            Editor: ({ descriptor, mdastNode }) => {
-                                const url = mdastNode.attributes.find(
-                                    (attr) => attr.type === 'mdxJsxAttribute' && attr.name === 'url'
-                                );
-                                return (
-                                    <BrowserWindow url={url?.value as string}>
-                                        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                            <GenericAttributeEditor
-                                                descriptor={descriptor}
-                                                mdastNode={mdastNode}
-                                            />
-                                        </div>
-                                        <NestedLexicalEditor<MdxJsxFlowElement>
-                                            getContent={(node) => node.children}
-                                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                                            getUpdatedMdastNode={(mdastNode, children: any) => {
-                                                return { ...mdastNode, children };
-                                            }}
-                                        />
-                                    </BrowserWindow>
-                                );
-                            }
-                        },
-                        {
-                            name: 'DocCardList',
-                            source: '@theme/DocCardList',
-                            defaultExport: true,
-                            kind: 'flow',
-                            hasChildren: false,
-                            props: [],
-                            Editor: () => {
-                                const remover = useLexicalNodeRemove();
-                                return (
-                                    <div className="card">
-                                        <div
-                                            className="card__header"
-                                            style={{
-                                                display: 'flex',
-                                                width: '100%',
-                                                justifyContent: 'space-between'
-                                            }}
-                                        >
-                                            <h4>
-                                                <code>{`<DocCardList />`}</code>
-                                            </h4>
-                                            <Button
-                                                onClick={() => {
-                                                    remover();
-                                                }}
-                                                icon={mdiClose}
-                                            />
-                                        </div>
-                                        <div
-                                            className="card__body"
-                                            style={{ display: 'flex', justifyContent: 'center' }}
-                                        >
-                                            <Icon
-                                                path={mdiFormatListCheckbox}
-                                                size={3}
-                                                color="var(--ifm-color-primary)"
-                                            />
-                                        </div>
-                                    </div>
-                                );
-                            }
-                        }
-                    ]
+                    jsxComponentDescriptors: [BrowserWindowDescriptor, DocCardListDescriptor]
                 })
             ]}
             onChange={(md) => {

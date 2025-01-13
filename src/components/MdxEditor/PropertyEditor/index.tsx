@@ -5,19 +5,12 @@ import {
     MdxJsxAttributeValueExpression,
     MdxJsxExpressionAttribute
 } from 'mdast-util-mdx-jsx';
-import { JsxComponentDescriptor, MdastJsx, PropertyPopover, useMdastNodeUpdater } from '@mdxeditor/editor';
-import PropertyEditor from './PropertyEditor';
-import Popup from 'reactjs-popup';
-import Icon from '@mdi/react';
-import { mdiCog } from '@mdi/js';
-import Button from '@tdev-components/shared/Button';
+import { JsxPropertyDescriptor, useMdastNodeUpdater } from '@mdxeditor/editor';
 
-export interface Props {
-    descriptor: JsxComponentDescriptor;
-    mdastNode: MdastJsx;
-}
+/* @see https://github.com/mdx-editor/editor/blob/main/src/plugins/core/PropertyPopover.tsx */
+import Editor from './Editor';
 
-// @see https://github.com/mdx-editor/editor/blob/d484a0b7c06912527c03d3a2e8d56a69e70fef27/src/jsx-editors/GenericJsxEditor.tsx
+// @see https://github.com/mdx-editor/editor/blob/main/src/jsx-editors/GenericJsxEditor.tsx
 
 const isExpressionValue = (
     value: string | MdxJsxAttributeValueExpression | null | undefined
@@ -46,13 +39,20 @@ const isMdxJsxAttribute = (value: MdxJsxAttribute | MdxJsxExpressionAttribute): 
     return false;
 };
 
-const GenericAttributeEditor = (props: Props) => {
-    const { descriptor, mdastNode } = props;
+export interface Props {
+    properties: JsxPropertyDescriptor[];
+    mdastAttributes: (MdxJsxAttribute | MdxJsxExpressionAttribute)[];
+    title?: string;
+    onClose?: () => void;
+}
+
+const PropertyEditor = (props: Props) => {
+    const { properties, mdastAttributes } = props;
     const updateMdastNode = useMdastNodeUpdater();
-    const properties = React.useMemo(
+    const cProps = React.useMemo(
         () =>
-            descriptor.props.reduce<Record<string, string>>((acc, { name }) => {
-                const attribute = mdastNode.attributes.find((attr) =>
+            properties.reduce<Record<string, string>>((acc, { name }) => {
+                const attribute = mdastAttributes.find((attr) =>
                     isMdxJsxAttribute(attr) ? attr.name === name : false
                 );
 
@@ -71,18 +71,18 @@ const GenericAttributeEditor = (props: Props) => {
                 acc[name] = '';
                 return acc;
             }, {}),
-        [mdastNode, descriptor]
+        [mdastAttributes, properties]
     );
 
     const onChange = React.useCallback(
         (values: Record<string, string>) => {
-            const updatedAttributes = Object.entries(values).reduce<typeof mdastNode.attributes>(
+            const updatedAttributes = Object.entries(values).reduce<typeof mdastAttributes>(
                 (acc, [name, value]) => {
                     if (value === '') {
                         return acc;
                     }
 
-                    const property = descriptor.props.find((prop) => prop.name === name);
+                    const property = properties.find((prop) => prop.name === name);
 
                     if (property?.type === 'expression') {
                         acc.push({
@@ -106,31 +106,12 @@ const GenericAttributeEditor = (props: Props) => {
 
             updateMdastNode({ attributes: updatedAttributes });
         },
-        [mdastNode, updateMdastNode, descriptor]
+        [mdastAttributes, updateMdastNode, properties]
     );
-    if (descriptor.props.length === 0) {
+    if (properties.length === 0) {
         return null;
     }
-    // return <Popup
-    //     trigger={
-    //         <span >
-    //             <Button
-    //                 icon={mdiCog}
-    //                 size={0.8}
-    //             />
-    //         </span>
-    //     }
-    //     keepTooltipInside="#__docusaurus"
-    //     overlayStyle={{ background: 'rgba(0,0,0,0.5)' }}
-    //     ref={ref}
-    //     modal
-    //     on="click"
-    // >
-    //     <PropertyEditor
-
-    //     />
-    // </Popup>
-    <PropertyPopover properties={properties} title={mdastNode.name ?? ''} onChange={onChange} />;
+    return <Editor onChange={onChange} properties={cProps} />;
 };
 
-export default GenericAttributeEditor;
+export default PropertyEditor;

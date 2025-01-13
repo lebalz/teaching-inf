@@ -10,6 +10,7 @@ import Admonition from '@theme/Admonition';
 import { mdiAbacus, mdiArrowDown, mdiChevronDown } from '@mdi/js';
 import Button from '@tdev-components/shared/Button';
 import Popup from 'reactjs-popup';
+import RemoveJsxNode from '../../../RemoveJsxNode';
 
 /** @internal */
 export const ADMONITION_TYPES = ['note', 'tip', 'info', 'warning', 'danger'] as const;
@@ -107,6 +108,7 @@ export const AdmonitionDirectiveDescriptor: DirectiveDescriptor = {
                                 };
                             }}
                         />
+                        <RemoveJsxNode />
                     </>
                 }
             >

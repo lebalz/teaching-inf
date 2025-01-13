@@ -16,29 +16,11 @@ export const InsertJsxElements = () => {
         <ButtonOrDropdownButton
             items={[
                 {
-                    label: (
-                        <Button
-                            icon={mdiFormatListCheckbox}
-                            text="DocCardList"
-                            onClick={(e) => {
-                                e.preventDefault();
-                            }}
-                            iconSide="left"
-                        />
-                    ),
+                    label: <Button icon={mdiFormatListCheckbox} text="DocCardList" iconSide="left" />,
                     value: 'DocCardList'
                 },
                 {
-                    label: (
-                        <Button
-                            icon={mdiApplicationOutline}
-                            text="BrowserWindow"
-                            onClick={(e) => {
-                                e.preventDefault();
-                            }}
-                            iconSide="left"
-                        />
-                    ),
+                    label: <Button icon={mdiApplicationOutline} text="BrowserWindow" iconSide="left" />,
                     value: 'BrowserWindow'
                 }
             ]}

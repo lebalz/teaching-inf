@@ -7,7 +7,7 @@ import {
     useTranslation
 } from '@mdxeditor/editor';
 import React from 'react';
-import { ADMONITION_TYPES } from '../directive-editors/AdmonitionDirectiveDescriptor';
+import { ADMONITION_TYPES } from '../JsxPluginDescriptors/directive-editors/AdmonitionDescriptor';
 
 /**
  * A toolbar dropdown button that allows the user to insert admonitions.
