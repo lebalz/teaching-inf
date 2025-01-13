@@ -17,7 +17,6 @@ import {
     EditorInFocus,
     frontmatterPlugin,
     headingsPlugin,
-    InsertAdmonition,
     InsertCodeBlock,
     InsertFrontmatter,
     InsertTable,
@@ -42,6 +41,7 @@ import {
 } from './directive-editors/AdmonitionDirectiveDescriptor';
 import { BlockContent, Paragraph, RootContent } from 'mdast';
 import '@mdxeditor/editor/style.css';
+import { InsertAdmonition } from './toolbar/InsertAdmonition';
 
 export interface Props {
     file: File;
