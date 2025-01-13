@@ -1,9 +1,10 @@
 import { GithubStore } from '@tdev-stores/GithubStore';
 import iEntry, { iEntryProps } from './iEntry';
-import { computed } from 'mobx';
-import { mdiFile, mdiFileCode, mdiFileDocumentOutline, mdiFileImage, mdiFilePdfBox } from '@mdi/js';
+import { action, computed, observable } from 'mobx';
+import { mdiFileCode, mdiFileDocumentOutline, mdiFileImage, mdiFilePdfBox } from '@mdi/js';
+import axios from 'axios';
 
-interface FileProps extends iEntryProps {
+export interface FileProps extends iEntryProps {
     size: number;
     download_url: string | null;
 }
@@ -11,12 +12,29 @@ interface FileProps extends iEntryProps {
 class File extends iEntry {
     readonly type = 'file';
     readonly size: number;
-    readonly download_url: string | null;
+    readonly downloadUrl: string;
+    _pristine: string | undefined;
+    @observable accessor content: string | undefined;
+    // unobserved content - always in sync with content
+    refContent: string | undefined;
+
+    @observable accessor isEditing: boolean = false;
 
     constructor(props: FileProps, store: GithubStore) {
         super(props, store);
         this.size = props.size;
-        this.download_url = props.download_url;
+        this.downloadUrl = props.download_url!;
+    }
+
+    @action
+    setEditing(editing: boolean) {
+        if (editing === this.isEditing) {
+            return;
+        }
+        if (editing) {
+            this.store.editedFile?.setEditing(false);
+        }
+        this.isEditing = editing;
     }
 
     @computed
@@ -67,6 +85,43 @@ class File extends iEntry {
             return mdiFilePdfBox;
         }
         return mdiFileDocumentOutline;
+    }
+
+    @action
+    setContent(content: string) {
+        this.content = content;
+        this.refContent = content;
+    }
+
+    @computed
+    get isDirty() {
+        return this.content !== this._pristine;
+    }
+
+    @action
+    reset() {
+        if (this._pristine) {
+            this.setContent(this._pristine);
+        }
+    }
+
+    @action
+    fetchContent() {
+        return axios
+            .get(this.downloadUrl, {
+                params: {
+                    _t: Date.now()
+                }
+            })
+            .then(
+                action((res) => {
+                    if (res.status !== 200) {
+                        console.log('Shibby');
+                    }
+                    this._pristine = res.data;
+                    this.setContent(res.data);
+                })
+            );
     }
 }
 

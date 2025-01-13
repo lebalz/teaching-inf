@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite';
 import { default as DirModel } from '@tdev-models/github/Dir';
 import File from '../File';
 import shared from '../styles.module.scss';
+import styles from './styles.module.scss';
 import Icon from '@mdi/react';
 
 interface Props {
@@ -13,10 +14,10 @@ interface Props {
 const Dir = observer((props: Props) => {
     const { dir } = props;
     return (
-        <li>
+        <li className={clsx(shared.item)}>
             <Icon spin={dir.isSyncing} path={dir.icon} size={0.8} color={dir.iconColor} />
             <span
-                className={clsx(shared.item)}
+                className={clsx(styles.dir)}
                 onClick={() => {
                     dir.setOpen(!dir.isOpen);
                 }}

@@ -1,42 +1,41 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import { MetaInit, ModelMeta } from '@site/src/models/documents/Excalidoc';
-import type {
-    ExcalidrawImperativeAPI,
-    LibraryItems,
-    NormalizedZoomValue
-} from '@excalidraw/excalidraw/types/types';
-import { Source } from '@tdev-models/iDocument';
-import { reaction } from 'mobx';
-import { useColorMode } from '@docusaurus/theme-common';
 import type * as MdxEditorLib from '@mdxeditor/editor';
 import _ from 'lodash';
-import { useFirstRealMainDocument } from '@tdev-hooks/useFirstRealMainDocument';
-import { useDocument } from '@tdev-hooks/useDocument';
-import { DocumentType } from '@tdev-api/document';
 import { useClientLib } from '@tdev-hooks/useClientLib';
 import '@mdxeditor/editor/style.css';
+import File from '@tdev-models/github/File';
 
-export interface Props {}
+export interface Props {
+    file: File;
+}
 
 const MdxEditor = observer((props: Props) => {
     const Lib = useClientLib<typeof MdxEditorLib>(() => import('@mdxeditor/editor'), '@mdxeditor/editor');
-
+    const { file } = props;
     if (!Lib) {
         return null;
     }
     return (
         <Lib.MDXEditor
-            markdown="# Hello world"
+            markdown={file.refContent!}
             plugins={[
                 Lib.headingsPlugin(),
+                Lib.frontmatterPlugin(),
                 Lib.listsPlugin(),
+                Lib.linkPlugin(),
+                Lib.linkDialogPlugin(),
                 Lib.quotePlugin(),
+                Lib.directivesPlugin({ directiveDescriptors: [Lib.AdmonitionDirectiveDescriptor] }),
                 Lib.thematicBreakPlugin(),
                 Lib.markdownShortcutPlugin(),
+                Lib.tablePlugin(),
                 Lib.directivesPlugin(),
+                Lib.diffSourcePlugin({ diffMarkdown: file._pristine, viewMode: 'rich-text' }),
                 Lib.codeBlockPlugin({ defaultCodeBlockLanguage: 'py' }),
-                Lib.codeMirrorPlugin({ codeBlockLanguages: { py: 'Python', js: 'JavaScript', css: 'CSS' } }),
+                Lib.codeMirrorPlugin({
+                    codeBlockLanguages: { py: 'Python', js: 'JavaScript', css: 'CSS', bash: 'bash' }
+                }),
                 Lib.toolbarPlugin({
                     toolbarClassName: 'my-classname',
                     toolbarContents: () => (
@@ -49,6 +48,11 @@ const MdxEditor = observer((props: Props) => {
                             <Lib.CreateLink />
                             <Lib.CodeToggle />
                             <Lib.BlockTypeSelect />
+                            <Lib.InsertFrontmatter />
+                            <Lib.DiffSourceToggleWrapper>
+                                <Lib.UndoRedo />
+                            </Lib.DiffSourceToggleWrapper>
+                            <Lib.InsertTable />
                             <Lib.ConditionalContents
                                 options={[
                                     {
@@ -59,6 +63,7 @@ const MdxEditor = observer((props: Props) => {
                                         fallback: () => (
                                             <>
                                                 <Lib.InsertCodeBlock />
+                                                <Lib.InsertAdmonition />
                                             </>
                                         )
                                     }
@@ -68,6 +73,9 @@ const MdxEditor = observer((props: Props) => {
                     )
                 })
             ]}
+            onChange={(md) => {
+                file.setContent(md);
+            }}
         />
     );
 });

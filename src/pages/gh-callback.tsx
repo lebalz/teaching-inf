@@ -8,6 +8,7 @@ import { useHistory } from '@docusaurus/router';
 import { useStore } from '@tdev-hooks/useStore';
 import { useLocation } from '@docusaurus/router';
 import CodeBlock from '@theme/CodeBlock';
+import Link from '@docusaurus/Link';
 
 function HomepageHeader() {
     const { siteConfig } = useDocusaurusContext();
@@ -42,6 +43,7 @@ const GhCallback = observer(() => {
             });
         }
     }, [code]);
+
     return (
         <Layout>
             <HomepageHeader />
@@ -49,6 +51,7 @@ const GhCallback = observer(() => {
                 <CodeBlock className="language-json">
                     {JSON.stringify({ code, accessToken: githubStore.accessToken }, null, 2)}
                 </CodeBlock>
+                <Link to="/cms">CMS</Link>
             </main>
         </Layout>
     );

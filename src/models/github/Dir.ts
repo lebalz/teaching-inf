@@ -1,14 +1,14 @@
-import type { RestEndpointMethodTypes } from '@octokit/plugin-rest-endpoint-methods';
 import { GithubStore } from '@tdev-stores/GithubStore';
 import { action, computed, observable } from 'mobx';
 import iEntry, { iEntryProps } from './iEntry';
-import { mdiFolder, mdiFolderOpen, mdiFolderOutline, mdiLoading } from '@mdi/js';
+import { mdiFolder, mdiFolderOpen, mdiLoading } from '@mdi/js';
 import { ApiState } from '@tdev-stores/iStore';
 
 interface DirProps extends iEntryProps {}
 
 class Dir extends iEntry {
     readonly type = 'dir';
+    @observable accessor fetched: boolean = false;
     @observable accessor isOpen: boolean = false;
     @observable accessor apiState: ApiState = ApiState.IDLE;
 
@@ -19,7 +19,7 @@ class Dir extends iEntry {
     @action
     setOpen(open: boolean) {
         this.isOpen = open;
-        if (open) {
+        if (open && !this.fetched) {
             this.fetchDirectory();
         }
     }
@@ -30,6 +30,7 @@ class Dir extends iEntry {
         this.store.fetchFiles(this.branch, this.path).then(
             action(() => {
                 this.apiState = ApiState.IDLE;
+                this.fetched = true;
             })
         );
     }

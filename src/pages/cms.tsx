@@ -19,6 +19,7 @@ import Dir from '@tdev-components/Github/iFile/Dir';
 import { ApiState } from '@tdev-stores/iStore';
 import { mdiLoading } from '@mdi/js';
 import MdxEditor from '@tdev-components/MdxEditor';
+import Selector from '@tdev-components/Github/Branch/Selector';
 
 function HomepageHeader() {
     const { siteConfig } = useDocusaurusContext();
@@ -34,41 +35,37 @@ function HomepageHeader() {
 
 const GhCallback = observer(() => {
     const githubStore = useStore('githubStore');
-    const [apiState, setApiState] = React.useState(ApiState.IDLE);
     return (
         <Layout>
             <HomepageHeader />
             <main>
-                <MdxEditor />
+                <Selector
+                    onSelect={(branchName) => {
+                        if (githubStore.branchNames.includes(branchName)) {
+                            githubStore.setBranch(branchName);
+                        } else {
+                            githubStore.createNewBranch(branchName).then((branch) => {
+                                githubStore.setBranch(branchName);
+                            });
+                        }
+                    }}
+                />
+                {/* <MdxEditor /> */}
                 <CodeBlock className="language-json" title="Github Token">
                     {JSON.stringify({ accessToken: githubStore.accessToken }, null, 2)}
                 </CodeBlock>
-                <Button
-                    text={`Create PR: ${githubStore.nextPrName}`}
-                    onClick={() => {
-                        setApiState(ApiState.SYNCING);
-                        githubStore.createNewBranchAndPull(githubStore.nextPrName).then(() => {
-                            setApiState(ApiState.IDLE);
-                        });
-                    }}
-                    icon={apiState === ApiState.SYNCING ? mdiLoading : undefined}
-                    spin={apiState === ApiState.SYNCING}
-                />
-                <details>
-                    <CodeBlock className="language-json" title="Github Token">
-                        {JSON.stringify(
-                            githubStore.entries.get(githubStore.branch || '')?.map((e) => e.props),
-                            null,
-                            2
-                        )}
-                    </CodeBlock>
-                </details>
-                <h4>Branches</h4>
+                <h4>Files</h4>
                 <ul>
-                    {githubStore.branches.map((branch, idx) => {
-                        return <li key={idx}>{branch.name}</li>;
+                    {githubStore.currentBranch.map((entry, idx) => {
+                        if (entry.type === 'file') {
+                            return <File file={entry} key={entry.path} />;
+                        }
+                        return <Dir dir={entry} key={entry.path} />;
                     })}
                 </ul>
+                {githubStore.editedFile && githubStore.editedFile.content && (
+                    <MdxEditor file={githubStore.editedFile} key={githubStore.editedFile.downloadUrl} />
+                )}
                 <h4>Pulls</h4>
                 <ul>
                     {githubStore.pulls.map((pull, idx) => {
@@ -77,15 +74,6 @@ const GhCallback = observer(() => {
                                 key={idx}
                             >{`#${pull.number}: ${pull.title} --> ${pull.head.ref} ${pull.head.repo.owner.login}`}</li>
                         );
-                    })}
-                </ul>
-                <h4>Files</h4>
-                <ul>
-                    {githubStore.currentBranch.map((entry, idx) => {
-                        if (entry.type === 'file') {
-                            return <File file={entry} key={entry.path} />;
-                        }
-                        return <Dir dir={entry} key={entry.path} />;
                     })}
                 </ul>
             </main>

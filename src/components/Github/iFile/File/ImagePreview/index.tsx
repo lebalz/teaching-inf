@@ -13,7 +13,7 @@ const ImagePreview = observer((props: Props) => {
         <div className={clsx(styles.preview, 'card-demo')}>
             <div className="card">
                 <div className={clsx(styles.img, 'card__image')}>
-                    <img src={file.download_url!} />
+                    <img src={file.downloadUrl!} />
                 </div>
             </div>
         </div>
