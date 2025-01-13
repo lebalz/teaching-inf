@@ -27,7 +27,7 @@ class Dir extends iEntry {
     @action
     fetchDirectory() {
         this.apiState = ApiState.SYNCING;
-        this.store.fetchFiles(this.branch, this.path).then(
+        this.store.fetchDirectory(this.branch, this.path).then(
             action(() => {
                 this.apiState = ApiState.IDLE;
                 this.fetched = true;

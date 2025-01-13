@@ -7,9 +7,10 @@ import { Octokit } from '@octokit/rest';
 import type { RestEndpointMethodTypes } from '@octokit/plugin-rest-endpoint-methods';
 import siteConfig from '@generated/docusaurus.config';
 import Dir from '@tdev-models/github/Dir';
-import File, { FileProps } from '@tdev-models/github/File';
+import File from '@tdev-models/github/File';
 import { computedFn } from 'mobx-utils';
 import _ from 'lodash';
+import FileStub from '@tdev-models/github/FileStub';
 const { organizationName, projectName } = siteConfig;
 if (!organizationName || !projectName) {
     throw new Error('"organizationName" and "projectName" must be set in docusaurus.config.ts');
@@ -29,7 +30,7 @@ export class GithubStore extends iStore {
     @observable accessor fetchedAt: Date | undefined;
 
     /* contains branch <-> rootDirectory */
-    entries = observable.map<string, IObservableArray<Dir | File>>([], { deep: false });
+    entries = observable.map<string, IObservableArray<Dir | File | FileStub>>([], { deep: false });
 
     @observable.ref accessor branches: RestEndpointMethodTypes['repos']['listBranches']['response']['data'] =
         [];
@@ -55,7 +56,7 @@ export class GithubStore extends iStore {
             () => this.branch,
             action((branch) => {
                 if (branch) {
-                    this.fetchFiles(branch.name);
+                    this.fetchDirectory(branch.name);
                 }
             })
         );
@@ -69,7 +70,7 @@ export class GithubStore extends iStore {
         const data = SessionStorage.get('GithubToken', _data);
         if (data) {
             try {
-                this.addToStore(data);
+                this.addTokenToStore(data);
             } catch (e) {
                 console.error(e);
                 SessionStorage.remove('GithubToken');
@@ -78,7 +79,7 @@ export class GithubStore extends iStore {
     }
 
     @action
-    addToStore(data: GithubToken & { fetchedAt: number }) {
+    addTokenToStore(data: GithubToken & { fetchedAt: number }) {
         this.accessToken = data.access_token;
         this.expiresIn = data.expires_in;
         this.refreshToken = data.refresh_token;
@@ -112,7 +113,7 @@ export class GithubStore extends iStore {
         if (!this.branch) {
             return [];
         }
-        return this.entries.get(this.branch.name)?.filter((e) => e.level === 0) || [];
+        return _.orderBy(this.entries.get(this.branch.name)?.filter((e) => e.level === 0) || [], ['name']);
     }
 
     @action
@@ -131,7 +132,7 @@ export class GithubStore extends iStore {
                 .then(
                     action(({ data }) => {
                         const now = Date.now();
-                        this.addToStore({ ...data, fetchedAt: now });
+                        this.addTokenToStore({ ...data, fetchedAt: now });
                         SessionStorage.set('GithubToken', {
                             ...data,
                             fetchedAt: now
@@ -169,23 +170,19 @@ export class GithubStore extends iStore {
         return this.currentEntries.find((f) => f.type === 'file' && f.isEditing) as File;
     }
 
-    findEntry = computedFn(function (
+    findEntry = computedFn(function <T = Dir | File>(
         this: GithubStore,
         branch: string,
         path: string
-    ): Dir | File | undefined {
+    ): T | undefined {
         if (!this.entries.has(branch)) {
-            return;
+            return undefined;
         }
         const ref = path.endsWith('/') ? path.replace(/\/+$/, '') : path;
-        return this.entries.get(branch)!.find((entry) => entry.path === ref);
+        return this.entries.get(branch)!.find((entry) => entry.path === ref) as T;
     });
 
-    findChildren = computedFn(function (
-        this: GithubStore,
-        branch: string,
-        parentPath: string
-    ): (Dir | File)[] {
+    findChildren = computedFn(function (this: GithubStore, branch: string, parentPath: string) {
         if (!this.entries.has(branch)) {
             return [];
         }
@@ -207,9 +204,8 @@ export class GithubStore extends iStore {
         if (!this.octokit) {
             return Promise.resolve([]);
         }
-        return this.octokit.repos
-            .listBranches({ repo: projectName!, owner: organizationName! })
-            .then((res) => {
+        return this.octokit.repos.listBranches({ repo: projectName!, owner: organizationName! }).then(
+            action((res) => {
                 this.branches = res.data;
                 const main = res.data.find((b) => b.name === 'main' || b.name === 'master');
                 if (main) {
@@ -218,7 +214,8 @@ export class GithubStore extends iStore {
                         this.branch = main;
                     }
                 }
-            });
+            })
+        );
     }
 
     @action
@@ -236,13 +233,15 @@ export class GithubStore extends iStore {
                 direction: 'desc',
                 page: 1
             })
-            .then((res) => {
-                this.pulls = res.data.filter(
-                    (pull) =>
-                        pull.head.repo.name.toLowerCase() === projectName!.toLowerCase() &&
-                        pull.head.repo.owner.login.toLowerCase() === organizationName!.toLowerCase()
-                );
-            });
+            .then(
+                action((res) => {
+                    this.pulls = res.data.filter(
+                        (pull) =>
+                            pull.head.repo.name.toLowerCase() === projectName!.toLowerCase() &&
+                            pull.head.repo.owner.login.toLowerCase() === organizationName!.toLowerCase()
+                    );
+                })
+            );
     }
 
     @computed
@@ -262,18 +261,20 @@ export class GithubStore extends iStore {
             repo: projectName!,
             ref: `refs/heads/${name}`,
             sha: this.main.commit.sha
-        }).then((res) => {
-            const newBranch = {
-                name: name,
-                commit: {
-                    sha: res.data.object.sha,
-                    url: res.data.object.url
-                },
-                protected: false
-            };
-            this.branches = [...this.branches, newBranch];
-            return newBranch;
-        });
+        }).then(
+            action((res) => {
+                const newBranch = {
+                    name: name,
+                    commit: {
+                        sha: res.data.object.sha,
+                        url: res.data.object.url
+                    },
+                    protected: false
+                };
+                this.branches = [...this.branches, newBranch];
+                return newBranch;
+            })
+        );
     }
 
     @action
@@ -299,26 +300,38 @@ export class GithubStore extends iStore {
         }
         const textContent = new TextEncoder().encode(content);
         const base64Content = btoa(String.fromCharCode(...textContent));
+        const current = this.findEntry(branch.name, path) as File | undefined;
         return this.octokit!.repos.createOrUpdateFileContents({
             owner: organizationName!,
             repo: projectName!,
             path: path, // File path in repo
-            message: commitMessage || `Create ${path}`,
+            message: commitMessage || (sha ? `Update: ${path}` : `Create ${path}`),
             content: base64Content,
             branch: branch.name,
             sha: sha
-        }).then((res) => {
-            switch (res.status) {
-                case 200:
-                case 201:
-                    const { content } = res.data;
-                    if (content) {
-                        const file = new File(content as FileProps, this);
+        }).then(
+            action((res) => {
+                const resContent = File.ValidateProps(res.data.content, 'stub');
+                if (!resContent) {
+                    return;
+                }
+                switch (res.status) {
+                    case 200:
+                        // file updated
+                        if (current) {
+                            const file = new File({ ...resContent, content: content }, this);
+                            this.addFileToStore(branch.name, file);
+                            file.setEditing(true);
+                        }
+                        break;
+                    case 201:
+                        // file created
+                        const file = new File({ ...resContent, content: content }, this);
                         this.addFileToStore(branch.name, file);
-                    }
-                    break;
-            }
-        });
+                        break;
+                }
+            })
+        );
     }
 
     @action
@@ -334,7 +347,7 @@ export class GithubStore extends iStore {
     }
 
     @action
-    fetchFiles(branchName: string, path: string = '') {
+    fetchDirectory(branchName: string, path: string = '') {
         if (!this.octokit || !this.branch) {
             return Promise.resolve([]);
         }
@@ -366,13 +379,44 @@ export class GithubStore extends iStore {
                                     arr.push(new Dir(entry, this));
                                     break;
                                 case 'file':
-                                    arr.push(new File(entry, this));
+                                    arr.push(new FileStub(entry, this));
                                     break;
                             }
                         });
                         return arr;
                     }
                     return [];
+                })
+            );
+    }
+
+    @action
+    fetchFile(branchName: string, path: string, editAfterFetch: boolean = false) {
+        if (!this.octokit || !this.branch) {
+            return Promise.resolve();
+        }
+        return this.octokit.repos
+            .getContent({
+                owner: organizationName!,
+                repo: projectName!,
+                path: path,
+                ref: branchName
+            })
+            .then(
+                action((res) => {
+                    if ('content' in res.data) {
+                        const props = File.ValidateProps(res.data, 'stub');
+                        if (props) {
+                            const content = new TextDecoder().decode(
+                                Uint8Array.from(atob(res.data.content), (c) => c.charCodeAt(0))
+                            );
+                            const file = new File({ ...props, content: content }, this);
+                            this.addFileToStore(branchName, file);
+                            if (editAfterFetch) {
+                                file.setEditing(true);
+                            }
+                        }
+                    }
                 })
             );
     }

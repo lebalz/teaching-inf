@@ -2,6 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import { observer } from 'mobx-react-lite';
 import { default as FileModel } from '@tdev-models/github/File';
+import FileStub from '@tdev-models/github/FileStub';
 import shared from '../styles.module.scss';
 import styles from './styles.module.scss';
 import ImagePreview from './ImagePreview';
@@ -10,7 +11,7 @@ import Button from '@tdev-components/shared/Button';
 import { mdiCircleEditOutline, mdiContentSave } from '@mdi/js';
 import { useStore } from '@tdev-hooks/useStore';
 interface Props {
-    file: FileModel;
+    file: FileModel | FileStub;
 }
 
 const File = observer((props: Props) => {
@@ -26,23 +27,21 @@ const File = observer((props: Props) => {
                 color="orange"
                 size={0.7}
                 onClick={() => {
-                    if (!file.content) {
-                        file.fetchContent().then(() => {
-                            file.setEditing(true);
-                        });
+                    if (!file.canEdit) {
+                        file.fetchContent(true);
                     } else {
                         file.setEditing(true);
                     }
                 }}
             />
-            {file.isDirty && (
+            {file.type === 'file' && file.isDirty && (
                 <Button
                     icon={mdiContentSave}
                     color="green"
                     size={0.7}
                     disabled={githubStore.isOnMainBranch}
                     onClick={() => {
-                        githubStore.createOrUpdateFile(file.path, file.content!, file.sha);
+                        githubStore.createOrUpdateFile(file.path, file.content, file.sha);
                     }}
                 />
             )}

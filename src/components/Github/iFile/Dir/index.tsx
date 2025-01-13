@@ -27,7 +27,11 @@ const Dir = observer((props: Props) => {
             {dir.isOpen && dir.children.length > 0 && (
                 <ul>
                     {dir.children.map((child, idx) => {
-                        return <>{child.type === 'file' ? <File file={child} /> : <Dir dir={child} />}</>;
+                        return (
+                            <React.Fragment key={idx}>
+                                {child.type === 'dir' ? <Dir dir={child} /> : <File file={child} />}
+                            </React.Fragment>
+                        );
                     })}
                 </ul>
             )}

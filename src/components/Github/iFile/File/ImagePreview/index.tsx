@@ -3,8 +3,9 @@ import clsx from 'clsx';
 import { observer } from 'mobx-react-lite';
 import { default as FileModel } from '@tdev-models/github/File';
 import styles from './styles.module.scss';
+import FileStub from '@tdev-models/github/FileStub';
 interface Props {
-    file: FileModel;
+    file: FileModel | FileStub;
 }
 
 const ImagePreview = observer((props: Props) => {

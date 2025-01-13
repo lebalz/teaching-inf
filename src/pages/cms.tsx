@@ -50,14 +50,13 @@ const GhCallback = observer(() => {
                         }
                     }}
                 />
-                {/* <MdxEditor /> */}
                 <CodeBlock className="language-json" title="Github Token">
                     {JSON.stringify({ accessToken: githubStore.accessToken }, null, 2)}
                 </CodeBlock>
                 <h4>Files</h4>
                 <ul>
                     {githubStore.currentBranch.map((entry, idx) => {
-                        if (entry.type === 'file') {
+                        if (entry.type === 'file' || entry.type === 'file_stub') {
                             return <File file={entry} key={entry.path} />;
                         }
                         return <Dir dir={entry} key={entry.path} />;

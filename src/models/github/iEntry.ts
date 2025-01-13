@@ -8,11 +8,6 @@ export interface iEntryProps {
     url: string;
     html_url: string | null;
     git_url: string | null;
-    _links: {
-        git: string | null;
-        html: string | null;
-        self: string;
-    };
 }
 
 abstract class iEntry {
@@ -23,13 +18,8 @@ abstract class iEntry {
     readonly path: string;
     readonly sha: string;
     readonly url: string;
-    readonly html_url: string | null;
-    readonly git_url: string | null;
-    readonly _links: {
-        git: string | null;
-        html: string | null;
-        self: string;
-    };
+    readonly htmlUrl: string | null;
+    readonly gitUrl: string | null;
 
     constructor(props: iEntryProps, store: GithubStore) {
         this.store = store;
@@ -38,18 +28,19 @@ abstract class iEntry {
         this.path = props.path;
         this.sha = props.sha;
         this.url = props.url;
-        this.html_url = props.html_url;
-        this.git_url = props.git_url;
-        this._links = props._links;
+        this.htmlUrl = props.html_url;
+        this.gitUrl = props.git_url;
     }
 
     @computed
-    get props() {
+    get props(): iEntryProps {
         return {
-            type: this.type,
             name: this.name,
             path: this.path,
-            url: this.url
+            url: this.url,
+            git_url: this.gitUrl,
+            html_url: this.htmlUrl,
+            sha: this.sha
         };
     }
 
