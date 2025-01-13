@@ -1,12 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import React from 'react';
-import {
-    DirectiveDescriptor,
-    NestedLexicalEditor,
-    useMdastNodeUpdater,
-    useNestedEditorContext
-} from '@mdxeditor/editor';
+import { DirectiveDescriptor, NestedLexicalEditor, useMdastNodeUpdater } from '@mdxeditor/editor';
 import { ContainerDirective } from 'mdast-util-directive';
 import { BlockContent, Paragraph, PhrasingContent, RootContent } from 'mdast';
 import styles from './styles.module.scss';
@@ -73,7 +68,7 @@ export const AdmonitionDirectiveDescriptor: DirectiveDescriptor = {
                                                 className={clsx(styles.userButton)}
                                                 iconSide="left"
                                                 active={mdastNode.name === admoType}
-                                                onClick={() => updater({ ...mdastNode, name: admoType })}
+                                                onClick={() => updater({ name: admoType })}
                                             >
                                                 {admoType}
                                             </Button>

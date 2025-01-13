@@ -15,7 +15,7 @@ interface Props {
     children: ReactNode;
     minHeight?: number;
     maxHeight?: number;
-    url: string;
+    url?: string;
     style?: CSSProperties;
     bodyStyle?: CSSProperties;
 }
