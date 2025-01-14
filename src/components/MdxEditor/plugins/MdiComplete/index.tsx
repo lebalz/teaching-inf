@@ -13,14 +13,8 @@ const mdiCompletePlugin = realmPlugin({
             [addComposerChild$]: MdiPickerPlugin,
             [addNestedEditorChild$]: MdiPickerPlugin
         });
-        console.log('registered');
     },
-    update(realm, params) {
-        // realm.pubIn({
-        //     [addComposerChild$]: EmojiPickerPlugin,
-        //     [addNestedEditorChild$]: EmojiPickerPlugin
-        // });
-    }
+    update(realm, params) {}
 });
 
 export default mdiCompletePlugin;

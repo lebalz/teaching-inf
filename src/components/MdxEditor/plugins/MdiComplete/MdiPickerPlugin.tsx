@@ -23,26 +23,41 @@ import * as ReactDOM from 'react-dom';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
 import { $createDirectiveNode } from '@mdxeditor/editor';
+import Button from '@tdev-components/shared/Button';
+
+enum MdiColorClass {
+    Black = 'black',
+    Green = 'green',
+    Red = 'red',
+    Orange = 'orange',
+    Blue = 'blue',
+    Cyan = 'cyan'
+}
 
 class MdiOption extends MenuOption {
     name: string;
     mdiIcon: keyof typeof Mdi;
+    color: MdiColorClass;
 
     constructor(mdiIcon: keyof typeof Mdi) {
         super(mdiIcon);
         this.mdiIcon = mdiIcon;
-        this.name = _.startCase(mdiIcon).split(' ').slice(1).join(' ');
+        this.name = _.startCase(mdiIcon).split(' ').slice(1).join('-');
+        this.color = MdiColorClass.Black;
+    }
+
+    setColor(color: MdiColorClass) {
+        this.color = color;
     }
 }
-
 interface MdiMenuProps {
     index: number;
     isSelected: boolean;
-    onClick: () => void;
+    onClick: (color: MdiColorClass) => void;
     onMouseEnter: () => void;
     option: MdiOption;
 }
-function EmojiMenuItem(props: MdiMenuProps) {
+function MdiIconMenuItem(props: MdiMenuProps) {
     const { index, isSelected, onClick, onMouseEnter, option } = props;
     return (
         <li
@@ -54,10 +69,21 @@ function EmojiMenuItem(props: MdiMenuProps) {
             aria-selected={isSelected}
             id={'typeahead-item-' + index}
             onMouseEnter={onMouseEnter}
-            onClick={onClick}
+            title={option.name}
         >
-            <Icon path={Mdi[option.mdiIcon]} size={0.8} className={clsx(styles.icon)} />
-            <span className={clsx('text')}>{option.name}</span>
+            {Object.values(MdiColorClass).map((color) => {
+                return (
+                    <Button
+                        key={color}
+                        icon={Mdi[option.mdiIcon]}
+                        size={0.8}
+                        onClick={() => {
+                            onClick(color as MdiColorClass);
+                        }}
+                        color={color}
+                    />
+                );
+            })}
         </li>
     );
 }
@@ -73,7 +99,7 @@ export default function MdiPickerPlugin() {
         setMdiIcons(Object.keys(Mdi) as (keyof typeof Mdi)[]);
     }, []);
 
-    const emojiOptions = useMemo(
+    const mdiOptions = useMemo(
         () => (mdiIcons != null ? mdiIcons.map((ico) => new MdiOption(ico)) : []),
         [mdiIcons]
     );
@@ -84,16 +110,16 @@ export default function MdiPickerPlugin() {
 
     const options: Array<MdiOption> = useMemo(() => {
         if (!queryString) {
-            return emojiOptions.slice(0, MAX_MDI_SUGGESTION_COUNT);
+            return mdiOptions.slice(0, MAX_MDI_SUGGESTION_COUNT);
         }
         const tokens = _.startCase(queryString).split(' ');
         const regex = new RegExp(tokens.map((q) => `(?=.*${q})`).join(''), 'i');
         const startRegex = new RegExp(`^(${tokens.join('|')})`, 'i');
-        return emojiOptions
+        return mdiOptions
             .filter((option: MdiOption) => regex.test(option.name))
             .sort((a, b) => (startRegex.test(a.name) ? (startRegex.test(b.name) ? 0 : -1) : 1))
             .slice(0, MAX_MDI_SUGGESTION_COUNT);
-    }, [emojiOptions, queryString]);
+    }, [mdiOptions, queryString]);
 
     const onSelectOption = useCallback(
         (selectedOption: MdiOption, nodeToRemove: TextNode | null, closeMenu: () => void) => {
@@ -112,8 +138,13 @@ export default function MdiPickerPlugin() {
                     $createDirectiveNode({
                         name: 'mdi',
                         type: 'textDirective',
-                        children: [{ type: 'text', value: selectedOption.name.toLowerCase() }]
-                    })
+                        children: [{ type: 'text', value: selectedOption.name.toLowerCase() }],
+                        attributes:
+                            selectedOption.color === MdiColorClass.Black
+                                ? undefined
+                                : { class: selectedOption.color }
+                    }),
+                    $createTextNode(' ')
                 ]);
 
                 closeMenu();
@@ -141,12 +172,13 @@ export default function MdiPickerPlugin() {
                           <Card classNames={{ card: clsx(styles.card) }}>
                               <ul className={clsx(styles.mdiList)}>
                                   {options.map((option: MdiOption, index) => (
-                                      <EmojiMenuItem
+                                      <MdiIconMenuItem
                                           key={option.key}
                                           index={index}
                                           isSelected={selectedIndex === index}
-                                          onClick={() => {
+                                          onClick={(color: MdiColorClass) => {
                                               setHighlightedIndex(index);
+                                              option.setColor(color);
                                               selectOptionAndCleanUp(option);
                                           }}
                                           onMouseEnter={() => {

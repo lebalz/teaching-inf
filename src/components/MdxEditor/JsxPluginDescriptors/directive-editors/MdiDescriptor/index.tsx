@@ -10,17 +10,10 @@ import Icon from '@mdi/react';
 import { camelCased, captialize } from '@tdev/plugins/helpers';
 import { transformMdiAttributes } from '@tdev/plugins/remark-mdi/plugin';
 import Editor from '@tdev-components/MdxEditor/PropertyEditor/Editor';
-import PropertyEditor from '@tdev-components/MdxEditor/PropertyEditor';
 import { PopupActions } from 'reactjs-popup/dist/types';
 import Card from '@tdev-components/shared/Card';
-import DropdownSelector from '@tdev-components/MdiSelector/DropdownSelector';
 
-/** @internal */
-export const ADMONITION_TYPES = ['note', 'tip', 'info', 'warning', 'danger'] as const;
-
-/** @internal */
-export type AdmonitionKind = (typeof ADMONITION_TYPES)[number];
-
+export const DEFAULT_SIZE = '1.25em';
 /**
  * Pass this descriptor to the `directivesPlugin` `directiveDescriptors` parameter to enable {@link https://docusaurus.io/docs/markdown-features/admonitions | markdown admonitions}.
  *
@@ -53,7 +46,7 @@ export const MdiDescriptor: DirectiveDescriptor = {
                 blue: '#3578e5',
                 cyan: '#01f0bc'
             },
-            defaultSize: '1.25em'
+            defaultSize: DEFAULT_SIZE
         });
         const icon = mdastNode.children.map((c) => (c.type === 'text' ? c.value : '')).join('');
         const mdiIcon = `mdi${captialize(camelCased(icon))}`;
@@ -78,16 +71,16 @@ export const MdiDescriptor: DirectiveDescriptor = {
             >
                 <Card>
                     <Editor
-                        properties={{
+                        properties={mdastNode.attributes || {}}
+                        defaultValues={{
                             spin: 0,
-                            size: 0,
+                            size: DEFAULT_SIZE,
                             rotate: 0,
-                            color: null,
-                            className: null,
-                            title: null,
+                            color: '#000000',
+                            className: '',
+                            title: '',
                             horizontal: false,
-                            vertical: false,
-                            ...(mdastNode.attributes || {})
+                            vertical: false
                         }}
                         meta={{
                             spin: { type: 'string', description: 'true = 2s, -2 counterclockwise, {spin}s' },

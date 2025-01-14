@@ -13,6 +13,7 @@ export interface Props {
     /**
      * The properties to edit. The key is the name of the property, and the value is the initial value.
      */
+    defaultValues: Record<string, string | boolean | number | undefined | null>;
     properties: Record<string, string | boolean | number | undefined | null>;
     meta?: Record<string, { type: React.HTMLInputTypeAttribute; description: string }>;
     /**
@@ -28,8 +29,9 @@ export interface Props {
 }
 
 const Editor = (props: Props) => {
-    const { properties, meta, title } = props;
-    const { register, handleSubmit, reset } = useForm({ defaultValues: properties });
+    const { properties, defaultValues, meta, title } = props;
+    const { register, handleSubmit, reset } = useForm({ defaultValues: { ...defaultValues, ...properties } });
+    console.log(properties);
     return (
         <Card header={title && <h4>{title}</h4>} classNames={{ card: styles.editor }}>
             {
@@ -37,10 +39,12 @@ const Editor = (props: Props) => {
                     onSubmit={handleSubmit((data) => {
                         const res: Record<string, string> = {};
                         Object.entries(data).forEach(([key, val]) => {
+                            const defVal = defaultValues[key];
                             const value = `${val}`;
-                            if (val && value && value !== '0' && value !== 'false' && value != '#000000') {
-                                res[key] = value;
+                            if (defVal === val || defVal === value || `${defVal}` === value) {
+                                return;
                             }
+                            res[key] = value;
                         });
                         props.onChange(res);
                         props.onClose?.();
@@ -54,7 +58,7 @@ const Editor = (props: Props) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {Object.keys(properties).map((propName) => (
+                            {Object.keys(defaultValues).map((propName) => (
                                 <tr key={propName}>
                                     <th className={styles.readOnlyColumnCell}>{propName}</th>
                                     <td>
