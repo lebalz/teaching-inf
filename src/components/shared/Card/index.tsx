@@ -17,6 +17,7 @@ interface Props {
         body?: string;
         footer?: string;
     };
+    style?: React.CSSProperties;
     children?: React.ReactNode;
     image?: React.ReactNode;
     header?: React.ReactNode;
@@ -25,7 +26,7 @@ interface Props {
 
 const Card = observer((props: Props): React.ReactNode => {
     return (
-        <div className={clsx('card', props.classNames?.card)}>
+        <div className={clsx('card', props.classNames?.card)} style={props.style}>
             {props.image && <div className={clsx('card__image')}>{props.image}</div>}
             {props.header && (
                 <div className={clsx('card__header', props.classNames?.header)}>{props.header}</div>

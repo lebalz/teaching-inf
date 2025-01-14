@@ -40,6 +40,7 @@ import { InsertJsxElements } from './toolbar/InsertJsxOptions';
 import BrowserWindowDescriptor from './JsxPluginDescriptors/BrowserWindowDescriptor';
 import DocCardListDescriptor from './JsxPluginDescriptors/DocCardListDescriptor';
 import { MdiDescriptor } from './JsxPluginDescriptors/directive-editors/MdiDescriptor';
+import mdiCompletePlugin from './plugins/MdiComplete';
 
 export interface Props {
     file: File;
@@ -52,6 +53,7 @@ const CmsMdxEditor = observer((props: Props) => {
             markdown={file.refContent!}
             plugins={[
                 headingsPlugin(),
+                mdiCompletePlugin(),
                 frontmatterPlugin(),
                 listsPlugin(),
                 linkPlugin(),
