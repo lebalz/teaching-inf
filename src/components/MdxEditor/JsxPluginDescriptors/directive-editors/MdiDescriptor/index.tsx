@@ -12,6 +12,8 @@ import { transformMdiAttributes } from '@tdev/plugins/remark-mdi/plugin';
 import Editor from '@tdev-components/MdxEditor/PropertyEditor/Editor';
 import PropertyEditor from '@tdev-components/MdxEditor/PropertyEditor';
 import { PopupActions } from 'reactjs-popup/dist/types';
+import Card from '@tdev-components/shared/Card';
+import DropdownSelector from '@tdev-components/MdiSelector/DropdownSelector';
 
 /** @internal */
 export const ADMONITION_TYPES = ['note', 'tip', 'info', 'warning', 'danger'] as const;
@@ -74,38 +76,41 @@ export const MdiDescriptor: DirectiveDescriptor = {
                 modal
                 on="click"
             >
-                <Editor
-                    properties={{
-                        spin: 0,
-                        size: 0,
-                        rotate: 0,
-                        color: null,
-                        className: null,
-                        title: null,
-                        horizontal: false,
-                        vertical: false,
-                        ...(mdastNode.attributes || {})
-                    }}
-                    meta={{
-                        spin: { type: 'string', description: 'true = 2s, -2 counterclockwise, {spin}s' },
-                        size: { type: 'string', description: '2, 1em, 48px' },
-                        rotate: { type: 'number', description: 'degrees 0 to 360' },
-                        color: { type: 'color', description: 'rgb() / rgba() / #000' },
-                        className: { type: 'string', description: 'additional class names' },
-                        title: { type: 'string', description: 'A11y <title>{title}</title>' },
-                        horizontal: { type: 'checkbox', description: 'Flip Horizontal' },
-                        vertical: { type: 'checkbox', description: 'Flip Vertical' }
-                    }}
-                    onChange={(data) => {
-                        updater({ attributes: data });
-                    }}
-                    onClose={() => {
-                        ref.current?.close();
-                    }}
-                    onRemove={() => {
-                        remover();
-                    }}
-                />
+                <Card>
+                    <Editor
+                        properties={{
+                            spin: 0,
+                            size: 0,
+                            rotate: 0,
+                            color: null,
+                            className: null,
+                            title: null,
+                            horizontal: false,
+                            vertical: false,
+                            ...(mdastNode.attributes || {})
+                        }}
+                        meta={{
+                            spin: { type: 'string', description: 'true = 2s, -2 counterclockwise, {spin}s' },
+                            size: { type: 'string', description: '2, 1em, 48px' },
+                            rotate: { type: 'number', description: 'degrees 0 to 360' },
+                            color: { type: 'color', description: 'rgb() / rgba() / #000' },
+                            className: { type: 'string', description: 'additional class names' },
+                            title: { type: 'string', description: 'A11y <title>{title}</title>' },
+                            horizontal: { type: 'checkbox', description: 'Flip Horizontal' },
+                            vertical: { type: 'checkbox', description: 'Flip Vertical' }
+                        }}
+                        onChange={(data) => {
+                            updater({ attributes: data });
+                        }}
+                        onClose={() => {
+                            ref.current?.close();
+                        }}
+                        onRemove={() => {
+                            remover();
+                        }}
+                    />
+                    {/* <DropdownSelector /> */}
+                </Card>
             </Popup>
         );
     }

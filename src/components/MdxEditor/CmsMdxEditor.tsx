@@ -64,7 +64,13 @@ const CmsMdxEditor = observer((props: Props) => {
                 diffSourcePlugin({ diffMarkdown: file._pristine, viewMode: 'rich-text' }),
                 codeBlockPlugin({ defaultCodeBlockLanguage: 'py' }),
                 codeMirrorPlugin({
-                    codeBlockLanguages: { py: 'Python', js: 'JavaScript', css: 'CSS', bash: 'bash' }
+                    codeBlockLanguages: {
+                        py: 'Python',
+                        js: 'JavaScript',
+                        css: 'CSS',
+                        bash: 'bash',
+                        ['mdx-code-block']: 'mdx-code-block'
+                    }
                 }),
                 toolbarPlugin({
                     toolbarClassName: 'my-classname',
