@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 import _ from 'lodash';
-import File from '@tdev-models/github/File';
+import File from '@tdev-models/cms/File';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import Loader from '@tdev-components/Loader';
 

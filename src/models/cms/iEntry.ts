@@ -1,4 +1,4 @@
-import { GithubStore } from '@tdev-stores/GithubStore';
+import { CmsStore } from '@tdev-stores/CmsStore';
 import { computed } from 'mobx';
 
 export interface iEntryProps {
@@ -12,7 +12,7 @@ export interface iEntryProps {
 
 abstract class iEntry {
     abstract readonly type: string;
-    readonly store: GithubStore;
+    readonly store: CmsStore;
 
     readonly name: string;
     readonly path: string;
@@ -21,7 +21,7 @@ abstract class iEntry {
     readonly htmlUrl: string | null;
     readonly gitUrl: string | null;
 
-    constructor(props: iEntryProps, store: GithubStore) {
+    constructor(props: iEntryProps, store: CmsStore) {
         this.store = store;
 
         this.name = props.name;

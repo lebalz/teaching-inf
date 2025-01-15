@@ -4,11 +4,12 @@ import styles from './login.module.scss';
 import Layout from '@theme/Layout';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import { observer } from 'mobx-react-lite';
-import { useHistory } from '@docusaurus/router';
+import { Redirect, useHistory } from '@docusaurus/router';
 import { useStore } from '@tdev-hooks/useStore';
 import { useLocation } from '@docusaurus/router';
 import CodeBlock from '@theme/CodeBlock';
 import Link from '@docusaurus/Link';
+import { useGithubAccess } from '@tdev-hooks/useGithubAccess';
 
 function HomepageHeader() {
     const { siteConfig } = useDocusaurusContext();
@@ -23,33 +24,31 @@ function HomepageHeader() {
 }
 
 const GhCallback = observer(() => {
-    const githubStore = useStore('githubStore');
+    const cmsStore = useStore('cmsStore');
+    const access = useGithubAccess();
     const location = useLocation();
     const history = useHistory();
     const code = new URLSearchParams(location.search).get('code');
-
     React.useEffect(() => {
-        if (githubStore.accessToken) {
-            return;
-        }
         if (code) {
-            githubStore.fetchAccessToken(code).then((token) => {
-                console.log('Token:', token);
-                if (token) {
-                    history.push('/cms');
-                } else {
-                    history.push('/gh-login');
-                }
-            });
+            cmsStore.fetchAccessToken(code);
+            history.replace('/gh-callback');
         }
-    }, [code]);
+    }, [history]);
+
+    if (!code) {
+        if (access === 'access') {
+            return <Redirect to={'/cms'} />;
+        }
+        return <Redirect to={'/gh-login'} />;
+    }
 
     return (
         <Layout>
             <HomepageHeader />
             <main>
                 <CodeBlock className="language-json">
-                    {JSON.stringify({ code, accessToken: githubStore.accessToken }, null, 2)}
+                    {JSON.stringify({ code, accessToken: code }, null, 2)}
                 </CodeBlock>
                 <Link to="/cms">CMS</Link>
             </main>

@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import { observer } from 'mobx-react-lite';
-import { default as DirModel } from '@tdev-models/github/Dir';
+import { default as DirModel } from '@tdev-models/cms/Dir';
 import File from '../File';
 import shared from '../styles.module.scss';
 import styles from './styles.module.scss';

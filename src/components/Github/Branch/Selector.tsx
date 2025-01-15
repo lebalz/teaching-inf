@@ -15,9 +15,9 @@ interface Props {
 }
 
 const Selector = observer((props: Props) => {
-    const githubStore = useStore('githubStore');
-    const { branch } = githubStore;
-    if (!branch) {
+    const cmsStore = useStore('cmsStore');
+    const { activeBranchName } = cmsStore;
+    if (!activeBranchName) {
         return <Loader />;
     }
     return (
@@ -31,7 +31,7 @@ const Selector = observer((props: Props) => {
                 }}
                 name="github.branch"
                 menuPortalTarget={document.body}
-                options={githubStore.branchNames.map((br) => ({
+                options={cmsStore.refNames.map((br) => ({
                     label: br,
                     value: br
                 }))}
@@ -48,7 +48,7 @@ const Selector = observer((props: Props) => {
                 onCreateOption={(option) => {
                     props.onSelect(option);
                 }}
-                value={{ label: branch.name, value: branch.name }}
+                value={{ label: activeBranchName, value: activeBranchName }}
             />
         </div>
     );

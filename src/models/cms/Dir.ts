@@ -1,4 +1,4 @@
-import { GithubStore } from '@tdev-stores/GithubStore';
+import { CmsStore } from '@tdev-stores/CmsStore';
 import { action, computed, observable } from 'mobx';
 import iEntry, { iEntryProps } from './iEntry';
 import { mdiFolder, mdiFolderOpen, mdiLoading } from '@mdi/js';
@@ -12,7 +12,7 @@ class Dir extends iEntry {
     @observable accessor isOpen: boolean = false;
     @observable accessor apiState: ApiState = ApiState.IDLE;
 
-    constructor(props: DirProps, store: GithubStore) {
+    constructor(props: DirProps, store: CmsStore) {
         super(props, store);
     }
 
@@ -27,7 +27,7 @@ class Dir extends iEntry {
     @action
     fetchDirectory() {
         this.apiState = ApiState.SYNCING;
-        this.store.fetchDirectory(this.branch, this.path).then(
+        this.store.github?.fetchDirectory(this.branch, this.path).then(
             action(() => {
                 this.apiState = ApiState.IDLE;
                 this.fetched = true;

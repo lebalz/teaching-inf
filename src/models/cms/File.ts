@@ -1,4 +1,4 @@
-import { GithubStore } from '@tdev-stores/GithubStore';
+import { CmsStore } from '@tdev-stores/CmsStore';
 import { action, computed, observable } from 'mobx';
 import { FileProps, iFileStub } from './FileStub';
 import { ApiState } from '@tdev-stores/iStore';
@@ -11,10 +11,9 @@ class File extends iFileStub {
     // unobserved content - always in sync with content
     refContent: string;
 
-    @observable accessor _isEditing: boolean = false;
     @observable accessor apiState: ApiState = ApiState.IDLE;
 
-    constructor(props: FileProps, store: GithubStore) {
+    constructor(props: FileProps, store: CmsStore) {
         super(props, store);
         this._pristine = props.content;
         this.content = props.content;
@@ -27,18 +26,12 @@ class File extends iFileStub {
 
     @computed
     get isEditing() {
-        return this._isEditing;
+        return this.store.editedFile === this;
     }
 
     @action
     setEditing(editing: boolean) {
-        if (editing === this._isEditing) {
-            return;
-        }
-        if (editing) {
-            this.store.editedFile?.setEditing(false);
-        }
-        this._isEditing = editing;
+        this.store.setFileEditingState(this, editing);
     }
 
     @action
@@ -53,7 +46,7 @@ class File extends iFileStub {
     @action
     save(commitMessage?: string) {
         this.apiState = ApiState.SYNCING;
-        this.store.saveFile(this, commitMessage);
+        this.store.github?.saveFile(this, commitMessage);
     }
 
     @computed

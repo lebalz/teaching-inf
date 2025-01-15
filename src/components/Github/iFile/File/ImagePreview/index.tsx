@@ -1,9 +1,9 @@
 import React from 'react';
 import clsx from 'clsx';
 import { observer } from 'mobx-react-lite';
-import { default as FileModel } from '@tdev-models/github/File';
+import { default as FileModel } from '@tdev-models/cms/File';
 import styles from './styles.module.scss';
-import FileStub from '@tdev-models/github/FileStub';
+import FileStub from '@tdev-models/cms/FileStub';
 interface Props {
     file: FileModel | FileStub;
 }

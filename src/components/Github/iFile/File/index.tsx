@@ -1,8 +1,8 @@
 import React from 'react';
 import clsx from 'clsx';
 import { observer } from 'mobx-react-lite';
-import { default as FileModel } from '@tdev-models/github/File';
-import FileStub from '@tdev-models/github/FileStub';
+import { default as FileModel } from '@tdev-models/cms/File';
+import FileStub from '@tdev-models/cms/FileStub';
 import shared from '../styles.module.scss';
 import styles from './styles.module.scss';
 import ImagePreview from './ImagePreview';
@@ -16,7 +16,7 @@ interface Props {
 }
 
 const File = observer((props: Props) => {
-    const githubStore = useStore('githubStore');
+    const cmsStore = useStore('cmsStore');
     const { file } = props;
     return (
         <li className={clsx(styles.file, shared.item)}>
@@ -41,7 +41,7 @@ const File = observer((props: Props) => {
                     spin={file.apiState === ApiState.SYNCING}
                     color="green"
                     size={0.7}
-                    disabled={githubStore.isOnMainBranch}
+                    disabled={cmsStore.isOnMainBranch}
                     onClick={() => {
                         file.save();
                     }}

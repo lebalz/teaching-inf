@@ -7,6 +7,8 @@ import Link from '@docusaurus/Link';
 import { observer } from 'mobx-react-lite';
 import siteConfig from '@generated/docusaurus.config';
 import { useStore } from '@tdev-hooks/useStore';
+import { useGithubAccess } from '@tdev-hooks/useGithubAccess';
+import { Redirect } from '@docusaurus/router';
 const { APP_URL } = siteConfig.customFields as { APP_URL?: string };
 const callback = `${APP_URL || 'http://localhost:3000'}/gh-callback`;
 const LOGIN_URL =
@@ -25,7 +27,13 @@ function HomepageHeader() {
 }
 
 const LoginPage = observer(() => {
-    const sessionStore = useStore('sessionStore');
+    const access = useGithubAccess();
+    if (access === 'access') {
+        return <Redirect to={'/cms'} />;
+    }
+    if (access === 'loading') {
+        return <Layout>Loading...</Layout>;
+    }
     return (
         <Layout>
             <HomepageHeader />

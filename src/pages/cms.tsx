@@ -10,6 +10,8 @@ import File from '@tdev-components/Github/iFile/File';
 import Dir from '@tdev-components/Github/iFile/Dir';
 import MdxEditor from '@tdev-components/MdxEditor';
 import Selector from '@tdev-components/Github/Branch/Selector';
+import { useGithubAccess } from '@tdev-hooks/useGithubAccess';
+import { Redirect } from '@docusaurus/router';
 
 function HomepageHeader() {
     const { siteConfig } = useDocusaurusContext();
@@ -24,40 +26,48 @@ function HomepageHeader() {
 }
 
 const GhCallback = observer(() => {
-    const githubStore = useStore('githubStore');
+    const cmsStore = useStore('cmsStore');
+    const access = useGithubAccess();
+    const { settings, github } = cmsStore;
+    if (access === 'no-token') {
+        return <Redirect to={'/gh-login'} />;
+    }
+    if (access === 'loading' || !settings || !github) {
+        return <Layout>Loading...</Layout>;
+    }
     return (
         <Layout>
             <HomepageHeader />
             <main>
                 <Selector
                     onSelect={(branchName) => {
-                        if (githubStore.branchNames.includes(branchName)) {
-                            githubStore.setBranch(branchName);
+                        if (cmsStore.refNames.includes(branchName)) {
+                            cmsStore.setBranch(branchName);
                         } else {
-                            githubStore.createNewBranch(branchName).then((branch) => {
-                                githubStore.setBranch(branchName);
+                            github.createNewBranch(branchName).then((branch) => {
+                                cmsStore.setBranch(branchName);
                             });
                         }
                     }}
                 />
                 <CodeBlock className="language-json" title="Github Token">
-                    {JSON.stringify({ accessToken: githubStore.accessToken }, null, 2)}
+                    {JSON.stringify({ accessToken: settings.token }, null, 2)}
                 </CodeBlock>
                 <h4>Files</h4>
                 <ul>
-                    {githubStore.currentBranch.map((entry, idx) => {
+                    {cmsStore.refsRootEntries.map((entry, idx) => {
                         if (entry.type === 'file' || entry.type === 'file_stub') {
                             return <File file={entry} key={entry.path} />;
                         }
                         return <Dir dir={entry} key={entry.path} />;
                     })}
                 </ul>
-                {githubStore.editedFile && githubStore.editedFile.content && (
-                    <MdxEditor file={githubStore.editedFile} key={githubStore.editedFile.downloadUrl} />
+                {cmsStore.editedFile && cmsStore.editedFile.content && (
+                    <MdxEditor file={cmsStore.editedFile} key={cmsStore.editedFile.downloadUrl} />
                 )}
                 <h4>Pulls</h4>
                 <ul>
-                    {githubStore.pulls.map((pull, idx) => {
+                    {github.pulls.map((pull, idx) => {
                         return (
                             <li
                                 key={idx}

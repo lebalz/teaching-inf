@@ -1,4 +1,4 @@
-import { GithubStore } from '@tdev-stores/GithubStore';
+import { CmsStore } from '@tdev-stores/CmsStore';
 import iEntry, { iEntryProps } from './iEntry';
 import { action, computed } from 'mobx';
 import { mdiFileCode, mdiFileDocumentOutline, mdiFileImage, mdiFilePdfBox } from '@mdi/js';
@@ -38,7 +38,7 @@ export abstract class iFileStub extends iEntry {
     readonly size: number;
     readonly downloadUrl: string;
 
-    constructor(props: FileStubProps, store: GithubStore) {
+    constructor(props: FileStubProps, store: CmsStore) {
         super(props, store);
         this.size = props.size;
         this.downloadUrl = props.download_url!;
@@ -121,7 +121,7 @@ export abstract class iFileStub extends iEntry {
 
     @action
     fetchContent(editAfterFetch: boolean = false) {
-        this.store.fetchFile(this.branch, this.path, editAfterFetch);
+        this.store.github?.fetchFile(this.branch, this.path, editAfterFetch);
     }
 
     static ValidateProps(props: Partial<FileStubProps> | any, type: 'stub'): FileStubProps | undefined;

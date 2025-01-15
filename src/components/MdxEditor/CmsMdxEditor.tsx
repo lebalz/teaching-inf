@@ -32,7 +32,7 @@ import {
 } from '@mdxeditor/editor';
 import _ from 'lodash';
 import '@mdxeditor/editor/style.css';
-import File from '@tdev-models/github/File';
+import File from '@tdev-models/cms/File';
 import { AdmonitionDirectiveDescriptor } from './JsxPluginDescriptors/directive-editors/AdmonitionDescriptor';
 import '@mdxeditor/editor/style.css';
 import { InsertAdmonition } from './toolbar/InsertAdmonition';
