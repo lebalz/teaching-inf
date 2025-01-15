@@ -108,9 +108,10 @@ const GenericAttributeEditor = (props: Props) => {
         },
         [mdastNode, updateMdastNode, descriptor]
     );
-    if (descriptor.props.length === 0) {
+    if (Object.keys(properties).length === 0) {
         return null;
     }
+    console.log('properties', properties, Object.keys(properties).length);
     // return <Popup
     //     trigger={
     //         <span >
@@ -130,7 +131,7 @@ const GenericAttributeEditor = (props: Props) => {
 
     //     />
     // </Popup>
-    <PropertyPopover properties={properties} title={mdastNode.name ?? ''} onChange={onChange} />;
+    return <PropertyPopover properties={properties} title={mdastNode.name ?? ''} onChange={onChange} />;
 };
 
 export default GenericAttributeEditor;
