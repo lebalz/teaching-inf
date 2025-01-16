@@ -462,3 +462,182 @@ Die Vorlage-Seite finden Sie [hier](https://h0fer.netlify.app).
 
     </TabItem>
 </Tabs>
+
+
+## Navigation
+
+Eine Webseite kann aus mehreren Seiten bestehen. Um zwischen den Seiten zu navigieren, wird eine Navigationsleiste benötigt.
+
+:::info[Ziel]
+- Eine Navigationsleiste hinzufügen
+- Das CV soll unsere Startseite sein
+- Die Rezepte-Leiset soll ebenfalls verlinkt werden
+- Möglichkeit für weitere Seiten vorsehen
+:::
+
+<Tabs>
+    <TabItem label="S 1" value="1">
+### Navigationsleiste
+
+Die Navigationsleiste wird zuoberst im `<body>` hinzugefügt. Das Tag heisst `<nav>` und wird mit den Bootstrap-Klassen `navbar` (für die Darestellung) und ` bg-body-secondary` (für die Farbe) versehen. In der Navigationsleiste werden die Links mit `<a>`-Tags erstellt.
+
+```html title="cv.html" {5-7}
+<!doctype html>
+<html lang="en">
+    <head></head>
+    <body>
+        <nav class="navbar bg-body-secondary">
+            <a class="nav-link" href="#">CV</a>
+        </nav>
+        <!--  -->
+    </body>
+</html>
+```
+
+:::warning[Bemerke]
+- Der Link `<a>` wird hübscher dargestellt dank der Klasse `nav-link`.
+- Der Link führt mit `href="#"` auf die aktuelle Seite (es wird nichts passieren).
+:::
+
+:::aufgabe[Navigationsleiste]
+<Answer type="state" id="0ebe2ca1-8481-4d3e-ba21-5cb8332d5ffd" />
+Fügen Sie die Navigationsleiste hinzu und überprüfen Sie die Änderungen in der Live-Vorschau.
+
+Im nächsten Schritt wird die Navigationsleiste erweitert.
+
+![--width=450px](./images/nav-s1.jpg)
+:::
+    </TabItem>
+    <TabItem label="S 2" value="2">
+### Navigationsleiste erweitern
+Die Navigationsleiste soll nun mit der Rezepte-Seite erweitert werden. Da das CV unsere Hauptseite sein soll, werden zuerst folgende Umbenennungen vorgenommen:
+
+Rezept
+: Aktuell im `index.html`-File, wird neu in __`rezepte.html`__ umbenannt.
+CV-Seite
+: Aktuell im `cv.html`-File, wird neu in __`index.html`__ umbenannt.
+
+Nun können wir in unserer Navigationsleiste im CV (neu `index.html`) eine Verlinkung zur Rezepte-Seite hinzufügen.
+
+```html title="index.html" {4}
+<body>
+    <nav class="navbar bg-body-secondary">
+        <a class="nav-link" href="#">CV</a>
+        <a class="nav-link" href="./rezepte">Rezepte</a>
+    </nav>
+</body>
+```
+
+:::warning[Bemerke]
+Der Link führt auf die Datei `rezepte.html` im gleichen Ordner
+- da der Browser automatisch die Dateiendung `.html` ergänzt, muss diese nicht explizit angegeben werden.
+- der `.` bei `./rezepte` bedeutet, dass die Datei im gleichen Ordner, in dem sich auch die aktuelle Datei befindet, gesucht wird. Wird das `.` weggelassen, wird die Datei im sog. Rootverzeichnis gesucht (in diesem Ordner liegt die Hauptseite, bei uns das `index.html`).
+:::
+
+:::aufgabe[Navigationsleiste erweitern]
+<Answer type="state" id="026afc2b-5aef-4034-8bde-4924aaa49540" />
+
+Ergänzen Sie die Navigationsleiste und probieren Sie aus, ob Sie die Rezept-Seite erreichen können.
+
+![--width=450px](./images/nav-s2.jpg)
+:::
+</TabItem>
+<TabItem label="S 3" value="3">
+### Hübscher machen
+
+Aktuell sieht die Navigationsleiste sehr verquetscht aus. Durch das Hinzufügen von `div-containern` und CSS-Klassen kann die Navigationsleiste hübscher gestaltet werden.
+
+```html title="index.html" {2,5}
+<nav class="navbar bg-body-secondary">
+    <div class="navbar-nav">
+        <a class="nav-link" href="#">CV</a>
+        <a class="nav-link" href="./rezepte">Rezepte</a>
+    </div>
+</nav>
+```
+:::aufgabe[Navigationsleiste hübscher machen]
+<Answer type="state" id="f912481a-9772-41eb-b88d-62ed5315e82d" />
+
+:::cards{flexBasis=400px}
+![Grosse Fenstergrösse](./images/nav-s3.jpg)
+::br
+![Kleine Fenstergrösse](./images/nav-s3-xs.jpg)
+:::
+:::
+
+Im nächsten Schritt fügen wir einen Hamburger-Button ein :mdi[emoticon]
+
+</TabItem>
+<TabItem label="S 4" value="4">
+### Hamburger-Button
+
+Hamburger-Buttons sind die kleinen Menü-Buttons, die auf mobilen Geräten angezeigt werden. Sie bestehen aus drei horizontalen Linien und werden durch Klicken geöffnet. Sie sind vorallem dann sinnvoll, wenn viele (mehr als 2) Unterseiten vorhanden sind. Dennoch wollen wir uns das Konzept anschauen.
+
+```html title="index.html" {2-7,12-13}
+<nav class="navbar bg-body-secondary">
+    <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-link active" aria-current="page" href="#">CV</a>
+                <a class="nav-link" href="./rezepte">Rezepte</a>
+            </div>
+        </div>
+    </div>
+</nav>
+```
+
+Es wird ein Hamburger-Button angezeigt 🥳
+:::cards
+![--width=300px](./images/nav-s4.jpg)
+:::
+
+Aber er funktioniert noch nicht 😪.
+
+Damit er auf und zu geht, braucht es ein paar Zeilen Programmiercode, die in der Browser-optimierten Sprache JavaScript geschrieben sind. Das Programm müssen wir aber nicht selber schreiben - wir erklären dem Browser lediglich, wo er das Programm finden kann - auf der Bootstrap-Website.
+
+:::aufgabe[Hamburger-Button]
+<Answer type="state" id="01ce275e-3547-40f2-95ae-dd85cc327197" />
+
+Nachdem Sie den Hamburger-Button hinzugefügt haben, fügen Sie zuunderst auf der Webseite, eine Zeile über dem abschliessenden `</body>`-Tag folgenden Code ein:
+
+```html title="index.html" {5-8}
+<!doctype html>
+<!-- .   -->
+<!--  .  -->
+<!--   . -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous">
+        </script>
+    </body>
+</html>
+```
+
+Nun sollte die Navigationsleiste auch auf kleinen Bildschirmen funktionieren.
+:::
+
+:::tip[Bestimmen, ab wann der Hamburger-Button erscheint]
+
+Indem Sie dem `<nav>`-Element eine weitere Klasse vergeben, können Sie festlegen, wann der sog. `Breakpoint` erreicht ist, ab dem der Hamburger-Button erscheint. 
+- `navbar-expand-lg` bereits wenn das Display kleiner als 992px ist
+- `navbar-expand-md` wenn das Display kleiner als 768px ist
+- `navbar-expand-sm` nur auf Mobiltelefonen (wenn das Display kleiner als 576px ist)
+
+[Weitere Breakpoints](https://getbootstrap.com/docs/5.3/layout/breakpoints/)
+:::
+
+</TabItem>
+</Tabs>
+
+## Hochladen auf Netlify
+Wer mag, kann die Webseite auf Netlify hochladen (wie im letzten Kapitel erklärt...).
+
+:::warning[Persönliche Daten]
+Eine mit Netlify veröffentlichte Seite ist - nun ja, öffentlich. Handynummern, Mailadressen und Fotos können somit potentiell von allen gesehen werden. Überlegen Sie sich gut, welche Informationen Sie auf Ihrer Webseite veröffentlichen.
+
+⚠️ Sollten Sie Fotos von anderen Personen verwenden, fragen Sie unbedingt um Erlaubnis.
+:::
