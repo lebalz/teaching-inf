@@ -49,9 +49,7 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
 
     @action
     _initializeGithub() {
-        console.log('initializeGithub');
         if (!this.settings || this.settings.isExpired) {
-            console.log('initializeGithub - nope', this.settings?.token);
             return;
         }
         this.github = new Github(this.settings.token, this);
@@ -160,9 +158,11 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
         if (this.initialized) {
             return;
         }
-        this.loadSettings().then((res) => {
-            this.initialized = true;
-        });
+        this.loadSettings().then(
+            action((res) => {
+                this.initialized = true;
+            })
+        );
     }
 
     @computed

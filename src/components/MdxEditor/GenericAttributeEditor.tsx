@@ -111,7 +111,6 @@ const GenericAttributeEditor = (props: Props) => {
     if (Object.keys(properties).length === 0) {
         return null;
     }
-    console.log('properties', properties, Object.keys(properties).length);
     // return <Popup
     //     trigger={
     //         <span >

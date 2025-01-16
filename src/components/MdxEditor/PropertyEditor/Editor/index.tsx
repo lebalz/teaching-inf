@@ -31,7 +31,6 @@ export interface Props {
 const Editor = (props: Props) => {
     const { properties, defaultValues, meta, title } = props;
     const { register, handleSubmit, reset } = useForm({ defaultValues: { ...defaultValues, ...properties } });
-    console.log(properties);
     return (
         <Card header={title && <h4>{title}</h4>} classNames={{ card: styles.editor }}>
             {
