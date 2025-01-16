@@ -73,6 +73,14 @@ const PropertyEditor = (props: Props) => {
             }, {}),
         [mdastAttributes, properties]
     );
+    const defValues = React.useMemo(() => {
+        const defaults = properties.reduce<Record<string, string | number>>((acc, { name, type }) => {
+            acc[name] = type === 'number' ? 0 : '';
+            return acc;
+        }, {});
+
+        return defaults;
+    }, [properties]);
 
     const onChange = React.useCallback(
         (values: Record<string, string>) => {
@@ -111,7 +119,7 @@ const PropertyEditor = (props: Props) => {
     if (properties.length === 0) {
         return null;
     }
-    return <Editor onChange={onChange} properties={cProps} />;
+    return <Editor onChange={onChange} properties={cProps} defaultValues={defValues} />;
 };
 
 export default PropertyEditor;

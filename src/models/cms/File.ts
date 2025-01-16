@@ -43,6 +43,15 @@ class File extends iFileStub {
         }
     }
 
+    @computed
+    get isOnMainBranch() {
+        const main = this.store.github?.main?.name;
+        if (!main) {
+            return undefined;
+        }
+        return main === this.branch;
+    }
+
     @action
     save(commitMessage?: string) {
         this.apiState = ApiState.SYNCING;

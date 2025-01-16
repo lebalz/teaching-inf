@@ -19,7 +19,10 @@ class Github {
 
     @observable.ref accessor main: Branch | undefined;
 
-    @observable.ref accessor pulls: RestEndpointMethodTypes['pulls']['list']['response']['data'] = [];
+    @observable.ref accessor pulls: (
+        | RestEndpointMethodTypes['pulls']['list']['response']['data'][number]
+        | RestEndpointMethodTypes['pulls']['create']['response']['data']
+    )[] = [];
 
     constructor(accessToken: string, store: CmsStore) {
         this.store = store;
@@ -75,44 +78,51 @@ class Github {
 
     @action
     createNewBranch(name: string) {
-        if (!this.octokit || !this.main) {
-            return Promise.resolve();
-        }
-
-        return this.octokit!.git.createRef({
-            owner: organizationName!,
-            repo: projectName!,
-            ref: `refs/heads/${name}`,
-            sha: this.main.commit.sha
-        }).then(
-            action((res) => {
-                const newBranch = {
-                    name: name,
-                    commit: {
-                        sha: res.data.object.sha,
-                        url: res.data.object.url
-                    },
-                    protected: false
-                };
-                this.refs = [...this.refs, newBranch];
-                return newBranch;
-            })
-        );
-    }
-
-    @action
-    createPull(ref: Branch, title: string, body?: string) {
         if (!this.main) {
             return Promise.resolve();
         }
-        return this.octokit.pulls.create({
-            owner: organizationName!,
-            repo: projectName!,
-            title: title,
-            head: ref.name,
-            base: this.main.name, // or whatever base branch
-            body: body
-        });
+
+        return this.octokit.git
+            .createRef({
+                owner: organizationName!,
+                repo: projectName!,
+                ref: `refs/heads/${name}`,
+                sha: this.main.commit.sha
+            })
+            .then(
+                action((res) => {
+                    const newBranch = {
+                        name: name,
+                        commit: {
+                            sha: res.data.object.sha,
+                            url: res.data.object.url
+                        },
+                        protected: false
+                    };
+                    this.refs = [...this.refs, newBranch];
+                    return newBranch;
+                })
+            );
+    }
+
+    @action
+    createPull(branch: string, title: string, body?: string) {
+        if (!this.main) {
+            return Promise.resolve();
+        }
+        return this.octokit.pulls
+            .create({
+                owner: organizationName!,
+                repo: projectName!,
+                title: title,
+                head: branch,
+                base: this.main.name, // or whatever base branch
+                body: body
+            })
+            .then((res) => {
+                this.pulls = [...this.pulls, res.data];
+                return res.data;
+            });
     }
 
     @action
@@ -121,17 +131,17 @@ class Github {
     }
 
     @action
-    createOrUpdateFile(path: string, content: string, refName: string, sha?: string, commitMessage?: string) {
+    createOrUpdateFile(path: string, content: string, branch: string, sha?: string, commitMessage?: string) {
         const textContent = new TextEncoder().encode(content);
         const base64Content = btoa(String.fromCharCode(...textContent));
-        const current = this.store.findEntry(refName, path) as File | undefined;
+        const current = this.store.findEntry(branch, path) as File | undefined;
         return this.octokit!.repos.createOrUpdateFileContents({
             owner: organizationName!,
             repo: projectName!,
             path: path, // File path in repo
             message: commitMessage || (sha ? `Update: ${path}` : `Create ${path}`),
             content: base64Content,
-            branch: refName,
+            branch: branch,
             sha: sha
         }).then(
             action((res) => {
@@ -144,14 +154,14 @@ class Github {
                         // file updated
                         if (current) {
                             const file = new File({ ...resContent, content: content }, this.store);
-                            this.addFileEntry(refName, file);
+                            this.addFileEntry(branch, file);
                             file.setEditing(true);
                         }
                         break;
                     case 201:
                         // file created
                         const file = new File({ ...resContent, content: content }, this.store);
-                        this.addFileEntry(refName, file);
+                        this.addFileEntry(branch, file);
                         break;
                 }
             })
@@ -159,13 +169,13 @@ class Github {
     }
 
     @action
-    fetchDirectory(refName: string, path: string = '') {
+    fetchDirectory(branch: string, path: string = '') {
         return this.octokit.repos
             .getContent({
                 owner: organizationName!,
                 repo: projectName!,
                 path: path,
-                ref: refName
+                ref: branch
             })
             .then(
                 action((res) => {
@@ -174,10 +184,10 @@ class Github {
                         if (entries.length === 0) {
                             return [];
                         }
-                        if (!this.entries.has(refName)) {
-                            this.entries.set(refName, observable.array([], { deep: false }));
+                        if (!this.entries.has(branch)) {
+                            this.entries.set(branch, observable.array([], { deep: false }));
                         }
-                        const arr = this.entries.get(refName)!;
+                        const arr = this.entries.get(branch)!;
                         entries.forEach((entry) => {
                             const old = arr.find((e) => e.path === entry.path);
                             if (old) {
@@ -200,13 +210,13 @@ class Github {
     }
 
     @action
-    fetchFile(refName: string, path: string, editAfterFetch: boolean = false) {
+    fetchFile(branch: string, path: string, editAfterFetch: boolean = false) {
         return this.octokit.repos
             .getContent({
                 owner: organizationName!,
                 repo: projectName!,
                 path: path,
-                ref: refName
+                ref: branch
             })
             .then(
                 action((res) => {
@@ -217,7 +227,7 @@ class Github {
                                 Uint8Array.from(atob(res.data.content), (c) => c.charCodeAt(0))
                             );
                             const file = new File({ ...props, content: content }, this.store);
-                            this.addFileEntry(refName, file);
+                            this.addFileEntry(branch, file);
                             if (editAfterFetch) {
                                 file.setEditing(true);
                             }

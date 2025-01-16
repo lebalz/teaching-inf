@@ -24,6 +24,7 @@ import {
     ListsToggle,
     markdownShortcutPlugin,
     MDXEditor,
+    MDXEditorMethods,
     quotePlugin,
     tablePlugin,
     thematicBreakPlugin,
@@ -45,6 +46,7 @@ import { DeflistDescriptor, DdDescriptor, DtDescriptor } from './JsxPluginDescri
 import ErrorBoundary from '@docusaurus/ErrorBoundary';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
+import Actions from './toolbar/Actions';
 
 export interface Props {
     file: File;
@@ -52,6 +54,7 @@ export interface Props {
 
 const CmsMdxEditor = observer((props: Props) => {
     const { file } = props;
+    const ref = React.useRef<MDXEditorMethods>(null);
     return (
         <ErrorBoundary
             fallback={({ error, tryAgain }) => (
@@ -66,6 +69,7 @@ const CmsMdxEditor = observer((props: Props) => {
                 onError={(error) => {
                     console.error('Error in editor', error);
                 }}
+                ref={ref}
                 className={clsx(styles.mdxEditor)}
                 plugins={[
                     headingsPlugin(),
@@ -103,6 +107,12 @@ const CmsMdxEditor = observer((props: Props) => {
                             <>
                                 {' '}
                                 <DiffSourceToggleWrapper>
+                                    <Actions
+                                        file={file}
+                                        onNeedsRefresh={() => {
+                                            ref.current?.setMarkdown(file.content);
+                                        }}
+                                    />
                                     <InsertTable />
                                     <BoldItalicUnderlineToggles />
                                     <ListsToggle />

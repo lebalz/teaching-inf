@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { useLexicalNodeRemove } from '@mdxeditor/editor';
 import { mdiClose, mdiCloseBox } from '@mdi/js';
 import clsx from 'clsx';
-import { Delete } from '@tdev-components/shared/Button/Delete';
+import { Confirm } from '@tdev-components/shared/Button/Confirm';
 
 export interface Props {
     className?: string;
@@ -13,13 +13,13 @@ const RemoveJsxNode = (props: Props) => {
     const remover = useLexicalNodeRemove();
     return (
         <span className={clsx(props.className)}>
-            <Delete
-                icon={mdiCloseBox}
-                iconOutline={mdiClose}
+            <Confirm
+                icon={mdiClose}
+                confirmIcon={mdiCloseBox}
                 text={null}
                 confirmMessage="Entfernen"
                 color="black"
-                onDelete={() => {
+                onConfirm={() => {
                     remover();
                 }}
             />
