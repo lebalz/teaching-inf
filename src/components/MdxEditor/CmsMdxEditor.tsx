@@ -105,14 +105,13 @@ const CmsMdxEditor = observer((props: Props) => {
                         toolbarClassName: styles.toolbar,
                         toolbarContents: () => (
                             <>
-                                {' '}
+                                <Actions
+                                    file={file}
+                                    onNeedsRefresh={() => {
+                                        ref.current?.setMarkdown(file.content);
+                                    }}
+                                />
                                 <DiffSourceToggleWrapper>
-                                    <Actions
-                                        file={file}
-                                        onNeedsRefresh={() => {
-                                            ref.current?.setMarkdown(file.content);
-                                        }}
-                                    />
                                     <InsertTable />
                                     <BoldItalicUnderlineToggles />
                                     <ListsToggle />

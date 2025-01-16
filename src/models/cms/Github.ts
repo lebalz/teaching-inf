@@ -98,7 +98,7 @@ class Github {
 
     @computed
     get nextPrName() {
-        const now = new Date().toISOString().replace('T', ' ').slice(0, 16);
+        const now = new Date().toISOString().replace('T', '--').replaceAll(':', '-').slice(0, 16);
         return `cms/pr-${now}`;
     }
 
