@@ -43,6 +43,7 @@ import { MdiDescriptor } from './JsxPluginDescriptors/directive-editors/MdiDescr
 import mdiCompletePlugin from './plugins/MdiComplete';
 import { DeflistDescriptor, DdDescriptor, DtDescriptor } from './JsxPluginDescriptors/DeflistDescriptor';
 import ErrorBoundary from '@docusaurus/ErrorBoundary';
+import styles from './styles.module.scss';
 import clsx from 'clsx';
 
 export interface Props {
@@ -65,6 +66,7 @@ const CmsMdxEditor = observer((props: Props) => {
                 onError={(error) => {
                     console.error('Error in editor', error);
                 }}
+                className={clsx(styles.mdxEditor)}
                 plugins={[
                     headingsPlugin(),
                     mdiCompletePlugin(),
@@ -96,7 +98,7 @@ const CmsMdxEditor = observer((props: Props) => {
                         }
                     }),
                     toolbarPlugin({
-                        toolbarClassName: 'my-classname',
+                        toolbarClassName: styles.toolbar,
                         toolbarContents: () => (
                             <>
                                 {' '}

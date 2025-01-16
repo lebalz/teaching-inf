@@ -169,7 +169,7 @@ export default function MdiPickerPlugin() {
 
                 return anchorElementRef.current && options.length
                     ? ReactDOM.createPortal(
-                          <Card classNames={{ card: clsx(styles.card) }}>
+                          <Card classNames={{ card: clsx(styles.card), body: clsx(styles.cardBody) }}>
                               <ul className={clsx(styles.mdiList)}>
                                   {options.map((option: MdiOption, index) => (
                                       <MdiIconMenuItem

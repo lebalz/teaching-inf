@@ -12,6 +12,7 @@ import MdxEditor from '@tdev-components/MdxEditor';
 import Selector from '@tdev-components/Github/Branch/Selector';
 import { useGithubAccess } from '@tdev-hooks/useGithubAccess';
 import { Redirect } from '@docusaurus/router';
+import Details from '@theme/Details';
 
 function HomepageHeader() {
     const { siteConfig } = useDocusaurusContext();
@@ -50,31 +51,32 @@ const GhCallback = observer(() => {
                         }
                     }}
                 />
-                <CodeBlock className="language-json" title="Github Token">
-                    {JSON.stringify({ accessToken: settings.token }, null, 2)}
-                </CodeBlock>
-                <h4>Files</h4>
-                <ul>
-                    {cmsStore.refsRootEntries.map((entry, idx) => {
-                        if (entry.type === 'file' || entry.type === 'file_stub') {
-                            return <File file={entry} key={entry.path} />;
-                        }
-                        return <Dir dir={entry} key={entry.path} />;
-                    })}
-                </ul>
                 {cmsStore.editedFile && cmsStore.editedFile.content && (
                     <MdxEditor file={cmsStore.editedFile} key={cmsStore.editedFile.downloadUrl} />
                 )}
-                <h4>Pulls</h4>
-                <ul>
-                    {github.pulls.map((pull, idx) => {
-                        return (
-                            <li
-                                key={idx}
-                            >{`#${pull.number}: ${pull.title} --> ${pull.head.ref} ${pull.head.repo.owner.login}`}</li>
-                        );
-                    })}
-                </ul>
+                <Details summary={'Files'}>
+                    <h4>Files</h4>
+                    <ul>
+                        {cmsStore.refsRootEntries.map((entry, idx) => {
+                            if (entry.type === 'file' || entry.type === 'file_stub') {
+                                return <File file={entry} key={entry.path} />;
+                            }
+                            return <Dir dir={entry} key={entry.path} />;
+                        })}
+                    </ul>
+                </Details>
+                <Details summary={'PRs'}>
+                    <h4>Pulls</h4>
+                    <ul>
+                        {github.pulls.map((pull, idx) => {
+                            return (
+                                <li
+                                    key={idx}
+                                >{`#${pull.number}: ${pull.title} --> ${pull.head.ref} ${pull.head.repo.owner.login}`}</li>
+                            );
+                        })}
+                    </ul>
+                </Details>
             </main>
         </Layout>
     );
