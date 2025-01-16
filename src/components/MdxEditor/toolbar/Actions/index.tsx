@@ -74,17 +74,7 @@ const Actions = observer((props: Props) => {
                                     text="In neuem Branch speichern"
                                     onClick={() => {
                                         const name = github.nextPrName;
-                                        github.createNewBranch(name).then(async () => {
-                                            await github.createOrUpdateFile(
-                                                file.path,
-                                                file.content,
-                                                name,
-                                                file.sha
-                                            );
-                                            await github.createPull(name, name);
-                                            cmsStore.settings?.setLocation(name, file.path);
-                                            ref.current?.close();
-                                        });
+                                        github.saveFileInNewBranchAndCreatePr(file, name);
                                     }}
                                     icon={mdiSourceBranchPlus}
                                     color="primary"

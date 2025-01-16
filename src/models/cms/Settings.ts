@@ -49,6 +49,9 @@ class Settings {
     @action
     setActiveBranchName(branch: string) {
         this.activeBranchName = branch;
+        if (this.activePath) {
+            this.store.github?.fetchFile(branch, this.activePath);
+        }
         this.save();
     }
 

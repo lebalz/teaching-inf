@@ -31,7 +31,7 @@ class File extends iFileStub {
 
     @action
     setEditing(editing: boolean) {
-        this.store.setFileEditingState(this, editing);
+        this.store.setIsEditing(this, editing);
     }
 
     @action
@@ -45,7 +45,7 @@ class File extends iFileStub {
 
     @computed
     get isOnMainBranch() {
-        const main = this.store.github?.main?.name;
+        const main = this.store.github?.defaultBranch?.name;
         if (!main) {
             return undefined;
         }

@@ -13,6 +13,9 @@ import Selector from '@tdev-components/Github/Branch/Selector';
 import { useGithubAccess } from '@tdev-hooks/useGithubAccess';
 import { Redirect } from '@docusaurus/router';
 import Details from '@theme/Details';
+import { ApiState } from '@tdev-stores/iStore';
+import Loader from '@tdev-components/Loader';
+import Card from '@tdev-components/shared/Card';
 
 function HomepageHeader() {
     const { siteConfig } = useDocusaurusContext();
@@ -51,8 +54,20 @@ const GhCallback = observer(() => {
                         }
                     }}
                 />
-                {cmsStore.editedFile && cmsStore.editedFile.content && (
+                {cmsStore.editedFile && cmsStore.editedFile.content ? (
                     <MdxEditor file={cmsStore.editedFile} key={cmsStore.editedFile.downloadUrl} />
+                ) : (
+                    <>
+                        {github.apiStates.get(`${settings.activeBranchName}:${settings.activePath}`) ===
+                            ApiState.SYNCING && (
+                            <Card>
+                                <Loader
+                                    label={`${settings.activeBranchName}:${settings.activePath} wird geladen...`}
+                                    size={2}
+                                />
+                            </Card>
+                        )}
+                    </>
                 )}
                 <Details summary={'Files'}>
                     <h4>Files</h4>

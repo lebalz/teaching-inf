@@ -66,7 +66,7 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
 
     @computed
     get activeBranchName() {
-        return this.settings?.activeBranchName || this.github?.main?.name;
+        return this.settings?.activeBranchName || this.github?.defaultBranch?.name;
     }
 
     @computed
@@ -79,7 +79,7 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
 
     @computed
     get refNames(): string[] {
-        return this.github?.refs.map((b) => b.name) || [];
+        return this.github?.branches.map((b) => b.name) || [];
     }
 
     /**
@@ -125,7 +125,7 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
 
     @computed
     get isOnMainBranch() {
-        return this.github?.main?.name === this.activeBranchName;
+        return this.github?.defaultBranch?.name === this.activeBranchName;
     }
 
     findEntry = computedFn(function <T = Dir | File>(
@@ -149,7 +149,7 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
     });
 
     @action
-    setFileEditingState(file: File, isEditing: boolean) {
+    setIsEditing(file: File, isEditing: boolean) {
         this.settings?.setLocation(file.branch, isEditing ? file.path : null);
     }
 
