@@ -1,12 +1,12 @@
 import { CmsStore } from '@tdev-stores/CmsStore';
 import { action, computed, IObservableArray, observable } from 'mobx';
-import { Octokit, RestEndpointMethodTypes } from '@octokit/rest';
+import { Octokit, RestEndpointMethodTypes as GhTypes } from '@octokit/rest';
 import siteConfig from '@generated/docusaurus.config';
 import FileStub from './FileStub';
 import Dir from './Dir';
 import File from './File';
 const { organizationName, projectName } = siteConfig;
-type Branch = RestEndpointMethodTypes['repos']['listBranches']['response']['data'][number];
+type Branch = GhTypes['repos']['listBranches']['response']['data'][number];
 
 class Github {
     readonly store: CmsStore;
@@ -15,13 +15,13 @@ class Github {
     entries = observable.map<string, IObservableArray<Dir | File | FileStub>>([], { deep: false });
     @observable.ref accessor octokit: Octokit;
 
-    @observable.ref accessor refs: RestEndpointMethodTypes['repos']['listBranches']['response']['data'] = [];
+    @observable.ref accessor refs: GhTypes['repos']['listBranches']['response']['data'] = [];
 
     @observable.ref accessor main: Branch | undefined;
 
     @observable.ref accessor pulls: (
-        | RestEndpointMethodTypes['pulls']['list']['response']['data'][number]
-        | RestEndpointMethodTypes['pulls']['create']['response']['data']
+        | GhTypes['pulls']['list']['response']['data'][number]
+        | GhTypes['pulls']['create']['response']['data']
     )[] = [];
 
     constructor(accessToken: string, store: CmsStore) {
