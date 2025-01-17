@@ -471,7 +471,7 @@ Eine Webseite kann aus mehreren Seiten bestehen. Um zwischen den Seiten zu navig
 :::info[Ziel]
 - Eine Navigationsleiste hinzufügen
 - Das CV soll unsere Startseite sein
-- Die Rezepte-Leiset soll ebenfalls verlinkt werden
+- Die Rezepte-Seite soll ebenfalls verlinkt werden
 - Möglichkeit für weitere Seiten vorsehen
 :::
 
@@ -513,7 +513,7 @@ Im nächsten Schritt wird die Navigationsleiste erweitert.
 Die Navigationsleiste soll nun mit der Rezepte-Seite erweitert werden. Da das CV unsere Hauptseite sein soll, werden zuerst folgende Umbenennungen vorgenommen:
 
 Rezept
-: Aktuell im `index.html`-File, wird neu in __`rezepte.html`__ umbenannt.
+: Aktuell im `index.html`-File, wird neu in __`rezept.html`__ umbenannt.
 CV-Seite
 : Aktuell im `cv.html`-File, wird neu in __`index.html`__ umbenannt.
 
@@ -523,15 +523,15 @@ Nun können wir in unserer Navigationsleiste im CV (neu `index.html`) eine Verli
 <body>
     <nav class="navbar bg-body-secondary">
         <a class="nav-link" href="#">CV</a>
-        <a class="nav-link" href="./rezepte">Rezepte</a>
+        <a class="nav-link" href="./rezept.html">Rezept</a>
     </nav>
 </body>
 ```
 
 :::warning[Bemerke]
 Der Link führt auf die Datei `rezepte.html` im gleichen Ordner
-- da der Browser automatisch die Dateiendung `.html` ergänzt, muss diese nicht explizit angegeben werden.
-- der `.` bei `./rezepte` bedeutet, dass die Datei im gleichen Ordner, in dem sich auch die aktuelle Datei befindet, gesucht wird. Wird das `.` weggelassen, wird die Datei im sog. Rootverzeichnis gesucht (in diesem Ordner liegt die Hauptseite, bei uns das `index.html`).
+- der `.` bei `./rezept.html` bedeutet, dass die Datei im gleichen Ordner, in dem sich auch die aktuelle Datei befindet, gesucht wird. Wird das `.` weggelassen, wird die Datei im sog. Rootverzeichnis gesucht (in diesem Ordner liegt die Hauptseite, bei uns das `index.html`).
+- Wird die Seite veröffentlicht (auf Netlify), so könnte das `.html` auch weggelassen werden, da der Browser automatisch die Dateiendung `.html` ergänzt.
 :::
 
 :::aufgabe[Navigationsleiste erweitern]
@@ -551,7 +551,7 @@ Aktuell sieht die Navigationsleiste sehr verquetscht aus. Durch das Hinzufügen 
 <nav class="navbar bg-body-secondary">
     <div class="navbar-nav">
         <a class="nav-link" href="#">CV</a>
-        <a class="nav-link" href="./rezepte">Rezepte</a>
+        <a class="nav-link" href="./rezept.html">Rezept</a>
     </div>
 </nav>
 ```
@@ -583,7 +583,7 @@ Hamburger-Buttons sind die kleinen Menü-Buttons, die auf mobilen Geräten angez
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
                 <a class="nav-link active" aria-current="page" href="#">CV</a>
-                <a class="nav-link" href="./rezepte">Rezepte</a>
+                <a class="nav-link" href="./rezept.html">Rezept</a>
             </div>
         </div>
     </div>
