@@ -16,7 +16,7 @@ interface Props extends MetaInit {
     open?: boolean;
     className?: string;
     access?: Access;
-    children: React.ReactNode;
+    children: JSX.Element;
 }
 
 const SelfCheckSolution = observer((props: Props) => {

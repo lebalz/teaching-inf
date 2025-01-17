@@ -5,13 +5,11 @@ import CmsImporter from '../CmsImporter';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
 import { CmsTextEntries } from '../WithCmsText';
-import DivSpanWrapper from '@tdev-components/shared/DivSpanWrapper';
 
 interface Props {
     entries: CmsTextEntries;
     className?: string;
     mode?: 'xlsx' | 'code';
-    inline?: boolean;
 }
 
 const CmsActions = observer((props: Props) => {
@@ -21,13 +19,10 @@ const CmsActions = observer((props: Props) => {
         return null;
     }
     return (
-        <DivSpanWrapper
-            inline={props.inline}
-            className={clsx(styles.actions, props.inline && styles.inline, props.className)}
-        >
+        <div className={clsx(styles.actions, props.className)}>
             <CmsImporter toAssign={entries} mode={props.mode} />
             <PermissionsPanel documentRootIds={documentRootIds} />
-        </DivSpanWrapper>
+        </div>
     );
 });
 

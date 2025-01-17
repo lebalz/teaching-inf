@@ -10,18 +10,14 @@ import { useDocument } from '@tdev-hooks/useContextDocument';
 import { observer } from 'mobx-react-lite';
 import { mdiClose } from '@mdi/js';
 export interface Props {
-    controls?: React.ReactNode;
-    main?: React.ReactNode;
+    controls?: JSX.Element;
+    main?: JSX.Element;
 }
 const Graphics = observer((props: Props) => {
     const script = useDocument<DocumentType.Script>();
-    const nodeRef = React.useRef<HTMLDivElement>(null);
+    const nodeRef = React.useRef(null);
     return (
-        <Draggable
-            onStop={checkForButtonClick}
-            positionOffset={{ x: '15%', y: '25%' }}
-            nodeRef={nodeRef as React.RefObject<HTMLDivElement>}
-        >
+        <Draggable onStop={checkForButtonClick} positionOffset={{ x: '15%', y: '25%' }} nodeRef={nodeRef}>
             <div className={styles.brythonGraphicsResult} ref={nodeRef}>
                 <div className={styles.brythonGraphicsResultHead}>
                     <span>Output</span>

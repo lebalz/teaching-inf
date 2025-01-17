@@ -70,7 +70,7 @@ export const splitCode = (rawCode: string) => {
     };
 };
 
-export default function CodeBlockWrapper(props: Props & MetaProps): React.ReactNode {
+export default function CodeBlockWrapper(props: Props & MetaProps): JSX.Element {
     const metaProps = extractMetaProps(props);
     const langMatch = ((props.className || '') as string).match(/language-(?<lang>\w*)/);
     let lang = langMatch?.groups?.lang?.toLocaleLowerCase() ?? '';

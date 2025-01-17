@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import styles from './styles.module.scss';
 
 interface Props {
-    children: React.ReactNode | React.ReactNode[];
+    children: React.JSX.Element | React.JSX.Element[];
 }
 
 const DefBox = (props: Props) => {
