@@ -233,49 +233,32 @@ class Github {
     }
 
     @action
-    fetchIsBranchMerged(branch: Branch) {
-        if (!this.defaultBranch) {
-            return Promise.resolve(false);
+    fetchMergeStatus(from: Branch, to?: Branch) {
+        const toBranch = to || this.defaultBranch;
+        if (!to) {
+            return Promise.resolve({
+                status: MergeStatus.Unchecked,
+                ahead_by: -1
+            });
         }
         return this.octokit.repos
             .compareCommitsWithBasehead({
-                basehead: `${this.defaultBranch.sha}...${branch.sha}`,
+                basehead: `${to.sha}...${from.sha}`,
                 owner: organizationName!,
                 repo: projectName!
             })
             .then((res) => {
-                return res.data.ahead_by === 0;
+                const status = res.data.status;
+                return {
+                    status: status === 'diverged' ? MergeStatus.Conflict : MergeStatus.Ready,
+                    ahead_by: res.data.ahead_by
+                };
             })
             .catch(() => {
-                return false;
-            });
-    }
-
-    @action
-    fetchMergeStatus(from: string, to?: string) {
-        const base = to || this.defaultBranchName;
-        if (!base) {
-            return Promise.resolve(MergeStatus.Unchecked);
-        }
-        return this.octokit.rest.repos
-            .merge({
-                base: base,
-                head: from,
-                owner: organizationName!,
-                repo: projectName!
-                // dry-run since no "sha" was provided
-            })
-            .then((res) => {
-                if (res.status === 201 || res.status === 204) {
-                    return MergeStatus.Ready;
-                }
-                return MergeStatus.Conflict;
-            })
-            .catch((error) => {
-                if (error.status === 409) {
-                    return MergeStatus.Conflict;
-                }
-                return MergeStatus.Conflict;
+                return {
+                    status: MergeStatus.Unchecked,
+                    ahead_by: -1
+                };
             });
     }
 

@@ -73,13 +73,13 @@ class Branch {
         if (updateSync) {
             this.setSyncStatus(ApiState.SYNCING);
         }
-        this.gitProvider.fetchMergeStatus(this.name).then(
+        this.gitProvider.fetchMergeStatus(this).then(
             action((res) => {
-                this.setMergeStatus(res);
-                if (res === MergeStatus.Conflict) {
+                this.setMergeStatus(res.status);
+                this.isMerged = res.ahead_by === 0;
+                if (res.status === MergeStatus.Conflict) {
                     this.syncFastForwardStatus();
                 } else {
-                    this.syncIsMerged();
                     if (updateSync) {
                         this.setSyncStatus(ApiState.IDLE);
                     }
@@ -89,28 +89,17 @@ class Branch {
     }
 
     @action
-    syncIsMerged() {
-        console.log('check Is Merged');
-        this.gitProvider.fetchIsBranchMerged(this).then(
-            action((isMerged) => {
-                console.log('Is Merged', isMerged);
-                this.isMerged = isMerged;
-            })
-        );
-    }
-
-    @action
     syncFastForwardStatus(updateSync: boolean = true) {
-        const { defaultBranchName } = this.gitProvider;
-        if (!defaultBranchName) {
+        const { defaultBranch } = this.gitProvider;
+        if (!defaultBranch) {
             return this.setFastForwardStatus(MergeStatus.Unchecked);
         }
         if (updateSync) {
             this.setSyncStatus(ApiState.SYNCING);
         }
-        this.gitProvider.fetchMergeStatus(defaultBranchName, this.name).then(
+        this.gitProvider.fetchMergeStatus(defaultBranch, this).then(
             action((res) => {
-                this.setFastForwardStatus(res);
+                this.setFastForwardStatus(res.status);
                 if (updateSync) {
                     this.setSyncStatus(ApiState.IDLE);
                 }
