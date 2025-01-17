@@ -20,7 +20,7 @@ interface Props extends MetaInit {
     title?: string;
     open?: boolean;
     className?: string;
-    children: React.ReactNode;
+    children: JSX.Element;
     access?: Access;
 }
 

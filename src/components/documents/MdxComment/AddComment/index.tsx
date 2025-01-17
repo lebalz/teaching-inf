@@ -51,7 +51,7 @@ const AddComment = observer((props: Props) => {
                         });
                 }}
             >
-                <Stack size={1} color={null}>
+                <Stack size={1}>
                     <Icon path={mdiCommentPlus} size={1} color="var(--ifm-background-color)" />
                     <Icon path={mdiCommentPlusOutline} size={1} color="var(--comment-ico-color)" />
                 </Stack>

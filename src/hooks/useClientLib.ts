@@ -8,16 +8,12 @@ export const useClientLib = <T>(dynamicImport: () => Promise<T>, moduleName?: st
             setLib(Lib);
             return;
         }
-        dynamicImport()
-            .then((Lib) => {
-                setLib(Lib);
-                if (moduleName) {
-                    cachedLibs.set(moduleName, Lib);
-                }
-            })
-            .catch((e) => {
-                console.error(e);
-            });
+        dynamicImport().then((Lib) => {
+            setLib(Lib);
+            if (moduleName) {
+                cachedLibs.set(moduleName, Lib);
+            }
+        });
     }, []);
     return Lib || null;
 };
