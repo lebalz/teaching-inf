@@ -17,7 +17,7 @@ interface Props extends MetaInit {
     label?: string;
     labelWidth?: string;
     inputWidth?: string;
-    children?: JSX.Element;
+    children?: React.ReactNode;
     type?: React.HTMLInputTypeAttribute | undefined;
     stateIconsPosition?: 'inside' | 'outside' | 'hidden';
     hideWarning?: boolean;
@@ -38,7 +38,12 @@ const ColorMap: { [key in StringAnswer]: string } = {
 };
 
 const InputWrapper = observer(
-    (props: { inline?: boolean; className?: string; style?: React.CSSProperties; children: JSX.Element }) => {
+    (props: {
+        inline?: boolean;
+        className?: string;
+        style?: React.CSSProperties;
+        children: React.ReactNode;
+    }) => {
         if (props.inline) {
             return (
                 <span className={clsx(styles.inline, props.className)} style={props.style}>
