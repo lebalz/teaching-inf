@@ -235,7 +235,7 @@ class Github {
     @action
     fetchMergeStatus(from: Branch, to?: Branch) {
         const toBranch = to || this.defaultBranch;
-        if (!to) {
+        if (!toBranch) {
             return Promise.resolve({
                 status: MergeStatus.Unchecked,
                 ahead_by: -1
@@ -243,7 +243,7 @@ class Github {
         }
         return this.octokit.repos
             .compareCommitsWithBasehead({
-                basehead: `${to.sha}...${from.sha}`,
+                basehead: `${toBranch.sha}...${from.sha}`,
                 owner: organizationName!,
                 repo: projectName!
             })
@@ -254,7 +254,8 @@ class Github {
                     ahead_by: res.data.ahead_by
                 };
             })
-            .catch(() => {
+            .catch((err) => {
+                console.log('error', err);
                 return {
                     status: MergeStatus.Unchecked,
                     ahead_by: -1

@@ -75,6 +75,7 @@ class Branch {
         }
         this.gitProvider.fetchMergeStatus(this).then(
             action((res) => {
+                console.log(this.name, res);
                 this.setMergeStatus(res.status);
                 this.isMerged = res.ahead_by === 0;
                 if (res.status === MergeStatus.Conflict) {
