@@ -7,14 +7,10 @@ import { BACKEND_URL } from '@tdev/authConfig';
 import Icon from '@mdi/react';
 import { mdiCheckCircle, mdiCloseCircle, mdiConnection } from '@mdi/js';
 import Button from '@tdev-components/shared/Button';
-import React from 'react';
-import useIsBrowser from '@docusaurus/useIsBrowser';
 
 const HomepageFeatures = observer(() => {
     const socketStore = useStore('socketStore');
     const userStore = useStore('userStore');
-    const isBrowser = useIsBrowser();
-    const isLive = isBrowser && socketStore.isLive;
     return (
         <section className={styles.features}>
             <div className="container">
@@ -24,7 +20,7 @@ const HomepageFeatures = observer(() => {
                     <dd>{BACKEND_URL}</dd>
                     <dt>Connected?</dt>
                     <dd>
-                        {isLive ? (
+                        {socketStore.isLive ? (
                             <span>
                                 <Icon path={mdiCheckCircle} size={0.8} color="var(--ifm-color-success)" />{' '}
                                 Live
@@ -36,7 +32,7 @@ const HomepageFeatures = observer(() => {
                             </span>
                         )}
                     </dd>
-                    {isLive && (
+                    {socketStore.isLive && (
                         <>
                             <dt>Clients</dt>
                             <dd>{socketStore.connectedClients.get(userStore.viewedUser?.id ?? '') ?? 0}</dd>
@@ -51,7 +47,7 @@ const HomepageFeatures = observer(() => {
                                 socketStore.resetUserData();
                                 socketStore.connect();
                             }}
-                            disabled={isLive}
+                            disabled={socketStore.isLive}
                             color="blue"
                         />
                     </dd>
@@ -60,7 +56,7 @@ const HomepageFeatures = observer(() => {
                             icon={mdiCloseCircle}
                             text="Disconnect"
                             onClick={() => socketStore.disconnect()}
-                            disabled={!isLive}
+                            disabled={!socketStore.isLive}
                             color="red"
                         />
                     </dd>
