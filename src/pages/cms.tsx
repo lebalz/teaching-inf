@@ -16,6 +16,7 @@ import Details from '@theme/Details';
 import { ApiState } from '@tdev-stores/iStore';
 import Loader from '@tdev-components/Loader';
 import Card from '@tdev-components/shared/Card';
+import Branch from '@tdev-components/Github/Branch';
 
 function HomepageHeader() {
     const { siteConfig } = useDocusaurusContext();
@@ -83,11 +84,23 @@ const GhCallback = observer(() => {
                 <Details summary={'PRs'}>
                     <h4>Pulls</h4>
                     <ul>
-                        {github.pulls.map((pull, idx) => {
+                        {github.prs.map((pull, idx) => {
                             return (
                                 <li
                                     key={idx}
                                 >{`#${pull.number}: ${pull.title} --> ${pull.head.ref} ${pull.head.repo.owner.login}`}</li>
+                            );
+                        })}
+                    </ul>
+                </Details>
+                <Details summary={'Branches'} open>
+                    <h4>Branches</h4>
+                    <ul>
+                        {github.branches.map((branch, idx) => {
+                            return (
+                                <li key={branch.name}>
+                                    <Branch branch={branch} />
+                                </li>
                             );
                         })}
                     </ul>

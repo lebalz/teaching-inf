@@ -14,14 +14,15 @@ interface Props {
     text?: string | null;
     cancelIcon?: string;
     confirmIcon?: string;
-    confirmMessage?: string;
+    confirmText?: string;
     confirmColor?: Color | string;
     color?: Color | string;
     size?: number;
     iconSide?: 'left' | 'right';
+    disabled?: boolean;
 }
 
-const getValue = (value: undefined | string | null, defaultVal: string) => {
+const getValue = (value: undefined | string | null, defaultVal: string | undefined) => {
     if (value === null) {
         return undefined;
     }
@@ -47,11 +48,11 @@ export const Confirm = (props: Props) => {
             <Button
                 text={
                     (isConfirming
-                        ? getValue(props.confirmMessage, 'Ja')
-                        : getValue(props.text, 'Löschen')) as string
+                        ? getValue(props.confirmText, 'Ja')
+                        : getValue(props.text, undefined)) as string
                 }
                 title={props.title}
-                color={isConfirming ? props.confirmColor : props.color}
+                color={isConfirming ? props.confirmColor || props.color : props.color}
                 icon={isConfirming ? props.confirmIcon || props.icon : props.icon}
                 size={props.size || 1}
                 iconSide={isConfirming ? 'right' : props.iconSide}
@@ -64,6 +65,7 @@ export const Confirm = (props: Props) => {
                         setIsConfirming(true);
                     }
                 }}
+                disabled={props.disabled}
             />
         </div>
     );

@@ -61,7 +61,7 @@ const Actions = observer((props: Props) => {
                                     ref.current?.close();
                                     props.onNeedsRefresh?.();
                                 }}
-                                confirmMessage="Verwerfen?"
+                                confirmText="Verwerfen?"
                                 confirmIcon={mdiCloseCircle}
                                 confirmColor="red"
                                 icon={mdiCloseCircleOutline}

@@ -17,7 +17,7 @@ const RemoveJsxNode = (props: Props) => {
                 icon={mdiClose}
                 confirmIcon={mdiCloseBox}
                 text={null}
-                confirmMessage="Entfernen"
+                confirmText="Entfernen"
                 color="black"
                 onConfirm={() => {
                     remover();

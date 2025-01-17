@@ -148,6 +148,10 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
         return this.github.entries.get(branch)!.filter((entry) => entry.parentPath === ref);
     });
 
+    findPrByBranch = computedFn(function (this: CmsStore, branch: string) {
+        return this.github?.prs.find((pr) => pr.head.ref === branch);
+    });
+
     @action
     setIsEditing(file: File, isEditing: boolean) {
         this.settings?.setLocation(file.branch, isEditing ? file.path : null);

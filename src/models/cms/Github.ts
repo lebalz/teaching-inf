@@ -6,13 +6,24 @@ import FileStub from './FileStub';
 import Dir from './Dir';
 import File from './File';
 import { ApiState } from '@tdev-stores/iStore';
+import Branch, { MergeStatus } from './Branch';
 const { organizationName, projectName } = siteConfig;
 
-type GhRepo = GhTypes['repos']['get']['response']['data'];
-type GhBranch = GhTypes['repos']['listBranches']['response']['data'][number];
-type GhPr =
+export type GhRepo = GhTypes['repos']['get']['response']['data'];
+export type GhBranch = GhTypes['repos']['listBranches']['response']['data'][number];
+export type GhPr =
     | GhTypes['pulls']['list']['response']['data'][number]
     | GhTypes['pulls']['create']['response']['data'];
+
+const PR_PAGE_SIZE = 20;
+// name: string;
+// commit: {
+//     sha: string;
+//     url: string;
+// };
+// protected: boolean;
+// protection?: components["schemas"]["branch-protection"];
+// protection_url?: string;
 
 class Github {
     readonly store: CmsStore;
@@ -21,9 +32,9 @@ class Github {
     entries = observable.map<string, IObservableArray<Dir | File | FileStub>>([], { deep: false });
     @observable.ref accessor octokit: Octokit;
 
-    @observable.ref accessor branches: GhBranch[] = [];
+    branches = observable.array<Branch>([]);
 
-    @observable.ref accessor pulls: GhPr[] = [];
+    @observable.ref accessor prs: GhPr[] = [];
 
     @observable.ref accessor repo: GhRepo | undefined;
 
@@ -36,7 +47,7 @@ class Github {
 
     @action
     load() {
-        return Promise.all([this.fetchRepo(), this.fetchBranches(), this.fetchPulls()]);
+        return Promise.all([this.fetchRepo(), this.fetchBranches(), this.fetchPRs()]);
     }
 
     @action
@@ -68,26 +79,27 @@ class Github {
     fetchBranches() {
         return this.octokit.repos.listBranches({ repo: projectName!, owner: organizationName! }).then(
             action((res) => {
-                this.branches = res.data;
+                const branches = res.data.map((br) => new Branch(br, this));
+                this.branches.replace(branches);
             })
         );
     }
 
     @action
-    fetchPulls() {
+    fetchPRs(page?: number) {
         return this.octokit.pulls
             .list({
                 repo: projectName!,
                 owner: organizationName!,
                 state: 'all',
-                per_page: 10,
+                per_page: PR_PAGE_SIZE,
                 sort: 'created',
                 direction: 'desc',
-                page: 1
+                page: page ?? 1
             })
             .then(
                 action((res) => {
-                    this.pulls = res.data.filter(
+                    this.prs = res.data.filter(
                         (pull) =>
                             pull.head.repo.name.toLowerCase() === projectName!.toLowerCase() &&
                             pull.head.repo.owner.login.toLowerCase() === organizationName!.toLowerCase()
@@ -98,7 +110,7 @@ class Github {
 
     @computed
     get nextPrName() {
-        const now = new Date().toISOString().replace('T', '--').replaceAll(':', '-').slice(0, 16);
+        const now = new Date().toISOString().replace('T', '--').replaceAll(':', '-').slice(0, 17);
         return `cms/pr-${now}`;
     }
 
@@ -119,7 +131,7 @@ class Github {
 
     @action
     closeAndDeletePr(prNumber: number) {
-        const pr = this.pulls.find((p) => p.number === prNumber);
+        const pr = this.prs.find((p) => p.number === prNumber);
         if (!pr) {
             return;
         }
@@ -140,7 +152,10 @@ class Github {
             })
             .then(
                 action(() => {
-                    this.branches = this.branches.filter((b) => b.name !== name);
+                    const current = this.branches.find((b) => b.name === name);
+                    if (current) {
+                        this.branches.remove(current);
+                    }
                 })
             );
     }
@@ -156,7 +171,7 @@ class Github {
             })
             .then(
                 action(() => {
-                    this.pulls = this.pulls.filter((p) => p.number !== prNumber);
+                    this.prs = this.prs.filter((p) => p.number !== prNumber);
                 })
             );
     }
@@ -172,19 +187,21 @@ class Github {
                 owner: organizationName!,
                 repo: projectName!,
                 ref: `refs/heads/${name}`,
-                sha: this.defaultBranch.commit.sha
+                sha: this.defaultBranch.sha
             })
             .then(
                 action((res) => {
-                    const newBranch = {
-                        name: name,
-                        commit: {
-                            sha: res.data.object.sha,
-                            url: res.data.object.url
+                    const newBranch = new Branch(
+                        {
+                            name: name,
+                            commit: {
+                                sha: res.data.object.sha,
+                                url: res.data.object.url
+                            }
                         },
-                        protected: false
-                    };
-                    this.branches = [...this.branches, newBranch];
+                        this
+                    );
+                    this._addBranchEntry(newBranch);
                     return newBranch;
                 })
             );
@@ -205,7 +222,7 @@ class Github {
                 body: body
             })
             .then((res) => {
-                this.pulls = [...this.pulls, res.data];
+                this.prs = [...this.prs, res.data];
                 return res.data;
             });
     }
@@ -213,6 +230,53 @@ class Github {
     @action
     saveFile(file: File, commitMessage?: string) {
         return this.createOrUpdateFile(file.path, file.content, file.branch, file.sha, commitMessage);
+    }
+
+    @action
+    fetchIsBranchMerged(branch: Branch) {
+        if (!this.defaultBranch) {
+            return Promise.resolve(false);
+        }
+        return this.octokit.repos
+            .compareCommitsWithBasehead({
+                basehead: `${this.defaultBranch.sha}...${branch.sha}`,
+                owner: organizationName!,
+                repo: projectName!
+            })
+            .then((res) => {
+                return res.data.ahead_by === 0;
+            })
+            .catch(() => {
+                return false;
+            });
+    }
+
+    @action
+    fetchMergeStatus(from: string, to?: string) {
+        const base = to || this.defaultBranchName;
+        if (!base) {
+            return Promise.resolve(MergeStatus.Unchecked);
+        }
+        return this.octokit.rest.repos
+            .merge({
+                base: base,
+                head: from,
+                owner: organizationName!,
+                repo: projectName!
+                // dry-run since no "sha" was provided
+            })
+            .then((res) => {
+                if (res.status === 201 || res.status === 204) {
+                    return MergeStatus.Ready;
+                }
+                return MergeStatus.Conflict;
+            })
+            .catch((error) => {
+                if (error.status === 409) {
+                    return MergeStatus.Conflict;
+                }
+                return MergeStatus.Conflict;
+            });
     }
 
     @action
@@ -352,8 +416,12 @@ class Github {
     }
 
     @action
-    _addBranchEntry(branch: GhBranch) {
-        this.branches = [...this.branches.filter((ref) => ref.name !== branch.name), branch];
+    _addBranchEntry(branch: Branch) {
+        const current = this.branches.find((b) => b.name === branch.name);
+        if (current) {
+            this.branches.remove(current);
+        }
+        this.branches.push(branch);
     }
 }
 

@@ -22,10 +22,10 @@ export const Delete = (props: Props) => {
             onConfirm={props.onDelete}
             title={props.title}
             icon={props.icon || mdiTrashCan}
-            text={props.text || 'Löschen'}
+            text={props.text ?? 'Löschen'}
             color={props.color || 'red'}
             confirmIcon={props.iconOutline || mdiTrashCanOutline}
-            confirmMessage={props.confirmMessage}
+            confirmText={props.confirmMessage}
             size={1}
             className={props.className}
             cancelIcon={mdiClose}
