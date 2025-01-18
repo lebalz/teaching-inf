@@ -92,7 +92,7 @@ class Github {
             .list({
                 repo: projectName!,
                 owner: organizationName!,
-                state: 'all',
+                state: 'open',
                 per_page: PR_PAGE_SIZE,
                 sort: 'created',
                 direction: 'desc',
