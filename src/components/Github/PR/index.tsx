@@ -84,6 +84,7 @@ const PR = observer((props: Props) => {
                     <Icon path={mdiCloseCircle} size={0.8} color="var(--ifm-color-danger)" /> Closed
                 </Badge>
             )}
+            {pr.hasBlockingLabel && <Badge type="danger">Blocked</Badge>}
             {pr.isSynced && (
                 <>
                     {pr.rebaseable && (
@@ -103,7 +104,7 @@ const PR = observer((props: Props) => {
                         onConfirm={() => {
                             github.mergePR(pr.number);
                         }}
-                        disabled={!pr.mergeable}
+                        disabled={!pr.mergeable || pr.hasBlockingLabel}
                         text={''}
                         confirmText="Mergen?"
                         title={`In den ${github.defaultBranchName}-Branch Mergen: ${pr.mergeableState}`}

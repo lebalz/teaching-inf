@@ -26,6 +26,9 @@ interface Props {
     head: PRRef;
     base: PRRef;
     html_url: string;
+    labels: {
+        name: string;
+    }[];
 }
 
 class PR {
@@ -44,6 +47,8 @@ class PR {
     readonly branchName: string;
     readonly owner: string; // e.g github username
 
+    labels = observable.set<string>();
+
     @observable accessor headSha: string;
     @observable accessor merged: boolean | undefined;
     @observable accessor mergeable: boolean | undefined;
@@ -60,6 +65,7 @@ class PR {
         this.headSha = props.head.sha;
         this.branchName = props.head.ref;
         this.owner = props.head.repo.owner.login;
+        this.labels.replace(props.labels.map((l) => l.name));
 
         this.body = props.body || '';
         this.title = props.title;
@@ -86,6 +92,11 @@ class PR {
         this.merged = merged;
     }
 
+    @computed
+    get hasBlockingLabel() {
+        return this.labels.has('blocked');
+    }
+
     @action
     sync(syncBranch = true) {
         this.setApiState(ApiState.SYNCING);
@@ -99,6 +110,8 @@ class PR {
                         this.mergeableState = res.mergeable_state;
                         this.setMerged(res.merged);
                         this.headSha = res.head.sha;
+                        this.labels.replace(res.labels.map((l) => l.name));
+                        this.labels.add;
                         this.isSynced = true;
                     })
                 )
