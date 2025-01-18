@@ -148,8 +148,16 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
         return this.github.entries.get(branch)!.filter((entry) => entry.parentPath === ref);
     });
 
+    findPr = computedFn(function (this: CmsStore, prNumber: number) {
+        return this.github?.PRs.find((pr) => pr.number === prNumber);
+    });
+
+    findBranch = computedFn(function (this: CmsStore, branch: string) {
+        return this.github?.branches.find((b) => b.name === branch);
+    });
+
     findPrByBranch = computedFn(function (this: CmsStore, branch: string) {
-        return this.github?.prs.find((pr) => pr.head.ref === branch);
+        return this.github?.PRs.find((pr) => pr.branchName === branch);
     });
 
     @action

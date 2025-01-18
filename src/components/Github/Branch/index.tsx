@@ -67,9 +67,8 @@ const Branch = observer((props: Props) => {
                             branch.sync();
                         }}
                         title="Branch Status aktualisieren"
-                        spin={branch.apiStatus === ApiState.SYNCING || branch.needsSync}
                     />
-                    {branch.canFastForward && (
+                    {/* {branch.canFastForward && (
                         <Button
                             icon={mdiSyncCircle}
                             color="green"
@@ -84,7 +83,7 @@ const Branch = observer((props: Props) => {
                             icon={mdiAlert}
                             color="orange"
                             text="Merge-Konflikte"
-                            href={associatedPr?.html_url}
+                            href={associatedPr?.htmlUrl}
                         />
                     )}
                     {branch.isMerged ? (
@@ -103,7 +102,7 @@ const Branch = observer((props: Props) => {
                             confirmText="Mergen?"
                             title={`In den ${github.defaultBranchName}-Branch Mergen`}
                         />
-                    )}
+                    )} */}
                     <Delete
                         onDelete={() => {
                             if (associatedPr) {

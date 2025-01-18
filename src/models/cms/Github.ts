@@ -7,6 +7,7 @@ import Dir from './Dir';
 import File from './File';
 import { ApiState } from '@tdev-stores/iStore';
 import Branch, { MergeStatus } from './Branch';
+import PR from './PR';
 const { organizationName, projectName } = siteConfig;
 
 export type GhRepo = GhTypes['repos']['get']['response']['data'];
@@ -34,7 +35,7 @@ class Github {
 
     branches = observable.array<Branch>([]);
 
-    @observable.ref accessor prs: GhPr[] = [];
+    PRs = observable.array<PR>([]);
 
     @observable.ref accessor repo: GhRepo | undefined;
 
@@ -99,11 +100,25 @@ class Github {
             })
             .then(
                 action((res) => {
-                    this.prs = res.data.filter(
-                        (pull) =>
-                            pull.head.repo.name.toLowerCase() === projectName!.toLowerCase() &&
-                            pull.head.repo.owner.login.toLowerCase() === organizationName!.toLowerCase()
-                    );
+                    console.log('PRs', res.data);
+                    const prs = res.data.map((pr) => new PR(pr, this));
+                    const newPRs = new Set(prs.map((pr) => pr.number));
+                    this.PRs.replace([...this.PRs.filter((pr) => !newPRs.has(pr.number)), ...prs]);
+                })
+            );
+    }
+
+    @action
+    fetchPrState(number: number) {
+        return this.octokit.pulls
+            .get({
+                repo: projectName!,
+                owner: organizationName!,
+                pull_number: number
+            })
+            .then(
+                action((res) => {
+                    return res.data;
                 })
             );
     }
@@ -131,13 +146,13 @@ class Github {
 
     @action
     closeAndDeletePr(prNumber: number) {
-        const pr = this.prs.find((p) => p.number === prNumber);
+        const pr = this.PRs.find((p) => p.number === prNumber);
         if (!pr) {
             return;
         }
         this.closePr(prNumber).then(() => {
-            this.deleteBranch(pr.head.ref).catch(() => {
-                console.warn('Failed to delete branch', pr.head.ref);
+            this.deleteBranch(pr.branchName).catch(() => {
+                console.warn('Failed to delete branch', pr.branchName);
             });
         });
     }
@@ -171,7 +186,10 @@ class Github {
             })
             .then(
                 action(() => {
-                    this.prs = this.prs.filter((p) => p.number !== prNumber);
+                    const current = this.PRs.find((b) => b.number === prNumber);
+                    if (current) {
+                        this.PRs.remove(current);
+                    }
                 })
             );
     }
@@ -222,7 +240,8 @@ class Github {
                 body: body
             })
             .then((res) => {
-                this.prs = [...this.prs, res.data];
+                const pr = new PR(res.data, this);
+                this._addPr(pr);
                 return res.data;
             });
     }
@@ -236,10 +255,7 @@ class Github {
     fetchMergeStatus(from: Branch, to?: Branch) {
         const toBranch = to || this.defaultBranch;
         if (!toBranch) {
-            return Promise.resolve({
-                status: MergeStatus.Unchecked,
-                ahead_by: -1
-            });
+            return Promise.resolve();
         }
         return this.octokit.repos
             .compareCommitsWithBasehead({
@@ -247,20 +263,7 @@ class Github {
                 owner: organizationName!,
                 repo: projectName!
             })
-            .then((res) => {
-                const status = res.data.status;
-                return {
-                    status: status === 'diverged' ? MergeStatus.Conflict : MergeStatus.Ready,
-                    ahead_by: res.data.ahead_by
-                };
-            })
-            .catch((err) => {
-                console.log('error', err);
-                return {
-                    status: MergeStatus.Unchecked,
-                    ahead_by: -1
-                };
-            });
+            .then((res) => res.data);
     }
 
     @action
@@ -406,6 +409,15 @@ class Github {
             this.branches.remove(current);
         }
         this.branches.push(branch);
+    }
+
+    @action
+    _addPr(pr: PR) {
+        const current = this.PRs.find((b) => b.number === pr.number);
+        if (current) {
+            this.PRs.remove(current);
+        }
+        this.PRs.push(pr);
     }
 }
 

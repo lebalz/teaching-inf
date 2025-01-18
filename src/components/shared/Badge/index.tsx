@@ -13,6 +13,7 @@ interface Props {
     noPaddingLeft?: boolean;
     noPaddingRight?: boolean;
     title?: string;
+    style?: React.CSSProperties;
 }
 
 const Badge = observer((props: Props) => {
@@ -26,6 +27,7 @@ const Badge = observer((props: Props) => {
                 (props.noPaddingRight || props.noPadding) && styles.noPaddingRight,
                 props.className
             )}
+            style={props.style}
             title={props.title}
         >
             {props.children}
