@@ -87,7 +87,7 @@ const PR = observer((props: Props) => {
             {pr.hasBlockingLabel && <Badge type="danger">Blocked</Badge>}
             {pr.isSynced && (
                 <>
-                    {pr.rebaseable && (
+                    {pr.branch && pr.mergeableState === 'clean' && pr.branch.behindBy > 0 && (
                         <Confirm
                             icon={mdiSourceBranchSync}
                             color="blue"
