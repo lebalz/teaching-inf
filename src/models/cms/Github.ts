@@ -145,6 +145,52 @@ class Github {
     }
 
     @action
+    rebaseBranch(branch: string, to: string) {
+        // octokit has no "rebase" action, so do a merge
+        return this.octokit.repos
+            .merge({
+                owner: organizationName!,
+                repo: projectName!,
+                base: to,
+                head: branch,
+                commit_message: `Merge ${branch} into ${to}`
+            })
+            .then(
+                action((res) => {
+                    const newBranch = new Branch({ name: branch, commit: res.data }, this);
+                    newBranch.sync();
+                    this._addBranchEntry(newBranch);
+                    return res.data;
+                })
+            )
+            .catch((err) => {
+                console.error('Error merging branch', err);
+                return err;
+            });
+    }
+
+    @action
+    mergePR(prNumber: number) {
+        this.octokit.pulls
+            .merge({
+                owner: organizationName!,
+                repo: projectName!,
+                pull_number: prNumber,
+                merge_method: 'merge', // or "squash" or "rebase"
+                commit_title: `CMS: Merge #${prNumber}`
+            })
+            .then(
+                action((res) => {
+                    const pr = this.store.findPr(prNumber);
+                    if (pr) {
+                        pr.setMerged(true);
+                        pr.sync();
+                    }
+                })
+            );
+    }
+
+    @action
     closeAndDeletePr(prNumber: number) {
         const pr = this.PRs.find((p) => p.number === prNumber);
         if (!pr) {
@@ -252,14 +298,14 @@ class Github {
     }
 
     @action
-    fetchMergeStatus(from: Branch, to?: Branch) {
-        const toBranch = to || this.defaultBranch;
+    fetchBranchStatus(from: Branch, to?: Branch) {
+        const toBranch = to?.sha || this.defaultBranch?.name;
         if (!toBranch) {
             return Promise.resolve();
         }
         return this.octokit.repos
             .compareCommitsWithBasehead({
-                basehead: `${toBranch.sha}...${from.sha}`,
+                basehead: `${toBranch}...${from.name}`,
                 owner: organizationName!,
                 repo: projectName!
             })

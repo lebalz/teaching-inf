@@ -61,6 +61,7 @@ export const Confirm = (props: Props) => {
                     e.stopPropagation();
                     if (isConfirming) {
                         props.onConfirm();
+                        setIsConfirming(false);
                     } else {
                         setIsConfirming(true);
                     }

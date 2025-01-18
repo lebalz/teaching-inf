@@ -19,8 +19,8 @@ export enum MergeStatus {
 class Branch {
     readonly gitProvider: Github;
     readonly name: string;
-    readonly sha: string;
     readonly url: string;
+    @observable accessor sha: string;
     @observable accessor apiState: ApiState = ApiState.IDLE;
     @observable accessor isSynced: boolean = false;
     @observable accessor aheadBy: number = -1;
@@ -41,10 +41,13 @@ class Branch {
     sync() {
         this.setApiState(ApiState.SYNCING);
         return this.gitProvider
-            .fetchMergeStatus(this)
+            .fetchBranchStatus(this)
             .then(
                 action((res) => {
                     if (res) {
+                        if (res.commits.length > 0) {
+                            this.sha = res.commits[res.commits.length - 1].sha;
+                        }
                         this.aheadBy = res.ahead_by;
                         this.behindBy = res.behind_by;
                         this.isSynced = true;

@@ -82,6 +82,11 @@ class PR {
     }
 
     @action
+    setMerged(merged: boolean) {
+        this.merged = merged;
+    }
+
+    @action
     sync(syncBranch = true) {
         this.setApiState(ApiState.SYNCING);
         const promises = [
@@ -89,10 +94,10 @@ class PR {
                 .fetchPrState(this.number)
                 .then(
                     action((res) => {
-                        this.merged = res.merged;
                         this.mergeable = !!res.mergeable;
                         this.rebaseable = !!res.rebaseable;
                         this.mergeableState = res.mergeable_state;
+                        this.setMerged(res.merged);
                         this.headSha = res.head.sha;
                         this.isSynced = true;
                     })

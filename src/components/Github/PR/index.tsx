@@ -14,12 +14,15 @@ import {
     mdiLoading,
     mdiMerge,
     mdiReload,
+    mdiSourceBranchRefresh,
+    mdiSourceBranchSync,
     mdiSourceCommit,
     mdiSourceMerge,
     mdiSyncCircle
 } from '@mdi/js';
 import Button from '@tdev-components/shared/Button';
 import { ApiState } from '@tdev-stores/iStore';
+import Link from '@docusaurus/Link';
 
 interface Props {
     pr: PrModel;
@@ -41,12 +44,14 @@ const PR = observer((props: Props) => {
 
     return (
         <div className={clsx(styles.PR)}>
-            <Badge noPaddingRight>
-                {pr.title}
+            <Badge noPaddingLeft>
                 <Stack color="var(--ifm-color-success)" size={0.8}>
                     <Icon path={mdiCircleOutline} size={0.8} />
                     <Icon path={mdiCircleSmall} size={0.8} />
                 </Stack>
+                <Link to={pr.htmlUrl} target="_blank">
+                    {pr.title}
+                </Link>
             </Badge>
             <Button
                 icon={pr.apiState === ApiState.SYNCING ? mdiLoading : mdiReload}
@@ -60,7 +65,11 @@ const PR = observer((props: Props) => {
             />
             <div className={clsx(styles.spacer)}></div>
             {pr.branch && pr.branch.aheadBy > 0 && (
-                <Badge noPaddingLeft style={{ gap: 0 }}>
+                <Badge
+                    noPaddingLeft
+                    style={{ gap: 0 }}
+                    title={`Branch ist ${pr.branch.aheadBy} Commits vor- und ${pr.branch.behindBy} Commits hinter dem ${github.defaultBranchName}-Branch`}
+                >
                     <Icon path={mdiSourceCommit} size={0.8} />+{pr.branch.aheadBy}
                     {pr.branch.behindBy > 0 && `/-${pr.branch.behindBy}`}
                 </Badge>
@@ -78,20 +87,21 @@ const PR = observer((props: Props) => {
             {pr.isSynced && (
                 <>
                     {pr.rebaseable && (
-                        <Button
-                            icon={mdiSyncCircle}
-                            color="green"
-                            text="Fast Forward"
-                            onClick={() => {
-                                console.log('Fast Forward');
+                        <Confirm
+                            icon={mdiSourceBranchSync}
+                            color="blue"
+                            title={`Rebase ${github.defaultBranchName} into ${pr.branchName}`}
+                            confirmText={`Rebase ${github.defaultBranchName}?`}
+                            onConfirm={() => {
+                                github.rebaseBranch(github.defaultBranchName!, pr.branchName);
                             }}
                         />
                     )}
                     <Confirm
-                        icon={mdiMerge}
+                        icon={mdiSourceMerge}
                         color="green"
                         onConfirm={() => {
-                            console.log('Merge');
+                            github.mergePR(pr.number);
                         }}
                         disabled={!pr.mergeable}
                         text={''}
