@@ -48,12 +48,6 @@ const PR = observer((props: Props) => {
                     <Icon path={mdiCircleSmall} size={0.8} />
                 </Stack>
             </Badge>
-            {pr.branch && pr.branch.aheadBy > 0 && (
-                <Badge noPaddingLeft style={{ gap: 0 }}>
-                    <Icon path={mdiSourceCommit} size={0.8} />+{pr.branch.aheadBy}
-                    {pr.branch.behindBy > 0 && `/-${pr.branch.behindBy}`}
-                </Badge>
-            )}
             <Button
                 icon={pr.apiState === ApiState.SYNCING ? mdiLoading : mdiReload}
                 spin={pr.apiState === ApiState.SYNCING}
@@ -61,8 +55,16 @@ const PR = observer((props: Props) => {
                 onClick={() => {
                     pr.sync();
                 }}
+                size={0.8}
                 title="PR Status aktualisieren"
             />
+            <div className={clsx(styles.spacer)}></div>
+            {pr.branch && pr.branch.aheadBy > 0 && (
+                <Badge noPaddingLeft style={{ gap: 0 }}>
+                    <Icon path={mdiSourceCommit} size={0.8} />+{pr.branch.aheadBy}
+                    {pr.branch.behindBy > 0 && `/-${pr.branch.behindBy}`}
+                </Badge>
+            )}
             {pr.merged && (
                 <Badge noPaddingLeft title={`Merged: ${pr.mergedAt}`}>
                     <Icon path={mdiSourceMerge} size={0.8} color="var(--ifm-color-violet)" /> Merged
