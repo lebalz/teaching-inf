@@ -64,7 +64,7 @@ const PR = observer((props: Props) => {
                 title="PR Status aktualisieren"
             />
             <div className={clsx(styles.spacer)}></div>
-            {pr.branch && pr.branch.aheadBy > 0 && (
+            {pr.branch && (pr.branch.aheadBy > 0 || pr.branch.behindBy > 0) && (
                 <Badge
                     noPaddingLeft
                     style={{ gap: 0 }}
