@@ -13,6 +13,7 @@ import {
     mdiCloseCircle,
     mdiLoading,
     mdiMerge,
+    mdiRecordCircleOutline,
     mdiReload,
     mdiSourceBranchRefresh,
     mdiSourceBranchSync,
@@ -45,10 +46,7 @@ const PR = observer((props: Props) => {
     return (
         <div className={clsx(styles.PR)}>
             <Badge noPaddingLeft>
-                <Stack color="var(--ifm-color-success)" size={0.8}>
-                    <Icon path={mdiCircleOutline} size={0.8} />
-                    <Icon path={mdiCircleSmall} size={0.8} />
-                </Stack>
+                <Icon path={mdiRecordCircleOutline} size={0.8} color="var(--ifm-color-success)" />
                 <Link to={pr.htmlUrl} target="_blank">
                     {pr.title}
                 </Link>

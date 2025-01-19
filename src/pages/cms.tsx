@@ -82,18 +82,6 @@ const GhCallback = observer(() => {
                         })}
                     </ul>
                 </Details>
-                <Details summary={'PRs'}>
-                    <h4>Pulls</h4>
-                    <ul>
-                        {github.PRs.map((pull, idx) => {
-                            return (
-                                <li
-                                    key={idx}
-                                >{`#${pull.number}: ${pull.title} --> ${pull.branchName} ${pull.owner}`}</li>
-                            );
-                        })}
-                    </ul>
-                </Details>
                 <Details summary={'PRs'} open>
                     <h4>PRs und Branches</h4>
                     <ul>
@@ -104,6 +92,17 @@ const GhCallback = observer(() => {
                                 </li>
                             );
                         })}
+                    </ul>
+                    <ul>
+                        {github.branches
+                            .filter((b) => !b.PR)
+                            .map((branch, idx) => {
+                                return (
+                                    <li key={branch.name}>
+                                        <Branch branch={branch} />
+                                    </li>
+                                );
+                            })}
                     </ul>
                 </Details>
             </main>

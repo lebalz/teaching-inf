@@ -134,7 +134,7 @@ class Github {
         this.createNewBranch(newBranch)
             .then(async () => {
                 await this.createOrUpdateFile(file.path, file.content, newBranch, file.sha);
-                await this.createPull(newBranch, newBranch);
+                await this.createPR(newBranch, newBranch);
                 this.store.settings?.setLocation(newBranch, file.path);
             })
             .catch(() => {
@@ -275,7 +275,7 @@ class Github {
     }
 
     @action
-    createPull(branch: string, title: string, body?: string) {
+    createPR(branch: string, title: string, body?: string) {
         if (!this.defaultBranchName) {
             return Promise.resolve();
         }
@@ -291,7 +291,7 @@ class Github {
             .then((res) => {
                 const pr = new PR(res.data, this);
                 this._addPr(pr);
-                return res.data;
+                return pr;
             });
     }
 

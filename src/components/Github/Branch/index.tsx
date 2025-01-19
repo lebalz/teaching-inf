@@ -13,9 +13,13 @@ import {
     mdiCircleSmall,
     mdiGit,
     mdiMerge,
+    mdiPlus,
+    mdiPlusCircleMultipleOutline,
+    mdiPlusCircleOutline,
     mdiReload,
     mdiSourceBranch,
     mdiSourceBranchSync,
+    mdiSourceCommit,
     mdiSourceMerge,
     mdiSyncCircle
 } from '@mdi/js';
@@ -23,6 +27,10 @@ import { Confirm } from '@tdev-components/shared/Button/Confirm';
 import { default as BranchModel, MergeStatus } from '@tdev-models/cms/Branch';
 import Button from '@tdev-components/shared/Button';
 import { ApiState } from '@tdev-stores/iStore';
+import Popup from 'reactjs-popup';
+import Card from '@tdev-components/shared/Card';
+import NewPR from '../PR/NewPR';
+import { PopupActions } from 'reactjs-popup/dist/types';
 interface Props {
     branch: BranchModel;
 }
@@ -30,6 +38,8 @@ interface Props {
 const Branch = observer((props: Props) => {
     const cmsStore = useStore('cmsStore');
     const github = cmsStore.github;
+    const ref = React.useRef<PopupActions>(null);
+
     const { branch } = props;
     React.useEffect(() => {
         if (github?.defaultBranchName) {
@@ -44,65 +54,61 @@ const Branch = observer((props: Props) => {
 
     return (
         <div className={clsx(styles.branch)}>
-            <div>{branch.name}</div>
-            {associatedPr && (
-                <>
-                    <div className={clsx(styles.spacer)}></div>
-                    <Badge noPaddingRight>
-                        {associatedPr.title}
-                        <Stack color="var(--ifm-color-success)" size={0.8}>
-                            <Icon path={mdiCircleOutline} size={0.8} />
-                            <Icon path={mdiCircleSmall} size={0.8} />
-                        </Stack>
-                    </Badge>
-                </>
-            )}
+            <Badge noPaddingLeft>
+                <Icon path={mdiSourceBranch} color="var(--ifm-color-blue)" size={0.8} />
+                {branch.name}
+            </Badge>
             <div className={clsx(styles.spacer)}></div>
             {github.defaultBranchName !== branch.name ? (
                 <>
+                    {branch.aheadBy > 0 && (
+                        <div>
+                            <Popup
+                                trigger={
+                                    <span>
+                                        <Button
+                                            icon={mdiPlusCircleMultipleOutline}
+                                            color="green"
+                                            size={0.8}
+                                            text="PR"
+                                            iconSide="left"
+                                            title="Erstelle neuen PR"
+                                        />
+                                    </span>
+                                }
+                                ref={ref}
+                                modal
+                                on="click"
+                                overlayStyle={{ background: 'rgba(0,0,0,0.5)' }}
+                            >
+                                <NewPR
+                                    branch={branch}
+                                    onDiscard={() => ref.current?.close()}
+                                    onDone={() => {
+                                        ref.current?.close();
+                                    }}
+                                />
+                            </Popup>
+                        </div>
+                    )}
+                    <div className={clsx(styles.spacer)}></div>
+                    <Badge
+                        noPaddingLeft
+                        style={{ gap: 0 }}
+                        title={`Branch ist ${branch.aheadBy} Commits vor- und ${branch.behindBy} Commits hinter dem ${github.defaultBranchName}-Branch`}
+                    >
+                        <Icon path={mdiSourceCommit} size={0.8} />+{branch.aheadBy}
+                        {branch.behindBy > 0 && `/-${branch.behindBy}`}
+                    </Badge>
                     <Button
                         icon={mdiReload}
                         color="grey"
                         onClick={() => {
+                            github.fetchBranches();
                             branch.sync();
                         }}
                         title="Branch Status aktualisieren"
                     />
-                    {/* {branch.canFastForward && (
-                        <Button
-                            icon={mdiSyncCircle}
-                            color="green"
-                            text="Fast Forward"
-                            onClick={() => {
-                                console.log('Fast Forward');
-                            }}
-                        />
-                    )}
-                    {branch.mergeStatus === MergeStatus.Conflict && (
-                        <Button
-                            icon={mdiAlert}
-                            color="orange"
-                            text="Merge-Konflikte"
-                            href={associatedPr?.htmlUrl}
-                        />
-                    )}
-                    {branch.isMerged ? (
-                        <Badge noPaddingLeft>
-                            <Icon path={mdiSourceMerge} size={0.8} color="var(--ifm-color-violet)" /> Merged
-                        </Badge>
-                    ) : (
-                        <Confirm
-                            icon={mdiMerge}
-                            color="green"
-                            onConfirm={() => {
-                                console.log('Merge');
-                            }}
-                            disabled={branch.mergeStatus !== MergeStatus.Ready}
-                            text={''}
-                            confirmText="Mergen?"
-                            title={`In den ${github.defaultBranchName}-Branch Mergen`}
-                        />
-                    )} */}
                     <Delete
                         onDelete={() => {
                             if (associatedPr) {
