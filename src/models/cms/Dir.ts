@@ -18,7 +18,6 @@ class Dir extends iEntry {
         when(
             () => this.fetched,
             () => {
-                console.log('Fetched', this.imageDir?.name);
                 this.imageDir?.fetchDirectory()?.then((imgDir) => {
                     if (imgDir) {
                         imgDir.children.forEach((img) => {

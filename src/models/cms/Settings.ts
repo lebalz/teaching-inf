@@ -47,18 +47,28 @@ class Settings {
     }
 
     @action
-    setActiveBranchName(branch: string) {
+    setActiveBranchName(branch: string, save: boolean = true) {
         this.activeBranchName = branch;
-        if (this.activePath) {
-            this.store.github?.fetchFile(branch, this.activePath);
+        if (save) {
+            this.save();
         }
-        this.save();
+    }
+
+    @action
+    setActivePath(path: string, save: boolean = true) {
+        if (this.activePath === path) {
+            return;
+        }
+        this.activePath = path;
+        if (save) {
+            this.save();
+        }
     }
 
     @action
     setLocation(branch: string, path: string | null) {
-        this.activeBranchName = branch;
-        this.activePath = path;
+        this.setActiveBranchName(branch, false);
+        this.setActivePath(path || '', false);
         this.save();
     }
 

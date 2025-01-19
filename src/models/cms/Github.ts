@@ -421,7 +421,7 @@ class Github {
                             if (editAfterFetch) {
                                 file.setEditing(true);
                             }
-                            return;
+                            return file;
                         }
                     }
                     this.apiStates.set(apiId, ApiState.ERROR);

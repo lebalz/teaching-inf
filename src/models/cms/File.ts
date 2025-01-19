@@ -2,6 +2,7 @@ import { CmsStore } from '@tdev-stores/CmsStore';
 import { action, computed, observable } from 'mobx';
 import { FileProps, iFileStub } from './FileStub';
 import { ApiState } from '@tdev-stores/iStore';
+import Dir from './Dir';
 
 class File extends iFileStub {
     readonly type = 'file';
@@ -32,6 +33,11 @@ class File extends iFileStub {
     @action
     setEditing(editing: boolean) {
         this.store.setIsEditing(this, editing);
+    }
+
+    @computed
+    get dir(): Dir | undefined {
+        return this.parent as Dir;
     }
 
     @action

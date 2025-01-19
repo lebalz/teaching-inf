@@ -34,6 +34,22 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
             action((branch) => {
                 if (branch && this.github) {
                     this.github.fetchDirectory(branch);
+                    if (this.activeFileName) {
+                        this.github.fetchFile(branch, this.activeFileName);
+                    }
+                }
+            })
+        );
+        reaction(
+            () => this.activeFileName + `${this.github}`,
+            action((fileName) => {
+                if (this.activeFileName && this.activeBranchName) {
+                    console.log('activeFileName', this.activeFileName, this.activeBranchName);
+                    this.github?.fetchFile(this.activeBranchName, this.activeFileName).then((file) => {
+                        if (file && file.type === 'file' && !file.dir && this.activeBranchName) {
+                            this.github?.fetchDirectory(this.activeBranchName, file.parentPath);
+                        }
+                    });
                 }
             })
         );
@@ -42,6 +58,14 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
             action((token) => {
                 if (token) {
                     this._initializeGithub();
+                }
+            })
+        );
+        reaction(
+            () => this.editedFile,
+            action((file) => {
+                if (file) {
+                    file.dir?.fetchDirectory();
                 }
             })
         );
@@ -67,6 +91,11 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
     @computed
     get activeBranchName() {
         return this.settings?.activeBranchName || this.github?.defaultBranch?.name;
+    }
+
+    @computed
+    get activeFileName() {
+        return this.settings?.activePath;
     }
 
     @computed
@@ -163,6 +192,7 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
     @action
     setIsEditing(file: File, isEditing: boolean) {
         this.settings?.setLocation(file.branch, isEditing ? file.path : null);
+        const dir = file.parent as Dir;
     }
 
     @action
