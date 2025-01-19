@@ -85,6 +85,7 @@ const PR = observer((props: Props) => {
                 </Badge>
             )}
             {pr.hasBlockingLabel && <Badge type="danger">Blocked</Badge>}
+            {pr.isDraft && <Badge type="danger">Draft</Badge>}
             {pr.isSynced && (
                 <>
                     {pr.branch && pr.mergeableState === 'clean' && pr.branch.behindBy > 0 && (
@@ -104,7 +105,7 @@ const PR = observer((props: Props) => {
                         onConfirm={() => {
                             github.mergePR(pr.number);
                         }}
-                        disabled={!pr.mergeable || pr.hasBlockingLabel}
+                        disabled={!pr.canMerge}
                         text={''}
                         confirmText="Mergen?"
                         title={`In den ${github.defaultBranchName}-Branch Mergen: ${pr.mergeableState}`}

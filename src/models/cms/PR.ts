@@ -37,7 +37,6 @@ class PR {
     readonly title: string;
     readonly body: string;
 
-    readonly draft: boolean;
     readonly updatedAt: Date;
     readonly createdAt: Date;
     readonly mergedAt: Date | null;
@@ -57,6 +56,7 @@ class PR {
 
     @observable accessor apiState: ApiState = ApiState.IDLE;
     @observable accessor isSynced: boolean = false;
+    @observable accessor isDraft: boolean = false;
 
     constructor(props: Props, github: Github) {
         this.gitProvider = github;
@@ -71,7 +71,7 @@ class PR {
         this.title = props.title;
         this.state = props.state;
         this.htmlUrl = props.html_url;
-        this.draft = !!props.draft;
+        this.isDraft = !!props.draft;
         this.updatedAt = new Date(props.updated_at);
         this.createdAt = new Date(props.created_at);
         this.mergedAt = props.merged_at ? new Date(props.merged_at) : null;
@@ -111,7 +111,7 @@ class PR {
                         this.setMerged(res.merged);
                         this.headSha = res.head.sha;
                         this.labels.replace(res.labels.map((l) => l.name));
-                        this.labels.add;
+                        this.isDraft = !!res.draft;
                         this.isSynced = true;
                     })
                 )
@@ -125,6 +125,11 @@ class PR {
         Promise.all(promises).finally(() => {
             this.setApiState(ApiState.IDLE);
         });
+    }
+
+    @computed
+    get canMerge() {
+        return this.mergeable && !this.hasBlockingLabel && !this.isDraft;
     }
 }
 
