@@ -40,7 +40,6 @@ class PR {
     readonly updatedAt: Date;
     readonly createdAt: Date;
     readonly mergedAt: Date | null;
-    readonly state: string;
     // readonly head: PRRef;
     readonly htmlUrl: string;
     readonly branchName: string;
@@ -48,6 +47,7 @@ class PR {
 
     labels = observable.set<string>();
 
+    @observable accessor state: string;
     @observable accessor headSha: string;
     @observable accessor merged: boolean | undefined;
     @observable accessor mergeable: boolean | undefined;
@@ -113,6 +113,7 @@ class PR {
                         this.labels.replace(res.labels.map((l) => l.name));
                         this.isDraft = !!res.draft;
                         this.isSynced = true;
+                        this.state = res.state;
                     })
                 )
                 .catch((err) => {
@@ -129,7 +130,7 @@ class PR {
 
     @computed
     get canMerge() {
-        return this.mergeable && !this.hasBlockingLabel && !this.isDraft && this.mergeableState === 'clean';
+        return this.mergeable && !this.hasBlockingLabel && !this.isDraft && !this.isClosed;
     }
 
     @computed
