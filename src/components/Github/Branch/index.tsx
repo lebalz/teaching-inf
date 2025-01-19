@@ -43,7 +43,6 @@ const Branch = observer((props: Props) => {
     const { branch } = props;
     React.useEffect(() => {
         if (github?.defaultBranchName) {
-            console.log('Syncing branch', github?.defaultBranchName, branch.name);
             branch.sync();
         }
     }, [github?.defaultBranchName, branch]);

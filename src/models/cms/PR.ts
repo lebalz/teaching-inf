@@ -129,7 +129,12 @@ class PR {
 
     @computed
     get canMerge() {
-        return this.mergeable && !this.hasBlockingLabel && !this.isDraft;
+        return this.mergeable && !this.hasBlockingLabel && !this.isDraft && this.mergeableState === 'clean';
+    }
+
+    @computed
+    get isClosed() {
+        return this.state === 'closed';
     }
 }
 

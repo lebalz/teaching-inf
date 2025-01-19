@@ -100,7 +100,6 @@ class Github {
             })
             .then(
                 action((res) => {
-                    console.log('PRs', res.data);
                     const prs = res.data.map((pr) => new PR(pr, this));
                     const newPRs = new Set(prs.map((pr) => pr.number));
                     this.PRs.replace([...this.PRs.filter((pr) => !newPRs.has(pr.number)), ...prs]);

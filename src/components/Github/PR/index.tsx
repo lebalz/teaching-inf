@@ -84,6 +84,7 @@ const PR = observer((props: Props) => {
             )}
             {pr.hasBlockingLabel && <Badge type="danger">Blocked</Badge>}
             {pr.isDraft && <Badge type="danger">Draft</Badge>}
+            {pr.isClosed && <Badge type="danger">Closed</Badge>}
             {pr.isSynced && (
                 <>
                     {pr.branch && pr.mergeableState === 'clean' && pr.branch.behindBy > 0 && (

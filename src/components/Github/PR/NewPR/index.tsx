@@ -11,7 +11,6 @@ import { mdiClose, mdiFlashTriangle, mdiRecordCircleOutline, mdiSourceBranch } f
 import TextInput from '@tdev-components/shared/TextInput';
 import TextAreaInput from '@tdev-components/shared/TextAreaInput';
 import Button from '@tdev-components/shared/Button';
-import { PopupActions } from 'reactjs-popup/dist/types';
 import PR from '@tdev-models/cms/PR';
 import Alert from '@tdev-components/shared/Alert';
 
