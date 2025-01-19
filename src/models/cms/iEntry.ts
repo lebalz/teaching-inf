@@ -1,5 +1,6 @@
 import { CmsStore } from '@tdev-stores/CmsStore';
 import { computed } from 'mobx';
+import FileStub from './FileStub';
 
 export interface iEntryProps {
     name: string;
@@ -11,7 +12,7 @@ export interface iEntryProps {
 }
 
 abstract class iEntry {
-    abstract readonly type: string;
+    abstract readonly type: 'file' | 'file_stub' | 'dir';
     readonly store: CmsStore;
 
     readonly name: string;
@@ -42,6 +43,10 @@ abstract class iEntry {
             html_url: this.htmlUrl,
             sha: this.sha
         };
+    }
+
+    isFile(): this is File | FileStub {
+        return this.type === 'file' || this.type === 'file_stub';
     }
 
     @computed

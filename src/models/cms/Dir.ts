@@ -1,11 +1,12 @@
 import { CmsStore } from '@tdev-stores/CmsStore';
-import { action, computed, observable } from 'mobx';
+import { action, computed, observable, when } from 'mobx';
 import iEntry, { iEntryProps } from './iEntry';
 import { mdiFolder, mdiFolderOpen, mdiLoading } from '@mdi/js';
 import { ApiState } from '@tdev-stores/iStore';
 
 interface DirProps extends iEntryProps {}
 
+const IMAGE_DIR_NAME = 'images' as const;
 class Dir extends iEntry {
     readonly type = 'dir';
     @observable accessor fetched: boolean = false;
@@ -14,6 +15,21 @@ class Dir extends iEntry {
 
     constructor(props: DirProps, store: CmsStore) {
         super(props, store);
+        when(
+            () => this.fetched,
+            () => {
+                console.log('Fetched', this.imageDir?.name);
+                this.imageDir?.fetchDirectory()?.then((imgDir) => {
+                    if (imgDir) {
+                        imgDir.children.forEach((img) => {
+                            if (img.type === 'file_stub') {
+                                img.fetchContent();
+                            }
+                        });
+                    }
+                });
+            }
+        );
     }
 
     @action
@@ -25,14 +41,30 @@ class Dir extends iEntry {
     }
 
     @action
-    fetchDirectory() {
+    fetchDirectory(force: boolean = false) {
+        if (this.fetched && !force) {
+            return Promise.resolve(this);
+        }
         this.apiState = ApiState.SYNCING;
-        this.store.github?.fetchDirectory(this.branch, this.path).then(
+        return this.store.github?.fetchDirectory(this.branch, this.path).then(
             action(() => {
                 this.apiState = ApiState.IDLE;
                 this.fetched = true;
+                return this;
             })
         );
+    }
+
+    @computed
+    get imageDir(): Dir | undefined {
+        return this.children.find((child) => child.name === IMAGE_DIR_NAME) as Dir;
+    }
+
+    @computed
+    get images() {
+        const images = this.children.filter((child) => child.isFile() && child.isImage);
+
+        return images;
     }
 
     @computed
