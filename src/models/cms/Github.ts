@@ -158,8 +158,11 @@ class Github {
             .then(
                 action((res) => {
                     const newBranch = new Branch({ name: branch, commit: res.data }, this);
-                    newBranch.sync();
                     this._addBranchEntry(newBranch);
+                    newBranch.sync();
+                    if (newBranch.PR) {
+                        newBranch.PR.sync();
+                    }
                     return res.data;
                 })
             )
