@@ -451,10 +451,7 @@ class Github {
                         const props = File.ValidateProps(res.data, 'stub');
                         if (props) {
                             this.apiStates.delete(apiId);
-                            const content = new TextDecoder().decode(
-                                Uint8Array.from(atob(res.data.content), (c) => c.charCodeAt(0))
-                            );
-                            const file = new File({ ...props, content: content }, this.store);
+                            const file = new File({ ...props, rawBase64: res.data.content }, this.store);
                             this._addFileEntry(branch, file);
                             if (editAfterFetch) {
                                 file.setEditing(true);

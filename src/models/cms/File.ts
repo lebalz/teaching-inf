@@ -16,9 +16,19 @@ class File extends iFileStub {
 
     constructor(props: FileProps, store: CmsStore) {
         super(props, store);
-        this._pristine = props.content;
-        this.content = props.content;
-        this.refContent = props.content;
+        if (this.isImage) {
+            this.content = 'rawBase64' in props ? props.rawBase64 : props.content;
+        } else {
+            if ('rawBase64' in props) {
+                this.content = new TextDecoder().decode(
+                    Uint8Array.from(atob(props.rawBase64), (c) => c.charCodeAt(0))
+                );
+            } else {
+                this.content = props.content;
+            }
+        }
+        this._pristine = this.content;
+        this.refContent = this.content;
     }
 
     get canEdit() {
@@ -81,7 +91,7 @@ class File extends iFileStub {
             sha: this.sha,
             download_url: this.downloadUrl,
             size: this.size,
-            content: this.content
+            rawBase64: this.content
         };
     }
 }

@@ -36,6 +36,8 @@ import { useCellValues, usePublisher } from '@mdxeditor/gurx';
 import { MdxJsxAttribute, MdxJsxExpressionAttribute } from 'mdast-util-mdx-jsx';
 import { iconComponentFor$, readOnly$, useTranslation } from '@mdxeditor/editor';
 import { $isImageNode, type ImageNode } from './ImageNode';
+import { observer } from 'mobx-react-lite';
+import { useStore } from '@tdev-hooks/useStore';
 
 const styles: any = {};
 export interface ImageEditorProps {
@@ -64,47 +66,42 @@ function useSuspenseImage(src: string) {
     }
 }
 
-function LazyImage({
-    title,
-    alt,
-    className,
-    imageRef,
-    src,
-    width,
-    height
-}: {
-    title: string;
-    alt: string;
-    className: string | null;
-    imageRef: { current: null | HTMLImageElement };
-    src: string;
-    width: number | 'inherit';
-    height: number | 'inherit';
-}): React.ReactNode {
-    useSuspenseImage(src);
-    return (
-        <img
-            className={className ?? undefined}
-            alt={alt}
-            src={src}
-            title={title}
-            ref={imageRef}
-            draggable="false"
-            width={width}
-            height={height}
-        />
-    );
-}
+// function LazyImage({
+//     title,
+//     alt,
+//     className,
+//     imageRef,
+//     src,
+//     width,
+//     height
+// }: {
+//     title: string;
+//     alt: string;
+//     className: string | null;
+//     imageRef: { current: null | HTMLImageElement };
+//     src: string;
+//     width: number | 'inherit';
+//     height: number | 'inherit';
+// }): React.ReactNode {
+//     // useSuspenseImage(src);
+//     return (
+//         <img
+//             className={className ?? undefined}
+//             alt={alt}
+//             src={src}
+//             title={title}
+//             ref={imageRef}
+//             draggable="false"
+//             width={width}
+//             height={height}
+//         />
+//     );
+// }
 
-export function ImageEditor({
-    src,
-    title,
-    alt,
-    nodeKey,
-    width,
-    height,
-    rest
-}: ImageEditorProps): React.ReactNode | null {
+export const ImageEditor = observer((props: ImageEditorProps): React.ReactNode => {
+    const { src, title, alt, nodeKey, width, height, rest } = props;
+    const cmsStore = useStore('cmsStore');
+    const { github } = cmsStore;
     const [disableImageResize, disableImageSettingsButton, imagePreviewHandler, iconComponentFor, readOnly] =
         useCellValues(
             disableImageResize$,
@@ -178,7 +175,9 @@ export function ImageEditor({
     React.useEffect(() => {
         if (imagePreviewHandler) {
             const callPreviewHandler = async () => {
-                if (!initialImagePath) setInitialImagePath(src);
+                if (!initialImagePath) {
+                    setInitialImagePath(src);
+                }
                 const updatedSrc = await imagePreviewHandler(src);
                 setImageSource(updatedSrc);
             };
@@ -270,6 +269,9 @@ export function ImageEditor({
         setIsResizing(true);
     };
 
+    const { editedFile } = cmsStore;
+    const gitImg = editedFile?.findEntryByRelativePath(src);
+
     const draggable = $isNodeSelection(selection);
     const isFocused = isSelected;
 
@@ -290,20 +292,34 @@ export function ImageEditor({
         <React.Suspense fallback={null}>
             <div className={styles.imageWrapper} data-editor-block-type="image">
                 <div draggable={draggable}>
-                    <LazyImage
-                        width={width}
-                        height={height}
+                    <img
                         className={classNames(
                             {
                                 [styles.focusedImage]: isFocused
                             },
                             passedClassName
                         )}
+                        alt={alt}
+                        src={
+                            gitImg?.type === 'file' && gitImg.isImage
+                                ? `data:image/${gitImg.extension};base64,${gitImg.content}`
+                                : src
+                        }
+                        title={title}
+                        ref={imageRef}
+                        draggable="false"
+                        width={width}
+                        height={height}
+                    />
+                    {/* <LazyImage
+                        width={width}
+                        height={height}
+                        className={}
                         src={imageSource}
                         title={title ?? ''}
                         alt={alt ?? ''}
                         imageRef={imageRef}
-                    />
+                    /> */}
                 </div>
                 {draggable && isFocused && !disableImageResize && (
                     <ImageResizer
@@ -339,7 +355,7 @@ export function ImageEditor({
                                     openEditImageDialog({
                                         nodeKey: nodeKey,
                                         initialValues: {
-                                            src: !initialImagePath ? imageSource : initialImagePath,
+                                            src: initialImagePath ?? imageSource,
                                             title: title ?? '',
                                             altText: alt ?? ''
                                         }
@@ -354,4 +370,4 @@ export function ImageEditor({
             </div>
         </React.Suspense>
     ) : null;
-}
+});

@@ -9,9 +9,14 @@ export interface FileStubProps extends iEntryProps {
     size: number;
     download_url: string | null;
 }
-export interface FileProps extends FileStubProps {
+export interface RawFileProps extends FileStubProps {
+    rawBase64: string;
+}
+export interface ContentFileProps extends FileStubProps {
     content: string;
 }
+export type FileProps = RawFileProps | ContentFileProps;
+
 const FilePropKeys: ReadonlyArray<keyof FileProps> = keysOfInterface<keyof FileProps>()(
     'name',
     'path',
@@ -20,7 +25,6 @@ const FilePropKeys: ReadonlyArray<keyof FileProps> = keysOfInterface<keyof FileP
     'html_url',
     'sha',
     'size',
-    'content',
     'download_url'
 );
 
@@ -77,6 +81,11 @@ export abstract class iFileStub extends iEntry {
         return /(js|jsx|ts|tsx|py|java|cpp|c|cs|php|rb|go|rs|swift|json|yml|yaml|md|mdx|html|css)$/i.test(
             this.extension
         );
+    }
+
+    findEntryByRelativePath(relPath: string) {
+        const imgPath = new URL(relPath, `path:/${this.parentPath}/`).pathname.slice(1);
+        return this.store.findEntry(this.branch, imgPath);
     }
 
     @computed
@@ -142,6 +151,12 @@ export abstract class iFileStub extends iEntry {
                 (validP as any)[k] = props[k];
             }
         });
+        if (type === 'full') {
+            if (props['content'] === undefined && props['rawBase64'] === undefined) {
+                isValid = false;
+                console.warn('Missing key', 'content or rawBase64');
+            }
+        }
         if (isValid) {
             return validP;
         }
