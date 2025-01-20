@@ -14,6 +14,7 @@ import { computedFn } from 'mobx-utils';
 import _ from 'lodash';
 import Settings, { REFRESH_THRESHOLD } from '@tdev-models/cms/Settings';
 import Github from '@tdev-models/cms/Github';
+import FileStub from '@tdev-models/cms/FileStub';
 const { organizationName, projectName } = siteConfig;
 if (!organizationName || !projectName) {
     throw new Error('"organizationName" and "projectName" must be set in docusaurus.config.ts');
@@ -77,14 +78,6 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
         }
         this.github = new Github(this.settings.token, this);
         this.github.load();
-        // const { activePath, activeBranchName } = this.settings;
-        // if (activeBranchName) {
-        //     this.github.fetchDirectory(activeBranchName).then(() => {
-        //         if (activePath) {
-        //             this.github?.fetchFile(activeBranchName, activePath);
-        //         }
-        //     });
-        // }
     }
 
     @computed
@@ -189,9 +182,8 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
     });
 
     @action
-    setIsEditing(file: File, isEditing: boolean) {
+    setIsEditing(file: File | FileStub, isEditing: boolean) {
         this.settings?.setLocation(file.branch, isEditing ? file.path : null);
-        const dir = file.parent as Dir;
     }
 
     @action

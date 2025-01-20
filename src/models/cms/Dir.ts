@@ -9,14 +9,14 @@ interface DirProps extends iEntryProps {}
 const IMAGE_DIR_NAME = 'images' as const;
 class Dir extends iEntry {
     readonly type = 'dir';
-    @observable accessor fetched: boolean = false;
+    @observable accessor isFetched: boolean = false;
     @observable accessor isOpen: boolean = false;
     @observable accessor apiState: ApiState = ApiState.IDLE;
 
     constructor(props: DirProps, store: CmsStore) {
         super(props, store);
         when(
-            () => this.fetched,
+            () => this.isFetched,
             () => {
                 this.imageDir?.fetchDirectory()?.then((imgDir) => {
                     if (imgDir) {
@@ -34,24 +34,29 @@ class Dir extends iEntry {
     @action
     setOpen(open: boolean) {
         this.isOpen = open;
-        if (open && !this.fetched) {
+        if (open && !this.isFetched) {
             this.fetchDirectory();
         }
     }
 
     @action
     fetchDirectory(force: boolean = false) {
-        if (this.fetched && !force) {
+        if (this.isFetched && !force) {
             return Promise.resolve(this);
         }
         this.apiState = ApiState.SYNCING;
         return this.store.github?.fetchDirectory(this.branch, this.path).then(
             action(() => {
                 this.apiState = ApiState.IDLE;
-                this.fetched = true;
+                this.setIsFetched(true);
                 return this;
             })
         );
+    }
+
+    @action
+    setIsFetched(fetched: boolean) {
+        this.isFetched = fetched;
     }
 
     @computed

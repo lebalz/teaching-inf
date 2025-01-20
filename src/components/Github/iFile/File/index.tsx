@@ -30,11 +30,7 @@ const File = observer((props: Props) => {
                     color="orange"
                     size={0.7}
                     onClick={() => {
-                        if (!file.canEdit) {
-                            file.fetchContent(true);
-                        } else {
-                            file.setEditing(true);
-                        }
+                        cmsStore.setIsEditing(file, true);
                     }}
                 />
             )}

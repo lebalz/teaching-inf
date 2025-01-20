@@ -361,15 +361,23 @@ class Github {
         const branch = file.branch;
         const parts = path.split('/').slice(0, -1);
         const promises: Promise<(File | Dir | FileStub)[]>[] = [];
-        for (let i = 0; i <= parts.length; i++) {
+        for (let i = 1; i <= parts.length; i++) {
             const dirPath = parts.slice(0, i).join('/');
             const dir = this.store.findEntry(branch, dirPath) as Dir | undefined;
-            if (!dir) {
+            if (!dir || !dir.isFetched) {
                 const res = this.fetchDirectory(branch, dirPath);
                 promises.push(res);
             }
         }
-        return Promise.all(promises);
+        return Promise.all(promises).then(() => {
+            if (file.dir) {
+                let curr: Dir | undefined = file.dir;
+                while (curr) {
+                    curr.setIsFetched(true);
+                    curr = curr.dir;
+                }
+            }
+        });
     }
 
     @action
@@ -383,6 +391,7 @@ class Github {
             })
             .then(
                 action((res) => {
+                    const dir = this.store.findEntry(branch, path) as Dir | undefined;
                     const entries = res.data;
                     if (Array.isArray(entries)) {
                         if (entries.length === 0) {
@@ -416,6 +425,9 @@ class Github {
                             }
                         });
                         return newEntries;
+                    }
+                    if (dir) {
+                        dir.setIsFetched(true);
                     }
                     return [];
                 })
@@ -465,15 +477,15 @@ class Github {
      * This method adds the File only to the entries map - it won't create or update the file on GitHub.
      */
     @action
-    _addFileEntry(refName: string, file: File) {
-        if (!this.entries.has(refName)) {
-            this.entries.set(refName, observable.array([], { deep: false }));
+    _addFileEntry(branch: string, file: File) {
+        if (!this.entries.has(branch)) {
+            this.entries.set(branch, observable.array([], { deep: false }));
         }
-        const old = this.store.findEntry(refName, file.path);
+        const old = this.store.findEntry(branch, file.path);
         if (old) {
-            this.entries.get(refName)!.remove(old);
+            this.entries.get(branch)!.remove(old);
         }
-        this.entries.get(refName)!.push(file);
+        this.entries.get(branch)!.push(file);
     }
 
     @action

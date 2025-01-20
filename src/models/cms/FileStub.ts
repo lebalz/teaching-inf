@@ -53,11 +53,6 @@ export abstract class iFileStub extends iEntry {
         return false;
     }
 
-    @computed
-    get dir(): Dir | undefined {
-        return this.parent as Dir;
-    }
-
     setEditing(isEditing: boolean) {
         // no-op
     }

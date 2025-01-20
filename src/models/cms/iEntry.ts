@@ -1,6 +1,7 @@
 import { CmsStore } from '@tdev-stores/CmsStore';
 import { computed } from 'mobx';
 import FileStub from './FileStub';
+import Dir from './Dir';
 
 export interface iEntryProps {
     name: string;
@@ -60,6 +61,11 @@ abstract class iEntry {
     @computed
     get parentPath() {
         return this.path.replace(this.name, '').replace(/\/+$/, '');
+    }
+
+    @computed
+    get dir(): Dir | undefined {
+        return this.parent as Dir;
     }
 
     @computed
