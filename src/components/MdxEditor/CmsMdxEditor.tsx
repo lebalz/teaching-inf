@@ -42,11 +42,13 @@ import BrowserWindowDescriptor from './JsxPluginDescriptors/BrowserWindowDescrip
 import DocCardListDescriptor from './JsxPluginDescriptors/DocCardListDescriptor';
 import { MdiDescriptor } from './JsxPluginDescriptors/directive-editors/MdiDescriptor';
 import mdiCompletePlugin from './plugins/MdiComplete';
+import { imagePlugin } from './plugins/image';
 import { DeflistDescriptor, DdDescriptor, DtDescriptor } from './JsxPluginDescriptors/DeflistDescriptor';
 import ErrorBoundary from '@docusaurus/ErrorBoundary';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
 import Actions from './toolbar/Actions';
+import { InsertImage } from './toolbar/InsertImage';
 
 export interface Props {
     file: File;
@@ -138,6 +140,7 @@ const CmsMdxEditor = observer((props: Props) => {
                                         ]}
                                     />
                                     <InsertJsxElements />
+                                    <InsertImage />
                                 </DiffSourceToggleWrapper>
                             </>
                         )
@@ -150,6 +153,12 @@ const CmsMdxEditor = observer((props: Props) => {
                             DdDescriptor,
                             DtDescriptor
                         ]
+                    }),
+                    imagePlugin({
+                        imageUploadHandler: () => {
+                            console.log('uploading image');
+                            return Promise.resolve('https://picsum.photos/200/300');
+                        }
                     })
                 ]}
                 onChange={(md) => {
