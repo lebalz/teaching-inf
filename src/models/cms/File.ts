@@ -35,11 +35,6 @@ class File extends iFileStub {
         this.store.setIsEditing(this, editing);
     }
 
-    @computed
-    get dir(): Dir | undefined {
-        return this.parent as Dir;
-    }
-
     @action
     setContent(content: string, isInit: boolean = false) {
         this.content = content;

@@ -22,19 +22,22 @@ const File = observer((props: Props) => {
         <li className={clsx(styles.file, shared.item)}>
             <Icon path={file.icon} size={0.8} color={file.iconColor} />
             <span className={clsx(shared.item)}>{file.name}</span>
-            {file.isImage && <ImagePreview file={file} />}
-            <Button
-                icon={mdiCircleEditOutline}
-                color="orange"
-                size={0.7}
-                onClick={() => {
-                    if (!file.canEdit) {
-                        file.fetchContent(true);
-                    } else {
-                        file.setEditing(true);
-                    }
-                }}
-            />
+            {file.isImage ? (
+                <ImagePreview file={file} />
+            ) : (
+                <Button
+                    icon={mdiCircleEditOutline}
+                    color="orange"
+                    size={0.7}
+                    onClick={() => {
+                        if (!file.canEdit) {
+                            file.fetchContent(true);
+                        } else {
+                            file.setEditing(true);
+                        }
+                    }}
+                />
+            )}
             {file.type === 'file' && file.isDirty && (
                 <>
                     <Button

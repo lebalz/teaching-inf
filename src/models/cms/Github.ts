@@ -353,6 +353,26 @@ class Github {
     }
 
     @action
+    fetchDirectoryTree(file: FileStub | File) {
+        if (file.dir) {
+            return Promise.resolve();
+        }
+        const path = file.path;
+        const branch = file.branch;
+        const parts = path.split('/').slice(0, -1);
+        const promises: Promise<(File | Dir | FileStub)[]>[] = [];
+        for (let i = 0; i <= parts.length; i++) {
+            const dirPath = parts.slice(0, i).join('/');
+            const dir = this.store.findEntry(branch, dirPath) as Dir | undefined;
+            if (!dir) {
+                const res = this.fetchDirectory(branch, dirPath);
+                promises.push(res);
+            }
+        }
+        return Promise.all(promises);
+    }
+
+    @action
     fetchDirectory(branch: string, path: string = '') {
         return this.octokit.repos
             .getContent({
@@ -371,25 +391,31 @@ class Github {
                         if (!this.entries.has(branch)) {
                             this.entries.set(branch, observable.array([], { deep: false }));
                         }
+                        const newEntries: (Dir | FileStub | File)[] = [];
                         const arr = this.entries.get(branch)!;
                         entries.forEach((entry) => {
                             const old = arr.find((e) => e.path === entry.path);
                             if (old) {
                                 if (old.sha === entry.sha) {
+                                    newEntries.push(old);
                                     return;
                                 }
                                 arr.remove(old);
                             }
                             switch (entry.type) {
                                 case 'dir':
-                                    arr.push(new Dir(entry, this.store));
+                                    const dir = new Dir(entry, this.store);
+                                    newEntries.push(dir);
+                                    arr.push(dir);
                                     break;
                                 case 'file':
-                                    arr.push(new FileStub(entry, this.store));
+                                    const fstub = new FileStub(entry, this.store);
+                                    newEntries.push(fstub);
+                                    arr.push(fstub);
                                     break;
                             }
                         });
-                        return arr;
+                        return newEntries;
                     }
                     return [];
                 })

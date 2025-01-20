@@ -3,6 +3,7 @@ import iEntry, { iEntryProps } from './iEntry';
 import { action, computed } from 'mobx';
 import { mdiFileCode, mdiFileDocumentOutline, mdiFileImage, mdiFilePdfBox } from '@mdi/js';
 import { keysOfInterface } from '@tdev-models/helpers/keysOfInterface';
+import Dir from './Dir';
 
 export interface FileStubProps extends iEntryProps {
     size: number;
@@ -50,6 +51,11 @@ export abstract class iFileStub extends iEntry {
 
     get canEdit() {
         return false;
+    }
+
+    @computed
+    get dir(): Dir | undefined {
+        return this.parent as Dir;
     }
 
     setEditing(isEditing: boolean) {

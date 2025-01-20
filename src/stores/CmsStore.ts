@@ -30,24 +30,31 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
         super();
         this.root = store;
         reaction(
-            () => this.activeBranchName,
-            action((branch) => {
-                if (branch && this.github) {
-                    this.github.fetchDirectory(branch);
-                    if (this.activeFileName) {
-                        this.github.fetchFile(branch, this.activeFileName);
-                    }
+            () => [this.activeBranchName, this.github] as [string | undefined, Github | undefined],
+            action(([branch, github]) => {
+                if (branch && github) {
+                    github.fetchDirectory(branch);
                 }
             })
         );
         reaction(
-            () => this.activeFileName + `${this.github}`,
-            action((fileName) => {
-                if (this.activeFileName && this.activeBranchName) {
-                    console.log('activeFileName', this.activeFileName, this.activeBranchName);
-                    this.github?.fetchFile(this.activeBranchName, this.activeFileName).then((file) => {
-                        if (file && file.type === 'file' && !file.dir && this.activeBranchName) {
-                            this.github?.fetchDirectory(this.activeBranchName, file.parentPath);
+            () =>
+                [this.activeFileName, this.activeBranchName, this.github] as [
+                    string | undefined,
+                    string | undefined,
+                    Github | undefined
+                ],
+            action(([fileName, branch, github]) => {
+                if (fileName && branch && github) {
+                    github.fetchFile(branch, fileName).then((file) => {
+                        if (file && file.isFile()) {
+                            if (file.dir) {
+                                file.dir.fetchDirectory();
+                            } else {
+                                github.fetchDirectoryTree(file).then(() => {
+                                    file.dir?.fetchDirectory();
+                                });
+                            }
                         }
                     });
                 }
@@ -61,14 +68,6 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
                 }
             })
         );
-        reaction(
-            () => this.editedFile,
-            action((file) => {
-                if (file) {
-                    file.dir?.fetchDirectory();
-                }
-            })
-        );
     }
 
     @action
@@ -78,14 +77,14 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
         }
         this.github = new Github(this.settings.token, this);
         this.github.load();
-        const { activePath, activeBranchName } = this.settings;
-        if (activeBranchName) {
-            this.github.fetchDirectory(activeBranchName).then(() => {
-                if (activePath) {
-                    this.github?.fetchFile(activeBranchName, activePath);
-                }
-            });
-        }
+        // const { activePath, activeBranchName } = this.settings;
+        // if (activeBranchName) {
+        //     this.github.fetchDirectory(activeBranchName).then(() => {
+        //         if (activePath) {
+        //             this.github?.fetchFile(activeBranchName, activePath);
+        //         }
+        //     });
+        // }
     }
 
     @computed
