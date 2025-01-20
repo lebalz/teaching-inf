@@ -93,6 +93,7 @@ const CmsMdxEditor = observer((props: Props) => {
                         codeBlockLanguages: {
                             py: 'Python',
                             js: 'JavaScript',
+                            json: 'JSON',
                             jsx: 'JSX',
                             ts: 'TS',
                             tsx: 'TSX',
