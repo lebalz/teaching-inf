@@ -13,7 +13,7 @@ import type { LexicalEditor } from 'lexical';
 
 import * as React from 'react';
 import { useRef } from 'react';
-import styles from './styles.module.scss';
+import styles from '../styles.module.scss';
 import clsx from 'clsx';
 
 function clamp(value: number, min: number, max: number) {
@@ -37,7 +37,7 @@ export default function ImageResizer({
     editor: LexicalEditor;
     imageRef: { current: null | HTMLElement };
     maxWidth?: number;
-    onResizeEnd: (width: 'inherit' | number, height: 'inherit' | number) => void;
+    onResizeEnd: (width: number, height: number) => void;
     onResizeStart: () => void;
 }): React.ReactNode {
     const controlWrapperRef = useRef<HTMLDivElement>(null);
@@ -46,8 +46,8 @@ export default function ImageResizer({
         value: 'default'
     });
     const positioningRef = useRef<{
-        currentHeight: 'inherit' | number;
-        currentWidth: 'inherit' | number;
+        currentHeight: number;
+        currentWidth: number;
         direction: number;
         isResizing: boolean;
         ratio: number;
@@ -153,38 +153,25 @@ export default function ImageResizer({
         const positioning = positioningRef.current;
 
         const isHorizontal = positioning.direction & (Direction.east | Direction.west);
-        const isVertical = positioning.direction & (Direction.south | Direction.north);
 
         if (image !== null && positioning.isResizing) {
-            // Corner cursor
-            if (isHorizontal && isVertical) {
-                let diff = Math.floor(positioning.startX - event.clientX);
-                diff = positioning.direction & Direction.east ? -diff : diff;
-
-                const width = clamp(positioning.startWidth + diff, minWidth, maxWidthContainer);
-
-                const height = width / positioning.ratio;
-                image.style.width = `${width}px`;
-                image.style.height = `${height}px`;
-                positioning.currentHeight = height;
-                positioning.currentWidth = width;
-            } else if (isVertical) {
-                let diff = Math.floor(positioning.startY - event.clientY);
-                diff = positioning.direction & Direction.south ? -diff : diff;
-
-                const height = clamp(positioning.startHeight + diff, minHeight, maxHeightContainer);
-
-                image.style.height = `${height}px`;
-                positioning.currentHeight = height;
+            let height: number;
+            let width: number;
+            if (isHorizontal) {
+                const flip = positioning.direction & Direction.west ? 1 : -1;
+                const diff = Math.floor(positioning.startX - event.clientX) * flip;
+                width = clamp(positioning.startWidth + diff, minWidth, maxWidthContainer);
+                height = width / positioning.ratio;
             } else {
-                let diff = Math.floor(positioning.startX - event.clientX);
-                diff = positioning.direction & Direction.east ? -diff : diff;
-
-                const width = clamp(positioning.startWidth + diff, minWidth, maxWidthContainer);
-
-                image.style.width = `${width}px`;
-                positioning.currentWidth = width;
+                const flip = positioning.direction & Direction.north ? 1 : -1;
+                const diff = Math.floor(positioning.startY - event.clientY) * flip;
+                height = clamp(positioning.startHeight + diff, minHeight, maxHeightContainer);
+                width = height * positioning.ratio;
             }
+            image.style.width = `${width}px`;
+            image.style.height = `${height}px`;
+            positioning.currentHeight = height;
+            positioning.currentWidth = width;
         }
     };
     const handlePointerUp = () => {

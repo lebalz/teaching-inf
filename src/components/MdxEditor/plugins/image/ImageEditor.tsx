@@ -38,90 +38,28 @@ import { iconComponentFor$, readOnly$, useTranslation } from '@mdxeditor/editor'
 import { $isImageNode, type ImageNode } from './ImageNode';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@tdev-hooks/useStore';
+import clsx from 'clsx';
+import styles from './styles.module.scss';
 
-const styles: any = {};
 export interface ImageEditorProps {
     nodeKey: string;
     src: string;
     alt?: string;
-    title?: string;
-    width: number | 'inherit';
-    height: number | 'inherit';
-    rest: (MdxJsxAttribute | MdxJsxExpressionAttribute)[];
+    width?: number;
+    caption: string;
 }
-
-const imageCache = new Set();
-
-function useSuspenseImage(src: string) {
-    if (!imageCache.has(src)) {
-        // eslint-disable-next-line @typescript-eslint/no-throw-literal, @typescript-eslint/only-throw-error
-        throw new Promise((resolve) => {
-            const img = new Image();
-            img.src = src;
-            img.onerror = img.onload = () => {
-                imageCache.add(src);
-                resolve(null);
-            };
-        });
-    }
-}
-
-// function LazyImage({
-//     title,
-//     alt,
-//     className,
-//     imageRef,
-//     src,
-//     width,
-//     height
-// }: {
-//     title: string;
-//     alt: string;
-//     className: string | null;
-//     imageRef: { current: null | HTMLImageElement };
-//     src: string;
-//     width: number | 'inherit';
-//     height: number | 'inherit';
-// }): React.ReactNode {
-//     // useSuspenseImage(src);
-//     return (
-//         <img
-//             className={className ?? undefined}
-//             alt={alt}
-//             src={src}
-//             title={title}
-//             ref={imageRef}
-//             draggable="false"
-//             width={width}
-//             height={height}
-//         />
-//     );
-// }
 
 export const ImageEditor = observer((props: ImageEditorProps): React.ReactNode => {
-    const { src, title, alt, nodeKey, width, height, rest } = props;
+    const { src, alt, nodeKey } = props;
     const cmsStore = useStore('cmsStore');
     const { github } = cmsStore;
-    const [disableImageResize, disableImageSettingsButton, imagePreviewHandler, iconComponentFor, readOnly] =
-        useCellValues(
-            disableImageResize$,
-            disableImageSettingsButton$,
-            imagePreviewHandler$,
-            iconComponentFor$,
-            readOnly$
-        );
 
-    const openEditImageDialog = usePublisher(openEditImageDialog$);
     const imageRef = React.useRef<null | HTMLImageElement>(null);
-    const buttonRef = React.useRef<HTMLButtonElement | null>(null);
     const [isSelected, setSelected, clearSelection] = useLexicalNodeSelection(nodeKey);
     const [editor] = useLexicalComposerContext();
     const [selection, setSelection] = React.useState<BaseSelection | null>(null);
     const activeEditorRef = React.useRef<LexicalEditor | null>(null);
     const [isResizing, setIsResizing] = React.useState<boolean>(false);
-    const [imageSource, setImageSource] = React.useState<string | null>(null);
-    const [initialImagePath, setInitialImagePath] = React.useState<string | null>(null);
-    const t = useTranslation();
 
     const onDelete = React.useCallback(
         (payload: KeyboardEvent) => {
@@ -137,57 +75,6 @@ export const ImageEditor = observer((props: ImageEditorProps): React.ReactNode =
         },
         [isSelected, nodeKey]
     );
-
-    const onEnter = React.useCallback(
-        (event: KeyboardEvent) => {
-            const latestSelection = $getSelection();
-            const buttonElem = buttonRef.current;
-            if (isSelected && $isNodeSelection(latestSelection) && latestSelection.getNodes().length === 1) {
-                if (buttonElem !== null && buttonElem !== document.activeElement) {
-                    event.preventDefault();
-                    buttonElem.focus();
-                    return true;
-                }
-            }
-            return false;
-        },
-        [isSelected]
-    );
-
-    const onEscape = React.useCallback(
-        (event: KeyboardEvent) => {
-            if (buttonRef.current === event.target) {
-                $setSelection(null);
-                editor.update(() => {
-                    setSelected(true);
-                    const parentRootElement = editor.getRootElement();
-                    if (parentRootElement !== null) {
-                        parentRootElement.focus();
-                    }
-                });
-                return true;
-            }
-            return false;
-        },
-        [editor, setSelected]
-    );
-
-    React.useEffect(() => {
-        if (imagePreviewHandler) {
-            const callPreviewHandler = async () => {
-                if (!initialImagePath) {
-                    setInitialImagePath(src);
-                }
-                const updatedSrc = await imagePreviewHandler(src);
-                setImageSource(updatedSrc);
-            };
-            callPreviewHandler().catch((e: unknown) => {
-                console.error(e);
-            });
-        } else {
-            setImageSource(src);
-        }
-    }, [src, imagePreviewHandler, initialImagePath]);
 
     React.useEffect(() => {
         let isMounted = true;
@@ -241,17 +128,15 @@ export const ImageEditor = observer((props: ImageEditorProps): React.ReactNode =
                 COMMAND_PRIORITY_LOW
             ),
             editor.registerCommand(KEY_DELETE_COMMAND, onDelete, COMMAND_PRIORITY_LOW),
-            editor.registerCommand(KEY_BACKSPACE_COMMAND, onDelete, COMMAND_PRIORITY_LOW),
-            editor.registerCommand(KEY_ENTER_COMMAND, onEnter, COMMAND_PRIORITY_LOW),
-            editor.registerCommand(KEY_ESCAPE_COMMAND, onEscape, COMMAND_PRIORITY_LOW)
+            editor.registerCommand(KEY_BACKSPACE_COMMAND, onDelete, COMMAND_PRIORITY_LOW)
         );
         return () => {
             isMounted = false;
             unregister();
         };
-    }, [clearSelection, editor, isResizing, isSelected, nodeKey, onDelete, onEnter, onEscape, setSelected]);
+    }, [clearSelection, editor, isResizing, isSelected, nodeKey, onDelete, setSelected]);
 
-    const onResizeEnd = (nextWidth: 'inherit' | number, nextHeight: 'inherit' | number) => {
+    const onResizeEnd = (nextWidth: number, nextHeight: number) => {
         // Delay hiding the resize bars for click case
         setTimeout(() => {
             setIsResizing(false);
@@ -260,7 +145,7 @@ export const ImageEditor = observer((props: ImageEditorProps): React.ReactNode =
         editor.update(() => {
             const node = $getNodeByKey(nodeKey);
             if ($isImageNode(node)) {
-                (node as ImageNode).setWidthAndHeight(nextWidth, nextHeight);
+                (node as ImageNode).setWidth(nextWidth);
             }
         });
     };
@@ -274,100 +159,70 @@ export const ImageEditor = observer((props: ImageEditorProps): React.ReactNode =
 
     const draggable = $isNodeSelection(selection);
     const isFocused = isSelected;
-
-    const passedClassName = React.useMemo(() => {
-        if (rest.length === 0) {
-            return null;
-        }
-        const className = rest.find(
-            (attr) => attr.type === 'mdxJsxAttribute' && (attr.name === 'class' || attr.name === 'className')
-        );
-        if (className) {
-            return className.value as string;
-        }
+    if (gitImg?.type !== 'file' || !gitImg.isImage) {
         return null;
-    }, [rest]);
+    }
 
-    return imageSource !== null ? (
-        <React.Suspense fallback={null}>
-            <div className={styles.imageWrapper} data-editor-block-type="image">
-                <div draggable={draggable}>
-                    <img
-                        className={classNames(
-                            {
-                                [styles.focusedImage]: isFocused
-                            },
-                            passedClassName
-                        )}
-                        alt={alt}
-                        src={
-                            gitImg?.type === 'file' && gitImg.isImage
-                                ? `data:image/${gitImg.extension};base64,${gitImg.content}`
-                                : src
-                        }
-                        title={title}
-                        ref={imageRef}
-                        draggable="false"
-                        width={width}
-                        height={height}
-                    />
-                    {/* <LazyImage
-                        width={width}
-                        height={height}
-                        className={}
-                        src={imageSource}
-                        title={title ?? ''}
-                        alt={alt ?? ''}
-                        imageRef={imageRef}
-                    /> */}
-                </div>
-                {draggable && isFocused && !disableImageResize && (
-                    <ImageResizer
-                        editor={editor}
-                        imageRef={imageRef}
-                        onResizeStart={onResizeStart}
-                        onResizeEnd={onResizeEnd}
-                    />
-                )}
-                {readOnly || (
-                    <div className={styles.editImageToolbar}>
+    return (
+        <div className={styles.imageWrapper} data-editor-block-type="image">
+            <div draggable={draggable}>
+                <img
+                    className={clsx(isFocused && styles.focusedImage)}
+                    alt={alt}
+                    src={
+                        gitImg?.type === 'file' && gitImg.isImage
+                            ? `data:image/${gitImg.extension};base64,${gitImg.content}`
+                            : src
+                    }
+                    width={props.width}
+                    ref={imageRef}
+                    draggable="false"
+                />
+            </div>
+            {draggable && isFocused && (
+                <ImageResizer
+                    editor={editor}
+                    imageRef={imageRef}
+                    onResizeStart={onResizeStart}
+                    onResizeEnd={onResizeEnd}
+                />
+            )}
+            {/* <div className={styles.editImageToolbar}>
+                    <button
+                        className={styles.iconButton}
+                        type="button"
+                        title={t('imageEditor.deleteImage', 'Delete image')}
+                        disabled={readOnly}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            editor.update(() => {
+                                $getNodeByKey(nodeKey)?.remove();
+                            });
+                        }}
+                    >
+                        {iconComponentFor('delete_small')}
+                    </button>
+                    {!disableImageSettingsButton && (
                         <button
-                            className={styles.iconButton}
                             type="button"
-                            title={t('imageEditor.deleteImage', 'Delete image')}
+                            className={classNames(styles.iconButton, styles.editImageButton)}
+                            title={t('imageEditor.editImage', 'Edit image')}
                             disabled={readOnly}
-                            onClick={(e) => {
-                                e.preventDefault();
-                                editor.update(() => {
-                                    $getNodeByKey(nodeKey)?.remove();
+                            onClick={() => {
+                                openEditImageDialog({
+                                    nodeKey: nodeKey,
+                                    initialValues: {
+                                        src: initialImagePath ?? imageSource,
+                                        title: title ?? '',
+                                        altText: alt ?? ''
+                                    }
                                 });
                             }}
                         >
-                            {iconComponentFor('delete_small')}
+                            {iconComponentFor('settings')}
                         </button>
-                        {!disableImageSettingsButton && (
-                            <button
-                                type="button"
-                                className={classNames(styles.iconButton, styles.editImageButton)}
-                                title={t('imageEditor.editImage', 'Edit image')}
-                                disabled={readOnly}
-                                onClick={() => {
-                                    openEditImageDialog({
-                                        nodeKey: nodeKey,
-                                        initialValues: {
-                                            src: initialImagePath ?? imageSource,
-                                            title: title ?? '',
-                                            altText: alt ?? ''
-                                        }
-                                    });
-                                }}
-                            >
-                                {iconComponentFor('settings')}
-                            </button>
-                        )}
-                    </div>
-                )}
-            </div>
-        </React.Suspense>
-    ) : null;
+                    )}
+                </div> */}
+        </div>
+    );
 });

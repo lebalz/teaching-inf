@@ -36,7 +36,7 @@ import {
     realmPlugin
 } from '@mdxeditor/editor';
 import { $createImageNode, $isImageNode, CreateImageNodeParameters, ImageNode } from './ImageNode';
-import { MdastHtmlImageVisitor, MdastImageVisitor, MdastJsxImageVisitor } from './MdastImageVisitor';
+import { MdastImageVisitor } from './MdastImageVisitor';
 import { ImageDialog } from './ImageDialog';
 import React from 'react';
 
@@ -114,8 +114,7 @@ const internalInsertImage$ = Signal<SrcImageParameters>((r) => {
         theEditor?.update(() => {
             const imageNode = $createImageNode({
                 altText: values.altText ?? '',
-                src: values.src,
-                title: values.title ?? ''
+                src: values.src
             });
             $insertNodes([imageNode]);
             if ($isRootOrShadowRoot(imageNode.getParentOrThrow())) {
@@ -187,7 +186,6 @@ export const imageDialogState$ = Cell<
                               const { nodeKey } = dialogState;
                               const imageNode = $getNodeByKey(nodeKey)! as ImageNode;
 
-                              imageNode.setTitle(values.title);
                               imageNode.setAltText(values.altText);
                               imageNode.setSrc(src);
                           });
@@ -343,7 +341,7 @@ export const imagePlugin = realmPlugin<{
 }>({
     init(realm, params) {
         realm.pubIn({
-            [addImportVisitor$]: [MdastImageVisitor, MdastHtmlImageVisitor, MdastJsxImageVisitor],
+            [addImportVisitor$]: [MdastImageVisitor],
             [addLexicalNode$]: ImageNode,
             [addExportVisitor$]: LexicalImageVisitor,
             [addComposerChild$]: params?.ImageDialog ?? ImageDialog,
@@ -396,7 +394,6 @@ function onDragStart(event: DragEvent): boolean {
         JSON.stringify({
             data: {
                 altText: node.__altText,
-                title: node.__title,
                 key: node.getKey(),
                 src: node.__src
             },
