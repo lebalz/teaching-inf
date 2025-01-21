@@ -42,7 +42,13 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
             () => [this.activeBranchName, this.github] as [string | undefined, Github | undefined],
             action(([branch, github]) => {
                 if (branch && github) {
-                    github.fetchDirectory(branch);
+                    const { defaultBranchName } = github;
+                    github.fetchDirectory(branch).catch((err) => {
+                        console.log(`invalid branch, resetting to default: ${defaultBranchName}`, err);
+                        if (defaultBranchName) {
+                            this.setBranch(defaultBranchName);
+                        }
+                    });
                 }
             })
         );
