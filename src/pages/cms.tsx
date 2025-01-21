@@ -18,6 +18,7 @@ import Loader from '@tdev-components/Loader';
 import Card from '@tdev-components/shared/Card';
 import Branch from '@tdev-components/Github/Branch';
 import PR from '@tdev-components/Github/PR';
+import PathNav from '@tdev-components/MdxEditor/PathNav';
 
 function HomepageHeader() {
     const { siteConfig } = useDocusaurusContext();
@@ -57,7 +58,10 @@ const GhCallback = observer(() => {
                     }}
                 />
                 {cmsStore.editedFile && cmsStore.editedFile.content ? (
-                    <MdxEditor file={cmsStore.editedFile} key={cmsStore.editedFile.downloadUrl} />
+                    <>
+                        <PathNav item={cmsStore.editedFile} />
+                        <MdxEditor file={cmsStore.editedFile} key={cmsStore.editedFile.downloadUrl} />
+                    </>
                 ) : (
                     <>
                         {github.apiStates.get(`${settings.activeBranchName}:${settings.activePath}`) ===

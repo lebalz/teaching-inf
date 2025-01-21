@@ -46,8 +46,25 @@ abstract class iEntry {
         };
     }
 
-    isFile(): this is File | FileStub {
+    @computed
+    get _isFileType(): boolean {
         return this.type === 'file' || this.type === 'file_stub';
+    }
+
+    isFile(): this is File | FileStub {
+        return this._isFileType;
+    }
+
+    @computed
+    get pathParts() {
+        return this.path.split('/').filter(Boolean);
+    }
+
+    @computed
+    get tree() {
+        return this.pathParts.map((part, idx) => {
+            return this.store.findEntry(this.branch, this.pathParts.slice(0, idx + 1).join('/'));
+        });
     }
 
     @computed
@@ -55,7 +72,7 @@ abstract class iEntry {
         if (!this.path.includes('/')) {
             return 0;
         }
-        return this.path.split('/').filter(Boolean).length;
+        return this.pathParts.length;
     }
 
     @computed
@@ -86,6 +103,12 @@ abstract class iEntry {
     @computed
     get branch() {
         return this.URL.searchParams.get('ref')!;
+    }
+
+    findEntryByRelativePath(relPath: string) {
+        const base = this._isFileType ? this.parentPath : this.path;
+        const resolved = new URL(relPath, `path:/${base}/`).pathname.slice(1);
+        return this.store.findEntry(this.branch, resolved);
     }
 }
 

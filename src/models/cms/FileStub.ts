@@ -83,11 +83,6 @@ export abstract class iFileStub extends iEntry {
         );
     }
 
-    findEntryByRelativePath(relPath: string) {
-        const imgPath = new URL(relPath, `path:/${this.parentPath}/`).pathname.slice(1);
-        return this.store.findEntry(this.branch, imgPath);
-    }
-
     @computed
     get iconColor() {
         if (this.isImage) {
