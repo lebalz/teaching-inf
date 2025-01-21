@@ -20,6 +20,7 @@ import Branch from '@tdev-components/Github/Branch';
 import PR from '@tdev-components/Github/PR';
 import PathNav from '@tdev-components/MdxEditor/PathNav';
 import Directory from '@tdev-components/MdxEditor/Directory';
+import ImagePreview from '@tdev-components/Github/iFile/File/ImagePreview';
 
 function HomepageHeader() {
     const { siteConfig } = useDocusaurusContext();
@@ -66,7 +67,13 @@ const GhCallback = observer(() => {
                 ) : (
                     <>
                         {activeEntry.type === 'file' && activeEntry.content ? (
-                            <MdxEditor file={activeEntry} key={activeEntry.downloadUrl} />
+                            <>
+                                {activeEntry.isImage ? (
+                                    <ImagePreview file={activeEntry} />
+                                ) : (
+                                    <MdxEditor file={activeEntry} key={activeEntry.downloadUrl} />
+                                )}
+                            </>
                         ) : (
                             <>
                                 {github.apiStates.get(
