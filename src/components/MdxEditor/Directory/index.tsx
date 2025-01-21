@@ -24,11 +24,14 @@ const Directory = observer((props: Props) => {
         <div className={clsx(styles.directory)}>
             <Card
                 header={
-                    <h4>
+                    <h4 className={clsx(styles.title)}>
                         <Icon path={dir.icon} color={dir.iconColor} size={0.8} />
                         {dir.name}
                     </h4>
                 }
+                classNames={{
+                    body: styles.cardBody
+                }}
             >
                 <ul>
                     {dir.children.map((entry, idx) => {
