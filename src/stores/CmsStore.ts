@@ -1,6 +1,6 @@
 import { action, computed, observable, reaction } from 'mobx';
 import { RootStore } from '@tdev-stores/rootStore';
-import iStore from '@tdev-stores/iStore';
+import iStore, { ApiState } from '@tdev-stores/iStore';
 import {
     githubToken as apiGithubToken,
     load as apiLoadSettings,
@@ -15,10 +15,18 @@ import _ from 'lodash';
 import Settings, { REFRESH_THRESHOLD } from '@tdev-models/cms/Settings';
 import Github from '@tdev-models/cms/Github';
 import FileStub from '@tdev-models/cms/FileStub';
+import iEntry from '@tdev-models/cms/iEntry';
 const { organizationName, projectName } = siteConfig;
 if (!organizationName || !projectName) {
     throw new Error('"organizationName" and "projectName" must be set in docusaurus.config.ts');
 }
+
+const trimSlashes = (path: string) => {
+    if (path === '/') {
+        return path;
+    }
+    return path.replace(/^\/+|\/+$/g, '');
+};
 
 export class CmsStore extends iStore<`update-settings` | `load-settings` | `load-token`> {
     readonly root: RootStore;
@@ -86,6 +94,14 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
     }
 
     @computed
+    get activeBranch() {
+        if (!this.activeBranchName) {
+            return undefined;
+        }
+        return this.findBranch(this.activeBranchName);
+    }
+
+    @computed
     get activeFileName() {
         return this.settings?.activePath;
     }
@@ -99,7 +115,7 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
     }
 
     @computed
-    get refNames(): string[] {
+    get branchNames(): string[] {
         return this.github?.branches.map((b) => b.name) || [];
     }
 
@@ -107,16 +123,20 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
      * all files belonging to the current branch and located at the root level
      */
     @computed
-    get refsRootEntries() {
+    get branchesRootEntries() {
         if (!this.settings) {
             return [];
         }
-        return _.orderBy(this.branchEntries.filter((e) => e.level === 0) || [], ['name']);
+        return _.orderBy(
+            this.branchEntries.filter((e) => e.level === 1) || [],
+            ['type', 'name'],
+            ['asc', 'asc']
+        );
     }
 
     @computed
-    get editedFile() {
-        return this.settings?.activeFile;
+    get rootDir() {
+        return this.findEntry<Dir>(this.activeBranchName, '/');
     }
 
     @action
@@ -151,13 +171,13 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
 
     findEntry = computedFn(function <T = Dir | File>(
         this: CmsStore,
-        branch: string,
-        path: string
+        branch?: string,
+        path?: string
     ): T | undefined {
-        if (!this.github?.entries.has(branch)) {
+        if (!path || !branch || !this.github?.entries.has(branch)) {
             return undefined;
         }
-        const fPath = path.endsWith('/') ? path.replace(/\/+$/, '') : path;
+        const fPath = trimSlashes(path);
         return this.github.entries.get(branch)!.find((entry) => entry.path === fPath) as T;
     });
 
@@ -165,8 +185,12 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
         if (!this.github?.entries.has(branch)) {
             return [];
         }
-        const ref = parentPath.endsWith('/') ? parentPath.replace(/\/+$/, '') : parentPath;
-        return this.github.entries.get(branch)!.filter((entry) => entry.parentPath === ref);
+        const refPath = trimSlashes(parentPath);
+        return _.orderBy(
+            this.github.entries.get(branch)!.filter((entry) => entry.parentPath === refPath),
+            ['type', 'name'],
+            ['asc', 'asc']
+        );
     });
 
     findPr = computedFn(function (this: CmsStore, prNumber: number) {
@@ -184,6 +208,21 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
     @action
     setIsEditing(file: File | FileStub, isEditing: boolean) {
         this.settings?.setLocation(file.branch, isEditing ? file.path : null);
+    }
+
+    @action
+    setActiveEntry(entry: iEntry) {
+        this.settings?.setActiveEntry(entry);
+    }
+
+    @computed
+    get activeEntry() {
+        return this.settings?.activeEntry || this.rootDir;
+    }
+
+    @computed
+    get editedFile() {
+        return this.settings?.activeEntry;
     }
 
     @action

@@ -14,6 +14,7 @@ interface Props {
     color?: Color | string;
     confirmMessage?: string;
     text?: string | null;
+    disabled?: boolean;
 }
 
 export const Delete = (props: Props) => {
@@ -27,6 +28,7 @@ export const Delete = (props: Props) => {
             confirmIcon={props.iconOutline || mdiTrashCanOutline}
             confirmText={props.confirmMessage}
             size={1}
+            disabled={props.disabled}
             className={props.className}
             cancelIcon={mdiClose}
         />

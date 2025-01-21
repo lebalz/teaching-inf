@@ -144,6 +144,32 @@ class Github {
     }
 
     @action
+    deleteFile(file: File | FileStub) {
+        file.apiState = ApiState.SYNCING;
+        return this.octokit.repos
+            .deleteFile({
+                owner: organizationName!,
+                repo: projectName!,
+                message: `Delete ${file.path}`,
+                path: file.path,
+                sha: file.sha,
+                branch: file.branch
+            })
+            .then((res) => {
+                if (res.status === 200) {
+                    const current = this.store.findEntry(file.branch, file.path);
+                    if (current) {
+                        this.entries.get(file.branch)!.remove(current);
+                    }
+                }
+            })
+            .catch((err) => {
+                console.error('Error deleting file', err);
+                this.store.findEntry(file.branch, file.path)?.setApiState(ApiState.ERROR);
+            });
+    }
+
+    @action
     rebaseBranch(branch: string, to: string) {
         // octokit has no "rebase" action, so do a merge
         return this.octokit.repos
@@ -380,6 +406,23 @@ class Github {
         });
     }
 
+    _createRootDir(branch: string) {
+        const rootDir = new Dir(
+            {
+                path: '/',
+                git_url: null,
+                html_url: `https://github.com/${organizationName!}/${projectName!}/tree/${branch}`,
+                name: '/',
+                sha: this.store.findBranch(branch)?.sha || '',
+                url: `https://api.github.com/repos/${organizationName!}/${projectName!}/contents?ref=${branch}`
+            },
+            this.store
+        );
+        rootDir.setIsFetched(true);
+        console.log('Root dir', rootDir, rootDir.branch);
+        return rootDir;
+    }
+
     @action
     fetchDirectory(branch: string, path: string = '') {
         return this.octokit.repos
@@ -398,7 +441,10 @@ class Github {
                             return [];
                         }
                         if (!this.entries.has(branch)) {
-                            this.entries.set(branch, observable.array([], { deep: false }));
+                            this.entries.set(
+                                branch,
+                                observable.array([this._createRootDir(branch)], { deep: false })
+                            );
                         }
                         const newEntries: (Dir | FileStub | File)[] = [];
                         const arr = this.entries.get(branch)!;
@@ -474,9 +520,9 @@ class Github {
      * This method adds the File only to the entries map - it won't create or update the file on GitHub.
      */
     @action
-    _addFileEntry(branch: string, file: File) {
+    _addFileEntry(branch: string, file: File | Dir) {
         if (!this.entries.has(branch)) {
-            this.entries.set(branch, observable.array([], { deep: false }));
+            this.entries.set(branch, observable.array([this._createRootDir(branch)], { deep: false }));
         }
         const old = this.store.findEntry(branch, file.path);
         if (old) {

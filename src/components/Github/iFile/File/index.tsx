@@ -11,6 +11,8 @@ import Button from '@tdev-components/shared/Button';
 import { mdiCircleEditOutline, mdiContentSave, mdiLoading, mdiRestore } from '@mdi/js';
 import { useStore } from '@tdev-hooks/useStore';
 import { ApiState } from '@tdev-stores/iStore';
+import Link from '@docusaurus/Link';
+import { Delete } from '@tdev-components/shared/Button/Delete';
 interface Props {
     file: FileModel | FileStub;
 }
@@ -20,18 +22,28 @@ const File = observer((props: Props) => {
     const { file } = props;
     return (
         <li className={clsx(styles.file, shared.item)}>
-            <Icon path={file.icon} size={0.8} color={file.iconColor} />
-            <span className={clsx(shared.item)}>{file.name}</span>
+            <Link
+                onClick={() => {
+                    cmsStore.setIsEditing(file, true);
+                }}
+            >
+                <Icon path={file.icon} size={0.8} color={file.iconColor} />
+                <span className={clsx(shared.item)}>{file.name}</span>
+            </Link>
             {file.isImage ? (
                 <ImagePreview file={file} />
             ) : (
-                <Button
-                    icon={mdiCircleEditOutline}
-                    color="orange"
-                    size={0.7}
-                    onClick={() => {
-                        cmsStore.setIsEditing(file, true);
+                <Delete
+                    onDelete={() => {
+                        cmsStore.github?.deleteFile(file);
                     }}
+                    disabled={cmsStore.isOnMainBranch}
+                    text={''}
+                    title={
+                        cmsStore.isOnMainBranch
+                            ? `Es können keine Dateien im ${cmsStore.github?.defaultBranchName || 'main'}-Branch gelöscht werden.`
+                            : undefined
+                    }
                 />
             )}
             {file.type === 'file' && file.isDirty && (

@@ -3,6 +3,8 @@ import { CmsStore } from '@tdev-stores/CmsStore';
 import _ from 'lodash';
 import { action, computed, observable } from 'mobx';
 import File from './File';
+import iEntry from './iEntry';
+import Dir from './Dir';
 
 export const REFRESH_THRESHOLD = 60 * 60;
 
@@ -34,7 +36,7 @@ class Settings {
     }
 
     @computed
-    get activeFile(): File | undefined {
+    get activeEntry(): File | undefined {
         if (!this.activePath || !this.activeBranchName) {
             return;
         }
@@ -62,6 +64,17 @@ class Settings {
         this.activePath = path;
         if (save) {
             this.save();
+        }
+    }
+
+    @action
+    setActiveEntry(entry: iEntry) {
+        this.setActiveBranchName(entry.branch, false);
+        this.setActivePath(entry.path, false);
+        if (entry._isFileType) {
+            this.save();
+        } else {
+            (entry as Dir).setOpen(true);
         }
     }
 

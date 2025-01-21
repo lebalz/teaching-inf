@@ -19,6 +19,7 @@ import Card from '@tdev-components/shared/Card';
 import Branch from '@tdev-components/Github/Branch';
 import PR from '@tdev-components/Github/PR';
 import PathNav from '@tdev-components/MdxEditor/PathNav';
+import Directory from '@tdev-components/MdxEditor/Directory';
 
 function HomepageHeader() {
     const { siteConfig } = useDocusaurusContext();
@@ -35,20 +36,22 @@ function HomepageHeader() {
 const GhCallback = observer(() => {
     const cmsStore = useStore('cmsStore');
     const access = useGithubAccess();
-    const { settings, github } = cmsStore;
+    const { settings, github, activeEntry } = cmsStore;
+
     if (access === 'no-token') {
         return <Redirect to={'/gh-login'} />;
     }
-    if (access === 'loading' || !settings || !github) {
+    if (access === 'loading' || !settings || !github || !activeEntry) {
         return <Layout>Loading...</Layout>;
     }
+
     return (
         <Layout>
             <HomepageHeader />
             <main>
                 <Selector
                     onSelect={(branchName) => {
-                        if (cmsStore.refNames.includes(branchName)) {
+                        if (cmsStore.branchNames.includes(branchName)) {
                             cmsStore.setBranch(branchName);
                         } else {
                             github.createNewBranch(branchName).then((branch) => {
@@ -57,35 +60,29 @@ const GhCallback = observer(() => {
                         }
                     }}
                 />
-                {cmsStore.editedFile && cmsStore.editedFile.content ? (
-                    <>
-                        <PathNav item={cmsStore.editedFile} />
-                        <MdxEditor file={cmsStore.editedFile} key={cmsStore.editedFile.downloadUrl} />
-                    </>
+                <PathNav item={activeEntry} />
+                {activeEntry.type === 'dir' ? (
+                    <Directory dir={activeEntry} />
                 ) : (
                     <>
-                        {github.apiStates.get(`${settings.activeBranchName}:${settings.activePath}`) ===
-                            ApiState.SYNCING && (
-                            <Card>
-                                <Loader
-                                    label={`${settings.activeBranchName}:${settings.activePath} wird geladen...`}
-                                    size={2}
-                                />
-                            </Card>
+                        {activeEntry.type === 'file' && activeEntry.content ? (
+                            <MdxEditor file={activeEntry} key={activeEntry.downloadUrl} />
+                        ) : (
+                            <>
+                                {github.apiStates.get(
+                                    `${settings.activeBranchName}:${settings.activePath}`
+                                ) === ApiState.SYNCING && (
+                                    <Card>
+                                        <Loader
+                                            label={`${settings.activeBranchName}:${settings.activePath} wird geladen...`}
+                                            size={2}
+                                        />
+                                    </Card>
+                                )}
+                            </>
                         )}
                     </>
                 )}
-                <Details summary={'Files'}>
-                    <h4>Files</h4>
-                    <ul>
-                        {cmsStore.refsRootEntries.map((entry, idx) => {
-                            if (entry.type === 'file' || entry.type === 'file_stub') {
-                                return <File file={entry} key={entry.path} />;
-                            }
-                            return <Dir dir={entry} key={entry.path} />;
-                        })}
-                    </ul>
-                </Details>
                 <Details summary={'PRs'} open>
                     <h4>PRs und Branches</h4>
                     <ul>

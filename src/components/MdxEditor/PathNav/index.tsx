@@ -4,13 +4,14 @@ import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@tdev-hooks/useStore';
 import iEntry from '@tdev-models/cms/iEntry';
+import Icon from '@mdi/react';
 
 interface Props {
     item: iEntry;
 }
 
 const PathNav = observer((props: Props) => {
-    // const cmsStore = useStore('cmsStore');
+    const cmsStore = useStore('cmsStore');
     const { item } = props;
     return (
         <div className={clsx(styles.PathNav)}>
@@ -21,7 +22,13 @@ const PathNav = observer((props: Props) => {
                             return null;
                         }
                         return (
-                            <li className={clsx('breadcrumbs__item')} key={index}>
+                            <li
+                                className={clsx(
+                                    'breadcrumbs__item',
+                                    part.path === item.path && 'breadcrumbs__item--active'
+                                )}
+                                key={index}
+                            >
                                 {part.children.length > 0 ? (
                                     <div className={clsx('dropdown dropdown--hoverable')}>
                                         <button
@@ -29,16 +36,41 @@ const PathNav = observer((props: Props) => {
                                                 'button',
                                                 'button--secondary',
                                                 'button--sm',
-                                                'breadcrumbs__link'
+                                                'breadcrumbs__link',
+                                                styles.breadcrumbsButton
                                             )}
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                cmsStore.setActiveEntry(part);
+                                            }}
                                         >
                                             {part.name}
                                         </button>
                                         <ul className={clsx('dropdown__menu')}>
                                             {part.children.map((child, idx) => {
                                                 return (
-                                                    <li>
-                                                        <a className={clsx('dropdown__link')} href="#url">
+                                                    <li key={idx}>
+                                                        <a
+                                                            className={clsx(
+                                                                'dropdown__link',
+                                                                styles.item,
+                                                                child.path === item.path && styles.active
+                                                            )}
+                                                            onClick={(e) => {
+                                                                e.preventDefault();
+                                                                e.stopPropagation();
+                                                                // if (child.type === 'dir') {
+                                                                //     child.fetchDirectory();
+                                                                // }
+                                                                cmsStore.setActiveEntry(child);
+                                                            }}
+                                                        >
+                                                            <Icon
+                                                                path={child.icon}
+                                                                color={child.iconColor}
+                                                                size={0.7}
+                                                            />{' '}
                                                             {child.name}
                                                         </a>
                                                     </li>
@@ -52,7 +84,6 @@ const PathNav = observer((props: Props) => {
                                         onClick={(e) => {
                                             e.preventDefault();
                                             e.stopPropagation();
-                                            console.log('clicked', part);
                                         }}
                                         href="#"
                                     >

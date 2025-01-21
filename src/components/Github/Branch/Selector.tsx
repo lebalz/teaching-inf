@@ -31,7 +31,7 @@ const Selector = observer((props: Props) => {
                 }}
                 name="github.branch"
                 menuPortalTarget={document.body}
-                options={cmsStore.refNames.map((br) => ({
+                options={cmsStore.branchNames.map((br) => ({
                     label: br,
                     value: br
                 }))}

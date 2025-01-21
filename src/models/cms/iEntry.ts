@@ -1,7 +1,8 @@
 import { CmsStore } from '@tdev-stores/CmsStore';
-import { computed } from 'mobx';
+import { action, computed, observable } from 'mobx';
 import FileStub from './FileStub';
 import Dir from './Dir';
+import { ApiState } from '@tdev-stores/iStore';
 
 export interface iEntryProps {
     name: string;
@@ -22,6 +23,7 @@ abstract class iEntry {
     readonly url: string;
     readonly htmlUrl: string | null;
     readonly gitUrl: string | null;
+    @observable accessor apiState: ApiState = ApiState.IDLE;
 
     constructor(props: iEntryProps, store: CmsStore) {
         this.store = store;
@@ -51,13 +53,18 @@ abstract class iEntry {
         return this.type === 'file' || this.type === 'file_stub';
     }
 
+    @action
+    setApiState(state: ApiState) {
+        this.apiState = state;
+    }
+
     isFile(): this is File | FileStub {
         return this._isFileType;
     }
 
     @computed
     get pathParts() {
-        return this.path.split('/').filter(Boolean);
+        return ['/', ...this.path.split('/').filter(Boolean)];
     }
 
     @computed
@@ -69,15 +76,19 @@ abstract class iEntry {
 
     @computed
     get level() {
-        if (!this.path.includes('/')) {
-            return 0;
-        }
-        return this.pathParts.length;
+        return this.pathParts.length - 1;
     }
 
     @computed
     get parentPath() {
-        return this.path.replace(this.name, '').replace(/\/+$/, '');
+        if (this.path === '/') {
+            return undefined;
+        }
+        const path = this.path.replace(this.name, '').replace(/\/+$/, '');
+        if (path === '') {
+            return '/';
+        }
+        return path;
     }
 
     @computed
