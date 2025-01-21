@@ -47,6 +47,8 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
                         console.log(`invalid branch, resetting to default: ${defaultBranchName}`, err);
                         if (defaultBranchName) {
                             this.setBranch(defaultBranchName);
+                        } else {
+                            this.settings?.clearLocation();
                         }
                     });
                 }
