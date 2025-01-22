@@ -84,6 +84,11 @@ export abstract class iFileStub extends iEntry {
     }
 
     @computed
+    get isMarkdown() {
+        return /(md|mdx)$/i.test(this.extension);
+    }
+
+    @computed
     get iconColor() {
         if (this.isImage) {
             return 'var(--ifm-color-blue)';

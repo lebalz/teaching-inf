@@ -44,6 +44,7 @@ const File = observer((props: Props) => {
                             ? `Es können keine Dateien im ${cmsStore.github?.defaultBranchName || 'main'}-Branch gelöscht werden.`
                             : undefined
                     }
+                    size={0.8}
                 />
             )}
             {file.type === 'file' && file.isDirty && (

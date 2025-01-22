@@ -56,6 +56,7 @@ export interface Props {
 
 const CmsMdxEditor = observer((props: Props) => {
     const { file } = props;
+    const { isMarkdown } = file;
     const ref = React.useRef<MDXEditorMethods>(null);
     return (
         <ErrorBoundary
