@@ -16,17 +16,11 @@ import Settings, { REFRESH_THRESHOLD } from '@tdev-models/cms/Settings';
 import Github from '@tdev-models/cms/Github';
 import FileStub from '@tdev-models/cms/FileStub';
 import iEntry from '@tdev-models/cms/iEntry';
+import { trimSlashes } from '@tdev-models/helpers/trimSlashes';
 const { organizationName, projectName } = siteConfig;
 if (!organizationName || !projectName) {
     throw new Error('"organizationName" and "projectName" must be set in docusaurus.config.ts');
 }
-
-const trimSlashes = (path: string) => {
-    if (path === '/') {
-        return path;
-    }
-    return path.replace(/^\/+|\/+$/g, '');
-};
 
 export class CmsStore extends iStore<`update-settings` | `load-settings` | `load-token`> {
     readonly root: RootStore;

@@ -3,11 +3,9 @@
     margin: 2em;
     .cardBody {
         padding-top: 0.25em;
-    }
-    .title {
-        display: flex;
-        gap: 0.5em;
-        align-items: center;
+        .dirTree {
+            padding-left: 0;
+        }
     }
 }
 @media screen and (max-width: 620px) {

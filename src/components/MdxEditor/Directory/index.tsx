@@ -23,23 +23,12 @@ const Directory = observer((props: Props) => {
     return (
         <div className={clsx(styles.directory)}>
             <Card
-                header={
-                    <h4 className={clsx(styles.title)}>
-                        <Icon path={dir.icon} color={dir.iconColor} size={0.8} />
-                        {dir.name}
-                    </h4>
-                }
                 classNames={{
                     body: styles.cardBody
                 }}
             >
-                <ul>
-                    {dir.children.map((entry, idx) => {
-                        if (entry.type === 'file' || entry.type === 'file_stub') {
-                            return <File file={entry} key={entry.path} />;
-                        }
-                        return <Dir dir={entry} key={entry.path} />;
-                    })}
+                <ul className={clsx(styles.dirTree)}>
+                    <Dir dir={dir} />
                 </ul>
             </Card>
         </div>

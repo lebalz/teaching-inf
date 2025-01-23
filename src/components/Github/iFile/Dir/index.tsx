@@ -28,7 +28,7 @@ const Dir = observer((props: Props) => {
                     <Icon spin={dir.isSyncing} path={dir.icon} size={0.8} color={dir.iconColor} />
                     {dir.name}
                 </span>
-                <AddFilePopup />
+                <AddFilePopup dir={dir} />
             </div>
             {dir.isOpen && dir.children.length > 0 && (
                 <ul>

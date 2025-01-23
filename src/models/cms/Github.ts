@@ -366,13 +366,14 @@ class Github {
                             const file = new File({ ...resContent, content: content }, this.store);
                             this._addFileEntry(branch, file);
                             file.setEditing(true);
+                            return file;
                         }
                         break;
                     case 201:
                         // file created
                         const file = new File({ ...resContent, content: content }, this.store);
                         this._addFileEntry(branch, file);
-                        break;
+                        return file;
                 }
             })
         );
@@ -395,15 +396,17 @@ class Github {
                 promises.push(res);
             }
         }
-        return Promise.all(promises).then(() => {
-            if (file.dir) {
-                let curr: Dir | undefined = file.dir;
-                while (curr) {
-                    curr.setIsFetched(true);
-                    curr = curr.dir;
+        return Promise.all(promises).then(
+            action(() => {
+                if (file.dir) {
+                    let curr: Dir | undefined = file.dir;
+                    while (curr) {
+                        curr.setIsFetched(true);
+                        curr = curr.dir;
+                    }
                 }
-            }
-        });
+            })
+        );
     }
 
     _createRootDir(branch: string) {
