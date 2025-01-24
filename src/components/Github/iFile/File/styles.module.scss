@@ -6,4 +6,13 @@
     &:hover {
         box-shadow: var(--ifm-global-shadow-md);
     }
+    .actions {
+        display: flex;
+    }
+    .fileLink {
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+        gap: 0.25em;
+    }
 }

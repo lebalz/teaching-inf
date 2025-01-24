@@ -72,6 +72,23 @@ export abstract class iFileStub extends iEntry {
     }
 
     @computed
+    get isVideo() {
+        return /(mp4|mov|avi|wmv|flv|mkv|webm|m4v|mpg|mpeg)$/i.test(this.extension);
+    }
+
+    @computed
+    get isBin() {
+        return /(exe|zip|rar|7z|tar|gz|bin|iso|msi|dmg|pkg|deb|rpm|xlsx?|docx?|pptx?|pdf|accdb|mdb|psd|ai|indd)$/i.test(
+            this.extension
+        );
+    }
+
+    @computed
+    get isAsset() {
+        return this.isImage || this.isVideo || this.isBin;
+    }
+
+    @computed
     get isPdf() {
         return /(pdf)$/i.test(this.extension);
     }

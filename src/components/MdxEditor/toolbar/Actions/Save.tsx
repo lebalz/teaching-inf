@@ -2,11 +2,10 @@ import React from 'react';
 import { observer } from 'mobx-react-lite';
 import _ from 'lodash';
 import File from '@tdev-models/cms/File';
-import BrowserOnly from '@docusaurus/BrowserOnly';
-import Loader from '@tdev-components/Loader';
 import Button from '@tdev-components/shared/Button';
-import { mdiContentSave } from '@mdi/js';
+import { mdiCircle, mdiContentSave } from '@mdi/js';
 import { Color } from '@tdev-components/shared/Colors';
+import Icon from '@mdi/react';
 
 export interface Props {
     file: File;
@@ -24,9 +23,13 @@ const Save = observer((props: Props) => {
                 file.save();
             }}
             text="Speichern"
-            disabled={!file.isDirty}
+            disabled={!file.isDirty || file.isOnMainBranch}
             color={props.color ?? 'green'}
             className={props.className}
+            floatingIcon={
+                file.isDirty &&
+                file.isOnMainBranch && <Icon path={mdiCircle} size={0.3} color="var(--ifm-color-success)" />
+            }
         />
     );
 });

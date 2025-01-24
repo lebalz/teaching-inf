@@ -7,7 +7,13 @@ import Loader from '@tdev-components/Loader';
 import Save from './Save';
 import Popup from 'reactjs-popup';
 import Button from '@tdev-components/shared/Button';
-import { mdiChevronDown, mdiCloseCircle, mdiCloseCircleOutline, mdiSourceBranchPlus } from '@mdi/js';
+import {
+    mdiChevronDown,
+    mdiCloseCircle,
+    mdiCloseCircleOutline,
+    mdiContentSaveAlert,
+    mdiSourceBranchPlus
+} from '@mdi/js';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
 import Card from '@tdev-components/shared/Card';
@@ -65,21 +71,38 @@ const Actions = observer((props: Props) => {
                                 confirmIcon={mdiCloseCircle}
                                 confirmColor="red"
                                 icon={mdiCloseCircleOutline}
-                                iconSide="right"
+                                iconSide="left"
                             />
                         </li>
                         {file.isOnMainBranch && (
-                            <li className={clsx(styles.option)}>
-                                <Button
-                                    text="In neuem Branch speichern"
-                                    onClick={() => {
-                                        const name = github.nextPrName;
-                                        github.saveFileInNewBranchAndCreatePr(file, name);
-                                    }}
-                                    icon={mdiSourceBranchPlus}
-                                    color="primary"
-                                />
-                            </li>
+                            <>
+                                <li className={clsx(styles.option)}>
+                                    <Button
+                                        text="In neuem Branch speichern"
+                                        onClick={() => {
+                                            const name = github.nextPrName;
+                                            github.saveFileInNewBranchAndCreatePr(file, name);
+                                        }}
+                                        icon={mdiSourceBranchPlus}
+                                        color="primary"
+                                        iconSide="left"
+                                    />
+                                </li>
+                                <li className={clsx(styles.option)}>
+                                    <Confirm
+                                        text={`Auf dem ${file.branch}-Branch speichern`}
+                                        onConfirm={() => {
+                                            const name = github.nextPrName;
+                                            github.saveFileInNewBranchAndCreatePr(file, name);
+                                        }}
+                                        icon={mdiContentSaveAlert}
+                                        confirmColor="orange"
+                                        confirmText={`Wirklich im ${file.branch}-Branch speichern?`}
+                                        color="green"
+                                        iconSide="left"
+                                    />
+                                </li>
+                            </>
                         )}
                     </ul>
                 </Card>

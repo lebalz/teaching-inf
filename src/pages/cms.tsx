@@ -22,18 +22,6 @@ import PathNav from '@tdev-components/MdxEditor/PathNav';
 import Directory from '@tdev-components/MdxEditor/Directory';
 import ImagePreview from '@tdev-components/Github/iFile/File/ImagePreview';
 
-function HomepageHeader() {
-    const { siteConfig } = useDocusaurusContext();
-    return (
-        <header className={clsx('hero hero--primary', 'gugus', styles.heroBanner)}>
-            <div className="container">
-                <h1 className="hero__title">{siteConfig.title}</h1>
-                <p className="hero__subtitle">{siteConfig.tagline}</p>
-            </div>
-        </header>
-    );
-}
-
 const GhCallback = observer(() => {
     const cmsStore = useStore('cmsStore');
     const access = useGithubAccess();
@@ -48,8 +36,8 @@ const GhCallback = observer(() => {
 
     return (
         <Layout>
-            <HomepageHeader />
             <main>
+                <PathNav item={activeEntry} />
                 <Selector
                     onSelect={(branchName) => {
                         if (cmsStore.branchNames.includes(branchName)) {
@@ -61,7 +49,6 @@ const GhCallback = observer(() => {
                         }
                     }}
                 />
-                <PathNav item={activeEntry} />
                 {activeEntry.type === 'dir' ? (
                     <Directory dir={activeEntry} />
                 ) : (

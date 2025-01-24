@@ -87,6 +87,11 @@ class Github {
     }
 
     @action
+    clearEntries(branch: string) {
+        this.entries.set(branch, observable.array([], { deep: false }));
+    }
+
+    @action
     fetchPRs(page?: number) {
         return this.octokit.pulls
             .list({
@@ -155,14 +160,16 @@ class Github {
                 sha: file.sha,
                 branch: file.branch
             })
-            .then((res) => {
-                if (res.status === 200) {
-                    const current = this.store.findEntry(file.branch, file.path);
-                    if (current) {
-                        this.entries.get(file.branch)!.remove(current);
+            .then(
+                action((res) => {
+                    if (res.status === 200) {
+                        const current = this.store.findEntry(file.branch, file.path);
+                        if (current) {
+                            this.entries.get(file.branch)!.remove(current);
+                        }
                     }
-                }
-            })
+                })
+            )
             .catch((err) => {
                 console.error('Error deleting file', err);
                 this.store.findEntry(file.branch, file.path)?.setApiState(ApiState.ERROR);
@@ -427,7 +434,7 @@ class Github {
     }
 
     @action
-    fetchDirectory(branch: string, path: string = '') {
+    fetchDirectory(branch: string, path: string = '', force: boolean = false) {
         return this.octokit.repos
             .getContent({
                 owner: organizationName!,
@@ -454,7 +461,7 @@ class Github {
                         entries.forEach((entry) => {
                             const old = arr.find((e) => e.path === entry.path);
                             if (old) {
-                                if (old.sha === entry.sha) {
+                                if (!force && old.sha === entry.sha) {
                                     newEntries.push(old);
                                     return;
                                 }

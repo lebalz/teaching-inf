@@ -54,6 +54,15 @@ abstract class iEntry {
     }
 
     @action
+    openRecursive() {
+        this.tree.forEach((entry) => {
+            if (entry?.type === 'dir') {
+                entry.setOpen(true);
+            }
+        });
+    }
+
+    @action
     setApiState(state: ApiState) {
         this.apiState = state;
     }

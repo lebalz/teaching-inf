@@ -2,25 +2,30 @@ import React from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
-import { useStore } from '@tdev-hooks/useStore';
 import Card from '@tdev-components/shared/Card';
 import TextInput from '@tdev-components/shared/TextInput';
 import Button from '@tdev-components/shared/Button';
-import { mdiClose, mdiFilePlus, mdiLoading } from '@mdi/js';
+import { mdiClose, mdiFileEdit, mdiFileMove, mdiFilePlus, mdiLoading } from '@mdi/js';
 import { ApiState } from '@tdev-stores/iStore';
 import Alert from '@tdev-components/shared/Alert';
+import FileStub from '@tdev-models/cms/FileStub';
+import File from '@tdev-models/cms/File';
+import { resolvePath } from '@tdev-models/helpers/resolvePath';
 
 export type Response = { state: ApiState; message?: string };
 
 interface Props {
     onDiscard: () => void;
-    onCreate: (path: string) => Promise<Response>;
+    onCreateOrUpdate: (path: string, file?: FileStub) => Promise<Response>;
+    file?: FileStub | File;
 }
 
-const AddFile = observer((props: Props) => {
+const AddOrUpdateFile = observer((props: Props) => {
     const [alert, setAlert] = React.useState('');
-    const [name, setName] = React.useState('');
+    const [name, setName] = React.useState(props.file?.name || '');
     const [apiState, setApiState] = React.useState(ApiState.IDLE);
+    const isUpdate = !!props.file;
+    const isSameDir = !/\//.test(name);
 
     return (
         <Card
@@ -36,14 +41,23 @@ const AddFile = observer((props: Props) => {
                         }}
                         color="black"
                         disabled={apiState !== ApiState.IDLE}
+                        iconSide="left"
                     />
                     <Button
-                        text="Datei erstellen"
-                        icon={apiState === ApiState.SYNCING ? mdiLoading : mdiFilePlus}
+                        text={isUpdate ? 'Datei aktualisieren' : 'Datei erstellen'}
+                        icon={
+                            apiState === ApiState.SYNCING
+                                ? mdiLoading
+                                : isUpdate
+                                  ? isSameDir
+                                      ? mdiFileEdit
+                                      : mdiFileMove
+                                  : mdiFilePlus
+                        }
                         spin={apiState === ApiState.SYNCING}
                         onClick={() => {
                             setApiState(ApiState.SYNCING);
-                            props.onCreate(name).then((res) => {
+                            props.onCreateOrUpdate(name).then((res) => {
                                 if (res.state === 'error') {
                                     setAlert(res.message || '');
                                     setApiState(ApiState.IDLE);
@@ -51,7 +65,7 @@ const AddFile = observer((props: Props) => {
                             });
                         }}
                         disabled={!name || apiState !== ApiState.IDLE}
-                        color="green"
+                        color={isUpdate ? 'orange' : 'green'}
                     />
                 </div>
             }
@@ -61,9 +75,21 @@ const AddFile = observer((props: Props) => {
                     {alert}
                 </Alert>
             )}
+            {isUpdate && (
+                <div className={clsx(styles.pathInfo)}>
+                    <small>
+                        <span className={clsx(styles.label)}>Aktuell:</span>
+                        <code>{props.file!.path}</code>
+                    </small>
+                    <small>
+                        <span className={clsx(styles.label)}>Neu:</span>
+                        <code>{resolvePath(props.file!.parentPath || '', name)}</code>
+                    </small>
+                </div>
+            )}
             <TextInput onChange={setName} value={name} />
         </Card>
     );
 });
 
-export default AddFile;
+export default AddOrUpdateFile;

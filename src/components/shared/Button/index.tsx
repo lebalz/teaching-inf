@@ -33,6 +33,7 @@ export interface Base {
     spin?: boolean | number;
     noBorder?: boolean;
     type?: 'button' | 'submit' | 'reset';
+    floatingIcon?: ReactNode;
 }
 interface IconProps extends Base {
     icon: ReactNode | string;
@@ -146,6 +147,7 @@ const Button = (props: Props) => {
                 <span className={clsx(styles.buttonInner)}>
                     <ButtonInner {...props} />
                 </span>
+                {props.floatingIcon && <span className={styles.floatingIcon}>{props.floatingIcon}</span>}
             </Link>
         );
     }
@@ -159,6 +161,7 @@ const Button = (props: Props) => {
             title={props.title}
         >
             <ButtonInner {...props} />
+            {props.floatingIcon && <span className={styles.floatingIcon}>{props.floatingIcon}</span>}
         </button>
     );
 };

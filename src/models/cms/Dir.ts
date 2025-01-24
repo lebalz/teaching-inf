@@ -45,7 +45,7 @@ class Dir extends iEntry {
             return Promise.resolve(this);
         }
         this.apiState = ApiState.SYNCING;
-        return this.store.github?.fetchDirectory(this.branch, this.path).then(
+        return this.store.github?.fetchDirectory(this.branch, this.path, force).then(
             action(() => {
                 this.apiState = ApiState.IDLE;
                 this.setIsFetched(true);

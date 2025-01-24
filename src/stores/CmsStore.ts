@@ -57,17 +57,7 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
                 ],
             action(([fileName, branch, github]) => {
                 if (fileName && branch && github) {
-                    github.fetchFile(branch, fileName).then((file) => {
-                        if (file && file.isFile()) {
-                            if (file.dir) {
-                                file.dir.fetchDirectory();
-                            } else {
-                                github.fetchDirectoryTree(file).then(() => {
-                                    file.dir?.fetchDirectory();
-                                });
-                            }
-                        }
-                    });
+                    this.fetchFile(fileName, branch);
                 }
             })
         );
@@ -88,6 +78,25 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
         }
         this.github = new Github(this.settings.token, this);
         this.github.load();
+    }
+
+    @action
+    fetchFile(fileName: string, branch: string) {
+        const github = this.github;
+        if (!github) {
+            return Promise.resolve(undefined);
+        }
+        return github.fetchFile(branch, fileName).then((file) => {
+            if (file && file.isFile()) {
+                if (file.dir) {
+                    return file.dir.fetchDirectory()?.then(() => file);
+                } else {
+                    return github.fetchDirectoryTree(file).then(() => {
+                        return file.dir?.fetchDirectory()?.then(() => file);
+                    });
+                }
+            }
+        });
     }
 
     @computed
@@ -213,7 +222,10 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
     }
 
     @action
-    setActiveEntry(entry: iEntry) {
+    setActiveEntry(entry: iEntry, reload = false) {
+        if (reload) {
+            this.github?.clearEntries(entry.branch);
+        }
         this.settings?.setActiveEntry(entry);
     }
 
