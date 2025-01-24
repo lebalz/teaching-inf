@@ -11,13 +11,14 @@ import Alert from '@tdev-components/shared/Alert';
 import FileStub from '@tdev-models/cms/FileStub';
 import File from '@tdev-models/cms/File';
 import { resolvePath } from '@tdev-models/helpers/resolvePath';
+import { Confirm } from '@tdev-components/shared/Button/Confirm';
 
 export type Response = { state: ApiState; message?: string };
 
 interface Props {
     onDiscard: () => void;
     onCreateOrUpdate: (path: string, file?: FileStub) => Promise<Response>;
-    file?: FileStub | File;
+    file?: File;
 }
 
 const AddOrUpdateFile = observer((props: Props) => {
@@ -43,7 +44,7 @@ const AddOrUpdateFile = observer((props: Props) => {
                         disabled={apiState !== ApiState.IDLE}
                         iconSide="left"
                     />
-                    <Button
+                    <Confirm
                         text={isUpdate ? 'Datei aktualisieren' : 'Datei erstellen'}
                         icon={
                             apiState === ApiState.SYNCING
@@ -54,8 +55,10 @@ const AddOrUpdateFile = observer((props: Props) => {
                                       : mdiFileMove
                                   : mdiFilePlus
                         }
+                        className={clsx(styles.confirm)}
+                        buttonClassName={clsx(styles.confirmButton)}
                         spin={apiState === ApiState.SYNCING}
-                        onClick={() => {
+                        onConfirm={() => {
                             setApiState(ApiState.SYNCING);
                             props.onCreateOrUpdate(name).then((res) => {
                                 if (res.state === 'error') {
@@ -64,8 +67,10 @@ const AddOrUpdateFile = observer((props: Props) => {
                                 }
                             });
                         }}
-                        disabled={!name || apiState !== ApiState.IDLE}
+                        disableConfirm={!props.file?.isOnMainBranch}
+                        disabled={!name || name === props.file?.name || apiState !== ApiState.IDLE}
                         color={isUpdate ? 'orange' : 'green'}
+                        confirmText={`Wirklich auf dem ${props.file?.branch}-Branch ändern?`}
                     />
                 </div>
             }

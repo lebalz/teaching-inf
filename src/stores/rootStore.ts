@@ -51,6 +51,7 @@ export class RootStore {
                  */
                 this.userStore.load();
                 this.studentGroupStore.load();
+                this.cmsStore.initialize();
                 if (user.isAdmin) {
                     this.adminStore.load();
                 }

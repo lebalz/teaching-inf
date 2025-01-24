@@ -6,8 +6,6 @@ import File from '../File';
 import shared from '../styles.module.scss';
 import styles from './styles.module.scss';
 import Icon from '@mdi/react';
-import Button from '@tdev-components/shared/Button';
-import { mdiFilePlus } from '@mdi/js';
 import AddFilePopup from '../File/AddOrUpdateFile/AddFilePopup';
 
 interface Props {

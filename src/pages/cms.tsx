@@ -77,7 +77,11 @@ const GhCallback = observer(() => {
                         )}
                     </>
                 )}
-                <Details summary={'PRs'} open>
+                <Details summary={'Files'}>
+                    <h4>Files</h4>
+                    <Directory dir={cmsStore.rootDir} />
+                </Details>
+                <Details summary={'PRs'}>
                     <h4>PRs und Branches</h4>
                     <ul>
                         {github.PRs.map((pr, idx) => {

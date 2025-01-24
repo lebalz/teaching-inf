@@ -20,6 +20,9 @@ interface Props {
     size?: number;
     iconSide?: 'left' | 'right';
     disabled?: boolean;
+    disableConfirm?: boolean;
+    spin?: boolean;
+    buttonClassName?: string;
 }
 
 const getValue = (value: undefined | string | null, defaultVal: string | undefined) => {
@@ -43,6 +46,7 @@ export const Confirm = (props: Props) => {
                         e.stopPropagation();
                         setIsConfirming(false);
                     }}
+                    className={clsx(props.buttonClassName)}
                 />
             )}
             <Button
@@ -59,7 +63,7 @@ export const Confirm = (props: Props) => {
                 onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    if (isConfirming) {
+                    if (isConfirming || props.disableConfirm) {
                         props.onConfirm();
                         setIsConfirming(false);
                     } else {
@@ -67,6 +71,8 @@ export const Confirm = (props: Props) => {
                     }
                 }}
                 disabled={props.disabled}
+                spin={props.spin}
+                className={clsx(props.buttonClassName)}
             />
         </div>
     );

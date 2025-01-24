@@ -5,6 +5,7 @@ import {
     githubToken as apiGithubToken,
     load as apiLoadSettings,
     update as apiUpdateSettings,
+    CmsSettings,
     FullCmsSettings
 } from '@tdev-api/cms';
 import siteConfig from '@generated/docusaurus.config';
@@ -12,11 +13,12 @@ import Dir from '@tdev-models/cms/Dir';
 import File from '@tdev-models/cms/File';
 import { computedFn } from 'mobx-utils';
 import _ from 'lodash';
-import Settings, { REFRESH_THRESHOLD } from '@tdev-models/cms/Settings';
+import Settings from '@tdev-models/cms/Settings';
 import Github from '@tdev-models/cms/Github';
 import FileStub from '@tdev-models/cms/FileStub';
 import iEntry from '@tdev-models/cms/iEntry';
 import { trimSlashes } from '@tdev-models/helpers/trimSlashes';
+import PartialSettings, { REFRESH_THRESHOLD } from '@tdev-models/cms/PartialSettings';
 const { organizationName, projectName } = siteConfig;
 if (!organizationName || !projectName) {
     throw new Error('"organizationName" and "projectName" must be set in docusaurus.config.ts');
@@ -25,6 +27,7 @@ if (!organizationName || !projectName) {
 export class CmsStore extends iStore<`update-settings` | `load-settings` | `load-token`> {
     readonly root: RootStore;
     @observable.ref accessor settings: Settings | undefined;
+    @observable.ref accessor partialSettings: PartialSettings | undefined;
     @observable.ref accessor github: Github | undefined;
 
     @observable accessor initialized = false;
@@ -261,6 +264,7 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
         return this.withAbortController(`load-settings`, (ct) => {
             return apiLoadSettings(ct.signal).then(
                 action(({ data }) => {
+                    this.partialSettings = new PartialSettings(data as CmsSettings, this);
                     if (data.token && data.tokenExpiresAt) {
                         this.settings = new Settings(data as FullCmsSettings, this);
                         return this.settings;
