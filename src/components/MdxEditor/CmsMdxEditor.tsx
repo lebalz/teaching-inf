@@ -51,7 +51,7 @@ import Actions from './toolbar/Actions';
 import * as Mdast from 'mdast';
 import { InsertImage } from './toolbar/InsertImage';
 import { strongPlugin } from './plugins/strong';
-import { Boxed } from './toolbar/InsertBoxed';
+import { ToolbarInsertBoxed } from './plugins/strong/ToolbarInsertBoxed';
 
 export interface Props {
     file: File;
@@ -122,6 +122,7 @@ const CmsMdxEditor = observer((props: Props) => {
                                 <DiffSourceToggleWrapper>
                                     <InsertTable />
                                     <BoldItalicUnderlineToggles />
+                                    <ToolbarInsertBoxed />
                                     <ListsToggle />
                                     <InsertCodeBlock />
                                     <CreateLink />
@@ -130,7 +131,6 @@ const CmsMdxEditor = observer((props: Props) => {
                                     <InsertAdmonition />
                                     <InsertFrontmatter />
                                     <UndoRedo />
-                                    <Boxed />
                                     <ConditionalContents
                                         options={[
                                             {

@@ -1,5 +1,5 @@
 import { mergeRegister } from '@lexical/utils';
-import { mdiFormatTextbox } from '@mdi/js';
+import { mdiFormatTextbox, mdiShapeRectanglePlus } from '@mdi/js';
 import Icon from '@mdi/react';
 import {
     activeEditor$,
@@ -11,6 +11,7 @@ import {
 } from '@mdxeditor/editor';
 import { useCellValues, usePublisher, withLatestFrom } from '@mdxeditor/gurx';
 import {
+    $isRangeSelection,
     CAN_REDO_COMMAND,
     CAN_UNDO_COMMAND,
     COMMAND_PRIORITY_CRITICAL,
@@ -19,14 +20,15 @@ import {
     UNDO_COMMAND
 } from 'lexical';
 import React from 'react';
-import { FORMAT_BOX_COMMAND, FORMAT_BOXED } from '../plugins/strong';
-import { $createBoxNode } from '../plugins/strong/BoxNode';
+import { FORMAT_BOX_COMMAND, FORMAT_BOXED } from '.';
+import { $createBoxNode } from './BoxNode';
 
 /**
  * A toolbar component that lets the user undo and redo changes in the editor.
  * @group Toolbar Components
  */
-export const Boxed: React.FC = () => {
+export const ToolbarInsertBoxed: React.FC = () => {
+    const [selection] = useCellValues(currentSelection$);
     const insertAtSelection = usePublisher(insertDecoratorNode$);
     const active = false;
     return (
@@ -37,14 +39,29 @@ export const Boxed: React.FC = () => {
                     disabled: false,
                     contents: (
                         <Icon
-                            path={mdiFormatTextbox}
+                            path={mdiShapeRectanglePlus}
                             size={0.8}
                             color={active ? 'var(--ifm-color-blue)' : undefined}
                         />
                     ),
                     active: active,
                     onChange: () => {
-                        insertAtSelection(() => $createBoxNode({ type: 'strong', children: [] }));
+                        insertAtSelection(() => {
+                            const box = $createBoxNode({
+                                type: 'strong',
+                                children: [
+                                    {
+                                        type: 'text',
+                                        value:
+                                            $isRangeSelection(selection) && !selection.isCollapsed()
+                                                ? selection.getTextContent().trim() || ''
+                                                : ''
+                                    }
+                                ]
+                            });
+                            // box.getWritable().insertAfter();
+                            return box;
+                        });
                     }
                 }
             ]}

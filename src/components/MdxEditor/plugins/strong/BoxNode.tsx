@@ -26,7 +26,7 @@ export type SerializedBoxedNode = Spread<
     SerializedLexicalNode
 >;
 
-export class BoxNode extends DecoratorNode<React.JSX.Element> {
+export class BoxNode extends DecoratorNode<React.ReactNode> {
     /** @internal */
     __mdastNode: Strong;
 
