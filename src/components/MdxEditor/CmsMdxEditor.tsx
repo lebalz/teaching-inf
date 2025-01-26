@@ -91,7 +91,6 @@ const CmsMdxEditor = observer((props: Props) => {
                         directiveDescriptors: [AdmonitionDirectiveDescriptor, MdiDescriptor]
                     }),
                     thematicBreakPlugin(),
-                    markdownShortcutPlugin(),
                     tablePlugin(),
                     diffSourcePlugin({ diffMarkdown: file._pristine, viewMode: 'rich-text' }),
                     codeBlockPlugin({ defaultCodeBlockLanguage: 'py' }),
@@ -167,7 +166,8 @@ const CmsMdxEditor = observer((props: Props) => {
                             console.log('uploading image');
                             return Promise.resolve('https://picsum.photos/200/300');
                         }
-                    })
+                    }),
+                    markdownShortcutPlugin()
                 ]}
                 onChange={(md) => {
                     file.setContent(md);
