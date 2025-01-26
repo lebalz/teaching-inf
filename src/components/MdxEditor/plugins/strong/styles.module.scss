@@ -1,0 +1,15 @@
+.boxEditor {
+    // border: 1px solid red;
+    border-radius: var(--ifm-global-radius);
+    .boxed {
+        display: inline-block;
+        border: 1px solid blue;
+        border-radius: var(--ifm-global-radius);
+        > p {
+            display: inline;
+            > br {
+                display: none;
+            }
+        }
+    }
+}

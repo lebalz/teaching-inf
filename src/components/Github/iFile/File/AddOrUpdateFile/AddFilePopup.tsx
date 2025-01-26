@@ -46,11 +46,9 @@ const AddFilePopup = observer((props: Props) => {
                     return github
                         .createOrUpdateFile(absPath, '\n', activeBranchName, undefined, `Create new ${path}`)
                         .then((file) => {
-                            if (isDir && file) {
-                                return (dir.fetchDirectory(true) || Promise.resolve()).then(() => {
-                                    ref.current?.close();
-                                    return { state: ApiState.SUCCESS };
-                                });
+                            ref.current?.close();
+                            if (file) {
+                                cmsStore.setActiveEntry(file, true);
                             }
                             return { state: ApiState.SUCCESS };
                         })

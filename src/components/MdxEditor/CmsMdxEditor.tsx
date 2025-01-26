@@ -48,7 +48,10 @@ import ErrorBoundary from '@docusaurus/ErrorBoundary';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
 import Actions from './toolbar/Actions';
+import * as Mdast from 'mdast';
 import { InsertImage } from './toolbar/InsertImage';
+import { strongPlugin } from './plugins/strong';
+import { Boxed } from './toolbar/InsertBoxed';
 
 export interface Props {
     file: File;
@@ -69,6 +72,7 @@ const CmsMdxEditor = observer((props: Props) => {
         >
             <MDXEditor
                 markdown={file.refContent!}
+                placeholder="Schreibe deine Inhalte hier..."
                 onError={(error) => {
                     console.error('Error in editor', error);
                 }}
@@ -82,6 +86,7 @@ const CmsMdxEditor = observer((props: Props) => {
                     linkPlugin(),
                     linkDialogPlugin(),
                     quotePlugin(),
+                    strongPlugin(),
                     directivesPlugin({
                         directiveDescriptors: [AdmonitionDirectiveDescriptor, MdiDescriptor]
                     }),
@@ -126,6 +131,7 @@ const CmsMdxEditor = observer((props: Props) => {
                                     <InsertAdmonition />
                                     <InsertFrontmatter />
                                     <UndoRedo />
+                                    <Boxed />
                                     <ConditionalContents
                                         options={[
                                             {
@@ -165,6 +171,22 @@ const CmsMdxEditor = observer((props: Props) => {
                 ]}
                 onChange={(md) => {
                     file.setContent(md);
+                }}
+                toMarkdownOptions={{
+                    bullet: '-',
+                    emphasis: '*',
+                    rule: '-',
+                    handlers: {
+                        strong: (node: Mdast.Strong, parent, state, info) => {
+                            const text = node.children.reduce((acc, child) => {
+                                return acc + state.handle(child, node, state, info);
+                            }, '');
+                            if (node.data?.hProperties?.class === 'boxed') {
+                                return `__${text}__`;
+                            }
+                            return `**${text}**`;
+                        }
+                    }
                 }}
             />
         </ErrorBoundary>
