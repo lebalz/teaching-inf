@@ -48,7 +48,11 @@ class Github {
 
     @action
     load() {
-        return Promise.all([this.fetchRepo(), this.fetchBranches(), this.fetchPRs()]);
+        return Promise.all([this.fetchRepo(), this.fetchBranches(), this.fetchPRs()]).catch((err) => {
+            if (/Bad credentials/.test(err.message)) {
+                this.store.clearAccessToken();
+            }
+        });
     }
 
     @action

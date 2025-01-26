@@ -2,6 +2,8 @@ import { CmsStore } from '@tdev-stores/CmsStore';
 import { action, computed, observable } from 'mobx';
 import { FileProps, iFileStub } from './FileStub';
 import { ApiState } from '@tdev-stores/iStore';
+import { Position } from 'unist';
+
 import Dir from './Dir';
 
 class File extends iFileStub {
@@ -79,6 +81,14 @@ class File extends iFileStub {
         if (this._pristine) {
             this.setContent(this._pristine);
         }
+    }
+
+    contentAt(position: Position) {
+        const { start, end } = position;
+        if (start.offset !== undefined && end.offset !== undefined) {
+            return this.content.slice(start.offset, end.offset);
+        }
+        return this.content.split('\n')[start.line - 1].slice(start.column - 1, end.column);
     }
 
     get props(): FileProps {

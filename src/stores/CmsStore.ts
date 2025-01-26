@@ -102,6 +102,12 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
         });
     }
 
+    @action
+    clearAccessToken() {
+        this.github = undefined;
+        this.settings = undefined;
+    }
+
     @computed
     get activeBranchName() {
         return this.settings?.activeBranchName || this.github?.defaultBranch?.name;

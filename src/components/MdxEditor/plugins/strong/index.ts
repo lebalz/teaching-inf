@@ -24,49 +24,10 @@ export const FORMAT_BOX_COMMAND: LexicalCommand<void> = createCommand('FORMAT_BO
  */
 export const strongPlugin = realmPlugin<{}>({
     init(realm, params) {
-        // const editor = realm.getValue(rootEditor$);
-        // editor?.registerNodeTransform(TextNode, (node) => {
-        //     const format = node.getFormat();
-        //     const element = editor.getElementByKey(node.getKey());
-
-        //     if (element) {
-        //         if (format & FORMAT_BOXED) {
-        //             element.classList.add('box');
-        //         } else {
-        //             element.classList.remove('box');
-        //         }
-        //     }
-        // });
         realm.pubIn({
             [addImportVisitor$]: [MdastBoxVisitor],
             [addLexicalNode$]: BoxNode,
             [addExportVisitor$]: [BoxVisitor]
-            // [createRootEditorSubscription$]: (editor: LexicalEditor) => {
-            //     return editor.registerCommand<KeyboardEvent>(
-            //         FORMAT_BOX_COMMAND,
-            //         (event) => {
-            //             const selection = $getSelection();
-            //             const children = selection?.getNodes();
-            //             const node = $createBoxNode({type: 'strong', children: []});
-
-            //             if (children) {
-            //                 children.forEach((child) => {
-            //                     node.append(child);
-            //                 });
-            //             }
-
-            //             selection?.getNodes().forEach((node) => {
-            //                 if ($isTextNode(node)) {
-            //                     node.toggleFormat('bold');
-            //                     // Add your custom box formatting logic here
-            //                 }
-            //             });
-
-            //             return true;
-            //         },
-            //         COMMAND_PRIORITY_EDITOR
-            //     );
-            // }
         });
     }
 });

@@ -21,8 +21,7 @@ export const MdastBoxVisitor: MdastImportVisitor<Mdast.Strong> = {
             const content =
                 cmsStore.activeEntry?.type === 'file' ? cmsStore.activeEntry.contentAt(position) : undefined;
             if (content && content.startsWith('__')) {
-                console.log('add bn', mdastNode);
-                (lexicalParent as ElementNode).append($createBoxNode(mdastNode));
+                (lexicalParent as ElementNode)?.append($createBoxNode(mdastNode));
                 // actions.addAndStepInto($createBoxNode(mdastNode));
                 return;
             }
@@ -31,26 +30,4 @@ export const MdastBoxVisitor: MdastImportVisitor<Mdast.Strong> = {
         actions.visitChildren(mdastNode, lexicalParent);
     },
     priority: 1
-    // visitNode({ mdastNode, actions, mdastParent, lexicalParent, descriptors }) {
-    //     const formatting = actions.getParentFormatting();
-    //     const node = $createTextNodeWithMeta(mdastNode.value);
-    //     if (isBold(formatting)) {
-    //         // Bold
-    //         const { position } = mdastNode;
-    //         if (position) {
-    //             const { cmsStore } = rootStore;
-
-    //             const content =
-    //                 cmsStore.activeEntry?.type === 'file'
-    //                     ? cmsStore.activeEntry.contentAt(position)
-    //                     : undefined;
-    //             if (content && content.startsWith('__')) {
-    //                 node.setMeta({ marker: '_' });
-    //             } else {
-    //                 node.setMeta({ marker: '*' });
-    //             }
-    //         }
-    //     }
-    //     actions.addAndStepInto(node.setFormat(formatting));
-    // },
 };

@@ -53,7 +53,7 @@ const GhCallback = observer(() => {
                     <Directory dir={activeEntry} />
                 ) : (
                     <>
-                        {activeEntry.type === 'file' && activeEntry.content ? (
+                        {activeEntry.type === 'file' && activeEntry.content !== undefined ? (
                             <>
                                 {activeEntry.isImage ? (
                                     <ImagePreview file={activeEntry} />
