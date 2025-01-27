@@ -658,3 +658,71 @@ Wobei
 `brythonStdlibSrc`
 : die URL zur JS-Brython-Standardbibliothek
 :::
+
+
+## Eigene Brython Bibliotheken
+
+Es können eigene Python-Bibliotheken hinzugefügt werden - normale Python-Files, die unter `libDir` (Standard: `src/static/bry-libs/`) abgelegt sind. Diese können dann in den Code-Blöcken normal importiert werden.
+
+::::def[`speech.py`]
+```py live_py slim
+from speech import speak
+
+speak('Hallo, es ist Winter!')
+```
+
+Die Sprachausgabe kann angepasst werden:
+```py live_py slim
+from speech import speak
+### PRE
+speak('Hi there, i speak english now.', lang='en-US')
+speak('Jetzt doppelt so schnell', lang='de-DE', rate=2)
+speak('Jetzt halb so schnell', lang='de-DE', rate=0.5)
+speak('Jetzt höher', lang='de-DE', pitch=2) # max 2
+speak('Jetzt tiefer', lang='de-DE', pitch=0.1) # min 0.1
+speak('Jetzt leiser', lang='de-DE', volume=0.5) # Werte zwischen 0 und 1, Standard ist 1
+```
+Es kann auch die __Stimme__ verändert werden, wobei nicht jede Stimme in jedem Browser verfügbar ist.
+```py live_py slim
+from speech import speak, voices
+voices('de-DE') # gibt die verfügbaren Stimmen aus
+speak('Hallo, es ist Winter!', lang='de-DE', voice='Microsoft Katja - German (Germany)')
+```
+
+Die __verfügbaren Sprachen__ können mit `languages()` ausgegeben werden.
+```py live_py slim
+from speech import speak, languages
+languages()
+```
+
+:::warning[Browser-Feature]
+Nicht jeder Browser unterstützt das Sprechen von Texten in allen Sprachen.
+:::
+
+::::
+
+::::def[`cowsay.py`]
+Die bekannte Bibliothek Cowsay[^1] ist unter `src/static/bry-libs/cowsay.py` zu finden. Nach dem Kopieren in den `bry-libs` Ordner, kann sie verwendet werden:
+
+```py live_py slim
+from cowsay import *
+
+beavis('beavis')
+cheese('cheese')
+daemon('daemon')
+cow('cow')
+dragon('dragon')
+ghostbusters('ghostbusters')
+kitty('kitty')
+meow('meow')
+milk('milk')
+stegosaurus('stegosaurus')
+stimpy('stimpy')
+turkey('turkey')
+turtle('turtle')
+tux('tux')
+```
+
+::::
+
+[^1]: [Wikipedia](https://en.wikipedia.org/wiki/Cowsay)
