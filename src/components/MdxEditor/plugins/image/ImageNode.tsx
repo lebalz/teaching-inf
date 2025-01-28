@@ -16,9 +16,10 @@ import type {
 } from 'lexical';
 
 import { DecoratorNode } from 'lexical';
-import { ImageEditor } from './ImageEditor';
-import { MdxJsxAttribute, MdxJsxExpressionAttribute } from 'mdast-util-mdx-jsx';
+import { ImageEditor } from './ImageComponent';
+import { Position } from 'unist';
 import { cleanedText, parseOptions } from '@tdev/plugins/helpers';
+import { rootStore } from '@tdev/stores/rootStore';
 
 /**
  * A serialized representation of an {@link ImageNode}.
@@ -43,6 +44,8 @@ export class ImageNode extends DecoratorNode<React.ReactNode> {
     __src: string;
     /** @internal */
     __altText: string;
+    /** @internal */
+    __position: Position | undefined;
 
     /** @internal */
     static getType(): string {
@@ -68,10 +71,23 @@ export class ImageNode extends DecoratorNode<React.ReactNode> {
      * Constructs a new {@link ImageNode} with the specified image parameters.
      * Use {@link $createImageNode} to construct one.
      */
-    constructor(src: string, altText: string, key?: NodeKey) {
+    constructor(src: string, altText: string, key?: NodeKey, position?: Position) {
         super(key);
         this.__src = src;
         this.__altText = altText;
+        this.__position = position;
+        const editedFile = rootStore.cmsStore.editedFile;
+        console.log(editedFile?.path);
+        if (position && editedFile) {
+            const raw = editedFile.content
+                .split('\n')
+                [position.start.line - 1].slice(position.start.column - 1, position.end.column);
+            const rawCaption = raw.slice(2).replace(`](${src})`, '');
+            console.log(rawCaption, raw);
+            if (rawCaption) {
+                this.__altText = rawCaption;
+            }
+        }
     }
 
     /** @internal */
@@ -87,23 +103,23 @@ export class ImageNode extends DecoratorNode<React.ReactNode> {
     setWidth(width: number | undefined): void {
         const caption = cleanedText(this.__altText || '');
         if (caption) {
-            this.setAltText(`${caption} --width=${width}px`);
+            this.setAltText(`${caption} --width=${width}`);
         } else {
-            this.setAltText(`--width=${width}px`);
+            this.setAltText(`--width=${width}`);
         }
     }
 
     setCaption(caption: string): void {
         const width = (parseOptions(this.__altText || '', true) as any).width || undefined;
         if (width) {
-            this.setAltText(`${caption} --width=${width}px`);
+            this.setAltText(`${caption} --width=${width}`);
         } else {
             this.setAltText(caption);
         }
     }
 
     getCaption(): string {
-        return cleanedText(this.__altText || '');
+        return cleanedText(this.__altText || '', false);
     }
 
     getWidth(): number | undefined {
@@ -158,6 +174,7 @@ export interface CreateImageNodeParameters {
     altText: string;
     key?: NodeKey;
     src: string;
+    position?: Position;
 }
 
 /**
@@ -166,8 +183,8 @@ export interface CreateImageNodeParameters {
  * @group Image
  */
 export function $createImageNode(params: CreateImageNodeParameters): ImageNode {
-    const { altText, src, key } = params;
-    return new ImageNode(src, altText, key);
+    const { altText, src, key, position } = params;
+    return new ImageNode(src, altText, key, position);
 }
 
 /**

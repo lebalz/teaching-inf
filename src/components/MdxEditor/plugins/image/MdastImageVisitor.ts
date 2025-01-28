@@ -4,15 +4,16 @@
 
 import * as Mdast from 'mdast';
 import { $createImageNode } from './ImageNode';
-import { MdastImportVisitor } from '@mdxeditor/editor';
+import { markdown$, MdastImportVisitor, rootEditor$, setMarkdown$ } from '@mdxeditor/editor';
 
 export const MdastImageVisitor: MdastImportVisitor<Mdast.Image> = {
     testNode: 'image',
-    visitNode({ mdastNode, actions }) {
+    visitNode({ mdastNode, actions, mdastParent, lexicalParent, descriptors }) {
         actions.addAndStepInto(
             $createImageNode({
                 src: mdastNode.url,
-                altText: mdastNode.alt ?? ''
+                altText: mdastNode.alt ?? '',
+                position: mdastNode.position
             })
         );
     }

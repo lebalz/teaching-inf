@@ -13,7 +13,6 @@ import {
     $getSelection,
     $isRangeSelection,
     createCommand,
-    KEY_DOWN_COMMAND,
     KEY_ARROW_RIGHT_COMMAND,
     LexicalCommand,
     LexicalEditor,
@@ -21,13 +20,13 @@ import {
     RangeSelection,
     KEY_ARROW_DOWN_COMMAND,
     KEY_ARROW_LEFT_COMMAND,
-    KEY_ARROW_UP_COMMAND
+    KEY_ARROW_UP_COMMAND,
+    KEY_BACKSPACE_COMMAND
 } from 'lexical';
 import { MdastBoxVisitor } from './MdastBoxVisitor';
 import { $createBoxNode, $isBoxNode, BoxNode } from './BoxNode';
 import { BoxVisitor } from './LexicalBoxVisitor';
 import { $getNextSiblingOrParentSibling } from '@lexical/utils';
-// import { LexicalBoxVisitor } from './LexicalBoxVisitor';
 
 export const FORMAT_BOXED = 512 as const;
 export const FORMAT_BOX_COMMAND: LexicalCommand<void> = createCommand('FORMAT_BOX');
@@ -52,6 +51,11 @@ export const strongPlugin = realmPlugin<{}>({
                                 return false;
                             }
                             const focusNode = selection.getNodes()[0];
+                            if ($isBoxNode(focusNode)) {
+                                // dispatch "arrow up" event
+                                editor.dispatchCommand(KEY_ARROW_DOWN_COMMAND, {} as any);
+                                return true;
+                            }
                             const distance2End = focusNode.getTextContentSize() - selection.focus.offset;
                             if (distance2End < 2) {
                                 const nextSibling = $getNextSiblingOrParentSibling(focusNode)?.[0];
@@ -75,6 +79,11 @@ export const strongPlugin = realmPlugin<{}>({
                                 return false;
                             }
                             const focusNode = selection.getNodes()[0];
+                            if ($isBoxNode(focusNode)) {
+                                // dispatch "arrow up" event
+                                editor.dispatchCommand(KEY_ARROW_UP_COMMAND, {} as any);
+                                return true;
+                            }
                             const distance2Start = selection.focus.offset;
                             if (distance2Start < 1) {
                                 const previous = focusNode.getPreviousSibling();
