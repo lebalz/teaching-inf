@@ -43,6 +43,7 @@
         "@yudiel/react-qr-scanner": "^2.1.0",
         "ace-builds": "^1.36.2",
         "axios": "^1.7.2",
+        "browser-image-compression": "^2.0.2",
         "clsx": "^2.0.0",
         "docusaurus-plugin-sass": "^0.2.6",
         "dotenv": "^16.4.5",

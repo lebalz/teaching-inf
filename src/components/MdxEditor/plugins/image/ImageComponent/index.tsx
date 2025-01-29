@@ -39,7 +39,7 @@ export interface ImageEditorProps {
     caption: string;
 }
 
-export const ImageEditor = observer((props: ImageEditorProps): React.ReactNode => {
+export const ImageComponent = observer((props: ImageEditorProps): React.ReactNode => {
     const { src, alt, nodeKey, caption } = props;
     const cmsStore = useStore('cmsStore');
     const { github } = cmsStore;

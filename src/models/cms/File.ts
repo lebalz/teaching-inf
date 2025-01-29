@@ -68,7 +68,11 @@ class File extends iFileStub {
     @action
     save(commitMessage?: string) {
         this.apiState = ApiState.SYNCING;
-        this.store.github?.saveFile(this, commitMessage);
+        this.store.github?.saveFile(this, commitMessage).catch(
+            action(() => {
+                this.apiState = ApiState.IDLE;
+            })
+        );
     }
 
     @computed

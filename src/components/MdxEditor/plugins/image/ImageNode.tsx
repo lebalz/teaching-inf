@@ -16,7 +16,7 @@ import type {
 } from 'lexical';
 
 import { DecoratorNode } from 'lexical';
-import { ImageEditor } from './ImageComponent';
+import { ImageComponent } from './ImageComponent';
 import { Position } from 'unist';
 import { cleanedText, parseOptions } from '@tdev/plugins/helpers';
 import { rootStore } from '@tdev/stores/rootStore';
@@ -155,7 +155,7 @@ export class ImageNode extends DecoratorNode<React.ReactNode> {
     /** @internal */
     decorate(_parentEditor: LexicalEditor): React.ReactNode {
         return (
-            <ImageEditor
+            <ImageComponent
                 src={this.getSrc()}
                 nodeKey={this.getKey()}
                 alt={this.__altText}

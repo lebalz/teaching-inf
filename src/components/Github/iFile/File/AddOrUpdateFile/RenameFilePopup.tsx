@@ -65,7 +65,8 @@ const RenameFilePopup = observer((props: Props) => {
                             file.content,
                             activeBranchName,
                             file.sha,
-                            `Rename ${fileName}`
+                            `Rename ${fileName}`,
+                            file.isImage
                         )
                         .then((movedFile) => {
                             if (movedFile) {

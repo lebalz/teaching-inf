@@ -33,7 +33,7 @@ import {
 } from '@mdxeditor/editor';
 import _ from 'lodash';
 import '@mdxeditor/editor/style.css';
-import File from '@tdev-models/cms/File';
+import { default as FileModel } from '@tdev-models/cms/File';
 import { AdmonitionDirectiveDescriptor } from './JsxPluginDescriptors/directive-editors/AdmonitionDescriptor';
 import '@mdxeditor/editor/style.css';
 import { InsertAdmonition } from './toolbar/InsertAdmonition';
@@ -52,12 +52,15 @@ import * as Mdast from 'mdast';
 import { InsertImage } from './toolbar/InsertImage';
 import { strongPlugin } from './plugins/strong';
 import { ToolbarInsertBoxed } from './plugins/strong/ToolbarInsertBoxed';
+import { useStore } from '@tdev-hooks/useStore';
+import { IMAGE_DIR_NAME } from '@tdev-models/cms/Dir';
 
 export interface Props {
-    file: File;
+    file: FileModel;
 }
 
 const CmsMdxEditor = observer((props: Props) => {
+    const cmsStore = useStore('cmsStore');
     const { file } = props;
     const { isMarkdown } = file;
     const ref = React.useRef<MDXEditorMethods>(null);
@@ -162,9 +165,22 @@ const CmsMdxEditor = observer((props: Props) => {
                         ]
                     }),
                     imagePlugin({
-                        imageUploadHandler: () => {
-                            console.log('uploading image');
-                            return Promise.resolve('https://picsum.photos/200/300');
+                        imageUploadHandler: (img: File) => {
+                            const { activeEntry } = cmsStore;
+                            if (!activeEntry) {
+                                return Promise.reject('No active entry');
+                            }
+                            const fPath = `${activeEntry.parent.imageDirPath}/${img.name}`;
+                            const current = cmsStore.findEntry(activeEntry.branch, fPath);
+                            console.log('uploading image', fPath);
+                            return cmsStore
+                                .uploadImage(img, fPath, activeEntry.branch, current?.sha)
+                                .then((file) => {
+                                    if (file) {
+                                        return `./${IMAGE_DIR_NAME}/${file.name}`;
+                                    }
+                                    return Promise.reject('Upload Error');
+                                });
                         }
                     }),
                     markdownShortcutPlugin()

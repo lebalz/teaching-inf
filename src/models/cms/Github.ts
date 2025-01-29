@@ -333,7 +333,14 @@ class Github {
 
     @action
     saveFile(file: File, commitMessage?: string) {
-        return this.createOrUpdateFile(file.path, file.content, file.branch, file.sha, commitMessage);
+        return this.createOrUpdateFile(
+            file.path,
+            file.content,
+            file.branch,
+            file.sha,
+            commitMessage,
+            file.isImage
+        );
     }
 
     @action
@@ -352,9 +359,22 @@ class Github {
     }
 
     @action
-    createOrUpdateFile(path: string, content: string, branch: string, sha?: string, commitMessage?: string) {
-        const textContent = new TextEncoder().encode(content);
-        const base64Content = btoa(String.fromCharCode(...textContent));
+    createOrUpdateFile(
+        path: string,
+        content: string,
+        branch: string,
+        sha?: string,
+        commitMessage?: string,
+        skipBase64Transformation?: boolean
+    ) {
+        console.log('Create or update file', path, branch, sha, commitMessage, skipBase64Transformation);
+        let base64Content = '';
+        if (skipBase64Transformation) {
+            base64Content = content;
+        } else {
+            const textContent = new TextEncoder().encode(content);
+            base64Content = btoa(String.fromCharCode(...textContent));
+        }
         const current = this.store.findEntry(branch, path) as File | undefined;
         return this.octokit!.repos.createOrUpdateFileContents({
             owner: organizationName!,

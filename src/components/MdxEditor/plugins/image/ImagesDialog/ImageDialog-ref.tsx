@@ -13,7 +13,7 @@ import {
     imageDialogState$,
     imageUploadHandler$,
     saveImage$
-} from './index';
+} from '../index';
 import { useCellValues, usePublisher } from '@mdxeditor/gurx';
 import { editorRootElementRef$, useTranslation } from '@mdxeditor/editor';
 import TextInput from '@tdev-components/shared/TextInput';
@@ -93,20 +93,6 @@ export const ImageDialog: React.FC = () => {
                                 defaultValue={state.type === 'editing' ? (state.initialValues.src ?? '') : ''}
                                 onChange={(val) => setValue('src', val)}
                             />
-                            {/* <DownshiftAutoComplete
-                                register={register}
-                                initialInputValue={
-                                    state.type === 'editing' ? (state.initialValues.src ?? '') : ''
-                                }
-                                inputName="src"
-                                suggestions={imageAutocompleteSuggestions}
-                                setValue={setValue}
-                                control={control}
-                                placeholder={t(
-                                    'uploadImage.autoCompletePlaceholder',
-                                    'Select or paste an image src'
-                                )}
-                            /> */}
                         </div>
 
                         <div className={styles.formField}>

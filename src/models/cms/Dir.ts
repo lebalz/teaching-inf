@@ -6,7 +6,7 @@ import { ApiState } from '@tdev-stores/iStore';
 
 interface DirProps extends iEntryProps {}
 
-const IMAGE_DIR_NAME = 'images' as const;
+export const IMAGE_DIR_NAME = 'images' as const;
 class Dir extends iEntry {
     readonly type = 'dir';
     @observable accessor isFetched: boolean = false;
@@ -65,9 +65,16 @@ class Dir extends iEntry {
     }
 
     @computed
+    get imageDirPath(): string {
+        return `${this.path}/${IMAGE_DIR_NAME}`;
+    }
+
+    /**
+     * The images which are direct children of this folder
+     */
+    @computed
     get images() {
         const images = this.children.filter((child) => child.isFile() && child.isImage);
-
         return images;
     }
 

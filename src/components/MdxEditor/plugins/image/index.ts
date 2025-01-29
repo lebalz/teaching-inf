@@ -37,8 +37,8 @@ import {
 } from '@mdxeditor/editor';
 import { $createImageNode, $isImageNode, CreateImageNodeParameters, ImageNode } from './ImageNode';
 import { MdastImageVisitor } from './MdastImageVisitor';
-import { ImageDialog } from './ImageDialog';
 import React from 'react';
+import { ImageDialog } from './ImagesDialog/ImageDialog-ref';
 
 export * from './ImageNode';
 
@@ -81,32 +81,6 @@ export type InsertImageParameters = FileImageParameters | SrcImageParameters;
 export interface SaveImageParameters extends BaseImageParameters {
     src?: string;
     file: FileList;
-}
-
-/**
- * The state of the image dialog when it is inactive.
- * @group Image
- */
-export interface InactiveImageDialogState {
-    type: 'inactive';
-}
-
-/**
- * The state of the image dialog when it is in new mode.
- * @group Image
- */
-export interface NewImageDialogState {
-    type: 'new';
-}
-
-/**
- * The state of the image dialog when it is in editing an existing node.
- * @group Image
- */
-export interface EditingImageDialogState {
-    type: 'editing';
-    nodeKey: string;
-    initialValues: Omit<SaveImageParameters, 'file'>;
 }
 
 const internalInsertImage$ = Signal<SrcImageParameters>((r) => {
@@ -169,156 +143,6 @@ export const imageUploadHandler$ = Cell<ImageUploadHandler>(null);
  */
 export const imagePreviewHandler$ = Cell<ImagePreviewHandler>(null);
 
-/**
- * Holds the current state of the image dialog.
- * @group Image
- */
-export const imageDialogState$ = Cell<
-    InactiveImageDialogState | NewImageDialogState | EditingImageDialogState
->({ type: 'inactive' }, (r) => {
-    r.sub(
-        r.pipe(saveImage$, withLatestFrom(activeEditor$, imageUploadHandler$, imageDialogState$)),
-        ([values, theEditor, imageUploadHandler, dialogState]) => {
-            const handler =
-                dialogState.type === 'editing'
-                    ? (src: string) => {
-                          theEditor?.update(() => {
-                              const { nodeKey } = dialogState;
-                              const imageNode = $getNodeByKey(nodeKey)! as ImageNode;
-
-                              imageNode.setAltText(values.altText);
-                              imageNode.setSrc(src);
-                          });
-                          r.pub(imageDialogState$, { type: 'inactive' });
-                      }
-                    : (src: string) => {
-                          r.pub(internalInsertImage$, { ...values, src });
-                          r.pub(imageDialogState$, { type: 'inactive' });
-                      };
-
-            if (values.file.length > 0) {
-                imageUploadHandler?.(values.file.item(0)!)
-                    .then(handler)
-                    .catch((e: unknown) => {
-                        throw e;
-                    });
-            } else if (values.src) {
-                handler(values.src);
-            }
-        }
-    );
-
-    r.pub(createActiveEditorSubscription$, (editor) => {
-        const theUploadHandler = r.getValue(imageUploadHandler$);
-        return mergeRegister(
-            editor.registerCommand<InsertImagePayload>(
-                INSERT_IMAGE_COMMAND,
-                (payload) => {
-                    const imageNode = $createImageNode(payload);
-                    $insertNodes([imageNode]);
-                    if ($isRootOrShadowRoot(imageNode.getParentOrThrow())) {
-                        $wrapNodeInElement(imageNode, $createParagraphNode).selectEnd();
-                    }
-
-                    return true;
-                },
-                COMMAND_PRIORITY_EDITOR
-            ),
-            editor.registerCommand<DragEvent>(
-                DRAGSTART_COMMAND,
-                (event) => {
-                    return onDragStart(event);
-                },
-                COMMAND_PRIORITY_HIGH
-            ),
-            editor.registerCommand<DragEvent>(
-                DRAGOVER_COMMAND,
-                (event) => {
-                    return onDragover(event, !!theUploadHandler);
-                },
-                COMMAND_PRIORITY_LOW
-            ),
-
-            editor.registerCommand<DragEvent>(
-                DROP_COMMAND,
-                (event) => {
-                    return onDrop(event, editor, r.getValue(imageUploadHandler$));
-                },
-                COMMAND_PRIORITY_HIGH
-            ),
-            editor.registerCommand(
-                PASTE_COMMAND,
-                (event: ClipboardEvent) => {
-                    if (!theUploadHandler) {
-                        let fromWeb = Array.from(event.clipboardData?.items ?? []);
-                        fromWeb = fromWeb.filter((i) => i.type.includes('text')); // Strip out the non-image bits
-
-                        if (!fromWeb.length || fromWeb.length === 0) {
-                            return true;
-                        } // If from file system, eject without calling imageUploadHandler.
-                        return false; // If from web, bail.
-                    }
-
-                    const cbPayload = Array.from(event.clipboardData?.items ?? []);
-                    const isMixedPayload = cbPayload.some((item) => !item.type.includes('image'));
-                    if (isMixedPayload) return false;
-
-                    if (!cbPayload.length || cbPayload.length === 0) {
-                        return false;
-                    } // If no image was present in the collection, bail.
-
-                    const imageUploadHandlerValue = r.getValue(imageUploadHandler$)!;
-
-                    Promise.all(cbPayload.map((file) => imageUploadHandlerValue(file.getAsFile()!)))
-                        .then((urls) => {
-                            urls.forEach((url) => {
-                                editor.dispatchCommand(INSERT_IMAGE_COMMAND, {
-                                    src: url,
-                                    altText: ''
-                                });
-                            });
-                        })
-                        .catch((e: unknown) => {
-                            throw e;
-                        });
-                    return true;
-                },
-                COMMAND_PRIORITY_CRITICAL
-            )
-        );
-    });
-});
-
-/**
- * Opens the new image dialog.
- * @group Image
- */
-export const openNewImageDialog$ = Action((r) => {
-    r.link(r.pipe(openNewImageDialog$, mapTo({ type: 'new' })), imageDialogState$);
-});
-
-/**
- * Opens the edit image dialog with the published parameters.
- * @group Image
- */
-export const openEditImageDialog$ = Signal<Omit<EditingImageDialogState, 'type'>>((r) => {
-    r.link(
-        r.pipe(
-            openEditImageDialog$,
-            map((payload) => ({ type: 'editing' as const, ...payload }))
-        ),
-        imageDialogState$
-    );
-});
-
-/**
- * Close the image dialog.
- * @group Image
- */
-export const closeImageDialog$ = Action((r) => {
-    r.link(r.pipe(closeImageDialog$, mapTo({ type: 'inactive' })), imageDialogState$);
-});
-
 export const disableImageSettingsButton$ = Cell<boolean>(false);
 
 /**
@@ -344,19 +168,99 @@ export const imagePlugin = realmPlugin<{
             [addImportVisitor$]: [MdastImageVisitor],
             [addLexicalNode$]: ImageNode,
             [addExportVisitor$]: LexicalImageVisitor,
-            [addComposerChild$]: params?.ImageDialog ?? ImageDialog,
             [imageUploadHandler$]: params?.imageUploadHandler ?? null,
-            [imageAutocompleteSuggestions$]: params?.imageAutocompleteSuggestions ?? [],
             [disableImageResize$]: Boolean(params?.disableImageResize),
             [disableImageSettingsButton$]: Boolean(params?.disableImageSettingsButton),
-            [imagePreviewHandler$]: params?.imagePreviewHandler ?? null
+            [imagePreviewHandler$]: params?.imagePreviewHandler ?? null,
+            [createActiveEditorSubscription$]: [
+                (editor: LexicalEditor) => {
+                    const theUploadHandler = realm.getValue(imageUploadHandler$);
+                    return mergeRegister(
+                        editor.registerCommand<InsertImagePayload>(
+                            INSERT_IMAGE_COMMAND,
+                            (payload) => {
+                                const imageNode = $createImageNode(payload);
+                                $insertNodes([imageNode]);
+                                if ($isRootOrShadowRoot(imageNode.getParentOrThrow())) {
+                                    $wrapNodeInElement(imageNode, $createParagraphNode).selectEnd();
+                                }
+
+                                return true;
+                            },
+                            COMMAND_PRIORITY_EDITOR
+                        ),
+                        editor.registerCommand<DragEvent>(
+                            DRAGSTART_COMMAND,
+                            (event) => {
+                                return onDragStart(event);
+                            },
+                            COMMAND_PRIORITY_HIGH
+                        ),
+                        editor.registerCommand<DragEvent>(
+                            DRAGOVER_COMMAND,
+                            (event) => {
+                                return onDragover(event, !!theUploadHandler);
+                            },
+                            COMMAND_PRIORITY_LOW
+                        ),
+
+                        editor.registerCommand<DragEvent>(
+                            DROP_COMMAND,
+                            (event) => {
+                                return onDrop(event, editor, realm.getValue(imageUploadHandler$));
+                            },
+                            COMMAND_PRIORITY_HIGH
+                        ),
+                        editor.registerCommand(
+                            PASTE_COMMAND,
+                            (event: ClipboardEvent) => {
+                                if (!theUploadHandler) {
+                                    let fromWeb = Array.from(event.clipboardData?.items ?? []);
+                                    fromWeb = fromWeb.filter((i) => i.type.includes('text')); // Strip out the non-image bits
+
+                                    if (!fromWeb.length || fromWeb.length === 0) {
+                                        return true;
+                                    } // If from file system, eject without calling imageUploadHandler.
+                                    return false; // If from web, bail.
+                                }
+
+                                const cbPayload = Array.from(event.clipboardData?.items ?? []);
+                                const isMixedPayload = cbPayload.some((item) => !item.type.includes('image'));
+                                if (isMixedPayload) return false;
+
+                                if (!cbPayload.length || cbPayload.length === 0) {
+                                    return false;
+                                } // If no image was present in the collection, bail.
+
+                                const imageUploadHandlerValue = realm.getValue(imageUploadHandler$)!;
+
+                                Promise.all(
+                                    cbPayload.map((file) => imageUploadHandlerValue(file.getAsFile()!))
+                                )
+                                    .then((urls) => {
+                                        urls.forEach((url) => {
+                                            editor.dispatchCommand(INSERT_IMAGE_COMMAND, {
+                                                src: url,
+                                                altText: ''
+                                            });
+                                        });
+                                    })
+                                    .catch((e: unknown) => {
+                                        throw e;
+                                    });
+                                return true;
+                            },
+                            COMMAND_PRIORITY_CRITICAL
+                        )
+                    );
+                }
+            ]
         });
     },
 
     update(realm, params) {
         realm.pubIn({
             [imageUploadHandler$]: params?.imageUploadHandler ?? null,
-            [imageAutocompleteSuggestions$]: params?.imageAutocompleteSuggestions ?? [],
             [disableImageResize$]: Boolean(params?.disableImageResize),
             [imagePreviewHandler$]: params?.imagePreviewHandler ?? null
         });

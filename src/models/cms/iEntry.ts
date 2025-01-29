@@ -107,7 +107,7 @@ abstract class iEntry {
 
     @computed
     get parent() {
-        return this.store.findEntry(this.branch, this.parentPath);
+        return this.store.findEntry(this.branch, this.parentPath) as Dir;
     }
 
     @computed

@@ -1,9 +1,11 @@
 import React from 'react';
-import * as RadixToolbar from '@radix-ui/react-toolbar';
 // import styles from '../../../styles/ui.module.css';
 import { useCellValues, usePublisher } from '@mdxeditor/gurx';
-import { openNewImageDialog$ } from '../plugins/image';
-import { iconComponentFor$, readOnly$, TooltipWrap, useTranslation } from '@mdxeditor/editor';
+import { iconComponentFor$, readOnly$, useTranslation } from '@mdxeditor/editor';
+import Popup from 'reactjs-popup';
+import { ImageDialog } from '../plugins/image/ImagesDialog';
+import Button from '@tdev-components/shared/Button';
+import { mdiImage, mdiImageOutline } from '@mdi/js';
 
 /**
  * A toolbar button that allows the user to insert an image from an URL.
@@ -11,22 +13,18 @@ import { iconComponentFor$, readOnly$, TooltipWrap, useTranslation } from '@mdxe
  * @group Toolbar Components
  */
 export const InsertImage = React.forwardRef<HTMLButtonElement, Record<string, never>>((_, forwardedRef) => {
-    const openNewImageDialog = usePublisher(openNewImageDialog$);
-    const [readOnly, iconComponentFor] = useCellValues(readOnly$, iconComponentFor$);
-    const t = useTranslation();
-
     return (
-        <RadixToolbar.Button
-            // className={styles.toolbarButton}
-            ref={forwardedRef}
-            disabled={readOnly}
-            onClick={() => {
-                openNewImageDialog();
-            }}
+        <Popup
+            trigger={
+                <span>
+                    <Button icon={mdiImageOutline} />
+                </span>
+            }
+            on="click"
+            closeOnDocumentClick
+            modal
         >
-            <TooltipWrap title={t('toolbar.image', 'Insert image')}>
-                {iconComponentFor('add_photo')}
-            </TooltipWrap>
-        </RadixToolbar.Button>
+            <ImageDialog />
+        </Popup>
     );
 });

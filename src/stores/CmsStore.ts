@@ -10,7 +10,7 @@ import {
 } from '@tdev-api/cms';
 import siteConfig from '@generated/docusaurus.config';
 import Dir from '@tdev-models/cms/Dir';
-import File from '@tdev-models/cms/File';
+import { default as FileModel } from '@tdev-models/cms/File';
 import { computedFn } from 'mobx-utils';
 import _ from 'lodash';
 import Settings from '@tdev-models/cms/Settings';
@@ -19,6 +19,7 @@ import FileStub from '@tdev-models/cms/FileStub';
 import iEntry from '@tdev-models/cms/iEntry';
 import { trimSlashes } from '@tdev-models/helpers/trimSlashes';
 import PartialSettings, { REFRESH_THRESHOLD } from '@tdev-models/cms/PartialSettings';
+import imageCompression from 'browser-image-compression';
 const { organizationName, projectName } = siteConfig;
 if (!organizationName || !projectName) {
     throw new Error('"organizationName" and "projectName" must be set in docusaurus.config.ts');
@@ -129,7 +130,7 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
     @computed
     get branchEntries() {
         if (!this.activeBranchName || !this.github) {
-            return [] as (Dir | File)[];
+            return [] as (Dir | FileModel)[];
         }
         return this.github.entries.get(this.activeBranchName) || [];
     }
@@ -189,7 +190,7 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
         return this.github?.defaultBranch?.name === this.activeBranchName;
     }
 
-    findEntry = computedFn(function <T = Dir | File>(
+    findEntry = computedFn(function <T = Dir | FileModel>(
         this: CmsStore,
         branch?: string,
         path?: string
@@ -226,7 +227,7 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
     });
 
     @action
-    setIsEditing(file: File | FileStub, isEditing: boolean) {
+    setIsEditing(file: FileModel | FileStub, isEditing: boolean) {
         this.settings?.setLocation(file.branch, isEditing ? file.path : null);
     }
 
@@ -302,5 +303,27 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
                     return this.loadSettings();
                 });
         });
+    }
+
+    @action
+    uploadImage(file: File, imagePath: string, branch: string, sha?: string, maxSizeMB: number = 1) {
+        const { github } = this;
+        if (!github) {
+            return Promise.resolve(undefined);
+        }
+        return imageCompression(file, { maxSizeMB: maxSizeMB, maxWidthOrHeight: 3840, useWebWorker: true })
+            .then(function (compressedFile) {
+                return imageCompression.getDataUrlFromFile(compressedFile);
+            })
+            .then((dataUrl) => {
+                // dataUrl looks like: data:image/jpeg;base64,/9j/4AAQSkZJRg...
+                // take only the content after the comma
+                const base64 = dataUrl.split(',')[1];
+                return github.createOrUpdateFile(imagePath, base64, branch, sha, undefined, true);
+            })
+            .catch(function (error) {
+                console.log(error.message);
+                return undefined;
+            });
     }
 }
