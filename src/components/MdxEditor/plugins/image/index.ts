@@ -38,7 +38,6 @@ import {
 import { $createImageNode, $isImageNode, CreateImageNodeParameters, ImageNode } from './ImageNode';
 import { MdastImageVisitor } from './MdastImageVisitor';
 import React from 'react';
-import { ImageDialog } from './ImagesDialog/ImageDialog-ref';
 
 export * from './ImageNode';
 

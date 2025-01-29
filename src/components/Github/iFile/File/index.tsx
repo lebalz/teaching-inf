@@ -36,7 +36,9 @@ const File = observer((props: Props) => {
                 <Icon path={file.icon} size={BUTTON_SIZE} color={file.iconColor} />
                 <span className={clsx(shared.item)}>{file.name}</span>
             </Link>
-            {file.isImage && <ImagePreview file={file} />}
+            {file.isImage && (
+                <ImagePreview src={file.type === 'file' ? FileModel.ImageDataUrl(file) : file.downloadUrl} />
+            )}
             <div className={clsx(styles.actions)}>
                 <Delete
                     onDelete={() => {
