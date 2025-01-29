@@ -1,13 +1,8 @@
 import React from 'react';
 import clsx from 'clsx';
-import styles from './login.module.scss';
 import Layout from '@theme/Layout';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@tdev-hooks/useStore';
-import CodeBlock from '@theme/CodeBlock';
-import File from '@tdev-components/Github/iFile/File';
-import Dir from '@tdev-components/Github/iFile/Dir';
 import MdxEditor from '@tdev-components/MdxEditor';
 import Selector from '@tdev-components/Github/Branch/Selector';
 import { useGithubAccess } from '@tdev-hooks/useGithubAccess';
@@ -21,8 +16,8 @@ import PR from '@tdev-components/Github/PR';
 import PathNav from '@tdev-components/MdxEditor/PathNav';
 import Directory from '@tdev-components/MdxEditor/Directory';
 import ImagePreview from '@tdev-components/Github/iFile/File/ImagePreview';
-import CodeEditor from '@tdev-components/shared/CodeEditor';
 import DefaultEditor from '@tdev-components/Github/DefaultEditor';
+import styles from './styles.module.scss';
 
 const GhCallback = observer(() => {
     const cmsStore = useStore('cmsStore');
@@ -38,7 +33,7 @@ const GhCallback = observer(() => {
 
     return (
         <Layout>
-            <main>
+            <main className={clsx(styles.cms)}>
                 <PathNav item={activeEntry} />
                 <Selector
                     onSelect={(branchName) => {
