@@ -8,6 +8,7 @@ import {
 } from '@mdxeditor/editor';
 import React from 'react';
 import { ADMONITION_TYPES } from '../JsxPluginDescriptors/directive-editors/AdmonitionDescriptor';
+import _ from 'lodash';
 
 /**
  * A toolbar dropdown button that allows the user to insert admonitions.
@@ -21,7 +22,7 @@ export const InsertAdmonition = () => {
     const t = useTranslation();
 
     const items = React.useMemo(() => {
-        return ADMONITION_TYPES.map((type) => ({ value: type, label: type }));
+        return [...ADMONITION_TYPES, 'details'].map((type) => ({ value: type, label: _.capitalize(type) }));
     }, [t]);
 
     return (

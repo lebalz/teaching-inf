@@ -133,7 +133,7 @@ const CmsMdxEditor = observer((props: Props) => {
                                     }}
                                 />
                                 <DiffSourceToggleWrapper>
-                                    <InsertTable />
+                                    <UndoRedo />
                                     <BoldItalicUnderlineToggles />
                                     <ToolbarInsertBoxed />
                                     <ListsToggle />
@@ -143,7 +143,7 @@ const CmsMdxEditor = observer((props: Props) => {
                                     <BlockTypeSelect />
                                     <InsertAdmonition />
                                     <InsertFrontmatter />
-                                    <UndoRedo />
+                                    <InsertTable />
                                     <ConditionalContents
                                         options={[
                                             {
