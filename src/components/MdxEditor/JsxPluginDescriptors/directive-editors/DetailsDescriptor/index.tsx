@@ -7,7 +7,7 @@ import { BlockContent, Paragraph, PhrasingContent, RootContent } from 'mdast';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
 import Admonition from '@theme/Admonition';
-import { mdiAbacus, mdiArrowDown, mdiChevronDown } from '@mdi/js';
+import { mdiAbacus, mdiArrowDown, mdiChevronDown, mdiChevronRight } from '@mdi/js';
 import Button from '@tdev-components/shared/Button';
 import Popup from 'reactjs-popup';
 import RemoveJsxNode from '../../../RemoveJsxNode';
@@ -39,46 +39,56 @@ export const DetailsDirectiveDescriptor: DirectiveDescriptor = {
         return node.name === 'details';
     },
     Editor({ mdastNode, lexicalNode }) {
+        const [open, setOpen] = React.useState(false);
         const updater = useMdastNodeUpdater();
         return (
-            <Details
-                className={clsx(styles.details)}
-                summary={
-                    <>
-                        <NestedLexicalEditor<ContainerDirective>
-                            block={false}
-                            getContent={(node) => {
-                                const label = node.children.find(
-                                    (n) => n.type === 'paragraph' && n.data?.directiveLabel
-                                ) as Paragraph;
-                                return label?.children || [];
-                            }}
-                            contentEditableProps={{
-                                className: styles.header
-                            }}
-                            getUpdatedMdastNode={(mdastNode, children) => {
-                                const content = mdastNode.children.filter(
-                                    (n) => !(n.type === 'paragraph' && n.data?.directiveLabel)
-                                );
-                                return {
-                                    ...mdastNode,
-                                    children: [
-                                        {
-                                            type: 'paragraph',
-                                            children: children as PhrasingContent[],
-                                            data: {
-                                                directiveLabel: true
-                                            }
-                                        } satisfies Paragraph,
-                                        ...content
-                                    ]
-                                };
-                            }}
-                        />
-                        <RemoveJsxNode />
-                    </>
-                }
-            >
+            <details className={clsx(styles.details, 'alert', 'alert--info')} open={open}>
+                <summary
+                    onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }}
+                    className={clsx(styles.summary)}
+                >
+                    <Button
+                        icon={open ? mdiChevronDown : mdiChevronRight}
+                        size={0.8}
+                        onClick={() => setOpen((o) => !o)}
+                        iconSide="left"
+                        color="primary"
+                    />
+                    <NestedLexicalEditor<ContainerDirective>
+                        block={false}
+                        getContent={(node) => {
+                            const label = node.children.find(
+                                (n) => n.type === 'paragraph' && n.data?.directiveLabel
+                            ) as Paragraph;
+                            return label?.children || [];
+                        }}
+                        contentEditableProps={{
+                            className: styles.header
+                        }}
+                        getUpdatedMdastNode={(mdastNode, children) => {
+                            const content = mdastNode.children.filter(
+                                (n) => !(n.type === 'paragraph' && n.data?.directiveLabel)
+                            );
+                            return {
+                                ...mdastNode,
+                                children: [
+                                    {
+                                        type: 'paragraph',
+                                        children: children as PhrasingContent[],
+                                        data: {
+                                            directiveLabel: true
+                                        }
+                                    } satisfies Paragraph,
+                                    ...content
+                                ]
+                            };
+                        }}
+                    />
+                    <RemoveJsxNode />
+                </summary>
                 <NestedLexicalEditor<ContainerDirective>
                     block
                     contentEditableProps={{
@@ -98,7 +108,7 @@ export const DetailsDirectiveDescriptor: DirectiveDescriptor = {
                         return { ...mdastNode, children: composed };
                     }}
                 />
-            </Details>
+            </details>
         );
     }
 };

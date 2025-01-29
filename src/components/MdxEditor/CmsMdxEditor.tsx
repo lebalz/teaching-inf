@@ -55,6 +55,7 @@ import { ToolbarInsertBoxed } from './plugins/strong/ToolbarInsertBoxed';
 import { useStore } from '@tdev-hooks/useStore';
 import { IMAGE_DIR_NAME } from '@tdev-models/cms/Dir';
 import { codeMirrorPlugin } from './plugins/codemirror';
+import DefaultEditor from '@tdev-components/Github/DefaultEditor';
 
 export interface Props {
     file: FileModel;
@@ -68,9 +69,12 @@ const CmsMdxEditor = observer((props: Props) => {
     return (
         <ErrorBoundary
             fallback={({ error, tryAgain }) => (
-                <div className={clsx('alert', 'alert--danger')} role="alert">
-                    <div>Der Editor ist abgestürzt 😵‍💫: {error.message}</div>
-                    Versuche ein anderes Dokument zu öffnen 😎.
+                <div>
+                    <div className={clsx('alert', 'alert--danger')} role="alert">
+                        <div>Der Editor ist abgestürzt 😵‍💫: {error.message}</div>
+                        Versuche ein anderes Dokument zu öffnen 😎.
+                    </div>
+                    <DefaultEditor file={file} />
                 </div>
             )}
         >
