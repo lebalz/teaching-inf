@@ -25,7 +25,7 @@ const ImagePreview = observer((props: Props) => {
         <div className={clsx(styles.preview)}>
             <Card
                 classNames={{ image: styles.img, header: styles.header }}
-                image={<img src={file.downloadUrl!} />}
+                image={<img src={file.type === 'file' ? FileModel.ImageDataUrl(file) : file.downloadUrl} />}
                 header={props.showPathName ? getPathName(file) : undefined}
             ></Card>
         </div>

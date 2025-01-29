@@ -1,6 +1,7 @@
 .file {
     cursor: pointer;
     display: flex;
+    align-items: flex-start;
     gap: 0.5em;
     justify-content: space-between;
     &:hover {
@@ -8,6 +9,7 @@
     }
     .actions {
         display: flex;
+        min-height: 2.4cap;
     }
     .fileLink {
         flex-grow: 1;

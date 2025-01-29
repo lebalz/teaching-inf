@@ -30,6 +30,7 @@ import styles from './styles.module.scss';
 import { NestedEditorsContext, NestedLexicalEditor } from '@mdxeditor/editor';
 import { ContainerDirective } from 'mdast-util-directive';
 import TextInput from '@tdev-components/shared/TextInput';
+import File from '@tdev-models/cms/File';
 
 export interface ImageEditorProps {
     nodeKey: string;
@@ -160,11 +161,7 @@ export const ImageComponent = observer((props: ImageEditorProps): React.ReactNod
                     <img
                         className={clsx(isFocused && styles.focusedImage)}
                         alt={alt}
-                        src={
-                            gitImg?.type === 'file' && gitImg.isImage
-                                ? `data:image/${gitImg.extension};base64,${gitImg.content}`
-                                : src
-                        }
+                        src={gitImg?.type === 'file' && gitImg.isImage ? File.ImageDataUrl(gitImg) : src}
                         width={props.width}
                         ref={imageRef}
                         draggable="false"

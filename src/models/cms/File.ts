@@ -75,6 +75,13 @@ class File extends iFileStub {
         );
     }
 
+    static ImageDataUrl(file: File) {
+        if (file.extension === 'svg') {
+            return `data:image/svg+xml;base64,${file.content}`;
+        }
+        return `data:image/${file.extension};base64,${file.content}`;
+    }
+
     @computed
     get isDirty() {
         return this.content !== this._pristine;

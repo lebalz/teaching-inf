@@ -5,7 +5,6 @@ import {
     BoldItalicUnderlineToggles,
     ChangeCodeMirrorLanguage,
     codeBlockPlugin,
-    codeMirrorPlugin,
     CodeToggle,
     ConditionalContents,
     CreateLink,
@@ -35,6 +34,7 @@ import _ from 'lodash';
 import '@mdxeditor/editor/style.css';
 import { default as FileModel } from '@tdev-models/cms/File';
 import { AdmonitionDirectiveDescriptor } from './JsxPluginDescriptors/directive-editors/AdmonitionDescriptor';
+import { DetailsDirectiveDescriptor } from './JsxPluginDescriptors/directive-editors/DetailsDescriptor';
 import '@mdxeditor/editor/style.css';
 import { InsertAdmonition } from './toolbar/InsertAdmonition';
 import { InsertJsxElements } from './toolbar/InsertJsxOptions';
@@ -54,6 +54,7 @@ import { strongPlugin } from './plugins/strong';
 import { ToolbarInsertBoxed } from './plugins/strong/ToolbarInsertBoxed';
 import { useStore } from '@tdev-hooks/useStore';
 import { IMAGE_DIR_NAME } from '@tdev-models/cms/Dir';
+import { codeMirrorPlugin } from './plugins/codemirror';
 
 export interface Props {
     file: FileModel;
@@ -91,7 +92,11 @@ const CmsMdxEditor = observer((props: Props) => {
                     quotePlugin(),
                     strongPlugin(),
                     directivesPlugin({
-                        directiveDescriptors: [AdmonitionDirectiveDescriptor, MdiDescriptor]
+                        directiveDescriptors: [
+                            AdmonitionDirectiveDescriptor,
+                            DetailsDirectiveDescriptor,
+                            MdiDescriptor
+                        ]
                     }),
                     thematicBreakPlugin(),
                     tablePlugin(),
@@ -110,7 +115,8 @@ const CmsMdxEditor = observer((props: Props) => {
                             mdx: 'MDX',
                             bash: 'bash',
                             ['mdx-code-block']: 'mdx-code-block'
-                        }
+                        },
+                        autoLoadLanguageSupport: true
                     }),
                     toolbarPlugin({
                         toolbarClassName: styles.toolbar,
