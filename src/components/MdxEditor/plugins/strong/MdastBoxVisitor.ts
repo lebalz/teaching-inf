@@ -21,8 +21,7 @@ export const MdastBoxVisitor: MdastImportVisitor<Mdast.Strong> = {
             const content =
                 cmsStore.activeEntry?.type === 'file' ? cmsStore.activeEntry.contentAt(position) : undefined;
             if (content && content.startsWith('__')) {
-                (lexicalParent as ElementNode)?.append($createBoxNode(mdastNode));
-                // actions.addAndStepInto($createBoxNode(mdastNode));
+                actions.addAndStepInto($createBoxNode());
                 return;
             }
         }

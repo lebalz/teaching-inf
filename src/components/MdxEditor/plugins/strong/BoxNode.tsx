@@ -1,164 +1,216 @@
-import { NestedEditorsContext, VoidEmitter, voidEmitter } from '@mdxeditor/editor';
-import {
-    DecoratorNode,
+/**
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ * @see https://github.com/facebook/lexical/blob/main/packages/lexical-link/src/index.ts
+ *
+ */
+
+import type {
+    BaseSelection,
     EditorConfig,
-    LexicalEditor,
+    LexicalCommand,
     LexicalNode,
     NodeKey,
-    SerializedLexicalNode,
-    Spread,
-    TextNode
+    RangeSelection,
+    SerializedElementNode
 } from 'lexical';
-import { Strong } from 'mdast';
-import { JSX } from 'react';
-import BoxEditor from './BoxEditor';
 
-/**
- * A serialized representation of an {@link BoxNode}.
- * @group Directive
- */
-export type SerializedBoxedNode = Spread<
-    {
-        mdastNode: Strong;
-        type: 'boxed';
-        version: 1;
-    },
-    SerializedLexicalNode
->;
+import { $findMatchingParent, addClassNamesToElement } from '@lexical/utils';
+import {
+    $applyNodeReplacement,
+    $getSelection,
+    $isElementNode,
+    $isRangeSelection,
+    createCommand,
+    ElementNode,
+    Spread
+} from 'lexical';
+import { $getAncestor } from '../lexical-helpers/get-ancestors';
+import { $withSelectedNodes } from '../lexical-helpers/with-selected-nodes';
 
-export class BoxNode extends DecoratorNode<React.ReactNode> {
-    /** @internal */
-    __mdastNode: Strong;
+export type SerializedBoxNode = Spread<{}, SerializedElementNode>;
 
-    __focusEmitter = voidEmitter();
+type BoxedHTMLElementType = HTMLElement | HTMLSpanElement;
 
+/** @noInheritDoc */
+export class BoxNode extends ElementNode {
     static getType(): string {
         return 'boxed';
     }
 
     static clone(node: BoxNode): BoxNode {
-        return new BoxNode(structuredClone(node.__mdastNode), node.__key);
+        return new BoxNode(node.__key);
     }
 
-    /** @internal */
-    static importJSON(serializedNode: SerializedBoxedNode): BoxNode {
-        return $createBoxNode(serializedNode.mdastNode);
-    }
-
-    /**
-     * Constructs a new {@link BoxNode} with the specified MDAST directive node as the object to edit.
-     */
-    constructor(mdastNode: Strong, key?: NodeKey) {
+    constructor(key?: NodeKey) {
         super(key);
-        this.__mdastNode = {
-            ...mdastNode,
-            data: {
-                ...(mdastNode.data || {}),
-                hProperties: {
-                    ...(mdastNode.data?.hProperties || {}),
-                    class: 'boxed'
-                }
-            }
-        };
     }
 
-    /**
-     * Returns the MDAST node that is being edited.
-     */
-    getMdastNode(): Strong {
-        return this.__mdastNode;
+    createDOM(config: EditorConfig): BoxedHTMLElementType {
+        const element = document.createElement('strong');
+        addClassNamesToElement(element, 'boxed');
+        return element;
     }
 
-    /** @internal */
-    exportJSON(): SerializedBoxedNode {
-        return {
-            mdastNode: structuredClone(this.__mdastNode),
-            type: 'boxed',
-            version: 1
-        };
-    }
-
-    createDOM(): HTMLElement {
-        return document.createElement('span');
-    }
-
-    updateDOM(): boolean {
+    updateDOM(config: EditorConfig): boolean {
         return false;
     }
 
-    /**
-     * Sets a new MDAST node to edit.
-     */
-    setMdastNode(mdastNode: Strong): void {
-        this.getWritable().__mdastNode = {
-            ...mdastNode,
-            data: {
-                ...(mdastNode.data || {}),
-                hProperties: {
-                    ...(mdastNode.data?.hProperties || {}),
-                    class: 'boxed'
-                }
-            }
-        };
+    static importJSON(serializedNode: SerializedBoxNode): BoxNode {
+        return $createBoxNode().updateFromJSON(serializedNode);
     }
 
-    /**
-     * Focuses the direcitive editor.
-     */
-    select = () => {
-        this.__focusEmitter.publish();
-    };
-
-    /** @internal */
-    decorate(parentEditor: LexicalEditor, config: EditorConfig): JSX.Element {
-        return (
-            <BoxEditorContainer
-                lexicalNode={this}
-                mdastNode={this.getMdastNode()}
-                parentEditor={parentEditor}
-                config={config}
-                focusEmitter={this.__focusEmitter}
-            />
-        );
+    exportJSON(): SerializedBoxNode {
+        return super.exportJSON();
     }
 
-    /** @internal */
-    isInline(): boolean {
-        return this.__mdastNode.type === 'strong';
+    insertNewAfter(_: RangeSelection, restoreSelection = true): null | ElementNode {
+        const boxNode = $createBoxNode();
+        this.insertAfter(boxNode, restoreSelection);
+        return boxNode;
     }
 
-    /** @internal */
-    isKeyboardSelectable(): boolean {
+    canInsertTextBefore(): true {
         return true;
     }
+
+    canInsertTextAfter(): true {
+        return true;
+    }
+
+    canBeEmpty(): false {
+        return false;
+    }
+
+    isInline(): true {
+        return true;
+    }
+
+    extractWithChild(child: LexicalNode, selection: BaseSelection, destination: 'clone' | 'html'): boolean {
+        if (!$isRangeSelection(selection)) {
+            return false;
+        }
+
+        const anchorNode = selection.anchor.getNode();
+        const focusNode = selection.focus.getNode();
+
+        return (
+            this.isParentOf(anchorNode) && this.isParentOf(focusNode) && selection.getTextContent().length > 0
+        );
+    }
 }
 
-const BoxEditorContainer: React.FC<{
-    parentEditor: LexicalEditor;
-    lexicalNode: BoxNode;
-    mdastNode: Strong;
-    config: EditorConfig;
-    focusEmitter: VoidEmitter;
-}> = (props) => {
-    const { mdastNode } = props;
-    return (
-        <NestedEditorsContext.Provider value={props}>
-            <BoxEditor />
-        </NestedEditorsContext.Provider>
-    );
-};
 /**
- * Creates an {@link BoxNode}. Use this instead of the constructor to follow the Lexical conventions.
- * @group Directive
+ * Creates a BoxNode.
+ * @returns The BoxNode.
  */
-export function $createBoxNode(mdastNode: Strong, key?: NodeKey): BoxNode {
-    return new BoxNode(mdastNode, key);
+export function $createBoxNode(): BoxNode {
+    return $applyNodeReplacement(new BoxNode());
 }
 
 /**
- * Retruns true if the node is an {@link BoxNode}.
- * @group Directive
+ * Determines if node is a BoxNode.
+ * @param node - The node to be checked.
+ * @returns true if node is a BoxNode, false otherwise.
  */
 export function $isBoxNode(node: LexicalNode | null | undefined): node is BoxNode {
     return node instanceof BoxNode;
+}
+
+export const TOGGLE_BOXED_COMMAND: LexicalCommand<boolean | null> = createCommand('TOGGLE_BOXED_COMMAND');
+
+/**
+ * Generates or updates a BoxNode. It can also delete a BoxNode if the URL is null,
+ * but saves any children and brings them up to the parent node.
+ * @param boxedOn - The URL the link directs to.
+ * @param attributes - Optional HTML a tag attributes. \\{ target, rel, title \\}
+ */
+export function $toggleBoxed(boxedOn: boolean): void {
+    const selection = $getSelection();
+
+    if (!$isRangeSelection(selection)) {
+        return;
+    }
+    const nodes = selection.extract();
+
+    if (boxedOn === false) {
+        // Remove BoxNodes
+        nodes.forEach((node) => {
+            const parentBox = $findMatchingParent(node, (parent): parent is BoxNode => $isBoxNode(parent));
+
+            if (parentBox) {
+                const children = parentBox.getChildren();
+
+                for (let i = 0; i < children.length; i++) {
+                    parentBox.insertBefore(children[i]);
+                }
+
+                parentBox.remove();
+            }
+        });
+        return;
+    }
+    const updatedNodes = new Set<NodeKey>();
+    const updateBoxNode = (boxNode: BoxNode) => {
+        if (updatedNodes.has(boxNode.getKey())) {
+            return;
+        }
+        updatedNodes.add(boxNode.getKey());
+    };
+    // Add or merge BoxNodes
+    if (nodes.length === 1) {
+        const firstNode = nodes[0];
+        // if the first node is a BoxNode or if its
+        // parent is a BoxNode, we update the URL, target and rel.
+        const boxNode = $getAncestor(firstNode, $isBoxNode);
+        if (boxNode !== null) {
+            return updateBoxNode(boxNode);
+        }
+    }
+
+    $withSelectedNodes(() => {
+        let boxNode: BoxNode | null = null;
+        for (const node of nodes) {
+            if (!node.isAttached()) {
+                continue;
+            }
+            const parentBoxNode = $getAncestor(node, $isBoxNode);
+            if (parentBoxNode) {
+                updateBoxNode(parentBoxNode);
+                continue;
+            }
+            if ($isElementNode(node)) {
+                if (!node.isInline()) {
+                    // Ignore block nodes, if there are any children we will see them
+                    // later and wrap in a new BoxNode
+                    continue;
+                }
+                if ($isBoxNode(node)) {
+                    // If it's not an autolink node and we don't already have a BoxNode
+                    // in this block then we can update it and re-use it
+                    if (boxNode === null || !boxNode.getParentOrThrow().isParentOf(node)) {
+                        updateBoxNode(node);
+                        boxNode = node;
+                        continue;
+                    }
+                    // Unwrap BoxNode
+                    for (const child of node.getChildren()) {
+                        node.insertBefore(child);
+                    }
+                    node.remove();
+                    continue;
+                }
+            }
+            const prevBoxNode = node.getPreviousSibling();
+            if ($isBoxNode(prevBoxNode) && prevBoxNode.is(boxNode)) {
+                prevBoxNode.append(node);
+                continue;
+            }
+            boxNode = $createBoxNode();
+            node.insertAfter(boxNode);
+            boxNode.append(node);
+        }
+    });
 }

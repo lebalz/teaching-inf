@@ -143,8 +143,7 @@ export default function MdiPickerPlugin() {
                             selectedOption.color === MdiColorClass.Black
                                 ? undefined
                                 : { class: selectedOption.color }
-                    }),
-                    $createTextNode(' ')
+                    })
                 ]);
 
                 closeMenu();
