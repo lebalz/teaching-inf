@@ -21,6 +21,8 @@ import PR from '@tdev-components/Github/PR';
 import PathNav from '@tdev-components/MdxEditor/PathNav';
 import Directory from '@tdev-components/MdxEditor/Directory';
 import ImagePreview from '@tdev-components/Github/iFile/File/ImagePreview';
+import CodeEditor from '@tdev-components/shared/CodeEditor';
+import DefaultEditor from '@tdev-components/Github/DefaultEditor';
 
 const GhCallback = observer(() => {
     const cmsStore = useStore('cmsStore');
@@ -55,10 +57,12 @@ const GhCallback = observer(() => {
                     <>
                         {activeEntry.type === 'file' && activeEntry.content !== undefined ? (
                             <>
-                                {activeEntry.isImage ? (
-                                    <ImagePreview file={activeEntry} />
-                                ) : (
+                                {activeEntry.isImage && <ImagePreview file={activeEntry} />}
+                                {activeEntry.isMarkdown && (
                                     <MdxEditor file={activeEntry} key={activeEntry.downloadUrl} />
+                                )}
+                                {!activeEntry.isImage && !activeEntry.isMarkdown && (
+                                    <DefaultEditor file={activeEntry} />
                                 )}
                             </>
                         ) : (

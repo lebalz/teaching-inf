@@ -95,7 +95,7 @@ export abstract class iFileStub extends iEntry {
 
     @computed
     get isCode() {
-        return /(js|jsx|ts|tsx|py|java|cpp|c|cs|php|rb|go|rs|swift|json|yml|yaml|md|mdx|html|css)$/i.test(
+        return /(js|jsx|ts|tsx|py|java|cpp|c|cs|php|rb|go|rs|swift|json|yml|yaml|html|htmx|xml|css)$/i.test(
             this.extension
         );
     }
