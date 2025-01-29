@@ -142,7 +142,7 @@ class Github {
         this.createNewBranch(newBranch)
             .then(async () => {
                 await this.createOrUpdateFile(file.path, file.content, newBranch, file.sha);
-                await this.createPR(newBranch, newBranch);
+                await this.createPR(newBranch, `${newBranch} [skip ci]`);
                 this.store.settings?.setLocation(newBranch, file.path);
             })
             .catch(() => {
