@@ -37,7 +37,7 @@
         "@mdi/js": "^7.4.47",
         "@mdi/react": "^1.6.1",
         "@mdx-js/react": "^3.0.0",
-        "@mdxeditor/editor": "^3.21.0",
+        "@mdxeditor/editor": "^3.21.2",
         "@octokit/rest": "^21.1.0",
         "@types/lodash": "^4.17.7",
         "@yudiel/react-qr-scanner": "^2.1.0",
