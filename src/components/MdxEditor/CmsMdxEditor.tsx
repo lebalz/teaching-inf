@@ -95,6 +95,15 @@ const CmsMdxEditor = observer((props: Props) => {
                     linkDialogPlugin(),
                     quotePlugin(),
                     strongPlugin(),
+                    jsxPlugin({
+                        jsxComponentDescriptors: [
+                            BrowserWindowDescriptor,
+                            DocCardListDescriptor,
+                            DeflistDescriptor,
+                            DdDescriptor,
+                            DtDescriptor
+                        ]
+                    }),
                     directivesPlugin({
                         directiveDescriptors: [
                             AdmonitionDirectiveDescriptor,
@@ -164,15 +173,6 @@ const CmsMdxEditor = observer((props: Props) => {
                                 </DiffSourceToggleWrapper>
                             </>
                         )
-                    }),
-                    jsxPlugin({
-                        jsxComponentDescriptors: [
-                            BrowserWindowDescriptor,
-                            DocCardListDescriptor,
-                            DeflistDescriptor,
-                            DdDescriptor,
-                            DtDescriptor
-                        ]
                     }),
                     imagePlugin({
                         imageUploadHandler: (img: File) => {

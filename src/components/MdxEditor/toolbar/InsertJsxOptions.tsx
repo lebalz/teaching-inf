@@ -3,6 +3,7 @@ import React from 'react';
 import { mdiApplicationOutline, mdiDotsVerticalCircleOutline, mdiFormatListCheckbox } from '@mdi/js';
 import Button from '@tdev-components/shared/Button';
 import Icon from '@mdi/react';
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 
 /**
  * A toolbar dropdown button that allows the user to insert admonitions.
@@ -12,6 +13,8 @@ import Icon from '@mdi/react';
  */
 export const InsertJsxElements = () => {
     const insertJsx = usePublisher(insertJsx$);
+    const [editor] = useLexicalComposerContext();
+
     return (
         <ButtonOrDropdownButton
             items={[
@@ -26,22 +29,26 @@ export const InsertJsxElements = () => {
             ]}
             title="Insert JSX Elements"
             onChoose={(value) => {
-                switch (value) {
-                    case 'DocCardList':
-                        insertJsx({
-                            name: 'DocCardList',
-                            kind: 'flow',
-                            props: {}
-                        });
-                        break;
-                    case 'BrowserWindow':
-                        insertJsx({
-                            name: 'BrowserWindow',
-                            kind: 'flow',
-                            props: {}
-                        });
-                        break;
-                }
+                setTimeout(() => {
+                    editor.update(() => {
+                        switch (value) {
+                            case 'DocCardList':
+                                insertJsx({
+                                    name: 'DocCardList',
+                                    kind: 'flow',
+                                    props: {}
+                                });
+                                break;
+                            case 'BrowserWindow':
+                                insertJsx({
+                                    name: 'BrowserWindow',
+                                    kind: 'flow',
+                                    props: {}
+                                });
+                                break;
+                        }
+                    });
+                }, 1);
             }}
         >
             <Icon path={mdiDotsVerticalCircleOutline} size={1} />
