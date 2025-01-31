@@ -1,8 +1,8 @@
 import { JsxComponentDescriptor, NestedLexicalEditor } from '@mdxeditor/editor';
 import BrowserWindow from '@tdev-components/BrowserWindow';
 import { MdxJsxFlowElement } from 'mdast-util-mdx';
-import GenericAttributeEditor from '../GenericAttributeEditor';
-import RemoveJsxNode from '../RemoveJsxNode';
+import GenericAttributeEditor from '../../GenericAttributeEditor';
+import RemoveJsxNode from '../../RemoveJsxNode';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
 

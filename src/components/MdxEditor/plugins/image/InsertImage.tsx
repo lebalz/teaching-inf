@@ -3,7 +3,7 @@ import React from 'react';
 import { useCellValues, usePublisher } from '@mdxeditor/gurx';
 import { iconComponentFor$, readOnly$, useTranslation } from '@mdxeditor/editor';
 import Popup from 'reactjs-popup';
-import { ImageDialog } from '../plugins/image/ImagesDialog';
+import { ImageDialog } from './ImagesDialog';
 import Button from '@tdev-components/shared/Button';
 import { mdiImage, mdiImageOutline } from '@mdi/js';
 

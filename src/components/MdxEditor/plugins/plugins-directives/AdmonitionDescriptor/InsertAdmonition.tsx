@@ -7,7 +7,7 @@ import {
     useTranslation
 } from '@mdxeditor/editor';
 import React from 'react';
-import { ADMONITION_TYPES } from '../JsxPluginDescriptors/directive-editors/AdmonitionDescriptor';
+import { ADMONITION_TYPES } from '.';
 import _ from 'lodash';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 

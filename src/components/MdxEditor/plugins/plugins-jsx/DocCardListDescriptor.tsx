@@ -1,5 +1,5 @@
 import { JsxComponentDescriptor } from '@mdxeditor/editor';
-import RemoveJsxNode from '../RemoveJsxNode';
+import RemoveJsxNode from '../../RemoveJsxNode';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
 import { mdiFormatListCheckbox } from '@mdi/js';
