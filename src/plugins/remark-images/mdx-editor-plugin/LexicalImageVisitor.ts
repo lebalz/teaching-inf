@@ -4,7 +4,7 @@
 
 import * as Mdast from 'mdast';
 import { ImageNode, $isImageNode } from './ImageNode';
-import { activeEditor$, LexicalExportVisitor, markdown$, rootEditor$ } from '@mdxeditor/editor';
+import { LexicalExportVisitor } from '@mdxeditor/editor';
 
 export const LexicalImageVisitor: LexicalExportVisitor<ImageNode, Mdast.Image> = {
     testLexicalNode: $isImageNode,

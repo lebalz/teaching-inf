@@ -3,11 +3,10 @@
  */
 
 import { $wrapNodeInElement, CAN_USE_DOM, mergeRegister } from '@lexical/utils';
-import { Action, Cell, Signal, map, mapTo, withLatestFrom } from '@mdxeditor/gurx';
+import { Cell, Signal, withLatestFrom } from '@mdxeditor/gurx';
 import {
     $createParagraphNode,
     $createRangeSelection,
-    $getNodeByKey,
     $getSelection,
     $insertNodes,
     $isNodeSelection,
@@ -28,7 +27,6 @@ import {
 import { LexicalImageVisitor } from './LexicalImageVisitor';
 import {
     activeEditor$,
-    addComposerChild$,
     addExportVisitor$,
     addImportVisitor$,
     addLexicalNode$,

@@ -5,18 +5,16 @@
 import React from 'react';
 // import styles from '../../styles/ui.module.css';
 import Card from '@tdev-components/shared/Card';
-import { useStore } from '@tdev-hooks/useStore';
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
 import ImageGallery from './ImageGallery';
 import { usePublisher } from '@mdxeditor/editor';
-import { insertImage$, saveImage$ } from '..';
+import { insertImage$ } from '..';
 import TextInput from '@tdev-components/shared/TextInput';
 import ImagePreview from '@tdev-components/Github/iFile/File/ImagePreview';
 import Button from '@tdev-components/shared/Button';
 
 export const ImageDialog = observer(() => {
-    const cmsStore = useStore('cmsStore');
     const [src, setSrc] = React.useState('');
     const insertImage = usePublisher(insertImage$);
 

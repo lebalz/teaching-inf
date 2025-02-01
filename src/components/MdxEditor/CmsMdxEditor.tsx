@@ -46,16 +46,16 @@ import {
     FlexDirectiveDescriptor
 } from '@tdev-plugins/remark-flex-cards/mdx-editor-plugin';
 import mdiCompletePlugin from './plugins/MdiComplete';
-import { imagePlugin } from './plugins/image';
+import { imagePlugin } from '@tdev-plugins/remark-images/mdx-editor-plugin';
 import { DeflistDescriptor, DdDescriptor, DtDescriptor } from './plugins/plugins-jsx/DeflistDescriptor';
 import ErrorBoundary from '@docusaurus/ErrorBoundary';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
 import Actions from './toolbar/Actions';
 import * as Mdast from 'mdast';
-import { InsertImage } from './plugins/image/InsertImage';
-import { strongPlugin } from '../../plugins/remark-strong/mdx-editor-plugin';
-import { ToolbarInsertBoxed } from '../../plugins/remark-strong/mdx-editor-plugin/ToolbarInsertBoxed';
+import { InsertImage } from '@tdev-plugins/remark-images/mdx-editor-plugin/InsertImage';
+import { strongPlugin } from '@tdev-plugins/remark-strong/mdx-editor-plugin';
+import { ToolbarInsertBoxed } from '@tdev-plugins/remark-strong/mdx-editor-plugin/ToolbarInsertBoxed';
 import { useStore } from '@tdev-hooks/useStore';
 import { IMAGE_DIR_NAME } from '@tdev-models/cms/Dir';
 import { codeMirrorPlugin } from './plugins/codemirror';

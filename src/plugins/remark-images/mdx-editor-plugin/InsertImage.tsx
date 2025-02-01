@@ -1,11 +1,9 @@
 import React from 'react';
 // import styles from '../../../styles/ui.module.css';
-import { useCellValues, usePublisher } from '@mdxeditor/gurx';
-import { iconComponentFor$, readOnly$, useTranslation } from '@mdxeditor/editor';
 import Popup from 'reactjs-popup';
 import { ImageDialog } from './ImagesDialog';
 import Button from '@tdev-components/shared/Button';
-import { mdiImage, mdiImageOutline } from '@mdi/js';
+import { mdiImageOutline } from '@mdi/js';
 
 /**
  * A toolbar button that allows the user to insert an image from an URL.

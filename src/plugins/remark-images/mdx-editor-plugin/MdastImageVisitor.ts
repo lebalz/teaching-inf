@@ -4,7 +4,7 @@
 
 import * as Mdast from 'mdast';
 import { $createImageNode } from './ImageNode';
-import { markdown$, MdastImportVisitor, rootEditor$, setMarkdown$ } from '@mdxeditor/editor';
+import { MdastImportVisitor } from '@mdxeditor/editor';
 
 export const MdastImageVisitor: MdastImportVisitor<Mdast.Image> = {
     testNode: 'image',
