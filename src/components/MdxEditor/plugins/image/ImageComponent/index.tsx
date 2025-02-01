@@ -21,14 +21,11 @@ import {
     SELECTION_CHANGE_COMMAND
 } from 'lexical';
 import ImageResizer from '../ImageResizer';
-import { BlockContent, Paragraph, PhrasingContent, RootContent, Text } from 'mdast';
 import { $isImageNode, type ImageNode } from '../ImageNode';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@tdev-hooks/useStore';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
-import { NestedEditorsContext, NestedLexicalEditor } from '@mdxeditor/editor';
-import { ContainerDirective } from 'mdast-util-directive';
 import TextInput from '@tdev-components/shared/TextInput';
 import File from '@tdev-models/cms/File';
 
@@ -43,7 +40,6 @@ export interface ImageEditorProps {
 export const ImageComponent = observer((props: ImageEditorProps): React.ReactNode => {
     const { src, alt, nodeKey, caption } = props;
     const cmsStore = useStore('cmsStore');
-    const { github } = cmsStore;
 
     const imageRef = React.useRef<null | HTMLImageElement>(null);
     const [isSelected, setSelected, clearSelection] = useLexicalNodeSelection(nodeKey);

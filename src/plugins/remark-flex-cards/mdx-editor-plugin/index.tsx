@@ -1,40 +1,22 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import React from 'react';
-import { $getSelection, $setSelection, type LexicalEditor } from 'lexical';
 import {
-    activeEditor$,
-    currentSelection$,
     DirectiveDescriptor,
     DirectiveEditorProps,
-    insertDirective$,
     NestedLexicalEditor,
-    useCellValues,
-    useMdastNodeUpdater,
-    usePublisher
+    useMdastNodeUpdater
 } from '@mdxeditor/editor';
 import { ContainerDirective, LeafDirective, Directives } from 'mdast-util-directive';
-import { BlockContent, Paragraph, PhrasingContent, DefinitionContent } from 'mdast';
+import { BlockContent, PhrasingContent } from 'mdast';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
-import {
-    mdiCardTextOutline,
-    mdiCheckCircleOutline,
-    mdiChevronDown,
-    mdiChevronRight,
-    mdiCircleEditOutline,
-    mdiCloseCircleOutline,
-    mdiMinusBoxOutline,
-    mdiPlus,
-    mdiPlusBox,
-    mdiPlusBoxOutline
-} from '@mdi/js';
+import { mdiChevronRight, mdiMinusBoxOutline, mdiPlusBoxOutline } from '@mdi/js';
 import Button from '@tdev-components/shared/Button';
-import RemoveJsxNode from '../../../components/MdxEditor/RemoveJsxNode';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import { edit } from 'ace-builds';
-import unfocusEditor from '@tdev-components/MdxEditor/helpers/lexical/unfocus-editor';
-import Icon from '@mdi/react';
+import Popup from 'reactjs-popup';
+import Card from '@tdev-components/shared/Card';
+import { SIZE_S } from '@tdev-components/shared/iconSizes';
 
 const isBreak = (node?: BlockContent | any): node is LeafDirective => {
     if (!node) {
@@ -47,62 +29,51 @@ interface ItemProps {
     isCard: boolean;
     start: number;
     end?: number;
-    isEditing: boolean;
     onInsert: () => void;
     onRemove: () => void;
 }
 const ItemEditor = (props: ItemProps) => {
-    const { isCard, start, end, isEditing } = props;
+    const { isCard, start, end } = props;
     return (
         <div className={clsx(styles.item, 'item', isCard && 'card')}>
             <div className={clsx(styles.editor, isCard ? 'card__body' : 'content')}>
-                {isEditing ? (
-                    <div className={clsx(styles.placeholder)}>
-                        <Icon path={mdiCardTextOutline} size={3} color="var(--ifm-color-blue)" />
-                    </div>
-                ) : (
-                    <NestedLexicalEditor<ContainerDirective>
-                        block
-                        getContent={(node) => {
-                            const content = node.children.slice(start, end);
-                            return content;
-                        }}
-                        getUpdatedMdastNode={(mdastNode, children) => {
-                            const composed = [
-                                ...mdastNode.children.slice(0, start),
-                                ...children,
-                                ...mdastNode.children.slice(end)
-                            ] as BlockContent[];
-                            return { ...mdastNode, children: composed };
-                        }}
-                    />
-                )}
+                <NestedLexicalEditor<ContainerDirective>
+                    block
+                    getContent={(node) => {
+                        const content = node.children.slice(start, end);
+                        return content;
+                    }}
+                    getUpdatedMdastNode={(mdastNode, children) => {
+                        const composed = [
+                            ...mdastNode.children.slice(0, start),
+                            ...children,
+                            ...mdastNode.children.slice(end)
+                        ] as BlockContent[];
+                        return { ...mdastNode, children: composed };
+                    }}
+                />
             </div>
-            {isEditing && (
-                <>
-                    <Button
-                        icon={mdiPlusBoxOutline}
-                        className={clsx(styles.add)}
-                        color="green"
-                        onClick={props.onInsert}
-                    />
-                    <Button
-                        icon={mdiMinusBoxOutline}
-                        className={clsx(styles.remove)}
-                        color="red"
-                        onClick={props.onRemove}
-                    />
-                </>
-            )}
+            <div className={clsx(styles.actions)}>
+                <Button
+                    icon={mdiPlusBoxOutline}
+                    className={clsx(styles.add, styles.button)}
+                    color="green"
+                    onClick={props.onInsert}
+                    size={SIZE_S}
+                />
+                <Button
+                    icon={mdiMinusBoxOutline}
+                    className={clsx(styles.remove, styles.button)}
+                    size={SIZE_S}
+                    color="red"
+                    onClick={props.onRemove}
+                />
+            </div>
         </div>
     );
 };
 
-export const FlexCardEditor: React.ComponentType<DirectiveEditorProps<Directives>> = ({
-    mdastNode,
-    lexicalNode
-}) => {
-    const [isEditing, setEditing] = React.useState(false);
+export const FlexCardEditor: React.ComponentType<DirectiveEditorProps<Directives>> = ({ mdastNode }) => {
     const updater = useMdastNodeUpdater();
     const [editor] = useLexicalComposerContext();
     const isCard = mdastNode.name === 'cards';
@@ -127,15 +98,33 @@ export const FlexCardEditor: React.ComponentType<DirectiveEditorProps<Directives
     }, [parts]);
 
     return (
-        <div className={clsx(styles.flexCard)}>
+        <div className={clsx(styles.flexCard, 'flex-card-container')}>
             <div className={clsx(styles.toolbar)}>
-                <Button
-                    icon={isEditing ? mdiCheckCircleOutline : mdiCircleEditOutline}
-                    color={isEditing ? 'green' : 'orange'}
-                    onClick={() => {
-                        setEditing(!isEditing);
-                    }}
-                />
+                <Popup
+                    trigger={
+                        <div className={styles.admonitionSwitcher}>
+                            <Button icon={mdiChevronRight} size={0.8} iconSide="left" color="primary" />
+                        </div>
+                    }
+                    on="click"
+                    position={['right center']}
+                    closeOnDocumentClick
+                    closeOnEscape
+                >
+                    <Card>
+                        {['flex', 'cards'].map((cardType) => (
+                            <Button
+                                key={cardType}
+                                className={clsx(styles.userButton)}
+                                iconSide="left"
+                                active={mdastNode.name === cardType}
+                                onClick={() => updater({ name: cardType })}
+                            >
+                                {cardType}
+                            </Button>
+                        ))}
+                    </Card>
+                </Popup>
             </div>
             <div className={clsx(styles.flex, 'flex', isCard && 'flex-cards')}>
                 {parts.map((part) => {
@@ -143,7 +132,7 @@ export const FlexCardEditor: React.ComponentType<DirectiveEditorProps<Directives
                         <ItemEditor
                             isCard={isCard}
                             {...part}
-                            isEditing={isEditing}
+                            key={part.key}
                             onInsert={() => {
                                 editor.update(() => {
                                     const end = part.end || mdastNode.children.length;
