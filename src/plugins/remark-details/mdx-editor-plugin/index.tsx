@@ -13,7 +13,7 @@ import styles from './styles.module.scss';
 import clsx from 'clsx';
 import { mdiChevronDown, mdiChevronRight } from '@mdi/js';
 import Button from '@tdev-components/shared/Button';
-import RemoveJsxNode from '../../../RemoveJsxNode';
+import RemoveJsxNode from '../../../components/MdxEditor/RemoveJsxNode';
 
 /** @internal */
 export const ADMONITION_TYPES = ['note', 'tip', 'info', 'warning', 'danger'] as const;

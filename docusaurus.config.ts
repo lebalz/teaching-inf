@@ -381,6 +381,7 @@ const config: Config = {
                 '@tdev-models': path.resolve(__dirname, './src/models'),
                 '@tdev-stores': path.resolve(__dirname, './src/stores'),
                 '@tdev-api': path.resolve(__dirname, './src/api'),
+                '@tdev-plugins': path.resolve(__dirname, './src/plugins'),
                 '@tdev': path.resolve(__dirname, './src'),
               }
             }

@@ -1,27 +1,9 @@
-import { mergeRegister } from '@lexical/utils';
-import { mdiFormatTextbox, mdiRectangleOutline, mdiShapeRectanglePlus } from '@mdi/js';
+import { mdiRectangleOutline } from '@mdi/js';
 import Icon from '@mdi/react';
-import {
-    activeEditor$,
-    applyFormat$,
-    currentFormat$,
-    currentSelection$,
-    insertDecoratorNode$,
-    MultipleChoiceToggleGroup
-} from '@mdxeditor/editor';
-import { useCellValues, usePublisher, withLatestFrom } from '@mdxeditor/gurx';
-import {
-    $isRangeSelection,
-    CAN_REDO_COMMAND,
-    CAN_UNDO_COMMAND,
-    COMMAND_PRIORITY_CRITICAL,
-    IS_BOLD,
-    REDO_COMMAND,
-    UNDO_COMMAND
-} from 'lexical';
+import { activeEditor$, currentSelection$, MultipleChoiceToggleGroup } from '@mdxeditor/editor';
+import { useCellValues } from '@mdxeditor/gurx';
 import React from 'react';
-import { FORMAT_BOX_COMMAND, FORMAT_BOXED } from '.';
-import { $createBoxNode, $isBoxNode, TOGGLE_BOXED_COMMAND } from './BoxNode';
+import { $isBoxNode, TOGGLE_BOXED_COMMAND } from './BoxNode';
 
 /**
  * A toolbar component that lets the user undo and redo changes in the editor.
@@ -31,14 +13,16 @@ export const ToolbarInsertBoxed: React.FC = () => {
     const [selection, editor] = useCellValues(currentSelection$, activeEditor$);
     const [isActive, setIsActive] = React.useState(false);
     React.useLayoutEffect(() => {
-        editor?.read(() => {
-            try {
-                const parents = selection?.getNodes()?.[0]?.getParents() || [];
-                setIsActive(parents.some($isBoxNode));
-            } catch (e) {
-                // nop
-            }
-        });
+        setTimeout(() => {
+            editor?.read(() => {
+                try {
+                    const parents = selection?.getNodes()?.[0]?.getParents() || [];
+                    setIsActive(parents.some($isBoxNode));
+                } catch (e) {
+                    // nop
+                }
+            });
+        }, 1);
     }, [editor, selection]);
     return (
         <MultipleChoiceToggleGroup

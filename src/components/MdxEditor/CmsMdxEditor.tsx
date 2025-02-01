@@ -34,13 +34,17 @@ import _ from 'lodash';
 import '@mdxeditor/editor/style.css';
 import { default as FileModel } from '@tdev-models/cms/File';
 import { AdmonitionDirectiveDescriptor } from './plugins/plugins-directives/AdmonitionDescriptor';
-import { DetailsDirectiveDescriptor } from './plugins/plugins-directives/DetailsDescriptor';
+import { DetailsDirectiveDescriptor } from '@tdev-plugins/remark-details/mdx-editor-plugin';
 import '@mdxeditor/editor/style.css';
 import { InsertAdmonition } from './plugins/plugins-directives/AdmonitionDescriptor/InsertAdmonition';
 import { InsertJsxElements } from './plugins/plugins-jsx/InsertJsxOptions';
 import BrowserWindowDescriptor from './plugins/plugins-jsx/BrowserWindowDescriptor';
 import DocCardListDescriptor from './plugins/plugins-jsx/DocCardListDescriptor';
-import { MdiDescriptor } from '../../plugins/remark-mdi/mdx-editor-plugin';
+import { MdiDescriptor } from '@tdev-plugins/remark-mdi/mdx-editor-plugin';
+import {
+    CardsDirectiveDescriptor,
+    FlexDirectiveDescriptor
+} from '@tdev-plugins/remark-flex-cards/mdx-editor-plugin';
 import mdiCompletePlugin from './plugins/MdiComplete';
 import { imagePlugin } from './plugins/image';
 import { DeflistDescriptor, DdDescriptor, DtDescriptor } from './plugins/plugins-jsx/DeflistDescriptor';
@@ -108,7 +112,9 @@ const CmsMdxEditor = observer((props: Props) => {
                         directiveDescriptors: [
                             AdmonitionDirectiveDescriptor,
                             DetailsDirectiveDescriptor,
-                            MdiDescriptor
+                            MdiDescriptor,
+                            FlexDirectiveDescriptor,
+                            CardsDirectiveDescriptor
                         ]
                     }),
                     thematicBreakPlugin(),
