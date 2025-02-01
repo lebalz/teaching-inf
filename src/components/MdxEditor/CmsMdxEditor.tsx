@@ -33,10 +33,10 @@ import {
 import _ from 'lodash';
 import '@mdxeditor/editor/style.css';
 import { default as FileModel } from '@tdev-models/cms/File';
-import { AdmonitionDirectiveDescriptor } from './plugins/plugins-directives/AdmonitionDescriptor';
+import { AdmonitionDirectiveDescriptor } from './plugins/AdmonitionDescriptor';
 import { DetailsDirectiveDescriptor } from '@tdev-plugins/remark-details/mdx-editor-plugin';
 import '@mdxeditor/editor/style.css';
-import { InsertAdmonition } from './plugins/plugins-directives/AdmonitionDescriptor/InsertAdmonition';
+import { InsertAdmonition } from './plugins/AdmonitionDescriptor/InsertAdmonition';
 import { InsertJsxElements } from './plugins/plugins-jsx/InsertJsxOptions';
 import BrowserWindowDescriptor from './plugins/plugins-jsx/BrowserWindowDescriptor';
 import DocCardListDescriptor from './plugins/plugins-jsx/DocCardListDescriptor';
@@ -45,7 +45,7 @@ import {
     CardsDirectiveDescriptor,
     FlexDirectiveDescriptor
 } from '@tdev-plugins/remark-flex-cards/mdx-editor-plugin';
-import mdiCompletePlugin from './plugins/MdiComplete';
+import mdiCompletePlugin from '@tdev-plugins/remark-mdi/mdx-editor-plugin/MdiComplete';
 import { imagePlugin } from '@tdev-plugins/remark-images/mdx-editor-plugin';
 import { DeflistDescriptor, DdDescriptor, DtDescriptor } from './plugins/plugins-jsx/DeflistDescriptor';
 import ErrorBoundary from '@docusaurus/ErrorBoundary';
