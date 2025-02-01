@@ -3,13 +3,9 @@
  */
 
 import * as Mdast from 'mdast';
-import { IS_BOLD, markdown$, MdastImportVisitor, rootEditor$, setMarkdown$ } from '@mdxeditor/editor';
-import { $createTextNode, ElementNode } from 'lexical';
+import { IS_BOLD, MdastImportVisitor } from '@mdxeditor/editor';
 import { rootStore } from '@tdev/stores/rootStore';
 import { $createBoxNode } from './BoxNode';
-
-const BOLD_POSITION = IS_BOLD.toString(2).length - 1;
-const isBold = (formatting: number) => (formatting >> BOLD_POSITION) % 2 === 1;
 
 export const MdastBoxVisitor: MdastImportVisitor<Mdast.Strong> = {
     testNode: 'strong',

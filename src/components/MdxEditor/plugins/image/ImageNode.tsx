@@ -4,9 +4,6 @@
 
 import React from 'react';
 import type {
-    DOMConversionMap,
-    DOMConversionOutput,
-    DOMExportOutput,
     EditorConfig,
     LexicalEditor,
     LexicalNode,
