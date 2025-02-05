@@ -6,14 +6,27 @@ import {
     addExportVisitor$,
     addImportVisitor$,
     addLexicalNode$,
+    addMdastExtension$,
     createRootEditorSubscription$,
     realmPlugin
 } from '@mdxeditor/editor';
 import { LexicalEditor, COMMAND_PRIORITY_LOW } from 'lexical';
 import { MdastBoxVisitor } from './MdastBoxVisitor';
-import { $toggleBoxed, BoxNode, TOGGLE_BOXED_COMMAND } from './BoxNode';
-import { BoxVisitor } from './LexicalBoxVisitor';
+import { $toggleBoxed, BoxNode, TOGGLE_BOX_COMMAND } from './BoxNode';
+import { LexicalBoxVisitor } from './LexicalBoxVisitor';
+import { Parent, PhrasingContent, Root, Nodes } from 'mdast';
+import { transformer } from '../plugin';
+import { rootStore } from '@tdev/stores/rootStore';
 
+export interface Box extends Parent {
+    type: 'box';
+    children: PhrasingContent[];
+}
+declare module 'mdast' {
+    interface RootContentMap {
+        box: Box;
+    }
+}
 /**
  * A plugin that adds support for images.
  * @group Image
@@ -23,10 +36,22 @@ export const strongPlugin = realmPlugin<{}>({
         realm.pubIn({
             [addImportVisitor$]: [MdastBoxVisitor],
             [addLexicalNode$]: BoxNode,
-            [addExportVisitor$]: [BoxVisitor],
+            [addExportVisitor$]: [LexicalBoxVisitor],
+            [addMdastExtension$]: [
+                {
+                    transforms: [
+                        (ast: Root) => {
+                            const { cmsStore } = rootStore;
+                            const content =
+                                cmsStore.activeEntry?.type === 'file' ? cmsStore.activeEntry.content : '';
+                            transformer(ast, content, (children) => ({ type: 'box', children: children }));
+                        }
+                    ]
+                }
+            ],
             [createRootEditorSubscription$]: (editor: LexicalEditor) => {
                 return editor.registerCommand<KeyboardEvent>(
-                    TOGGLE_BOXED_COMMAND,
+                    TOGGLE_BOX_COMMAND,
                     (payload) => {
                         $toggleBoxed(payload === null ? true : !!payload);
                         return true;

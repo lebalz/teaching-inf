@@ -32,12 +32,12 @@ import { $withSelectedNodes } from '@tdev-components/MdxEditor/helpers/lexical/w
 
 export type SerializedBoxNode = Spread<{}, SerializedElementNode>;
 
-type BoxedHTMLElementType = HTMLElement | HTMLSpanElement;
+type BoxHTMLElementType = HTMLElement | HTMLSpanElement;
 
 /** @noInheritDoc */
 export class BoxNode extends ElementNode {
     static getType(): string {
-        return 'boxed';
+        return 'box';
     }
 
     static clone(node: BoxNode): BoxNode {
@@ -48,7 +48,7 @@ export class BoxNode extends ElementNode {
         super(key);
     }
 
-    createDOM(config: EditorConfig): BoxedHTMLElementType {
+    createDOM(config: EditorConfig): BoxHTMLElementType {
         const element = document.createElement('strong');
         addClassNamesToElement(element, 'boxed');
         return element;
@@ -119,15 +119,15 @@ export function $isBoxNode(node: LexicalNode | null | undefined): node is BoxNod
     return node instanceof BoxNode;
 }
 
-export const TOGGLE_BOXED_COMMAND: LexicalCommand<boolean | null> = createCommand('TOGGLE_BOXED_COMMAND');
+export const TOGGLE_BOX_COMMAND: LexicalCommand<boolean | null> = createCommand('TOGGLE_BOX_COMMAND');
 
 /**
  * Generates or updates a BoxNode. It can also delete a BoxNode if the URL is null,
  * but saves any children and brings them up to the parent node.
- * @param boxedOn - The URL the link directs to.
+ * @param boxOn - The URL the link directs to.
  * @param attributes - Optional HTML a tag attributes. \\{ target, rel, title \\}
  */
-export function $toggleBoxed(boxedOn: boolean): void {
+export function $toggleBoxed(boxOn: boolean): void {
     const selection = $getSelection();
 
     if (!$isRangeSelection(selection)) {
@@ -135,7 +135,7 @@ export function $toggleBoxed(boxedOn: boolean): void {
     }
     const nodes = selection.extract();
 
-    if (boxedOn === false) {
+    if (boxOn === false) {
         // Remove BoxNodes
         nodes.forEach((node) => {
             const parentBox = $findMatchingParent(node, (parent): parent is BoxNode => $isBoxNode(parent));

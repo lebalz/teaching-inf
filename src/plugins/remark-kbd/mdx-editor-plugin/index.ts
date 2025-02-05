@@ -11,20 +11,20 @@ import {
     realmPlugin
 } from '@mdxeditor/editor';
 import { transformer } from '../plugin';
-import { Parent, PhrasingContent, Root, Nodes } from 'mdast';
+import type { Parent, PhrasingContent, Root } from 'mdast';
 import { MdastKbdVisitor } from './MdastKbdVisitor';
 import { $toggleKbd, KbdNode, TOGGLE_KBD_COMMAND } from './KbdNode';
 import { LexicalKbdVisitor } from './LexicalKbdVisitor';
 import { COMMAND_PRIORITY_LOW, type LexicalEditor } from 'lexical';
 
+export interface Kbd extends Parent {
+    type: 'kbd';
+    children: PhrasingContent[];
+}
 declare module 'mdast' {
     interface RootContentMap {
         kbd: Kbd;
     }
-}
-export interface Kbd extends Parent {
-    type: 'kbd';
-    children: PhrasingContent[];
 }
 /**
  * A plugin that adds support for images.

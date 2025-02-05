@@ -5,7 +5,7 @@ import dynamicRouterPlugin, { Config as DynamicRouteConfig} from './src/plugins/
 import type * as Preset from '@docusaurus/preset-classic';
 import path from 'path';
 
-import strongPlugin, { visitor as captionVisitor } from './src/plugins/remark-strong/plugin';
+import strongPlugin, { transformer as captionVisitor } from './src/plugins/remark-strong/plugin';
 import deflistPlugin from './src/plugins/remark-deflist/plugin';
 import mdiPlugin from './src/plugins/remark-mdi/plugin';
 import kbdPlugin from './src/plugins/remark-kbd/plugin';

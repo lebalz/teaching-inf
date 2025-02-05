@@ -54,7 +54,7 @@ import clsx from 'clsx';
 import Actions from './toolbar/Actions';
 import * as Mdast from 'mdast';
 import { InsertImage } from '@tdev-plugins/remark-images/mdx-editor-plugin/InsertImage';
-import { strongPlugin } from '@tdev-plugins/remark-strong/mdx-editor-plugin';
+import { Box, strongPlugin } from '@tdev-plugins/remark-strong/mdx-editor-plugin';
 import { ToolbarInsertBoxed } from '@tdev-plugins/remark-strong/mdx-editor-plugin/ToolbarInsertBoxed';
 import { useStore } from '@tdev-hooks/useStore';
 import { IMAGE_DIR_NAME } from '@tdev-models/cms/Dir';
@@ -212,15 +212,13 @@ const CmsMdxEditor = observer((props: Props) => {
                     bullet: '-',
                     emphasis: '*',
                     rule: '-',
+                    strong: '*',
                     handlers: {
-                        strong: (node: Mdast.Strong, parent, state, info) => {
+                        box: (node: Box, parent, state, info) => {
                             const text = node.children.reduce((acc, child) => {
                                 return acc + state.handle(child, node, state, info);
                             }, '');
-                            if (node.data?.hProperties?.class === 'boxed') {
-                                return `__${text}__`;
-                            }
-                            return `**${text}**`;
+                            return `__${text}__`;
                         },
                         kbd: (node: Kbd, parent, state, info) => {
                             const text = node.children.reduce((acc, child) => {
