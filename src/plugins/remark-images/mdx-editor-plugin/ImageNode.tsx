@@ -74,13 +74,11 @@ export class ImageNode extends DecoratorNode<React.ReactNode> {
         this.__altText = altText;
         this.__position = position;
         const editedFile = rootStore.cmsStore.editedFile;
-        console.log(editedFile?.path);
         if (position && editedFile) {
             const raw = editedFile.content
                 .split('\n')
                 [position.start.line - 1].slice(position.start.column - 1, position.end.column);
             const rawCaption = raw.slice(2).replace(`](${src})`, '');
-            console.log(rawCaption, raw);
             if (rawCaption) {
                 this.__altText = rawCaption;
             }

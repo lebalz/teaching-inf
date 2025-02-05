@@ -21,7 +21,6 @@ export const transformer = (ast: Root | Parent, source: string, boxNode: BoxNode
         const strToOperateOn = source.substring(startOg, endOg);
         const wasUnderscored = strToOperateOn.startsWith('__') && strToOperateOn.endsWith('__');
         if (wasUnderscored) {
-            console.log('wasUnderscored', node.children);
             parent.children.splice(idx, 1, boxNode(node.children) as PhrasingContent);
         }
     });

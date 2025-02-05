@@ -48,7 +48,14 @@ const BEFORE_DEFAULT_REMARK_PLUGINS = [
         figure: 'Figure'
       },
       captionVisitors: [
-        (ast, caption) => captionVisitor(ast, caption, { className: 'boxed' })
+        (ast, caption) => captionVisitor(ast, caption, (children) => {
+                    return {
+                        type: 'mdxJsxTextElement',
+                        name: 'strong',
+                        attributes: [{ type: 'mdxJsxAttribute', name: 'className', value: 'boxed' }],
+                        children: children
+                    };
+                })
       ] satisfies CaptionVisitor[]
     }
   ],

@@ -367,7 +367,6 @@ class Github {
         commitMessage?: string,
         skipBase64Transformation?: boolean
     ) {
-        console.log('Create or update file', path, branch, sha, commitMessage, skipBase64Transformation);
         let base64Content = '';
         if (skipBase64Transformation) {
             base64Content = content;
@@ -453,7 +452,6 @@ class Github {
             this.store
         );
         rootDir.setIsFetched(true);
-        console.log('Root dir', rootDir, rootDir.branch);
         return rootDir;
     }
 
