@@ -9,13 +9,10 @@ import {
     createRootEditorSubscription$,
     realmPlugin
 } from '@mdxeditor/editor';
-import { createCommand, LexicalCommand, LexicalEditor, COMMAND_PRIORITY_LOW } from 'lexical';
+import { LexicalEditor, COMMAND_PRIORITY_LOW } from 'lexical';
 import { MdastBoxVisitor } from './MdastBoxVisitor';
 import { $toggleBoxed, BoxNode, TOGGLE_BOXED_COMMAND } from './BoxNode';
 import { BoxVisitor } from './LexicalBoxVisitor';
-
-export const FORMAT_BOXED = 512 as const;
-export const FORMAT_BOX_COMMAND: LexicalCommand<void> = createCommand('FORMAT_BOX');
 
 /**
  * A plugin that adds support for images.

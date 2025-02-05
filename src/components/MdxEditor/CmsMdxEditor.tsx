@@ -60,6 +60,8 @@ import { useStore } from '@tdev-hooks/useStore';
 import { IMAGE_DIR_NAME } from '@tdev-models/cms/Dir';
 import { codeMirrorPlugin } from './plugins/codemirror';
 import DefaultEditor from '@tdev-components/Github/DefaultEditor';
+import { Kbd, kbdPlugin } from '@tdev-plugins/remark-kbd/mdx-editor-plugin';
+import { ToolbarInsertKbd } from '@tdev-plugins/remark-kbd/mdx-editor-plugin/ToolbarInsertKbd';
 
 export interface Props {
     file: FileModel;
@@ -151,6 +153,7 @@ const CmsMdxEditor = observer((props: Props) => {
                                     <UndoRedo />
                                     <BoldItalicUnderlineToggles />
                                     <ToolbarInsertBoxed />
+                                    <ToolbarInsertKbd />
                                     <ListsToggle />
                                     <InsertCodeBlock />
                                     <CreateLink />
@@ -199,7 +202,8 @@ const CmsMdxEditor = observer((props: Props) => {
                                 });
                         }
                     }),
-                    markdownShortcutPlugin()
+                    markdownShortcutPlugin(),
+                    kbdPlugin()
                 ]}
                 onChange={(md) => {
                     file.setContent(md);
@@ -217,6 +221,12 @@ const CmsMdxEditor = observer((props: Props) => {
                                 return `__${text}__`;
                             }
                             return `**${text}**`;
+                        },
+                        kbd: (node: Kbd, parent, state, info) => {
+                            const text = node.children.reduce((acc, child) => {
+                                return acc + state.handle(child, node, state, info);
+                            }, '');
+                            return `[[${text}]]`;
                         }
                     }
                 }}
