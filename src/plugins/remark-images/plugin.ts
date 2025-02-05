@@ -5,10 +5,11 @@ import { BlockContent, Image, Paragraph, Parent, PhrasingContent, Root, Text } f
 import path from 'path';
 import fs from 'fs';
 import { cleanedText, parseOptions, toJsxAttribute } from '../helpers';
+import clsx from 'clsx';
 
 const DEFAULT_TAG_NAMES = {
-    figure: 'figure',
-    figcaption: 'figcaption',
+    figure: 'span',
+    figcaption: 'span',
     sourceRef: 'SourceRef'
 };
 
@@ -121,6 +122,8 @@ const plugin: Plugin<OptionsInput[], Root> = function plugin(
             /** get image options and set cleaned alt text */
             const cleanedAlt = cleanedText(rawCaption || '');
             const options = parseOptions(rawCaption || '', true);
+            const className = (options as any).className as string | undefined;
+            delete (options as any).className;
             const isInline = /@inline/.test(node.alt || '') && parent.type === 'paragraph';
             if (isInline) {
                 node.alt = cleanedText(node.alt || '').replace(/@inline/, '');
@@ -130,26 +133,30 @@ const plugin: Plugin<OptionsInput[], Root> = function plugin(
             const figure = {
                 type: 'mdxJsxFlowElement',
                 name: optionsInput?.tagNames?.figure || DEFAULT_TAG_NAMES.figure,
-                attributes: Object.keys(options).length > 0 ? [toJsxAttribute('options', options)] : [],
+                attributes: [
+                    toJsxAttribute('className', clsx('figure', className)),
+                    ...(Object.keys(options).length > 0 ? [toJsxAttribute('options', options)] : [])
+                ],
                 children: [node] as unknown as BlockContent[]
             } as MdxJsxFlowElement;
 
+            const { inlineCaption = false } = options as any;
+            const { inlineEmptyCaptions = true } = optionsInput;
+            const captionEmpty = /^\s*$/.test(node.alt);
             /**
              * Add alt as caption
              */
             const caption = {
                 type: 'mdxJsxTextElement',
                 name: optionsInput?.tagNames?.figcaption || DEFAULT_TAG_NAMES.figcaption,
-                attributes: [],
+                attributes: [
+                    toJsxAttribute(
+                        'className',
+                        clsx('caption', (inlineCaption || (captionEmpty && inlineEmptyCaptions)) && 'inline')
+                    )
+                ],
                 children: []
-            } as MdxJsxFlowElement | MdxJsxTextElement;
-
-            const { inlineCaption = false } = options as any;
-            const { inlineEmptyCaptions = true } = optionsInput;
-            const captionEmpty = /^\s*$/.test(node.alt);
-            if (inlineCaption || (captionEmpty && inlineEmptyCaptions)) {
-                caption.attributes.push(toJsxAttribute('className', 'inline'));
-            }
+            } as MdxJsxTextElement;
 
             if (cleanedAlt) {
                 const altAst = this.parse(cleanedAlt) as Parent;
@@ -189,7 +196,7 @@ const plugin: Plugin<OptionsInput[], Root> = function plugin(
                 bibPromises.push(bibPromise);
             }
             if (caption.children.length > 0 || hasBibFile) {
-                figure.children.splice(figure.children.length, 0, caption as BlockContent);
+                figure.children.splice(figure.children.length, 0, caption as any);
             }
             parent.children.splice(idx || 0, 1, figure);
         });
