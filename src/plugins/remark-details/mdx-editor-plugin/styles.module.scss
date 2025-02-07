@@ -2,6 +2,7 @@
     margin: 0 0 var(--ifm-spacing-vertical);
     border: 1px solid var(--ifm-alert-border-color);
     --docusaurus-details-decoration-color: var(--ifm-alert-border-color);
+    --basePageBg: var(--ifm-alert-background-color-highlight);
     .summary {
         .header {
             flex-grow: 1;

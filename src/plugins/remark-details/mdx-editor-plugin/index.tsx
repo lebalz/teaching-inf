@@ -15,12 +15,6 @@ import { mdiChevronDown, mdiChevronRight } from '@mdi/js';
 import Button from '@tdev-components/shared/Button';
 import RemoveJsxNode from '../../../components/MdxEditor/RemoveJsxNode';
 
-/** @internal */
-export const ADMONITION_TYPES = ['note', 'tip', 'info', 'warning', 'danger'] as const;
-
-/** @internal */
-export type AdmonitionKind = (typeof ADMONITION_TYPES)[number];
-
 export const DetailsEditor: React.ComponentType<DirectiveEditorProps<Directives>> = () => {
     const [open, setOpen] = React.useState(false);
     return (
