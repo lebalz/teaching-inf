@@ -1,0 +1,98 @@
+---
+page_id: 620dc77b-8402-41f3-9203-af58250918f2
+unlisted: true
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import CmsCode from '@tdev-components/documents/CmsText/Code';
+import Restricted from '@tdev-components/documents/Restricted';
+import PermissionsPanel from "@tdev-components/PermissionsPanel"
+import { observer } from 'mobx-react-lite';
+import { useStore } from '@tdev-hooks/useStore';
+
+# Abschlussprüfung Programmieren 1
+
+<Restricted id="954c5a2f-85ce-4dcb-abd7-1e1d6307e84e">
+
+export const PFor = observer(() => {
+    const userStore = useStore('userStore');
+    return (
+        <Dl>
+            <dt>Prüfung für</dt>
+            <dd>{userStore.viewedUser?.name}</dd>
+        </Dl>
+    )
+});
+
+<PFor />
+
+## Aufgabe 5
+
+### 5a
+
+<PermissionsPanel documentRootId="2f62608c-3fbb-4141-b929-1477f58a8f85" />
+
+```py live_py title=5a.py id=2f62608c-3fbb-4141-b929-1477f58a8f85 versioned
+from turtle import *
+```
+### 5b
+
+<PermissionsPanel documentRootId="1c2a9a24-ad64-4561-9dad-694c31a17f75" />
+
+```py live_py title=5b.py id=1c2a9a24-ad64-4561-9dad-694c31a17f75 versioned
+```
+### 5c
+
+<PermissionsPanel documentRootId="f0879055-0423-4e84-8096-7a81bbdab441" />
+
+```py live_py title=5c.py id=f0879055-0423-4e84-8096-7a81bbdab441 versioned
+```
+
+### 5d
+
+<PermissionsPanel documentRootId="9a75e8cd-1c18-4192-b57e-1afed6b2ce5f" />
+
+```py live_py title=5d.py id=9a75e8cd-1c18-4192-b57e-1afed6b2ce5f versioned
+```
+
+### 5e
+
+<PermissionsPanel documentRootId="cbb61920-d65e-4a13-8ebe-d283094e33b7" />
+
+```py live_py title=5d.py id=cbb61920-d65e-4a13-8ebe-d283094e33b7 versioned
+```
+
+
+## Aufgabe 6
+
+<CmsCode
+    id="0883ad2c-64d2-4a59-bd49-3d8705d81379"
+    codeBlockProps={{language: 'python', showLineNumbers: true, title: 'Fehlerhafter Code, Nr. 6'}}
+    showActions
+/>
+
+
+<PermissionsPanel documentRootId="ef9920aa-ce62-4c01-96bb-894a8e80172f" />
+
+```py live_py title=korrigiert.py id=ef9920aa-ce62-4c01-96bb-894a8e80172f versioned
+```
+
+## Aufgabe 7
+
+:::def[`pi`]
+Die Kreiskonstante $\pi$ (pi) kann in Python aus der `math`-Bibliothek importiert werden.
+
+```py live_py slim
+from math import pi
+print(f'PI = {pi}')
+print(f'Kreisumfang für Radius=3cm: {2*pi*3}cm')
+```
+:::
+
+<PermissionsPanel documentRootId="bc06a0d7-c018-47d4-9dab-0c8f3466f9b6" />
+
+```py live_py title=aufgabe7.py id=bc06a0d7-c018-47d4-9dab-0c8f3466f9b6 versioned
+from math import pi
+```
+
+</Restricted>
