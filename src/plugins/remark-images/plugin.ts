@@ -1,10 +1,10 @@
 import { visit, SKIP, CONTINUE } from 'unist-util-visit';
 import type { Plugin, Transformer } from 'unified';
 import type { MdxJsxFlowElement, MdxJsxTextElement } from 'mdast-util-mdx';
-import { BlockContent, Image, Paragraph, Parent, PhrasingContent, Root, Text } from 'mdast';
+import { BlockContent, Image, Paragraph, Parent, PhrasingContent, Root, RootContent, Text } from 'mdast';
 import path from 'path';
-import fs from 'fs';
-import { cleanedText, parseOptions, toJsxAttribute } from '../helpers';
+import { promises as fs } from 'fs';
+import { cleanedText, ParsedOptions, parseOptions, toJsxAttribute } from '../helpers';
 import clsx from 'clsx';
 
 const DEFAULT_TAG_NAMES = {
@@ -101,106 +101,143 @@ const unshiftImagesFromParagraphs = (ast: Root) => {
     });
 };
 
+interface Config {
+    bibContent?: string;
+    figure: (children: RootContent[] | PhrasingContent[], options: ParsedOptions) => MdxJsxFlowElement;
+    caption: (rawCaption: string, options: ParsedOptions) => MdxJsxTextElement;
+    bib: (imgSrc: string) => Promise<MdxJsxTextElement | undefined>;
+    merge: (
+        figure: MdxJsxFlowElement,
+        caption: MdxJsxTextElement,
+        bib?: MdxJsxTextElement
+    ) => MdxJsxFlowElement;
+}
+
+const transformer = (ast: Root, content: string, config: Config) => {
+    unshiftImagesFromParagraphs(ast);
+    const bibPromises = [] as Promise<any>[];
+    visit(ast, 'image', (node, idx, parent) => {
+        if (!parent) {
+            return;
+        }
+        const line = (node.position?.start?.line || 1) - 1;
+        const raw = content
+            .split('\n')
+            [line].slice((node.position?.start?.column || 1) - 1, node.position?.end?.column || 0);
+        const rawCaption = raw.slice(2).replace(`](${node.url})`, '');
+        /** get image options and set cleaned alt text */
+        const cleanedAlt = cleanedText(rawCaption || '');
+        const options = parseOptions(rawCaption || '', true);
+        const className = (options as any).className as string | undefined;
+        delete (options as any).className;
+        const isInline = /@inline/.test(node.alt || '') && parent.type === 'paragraph';
+        if (isInline) {
+            node.alt = cleanedText(node.alt || '').replace(/@inline/, '');
+            return SKIP;
+        }
+        node.alt = cleanedText(node.alt || '');
+        const figure = config.figure([node], options);
+        const caption = config.caption(cleanedAlt, options);
+        const promise = config.bib(node.url).then((bib) => {
+            const imgNode = config.merge(figure, caption, bib);
+            parent.children.splice(idx || 0, 1, imgNode);
+        });
+        bibPromises.push(promise);
+    });
+    return Promise.all(bibPromises);
+};
+
 const plugin: Plugin<OptionsInput[], Root> = function plugin(
     this,
     optionsInput = { tagNames: DEFAULT_TAG_NAMES }
 ): Transformer<Root> {
     return async (ast, vfile) => {
         const dir = path.dirname(vfile.history[0] || '');
-        const bibPromises = [] as Promise<any>[];
-        unshiftImagesFromParagraphs(ast);
-        visit(ast, 'image', (node, idx, parent) => {
-            if (!parent) {
-                return;
-            }
-            const line = (node.position?.start?.line || 1) - 1;
-            const raw = vfile.value
-                .toString()
-                .split('\n')
-                [line].slice((node.position?.start?.column || 1) - 1, node.position?.end?.column || 0);
-            const rawCaption = raw.slice(2).replace(`](${node.url})`, '');
-            /** get image options and set cleaned alt text */
-            const cleanedAlt = cleanedText(rawCaption || '');
-            const options = parseOptions(rawCaption || '', true);
-            const className = (options as any).className as string | undefined;
-            delete (options as any).className;
-            const isInline = /@inline/.test(node.alt || '') && parent.type === 'paragraph';
-            if (isInline) {
-                node.alt = cleanedText(node.alt || '').replace(/@inline/, '');
-                return SKIP;
-            }
-            node.alt = cleanedText(node.alt || '');
-            const figure = {
-                type: 'mdxJsxFlowElement',
-                name: optionsInput?.tagNames?.figure || DEFAULT_TAG_NAMES.figure,
-                attributes: [
-                    toJsxAttribute('className', clsx('figure', className)),
-                    ...(Object.keys(options).length > 0 ? [toJsxAttribute('options', options)] : [])
-                ],
-                children: [node] as unknown as BlockContent[]
-            } as MdxJsxFlowElement;
-
-            const { inlineCaption = false } = options as any;
-            const { inlineEmptyCaptions = true } = optionsInput;
-            const captionEmpty = /^\s*$/.test(node.alt);
-            /**
-             * Add alt as caption
-             */
-            const caption = {
-                type: 'mdxJsxTextElement',
-                name: optionsInput?.tagNames?.figcaption || DEFAULT_TAG_NAMES.figcaption,
-                attributes: [
-                    toJsxAttribute(
-                        'className',
-                        clsx('caption', (inlineCaption || (captionEmpty && inlineEmptyCaptions)) && 'inline')
-                    )
-                ],
-                children: []
-            } as MdxJsxTextElement;
-
-            if (cleanedAlt) {
-                const altAst = this.parse(cleanedAlt) as Parent;
-                if (optionsInput?.captionVisitors) {
-                    optionsInput.captionVisitors.forEach((visitor) => visitor(altAst, cleanedAlt));
+        await transformer(ast, vfile.value.toString(), {
+            bib: async (imgSrc) => {
+                const ext = path.extname(imgSrc);
+                const bibFile = path.resolve(dir, imgSrc.replace(new RegExp(`${ext}$`), '.json'));
+                const hasBibFile = await fs
+                    .stat(bibFile)
+                    .then(() => true)
+                    .catch(() => false);
+                if (hasBibFile) {
+                    const bibContent = await import(bibFile)
+                        .then(({ default: bib }) => bib)
+                        .catch((err) => {
+                            console.warn('Invalid bib file', bibFile, err);
+                        });
+                    if (!bibContent) {
+                        return;
+                    }
+                    const bibNode = {
+                        type: 'mdxJsxTextElement',
+                        name: optionsInput?.tagNames?.sourceRef || DEFAULT_TAG_NAMES.sourceRef,
+                        attributes: [toJsxAttribute('bib', bibContent)],
+                        children: []
+                    } as MdxJsxTextElement;
+                    return bibNode;
                 }
-                /* flatten paragraphs by only using their child nodes */
-                const altNodes = altAst.children.flatMap((n) =>
-                    n.type === 'paragraph' ? n.children : (n as PhrasingContent)
-                );
-                caption.children = [SPACER_SPAN, ...altNodes, SPACER_SPAN];
-            }
+            },
+            caption: (rawCaption, options) => {
+                const { inlineCaption = false } = options;
+                const { inlineEmptyCaptions = true } = optionsInput;
+                const captionEmpty = /^\s*$/.test(rawCaption);
+                /**
+                 * Add alt as caption
+                 */
+                const caption = {
+                    type: 'mdxJsxTextElement',
+                    name: optionsInput?.tagNames?.figcaption || DEFAULT_TAG_NAMES.figcaption,
+                    attributes: [
+                        toJsxAttribute(
+                            'className',
+                            clsx(
+                                'caption',
+                                (inlineCaption || (captionEmpty && inlineEmptyCaptions)) && 'inline'
+                            )
+                        )
+                    ],
+                    children: []
+                } as MdxJsxTextElement;
 
-            /**
-             * Try to find a bib file with the same name as the image
-             */
-            const ext = path.extname(node.url);
-            const bibFile = path.resolve(dir, node.url.replace(new RegExp(`${ext}$`), '.json'));
-            const hasBibFile = fs.existsSync(bibFile);
-            if (hasBibFile) {
-                const bibPromise = import(bibFile)
-                    .then(({ default: bib }) => {
-                        const bibNode = {
-                            type: 'mdxJsxTextElement',
-                            name: optionsInput?.tagNames?.sourceRef || DEFAULT_TAG_NAMES.sourceRef,
-                            attributes: [toJsxAttribute('bib', bib)],
-                            children: []
-                        } as MdxJsxTextElement;
-                        if (!cleanedAlt) {
-                            caption.children.splice(caption.children.length, 0, SPACER_SPAN);
-                        }
-                        caption.children.splice(caption.children.length, 0, bibNode);
-                    })
-                    .catch((err) => {
-                        console.warn('Invalid bib file', bibFile, err);
-                    });
-                bibPromises.push(bibPromise);
+                if (rawCaption) {
+                    const altAst = this.parse(rawCaption) as Parent;
+                    if (optionsInput?.captionVisitors) {
+                        optionsInput.captionVisitors.forEach((visitor) => visitor(altAst, rawCaption));
+                    }
+                    /* flatten paragraphs by only using their child nodes */
+                    const altNodes = altAst.children.flatMap((n) =>
+                        n.type === 'paragraph' ? n.children : (n as PhrasingContent)
+                    );
+                    caption.children = [SPACER_SPAN, ...altNodes, SPACER_SPAN];
+                }
+                return caption;
+            },
+            figure: (children, options) => {
+                return {
+                    type: 'mdxJsxFlowElement',
+                    name: optionsInput?.tagNames?.figure || DEFAULT_TAG_NAMES.figure,
+                    attributes: [
+                        toJsxAttribute('className', clsx('figure', options.className)),
+                        ...(Object.keys(options).length > 0 ? [toJsxAttribute('options', options)] : [])
+                    ],
+                    children: children
+                } as MdxJsxFlowElement;
+            },
+            merge: (figure, caption, bib) => {
+                if (bib) {
+                    if (caption.children.length === 0) {
+                        caption.children.splice(caption.children.length, 0, SPACER_SPAN);
+                    }
+                    caption.children.splice(caption.children.length, 0, bib);
+                }
+                if (caption.children.length > 0) {
+                    figure.children.splice(figure.children.length, 0, caption as any);
+                }
+                return figure;
             }
-            if (caption.children.length > 0 || hasBibFile) {
-                figure.children.splice(figure.children.length, 0, caption as any);
-            }
-            parent.children.splice(idx || 0, 1, figure);
         });
-        await Promise.all(bibPromises);
     };
 };
 
