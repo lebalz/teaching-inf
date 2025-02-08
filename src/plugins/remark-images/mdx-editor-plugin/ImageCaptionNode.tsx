@@ -7,28 +7,9 @@
  *
  */
 
-import type {
-    BaseSelection,
-    EditorConfig,
-    LexicalCommand,
-    LexicalNode,
-    NodeKey,
-    RangeSelection,
-    SerializedElementNode
-} from 'lexical';
+import type { BaseSelection, EditorConfig, LexicalNode, NodeKey, SerializedElementNode } from 'lexical';
 
-import { $findMatchingParent } from '@lexical/utils';
-import {
-    $applyNodeReplacement,
-    $getSelection,
-    $isElementNode,
-    $isRangeSelection,
-    createCommand,
-    ElementNode,
-    Spread
-} from 'lexical';
-import { $getAncestor } from '@tdev-components/MdxEditor/helpers/lexical/get-ancestors';
-import { $withSelectedNodes } from '@tdev-components/MdxEditor/helpers/lexical/with-selected-nodes';
+import { $applyNodeReplacement, $isRangeSelection, ElementNode, Spread } from 'lexical';
 
 export type SerializedImageCaptionNode = Spread<{}, SerializedElementNode>;
 
@@ -65,12 +46,12 @@ export class ImageCaptionNode extends ElementNode {
         return super.exportJSON();
     }
 
-    canInsertTextBefore(): false {
-        return false;
+    canInsertTextBefore(): true {
+        return true;
     }
 
-    canInsertTextAfter(): false {
-        return false;
+    canInsertTextAfter(): true {
+        return true;
     }
 
     canBeEmpty(): false {
