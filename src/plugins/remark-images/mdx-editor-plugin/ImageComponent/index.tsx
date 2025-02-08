@@ -32,13 +32,11 @@ import File from '@tdev-models/cms/File';
 export interface ImageEditorProps {
     nodeKey: string;
     src: string;
-    alt?: string;
     width?: number;
-    caption: string;
 }
 
 export const ImageComponent = observer((props: ImageEditorProps): React.ReactNode => {
-    const { src, alt, nodeKey, caption } = props;
+    const { src, nodeKey } = props;
     const cmsStore = useStore('cmsStore');
 
     const imageRef = React.useRef<null | HTMLImageElement>(null);
@@ -156,7 +154,6 @@ export const ImageComponent = observer((props: ImageEditorProps): React.ReactNod
                 <div draggable={draggable}>
                     <img
                         className={clsx(isFocused && styles.focusedImage)}
-                        alt={alt}
                         src={gitImg?.type === 'file' && gitImg.isImage ? File.ImageDataUrl(gitImg) : src}
                         width={props.width}
                         ref={imageRef}
@@ -171,17 +168,6 @@ export const ImageComponent = observer((props: ImageEditorProps): React.ReactNod
                         onResizeEnd={onResizeEnd}
                     />
                 )}
-                <TextInput
-                    defaultValue={caption}
-                    onChange={(val) => {
-                        editor.update(() => {
-                            const node = $getNodeByKey(nodeKey);
-                            if ($isImageNode(node)) {
-                                node.setCaption(val);
-                            }
-                        });
-                    }}
-                />
             </div>
         </div>
     );

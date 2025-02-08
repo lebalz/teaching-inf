@@ -26,10 +26,7 @@ declare module 'mdast' {
         kbd: Kbd;
     }
 }
-/**
- * A plugin that adds support for images.
- * @group Image
- */
+
 export const kbdPlugin = realmPlugin<{}>({
     init(realm, params) {
         realm.pubIn({
@@ -38,6 +35,7 @@ export const kbdPlugin = realmPlugin<{}>({
             [addExportVisitor$]: [LexicalKbdVisitor],
             [addMdastExtension$]: [
                 {
+                    name: 'kbd-plugin',
                     transforms: [
                         (ast: Root) => {
                             transformer(ast, (children) => ({ type: 'kbd', children: children }));

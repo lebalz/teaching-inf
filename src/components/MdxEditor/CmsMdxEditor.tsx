@@ -46,7 +46,7 @@ import {
     FlexDirectiveDescriptor
 } from '@tdev-plugins/remark-flex-cards/mdx-editor-plugin';
 import mdiCompletePlugin from '@tdev-plugins/remark-mdi/mdx-editor-plugin/MdiComplete';
-import { imagePlugin } from '@tdev-plugins/remark-images/mdx-editor-plugin';
+import { ImageCaption, ImageFigure, imagePlugin } from '@tdev-plugins/remark-images/mdx-editor-plugin';
 import { DeflistDescriptor, DdDescriptor, DtDescriptor } from './plugins/plugins-jsx/DeflistDescriptor';
 import ErrorBoundary from '@docusaurus/ErrorBoundary';
 import styles from './styles.module.scss';
@@ -221,6 +221,24 @@ const CmsMdxEditor = observer((props: Props) => {
                             return `__${text}__`;
                         },
                         kbd: (node: Kbd, parent, state, info) => {
+                            const text = node.children.reduce((acc, child) => {
+                                return acc + state.handle(child, node, state, info);
+                            }, '');
+                            return `[[${text}]]`;
+                        },
+                        imageFigure: (node: ImageFigure, parent, state, info) => {
+                            if (node.children.length < 1) {
+                                return '';
+                            }
+                            const image = node.children[0] as Mdast.Image;
+                            const caption = node.children[1] || { children: [] as Mdast.PhrasingContent[] };
+                            const text = caption.children.reduce((acc, child) => {
+                                return acc + state.handle(child, node, state, info);
+                            }, '');
+                            const alt = `${text} ${image.alt}`.trim();
+                            return `![${alt}](${image.url})`;
+                        },
+                        imageCaption: (node: ImageCaption, parent, state, info) => {
                             const text = node.children.reduce((acc, child) => {
                                 return acc + state.handle(child, node, state, info);
                             }, '');

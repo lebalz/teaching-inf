@@ -39,6 +39,7 @@ export const strongPlugin = realmPlugin<{}>({
             [addExportVisitor$]: [LexicalBoxVisitor],
             [addMdastExtension$]: [
                 {
+                    name: 'strong-plugin',
                     transforms: [
                         (ast: Root) => {
                             const { cmsStore } = rootStore;

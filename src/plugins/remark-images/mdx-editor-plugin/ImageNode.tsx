@@ -40,9 +40,7 @@ export class ImageNode extends DecoratorNode<React.ReactNode> {
     /** @internal */
     __src: string;
     /** @internal */
-    __altText: string;
-    /** @internal */
-    __position: Position | undefined;
+    __width?: number;
 
     /** @internal */
     static getType(): string {
@@ -51,7 +49,7 @@ export class ImageNode extends DecoratorNode<React.ReactNode> {
 
     /** @internal */
     static clone(node: ImageNode): ImageNode {
-        return new ImageNode(node.__src, node.__altText, node.__key);
+        return new ImageNode(node.__src, node.getAltText(), node.__key);
     }
 
     /** @internal */
@@ -68,21 +66,10 @@ export class ImageNode extends DecoratorNode<React.ReactNode> {
      * Constructs a new {@link ImageNode} with the specified image parameters.
      * Use {@link $createImageNode} to construct one.
      */
-    constructor(src: string, altText: string, key?: NodeKey, position?: Position) {
+    constructor(src: string, altText: string, key?: NodeKey) {
         super(key);
         this.__src = src;
-        this.__altText = altText;
-        this.__position = position;
-        const editedFile = rootStore.cmsStore.editedFile;
-        if (position && editedFile) {
-            const raw = editedFile.content
-                .split('\n')
-                [position.start.line - 1].slice(position.start.column - 1, position.end.column);
-            const rawCaption = raw.slice(2).replace(`](${src})`, '');
-            if (rawCaption) {
-                this.__altText = rawCaption;
-            }
-        }
+        this.__width = (parseOptions(altText, true) as any).width;
     }
 
     /** @internal */
@@ -96,29 +83,14 @@ export class ImageNode extends DecoratorNode<React.ReactNode> {
     }
 
     setWidth(width: number | undefined): void {
-        const caption = cleanedText(this.__altText || '');
-        if (caption) {
-            this.setAltText(`${caption} --width=${width}`);
-        } else {
-            this.setAltText(`--width=${width}`);
+        this.getWritable().__width = width;
+    }
+
+    getAltText(): string {
+        if (!this.__width) {
+            return '';
         }
-    }
-
-    setCaption(caption: string): void {
-        const width = (parseOptions(this.__altText || '', true) as any).width || undefined;
-        if (width) {
-            this.setAltText(`${caption} --width=${width}`);
-        } else {
-            this.setAltText(caption);
-        }
-    }
-
-    getCaption(): string {
-        return cleanedText(this.__altText || '', false);
-    }
-
-    getWidth(): number | undefined {
-        return (parseOptions(this.__altText || '', true) as any).width;
+        return `--width=${this.__width}`;
     }
 
     /** @internal */
@@ -135,29 +107,13 @@ export class ImageNode extends DecoratorNode<React.ReactNode> {
         return this.__src;
     }
 
-    getAltText(): string {
-        return this.__altText;
-    }
-
     setSrc(src: string): void {
         this.getWritable().__src = src;
     }
 
-    setAltText(altText: string | undefined): void {
-        this.getWritable().__altText = altText ?? '';
-    }
-
     /** @internal */
     decorate(_parentEditor: LexicalEditor): React.ReactNode {
-        return (
-            <ImageComponent
-                src={this.getSrc()}
-                nodeKey={this.getKey()}
-                alt={this.__altText}
-                width={this.getWidth()}
-                caption={this.getCaption()}
-            />
-        );
+        return <ImageComponent src={this.getSrc()} nodeKey={this.getKey()} width={this.__width} />;
     }
 }
 
@@ -169,7 +125,6 @@ export interface CreateImageNodeParameters {
     altText: string;
     key?: NodeKey;
     src: string;
-    position?: Position;
 }
 
 /**
@@ -178,8 +133,8 @@ export interface CreateImageNodeParameters {
  * @group Image
  */
 export function $createImageNode(params: CreateImageNodeParameters): ImageNode {
-    const { altText, src, key, position } = params;
-    return new ImageNode(src, altText, key, position);
+    const { altText, src, key } = params;
+    return new ImageNode(src, altText, key);
 }
 
 /**

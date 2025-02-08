@@ -24,20 +24,48 @@ import {
     PASTE_COMMAND,
     createCommand
 } from 'lexical';
-import { LexicalImageVisitor } from './LexicalImageVisitor';
+import {
+    LexicalImageCaptionVisitor,
+    LexicalImageFigureVisitor,
+    LexicalImageVisitor
+} from './LexicalImageVisitor';
 import {
     activeEditor$,
     addExportVisitor$,
     addImportVisitor$,
     addLexicalNode$,
+    addMdastExtension$,
     createActiveEditorSubscription$,
     realmPlugin
 } from '@mdxeditor/editor';
 import { $createImageNode, $isImageNode, CreateImageNodeParameters, ImageNode } from './ImageNode';
-import { MdastImageVisitor } from './MdastImageVisitor';
+import { MdastImageCaptionVisitor, MdastImageFigureVisitor, MdastImageVisitor } from './MdastImageVisitor';
 import React from 'react';
-
+import { rootStore } from '@tdev/stores/rootStore';
+import type { Parent, PhrasingContent, Root, Image } from 'mdast';
+import { transformer } from '../transformer';
+import { transformer as strongTransformer } from '@tdev-plugins/remark-strong/plugin';
+import { ImageCaptionNode } from './ImageCaptionNode';
+import { ImageFigureNode } from './ImageFigureNode';
+import { fromMarkdown } from 'mdast-util-from-markdown';
+import { directiveFromMarkdown } from 'mdast-util-directive';
+import { directive } from 'micromark-extension-directive';
 export * from './ImageNode';
+
+export interface ImageCaption extends Parent {
+    type: 'imageCaption';
+    children: PhrasingContent[];
+}
+export interface ImageFigure extends Parent {
+    type: 'imageFigure';
+    children: [Image, ImageCaption];
+}
+declare module 'mdast' {
+    interface RootContentMap {
+        imageCaption: ImageCaption;
+        imageFigure: ImageFigure;
+    }
+}
 
 /**
  * @group Image
@@ -162,9 +190,9 @@ export const imagePlugin = realmPlugin<{
 }>({
     init(realm, params) {
         realm.pubIn({
-            [addImportVisitor$]: [MdastImageVisitor],
-            [addLexicalNode$]: ImageNode,
-            [addExportVisitor$]: LexicalImageVisitor,
+            [addImportVisitor$]: [MdastImageFigureVisitor, MdastImageVisitor, MdastImageCaptionVisitor],
+            [addLexicalNode$]: [ImageNode, ImageFigureNode, ImageCaptionNode],
+            [addExportVisitor$]: [LexicalImageFigureVisitor, LexicalImageCaptionVisitor, LexicalImageVisitor],
             [imageUploadHandler$]: params?.imageUploadHandler ?? null,
             [disableImageResize$]: Boolean(params?.disableImageResize),
             [disableImageSettingsButton$]: Boolean(params?.disableImageSettingsButton),
@@ -251,6 +279,58 @@ export const imagePlugin = realmPlugin<{
                         )
                     );
                 }
+            ],
+            [addMdastExtension$]: [
+                {
+                    name: 'images-plugin',
+                    transforms: [
+                        (ast: Root) => {
+                            const editedFile = rootStore.cmsStore.editedFile;
+                            transformer(ast, editedFile?.content || '', {
+                                cleanAltText: false,
+                                caption: (rawCaption, options) => {
+                                    const captionAst = fromMarkdown(rawCaption, 'utf-8', {
+                                        extensions: [directive()],
+                                        mdastExtensions: [
+                                            {
+                                                transforms: [
+                                                    (ast: Root) => {
+                                                        strongTransformer(ast, rawCaption, (children) => ({
+                                                            type: 'box',
+                                                            children: children
+                                                        }));
+                                                    }
+                                                ]
+                                            },
+                                            directiveFromMarkdown()
+                                        ]
+                                    });
+
+                                    const children = rawCaption ? captionAst.children : [];
+
+                                    /**
+                                     * Add alt as caption
+                                     */
+                                    const caption = {
+                                        type: 'imageCaption',
+                                        children: children
+                                    } as ImageCaption;
+                                    return caption;
+                                },
+                                figure: (children, options) => {
+                                    return {
+                                        type: 'imageFigure',
+                                        children: children
+                                    };
+                                },
+                                merge: (figure, caption) => {
+                                    figure.children.splice(figure.children.length, 0, caption as any);
+                                    return figure;
+                                }
+                            });
+                        }
+                    ]
+                }
             ]
         });
     },
@@ -294,7 +374,6 @@ function onDragStart(event: DragEvent): boolean {
         'application/x-lexical-drag',
         JSON.stringify({
             data: {
-                altText: node.__altText,
                 key: node.getKey(),
                 src: node.__src
             },
