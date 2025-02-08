@@ -3,10 +3,10 @@ import { Extension } from '@codemirror/state';
 import {
     appendCodeBlockEditorDescriptor$,
     CodeBlockEditorDescriptor,
-    CodeMirrorEditor,
     insertCodeBlock$,
     realmPlugin
 } from '@mdxeditor/editor';
+import { CodeMirrorEditor } from './CodeMirrorEditor';
 
 /**
  * The codemirror code block languages.

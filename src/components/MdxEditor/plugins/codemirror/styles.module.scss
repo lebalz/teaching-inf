@@ -1,0 +1,17 @@
+.codeMirrorWrapper {
+    margin-bottom: var(--spacing-5);
+    border: 1px solid var(--baseLine);
+    border-radius: var(--radius-medium);
+    overflow: hidden;
+    padding: 0.8rem;
+    position: relative;
+}
+.editor {
+    .toolbar {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--ifm-color-emphasis-300);
+        padding-right: 0;
+        padding-top: 0;
+    }
+}

@@ -7,10 +7,19 @@ import { Confirm } from '@tdev-components/shared/Button/Confirm';
 
 export interface Props {
     className?: string;
+    onRemove?: () => void;
 }
 
-const RemoveJsxNode = (props: Props) => {
+const useRemover = (onRemove?: () => void) => {
+    if (onRemove) {
+        return onRemove;
+    }
     const remover = useLexicalNodeRemove();
+    return remover;
+};
+
+const RemoveJsxNode = (props: Props) => {
+    const remover = useRemover(props.onRemove);
     return (
         <span className={clsx(props.className)}>
             <Confirm
