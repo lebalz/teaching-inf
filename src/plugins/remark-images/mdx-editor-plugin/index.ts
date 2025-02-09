@@ -45,8 +45,8 @@ import { rootStore } from '@tdev/stores/rootStore';
 import type { Parent, PhrasingContent, Root, Image } from 'mdast';
 import { transformer } from '../transformer';
 import { transformer as strongTransformer } from '@tdev-plugins/remark-strong/plugin';
-import { ImageCaptionNode } from './ImageCaptionNode';
-import { ImageFigureNode } from './ImageFigureNode';
+import { $createImageCaptionNode, ImageCaptionNode } from './ImageCaptionNode';
+import { $createImageFigureNode, ImageFigureNode } from './ImageFigureNode';
 import { fromMarkdown } from 'mdast-util-from-markdown';
 import { directiveFromMarkdown } from 'mdast-util-directive';
 import { directive } from 'micromark-extension-directive';
@@ -111,13 +111,17 @@ export interface SaveImageParameters extends BaseImageParameters {
 const internalInsertImage$ = Signal<SrcImageParameters>((r) => {
     r.sub(r.pipe(internalInsertImage$, withLatestFrom(activeEditor$)), ([values, theEditor]) => {
         theEditor?.update(() => {
+            const imageFigure = $createImageFigureNode();
             const imageNode = $createImageNode({
                 altText: values.altText ?? '',
                 src: values.src
             });
-            $insertNodes([imageNode]);
-            if ($isRootOrShadowRoot(imageNode.getParentOrThrow())) {
-                $wrapNodeInElement(imageNode, $createParagraphNode).selectEnd();
+            const imageCaption = $createImageCaptionNode();
+            imageFigure.append(imageNode, imageCaption);
+
+            $insertNodes([imageFigure]);
+            if ($isRootOrShadowRoot(imageFigure.getParentOrThrow())) {
+                $wrapNodeInElement(imageFigure, $createParagraphNode).selectEnd();
             }
         });
     });

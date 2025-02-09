@@ -23,7 +23,11 @@ const ImageGallery = observer((props: Props) => {
             {activeEntry.parent?.images.map((image) => {
                 if (image.type === 'file') {
                     return (
-                        <div onClick={() => props.onSelect(`./${image.name}`)} className={clsx(styles.image)}>
+                        <div
+                            onClick={() => props.onSelect(`./${image.name}`)}
+                            className={clsx(styles.image)}
+                            key={image.path}
+                        >
                             <ImagePreview
                                 key={image.path}
                                 src={File.ImageDataUrl(image)}
@@ -41,6 +45,7 @@ const ImageGallery = observer((props: Props) => {
                         <div
                             onClick={() => props.onSelect(`./${image.parent.name}/${image.name}`)}
                             className={clsx(styles.image)}
+                            key={image.path}
                         >
                             <ImagePreview
                                 key={image.path}

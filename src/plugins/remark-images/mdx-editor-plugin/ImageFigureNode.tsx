@@ -7,28 +7,9 @@
  *
  */
 
-import type {
-    BaseSelection,
-    EditorConfig,
-    LexicalCommand,
-    LexicalNode,
-    NodeKey,
-    RangeSelection,
-    SerializedElementNode
-} from 'lexical';
+import type { BaseSelection, EditorConfig, LexicalNode, NodeKey, SerializedElementNode } from 'lexical';
 
-import { $findMatchingParent } from '@lexical/utils';
-import {
-    $applyNodeReplacement,
-    $getSelection,
-    $isElementNode,
-    $isRangeSelection,
-    createCommand,
-    ElementNode,
-    Spread
-} from 'lexical';
-import { $getAncestor } from '@tdev-components/MdxEditor/helpers/lexical/get-ancestors';
-import { $withSelectedNodes } from '@tdev-components/MdxEditor/helpers/lexical/with-selected-nodes';
+import { $applyNodeReplacement, $isRangeSelection, ElementNode, Spread } from 'lexical';
 import styles from './styles.module.scss';
 
 export type SerializedImageFigureNode = Spread<{}, SerializedElementNode>;
