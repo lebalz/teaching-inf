@@ -1,6 +1,6 @@
 import Layout from '@theme/Layout';
 
-import { matchPath, Redirect, useLocation } from '@docusaurus/router';
+import { matchPath, Redirect, useHistory, useLocation } from '@docusaurus/router';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import { observer } from 'mobx-react-lite';
 import Loader from '@tdev-components/Loader';
@@ -117,11 +117,13 @@ const PATHNAME_PATTERN = '/cms/*' as const;
 
 const WithFileToEdit = observer((props: Props) => {
     const cmsStore = useStore('cmsStore');
+    const history = useHistory();
     React.useEffect(() => {
         if (props.fileToEdit) {
             cmsStore.settings?.setActivePath(props.fileToEdit, true);
+            history.replace(`/cms`);
         }
-    }, [props.fileToEdit]);
+    }, [props.fileToEdit, history]);
     return <CmsLandingPage />;
 });
 
