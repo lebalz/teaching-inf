@@ -9,7 +9,7 @@ import File from '@tdev-models/cms/File';
 import { IMAGE_DIR_NAME } from '@tdev-models/cms/Dir';
 
 interface Props {
-    onSelect: (src: string) => void;
+    onSelect: (src: string, entry: File) => void;
 }
 
 const ImageGallery = observer((props: Props) => {
@@ -24,7 +24,7 @@ const ImageGallery = observer((props: Props) => {
                 if (image.type === 'file') {
                     return (
                         <div
-                            onClick={() => props.onSelect(`./${image.name}`)}
+                            onClick={() => props.onSelect(`./${image.name}`, image)}
                             className={clsx(styles.image)}
                             key={image.path}
                         >
@@ -43,7 +43,7 @@ const ImageGallery = observer((props: Props) => {
                 if (image.type === 'file') {
                     return (
                         <div
-                            onClick={() => props.onSelect(`./${image.parent.name}/${image.name}`)}
+                            onClick={() => props.onSelect(`./${image.parent.name}/${image.name}`, image)}
                             className={clsx(styles.image)}
                             key={image.path}
                         >

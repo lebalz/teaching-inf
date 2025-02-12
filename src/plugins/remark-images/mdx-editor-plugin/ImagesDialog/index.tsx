@@ -13,9 +13,11 @@ import { insertImage$ } from '..';
 import TextInput from '@tdev-components/shared/TextInput';
 import ImagePreview from '@tdev-components/Github/iFile/File/ImagePreview';
 import Button from '@tdev-components/shared/Button';
+import File from '@tdev-models/cms/File';
 
 export const ImageDialog = observer(() => {
     const [src, setSrc] = React.useState('');
+    const [file, setFile] = React.useState<File | null>(null);
     const insertImage = usePublisher(insertImage$);
 
     return (
@@ -36,8 +38,9 @@ export const ImageDialog = observer(() => {
             }
         >
             <ImageGallery
-                onSelect={(src) => {
+                onSelect={(src, file) => {
                     setSrc(src);
+                    setFile(file);
                 }}
             />
             <TextInput
@@ -45,9 +48,12 @@ export const ImageDialog = observer(() => {
                 type="url"
                 onChange={(src) => {
                     setSrc(src);
+                    if (file) {
+                        setFile(null);
+                    }
                 }}
             />
-            {src && <ImagePreview src={src} />}
+            {src && <ImagePreview src={file ? File.ImageDataUrl(file) : src} />}
         </Card>
     );
 });
