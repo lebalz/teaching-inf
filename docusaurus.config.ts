@@ -254,7 +254,7 @@ const config: Config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/GBSL-Informatik/teaching-dev/edit/main/',
+            '/cms/',
           remarkPlugins: REMARK_PLUGINS,
           rehypePlugins: REHYPE_PLUGINS,
           beforeDefaultRemarkPlugins: BEFORE_DEFAULT_REMARK_PLUGINS,
@@ -264,7 +264,7 @@ const config: Config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/GBSL-Informatik/teaching-dev/edit/main/',
+            '/cms/',
             remarkPlugins: REMARK_PLUGINS,
             rehypePlugins: REHYPE_PLUGINS,
           beforeDefaultRemarkPlugins: BEFORE_DEFAULT_REMARK_PLUGINS,
@@ -273,6 +273,7 @@ const config: Config = {
           remarkPlugins: REMARK_PLUGINS,
           rehypePlugins: REHYPE_PLUGINS,
           beforeDefaultRemarkPlugins: BEFORE_DEFAULT_REMARK_PLUGINS,
+          editUrl: '/cms/'
         },
         theme: {
           customCss: './src/css/custom.scss',
@@ -298,7 +299,7 @@ const config: Config = {
         },
         { to: '/blog', label: 'Blog', position: 'left' },
         {
-          to: '/gh-login',
+          to: '/cms',
           label: 'CMS',
           position: 'left',
         },
@@ -364,6 +365,10 @@ const config: Config = {
           {
             path: '/rooms/',
             component: '@tdev-components/Rooms',
+          },
+          {
+            path: '/cms/',
+            component: '@tdev-components/Cms',
           }
         ]
       } satisfies DynamicRouteConfig
