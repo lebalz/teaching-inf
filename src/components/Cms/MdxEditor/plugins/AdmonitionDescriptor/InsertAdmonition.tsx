@@ -7,9 +7,10 @@ import {
     useTranslation
 } from '@mdxeditor/editor';
 import React from 'react';
-import { ADMONITION_TYPES } from '.';
 import _ from 'lodash';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
+import { observer } from 'mobx-react-lite';
+import { useStore } from '@tdev-hooks/useStore';
 
 /**
  * A toolbar dropdown button that allows the user to insert admonitions.
@@ -17,14 +18,15 @@ import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext
  *
  * @group Toolbar Components
  */
-export const InsertAdmonition = () => {
+export const InsertAdmonition = observer(() => {
     const [editor] = useLexicalComposerContext();
+    const cmsStore = useStore('cmsStore');
     const insertDirective = usePublisher(insertDirective$);
     const [iconComponentFor] = useCellValues(iconComponentFor$);
     const t = useTranslation();
 
     const items = React.useMemo(() => {
-        return [...ADMONITION_TYPES, 'details', 'def'].map((type) => ({
+        return ['details', ...cmsStore.admonitionTypes].sort().map((type) => ({
             value: type,
             label: _.capitalize(type)
         }));
@@ -43,4 +45,4 @@ export const InsertAdmonition = () => {
             {iconComponentFor('admonition')}
         </ButtonOrDropdownButton>
     );
-};
+});

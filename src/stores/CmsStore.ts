@@ -1,6 +1,6 @@
 import { action, computed, observable, reaction } from 'mobx';
 import { RootStore } from '@tdev-stores/rootStore';
-import iStore, { ApiState } from '@tdev-stores/iStore';
+import iStore from '@tdev-stores/iStore';
 import {
     githubToken as apiGithubToken,
     load as apiLoadSettings,
@@ -32,6 +32,9 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
     @observable.ref accessor github: Github | undefined;
 
     @observable accessor initialized = false;
+
+    // common admonition types by docusaurus
+    _admonitionTypes = observable.set(['note', 'tip', 'info', 'warning', 'danger']);
 
     constructor(store: RootStore) {
         super();
@@ -73,6 +76,18 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
                 }
             })
         );
+    }
+
+    @computed
+    get admonitionTypes() {
+        return [...this._admonitionTypes].sort();
+    }
+
+    @action
+    addAdmonitionType(type: string) {
+        if (!this._admonitionTypes.has(type)) {
+            this._admonitionTypes.add(type);
+        }
     }
 
     @action

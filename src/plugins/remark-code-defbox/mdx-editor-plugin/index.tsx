@@ -13,7 +13,9 @@ import DefBox from '@tdev-components/CodeDefBox';
 import DefHeading from '@tdev-components/CodeDefBox/DefHeading';
 import RemoveJsxNode from '@tdev-components/Cms/MdxEditor/RemoveJsxNode';
 import DefContent from '@tdev-components/CodeDefBox/DefContent';
-import { ADMONITION_TYPES } from '@tdev-components/Cms/MdxEditor/plugins/AdmonitionDescriptor';
+import AdmonitionTypeSelector from '@tdev-components/Cms/MdxEditor/plugins/AdmonitionDescriptor/AdmonitionTypeSelector';
+import { observer } from 'mobx-react-lite';
+import { useStore } from '@tdev-hooks/useStore';
 
 /**
  * Pass this descriptor to the `directivesPlugin` `directiveDescriptors` parameter to enable {@link https://docusaurus.io/docs/markdown-features/admonitions | markdown admonitions}.
@@ -34,8 +36,12 @@ export const CodeDefBoxDirectiveDescriptor: DirectiveDescriptor = {
     testNode(node) {
         return node.name === 'def';
     },
-    Editor({ mdastNode }) {
+    Editor: observer(({ mdastNode }) => {
         const updater = useMdastNodeUpdater();
+        const cmsStore = useStore('cmsStore');
+        React.useEffect(() => {
+            cmsStore.addAdmonitionType('def');
+        }, []);
         return (
             <DefBox className={clsx(styles.def)}>
                 <DefHeading className={clsx(styles.header)}>
@@ -51,19 +57,10 @@ export const CodeDefBoxDirectiveDescriptor: DirectiveDescriptor = {
                     >
                         <div className={clsx(styles.wrapper, 'card')}>
                             <div className={clsx('card__body')}>
-                                <div className={styles.admonitionList}>
-                                    {[...ADMONITION_TYPES, 'def'].map((admoType) => (
-                                        <Button
-                                            key={admoType}
-                                            className={clsx(styles.userButton)}
-                                            iconSide="left"
-                                            active={mdastNode.name === admoType}
-                                            onClick={() => updater({ name: admoType })}
-                                        >
-                                            {admoType}
-                                        </Button>
-                                    ))}
-                                </div>
+                                <AdmonitionTypeSelector
+                                    currentName={mdastNode.name}
+                                    onChange={(name) => updater({ name })}
+                                />
                             </div>
                         </div>
                     </Popup>
@@ -122,5 +119,5 @@ export const CodeDefBoxDirectiveDescriptor: DirectiveDescriptor = {
                 </DefContent>
             </DefBox>
         );
-    }
+    })
 };

@@ -11,6 +11,8 @@ import { mdiChevronDown } from '@mdi/js';
 import Button from '@tdev-components/shared/Button';
 import Popup from 'reactjs-popup';
 import RemoveJsxNode from '../../RemoveJsxNode';
+import { observer } from 'mobx-react-lite';
+import AdmonitionTypeSelector from './AdmonitionTypeSelector';
 
 /** @internal */
 export const ADMONITION_TYPES = ['note', 'tip', 'info', 'warning', 'danger'] as const;
@@ -37,7 +39,7 @@ export const AdmonitionDirectiveDescriptor: DirectiveDescriptor = {
     testNode(node) {
         return ADMONITION_TYPES.includes(node.name as AdmonitionKind);
     },
-    Editor({ mdastNode, lexicalNode }) {
+    Editor: observer(({ mdastNode }) => {
         const updater = useMdastNodeUpdater();
         return (
             <Admonition
@@ -62,19 +64,10 @@ export const AdmonitionDirectiveDescriptor: DirectiveDescriptor = {
                         >
                             <div className={clsx(styles.wrapper, 'card')}>
                                 <div className={clsx('card__body')}>
-                                    <div className={styles.admonitionList}>
-                                        {ADMONITION_TYPES.map((admoType) => (
-                                            <Button
-                                                key={admoType}
-                                                className={clsx(styles.userButton)}
-                                                iconSide="left"
-                                                active={mdastNode.name === admoType}
-                                                onClick={() => updater({ name: admoType })}
-                                            >
-                                                {admoType}
-                                            </Button>
-                                        ))}
-                                    </div>
+                                    <AdmonitionTypeSelector
+                                        currentName={mdastNode.name}
+                                        onChange={(name) => updater({ name })}
+                                    />
                                 </div>
                             </div>
                         </Popup>
@@ -133,5 +126,5 @@ export const AdmonitionDirectiveDescriptor: DirectiveDescriptor = {
                 />
             </Admonition>
         );
-    }
+    })
 };
