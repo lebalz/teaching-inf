@@ -3,10 +3,9 @@
 import React from 'react';
 import { DirectiveDescriptor, NestedLexicalEditor, useMdastNodeUpdater } from '@mdxeditor/editor';
 import { ContainerDirective } from 'mdast-util-directive';
-import { BlockContent, Paragraph, PhrasingContent, RootContent } from 'mdast';
+import { BlockContent, Paragraph, PhrasingContent } from 'mdast';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
-import Admonition from '@theme/Admonition';
 import { mdiChevronDown } from '@mdi/js';
 import Button from '@tdev-components/shared/Button';
 import Popup from 'reactjs-popup';
@@ -38,8 +37,8 @@ export const CodeDefBoxDirectiveDescriptor: DirectiveDescriptor = {
     Editor({ mdastNode }) {
         const updater = useMdastNodeUpdater();
         return (
-            <DefBox className={clsx(styles.admonition)}>
-                <DefHeading>
+            <DefBox className={clsx(styles.def)}>
+                <DefHeading className={clsx(styles.header)}>
                     <Popup
                         trigger={
                             <div className={styles.admonitionSwitcher}>
@@ -100,7 +99,7 @@ export const CodeDefBoxDirectiveDescriptor: DirectiveDescriptor = {
                     />
                     <RemoveJsxNode />
                 </DefHeading>
-                <DefContent>
+                <DefContent className={clsx(styles.content)}>
                     <NestedLexicalEditor<ContainerDirective>
                         block
                         contentEditableProps={{

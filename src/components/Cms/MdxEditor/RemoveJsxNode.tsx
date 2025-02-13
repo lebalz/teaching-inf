@@ -7,6 +7,7 @@ import { Confirm } from '@tdev-components/shared/Button/Confirm';
 
 export interface Props {
     className?: string;
+    buttonClassName?: string;
     onRemove?: () => void;
 }
 
@@ -23,6 +24,7 @@ const RemoveJsxNode = (props: Props) => {
     return (
         <span className={clsx(props.className)}>
             <Confirm
+                buttonClassName={clsx(props.buttonClassName)}
                 icon={mdiClose}
                 confirmIcon={mdiCloseBox}
                 text={null}

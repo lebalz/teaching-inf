@@ -20,6 +20,7 @@ import { useCodeMirrorRef } from './useCodeMirrorRef';
 import styles from './styles.module.scss';
 import Card from '@tdev-components/shared/Card';
 import RemoveJsxNode from '@tdev-components/Cms/MdxEditor/RemoveJsxNode';
+import clsx from 'clsx';
 
 export const COMMON_STATE_CONFIG_EXTENSIONS: Extension[] = [];
 const EMPTY_VALUE = '__EMPTY_VALUE__';
@@ -123,6 +124,7 @@ export const CodeMirrorEditor = ({ language, nodeKey, code, focusEmitter }: Code
                         }))}
                     />
                     <RemoveJsxNode
+                        buttonClassName={clsx(styles.removeButton)}
                         onRemove={() => {
                             parentEditor.update(() => {
                                 lexicalNode.remove();
