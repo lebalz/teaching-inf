@@ -9,7 +9,7 @@ import Popup from 'reactjs-popup';
 import Icon from '@mdi/react';
 import { camelCased, captialize } from '@tdev/plugins/helpers';
 import { transformMdiAttributes } from '@tdev/plugins/remark-mdi/plugin';
-import Editor from '@tdev-components/MdxEditor/PropertyEditor/Editor';
+import Editor from '@tdev-components/Cms/MdxEditor/PropertyEditor/Editor';
 import { PopupActions } from 'reactjs-popup/dist/types';
 import Card from '@tdev-components/shared/Card';
 

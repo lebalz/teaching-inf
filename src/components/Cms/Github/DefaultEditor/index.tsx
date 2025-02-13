@@ -4,7 +4,7 @@ import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@tdev-hooks/useStore';
 import CodeEditor from '@tdev-components/shared/CodeEditor';
-import Actions from '@tdev-components/MdxEditor/toolbar/Actions';
+import Actions from '@tdev-components/Cms/MdxEditor/toolbar/Actions';
 import File from '@tdev-models/cms/File';
 import { action } from 'mobx';
 

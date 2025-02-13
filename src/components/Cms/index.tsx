@@ -9,17 +9,17 @@ import { useStore } from '@tdev-hooks/useStore';
 import { useGithubAccess } from '@tdev-hooks/useGithubAccess';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
-import PathNav from '@tdev-components/MdxEditor/PathNav';
-import Selector from '@tdev-components/Github/Branch/Selector';
-import Directory from '@tdev-components/MdxEditor/Directory';
-import MdxEditor from '@tdev-components/MdxEditor';
-import DefaultEditor from '@tdev-components/Github/DefaultEditor';
+import PathNav from '@tdev-components/Cms/MdxEditor/PathNav';
+import Selector from '@tdev-components/Cms/Github/Branch/Selector';
+import Directory from '@tdev-components/Cms/MdxEditor/Directory';
+import MdxEditor from '@tdev-components/Cms/MdxEditor';
+import DefaultEditor from '@tdev-components/Cms/Github/DefaultEditor';
 import { ApiState } from '@tdev-stores/iStore';
 import Card from '@tdev-components/shared/Card';
 import Details from '@theme/Details';
-import ImagePreview from '@tdev-components/Github/iFile/File/ImagePreview';
-import PR from '@tdev-components/Github/PR';
-import Branch from '@tdev-components/Github/Branch';
+import ImagePreview from '@tdev-components/Cms/Github/iFile/File/ImagePreview';
+import PR from '@tdev-components/Cms/Github/PR';
+import Branch from '@tdev-components/Cms/Github/Branch';
 
 const CmsLandingPage = observer(() => {
     const cmsStore = useStore('cmsStore');

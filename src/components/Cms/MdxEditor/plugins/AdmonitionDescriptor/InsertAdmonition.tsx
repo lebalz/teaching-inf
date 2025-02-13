@@ -24,7 +24,10 @@ export const InsertAdmonition = () => {
     const t = useTranslation();
 
     const items = React.useMemo(() => {
-        return [...ADMONITION_TYPES, 'details'].map((type) => ({ value: type, label: _.capitalize(type) }));
+        return [...ADMONITION_TYPES, 'details', 'def'].map((type) => ({
+            value: type,
+            label: _.capitalize(type)
+        }));
     }, [t]);
 
     return (

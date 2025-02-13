@@ -7,7 +7,7 @@ import { BlockContent, Paragraph, PhrasingContent, RootContent } from 'mdast';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
 import Admonition from '@theme/Admonition';
-import { mdiAbacus, mdiArrowDown, mdiChevronDown } from '@mdi/js';
+import { mdiChevronDown } from '@mdi/js';
 import Button from '@tdev-components/shared/Button';
 import Popup from 'reactjs-popup';
 import RemoveJsxNode from '../../RemoveJsxNode';

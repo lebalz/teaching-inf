@@ -4,7 +4,7 @@ import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
 import { default as DirModel } from '@tdev-models/cms/Dir';
 import Card from '@tdev-components/shared/Card';
-import Dir from '@tdev-components/Github/iFile/Dir';
+import Dir from '@tdev-components/Cms/Github/iFile/Dir';
 
 interface Props {
     dir?: DirModel;

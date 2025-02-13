@@ -19,7 +19,7 @@ import {
 import { useCodeMirrorRef } from './useCodeMirrorRef';
 import styles from './styles.module.scss';
 import Card from '@tdev-components/shared/Card';
-import RemoveJsxNode from '@tdev-components/MdxEditor/RemoveJsxNode';
+import RemoveJsxNode from '@tdev-components/Cms/MdxEditor/RemoveJsxNode';
 
 export const COMMON_STATE_CONFIG_EXTENSIONS: Extension[] = [];
 const EMPTY_VALUE = '__EMPTY_VALUE__';
