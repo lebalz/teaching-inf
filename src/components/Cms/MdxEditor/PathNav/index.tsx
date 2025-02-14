@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite';
 import { useStore } from '@tdev-hooks/useStore';
 import iEntry from '@tdev-models/cms/iEntry';
 import Icon from '@mdi/react';
+import BranchSelector from './BranchSelector';
 
 interface Props {
     item: iEntry;
@@ -17,6 +18,7 @@ const PathNav = observer((props: Props) => {
         <div className={clsx(styles.PathNav)}>
             <nav aria-label="breadcrumbs">
                 <ul className={clsx('breadcrumbs', 'breadcrumbs--sm')}>
+                    <BranchSelector />
                     {item.tree.map((part, index) => {
                         if (!part) {
                             return null;

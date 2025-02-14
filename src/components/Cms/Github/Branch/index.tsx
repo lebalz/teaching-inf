@@ -3,32 +3,13 @@ import clsx from 'clsx';
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@tdev-hooks/useStore';
-import { GhBranch } from '@tdev-models/cms/Github';
 import { Delete } from '@tdev-components/shared/Button/Delete';
 import Badge from '@tdev-components/shared/Badge';
-import Icon, { Stack } from '@mdi/react';
-import {
-    mdiAlert,
-    mdiCircleOutline,
-    mdiCircleSmall,
-    mdiGit,
-    mdiMerge,
-    mdiPlus,
-    mdiPlusCircleMultipleOutline,
-    mdiPlusCircleOutline,
-    mdiReload,
-    mdiSourceBranch,
-    mdiSourceBranchSync,
-    mdiSourceCommit,
-    mdiSourceMerge,
-    mdiSyncCircle
-} from '@mdi/js';
-import { Confirm } from '@tdev-components/shared/Button/Confirm';
-import { default as BranchModel, MergeStatus } from '@tdev-models/cms/Branch';
+import Icon from '@mdi/react';
+import { mdiGit, mdiPlusCircleMultipleOutline, mdiReload, mdiSourceBranch, mdiSourceCommit } from '@mdi/js';
+import { default as BranchModel } from '@tdev-models/cms/Branch';
 import Button from '@tdev-components/shared/Button';
-import { ApiState } from '@tdev-stores/iStore';
 import Popup from 'reactjs-popup';
-import Card from '@tdev-components/shared/Card';
 import NewPR from '../PR/NewPR';
 import { PopupActions } from 'reactjs-popup/dist/types';
 interface Props {

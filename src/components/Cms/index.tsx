@@ -36,17 +36,6 @@ const CmsLandingPage = observer(() => {
     return (
         <main className={clsx(styles.cms)}>
             <PathNav item={activeEntry} />
-            <Selector
-                onSelect={(branchName) => {
-                    if (cmsStore.branchNames.includes(branchName)) {
-                        cmsStore.setBranch(branchName);
-                    } else {
-                        github.createNewBranch(branchName).then((branch) => {
-                            cmsStore.setBranch(branchName);
-                        });
-                    }
-                }}
-            />
             {activeEntry.type === 'dir' ? (
                 <Directory dir={activeEntry} />
             ) : (

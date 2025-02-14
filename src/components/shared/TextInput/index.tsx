@@ -14,6 +14,7 @@ interface Props {
     value?: string;
     type?: HTMLInputTypeAttribute;
     label?: string;
+    noSpellCheck?: boolean;
 }
 
 const TextInput = observer((props: Props) => {
@@ -28,6 +29,7 @@ const TextInput = observer((props: Props) => {
             )}
             <input
                 id={id}
+                spellCheck={!props.noSpellCheck}
                 type={props.type || 'text'}
                 placeholder={props.placeholder}
                 value={props.value || text}
