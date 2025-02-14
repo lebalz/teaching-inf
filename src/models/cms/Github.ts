@@ -17,14 +17,6 @@ export type GhPr =
     | GhTypes['pulls']['create']['response']['data'];
 
 const PR_PAGE_SIZE = 20;
-// name: string;
-// commit: {
-//     sha: string;
-//     url: string;
-// };
-// protected: boolean;
-// protection?: components["schemas"]["branch-protection"];
-// protection_url?: string;
 
 class Github {
     readonly store: CmsStore;
@@ -132,9 +124,9 @@ class Github {
     }
 
     @computed
-    get nextPrName() {
+    get nextBranchName() {
         const now = new Date().toISOString().replace('T', '--').replaceAll(':', '-').slice(0, 17);
-        return `cms/pr-${now}`;
+        return `cms/update-${now}`;
     }
 
     @action
@@ -142,7 +134,7 @@ class Github {
         this.createNewBranch(newBranch)
             .then(async () => {
                 await this.createOrUpdateFile(file.path, file.content, newBranch, file.sha);
-                await this.createPR(newBranch, `${newBranch} [skip ci]`);
+                await this.createPR(newBranch, `[skip ci] ${newBranch}`);
                 this.store.settings?.setLocation(newBranch, file.path);
             })
             .catch(() => {

@@ -80,7 +80,7 @@ const Actions = observer((props: Props) => {
                                     <Button
                                         text="In neuem Branch speichern"
                                         onClick={() => {
-                                            const name = github.nextPrName;
+                                            const name = github.nextBranchName;
                                             github.saveFileInNewBranchAndCreatePr(file, name);
                                         }}
                                         icon={mdiSourceBranchPlus}
@@ -92,8 +92,7 @@ const Actions = observer((props: Props) => {
                                     <Confirm
                                         text={`Auf dem ${file.branch}-Branch speichern`}
                                         onConfirm={() => {
-                                            const name = github.nextPrName;
-                                            github.saveFileInNewBranchAndCreatePr(file, name);
+                                            file.save();
                                         }}
                                         icon={mdiContentSaveAlert}
                                         confirmColor="orange"
