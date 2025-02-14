@@ -49,7 +49,7 @@ class Github {
 
     @action
     fetchRepo() {
-        return this.octokit.repos.get({ repo: projectName!, owner: organizationName! }).then(
+        return this.octokit.repos.get({ repo: projectName!, owner: organizationName!, _: Date.now() }).then(
             action((res) => {
                 this.repo = res.data;
             })
@@ -74,12 +74,14 @@ class Github {
 
     @action
     fetchBranches() {
-        return this.octokit.repos.listBranches({ repo: projectName!, owner: organizationName! }).then(
-            action((res) => {
-                const branches = res.data.map((br) => new Branch(br, this));
-                this.branches.replace(branches);
-            })
-        );
+        return this.octokit.repos
+            .listBranches({ repo: projectName!, owner: organizationName!, _: Date.now() })
+            .then(
+                action((res) => {
+                    const branches = res.data.map((br) => new Branch(br, this));
+                    this.branches.replace(branches);
+                })
+            );
     }
 
     @action
@@ -97,7 +99,8 @@ class Github {
                 per_page: PR_PAGE_SIZE,
                 sort: 'created',
                 direction: 'desc',
-                page: page ?? 1
+                page: page ?? 1,
+                _: Date.now() // disable cache
             })
             .then(
                 action((res) => {
@@ -114,7 +117,8 @@ class Github {
             .get({
                 repo: projectName!,
                 owner: organizationName!,
-                pull_number: number
+                pull_number: number,
+                _: Date.now() // disable cache
             })
             .then(
                 action((res) => {
@@ -345,7 +349,8 @@ class Github {
             .compareCommitsWithBasehead({
                 basehead: `${toBranch}...${from.name}`,
                 owner: organizationName!,
-                repo: projectName!
+                repo: projectName!,
+                _: Date.now() // disable cache
             })
             .then((res) => res.data);
     }
@@ -454,7 +459,8 @@ class Github {
                 owner: organizationName!,
                 repo: projectName!,
                 path: path,
-                ref: branch
+                ref: branch,
+                _: Date.now() // disable cache
             })
             .then(
                 action((res) => {
@@ -513,7 +519,8 @@ class Github {
                 owner: organizationName!,
                 repo: projectName!,
                 path: path,
-                ref: branch
+                ref: branch,
+                _: Date.now() // disable cache
             })
             .then(
                 action((res) => {
