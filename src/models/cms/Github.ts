@@ -8,6 +8,7 @@ import File from './File';
 import { ApiState } from '@tdev-stores/iStore';
 import Branch, { MergeStatus } from './Branch';
 import PR from './PR';
+import { withoutPreviewPRName } from './helpers';
 const { organizationName, projectName } = siteConfig;
 
 export type GhRepo = GhTypes['repos']['get']['response']['data'];
@@ -138,7 +139,7 @@ class Github {
         this.createNewBranch(newBranch)
             .then(async () => {
                 await this.createOrUpdateFile(file.path, file.content, newBranch, file.sha);
-                await this.createPR(newBranch, `[skip ci] ${newBranch}`);
+                await this.createPR(newBranch, withoutPreviewPRName(newBranch));
                 this.store.settings?.setLocation(newBranch, file.path);
             })
             .catch(() => {
@@ -372,6 +373,7 @@ class Github {
             base64Content = btoa(String.fromCharCode(...textContent));
         }
         const current = this.store.findEntry(branch, path) as File | undefined;
+        const branchModel = this.branches.find((b) => b.name === branch);
         return this.octokit!.repos.createOrUpdateFileContents({
             owner: organizationName!,
             repo: projectName!,
@@ -386,6 +388,7 @@ class Github {
                 if (!resContent) {
                     return;
                 }
+                branchModel?.sync();
                 switch (res.status) {
                     case 200:
                         // file updated

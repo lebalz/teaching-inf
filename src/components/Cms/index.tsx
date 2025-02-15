@@ -10,7 +10,6 @@ import { useGithubAccess } from '@tdev-hooks/useGithubAccess';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
 import PathNav from '@tdev-components/Cms/MdxEditor/PathNav';
-import Selector from '@tdev-components/Cms/Github/Branch/Selector';
 import Directory from '@tdev-components/Cms/MdxEditor/Directory';
 import MdxEditor from '@tdev-components/Cms/MdxEditor';
 import DefaultEditor from '@tdev-components/Cms/Github/DefaultEditor';
@@ -36,6 +35,12 @@ const CmsLandingPage = observer(() => {
     return (
         <main className={clsx(styles.cms)}>
             <PathNav item={activeEntry} />
+            {cmsStore.activeBranch &&
+                (cmsStore.activeBranch.PR ? (
+                    <PR pr={cmsStore.activeBranch.PR} />
+                ) : (
+                    <Branch branch={cmsStore.activeBranch} hideName />
+                ))}
             {activeEntry.type === 'dir' ? (
                 <Directory dir={activeEntry} />
             ) : (

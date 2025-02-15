@@ -13,6 +13,8 @@ import TextAreaInput from '@tdev-components/shared/TextAreaInput';
 import Button from '@tdev-components/shared/Button';
 import PR from '@tdev-models/cms/PR';
 import Alert from '@tdev-components/shared/Alert';
+import Checkbox from '@tdev-components/shared/Checkbox';
+import { withoutPreviewPRName, withPreviewPRName } from '@tdev-models/cms/helpers';
 
 interface Props {
     branch: Branch;
@@ -28,6 +30,8 @@ const NewPR = observer((props: Props) => {
     const [body, setBody] = React.useState(branch.name);
     const [isCreating, setIsCreating] = React.useState(false);
     const [isError, setIsError] = React.useState(false);
+    const [createPreview, setCreatePreview] = React.useState(false);
+
     return (
         <Card
             classNames={{ card: styles.createPr, footer: styles.footer }}
@@ -59,7 +63,10 @@ const NewPR = observer((props: Props) => {
                                 return props.onDone();
                             }
                             setIsCreating(true);
-                            cmsStore.github.createPR(branch.name, title, body).then((pr) => {
+                            const prTitle = createPreview
+                                ? withPreviewPRName(title)
+                                : withoutPreviewPRName(title);
+                            cmsStore.github.createPR(branch.name, prTitle, body).then((pr) => {
                                 if (pr) {
                                     pr.sync(true);
                                     props.onDone(pr);
@@ -89,6 +96,11 @@ const NewPR = observer((props: Props) => {
             )}
             <TextInput value={title} onChange={setTitle} label="Titel" />
             <TextAreaInput onChange={setBody} placeholder="Beschreibung" minRows={3} label="Beschreibung" />
+            <Checkbox
+                label="Seitenvorschau erstellen?"
+                checked={createPreview}
+                onChange={(checked) => setCreatePreview(checked)}
+            />
         </Card>
     );
 });

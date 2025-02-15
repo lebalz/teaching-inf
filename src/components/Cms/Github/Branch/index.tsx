@@ -14,6 +14,7 @@ import NewPR from '../PR/NewPR';
 import { PopupActions } from 'reactjs-popup/dist/types';
 interface Props {
     branch: BranchModel;
+    hideName?: boolean;
 }
 
 const Branch = observer((props: Props) => {
@@ -34,10 +35,12 @@ const Branch = observer((props: Props) => {
 
     return (
         <div className={clsx(styles.branch)}>
-            <Badge noPaddingLeft>
-                <Icon path={mdiSourceBranch} color="var(--ifm-color-blue)" size={0.8} />
-                {branch.name}
-            </Badge>
+            {!props.hideName && (
+                <Badge noPaddingLeft>
+                    <Icon path={mdiSourceBranch} color="var(--ifm-color-blue)" size={0.8} />
+                    {branch.name}
+                </Badge>
+            )}
             <div className={clsx(styles.spacer)}></div>
             {github.defaultBranchName !== branch.name ? (
                 <>
