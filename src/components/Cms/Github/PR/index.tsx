@@ -9,6 +9,8 @@ import Icon from '@mdi/react';
 import { Confirm } from '@tdev-components/shared/Button/Confirm';
 import {
     mdiCloseCircle,
+    mdiEye,
+    mdiEyeOff,
     mdiLoading,
     mdiRecordCircleOutline,
     mdiReload,
@@ -58,6 +60,11 @@ const PR = observer((props: Props) => {
                 title="PR Status aktualisieren"
             />
             <div className={clsx(styles.spacer)}></div>
+            <Button
+                icon={pr.hasPreview ? mdiEye : mdiEyeOff}
+                size={SIZE_S}
+                color={pr.hasPreview ? 'green' : 'orange'}
+            />
             {pr.branch && (pr.branch.aheadBy > 0 || pr.branch.behindBy > 0) && (
                 <Badge
                     noPaddingLeft
