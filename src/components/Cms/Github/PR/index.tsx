@@ -63,7 +63,15 @@ const PR = observer((props: Props) => {
             <Button
                 icon={pr.hasPreview ? mdiEye : mdiEyeOff}
                 size={SIZE_S}
-                color={pr.hasPreview ? 'green' : 'orange'}
+                color={pr.hasPreview ? 'blue' : 'orange'}
+                title={
+                    pr.hasPreview
+                        ? 'Preview wird beim nächsten Speichern veröffentlicht'
+                        : 'Preview wird nicht mehr veröffentlicht'
+                }
+                onClick={() => {
+                    pr.setPreview(!pr.hasPreview);
+                }}
             />
             {pr.branch && (pr.branch.aheadBy > 0 || pr.branch.behindBy > 0) && (
                 <Badge

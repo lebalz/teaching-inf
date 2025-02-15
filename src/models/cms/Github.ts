@@ -277,6 +277,35 @@ class Github {
     }
 
     @action
+    updatePr(prNumber: number, data: Partial<{ title: string; body: string; state: 'open' | 'closed' }>) {
+        const patch = { ...data };
+        (Object.keys(patch) as ('title' | 'body' | 'state')[]).forEach((key) => {
+            if (data[key] === undefined) {
+                delete data[key];
+            }
+        });
+        if (Object.keys(patch).length === 0) {
+            return Promise.resolve();
+        }
+        return this.octokit.pulls
+            .update({
+                owner: organizationName!,
+                repo: projectName!,
+                pull_number: prNumber,
+                ...patch
+            })
+            .then((res) => {
+                const pr = this.store.findPr(prNumber);
+                if (pr && res.data) {
+                    pr.update(res.data);
+                }
+            })
+            .catch((err) => {
+                console.warn('Error updating PR', patch, err);
+            });
+    }
+
+    @action
     createNewBranch(name: string) {
         if (!this.defaultBranch) {
             return Promise.resolve();

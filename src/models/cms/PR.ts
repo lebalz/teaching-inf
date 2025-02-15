@@ -1,7 +1,7 @@
 import { action, computed, observable } from 'mobx';
 import Github from './Github';
 import { ApiState } from '@tdev-stores/iStore';
-import { withPreviewPRName } from './helpers';
+import { withoutPreviewPRName, withPreviewPRName } from './helpers';
 
 type PRRef = {
     label: string;
@@ -35,8 +35,6 @@ interface Props {
 class PR {
     readonly gitProvider: Github;
     readonly number: number;
-    readonly title: string;
-    readonly body: string;
 
     readonly updatedAt: Date;
     readonly createdAt: Date;
@@ -47,6 +45,9 @@ class PR {
     readonly owner: string; // e.g github username
 
     labels = observable.set<string>();
+
+    @observable accessor title: string;
+    @observable accessor body: string;
 
     @observable accessor state: string;
     @observable accessor headSha: string;
@@ -83,6 +84,15 @@ class PR {
         return this.title === withPreviewPRName(this.title);
     }
 
+    @action
+    setPreview(enabled: boolean) {
+        if (enabled) {
+            this.gitProvider.updatePr(this.number, { title: withPreviewPRName(this.title) });
+        } else {
+            this.gitProvider.updatePr(this.number, { title: withoutPreviewPRName(this.title) });
+        }
+    }
+
     @computed
     get branch() {
         return this.gitProvider.store.findBranch(this.branchName);
@@ -104,6 +114,19 @@ class PR {
     }
 
     @action
+    update(data: Partial<Props>) {
+        if (data.state) {
+            this.state = data.state;
+        }
+        if (data.title) {
+            this.title = data.title;
+        }
+        if (data.body) {
+            this.body = data.body;
+        }
+    }
+
+    @action
     sync(syncBranch = true) {
         this.setApiState(ApiState.SYNCING);
         const promises = [
@@ -111,6 +134,8 @@ class PR {
                 .fetchPrState(this.number)
                 .then(
                     action((res) => {
+                        this.title = res.title;
+                        this.body = res.body || '';
                         this.mergeable = !!res.mergeable;
                         this.rebaseable = !!res.rebaseable;
                         this.mergeableState = res.mergeable_state;
