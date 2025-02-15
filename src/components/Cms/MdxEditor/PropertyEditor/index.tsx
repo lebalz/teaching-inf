@@ -45,42 +45,40 @@ export interface Props {
     title?: string;
     onClose?: () => void;
 }
+//{name: string, type?: React.HTMLInputTypeAttribute, required?: boolean}
+export interface Property {
+    name: string;
+    type: React.HTMLInputTypeAttribute;
+    value?: string;
+    required?: boolean;
+    description?: string;
+    placeholder?: string | number;
+}
 
 const PropertyEditor = (props: Props) => {
     const { properties, mdastAttributes } = props;
     const updateMdastNode = useMdastNodeUpdater();
     const cProps = React.useMemo(
         () =>
-            properties.reduce<Record<string, string>>((acc, { name }) => {
+            properties.map<Property>((prop) => {
                 const attribute = mdastAttributes.find((attr) =>
-                    isMdxJsxAttribute(attr) ? attr.name === name : false
+                    isMdxJsxAttribute(attr) ? attr.name === prop.name : false
                 );
 
                 if (attribute) {
                     if (isExpressionValue(attribute.value)) {
-                        acc[name] = attribute.value.value;
-                        return acc;
+                        return { ...prop, value: attribute.value.value };
                     }
 
                     if (isStringValue(attribute.value)) {
-                        acc[name] = attribute.value;
-                        return acc;
+                        return { ...prop, value: attribute.value };
                     }
                 }
 
-                acc[name] = '';
-                return acc;
-            }, {}),
+                return { ...prop, value: '' };
+            }),
         [mdastAttributes, properties]
     );
-    const defValues = React.useMemo(() => {
-        const defaults = properties.reduce<Record<string, string | number>>((acc, { name, type }) => {
-            acc[name] = type === 'number' ? 0 : '';
-            return acc;
-        }, {});
-
-        return defaults;
-    }, [properties]);
 
     const onChange = React.useCallback(
         (values: Record<string, string>) => {
@@ -119,7 +117,7 @@ const PropertyEditor = (props: Props) => {
     if (properties.length === 0) {
         return null;
     }
-    return <Editor onChange={onChange} properties={cProps} defaultValues={defValues} />;
+    return <Editor onChange={onChange} properties={cProps} onClose={props.onClose} />;
 };
 
 export default PropertyEditor;
