@@ -6,12 +6,20 @@ import { useStore } from '@tdev-hooks/useStore';
 import { Delete } from '@tdev-components/shared/Button/Delete';
 import Badge from '@tdev-components/shared/Badge';
 import Icon from '@mdi/react';
-import { mdiGit, mdiPlusCircleMultipleOutline, mdiReload, mdiSourceBranch, mdiSourceCommit } from '@mdi/js';
+import {
+    mdiGit,
+    mdiPlusCircleMultipleOutline,
+    mdiReload,
+    mdiSourceBranch,
+    mdiSourceCommit,
+    mdiSync
+} from '@mdi/js';
 import { default as BranchModel } from '@tdev-models/cms/Branch';
 import Button from '@tdev-components/shared/Button';
 import Popup from 'reactjs-popup';
 import NewPR from '../PR/NewPR';
 import { PopupActions } from 'reactjs-popup/dist/types';
+import { SIZE_S, SIZE_XS } from '@tdev-components/shared/iconSizes';
 interface Props {
     branch: BranchModel;
     hideName?: boolean;
@@ -80,12 +88,12 @@ const Branch = observer((props: Props) => {
                         style={{ gap: 0 }}
                         title={`Branch ist ${branch.aheadBy} Commits vor- und ${branch.behindBy} Commits hinter dem ${github.defaultBranchName}-Branch`}
                     >
-                        <Icon path={mdiSourceCommit} size={0.8} />+{branch.aheadBy}
+                        <Icon path={mdiSourceCommit} size={SIZE_XS} />+{branch.aheadBy}
                         {branch.behindBy > 0 && `/-${branch.behindBy}`}
                     </Badge>
                     <Button
-                        icon={mdiReload}
-                        color="grey"
+                        icon={mdiSync}
+                        size={SIZE_S}
                         onClick={() => {
                             github.fetchBranches();
                             branch.sync();
@@ -93,6 +101,7 @@ const Branch = observer((props: Props) => {
                         title="Branch Status aktualisieren"
                     />
                     <Delete
+                        title="Branch löschen"
                         onDelete={() => {
                             if (associatedPr) {
                                 github.closeAndDeletePr(associatedPr.number);
@@ -100,13 +109,14 @@ const Branch = observer((props: Props) => {
                                 github.deleteBranch(branch.name);
                             }
                         }}
+                        size={SIZE_S}
                         className={clsx(styles.delete)}
                         text={''}
                     />
                 </>
             ) : (
                 <Badge noPadding title="Standard Branch">
-                    <Icon path={mdiGit} size={0.8} color="var(--ifm-color-blue)" />
+                    <Icon path={mdiGit} size={SIZE_S} color="var(--ifm-color-blue)" />
                 </Badge>
             )}
         </div>

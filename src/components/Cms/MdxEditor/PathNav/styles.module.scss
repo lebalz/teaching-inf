@@ -2,6 +2,7 @@ button.breadcrumbsButton:global(.button) {
     border-radius: var(--ifm-breadcrumb-border-radius);
     --ifm-button-background-color: var(--ifm-breadcrumb-item-background-active);
     --ifm-button-border-color: var(--ifm-breadcrumb-item-border-active);
+    --ifm-button-padding-vertical: 0.3rem;
     color: var(--ifm-color-content);
 }
 .item {
@@ -9,5 +10,14 @@ button.breadcrumbsButton:global(.button) {
     &.active {
         color: var(--ifm-navbar-link-active-color);
         background: var(--ifm-pagination-item-active-background);
+    }
+}
+:global(.breadcrumbs__item) {
+    --ifm-breadcrumb-padding-vertical: 0.1rem;
+    &:not(:last-child):after {
+        transform: translateY(-3px);
+    }
+    > :global(.breadcrumbs__link) {
+        transform: translateY(-2px);
     }
 }

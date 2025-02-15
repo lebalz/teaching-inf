@@ -34,13 +34,15 @@ const CmsLandingPage = observer(() => {
 
     return (
         <main className={clsx(styles.cms)}>
-            <PathNav item={activeEntry} />
-            {cmsStore.activeBranch &&
-                (cmsStore.activeBranch.PR ? (
-                    <PR pr={cmsStore.activeBranch.PR} />
-                ) : (
-                    <Branch branch={cmsStore.activeBranch} hideName />
-                ))}
+            <div className={clsx(styles.header)}>
+                <PathNav item={activeEntry} />
+                {cmsStore.activeBranch &&
+                    (cmsStore.activeBranch.PR ? (
+                        <PR pr={cmsStore.activeBranch.PR} />
+                    ) : (
+                        <Branch branch={cmsStore.activeBranch} hideName />
+                    ))}
+            </div>
             {activeEntry.type === 'dir' ? (
                 <Directory dir={activeEntry} />
             ) : (
