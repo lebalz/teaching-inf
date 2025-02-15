@@ -1,6 +1,7 @@
 import { action, computed, observable } from 'mobx';
 import Github from './Github';
 import { ApiState } from '@tdev-stores/iStore';
+import { withPreviewPRName } from './helpers';
 
 type PRRef = {
     label: string;
@@ -75,6 +76,11 @@ class PR {
         this.updatedAt = new Date(props.updated_at);
         this.createdAt = new Date(props.created_at);
         this.mergedAt = props.merged_at ? new Date(props.merged_at) : null;
+    }
+
+    @computed
+    get hasPreview() {
+        return this.title === withPreviewPRName(this.title);
     }
 
     @computed
