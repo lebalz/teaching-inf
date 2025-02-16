@@ -35,7 +35,7 @@ const sanitizedTitle = (title?: string) => {
         .replace(/<<HYPHEN>>/g, '-');
 };
 
-const extractMetaProps = (props: { metastring?: string }): Partial<MetaProps> => {
+export const extractMetaProps = (props: { metastring?: string }): Partial<MetaProps> => {
     const metaString = (props?.metastring || '').replace(/\s*=\s*/g, '='); // remove spaces around =
     const metaRaw = metaString.split(/\s+/).map((s) => s.trim().split('='));
     return metaRaw.reduce(

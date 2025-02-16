@@ -29,6 +29,8 @@ interface Props {
     maxLines?: number;
     readonly?: boolean;
     name?: string;
+    placeholder?: string;
+    hideLineNumbers?: boolean;
 }
 
 const CodeEditor = (props: Props) => {
@@ -56,9 +58,10 @@ const CodeEditor = (props: Props) => {
                 }}
                 readOnly={props.readonly}
                 value={props.value}
-                defaultValue={props.defaultValue || '\n'}
+                defaultValue={props.defaultValue ?? '\n'}
                 name={props.name}
                 editorProps={{ $blockScrolling: true }}
+                placeholder={props.placeholder}
                 setOptions={{
                     displayIndentGuides: true,
                     vScrollBarAlwaysVisible: false,
@@ -69,7 +72,7 @@ const CodeEditor = (props: Props) => {
                 enableBasicAutocompletion
                 enableLiveAutocompletion={false}
                 enableSnippets={false}
-                showGutter={true}
+                showGutter={!props.hideLineNumbers}
             />
         </div>
     );

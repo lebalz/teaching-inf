@@ -1,19 +1,37 @@
 import React from 'react';
 import _ from 'lodash';
-import { JsxComponentDescriptor, MdastJsx } from '@mdxeditor/editor';
 import PropertyEditor from './PropertyEditor';
 import Popup from 'reactjs-popup';
 import { mdiCog } from '@mdi/js';
 import Button from '@tdev-components/shared/Button';
 import { PopupActions } from 'reactjs-popup/dist/types';
 
+export interface GenericPropery {
+    name: string;
+    required?: boolean;
+    placeholder?: string;
+    label?: string;
+    description?: string;
+    type: React.HTMLInputTypeAttribute | 'expression';
+    value?: string;
+    lang?: string;
+    sideEffect?: (
+        props: Record<string, string | number | undefined>,
+        initial: Record<string, string | number | undefined>
+    ) => { name: string; value: string }[] | void;
+}
+export interface GenericValueProperty extends GenericPropery {
+    value: string;
+}
+
 export interface Props {
-    descriptor: JsxComponentDescriptor;
-    mdastNode: MdastJsx;
+    properties: GenericPropery[];
+    onUpdate: (values: GenericValueProperty[]) => void;
+    values: Record<string, string>;
 }
 
 const GenericAttributeEditor = (props: Props) => {
-    const { descriptor, mdastNode } = props;
+    const { properties, onUpdate, values } = props;
     const ref = React.useRef<PopupActions>(null);
     return (
         <Popup
@@ -29,9 +47,9 @@ const GenericAttributeEditor = (props: Props) => {
             on="click"
         >
             <PropertyEditor
-                properties={descriptor.props}
-                title={mdastNode.name ?? ''}
-                mdastAttributes={mdastNode.attributes}
+                values={values}
+                onUpdate={onUpdate}
+                properties={properties}
                 onClose={() => ref.current?.close()}
             />
         </Popup>

@@ -1,13 +1,14 @@
 import React from 'react';
 import _ from 'lodash';
 import Card from '@tdev-components/shared/Card';
-import { useForm } from 'react-hook-form';
+import { useForm, UseFormRegisterReturn } from 'react-hook-form';
 import styles from './styles.module.scss';
 import Button from '@tdev-components/shared/Button';
 import { mdiClose, mdiCloseCircle, mdiContentSave } from '@mdi/js';
 import { Delete } from '@tdev-components/shared/Button/Delete';
 import clsx from 'clsx';
-import { Property } from '..';
+import CodeEditor from '@tdev-components/shared/CodeEditor';
+import { GenericPropery } from '../../GenericAttributeEditor';
 
 /* @see https://github.com/mdx-editor/editor/blob/main/src/plugins/core/PropertyPopover.tsx */
 
@@ -15,7 +16,7 @@ export interface Props {
     /**
      * The properties to edit. The key is the name of the property, and the value is the initial value.
      */
-    properties: Property[];
+    properties: GenericPropery[];
     /**
      * Triggered when the user edits the property values.
      */
@@ -35,28 +36,41 @@ const getInputType = (type?: React.HTMLInputTypeAttribute): React.HTMLInputTypeA
     if (type === 'string') {
         return 'search';
     }
+    if (type === 'boolean') {
+        return 'checkbox';
+    }
     return type;
 };
 
 const Editor = (props: Props) => {
     const { properties, title } = props;
     const initValues = React.useMemo(() => {
-        return properties.reduce<Record<string, string | number>>(
-            (acc, { value, name, type, placeholder: defaultValue }) => {
-                if (type === 'number') {
-                    acc[name] = value || defaultValue || 0;
-                } else {
-                    acc[name] = value || defaultValue || '';
-                }
-                return acc;
-            },
-            {}
-        );
+        return properties.reduce<Record<string, string | number>>((acc, { value, name, type }) => {
+            acc[name] = value || '';
+            return acc;
+        }, {});
     }, [properties]);
-    const { register, handleSubmit } = useForm({
+    const { register, handleSubmit, setValue, watch } = useForm({
         defaultValues: initValues
     });
-    console.log('properties', properties);
+
+    React.useEffect(() => {
+        const subscription = watch((value, { name }) => {
+            const prop = properties.find((p) => p.name === name);
+            if (!prop) {
+                return;
+            }
+            if (prop.sideEffect) {
+                const sideEffects = prop.sideEffect(value, initValues);
+                if (sideEffects) {
+                    sideEffects.forEach(({ name, value }) => {
+                        setValue(name, value);
+                    });
+                }
+            }
+        });
+        return () => subscription.unsubscribe();
+    }, [watch, initValues, properties, setValue]);
 
     return (
         <Card
@@ -106,6 +120,7 @@ const Editor = (props: Props) => {
                         <thead>
                             <tr>
                                 <th className={styles.readOnlyColumnCell}>Attribut</th>
+                                <th className={styles.readOnlyColumnCell}>Beschreibung</th>
                                 <th>Wert</th>
                             </tr>
                         </thead>
@@ -113,14 +128,29 @@ const Editor = (props: Props) => {
                             {props.properties.map((prop) => (
                                 <tr key={prop.name}>
                                     <th className={styles.readOnlyColumnCell}>{prop.name}</th>
-                                    <td>
-                                        <input
-                                            {...register(prop.name)}
-                                            className={styles.propertyEditorInput}
-                                            type={getInputType(prop.type)}
-                                            title={prop.description}
-                                            placeholder={`${prop.placeholder}`}
-                                        />
+                                    <td className={styles.readOnlyColumnCell}>{prop.description}</td>
+                                    <td className={clsx(styles.propertyEditorCell)}>
+                                        {prop.type === 'expression' ? (
+                                            <CodeEditor
+                                                defaultValue={(prop.value || '').trim()}
+                                                placeholder={prop.placeholder}
+                                                onChange={(value) => {
+                                                    setValue(prop.name, value);
+                                                }}
+                                                lang={prop.lang}
+                                                hideLineNumbers
+                                            />
+                                        ) : (
+                                            <input
+                                                {...register(prop.name)}
+                                                className={styles.propertyEditorInput}
+                                                type={getInputType(prop.type)}
+                                                title={prop.description}
+                                                placeholder={
+                                                    prop.placeholder ? `${prop.placeholder}` : undefined
+                                                }
+                                            />
+                                        )}
                                     </td>
                                 </tr>
                             ))}

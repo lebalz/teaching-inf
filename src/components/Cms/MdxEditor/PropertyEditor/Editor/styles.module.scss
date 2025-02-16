@@ -2,6 +2,15 @@
     --ifm-table-cell-padding: 0.2rem;
     table {
         margin-bottom: 0;
+        text-align: left;
+        .propertyEditorCell {
+            min-width: 20em;
+            text-align: right;
+            input[type='number'],
+            input[type='search'] {
+                width: 95%;
+            }
+        }
     }
     .buttonsFooter {
         display: flex;
