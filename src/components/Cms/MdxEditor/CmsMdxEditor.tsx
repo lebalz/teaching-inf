@@ -28,7 +28,9 @@ import {
     tablePlugin,
     thematicBreakPlugin,
     toolbarPlugin,
-    UndoRedo
+    UndoRedo,
+    useCell,
+    viewMode$
 } from '@mdxeditor/editor';
 import _ from 'lodash';
 import '@mdxeditor/editor/style.css';
@@ -63,6 +65,7 @@ import DefaultEditor from '@tdev-components/Cms/Github/DefaultEditor';
 import { Kbd, kbdPlugin } from '@tdev-plugins/remark-kbd/mdx-editor-plugin';
 import { ToolbarInsertKbd } from '@tdev-plugins/remark-kbd/mdx-editor-plugin/ToolbarInsertKbd';
 import { CodeDefBoxDirectiveDescriptor } from '@tdev-plugins/remark-code-defbox/mdx-editor-plugin';
+import { footnotePlugin } from './plugins/footnote';
 
 export interface Props {
     file: FileModel;
@@ -70,8 +73,8 @@ export interface Props {
 
 const CmsMdxEditor = observer((props: Props) => {
     const cmsStore = useStore('cmsStore');
+    const [skipUpdateCheck, setSkipUpdateCheck] = React.useState(false);
     const { file } = props;
-    const { isMarkdown } = file;
     const ref = React.useRef<MDXEditorMethods>(null);
     return (
         <ErrorBoundary
@@ -90,6 +93,7 @@ const CmsMdxEditor = observer((props: Props) => {
                 placeholder="Schreibe deine Inhalte hier..."
                 onError={(error) => {
                     console.error('Error in editor', error);
+                    setSkipUpdateCheck(true);
                 }}
                 ref={ref}
                 className={clsx(styles.mdxEditor)}
@@ -148,6 +152,7 @@ const CmsMdxEditor = observer((props: Props) => {
                         },
                         autoLoadLanguageSupport: true
                     }),
+                    footnotePlugin(),
                     toolbarPlugin({
                         toolbarClassName: styles.toolbar,
                         toolbarContents: () => (
@@ -215,7 +220,7 @@ const CmsMdxEditor = observer((props: Props) => {
                     kbdPlugin()
                 ]}
                 onChange={(md, initialMarkdownNormalize) => {
-                    if (initialMarkdownNormalize) {
+                    if (initialMarkdownNormalize && !skipUpdateCheck) {
                         return;
                     }
                     file.setContent(md);
