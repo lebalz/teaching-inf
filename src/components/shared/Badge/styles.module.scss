@@ -9,4 +9,11 @@
     &.noPaddingRight {
         padding-right: 4px;
     }
+    &.blue {
+        --ifm-color-primary: var(--ifm-color-blue);
+    }
+    &.black {
+        --ifm-color-primary: var(--ifm-color-content);
+        --ifm-badge-color: var(--ifm-color-content-inverse);
+    }
 }

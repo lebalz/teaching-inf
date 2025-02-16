@@ -12,7 +12,6 @@ import { $createImageFigureNode } from './ImageFigureNode';
 export const MdastImageVisitor: MdastImportVisitor<Mdast.Image> = {
     testNode: 'image',
     visitNode({ mdastNode, actions }) {
-        console.log('mdastNode', mdastNode);
         actions.addAndStepInto(
             $createImageNode({
                 src: mdastNode.url,

@@ -128,16 +128,23 @@ const CmsMdxEditor = observer((props: Props) => {
                     codeMirrorPlugin({
                         codeBlockLanguages: {
                             py: 'Python',
-                            js: 'JavaScript',
+                            js: 'JS',
                             json: 'JSON',
                             jsx: 'JSX',
                             ts: 'TS',
                             tsx: 'TSX',
                             css: 'CSS',
-                            md: 'markdown',
+                            md: 'MD',
                             mdx: 'MDX',
                             bash: 'bash',
-                            ['mdx-code-block']: 'mdx-code-block'
+                            html: 'HTML',
+                            yaml: 'YAML',
+                            sql: 'SQL',
+                            psql: 'PSQL',
+                            sh: 'Shell',
+                            c: 'C',
+                            cpp: 'C++',
+                            ['mdx-code-block']: 'MdxCodeBlock'
                         },
                         autoLoadLanguageSupport: true
                     }),

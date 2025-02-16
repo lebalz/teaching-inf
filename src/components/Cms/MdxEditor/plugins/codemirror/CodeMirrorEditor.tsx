@@ -11,7 +11,6 @@ import { codeBlockLanguages$, codeMirrorAutoLoadLanguageSupport$, codeMirrorExte
 import {
     CodeBlockEditorProps,
     readOnly$,
-    Select,
     useCodeBlockEditorContext,
     useTranslation
 } from '@mdxeditor/editor';
@@ -23,9 +22,11 @@ import clsx from 'clsx';
 import GenericAttributeEditor, { GenericPropery, GenericValueProperty } from '../../GenericAttributeEditor';
 import { extractMetaProps } from '@tdev/theme/CodeBlock';
 import { v4 } from 'uuid';
+import Badge from '@tdev-components/shared/Badge';
+import Button from '@tdev-components/shared/Button';
+import Popup from 'reactjs-popup';
 
 export const COMMON_STATE_CONFIG_EXTENSIONS: Extension[] = [];
-const EMPTY_VALUE = '__EMPTY_VALUE__';
 
 const LANGUAGE_ALIAS_MAP: { [key: string]: string } = {
     ['mdx-code-block']: 'tsx'
@@ -173,7 +174,6 @@ export const CodeMirrorEditor = ({ language, nodeKey, code, focusEmitter, meta }
     }, [readOnly, language]);
     const metaProps = React.useMemo(() => {
         const mProps = extractMetaProps({ metastring: meta });
-        console.log('metaProps', mProps, meta);
         return Object.entries(mProps).reduce<Record<string, string>>((acc, [key, value]) => {
             if (DOCUSAURUS_LINE_HIGHLIGHT_REGEX.test(key)) {
                 acc['highlightedLines'] = key.substring(1, key.length - 1);
@@ -245,25 +245,42 @@ export const CodeMirrorEditor = ({ language, nodeKey, code, focusEmitter, meta }
             }}
             header={
                 <>
-                    <Select
-                        value={language}
-                        onChange={(language) => {
-                            parentEditor.update(() => {
-                                lexicalNode.setLanguage(language === EMPTY_VALUE ? '' : language);
-                                setTimeout(() => {
-                                    parentEditor.update(() => {
-                                        lexicalNode.getLatest().select();
-                                    });
-                                });
-                            });
-                        }}
-                        triggerTitle={t('codeBlock.selectLanguage', 'Select code block language')}
-                        placeholder={t('codeBlock.inlineLanguage', 'Language')}
-                        items={Object.entries(codeBlockLanguages).map(([value, label]) => ({
-                            value: value ? value : EMPTY_VALUE,
-                            label
-                        }))}
-                    />
+                    <Popup
+                        trigger={
+                            <div>
+                                <Badge color="blue">{language || '-'}</Badge>
+                            </div>
+                        }
+                        on={['click', 'hover']}
+                        keepTooltipInside="#__docusaurus"
+                        position={['bottom left', 'top left', 'left center']}
+                        closeOnDocumentClick
+                        lockScroll
+                        closeOnEscape
+                    >
+                        <Card classNames={{ body: styles.languagePopup }}>
+                            {[['', '-'], ...Object.entries(codeBlockLanguages)].map(([value, label], idx) => {
+                                return (
+                                    <Button
+                                        key={idx}
+                                        text={label}
+                                        color={value === language ? 'blue' : undefined}
+                                        onClick={() => {
+                                            parentEditor.update(() => {
+                                                lexicalNode.setLanguage(value);
+                                                setTimeout(() => {
+                                                    parentEditor.update(() => {
+                                                        lexicalNode.getLatest().select();
+                                                    });
+                                                });
+                                            });
+                                        }}
+                                    />
+                                );
+                            })}
+                        </Card>
+                    </Popup>
+
                     {metaProps.title && <h4>{metaProps.title.replace(/^"/, '').replace(/"$/, '')}</h4>}
                     <GenericAttributeEditor onUpdate={onUpdate} properties={properties} values={metaProps} />
                     <RemoveJsxNode
