@@ -19,6 +19,8 @@ export interface GenericPropery {
         props: Record<string, string | number | undefined>,
         initial: Record<string, string | number | undefined>
     ) => { name: string; value: string }[] | void;
+    resettable?: boolean;
+    onRecalc?: () => string;
 }
 export interface GenericValueProperty extends GenericPropery {
     value: string;

@@ -75,6 +75,10 @@ const PYTHON_PROPS: GenericPropery[] = [
                 delta.push({ name: 'slim', value: 'true' });
             }
             return delta;
+        },
+        resettable: true,
+        onRecalc: () => {
+            return v4();
         }
     },
     { name: 'readonly', type: 'checkbox', required: false },

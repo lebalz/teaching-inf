@@ -4,12 +4,25 @@
     table {
         margin-bottom: 0;
         text-align: left;
+        .title {
+            position: relative;
+            .dirtyIndicator {
+                position: absolute;
+                top: 0;
+                right: 0;
+            }
+        }
         .propertyEditorCell {
             min-width: 20em;
             text-align: right;
-            input[type='number'],
-            input[type='search'] {
-                width: 95%;
+            .content {
+                display: flex;
+                align-items: center;
+                input[type='number'],
+                input[type='search'],
+                input[type='string'] {
+                    width: calc(100% - 1px);
+                }
             }
         }
     }
@@ -18,12 +31,17 @@
         justify-content: space-between;
     }
 }
+.spacer {
+    flex-grow: 1;
+    flex-basis: 0;
+    flex-shrink: 1;
+}
 
 @media screen and (max-width: 768px) {
     .editor {
         table {
             .propertyEditorCell {
-                min-width: 10em;
+                min-width: 12em;
             }
         }
     }
