@@ -14,9 +14,7 @@ import type {
 
 import { DecoratorNode } from 'lexical';
 import { ImageComponent } from './ImageComponent';
-import { Position } from 'unist';
-import { cleanedText, parseOptions } from '@tdev/plugins/helpers';
-import { rootStore } from '@tdev/stores/rootStore';
+import { parseOptions } from '@tdev/plugins/helpers';
 
 /**
  * A serialized representation of an {@link ImageNode}.

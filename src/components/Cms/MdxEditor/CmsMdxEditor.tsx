@@ -207,7 +207,10 @@ const CmsMdxEditor = observer((props: Props) => {
                     markdownShortcutPlugin(),
                     kbdPlugin()
                 ]}
-                onChange={(md) => {
+                onChange={(md, initialMarkdownNormalize) => {
+                    if (initialMarkdownNormalize) {
+                        return;
+                    }
                     file.setContent(md);
                 }}
                 toMarkdownOptions={{
