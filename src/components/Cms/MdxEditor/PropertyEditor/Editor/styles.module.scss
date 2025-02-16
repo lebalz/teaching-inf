@@ -1,5 +1,6 @@
 .editor {
     --ifm-table-cell-padding: 0.2rem;
+    max-width: 95vw;
     table {
         margin-bottom: 0;
         text-align: left;
@@ -15,5 +16,15 @@
     .buttonsFooter {
         display: flex;
         justify-content: space-between;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .editor {
+        table {
+            .propertyEditorCell {
+                min-width: 10em;
+            }
+        }
     }
 }

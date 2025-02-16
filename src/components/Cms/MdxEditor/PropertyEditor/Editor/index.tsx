@@ -9,6 +9,7 @@ import { Delete } from '@tdev-components/shared/Button/Delete';
 import clsx from 'clsx';
 import CodeEditor from '@tdev-components/shared/CodeEditor';
 import { GenericPropery } from '../../GenericAttributeEditor';
+import useIsMobileView from '@tdev-hooks/useIsMobileView';
 
 /* @see https://github.com/mdx-editor/editor/blob/main/src/plugins/core/PropertyPopover.tsx */
 
@@ -53,6 +54,7 @@ const Editor = (props: Props) => {
     const { register, handleSubmit, setValue, watch } = useForm({
         defaultValues: initValues
     });
+    const isMobile = useIsMobileView(768);
 
     React.useEffect(() => {
         const subscription = watch((value, { name }) => {
@@ -120,15 +122,19 @@ const Editor = (props: Props) => {
                         <thead>
                             <tr>
                                 <th className={styles.readOnlyColumnCell}>Attribut</th>
+                                {!isMobile && <th>Wert</th>}
                                 <th className={styles.readOnlyColumnCell}>Beschreibung</th>
-                                <th>Wert</th>
+                                {isMobile && <th>Wert</th>}
                             </tr>
                         </thead>
                         <tbody>
                             {props.properties.map((prop) => (
                                 <tr key={prop.name}>
                                     <th className={styles.readOnlyColumnCell}>{prop.name}</th>
-                                    <td className={styles.readOnlyColumnCell}>{prop.description}</td>
+                                    {!isMobile && (
+                                        <td className={styles.readOnlyColumnCell}>{prop.description}</td>
+                                    )}
+
                                     <td className={clsx(styles.propertyEditorCell)}>
                                         {prop.type === 'expression' ? (
                                             <CodeEditor
@@ -152,6 +158,9 @@ const Editor = (props: Props) => {
                                             />
                                         )}
                                     </td>
+                                    {isMobile && (
+                                        <td className={styles.readOnlyColumnCell}>{prop.description}</td>
+                                    )}
                                 </tr>
                             ))}
                         </tbody>

@@ -41,10 +41,12 @@ const GenericAttributeEditor = (props: Props) => {
                 </span>
             }
             keepTooltipInside="#__docusaurus"
-            overlayStyle={{ background: 'rgba(0,0,0,0.5)' }}
+            overlayStyle={{ background: 'rgba(0,0,0,0.5)', maxWidth: '100vw' }}
             ref={ref}
             modal
             on="click"
+            repositionOnResize
+            nested
         >
             <PropertyEditor
                 values={values}
