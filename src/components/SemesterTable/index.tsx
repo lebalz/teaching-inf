@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
 import { WEEK_DAYS } from '../../helpers/time';
@@ -21,8 +21,8 @@ const ICON_MAPPING: { [key in Type]: string } = {
 };
 
 interface CellProps {
-    value: string | JSX.Element;
-    icon?: JSX.Element;
+    value: string | ReactNode;
+    icon?: ReactNode;
     align?: 'left' | 'center' | 'right' | 'justify' | 'char';
     date?: Date;
 }
@@ -55,7 +55,7 @@ export class Cell extends React.Component<CellProps> {
 }
 
 export interface iRow {
-    cells: (string | JSX.Element)[];
+    cells: (string | ReactNode)[];
     type?: Type;
     className?: string;
     color?: string;
@@ -100,7 +100,7 @@ const weekNumber = (date: Date) => {
 };
 
 export class Row extends React.Component<RowProps> {
-    icon(): JSX.Element {
+    icon(): ReactNode {
         if (this.props.icon) {
             return (
                 <Icon

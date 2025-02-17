@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 import CmsActions from '../CmsActions';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
-
+import { type ReactNode } from 'react';
 export type Name = string & { __nameBrand: 'Name' };
 export type DocumentRootId = string & { __nameBrand: 'DocumentRootId' };
 
@@ -12,7 +12,7 @@ export type CmsTextEntries = { [key: Name]: DocumentRootId };
 interface Props {
     entries: CmsTextEntries;
     hideActions?: boolean;
-    children?: React.ReactNode;
+    children?: ReactNode;
     mode?: 'xlsx' | 'code';
 }
 

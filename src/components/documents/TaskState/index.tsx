@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type ReactNode } from 'react';
 import clsx from 'clsx';
 
 import styles from './styles.module.scss';
@@ -59,7 +59,7 @@ export const mdiColor: { [key in StateType]: string } = {
 
 interface Props extends MetaInit {
     id: string;
-    children?: JSX.Element;
+    children?: ReactNode;
     label?: string;
     pagePosition?: number;
     inline?: boolean;

@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { type ReactNode } from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 interface Props {
-    children: JSX.Element[];
+    children: ReactNode[];
     getLabel: (idx: number) => string;
     highlighted?: number[];
     hilightIcon?: string;

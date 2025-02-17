@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { type ReactNode } from 'react';
 import Details from '@theme/Details';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
 
 interface Props {
     title?: string;
-    children?: React.ReactNode;
+    children?: ReactNode;
 }
 
 const Finding = (props: Props) => {

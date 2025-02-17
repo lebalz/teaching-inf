@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type ReactNode } from 'react';
 import styles from './styles.module.scss';
 
 import clsx from 'clsx';
@@ -8,9 +8,9 @@ import { mdiWindowMinimize } from '@mdi/js';
 interface Props {
     src: string;
     type?: 'mp4';
-    title?: string | JSX.Element;
+    title?: string | ReactNode;
     expanded?: boolean;
-    children?: string | JSX.Element;
+    children?: string | ReactNode;
 }
 
 const Video = (props: Props) => {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type ReactNode } from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
@@ -20,7 +20,7 @@ interface Props extends MetaInit {
     title?: string;
     open?: boolean;
     className?: string;
-    children: JSX.Element;
+    children: ReactNode;
     access?: Access;
 }
 

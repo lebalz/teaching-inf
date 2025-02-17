@@ -1,4 +1,4 @@
-import React, { useId } from 'react';
+import React, { useId, type ReactNode } from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
@@ -17,7 +17,7 @@ interface Props extends MetaInit {
     label?: string;
     labelWidth?: string;
     inputWidth?: string;
-    children?: React.ReactNode;
+    children?: ReactNode;
     type?: React.HTMLInputTypeAttribute | undefined;
     stateIconsPosition?: 'inside' | 'outside' | 'hidden';
     hideWarning?: boolean;
@@ -39,12 +39,7 @@ const ColorMap: { [key in StringAnswer]: string } = {
 };
 
 const InputWrapper = observer(
-    (props: {
-        inline?: boolean;
-        className?: string;
-        style?: React.CSSProperties;
-        children: React.ReactNode;
-    }) => {
+    (props: { inline?: boolean; className?: string; style?: React.CSSProperties; children: ReactNode }) => {
         if (props.inline) {
             return (
                 <span className={clsx(styles.inline, props.className)} style={props.style}>

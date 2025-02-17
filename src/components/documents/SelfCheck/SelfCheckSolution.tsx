@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type ReactNode } from 'react';
 import { observer } from 'mobx-react-lite';
 import { MetaInit } from '@tdev-models/documents/TaskState';
 import { SelfCheckStateType } from '@tdev-components/documents/SelfCheck/models';
@@ -16,7 +16,7 @@ interface Props extends MetaInit {
     open?: boolean;
     className?: string;
     access?: Access;
-    children: JSX.Element;
+    children: ReactNode;
 }
 
 const SelfCheckSolution = observer((props: Props) => {

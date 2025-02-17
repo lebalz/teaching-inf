@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import { CmsTextContext, useFirstCmsTextDocumentIfExists } from '@tdev-components/documents/CmsText/shared';
-import React from 'react';
+import React, { type ReactNode } from 'react';
 import { Props as DefaultCmsProps, EmptyContent } from '..';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
@@ -10,7 +10,7 @@ import { useStore } from '@tdev-hooks/useStore';
 import Link from '@docusaurus/Link';
 
 interface Props extends DefaultCmsProps {
-    children?: React.ReactNode;
+    children?: ReactNode;
 }
 
 const CmsLink = observer((props: Props) => {

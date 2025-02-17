@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { type ReactNode } from 'react';
 import styles from './styles.module.scss';
 import { DOM_ELEMENT_IDS } from '@tdev-components/documents/CodeEditor/constants';
 import Draggable from 'react-draggable';
@@ -10,15 +10,19 @@ import { useDocument } from '@tdev-hooks/useContextDocument';
 import { observer } from 'mobx-react-lite';
 import { mdiClose } from '@mdi/js';
 export interface Props {
-    controls?: JSX.Element;
-    main?: JSX.Element;
+    controls?: ReactNode;
+    main?: ReactNode;
 }
 const Graphics = observer((props: Props) => {
     const script = useDocument<DocumentType.Script>();
-    const nodeRef = React.useRef(null);
+    const nodeRef = React.useRef<HTMLElement>(null);
     return (
-        <Draggable onStop={checkForButtonClick} positionOffset={{ x: '15%', y: '25%' }} nodeRef={nodeRef}>
-            <div className={styles.brythonGraphicsResult} ref={nodeRef}>
+        <Draggable
+            onStop={checkForButtonClick}
+            positionOffset={{ x: '15%', y: '25%' }}
+            nodeRef={nodeRef as any}
+        >
+            <div className={styles.brythonGraphicsResult} ref={nodeRef as any}>
                 <div className={styles.brythonGraphicsResultHead}>
                     <span>Output</span>
                     <span className={styles.spacer}></span>

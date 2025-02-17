@@ -1,4 +1,4 @@
-import React, { useRef, type ComponentProps, type ReactElement } from 'react';
+import React, { useRef, type ComponentProps, type ReactElement, type ReactNode } from 'react';
 import clsx from 'clsx';
 import useIsBrowser from '@docusaurus/useIsBrowser';
 
@@ -31,7 +31,7 @@ export type DetailsProps = {
     lazy?: boolean;
 } & ComponentProps<'details'>;
 
-const FsDetails = ({ summary, model, lazy, children, ...props }: DetailsProps): JSX.Element => {
+const FsDetails = ({ summary, model, lazy, children, ...props }: DetailsProps): ReactNode => {
     const isBrowser = useIsBrowser();
     const detailsRef = useRef<HTMLDetailsElement>(null);
     const summaryElement = React.isValidElement(summary) ? summary : <summary>{summary}</summary>;

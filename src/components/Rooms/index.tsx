@@ -9,7 +9,7 @@ import Icon from '@mdi/react';
 import { mdiAccountAlert, mdiEmoticonSad } from '@mdi/js';
 import { useStore } from '@tdev-hooks/useStore';
 import styles from './styles.module.scss';
-import React from 'react';
+import React, { type ReactNode } from 'react';
 import { DocumentType, DynamicDocumentRoot, RoomType } from '@tdev-api/document';
 import { ModelMeta as RootsMeta } from '@tdev-models/documents/DynamicDocumentRoots';
 import { default as DynamicDocumentRootMeta } from '@tdev-models/documents/DynamicDocumentRoot';
@@ -68,7 +68,7 @@ interface Props {
     roomProps: DynamicDocumentRoot;
     parentDocumentId: string;
 }
-const RoomComponent = observer((props: Props): JSX.Element => {
+const RoomComponent = observer((props: Props): ReactNode => {
     const documentStore = useStore('documentStore');
     const drStore = useStore('documentRootStore');
     const { roomProps } = props;
@@ -100,7 +100,7 @@ const RoomComponent = observer((props: Props): JSX.Element => {
 interface WithParentRootProps {
     path: string;
 }
-const WithParentRoot = observer((props: WithParentRootProps): JSX.Element => {
+const WithParentRoot = observer((props: WithParentRootProps): ReactNode => {
     const routeParams = matchPath<PathParams>(props.path, PATHNAME_PATTERN);
     const { parentRootId, documentRootId } = routeParams?.params || {};
     const [rootsMeta] = React.useState(new RootsMeta({}));

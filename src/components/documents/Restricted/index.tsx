@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type ReactNode } from 'react';
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
 import Loader from '@tdev-components/Loader';
@@ -12,7 +12,7 @@ import AccessBadge from '@tdev-components/PermissionsPanel/AccessBadge';
 
 interface Props extends MetaInit {
     id: string;
-    children: JSX.Element;
+    children: ReactNode;
     access?: Access;
 }
 
