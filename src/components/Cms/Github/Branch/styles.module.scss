@@ -11,6 +11,13 @@
         flex-basis: 0;
         min-width: none;
     }
+    .name {
+        &.compact {
+            max-width: 6em;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+    }
     &:hover {
         box-shadow: var(--ifm-global-shadow-md);
     }

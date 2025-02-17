@@ -57,9 +57,9 @@ const CmsLandingPage = observer(() => {
                 <PathNav item={activeEntry} />
                 {cmsStore.activeBranch &&
                     (cmsStore.activeBranch.PR ? (
-                        <PR pr={cmsStore.activeBranch.PR} />
+                        <PR pr={cmsStore.activeBranch.PR} compact />
                     ) : (
-                        <Branch branch={cmsStore.activeBranch} hideName />
+                        <Branch branch={cmsStore.activeBranch} hideName compact />
                     ))}
             </div>
             <div className={clsx(styles.fileTree)}>

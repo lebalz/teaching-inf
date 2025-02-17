@@ -26,6 +26,7 @@ import { SIZE_S, SIZE_XS } from '@tdev-components/shared/iconSizes';
 
 interface Props {
     pr: PrModel;
+    compact?: boolean;
 }
 
 const PR = observer((props: Props) => {
@@ -46,7 +47,12 @@ const PR = observer((props: Props) => {
         <div className={clsx(styles.PR)}>
             <Badge noPaddingLeft>
                 <Icon path={mdiRecordCircleOutline} size={SIZE_XS} color="var(--ifm-color-success)" />
-                <Link to={pr.htmlUrl} target="_blank">
+                <Link
+                    to={pr.htmlUrl}
+                    target="_blank"
+                    title={pr.title}
+                    className={clsx(styles.link, props.compact && styles.compact)}
+                >
                     {pr.title}
                 </Link>
             </Badge>

@@ -23,6 +23,7 @@ import { SIZE_S, SIZE_XS } from '@tdev-components/shared/iconSizes';
 interface Props {
     branch: BranchModel;
     hideName?: boolean;
+    compact?: boolean;
 }
 
 const Branch = observer((props: Props) => {
@@ -46,7 +47,7 @@ const Branch = observer((props: Props) => {
             {!props.hideName && (
                 <Badge noPaddingLeft>
                     <Icon path={mdiSourceBranch} color="var(--ifm-color-blue)" size={0.8} />
-                    {branch.name}
+                    <span className={clsx(styles.name, props.compact && styles.compact)}>{branch.name}</span>
                 </Badge>
             )}
             <div className={clsx(styles.spacer)}></div>
