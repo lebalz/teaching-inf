@@ -19,10 +19,16 @@ import Details from '@theme/Details';
 import ImagePreview from '@tdev-components/Cms/Github/iFile/File/ImagePreview';
 import PR from '@tdev-components/Cms/Github/PR';
 import Branch from '@tdev-components/Cms/Github/Branch';
+import Button from '@tdev-components/shared/Button';
+import { mdiFileTree, mdiFileTreeOutline } from '@mdi/js';
+import { SIZE_S } from '@tdev-components/shared/iconSizes';
+import useIsMobileView from '@tdev-hooks/useIsMobileView';
 
 const CmsLandingPage = observer(() => {
     const cmsStore = useStore('cmsStore');
     const access = useGithubAccess();
+    const isMobile = useIsMobileView(900);
+    const [showFileTree, setShowFileTree] = React.useState(false);
     const { settings, github, activeEntry } = cmsStore;
 
     if (access === 'no-token') {
@@ -32,9 +38,22 @@ const CmsLandingPage = observer(() => {
         return <Layout>Loading...</Layout>;
     }
 
+    React.useEffect(() => {
+        setShowFileTree(!isMobile);
+    }, [isMobile]);
+
     return (
-        <main className={clsx(styles.cms)}>
+        <main className={clsx(styles.cms, showFileTree && styles.showFileTree)}>
             <div className={clsx(styles.header)}>
+                <Button
+                    icon={showFileTree ? mdiFileTree : mdiFileTreeOutline}
+                    color={showFileTree ? 'blue' : undefined}
+                    onClick={() => {
+                        setShowFileTree(!showFileTree);
+                    }}
+                    className={clsx(styles.toggleFileTree)}
+                    size={SIZE_S}
+                />
                 <PathNav item={activeEntry} />
                 {cmsStore.activeBranch &&
                     (cmsStore.activeBranch.PR ? (
@@ -43,64 +62,72 @@ const CmsLandingPage = observer(() => {
                         <Branch branch={cmsStore.activeBranch} hideName />
                     ))}
             </div>
-            {activeEntry.type === 'dir' ? (
-                <Directory dir={activeEntry} />
-            ) : (
-                <>
-                    {activeEntry.type === 'file' && activeEntry.content !== undefined ? (
-                        <>
-                            {activeEntry.isImage && (
-                                <ImagePreview src={activeEntry.content} fileName={activeEntry.name} />
-                            )}
-                            {activeEntry.isMarkdown && (
-                                <MdxEditor file={activeEntry} key={activeEntry.downloadUrl} />
-                            )}
-                            {!activeEntry.isImage && !activeEntry.isMarkdown && (
-                                <DefaultEditor file={activeEntry} />
-                            )}
-                        </>
-                    ) : (
-                        <>
-                            {github.apiStates.get(`${settings.activeBranchName}:${settings.activePath}`) ===
-                                ApiState.SYNCING && (
-                                <Card>
-                                    <Loader
-                                        label={`${settings.activeBranchName}:${settings.activePath} wird geladen...`}
-                                        size={2}
-                                    />
-                                </Card>
-                            )}
-                        </>
-                    )}
-                </>
-            )}
-            <Details summary={'Files'}>
-                <h4>Files</h4>
-                <Directory dir={cmsStore.rootDir} />
-            </Details>
-            <Details summary={'PRs'}>
-                <h4>PRs und Branches</h4>
-                <ul>
-                    {github.PRs.map((pr, idx) => {
-                        return (
-                            <li key={pr.number}>
-                                <PR pr={pr} />
-                            </li>
-                        );
-                    })}
-                </ul>
-                <ul>
-                    {github.branches
-                        .filter((b) => !b.PR)
-                        .map((branch, idx) => {
+            <div className={clsx(styles.fileTree)}>
+                <Directory dir={cmsStore.rootDir} className={clsx(styles.tree)} showActions="hover" compact />
+            </div>
+            <div className={clsx(styles.content)}>
+                {activeEntry.type === 'dir' ? (
+                    <Directory dir={activeEntry} />
+                ) : (
+                    <>
+                        {activeEntry.type === 'file' && activeEntry.content !== undefined ? (
+                            <>
+                                {activeEntry.isImage && (
+                                    <ImagePreview src={activeEntry.content} fileName={activeEntry.name} />
+                                )}
+                                {activeEntry.isMarkdown && (
+                                    <MdxEditor file={activeEntry} key={activeEntry.downloadUrl} />
+                                )}
+                                {!activeEntry.isImage && !activeEntry.isMarkdown && (
+                                    <DefaultEditor file={activeEntry} />
+                                )}
+                            </>
+                        ) : (
+                            <>
+                                {github.apiStates.get(
+                                    `${settings.activeBranchName}:${settings.activePath}`
+                                ) === ApiState.SYNCING && (
+                                    <Card>
+                                        <Loader
+                                            label={`${settings.activeBranchName}:${settings.activePath} wird geladen...`}
+                                            size={2}
+                                        />
+                                    </Card>
+                                )}
+                            </>
+                        )}
+                    </>
+                )}
+            </div>
+            <div className={clsx(styles.footer)}>
+                <Details summary={'Files'}>
+                    <h4>Files</h4>
+                    <Directory dir={cmsStore.rootDir} />
+                </Details>
+                <Details summary={'PRs'}>
+                    <h4>PRs und Branches</h4>
+                    <ul>
+                        {github.PRs.map((pr, idx) => {
                             return (
-                                <li key={branch.name}>
-                                    <Branch branch={branch} />
+                                <li key={pr.number}>
+                                    <PR pr={pr} />
                                 </li>
                             );
                         })}
-                </ul>
-            </Details>
+                    </ul>
+                    <ul>
+                        {github.branches
+                            .filter((b) => !b.PR)
+                            .map((branch, idx) => {
+                                return (
+                                    <li key={branch.name}>
+                                        <Branch branch={branch} />
+                                    </li>
+                                );
+                            })}
+                    </ul>
+                </Details>
+            </div>
         </main>
     );
 });

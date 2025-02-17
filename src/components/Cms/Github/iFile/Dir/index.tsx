@@ -10,6 +10,7 @@ import AddFilePopup from '../File/AddOrUpdateFile/AddFilePopup';
 
 interface Props {
     dir: DirModel;
+    showActions?: 'always' | 'hover';
 }
 
 const Dir = observer((props: Props) => {
@@ -26,14 +27,18 @@ const Dir = observer((props: Props) => {
                     <Icon spin={dir.isSyncing} path={dir.icon} size={0.8} color={dir.iconColor} />
                     {dir.name}
                 </span>
-                <AddFilePopup dir={dir} />
+                <AddFilePopup dir={dir} className={clsx(props.showActions === 'hover' && styles.onHover)} />
             </div>
             {dir.isOpen && dir.children.length > 0 && (
                 <ul>
                     {dir.children.map((child, idx) => {
                         return (
                             <React.Fragment key={idx}>
-                                {child.type === 'dir' ? <Dir dir={child} /> : <File file={child} />}
+                                {child.type === 'dir' ? (
+                                    <Dir dir={child} showActions={props.showActions} />
+                                ) : (
+                                    <File file={child} showActions={props.showActions} />
+                                )}
                             </React.Fragment>
                         );
                     })}

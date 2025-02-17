@@ -7,7 +7,6 @@ import Popup from 'reactjs-popup';
 import AddOrUpdateFile from '.';
 import Button from '@tdev-components/shared/Button';
 import { mdiFilePlus } from '@mdi/js';
-import { trimSlashes } from '@tdev-models/helpers/trimSlashes';
 import { PopupActions } from 'reactjs-popup/dist/types';
 import { ApiState } from '@tdev-stores/iStore';
 import Dir from '@tdev-models/cms/Dir';
@@ -15,6 +14,7 @@ import { resolvePath } from '@tdev-models/helpers/resolvePath';
 
 interface Props {
     dir: Dir;
+    className?: string;
 }
 
 const AddFilePopup = observer((props: Props) => {
@@ -30,7 +30,7 @@ const AddFilePopup = observer((props: Props) => {
     return (
         <Popup
             trigger={
-                <div style={{ display: 'flex' }}>
+                <div className={clsx(styles.addFile, props.className)}>
                     <Button icon={mdiFilePlus} color="blue" size={0.8} />
                 </div>
             }

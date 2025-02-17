@@ -10,7 +10,13 @@
         gap: 0.25em;
         user-select: none;
     }
+    .onHover {
+        display: none;
+    }
     &:hover {
         box-shadow: var(--ifm-global-shadow-md);
+        .onHover {
+            display: flex;
+        }
     }
 }

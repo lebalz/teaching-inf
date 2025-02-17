@@ -16,6 +16,7 @@ import { Delete } from '@tdev-components/shared/Button/Delete';
 import RenameFilePopup from './AddOrUpdateFile/RenameFilePopup';
 interface Props {
     file: FileModel | FileStub;
+    showActions?: 'always' | 'hover';
 }
 
 const BUTTON_SIZE = 0.7;
@@ -34,12 +35,14 @@ const File = observer((props: Props) => {
                 className={clsx(styles.fileLink)}
             >
                 <Icon path={file.icon} size={BUTTON_SIZE} color={file.iconColor} />
-                <span className={clsx(shared.item)}>{file.name}</span>
+                <span className={clsx(shared.item, styles.fName)} title={file.name}>
+                    {file.name}
+                </span>
             </Link>
             {file.isImage && (
                 <ImagePreview src={file.type === 'file' ? FileModel.ImageDataUrl(file) : file.downloadUrl} />
             )}
-            <div className={clsx(styles.actions)}>
+            <div className={clsx(styles.actions, props.showActions === 'hover' && styles.onHover)}>
                 <Delete
                     onDelete={() => {
                         cmsStore.github?.deleteFile(file);

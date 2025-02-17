@@ -1,9 +1,46 @@
 .cms {
+    --cms-tree-view-width: 0px;
+    display: grid;
+    grid-template-areas:
+        'fileTree nav'
+        'fileTree content'
+        'fileTree footer';
+    grid-template-columns: var(--cms-tree-view-width) 1fr;
+    grid-template-rows: auto 1fr auto;
+    min-height: 80vh;
     .header {
+        grid-area: nav;
         display: flex;
         justify-content: space-between;
-        align-items: flex-end;
+        align-items: center;
         flex-wrap: wrap;
+        background-color: var(--ifm-background-color);
+        border-top-left-radius: var(--ifm-global-radius);
+        border-top-right-radius: var(--ifm-global-radius);
+        margin: 0 2px;
+        z-index: var(--ifm-z-index-overlay);
+        position: sticky;
+        top: 60px;
+        .toggleFileTree {
+            margin-right: 0.5em;
+        }
+    }
+    .fileTree {
+        grid-area: fileTree;
+        .tree {
+            position: sticky;
+            top: 60px;
+            margin: 28px 1em 0 0;
+        }
+    }
+    .content {
+        grid-area: content;
+    }
+    .footer {
+        grid-area: footer;
+    }
+    &.showFileTree {
+        --cms-tree-view-width: 300px;
     }
 }
 
@@ -23,5 +60,8 @@
     .cms {
         max-width: calc(1 * var(--ifm-container-width-xl));
         margin: 0 auto;
+        &.showFileTree {
+            max-width: calc(1 * var(--ifm-container-width-xl) + var(--cms-tree-view-width));
+        }
     }
 }

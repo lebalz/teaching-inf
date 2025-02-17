@@ -37,6 +37,7 @@ class Branch {
     setApiState(state: ApiState) {
         this.apiState = state;
     }
+
     @action
     sync() {
         this.setApiState(ApiState.SYNCING);
@@ -62,11 +63,6 @@ class Branch {
                     this.setApiState(ApiState.IDLE);
                 })
             );
-        // Promise.all([this.syncMergeStatus(false)]).then(
-        //     action(() => {
-        //         this.setSyncStatus(ApiState.IDLE);
-        //     })
-        // );
     }
 
     @computed

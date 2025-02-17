@@ -1,11 +1,12 @@
 .mdxEditor {
     margin: 1em 1px;
+    margin-top: 0;
     box-shadow: var(--ifm-global-shadow-md);
     border: 1px solid var(--ifm-color-secondary-darkest);
     border-radius: var(--ifm-global-radius);
 
     .toolbar {
-        top: 60px;
+        top: 88px;
     }
     // style native details element according to docusaurus theme
     :global(details):not([class]) {
