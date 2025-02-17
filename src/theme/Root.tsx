@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type ReactNode } from 'react';
 import { MsalProvider, useIsAuthenticated, useMsal } from '@azure/msal-react';
 import { StoresProvider, rootStore } from '@tdev-stores/rootStore';
 import { observer } from 'mobx-react-lite';
@@ -37,7 +37,7 @@ if (NO_AUTH) {
     );
 }
 
-const MsalWrapper = observer(({ children }: { children: React.ReactNode }) => {
+const MsalWrapper = observer(({ children }: { children: ReactNode }) => {
     const sessionStore = useStore('sessionStore');
     React.useEffect(() => {
         if (NO_AUTH && process.env.NODE_ENV !== 'production' && TEST_USERNAME) {
@@ -151,7 +151,7 @@ const MsalAccount = observer(() => {
 });
 
 // Default implementation, that you can customize
-function Root({ children }: { children: JSX.Element }) {
+function Root({ children }: { children: ReactNode }) {
     React.useEffect(() => {
         if (!rootStore) {
             return;

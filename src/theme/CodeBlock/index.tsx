@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type ReactNode } from 'react';
 import CodeBlock from '@theme-original/CodeBlock';
 import type CodeBlockType from '@theme/CodeBlock';
 import type { WrapperProps } from '@docusaurus/types';
@@ -70,7 +70,7 @@ export const splitCode = (rawCode: string) => {
     };
 };
 
-export default function CodeBlockWrapper(props: Props & MetaProps): JSX.Element {
+export default function CodeBlockWrapper(props: Props & MetaProps): ReactNode {
     const metaProps = extractMetaProps(props);
     const langMatch = ((props.className || '') as string).match(/language-(?<lang>\w*)/);
     let lang = langMatch?.groups?.lang?.toLocaleLowerCase() ?? '';

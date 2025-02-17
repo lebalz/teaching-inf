@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type ReactNode } from 'react';
 import Footer from '@theme-original/DocItem/Footer';
 import type FooterType from '@theme-original/DocItem/Footer';
 import type { WrapperProps } from '@docusaurus/types';
@@ -10,7 +10,7 @@ import { mdiOpenInNew } from '@mdi/js';
 
 type Props = WrapperProps<typeof FooterType>;
 
-export default function FooterWrapper(props: Props): JSX.Element {
+export default function FooterWrapper(props: Props): ReactNode {
     const { frontMatter } = useDoc();
     const { sidebar_custom_props } = frontMatter as {
         sidebar_custom_props: { source?: { name: string; ref?: string } };
