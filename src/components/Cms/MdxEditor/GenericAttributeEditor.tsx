@@ -30,6 +30,7 @@ export interface Props {
     properties: GenericPropery[];
     onUpdate: (values: GenericValueProperty[]) => void;
     values: Record<string, string>;
+    title?: string;
 }
 
 const GenericAttributeEditor = (props: Props) => {
@@ -39,7 +40,7 @@ const GenericAttributeEditor = (props: Props) => {
         <Popup
             trigger={
                 <span>
-                    <Button icon={mdiCog} size={0.8} />
+                    <Button icon={mdiCog} size={0.8} title={props.title} />
                 </span>
             }
             keepTooltipInside="#__docusaurus"

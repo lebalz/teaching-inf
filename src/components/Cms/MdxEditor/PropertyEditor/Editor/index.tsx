@@ -104,11 +104,7 @@ const Editor = (props: Props) => {
                         onClick={handleSubmit((data) => {
                             const res: Record<string, string> = {};
                             Object.entries(data).forEach(([key, val]) => {
-                                const value = `${val}`;
-                                if (val === DEFAULT_VALUE || value === DEFAULT_VALUE) {
-                                    return;
-                                }
-                                res[key] = value;
+                                res[key] = `${val}`;
                             });
                             props.onChange(res);
                             props.onClose?.();

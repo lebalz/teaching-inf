@@ -1,6 +1,5 @@
 import React from 'react';
 import _ from 'lodash';
-import { JsxPropertyDescriptor } from '@mdxeditor/editor';
 
 import Editor from './Editor';
 import type { GenericPropery, GenericValueProperty } from '../GenericAttributeEditor';
@@ -26,10 +25,6 @@ const PropertyEditor = (props: Props) => {
         (values: Record<string, string>) => {
             const updatedAttributes = Object.entries(values)
                 .map<GenericValueProperty | undefined>(([name, value]) => {
-                    if (value === '' || !value) {
-                        return;
-                    }
-
                     const property = properties.find((prop) => prop.name === name);
                     if (!property) {
                         return;

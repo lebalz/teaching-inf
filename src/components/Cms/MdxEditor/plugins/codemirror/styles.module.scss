@@ -1,14 +1,24 @@
 .editor {
     margin-bottom: var(--ifm-leading);
+    border-radius: var(--ifm-code-border-radius);
     .toolbar {
         display: flex;
         justify-content: space-between;
         border-bottom: 1px solid var(--ifm-color-emphasis-300);
         padding-right: 0;
+        padding-left: 0.25em;
         padding-top: 0;
         --basePageBg: transparent;
-        .removeButton {
-            border-top-right-radius: var(--ifm-card-border-radius);
+        .actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+        }
+        .props {
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+            flex-wrap: wrap;
         }
     }
 }

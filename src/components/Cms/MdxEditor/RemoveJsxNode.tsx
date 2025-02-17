@@ -9,6 +9,7 @@ export interface Props {
     className?: string;
     buttonClassName?: string;
     onRemove?: () => void;
+    size?: number;
 }
 
 const useRemover = (onRemove?: () => void) => {
@@ -29,7 +30,9 @@ const RemoveJsxNode = (props: Props) => {
                 confirmIcon={mdiCloseBox}
                 text={null}
                 confirmText="Entfernen"
+                title="Block entfernen"
                 color="black"
+                size={props.size}
                 onConfirm={() => {
                     remover();
                 }}

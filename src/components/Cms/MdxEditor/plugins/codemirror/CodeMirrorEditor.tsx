@@ -20,11 +20,13 @@ import Card from '@tdev-components/shared/Card';
 import RemoveJsxNode from '@tdev-components/Cms/MdxEditor/RemoveJsxNode';
 import clsx from 'clsx';
 import GenericAttributeEditor, { GenericPropery, GenericValueProperty } from '../../GenericAttributeEditor';
-import { extractMetaProps } from '@tdev/theme/CodeBlock';
+import { extractMetaProps, sanitizedTitle } from '@tdev/theme/CodeBlock';
 import { v4 } from 'uuid';
 import Badge from '@tdev-components/shared/Badge';
 import Button from '@tdev-components/shared/Button';
 import Popup from 'reactjs-popup';
+import { SIZE_S } from '@tdev-components/shared/iconSizes';
+import CopyBadge from '@tdev-components/shared/CopyBadge';
 
 export const COMMON_STATE_CONFIG_EXTENSIONS: Extension[] = [];
 
@@ -86,6 +88,12 @@ const PYTHON_PROPS: GenericPropery[] = [
     { name: 'noDownload', type: 'checkbox', required: false },
     { name: 'noReset', type: 'checkbox', required: false },
     { name: 'noCompare', type: 'checkbox', required: false },
+    {
+        name: 'hideWarning',
+        type: 'checkbox',
+        required: false,
+        description: 'Warnung, dass Dokument nicht gespeichert wird, verstecken.'
+    },
     {
         name: 'versioned',
         type: 'checkbox',
@@ -280,17 +288,41 @@ export const CodeMirrorEditor = ({ language, nodeKey, code, focusEmitter, meta }
                             })}
                         </Card>
                     </Popup>
-
-                    {metaProps.title && <h4>{metaProps.title.replace(/^"/, '').replace(/"$/, '')}</h4>}
-                    <GenericAttributeEditor onUpdate={onUpdate} properties={properties} values={metaProps} />
-                    <RemoveJsxNode
-                        buttonClassName={clsx(styles.removeButton)}
-                        onRemove={() => {
-                            parentEditor.update(() => {
-                                lexicalNode.remove();
-                            });
-                        }}
-                    />
+                    <div className={clsx(styles.props)}>
+                        {Object.entries(metaProps).map(([key, value]) => {
+                            if (key === 'title') {
+                                return null;
+                            }
+                            if (key === 'id') {
+                                return <CopyBadge key={key} label={key} value={value} />;
+                            }
+                            return (
+                                <Badge key={key} color="lightBlue" title={value}>
+                                    {key}
+                                </Badge>
+                            );
+                        })}
+                    </div>
+                    {metaProps.title && (
+                        <h4>{sanitizedTitle(metaProps.title.replace(/^"/, '').replace(/"$/, ''))}</h4>
+                    )}
+                    <div className={clsx(styles.actions)}>
+                        <RemoveJsxNode
+                            buttonClassName={clsx(styles.removeButton)}
+                            onRemove={() => {
+                                parentEditor.update(() => {
+                                    lexicalNode.remove();
+                                });
+                            }}
+                            size={SIZE_S}
+                        />
+                        <GenericAttributeEditor
+                            onUpdate={onUpdate}
+                            properties={properties}
+                            values={metaProps}
+                            title="Eigenschaften"
+                        />
+                    </div>
                 </>
             }
         >

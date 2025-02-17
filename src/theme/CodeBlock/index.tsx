@@ -23,7 +23,7 @@ export interface MetaProps {
 
 type Props = WrapperProps<typeof CodeBlockType>;
 
-const sanitizedTitle = (title?: string) => {
+export const sanitizedTitle = (title?: string) => {
     if (!title) {
         return;
     }
