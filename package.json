@@ -100,7 +100,8 @@
         "rsync": "^0.6.1",
         "typescript": "^5.5.4",
         "vfile": "^6.0.3",
-        "vitest": "^2.0.5"
+        "vitest": "^2.0.5",
+        "yaml-loader": "^0.8.1"
     },
     "browserslist": {
         "production": [

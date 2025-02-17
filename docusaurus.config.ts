@@ -517,6 +517,23 @@ const config: Config = {
             }
           }
       }
+    },
+    () => {
+      return {
+          name: 'yaml-loader-config',
+          configureWebpack(config, isServer, {currentBundler}) {
+            return {
+              module: {
+                rules: [
+                  {
+                    test: /\.ya?ml$/,
+                    use: 'yaml-loader'
+                  }
+                ]
+              }
+            }
+          }
+      }
     }
   ],
   themes: [
