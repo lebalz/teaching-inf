@@ -8,29 +8,44 @@ import SemesterTable from '@site/src/components/SemesterTable';
 import { SortTimeTableByDate } from '@site/src/helpers/time';
 import hs2024 from './28Gj_HS2024.json';
 import hk2024 from './28Gj-HK_HS2024.json';
+import fs2025 from './28Gj_FS2025.yaml';
 import Directory from '@site/src/components/documents/FileSystem/Directory';
 
 # 28Gj Informatik
 
 <Directory name="Notizen" id="ed3a2610-562f-410a-92d2-f248a78f946d" />
-
 <Tabs queryString="semester">
-    <TabItem label="Einzellektion" value="gym1-hs-theorie">
-        <SemesterTable
-            header={['Datum', 'Thema', 'Inhalt']}
-            compact
-            selectable
-            rows={hs2024}
-            order={SortTimeTableByDate()}
-        />
+    <TabItem label="Semester 2" value="s2" default>
+        <TabItem label="Doppellektion">
+            <SemesterTable
+                header={['Datum', 'Thema', 'Inhalt']}
+                compact
+                selectable
+                rows={fs2025}
+                order={SortTimeTableByDate()}
+            />
+        </TabItem>
     </TabItem>
-    <TabItem label="Praktikum" value="gym1-hs-praktikum">
-        <SemesterTable
-            header={['Datum', 'Halbklasse', 'Thema', 'Inhalt']}
-            compact
-            selectable
-            rows={hk2024}
-            order={SortTimeTableByDate()}
-        />
+    <TabItem label="Semester 1" value="s1">
+        <Tabs >
+            <TabItem label="Einzellektion" value="gym1-hs-theorie">
+                <SemesterTable
+                    header={['Datum', 'Thema', 'Inhalt']}
+                    compact
+                    selectable
+                    rows={hs2024}
+                    order={SortTimeTableByDate()}
+                />
+            </TabItem>
+            <TabItem label="Praktikum" value="gym1-hs-praktikum">
+                <SemesterTable
+                    header={['Datum', 'Halbklasse', 'Thema', 'Inhalt']}
+                    compact
+                    selectable
+                    rows={hk2024}
+                    order={SortTimeTableByDate()}
+                />
+            </TabItem>
+        </Tabs>
     </TabItem>
 </Tabs>

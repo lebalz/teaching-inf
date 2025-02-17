@@ -1,0 +1,111 @@
+- cells:
+      - 07.02.2025
+      - Programmieren 1
+      - Test
+  type: test
+- cells:
+      - 14.02.2025
+      - Sportwoche
+      - Ferien
+  type: holiday
+- cells:
+      - 21.02.2025
+      - Codes und Daten
+      - Was sind Daten? Wer ist interessiert an (meinen) Daten?
+- cells:
+      - 28.02.2025
+      - Codes und Daten
+      - Informationen und Daten speicherbar machen - Codierung
+- cells:
+      - 07.03.2025
+      - Codes und Daten
+      - Zeichenkodierungen
+- cells:
+      - 14.03.2025
+      - Codes und Daten
+      - Grafikformate, Audioformate, Videoformate, Dateigrössen
+- cells:
+      - 21.03.2025
+      - Codes und Daten
+      - Datenkompression
+- cells:
+      - 28.03.2025
+      - Codes und Daten
+      - Anwendungen
+- cells:
+      - 04.04.2025
+      - Sonderwoche
+      -
+  type: holiday
+- cells:
+      - 11.04.2025
+      - Frühlingsferien
+      -
+  type: holiday
+- cells:
+      - 18.04.2025
+      - Frühlingsferien
+      -
+  type: holiday
+- cells:
+      - 25.04.2025
+      - Codes und Daten
+      - Anwendungen und Wiederholung
+- cells:
+      - 02.05.2025
+      - Codes und Daten
+      - Test
+  type: test
+- cells:
+      - 09.05.2025
+      - KI und Big Data
+      -
+- cells:
+      - 16.05.2025
+      - KI und Big Data
+      -
+- cells:
+      - 23.05.2025
+      - KI und Big Data
+      -
+- cells:
+      - 30.05.2025
+      - Auffahrt
+      -
+  type: holiday
+- cells:
+      - 06.06.2025
+      - Sportwoche
+      -
+  type: holiday
+- cells:
+      - 13.06.2025
+      - KI und Big Data
+      -
+- cells:
+      - 20.06.2025
+      - KI und Big Data
+      -
+- cells:
+      - 20.06.2025
+      - KI und Big Data
+      - Abgabe Projekt
+  type: test
+- cells:
+      - 26.06.2025
+      - Notenschluss
+      - Film zum Thema 🎥🎬
+  type: event
+- cells:
+      - 27.06.2025
+      - 🚧🚧🚧
+      -
+- cells:
+      - 04.07.2025
+      - 🚧🚧🚧
+      -
+- cells:
+      - 05.07.2025
+      - Sommerferien 🏖️
+      -
+  type: holiday
