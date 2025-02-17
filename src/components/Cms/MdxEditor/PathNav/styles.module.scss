@@ -3,7 +3,10 @@ button.breadcrumbsButton:global(.button) {
     --ifm-button-background-color: var(--ifm-breadcrumb-item-background-active);
     --ifm-button-border-color: var(--ifm-breadcrumb-item-border-active);
     --ifm-button-padding-vertical: 0.3rem;
+    --ifm-button-padding-horizontal: 0.3rem;
+    --ifm-breadcrumb-border-radius: 0.5rem;
     color: var(--ifm-color-content);
+    min-width: 2em;
 }
 .item {
     cursor: pointer;
@@ -13,9 +16,11 @@ button.breadcrumbsButton:global(.button) {
     }
 }
 :global(.breadcrumbs__item) {
+    --ifm-breadcrumb-border-radius: 0.3rem;
     --ifm-breadcrumb-padding-vertical: 0.1rem;
     &:not(:last-child):after {
         transform: translateY(-3px);
+        --ifm-breadcrumb-spacing: 0.15rem;
     }
     > :global(.breadcrumbs__link) {
         transform: translateY(-2px);

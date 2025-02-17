@@ -44,7 +44,15 @@ const BranchSelector = observer((props: Props) => {
                         e.stopPropagation();
                     }}
                 >
-                    <Icon path={mdiSourceBranch} color={'var(--ifm-color-blue)'} size={0.7} />{' '}
+                    <Icon
+                        path={mdiSourceBranch}
+                        color={
+                            activeBranchName === cmsStore.github?.defaultBranchName
+                                ? 'var(--ifm-color-success)'
+                                : 'var(--ifm-color-blue)'
+                        }
+                        size={0.7}
+                    />{' '}
                     <span className={clsx(styles.name, props.compact && styles.compact)}>
                         {activeBranchName}
                     </span>
@@ -69,7 +77,13 @@ const BranchSelector = observer((props: Props) => {
                                 >
                                     <Icon
                                         path={mdiSourceBranch}
-                                        color={isActive ? 'var(--ifm-color-blue)' : undefined}
+                                        color={
+                                            isActive
+                                                ? 'var(--ifm-color-blue)'
+                                                : br === cmsStore.github?.defaultBranchName
+                                                  ? 'var(--ifm-color-success)'
+                                                  : undefined
+                                        }
                                         size={0.7}
                                     />{' '}
                                     {br}
@@ -81,7 +95,12 @@ const BranchSelector = observer((props: Props) => {
                         <Popup
                             trigger={
                                 <a
-                                    className={clsx('dropdown__link', styles.item, shared.item)}
+                                    className={clsx(
+                                        'dropdown__link',
+                                        styles.item,
+                                        shared.item,
+                                        styles.newBranch
+                                    )}
                                     onClick={(e) => {
                                         e.preventDefault();
                                         e.stopPropagation();
@@ -89,7 +108,7 @@ const BranchSelector = observer((props: Props) => {
                                 >
                                     <Icon
                                         path={mdiSourceBranchPlus}
-                                        color={'var(--ifm-color-success)'}
+                                        color={'var(--ifm-color-warning)'}
                                         size={0.7}
                                     />{' '}
                                     Neuer Branch
