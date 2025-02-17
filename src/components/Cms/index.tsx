@@ -30,6 +30,9 @@ const CmsLandingPage = observer(() => {
     const isMobile = useIsMobileView(900);
     const [showFileTree, setShowFileTree] = React.useState(false);
     const { settings, github, activeEntry } = cmsStore;
+    React.useEffect(() => {
+        setShowFileTree(!isMobile);
+    }, [isMobile]);
 
     if (access === 'no-token') {
         return <Redirect to={'/gh-login'} />;
@@ -37,10 +40,6 @@ const CmsLandingPage = observer(() => {
     if (access === 'loading' || !settings || !github || !activeEntry) {
         return <Layout>Loading...</Layout>;
     }
-
-    React.useEffect(() => {
-        setShowFileTree(!isMobile);
-    }, [isMobile]);
 
     return (
         <main className={clsx(styles.cms, showFileTree && styles.showFileTree)}>
