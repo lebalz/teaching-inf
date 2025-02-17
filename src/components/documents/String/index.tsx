@@ -23,6 +23,7 @@ interface Props extends MetaInit {
     hideWarning?: boolean;
     hideApiState?: boolean;
     inline?: boolean;
+    fullWidth?: boolean;
 }
 
 const IconMap: { [key in StringAnswer]: string } = {
@@ -122,7 +123,7 @@ const String = observer((props: Props) => {
                         {props.children}
                     </label>
                 )}
-                <span className={clsx(styles.inputBox)}>
+                <span className={clsx(styles.inputBox, props.fullWidth && styles.fullWidth)}>
                     <input
                         type={props.type || 'text'}
                         id={inputId}
@@ -131,7 +132,7 @@ const String = observer((props: Props) => {
                         onChange={(e) => {
                             doc.setData({ text: e.target.value }, Source.LOCAL);
                         }}
-                        className={clsx(styles.input)}
+                        className={clsx(styles.input, props.fullWidth && styles.fullWidth)}
                         value={doc.text}
                         placeholder={props.placeholder}
                         disabled={props.readonly || !doc.canEdit}
