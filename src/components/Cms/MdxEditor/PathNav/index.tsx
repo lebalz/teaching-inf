@@ -24,7 +24,7 @@ const PathNav = observer((props: Props) => {
         <div className={clsx(styles.PathNav)}>
             <nav aria-label="breadcrumbs">
                 <ul className={clsx('breadcrumbs', 'breadcrumbs--sm')}>
-                    <BranchSelector />
+                    <BranchSelector compact />
                     {item.tree.map((part, index) => {
                         if (!part) {
                             return null;

@@ -11,7 +11,9 @@ import Popup from 'reactjs-popup';
 import NewBranch from '@tdev-components/Cms/Github/Branch/NewBranch';
 import { PopupActions } from 'reactjs-popup/dist/types';
 
-interface Props {}
+interface Props {
+    compact?: boolean;
+}
 
 const BranchSelector = observer((props: Props) => {
     const ref = React.useRef<PopupActions>(null);
@@ -43,7 +45,9 @@ const BranchSelector = observer((props: Props) => {
                     }}
                 >
                     <Icon path={mdiSourceBranch} color={'var(--ifm-color-blue)'} size={0.7} />{' '}
-                    {activeBranchName}
+                    <span className={clsx(styles.name, props.compact && styles.compact)}>
+                        {activeBranchName}
+                    </span>
                 </button>
                 <ul className={clsx('dropdown__menu')}>
                     {cmsStore.branchNames.map((br, idx) => {
