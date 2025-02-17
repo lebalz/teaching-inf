@@ -66,6 +66,7 @@ import { Kbd, kbdPlugin } from '@tdev-plugins/remark-kbd/mdx-editor-plugin';
 import { ToolbarInsertKbd } from '@tdev-plugins/remark-kbd/mdx-editor-plugin/ToolbarInsertKbd';
 import { CodeDefBoxDirectiveDescriptor } from '@tdev-plugins/remark-code-defbox/mdx-editor-plugin';
 import { footnotePlugin } from './plugins/footnote';
+import Button from '@tdev-components/shared/Button';
 
 export interface Props {
     file: FileModel;
@@ -83,6 +84,7 @@ const CmsMdxEditor = observer((props: Props) => {
                     <div className={clsx('alert', 'alert--danger')} role="alert">
                         <div>Der Editor ist abgestürzt 😵‍💫: {error.message}</div>
                         Versuche ein anderes Dokument zu öffnen 😎.
+                        <Button onClick={tryAgain}>Nochmal versuchen</Button>
                     </div>
                     <DefaultEditor file={file} />
                 </div>
@@ -180,7 +182,7 @@ const CmsMdxEditor = observer((props: Props) => {
                                         options={[
                                             {
                                                 when: (editor) => editor?.editorType === 'codeblock',
-                                                contents: () => <ChangeCodeMirrorLanguage />
+                                                contents: () => null
                                             },
                                             {
                                                 fallback: () => (

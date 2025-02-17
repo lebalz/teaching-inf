@@ -1,5 +1,4 @@
 .cms {
-    margin: 0 2em;
     .header {
         display: flex;
         justify-content: space-between;
@@ -13,8 +12,16 @@
         margin: 0 1em;
     }
 }
+
 @media screen and (max-width: 620px) {
     .cms {
         margin: 0 0.5em;
+    }
+}
+
+@media screen and (min-width: 1320px) {
+    .cms {
+        max-width: calc(1 * var(--ifm-container-width-xl));
+        margin: 0 auto;
     }
 }
