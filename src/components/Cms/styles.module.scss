@@ -2,12 +2,12 @@
     --cms-tree-view-width: 0px;
     display: grid;
     grid-template-areas:
-        'fileTree nav'
+        'nav nav'
         'fileTree content'
         'fileTree footer';
-    grid-template-columns: var(--cms-tree-view-width) 1fr;
+    grid-template-columns: var(--cms-tree-view-width) minmax(10em, 1fr);
     grid-template-rows: auto 1fr auto;
-    min-height: 80vh;
+    min-height: 60vh;
     .header {
         grid-area: nav;
         display: flex;
@@ -30,7 +30,8 @@
         .tree {
             position: sticky;
             top: 60px;
-            margin: 28px 1em 0 0;
+            margin: 0;
+            margin-right: 0.5rem;
         }
     }
     .content {
@@ -53,15 +54,20 @@
 @media screen and (max-width: 620px) {
     .cms {
         margin: 0 0.5em;
+        .header {
+            justify-content: flex-start;
+        }
     }
 }
 
 @media screen and (min-width: 1320px) {
     .cms {
-        max-width: calc(1 * var(--ifm-container-width-xl));
+        max-width: var(--ifm-container-width-xl);
+        min-width: min(100%, 1320px);
         margin: 0 auto;
         &.showFileTree {
-            max-width: calc(1 * var(--ifm-container-width-xl) + var(--cms-tree-view-width));
+            max-width: min(100vw, calc(var(--ifm-container-width-xl) + var(--cms-tree-view-width)));
+            min-width: min(100%, calc(var(--ifm-container-width-xl) + var(--cms-tree-view-width)));
         }
     }
 }

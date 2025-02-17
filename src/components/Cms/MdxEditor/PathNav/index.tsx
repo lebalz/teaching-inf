@@ -21,9 +21,9 @@ const PathNav = observer((props: Props) => {
         }
     }, [closeDropdown]);
     return (
-        <div className={clsx(styles.PathNav)}>
-            <nav aria-label="breadcrumbs">
-                <ul className={clsx('breadcrumbs', 'breadcrumbs--sm')}>
+        <div className={clsx(styles.pathNav)}>
+            <nav aria-label="breadcrumbs" className={clsx(styles.breadcrumbNav)}>
+                <ul className={clsx('breadcrumbs', 'breadcrumbs--sm', styles.breadcrumbs)}>
                     <BranchSelector compact />
                     {item.tree.map((part, index) => {
                         if (!part) {

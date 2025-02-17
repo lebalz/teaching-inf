@@ -1,3 +1,12 @@
+.pathNav {
+    max-width: 100%;
+    .breadcrumbNav {
+        max-width: 100%;
+        .breadcrumbs {
+            max-width: 100%;
+        }
+    }
+}
 button.breadcrumbsButton:global(.button) {
     border-radius: var(--ifm-breadcrumb-border-radius);
     --ifm-button-background-color: var(--ifm-breadcrumb-item-background-active);
@@ -18,6 +27,14 @@ button.breadcrumbsButton:global(.button) {
 :global(.breadcrumbs__item) {
     --ifm-breadcrumb-border-radius: 0.3rem;
     --ifm-breadcrumb-padding-vertical: 0.1rem;
+    :global(.dropdown__menu) {
+        display: none;
+    }
+    &:hover {
+        :global(.dropdown__menu) {
+            display: block;
+        }
+    }
     &:not(:last-child):after {
         transform: translateY(-3px);
         --ifm-breadcrumb-spacing: 0.15rem;
