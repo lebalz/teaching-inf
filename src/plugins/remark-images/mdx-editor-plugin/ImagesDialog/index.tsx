@@ -14,6 +14,7 @@ import TextInput from '@tdev-components/shared/TextInput';
 import ImagePreview from '@tdev-components/Cms/Github/iFile/File/ImagePreview';
 import Button from '@tdev-components/shared/Button';
 import File from '@tdev-models/cms/File';
+import FileUpload from '@tdev-components/shared/FileUpload';
 
 export const ImageDialog = observer(() => {
     const [src, setSrc] = React.useState('');
@@ -43,6 +44,7 @@ export const ImageDialog = observer(() => {
                     setFile(file);
                 }}
             />
+            <FileUpload height="300px" onFilesSelected={() => {}} width="100%" />
             <TextInput
                 label="Bild URL"
                 type="url"

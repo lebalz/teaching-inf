@@ -20,6 +20,7 @@ export const InsertImage = React.forwardRef<HTMLButtonElement, Record<string, ne
             }
             on="click"
             closeOnDocumentClick
+            overlayStyle={{ background: 'rgba(0,0,0,0.5)' }}
             modal
         >
             <ImageDialog />
