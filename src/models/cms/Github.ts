@@ -6,7 +6,7 @@ import FileStub from './FileStub';
 import Dir from './Dir';
 import File from './File';
 import { ApiState } from '@tdev-stores/iStore';
-import Branch, { MergeStatus } from './Branch';
+import Branch from './Branch';
 import PR from './PR';
 import { withoutPreviewPRName } from './helpers';
 const { organizationName, projectName } = siteConfig;

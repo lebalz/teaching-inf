@@ -13,12 +13,14 @@ import { insertImage$ } from '..';
 import TextInput from '@tdev-components/shared/TextInput';
 import ImagePreview from '@tdev-components/Cms/Github/iFile/File/ImagePreview';
 import Button from '@tdev-components/shared/Button';
-import File from '@tdev-models/cms/File';
+import { default as CmsFile } from '@tdev-models/cms/File';
 import FileUpload from '@tdev-components/shared/FileUpload';
+import { IMAGE_DIR_NAME } from '@tdev-models/cms/Dir';
 
 export const ImageDialog = observer(() => {
     const [src, setSrc] = React.useState('');
-    const [file, setFile] = React.useState<File | null>(null);
+    const [file, setFile] = React.useState<CmsFile | null>(null);
+    const [upload, setUpload] = React.useState<File | null>(null);
     const insertImage = usePublisher(insertImage$);
 
     return (
@@ -35,6 +37,16 @@ export const ImageDialog = observer(() => {
                         disabled={!src}
                         color="green"
                     />
+                    {upload && (
+                        <Button
+                            onClick={() => {
+                                insertImage({ src: src });
+                            }}
+                            text="Hochladen und einfügen"
+                            disabled={!upload}
+                            color="blue"
+                        />
+                    )}
                 </div>
             }
         >
@@ -44,7 +56,6 @@ export const ImageDialog = observer(() => {
                     setFile(file);
                 }}
             />
-            <FileUpload height="300px" onFilesSelected={() => {}} width="100%" />
             <TextInput
                 label="Bild URL"
                 type="url"
@@ -55,7 +66,15 @@ export const ImageDialog = observer(() => {
                     }
                 }}
             />
-            {src && <ImagePreview src={file ? File.ImageDataUrl(file) : src} />}
+            <FileUpload
+                onFilesUploaded={(file) => {
+                    setFile(file);
+                    setSrc(`./${IMAGE_DIR_NAME}/${file.name}`);
+                }}
+                accept="image/*"
+                description="Bilder per Drag&Drop hochladen"
+            />
+            {src && <ImagePreview src={file ? CmsFile.ImageDataUrl(file) : src} />}
         </Card>
     );
 });

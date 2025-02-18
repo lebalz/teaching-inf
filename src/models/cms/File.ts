@@ -4,8 +4,6 @@ import { FileProps, iFileStub } from './FileStub';
 import { ApiState } from '@tdev-stores/iStore';
 import { Position } from 'unist';
 
-import Dir from './Dir';
-
 class File extends iFileStub {
     readonly type = 'file';
 

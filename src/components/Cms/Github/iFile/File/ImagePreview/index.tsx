@@ -6,6 +6,7 @@ import Card from '@tdev-components/shared/Card';
 interface Props {
     src: string;
     fileName?: string;
+    actions?: React.ReactElement;
 }
 const ImagePreview = observer((props: Props) => {
     return (
