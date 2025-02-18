@@ -7,32 +7,11 @@
  *
  */
 
-import type {
-    BaseSelection,
-    EditorConfig,
-    LexicalCommand,
-    LexicalNode,
-    NodeKey,
-    RangeSelection,
-    SerializedElementNode
-} from 'lexical';
+import type { EditorConfig, LexicalNode, NodeKey } from 'lexical';
 
-import { $findMatchingParent } from '@lexical/utils';
-import {
-    $applyNodeReplacement,
-    $getSelection,
-    $isElementNode,
-    $isRangeSelection,
-    createCommand,
-    ElementNode,
-    Spread
-} from 'lexical';
-import { $getAncestor } from '@tdev-components/Cms/MdxEditor/helpers/lexical/get-ancestors';
-import { $withSelectedNodes } from '@tdev-components/Cms/MdxEditor/helpers/lexical/with-selected-nodes';
-import { FootnoteNode } from './Footnote';
+import { $applyNodeReplacement } from 'lexical';
+import { FootnoteNode, SerializedDefinitionNode } from './Footnote';
 import styles from './styles.module.scss';
-
-export type SerializedDefinitionNode = Spread<{}, SerializedElementNode>;
 
 type DefinitionHTMLElementType = HTMLElement | HTMLDivElement;
 
@@ -62,6 +41,11 @@ export class FootnoteDefinitionNode extends FootnoteNode {
 
     isInline(): boolean {
         return false;
+    }
+
+    static importJSON(serializedNode: SerializedDefinitionNode): FootnoteDefinitionNode {
+        const { identifier } = serializedNode;
+        return $createFootnoteDefinitionNode(identifier).updateFromJSON(serializedNode);
     }
 }
 

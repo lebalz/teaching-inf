@@ -17,18 +17,7 @@ import type {
     SerializedElementNode
 } from 'lexical';
 
-import { $findMatchingParent } from '@lexical/utils';
-import {
-    $applyNodeReplacement,
-    $getSelection,
-    $isElementNode,
-    $isRangeSelection,
-    createCommand,
-    ElementNode,
-    Spread
-} from 'lexical';
-import { $getAncestor } from '@tdev-components/Cms/MdxEditor/helpers/lexical/get-ancestors';
-import { $withSelectedNodes } from '@tdev-components/Cms/MdxEditor/helpers/lexical/with-selected-nodes';
+import { $applyNodeReplacement, $isRangeSelection, ElementNode, Spread } from 'lexical';
 
 export type SerializedDefinitionNode = Spread<
     {
