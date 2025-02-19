@@ -16,49 +16,72 @@ import Button from '@tdev-components/shared/Button';
 import { default as CmsFile } from '@tdev-models/cms/File';
 import FileUpload from '@tdev-components/shared/FileUpload';
 import { IMAGE_DIR_NAME } from '@tdev-models/cms/Dir';
+import clsx from 'clsx';
 
-export const ImageDialog = observer(() => {
+interface Props {
+    onClose: () => void;
+}
+
+export const ImageDialog = observer((props: Props) => {
     const [src, setSrc] = React.useState('');
     const [file, setFile] = React.useState<CmsFile | null>(null);
-    const [upload, setUpload] = React.useState<File | null>(null);
+    const [cleanSrc, setCleanSrc] = React.useState(0);
     const insertImage = usePublisher(insertImage$);
 
     return (
         <Card
             header={<h4>Bild Einfügen</h4>}
-            classNames={{ card: styles.imageDialog }}
+            classNames={{
+                card: styles.imageDialog,
+                body: styles.body,
+                image: styles.preview,
+                footer: styles.footer
+            }}
             footer={
-                <div>
+                <>
+                    <Button onClick={props.onClose} text="Abbrechen" />
+                    <Button
+                        color="orange"
+                        disabled={!src}
+                        onClick={() => {
+                            setSrc('');
+                            setFile(null);
+                            setCleanSrc((prev) => prev + 1);
+                        }}
+                        text="Entfernen"
+                    />
                     <Button
                         onClick={() => {
                             insertImage({ src: src });
+                            props.onClose();
                         }}
                         text="Einfügen"
                         disabled={!src}
                         color="green"
                     />
-                    {upload && (
-                        <Button
-                            onClick={() => {
-                                insertImage({ src: src });
-                            }}
-                            text="Hochladen und einfügen"
-                            disabled={!upload}
-                            color="blue"
-                        />
-                    )}
-                </div>
+                </>
+            }
+            image={
+                src ? (
+                    <img
+                        title="Ausgewähltes Bild"
+                        className={clsx(styles.previewImage)}
+                        src={file ? CmsFile.ImageDataUrl(file) : src}
+                    />
+                ) : null
             }
         >
             <ImageGallery
                 onSelect={(src, file) => {
                     setSrc(src);
                     setFile(file);
+                    setCleanSrc((prev) => prev + 1);
                 }}
             />
             <TextInput
                 label="Bild URL"
                 type="url"
+                key={cleanSrc}
                 onChange={(src) => {
                     setSrc(src);
                     if (file) {
@@ -68,13 +91,12 @@ export const ImageDialog = observer(() => {
             />
             <FileUpload
                 onFilesUploaded={(file) => {
-                    setFile(file);
-                    setSrc(`./${IMAGE_DIR_NAME}/${file.name}`);
+                    insertImage({ src: `./${IMAGE_DIR_NAME}/${file.name}` });
+                    props.onClose();
                 }}
                 accept="image/*"
                 description="Bilder per Drag&Drop hochladen"
             />
-            {src && <ImagePreview src={file ? CmsFile.ImageDataUrl(file) : src} />}
         </Card>
     );
 });

@@ -4,6 +4,7 @@ import Popup from 'reactjs-popup';
 import { ImageDialog } from './ImagesDialog';
 import Button from '@tdev-components/shared/Button';
 import { mdiImageOutline } from '@mdi/js';
+import { PopupActions } from 'reactjs-popup/dist/types';
 
 /**
  * A toolbar button that allows the user to insert an image from an URL.
@@ -11,8 +12,10 @@ import { mdiImageOutline } from '@mdi/js';
  * @group Toolbar Components
  */
 export const InsertImage = React.forwardRef<HTMLButtonElement, Record<string, never>>((_, forwardedRef) => {
+    const ref = React.useRef<PopupActions>(null);
     return (
         <Popup
+            ref={ref}
             trigger={
                 <span>
                     <Button icon={mdiImageOutline} />
@@ -23,7 +26,11 @@ export const InsertImage = React.forwardRef<HTMLButtonElement, Record<string, ne
             overlayStyle={{ background: 'rgba(0,0,0,0.5)' }}
             modal
         >
-            <ImageDialog />
+            <ImageDialog
+                onClose={() => {
+                    ref.current?.close();
+                }}
+            />
         </Popup>
     );
 });
