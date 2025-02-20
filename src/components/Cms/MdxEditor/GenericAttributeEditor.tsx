@@ -22,6 +22,7 @@ export interface GenericPropery {
     resettable?: boolean;
     onRecalc?: () => string;
 }
+
 export interface GenericValueProperty extends GenericPropery {
     value: string;
 }

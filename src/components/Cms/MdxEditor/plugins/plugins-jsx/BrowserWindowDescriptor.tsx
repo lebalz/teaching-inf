@@ -13,6 +13,8 @@ import RemoveJsxNode from '../../RemoveJsxNode';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
 import { useAttributeEditorInNestedEditor } from '../../PropertyEditor/useAttributeEditorInNestedEditor';
+import { values } from 'lodash';
+import { parseExpression } from '../../PropertyEditor/parseValue';
 
 const props: GenericPropery[] = [
     { name: 'url', type: 'string', required: false, placeholder: 'http://localhost:3000' },
@@ -49,8 +51,16 @@ const BrowserWindowDescriptor: JsxComponentDescriptor = {
             (attr) => attr.type === 'mdxJsxAttribute' && attr.name === 'url'
         );
         const { onUpdate, values } = useAttributeEditorInNestedEditor(props, mdastNode.attributes);
+        const compStyle = parseExpression<React.CSSProperties>(values.style);
+        const bodyStyle = parseExpression<React.CSSProperties>(values.bodyStyle);
+
         return (
-            <BrowserWindow url={url?.value as string} className={clsx(styles.browserWindow)}>
+            <BrowserWindow
+                url={url?.value as string}
+                className={clsx(styles.browserWindow)}
+                style={compStyle}
+                bodyStyle={bodyStyle}
+            >
                 <div
                     className={clsx(styles.actions)}
                     style={{

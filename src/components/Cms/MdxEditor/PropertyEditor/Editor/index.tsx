@@ -82,7 +82,7 @@ const Editor = (props: Props) => {
     return (
         <Card
             header={title && <h4>{title}</h4>}
-            classNames={{ card: styles.editor }}
+            classNames={{ card: styles.editor, body: styles.body }}
             footer={
                 <div className={clsx('button-group', 'button-group--block')}>
                     <Button
@@ -149,12 +149,13 @@ const Editor = (props: Props) => {
                                             {prop.type === 'expression' ? (
                                                 <CodeEditor
                                                     defaultValue={(prop.value || DEFAULT_VALUE).trim()}
-                                                    placeholder={prop.placeholder}
+                                                    placeholder={prop.placeholder || 'Wert'}
                                                     onChange={(value) => {
                                                         setValue(prop.name, value, {
                                                             shouldDirty: value !== prop.value
                                                         });
                                                     }}
+                                                    className={clsx(styles.codeEditor)}
                                                     lang={prop.lang}
                                                     hideLineNumbers
                                                 />
@@ -179,7 +180,9 @@ const Editor = (props: Props) => {
                                                     }
                                                 />
                                             )}
-                                            <div className={clsx(styles.spacer)} />
+                                            {(prop.onRecalc || prop.resettable) && (
+                                                <div className={clsx(styles.spacer)} />
+                                            )}
                                             {prop.resettable && formState.dirtyFields[prop.name] && (
                                                 <Button
                                                     icon={mdiRestore}

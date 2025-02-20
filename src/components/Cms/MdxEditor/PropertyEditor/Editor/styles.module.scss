@@ -1,6 +1,10 @@
 .editor {
     --ifm-table-cell-padding: 0.2rem;
     max-width: 95vw;
+    max-height: 80vh;
+    .body {
+        overflow-y: auto;
+    }
     table {
         margin-bottom: 0;
         text-align: left;
@@ -23,6 +27,9 @@
                 input[type='string'] {
                     width: calc(100% - 1px);
                 }
+            }
+            .codeEditor {
+                flex-grow: 1;
             }
         }
     }
