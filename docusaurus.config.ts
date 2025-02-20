@@ -275,6 +275,8 @@ const config: Config = {
               keywords: ['aufgabe', 'finding'],
               extendDefaults: true,
           },
+          sidebarCollapsible: true,
+          sidebarCollapsed: false,
           versions: VERSIONS,
           remarkPlugins: REMARK_PLUGINS,
           rehypePlugins: REHYPE_PLUGINS,
