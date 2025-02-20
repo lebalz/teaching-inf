@@ -3,7 +3,6 @@ import { observer } from 'mobx-react-lite';
 import {
     BlockTypeSelect,
     BoldItalicUnderlineToggles,
-    ChangeCodeMirrorLanguage,
     codeBlockPlugin,
     CodeToggle,
     ConditionalContents,
@@ -67,6 +66,7 @@ import { ToolbarInsertKbd } from '@tdev-plugins/remark-kbd/mdx-editor-plugin/Too
 import { CodeDefBoxDirectiveDescriptor } from '@tdev-plugins/remark-code-defbox/mdx-editor-plugin';
 import { footnotePlugin } from './plugins/footnote';
 import Button from '@tdev-components/shared/Button';
+import { mathPlugin } from './plugins/mathPlugin';
 
 export interface Props {
     file: FileModel;
@@ -108,6 +108,7 @@ const CmsMdxEditor = observer((props: Props) => {
                     linkDialogPlugin(),
                     quotePlugin(),
                     strongPlugin(),
+                    mathPlugin(),
                     jsxPlugin({
                         jsxComponentDescriptors: [
                             BrowserWindowDescriptor,

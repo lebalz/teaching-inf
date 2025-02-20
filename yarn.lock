@@ -4656,6 +4656,13 @@
   resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-19.0.3.tgz#0804dfd279a165d5a0ad8b53a5b9e65f338050a4"
   integrity sha512-0Knk+HJiMP/qOZgMyNFamlIjw9OFCsyC2ZbigmEEyXXixgre6IQpm/4V+r3qH4GC1JPvRJKInw+on2rV6YZLeA==
 
+"@types/react-katex@^3.0.4":
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/@types/react-katex/-/react-katex-3.0.4.tgz#2b60eebf76938bb385337fd850d99cc53ad6ef67"
+  integrity sha512-aLkykKzSKLpXI6REJ3uClao6P47HAFfR1gcHOZwDeTuALsyjgMhz+oynLV4gX0kiJVnvHrBKF/TLXqyNTpHDUg==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-router-config@*", "@types/react-router-config@^5.0.7":
   version "5.0.11"
   resolved "https://registry.yarnpkg.com/@types/react-router-config/-/react-router-config-5.0.11.tgz#2761a23acc7905a66a94419ee40294a65aaa483a"
@@ -9415,7 +9422,7 @@ micromark-extension-gfm@^3.0.0:
     micromark-util-combine-extensions "^2.0.0"
     micromark-util-types "^2.0.0"
 
-micromark-extension-math@^3.0.0:
+micromark-extension-math@^3.0.0, micromark-extension-math@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/micromark-extension-math/-/micromark-extension-math-3.1.0.tgz#c42ee3b1dd5a9a03584e83dd8f08e3de510212c1"
   integrity sha512-lvEqd+fHjATVs+2v/8kg9i5Q0AP2k85H0WUOwpIVvUML8BapsMvh1XAogmQjOCsLpoKRCVQqEkQBB3NhVBcsOg==
@@ -11260,6 +11267,13 @@ react-json-view-lite@^1.2.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/react-json-view-lite/-/react-json-view-lite-1.5.0.tgz#377cc302821717ac79a1b6d099e1891df54c8662"
   integrity sha512-nWqA1E4jKPklL2jvHWs6s+7Na0qNgw9HCP6xehdQJeg6nPBTFZgGwyko9Q0oj+jQWKTTVRS30u0toM5wiuL3iw==
+
+react-katex@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/react-katex/-/react-katex-3.0.1.tgz#262b44f49c5fa727f1d13cbab595f791318e5083"
+  integrity sha512-wIUW1fU5dHlkKvq4POfDkHruQsYp3fM8xNb/jnc8dnQ+nNCnaj0sx5pw7E6UyuEdLRyFKK0HZjmXBo+AtXXy0A==
+  dependencies:
+    katex "^0.16.0"
 
 react-loadable-ssr-addon-v5-slorber@^1.0.1:
   version "1.0.1"
