@@ -3,12 +3,14 @@
         {
             "from": "docs/OF-BYOD-Basics/",
             "to": "versioned_docs/version-28Gb/01-BYOD",
-            "ignore": []
+            "ignore": [],
+            "open": false
         },
         {
             "from": "docs/OF-Programmieren-1/",
             "to": "versioned_docs/version-28Gb/02-Programmieren-1",
-            "ignore": ["02-Turtlegrafik/_category_.json"]
+            "ignore": ["02-Turtlegrafik/_category_.json"],
+            "open": false
         },
         {
             "from": "docs/OF-Word/",
@@ -19,25 +21,34 @@
         {
             "from": "docs/IN-Biber/2024/",
             "to": "versioned_docs/version-28Gb/02-Programmieren-1/10-IN-Biber",
-            "ignore": []
+            "ignore": [],
+            "open": false
         },
         {
             "from": "docs/OF-Websites/",
             "to": "versioned_docs/version-28Gb/04-Webseiten",
             "ignore": [],
             "open": false
+        },
+        {
+            "from": "docs/OF-Daten-und-Codes/",
+            "to": "versioned_docs/version-28Gb/05-Daten-und-Codes",
+            "ignore": [],
+            "open": true
         }
     ],
     "28Gj": [
         {
             "from": "docs/OF-BYOD-Basics/",
             "to": "versioned_docs/version-28Gj/01-BYOD",
-            "ignore": []
+            "ignore": [],
+            "open": false
         },
         {
             "from": "docs/OF-Programmieren-1/",
             "to": "versioned_docs/version-28Gj/02-Programmieren-1",
-            "ignore": ["02-Turtlegrafik/_category_.json"]
+            "ignore": ["02-Turtlegrafik/_category_.json"],
+            "open": false
         },
         {
             "from": "docs/OF-Word/",
@@ -48,13 +59,20 @@
         {
             "from": "docs/IN-Biber/2024/",
             "to": "versioned_docs/version-28Gj/02-Programmieren-1/10-IN-Biber",
-            "ignore": []
+            "ignore": [],
+            "open": false
         },
         {
             "from": "docs/OF-Websites/",
             "to": "versioned_docs/version-28Gj/04-Webseiten",
             "ignore": [],
             "open": false
+        },
+        {
+            "from": "docs/OF-Daten-und-Codes/",
+            "to": "versioned_docs/version-28Gj/05-Daten-und-Codes",
+            "ignore": [],
+            "open": true
         }
     ]
 }
