@@ -275,8 +275,6 @@ const config: Config = {
               keywords: ['aufgabe', 'finding'],
               extendDefaults: true,
           },
-          sidebarCollapsible: true,
-          sidebarCollapsed: false,
           versions: VERSIONS,
           remarkPlugins: REMARK_PLUGINS,
           rehypePlugins: REHYPE_PLUGINS,
@@ -319,6 +317,11 @@ const config: Config = {
   themeConfig: {
     // Replace with your project's social card
     image: 'img/social-card.png',
+    docs: {
+      sidebar: {
+        hideable: true
+      }
+    },
     navbar: {
       title: 'Informatik',
       logo: {
