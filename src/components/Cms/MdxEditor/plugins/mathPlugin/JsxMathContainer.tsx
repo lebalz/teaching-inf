@@ -1,4 +1,4 @@
-import { NestedEditorsContext, VoidEmitter } from '@mdxeditor/editor';
+import { VoidEmitter } from '@mdxeditor/editor';
 import type { EditorConfig, LexicalEditor } from 'lexical';
 import { MathNode } from './MathNode';
 import { InlineMath, Math } from 'mdast-util-math';
