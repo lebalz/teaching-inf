@@ -2,13 +2,14 @@ import { CmsStore } from '@tdev-stores/CmsStore';
 import { action, computed, IObservableArray, observable } from 'mobx';
 import { Octokit, RestEndpointMethodTypes as GhTypes } from '@octokit/rest';
 import siteConfig from '@generated/docusaurus.config';
-import FileStub from './FileStub';
+import FileStub, { iFileStub } from './FileStub';
 import Dir from './Dir';
-import File from './File';
+import { default as FileModel } from './File';
 import { ApiState } from '@tdev-stores/iStore';
 import Branch from './Branch';
 import PR from './PR';
 import { withoutPreviewPRName } from './helpers';
+import blobToBase64 from '@tdev-models/helpers/blobToBase64';
 const { organizationName, projectName } = siteConfig;
 
 export type GhRepo = GhTypes['repos']['get']['response']['data'];
@@ -23,7 +24,7 @@ class Github {
     readonly store: CmsStore;
 
     /* contains branch <-> rootDirectory */
-    entries = observable.map<string, IObservableArray<Dir | File | FileStub>>([], { deep: false });
+    entries = observable.map<string, IObservableArray<Dir | FileModel | FileStub>>([], { deep: false });
     @observable.ref accessor octokit: Octokit;
 
     branches = observable.array<Branch>([]);
@@ -135,7 +136,7 @@ class Github {
     }
 
     @action
-    saveFileInNewBranchAndCreatePr(file: File, newBranch: string) {
+    saveFileInNewBranchAndCreatePr(file: FileModel, newBranch: string) {
         this.createNewBranch(newBranch)
             .then(async () => {
                 await this.createOrUpdateFile(file.path, file.content, newBranch, file.sha);
@@ -150,7 +151,7 @@ class Github {
     }
 
     @action
-    deleteFile(file: File | FileStub) {
+    deleteFile(file: FileModel | FileStub) {
         file.apiState = ApiState.SYNCING;
         return this.octokit.repos
             .deleteFile({
@@ -358,7 +359,7 @@ class Github {
     }
 
     @action
-    saveFile(file: File, commitMessage?: string) {
+    saveFile(file: FileModel, commitMessage?: string) {
         return this.createOrUpdateFile(
             file.path,
             file.content,
@@ -401,7 +402,7 @@ class Github {
             const textContent = new TextEncoder().encode(content);
             base64Content = btoa(String.fromCharCode(...textContent));
         }
-        const current = this.store.findEntry(branch, path) as File | undefined;
+        const current = this.store.findEntry(branch, path) as FileModel | undefined;
         const branchModel = this.branches.find((b) => b.name === branch);
         return this.octokit!.repos.createOrUpdateFileContents({
             owner: organizationName!,
@@ -413,7 +414,7 @@ class Github {
             sha: sha
         }).then(
             action((res) => {
-                const resContent = File.ValidateProps(res.data.content, 'stub');
+                const resContent = FileModel.ValidateProps(res.data.content, 'stub');
                 if (!resContent) {
                     return;
                 }
@@ -422,7 +423,7 @@ class Github {
                     case 200:
                         // file updated
                         if (current) {
-                            const file = new File({ ...resContent, content: content }, this.store);
+                            const file = new FileModel({ ...resContent, content: content }, this.store);
                             this._addFileEntry(branch, file);
                             file.setEditing(true);
                             return file;
@@ -430,7 +431,7 @@ class Github {
                         break;
                     case 201:
                         // file created
-                        const file = new File({ ...resContent, content: content }, this.store);
+                        const file = new FileModel({ ...resContent, content: content }, this.store);
                         this._addFileEntry(branch, file);
                         return file;
                 }
@@ -439,14 +440,14 @@ class Github {
     }
 
     @action
-    fetchDirectoryTree(file: FileStub | File) {
+    fetchDirectoryTree(file: FileStub | FileModel) {
         if (file.dir) {
             return Promise.resolve();
         }
         const path = file.path;
         const branch = file.branch;
         const parts = path.split('/').slice(0, -1);
-        const promises: Promise<(File | Dir | FileStub)[]>[] = [];
+        const promises: Promise<(FileModel | Dir | FileStub)[]>[] = [];
         for (let i = 1; i <= parts.length; i++) {
             const dirPath = parts.slice(0, i).join('/');
             const dir = this.store.findEntry(branch, dirPath) as Dir | undefined;
@@ -508,7 +509,7 @@ class Github {
                                 observable.array([this._createRootDir(branch)], { deep: false })
                             );
                         }
-                        const newEntries: (Dir | FileStub | File)[] = [];
+                        const newEntries: (Dir | FileStub | FileModel)[] = [];
                         const arr = this.entries.get(branch)!;
                         entries.forEach((entry) => {
                             const old = arr.find((e) => e.path === entry.path);
@@ -556,11 +557,22 @@ class Github {
             })
             .then(
                 action((res) => {
+                    const { data } = res || {};
+                    if (!data || !('type' in data) || data.type !== 'file') {
+                        this.apiStates.set(apiId, ApiState.ERROR);
+                        return;
+                    }
                     if ('content' in res.data) {
-                        const props = File.ValidateProps(res.data, 'stub');
+                        const props = FileModel.ValidateProps(res.data, 'stub');
                         if (props) {
                             this.apiStates.delete(apiId);
-                            const file = new File({ ...props, rawBase64: res.data.content }, this.store);
+                            const file =
+                                res.data.content === ''
+                                    ? new FileStub({ ...props }, this.store)
+                                    : new FileModel({ ...props, rawBase64: res.data.content }, this.store);
+                            if (file.type === 'file_stub') {
+                                return this.fetchRawContent(file, editAfterFetch);
+                            }
                             this._addFileEntry(branch, file);
                             if (editAfterFetch) {
                                 file.setEditing(true);
@@ -568,7 +580,45 @@ class Github {
                             return file;
                         }
                     }
+                    console.log('Error fetching file', res.data);
                     this.apiStates.set(apiId, ApiState.ERROR);
+                })
+            )
+            .catch(
+                action((err) => {
+                    console.log('Error fetching file', err);
+                    this.apiStates.set(apiId, ApiState.ERROR);
+                })
+            );
+    }
+
+    @action
+    fetchRawContent(file: iFileStub, editAfterFetch: boolean = false) {
+        const apiId = `${file.branch}:${file.path}`;
+        this.apiStates.set(apiId, ApiState.SYNCING);
+        return this.octokit.git
+            .getBlob({
+                owner: organizationName!,
+                repo: projectName!,
+                path: file.path,
+                ref: file.branch,
+                file_sha: file.sha,
+                mediaType: { format: 'raw' },
+                _: Date.now() // disable cache
+            })
+            .then((res) => {
+                const blob = new Blob([res.data as any]);
+                const base64 = blobToBase64(blob, true);
+                return base64;
+            })
+            .then(
+                action((base64) => {
+                    const nFile = new FileModel({ ...file.props, rawBase64: base64 }, this.store);
+                    this._addFileEntry(file.branch, nFile);
+                    if (editAfterFetch) {
+                        file.setEditing(true);
+                    }
+                    return file;
                 })
             )
             .catch(
@@ -583,7 +633,7 @@ class Github {
      * This method adds the File only to the entries map - it won't create or update the file on GitHub.
      */
     @action
-    _addFileEntry(branch: string, file: File | Dir) {
+    _addFileEntry(branch: string, file: FileModel | Dir) {
         if (!this.entries.has(branch)) {
             this.entries.set(branch, observable.array([this._createRootDir(branch)], { deep: false }));
         }

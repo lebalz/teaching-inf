@@ -10,6 +10,7 @@ import { useStore } from '@tdev-hooks/useStore';
 import { resolvePath } from '@tdev-models/helpers/resolvePath';
 import { default as CmsFile } from '@tdev-models/cms/File';
 import TextInput from '../TextInput';
+import Checkbox from '../Checkbox';
 
 const convertToBase64 = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -21,6 +22,10 @@ const convertToBase64 = (file: File): Promise<string> => {
         };
         reader.onerror = (error) => reject(error);
     });
+};
+
+const toMb = (bytes: number): number => {
+    return Math.round((100 * bytes) / 1024 / 1024) / 100;
 };
 interface Props {
     onFilesUploaded: (files: CmsFile) => void;
@@ -36,6 +41,7 @@ const FileUpload = observer((props: Props) => {
     const cmsStore = useStore('cmsStore');
     const { activeEntry } = cmsStore;
     const [uploadName, setUploadName] = React.useState('');
+    const [compress, setCompress] = React.useState(true);
 
     const inputId = useId();
     const labelId = useId();
@@ -123,6 +129,14 @@ const FileUpload = observer((props: Props) => {
                                         ) : (
                                             <span>{file.name}</span>
                                         )}
+                                        {file.size && <span>{toMb(file.size)} MB</span>}
+                                        {file.type.startsWith('image/') && file.type !== 'image/svg+xml' && (
+                                            <Checkbox
+                                                checked={compress}
+                                                onChange={(ck) => setCompress(ck)}
+                                                label="Komprimieren auf < 1MB"
+                                            />
+                                        )}
                                     </div>
                                 </div>
                             ))}
@@ -143,22 +157,38 @@ const FileUpload = observer((props: Props) => {
                         onClick={() => {
                             if (files[0].type.startsWith('image/')) {
                                 const imgDir = activeEntry.parent.imageDirPath;
-                                convertToBase64(files[0])
-                                    .then((content) => {
-                                        return cmsStore.github?.createOrUpdateFile(
+                                if (compress) {
+                                    cmsStore
+                                        .uploadImage(
+                                            files[0],
                                             resolvePath(imgDir, uploadName),
-                                            content,
                                             activeEntry.branch,
                                             undefined,
-                                            `Upload ${uploadName}`,
-                                            true
-                                        );
-                                    })
-                                    .then((uploadedFile) => {
-                                        if (uploadedFile) {
-                                            props.onFilesUploaded(uploadedFile);
-                                        }
-                                    });
+                                            1
+                                        )
+                                        .then((uploadedFile) => {
+                                            if (uploadedFile) {
+                                                props.onFilesUploaded(uploadedFile);
+                                            }
+                                        });
+                                } else {
+                                    convertToBase64(files[0])
+                                        .then((content) => {
+                                            return cmsStore.github?.createOrUpdateFile(
+                                                resolvePath(imgDir, uploadName),
+                                                content,
+                                                activeEntry.branch,
+                                                undefined,
+                                                `Upload ${uploadName}`,
+                                                true
+                                            );
+                                        })
+                                        .then((uploadedFile) => {
+                                            if (uploadedFile) {
+                                                props.onFilesUploaded(uploadedFile);
+                                            }
+                                        });
+                                }
                             }
                         }}
                         text="Hochladen und einfügen"

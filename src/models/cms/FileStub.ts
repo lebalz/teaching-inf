@@ -3,7 +3,6 @@ import iEntry, { iEntryProps } from './iEntry';
 import { action, computed } from 'mobx';
 import { mdiFileCode, mdiFileDocumentOutline, mdiFileImage, mdiFilePdfBox } from '@mdi/js';
 import { keysOfInterface } from '@tdev-models/helpers/keysOfInterface';
-import Dir from './Dir';
 
 export interface FileStubProps extends iEntryProps {
     size: number;
@@ -146,8 +145,26 @@ export abstract class iFileStub extends iEntry {
         };
     }
 
+    @computed
+    get sizeMb() {
+        return this.size / 1024 / 1024;
+    }
+
+    /**
+     * returns true when the file is larger than 1MB.
+     * In this case, the content will not be provided by the github api
+     * and must be fetched separately.
+     */
+    @computed
+    get isLF() {
+        return this.sizeMb > 1;
+    }
+
     @action
     fetchContent(editAfterFetch: boolean = false) {
+        if (this.isLF) {
+            return this.store.github?.fetchRawContent(this, editAfterFetch);
+        }
         this.store.github?.fetchFile(this.branch, this.path, editAfterFetch);
     }
 

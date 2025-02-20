@@ -15,6 +15,7 @@ import type {
 import { DecoratorNode } from 'lexical';
 import { ImageComponent } from './ImageComponent';
 import { parseOptions } from '@tdev/plugins/helpers';
+import { observer } from 'mobx-react-lite';
 
 /**
  * A serialized representation of an {@link ImageNode}.
