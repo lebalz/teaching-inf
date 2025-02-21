@@ -242,7 +242,8 @@ class DocumentStore extends iStore<`delete-${string}`> {
 
     @action
     create<Type extends DocumentType>(
-        model: { documentRootId: string; type: Type } & Partial<DocumentProps<Type>>
+        model: { documentRootId: string; type: Type } & Partial<DocumentProps<Type>>,
+        isMain: boolean = false
     ) {
         const rootDoc = this.root.documentRootStore.find(model.documentRootId);
         if (!rootDoc || rootDoc.isDummy) {
@@ -256,7 +257,7 @@ class DocumentStore extends iStore<`delete-${string}`> {
             model.authorId !== this.root.userStore.current?.id &&
             ADMIN_EDITABLE_DOCUMENTS.includes(model.type);
         return this.withAbortController(`create-${model.id || uuidv4()}`, (sig) => {
-            return apiCreate<Type>(model, onBehalfOf, sig.signal);
+            return apiCreate<Type>(model, onBehalfOf, isMain, sig.signal);
         })
             .then(
                 action(({ data }) => {
