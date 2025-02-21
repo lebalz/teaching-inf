@@ -2,8 +2,6 @@ import { NestedEditorsContext, VoidEmitter } from '@mdxeditor/editor';
 import type { EditorConfig, LexicalEditor } from 'lexical';
 import { MathNode } from '../MathNode';
 import { InlineMath, Math } from 'mdast-util-math';
-import { InlineMath as InlineMathComponent, BlockMath } from 'react-katex';
-import { observable } from 'mobx';
 import InlineMathEditor from './InlineMathEditor';
 import BlockMathEditor from './BlockMathEditor';
 

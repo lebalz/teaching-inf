@@ -1,10 +1,10 @@
 import React from 'react';
 import _ from 'lodash';
 import Card from '@tdev-components/shared/Card';
-import { useForm, UseFormRegisterReturn } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import styles from './styles.module.scss';
 import Button from '@tdev-components/shared/Button';
-import { mdiCircleSmall, mdiClose, mdiCloseCircle, mdiContentSave, mdiRestore, mdiSync } from '@mdi/js';
+import { mdiCircleSmall, mdiClose, mdiContentSave, mdiRestore, mdiSync } from '@mdi/js';
 import { Delete } from '@tdev-components/shared/Button/Delete';
 import clsx from 'clsx';
 import CodeEditor from '@tdev-components/shared/CodeEditor';
