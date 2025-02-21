@@ -1,6 +1,9 @@
 .card {
     box-shadow: var(--ifm-global-shadow-tl);
 }
+.inlineMath {
+    cursor: pointer;
+}
 .tabs {
     --ifm-tabs-padding-vertical: 0.15em;
 }
