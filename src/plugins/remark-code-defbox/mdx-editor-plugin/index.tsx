@@ -11,7 +11,7 @@ import Button from '@tdev-components/shared/Button';
 import Popup from 'reactjs-popup';
 import DefBox from '@tdev-components/CodeDefBox';
 import DefHeading from '@tdev-components/CodeDefBox/DefHeading';
-import RemoveJsxNode from '@tdev-components/Cms/MdxEditor/RemoveJsxNode';
+import RemoveNode from '@tdev-components/Cms/MdxEditor/RemoveNode';
 import DefContent from '@tdev-components/CodeDefBox/DefContent';
 import AdmonitionTypeSelector from '@tdev-components/Cms/MdxEditor/plugins/AdmonitionDescriptor/AdmonitionTypeSelector';
 import { observer } from 'mobx-react-lite';
@@ -94,7 +94,7 @@ export const CodeDefBoxDirectiveDescriptor: DirectiveDescriptor = {
                             };
                         }}
                     />
-                    <RemoveJsxNode />
+                    <RemoveNode />
                 </DefHeading>
                 <DefContent className={clsx(styles.content)}>
                     <NestedLexicalEditor<ContainerDirective>

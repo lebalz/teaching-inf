@@ -1,5 +1,5 @@
 import { JsxComponentDescriptor } from '@mdxeditor/editor';
-import RemoveJsxNode from '../../RemoveJsxNode';
+import RemoveNode from '../../RemoveNode';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
 import { mdiFormatListCheckbox } from '@mdi/js';
@@ -19,7 +19,7 @@ const DocCardListDescriptor: JsxComponentDescriptor = {
                     <h4>
                         <code>{`<DocCardList />`}</code>
                     </h4>
-                    <RemoveJsxNode />
+                    <RemoveNode />
                 </div>
                 <div className={clsx(styles.body, 'card__body')}>
                     <Icon path={mdiFormatListCheckbox} size={3} color="var(--ifm-color-primary)" />

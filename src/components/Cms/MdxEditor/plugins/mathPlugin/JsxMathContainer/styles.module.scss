@@ -4,6 +4,14 @@
 .inlineMath {
     cursor: pointer;
 }
-.tabs {
-    --ifm-tabs-padding-vertical: 0.15em;
+.container {
+    position: relative;
+    .rmNode {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+    .tabs {
+        --ifm-tabs-padding-vertical: 0.15em;
+    }
 }

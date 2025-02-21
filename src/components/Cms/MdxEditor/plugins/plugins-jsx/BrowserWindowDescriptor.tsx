@@ -9,7 +9,7 @@ import { MdxJsxFlowElement } from 'mdast-util-mdx';
 import GenericAttributeEditor, {
     type GenericPropery
 } from '@tdev-components/Cms/MdxEditor/GenericAttributeEditor';
-import RemoveJsxNode from '../../RemoveJsxNode';
+import RemoveNode from '../../RemoveNode';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
 import { useAttributeEditorInNestedEditor } from '../../PropertyEditor/useAttributeEditorInNestedEditor';
@@ -74,7 +74,7 @@ const BrowserWindowDescriptor: JsxComponentDescriptor = {
                         onUpdate={onUpdate}
                         values={values}
                     />
-                    <RemoveJsxNode />
+                    <RemoveNode />
                 </div>
                 <NestedLexicalEditor<MdxJsxFlowElement>
                     getContent={(node) => node.children}

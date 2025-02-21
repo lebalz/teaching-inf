@@ -20,7 +20,7 @@ const useRemover = (onRemove?: () => void) => {
     return remover;
 };
 
-const RemoveJsxNode = (props: Props) => {
+const RemoveNode = (props: Props) => {
     const remover = useRemover(props.onRemove);
     return (
         <span className={clsx(props.className)}>
@@ -41,4 +41,4 @@ const RemoveJsxNode = (props: Props) => {
     );
 };
 
-export default RemoveJsxNode;
+export default RemoveNode;

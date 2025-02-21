@@ -17,7 +17,7 @@ import {
 import { useCodeMirrorRef } from './useCodeMirrorRef';
 import styles from './styles.module.scss';
 import Card from '@tdev-components/shared/Card';
-import RemoveJsxNode from '@tdev-components/Cms/MdxEditor/RemoveJsxNode';
+import RemoveNode from '@tdev-components/Cms/MdxEditor/RemoveNode';
 import clsx from 'clsx';
 import GenericAttributeEditor, { GenericPropery, GenericValueProperty } from '../../GenericAttributeEditor';
 import { extractMetaProps, sanitizedTitle } from '@tdev/theme/CodeBlock';
@@ -307,7 +307,7 @@ export const CodeMirrorEditor = ({ language, nodeKey, code, focusEmitter, meta }
                         <h4>{sanitizedTitle(metaProps.title.replace(/^"/, '').replace(/"$/, ''))}</h4>
                     )}
                     <div className={clsx(styles.actions)}>
-                        <RemoveJsxNode
+                        <RemoveNode
                             buttonClassName={clsx(styles.removeButton)}
                             onRemove={() => {
                                 parentEditor.update(() => {

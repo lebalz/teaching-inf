@@ -10,7 +10,7 @@ import Admonition from '@theme/Admonition';
 import { mdiChevronDown } from '@mdi/js';
 import Button from '@tdev-components/shared/Button';
 import Popup from 'reactjs-popup';
-import RemoveJsxNode from '../../RemoveJsxNode';
+import RemoveNode from '../../RemoveNode';
 import { observer } from 'mobx-react-lite';
 import AdmonitionTypeSelector from './AdmonitionTypeSelector';
 
@@ -101,7 +101,7 @@ export const AdmonitionDirectiveDescriptor: DirectiveDescriptor = {
                                 };
                             }}
                         />
-                        <RemoveJsxNode />
+                        <RemoveNode />
                     </>
                 }
             >
