@@ -16,7 +16,7 @@ const BlockMathEditor = (props: Props) => {
     const { mdastNode } = props;
     const updateMdastNode = useMdastNodeUpdater();
     return (
-        <Tabs className={clsx(styles.tabs)} groupId="katex-editor">
+        <Tabs className={clsx(styles.tabs)}>
             <TabItem value="math" label="Math">
                 <BlockMath>{mdastNode.value}</BlockMath>
             </TabItem>
