@@ -3,6 +3,7 @@
  */
 
 import {
+    addExportVisitor$,
     addImportVisitor$,
     addLexicalNode$,
     addMdastExtension$,
@@ -14,15 +15,17 @@ import { mathFromMarkdown, mathToMarkdown } from 'mdast-util-math';
 import { math } from 'micromark-extension-math';
 import { MdastInlineMathVisitor, MdastMathVisitor } from './MdastMathVisitor';
 import { MathNode } from './MathNode';
+import { LexicalMathVisitor } from './LexicalMathVisitor';
 
 export const mathPlugin = realmPlugin<{}>({
     init(realm, params) {
         realm.pubIn({
-            [addImportVisitor$]: [MdastInlineMathVisitor, MdastMathVisitor],
+            [addImportVisitor$]: [MdastMathVisitor, MdastInlineMathVisitor],
             [addSyntaxExtension$]: [math()],
             [addMdastExtension$]: [mathFromMarkdown()],
-            [addToMarkdownExtension$]: [mathToMarkdown()],
-            [addLexicalNode$]: [MathNode]
+            [addToMarkdownExtension$]: [mathToMarkdown({ singleDollarTextMath: true })],
+            [addLexicalNode$]: [MathNode],
+            [addExportVisitor$]: [LexicalMathVisitor]
         });
     }
 });

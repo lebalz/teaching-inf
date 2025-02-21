@@ -14,7 +14,8 @@ export const MdastMathVisitor: MdastImportVisitor<Math> = {
 };
 export const MdastInlineMathVisitor: MdastImportVisitor<InlineMath> = {
     testNode: 'inlineMath',
-    visitNode({ actions, mdastNode }) {
+    visitNode({ actions, mdastNode, lexicalParent }) {
+        // lexicalParent.insertAfter($createMathNode(mdastNode));
         actions.addAndStepInto($createMathNode(mdastNode));
     },
     priority: 1

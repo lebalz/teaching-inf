@@ -15,6 +15,7 @@ interface Props {
     type?: HTMLInputTypeAttribute;
     label?: string;
     noSpellCheck?: boolean;
+    noAutoFocus?: boolean;
 }
 
 const TextInput = observer((props: Props) => {
@@ -48,7 +49,7 @@ const TextInput = observer((props: Props) => {
                         props.onEscape?.();
                     }
                 }}
-                autoFocus
+                autoFocus={!props.noAutoFocus}
                 autoComplete="off"
                 autoCorrect="off"
             />
