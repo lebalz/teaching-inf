@@ -36,6 +36,15 @@ import TextMessage from '@tdev-models/documents/TextMessage';
 import DynamicDocumentRoots from '@tdev-models/documents/DynamicDocumentRoots';
 import { DynamicDocumentRootModel } from '@tdev-models/documents/DynamicDocumentRoot';
 
+const IsNotUniqueError = (error: any) => {
+    try {
+        const message = error.response.data;
+        return /FORBIDDEN: \[403\] \[not unique\]/.test(message || '');
+    } catch {
+        return false;
+    }
+};
+
 export function CreateDocumentModel<T extends DocumentType>(
     data: DocumentProps<T>,
     store: DocumentStore
@@ -266,6 +275,13 @@ class DocumentStore extends iStore<`delete-${string}`> {
             )
             .catch((err) => {
                 if (!axios.isCancel(err)) {
+                    if (IsNotUniqueError(err)) {
+                        const docRoot = this.root.documentRootStore.find(model.documentRootId);
+                        if ((docRoot?.mainDocuments?.length || 0) < 1) {
+                            console.log('The main document must be unique - try to load it from the api.');
+                            return this.root.documentRootStore.loadInNextBatch(model.documentRootId);
+                        }
+                    }
                     console.warn('Error creating document', err);
                 }
                 return undefined;
