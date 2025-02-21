@@ -1,10 +1,12 @@
 import { VoidEmitter } from '@mdxeditor/editor';
 import type { EditorConfig, LexicalEditor } from 'lexical';
-import { MathNode } from './MathNode';
+import { MathNode } from '../MathNode';
 import { InlineMath, Math } from 'mdast-util-math';
 import { InlineMath as InlineMathComponent, BlockMath } from 'react-katex';
+import { observable } from 'mobx';
+import InlineMathEditor from './InlineEditor';
 
-export function JsxMathContainer(props: {
+interface Props {
     /** The Lexical editor that contains the node */
     parentEditor: LexicalEditor;
     /** The Lexical node that is being edited */
@@ -13,11 +15,15 @@ export function JsxMathContainer(props: {
     mdastNode: Math | InlineMath;
     config: EditorConfig;
     focusEmitter: VoidEmitter;
-}) {
+}
+
+const JsxMathContainer = (props: Props) => {
     const { mdastNode } = props;
     if (mdastNode.type === 'inlineMath') {
-        return <InlineMathComponent>{mdastNode.value}</InlineMathComponent>;
+        return <InlineMathEditor mdastNode={mdastNode} />;
     } else {
         return <BlockMath>{mdastNode.value}</BlockMath>;
     }
-}
+};
+
+export default JsxMathContainer;

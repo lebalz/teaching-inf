@@ -11,7 +11,7 @@ import type {
 import { DecoratorNode } from 'lexical';
 import { InlineMath, Math } from 'mdast-util-math';
 import React from 'react';
-import { JsxMathContainer } from './JsxMathContainer';
+import JsxMathContainer from './JsxMathContainer';
 
 /**
  * A serialized representation of an {@link LexicalJsxNode}.
