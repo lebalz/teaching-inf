@@ -12,7 +12,7 @@ import GenericAttributeEditor, {
 import RemoveNode from '../../RemoveNode';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
-import { useAttributeEditorInNestedEditor } from '../../PropertyEditor/useAttributeEditorInNestedEditor';
+import { useAttributeEditorInNestedEditor } from '../../PropertyEditor/hooks/useAttributeEditorInNestedEditor';
 import { values } from 'lodash';
 import { parseExpression } from '../../PropertyEditor/parseValue';
 

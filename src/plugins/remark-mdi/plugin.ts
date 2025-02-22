@@ -1,8 +1,9 @@
 import { visit } from 'unist-util-visit';
 import type { Plugin, Transformer } from 'unified';
 import type { MdxJsxAttribute, MdxJsxTextElement, MdxjsEsm } from 'mdast-util-mdx';
-import { camelCased, captialize, toJsxAttribute, transformAttributes } from '../helpers';
+import { camelCased, captialize, Options, toJsxAttribute, transformAttributes } from '../helpers';
 import { Root, Text } from 'mdast';
+import _ from 'lodash';
 
 // const MDI_PROPS = [
 //     {
@@ -132,11 +133,8 @@ interface OptionsInput {
     defaultSize?: number | string;
 }
 
-export const transformMdiAttributes = (
-    attributes: Record<string, string | null | undefined> | null | undefined,
-    optionsInput: OptionsInput = {}
-) => {
-    const rawAttributes = transformAttributes(attributes || {});
+export const transformMdiAttributes = (options: Options, optionsInput: OptionsInput = {}) => {
+    const rawAttributes = _.cloneDeep(options);
     if (!('size' in rawAttributes.attributes)) {
         delete rawAttributes.style['size'];
         rawAttributes.attributes.size = optionsInput?.defaultSize || 1.5;
@@ -196,7 +194,8 @@ const plugin: Plugin<OptionsInput[], Root> = function plugin(optionsInput = {}):
             if (!includedMdiIcons.has(mdiIcon)) {
                 newMdiIcons.add(mdiIcon);
             }
-            const rawAttributes = transformMdiAttributes(node.attributes, optionsInput);
+            const parsedAttributes = transformAttributes(node.attributes || {});
+            const rawAttributes = transformMdiAttributes(parsedAttributes, optionsInput);
             const attributes = Object.entries(rawAttributes.attributes).map(([key, value]) =>
                 toJsxAttribute(key, value)
             );
