@@ -67,6 +67,7 @@ import { CodeDefBoxDirectiveDescriptor } from '@tdev-plugins/remark-code-defbox/
 import { footnotePlugin } from './plugins/footnote';
 import Button from '@tdev-components/shared/Button';
 import { mathPlugin } from './plugins/mathPlugin';
+import MediaDescriptors from '@tdev-plugins/remark-media/mdx-editor-plugin';
 
 export interface Props {
     file: FileModel;
@@ -125,7 +126,8 @@ const CmsMdxEditor = observer((props: Props) => {
                             DetailsDirectiveDescriptor,
                             MdiDescriptor,
                             FlexDirectiveDescriptor,
-                            CardsDirectiveDescriptor
+                            CardsDirectiveDescriptor,
+                            ...MediaDescriptors
                         ]
                     }),
                     thematicBreakPlugin(),

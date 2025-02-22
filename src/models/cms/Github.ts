@@ -8,8 +8,9 @@ import { default as FileModel } from './File';
 import { ApiState } from '@tdev-stores/iStore';
 import Branch from './Branch';
 import PR from './PR';
-import { withoutPreviewPRName } from './helpers';
+import { isBinaryFile, withoutPreviewPRName } from './helpers';
 import blobToBase64 from '@tdev-models/helpers/blobToBase64';
+import BinFile from './BinFile';
 const { organizationName, projectName } = siteConfig;
 
 export type GhRepo = GhTypes['repos']['get']['response']['data'];
@@ -24,7 +25,9 @@ class Github {
     readonly store: CmsStore;
 
     /* contains branch <-> rootDirectory */
-    entries = observable.map<string, IObservableArray<Dir | FileModel | FileStub>>([], { deep: false });
+    entries = observable.map<string, IObservableArray<Dir | FileModel | BinFile | FileStub>>([], {
+        deep: false
+    });
     @observable.ref accessor octokit: Octokit;
 
     branches = observable.array<Branch>([]);
@@ -447,7 +450,7 @@ class Github {
         const path = file.path;
         const branch = file.branch;
         const parts = path.split('/').slice(0, -1);
-        const promises: Promise<(FileModel | Dir | FileStub)[]>[] = [];
+        const promises: Promise<(FileModel | Dir | FileStub | BinFile)[]>[] = [];
         for (let i = 1; i <= parts.length; i++) {
             const dirPath = parts.slice(0, i).join('/');
             const dir = this.store.findEntry(branch, dirPath) as Dir | undefined;
@@ -509,7 +512,7 @@ class Github {
                                 observable.array([this._createRootDir(branch)], { deep: false })
                             );
                         }
-                        const newEntries: (Dir | FileStub | FileModel)[] = [];
+                        const newEntries: (Dir | FileStub | FileModel | BinFile)[] = [];
                         const arr = this.entries.get(branch)!;
                         entries.forEach((entry) => {
                             const old = arr.find((e) => e.path === entry.path);
@@ -566,10 +569,21 @@ class Github {
                         const props = FileModel.ValidateProps(res.data, 'stub');
                         if (props) {
                             this.apiStates.delete(apiId);
+                            const isBinary = isBinaryFile(path);
                             const file =
                                 res.data.content === ''
                                     ? new FileStub({ ...props }, this.store)
-                                    : new FileModel({ ...props, rawBase64: res.data.content }, this.store);
+                                    : isBinary
+                                      ? new BinFile(
+                                            {
+                                                ...props,
+                                                binData: Uint8Array.from(atob(res.data.content), (c) =>
+                                                    c.charCodeAt(0)
+                                                )
+                                            },
+                                            this.store
+                                        )
+                                      : new FileModel({ ...props, rawBase64: res.data.content }, this.store);
                             if (file.type === 'file_stub') {
                                 return this.fetchRawContent(file, editAfterFetch);
                             }
@@ -607,13 +621,15 @@ class Github {
                 _: Date.now() // disable cache
             })
             .then((res) => {
-                const blob = new Blob([res.data as any]);
-                const base64 = blobToBase64(blob, true);
-                return base64;
+                return res.data as any as Uint8Array;
             })
             .then(
-                action((base64) => {
-                    const nFile = new FileModel({ ...file.props, rawBase64: base64 }, this.store);
+                action((binData) => {
+                    if (file.isAsset) {
+                    }
+                    const nFile = file.isAsset
+                        ? new BinFile({ ...file.props, binData: binData }, this.store)
+                        : new FileModel({ ...file.props, binData: binData }, this.store);
                     this._addFileEntry(file.branch, nFile);
                     if (editAfterFetch) {
                         file.setEditing(true);
@@ -633,7 +649,7 @@ class Github {
      * This method adds the File only to the entries map - it won't create or update the file on GitHub.
      */
     @action
-    _addFileEntry(branch: string, file: FileModel | Dir) {
+    _addFileEntry(branch: string, file: FileModel | BinFile | Dir) {
         if (!this.entries.has(branch)) {
             this.entries.set(branch, observable.array([this._createRootDir(branch)], { deep: false }));
         }

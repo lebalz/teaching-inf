@@ -3,10 +3,14 @@ import iEntry, { iEntryProps } from './iEntry';
 import { action, computed } from 'mobx';
 import { mdiFileCode, mdiFileDocumentOutline, mdiFileImage, mdiFilePdfBox } from '@mdi/js';
 import { keysOfInterface } from '@tdev-models/helpers/keysOfInterface';
+import { isApplication, isAudio, isImage, isVideo } from './helpers';
 
 export interface FileStubProps extends iEntryProps {
     size: number;
     download_url: string | null;
+}
+export interface BinFileProps extends FileStubProps {
+    binData: Uint8Array;
 }
 export interface RawFileProps extends FileStubProps {
     rawBase64: string;
@@ -14,7 +18,7 @@ export interface RawFileProps extends FileStubProps {
 export interface ContentFileProps extends FileStubProps {
     content: string;
 }
-export type FileProps = RawFileProps | ContentFileProps;
+export type FileProps = RawFileProps | ContentFileProps | BinFileProps;
 
 const FilePropKeys: ReadonlyArray<keyof FileProps> = keysOfInterface<keyof FileProps>()(
     'name',
@@ -66,25 +70,75 @@ export abstract class iFileStub extends iEntry {
     }
 
     @computed
+    get mimeExtension() {
+        switch (this.extension) {
+            case 'jpg':
+            case 'jpeg':
+                return 'jpeg';
+            case 'svg':
+                return 'svg+xml';
+            case 'm4a':
+            case 'm4v':
+                return 'mp4';
+            case 'mov':
+                return 'quicktime';
+            case 'mkv':
+                return 'x-matroska';
+            case 'avi':
+                return 'video/x-msvideo';
+            case 'mpg':
+                return 'mpeg';
+            case 'tif':
+                return 'tiff';
+            case 'heics':
+                return 'heic-sequence';
+            case 'heifs':
+                return 'heif-sequence';
+            default:
+                return this.extension;
+        }
+    }
+
+    @computed
+    get mimeType() {
+        if (this.isImage) {
+            return 'image';
+        }
+        if (this.isVideo) {
+            return 'video';
+        }
+
+        if (this.isAudio) {
+            return 'audio';
+        }
+        if (this.isBin) {
+            return 'application';
+        }
+    }
+
+    @computed
+    get isAudio() {
+        return isAudio(this.extension);
+    }
+
+    @computed
     get isImage() {
-        return /(jpg|jpeg|png|gif|bmp|webp|svg|avif|tiff|ico|heic|heif)$/i.test(this.extension);
+        return isImage(this.extension);
     }
 
     @computed
     get isVideo() {
-        return /(mp4|mov|avi|wmv|flv|mkv|webm|m4v|mpg|mpeg)$/i.test(this.extension);
+        return isVideo(this.extension);
     }
 
     @computed
     get isBin() {
-        return /(exe|zip|rar|7z|tar|gz|bin|iso|msi|dmg|pkg|deb|rpm|xlsx?|docx?|pptx?|pdf|accdb|mdb|psd|ai|indd)$/i.test(
-            this.extension
-        );
+        return isApplication(this.extension);
     }
 
     @computed
     get isAsset() {
-        return this.isImage || this.isVideo || this.isBin;
+        return this.isImage || this.isVideo || this.isBin || this.isAudio;
     }
 
     @computed
@@ -166,6 +220,15 @@ export abstract class iFileStub extends iEntry {
             return this.store.github?.fetchRawContent(this, editAfterFetch);
         }
         this.store.github?.fetchFile(this.branch, this.path, editAfterFetch);
+    }
+
+    @computed
+    get isOnMainBranch() {
+        const main = this.store.github?.defaultBranch?.name;
+        if (!main) {
+            return undefined;
+        }
+        return main === this.branch;
     }
 
     static ValidateProps(props: Partial<FileStubProps> | any, type: 'stub'): FileStubProps | undefined;

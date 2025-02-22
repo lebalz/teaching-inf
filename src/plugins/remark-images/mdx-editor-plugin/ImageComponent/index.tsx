@@ -144,7 +144,7 @@ export const ImageComponent = observer((props: ImageEditorProps): React.ReactNod
 
     const draggable = $isNodeSelection(selection);
     const isFocused = isSelected;
-    if (gitImg && (gitImg.type !== 'file' || !gitImg.isImage)) {
+    if (gitImg && (gitImg.type !== 'bin_file' || !gitImg.isImage)) {
         return null;
     }
 
@@ -154,7 +154,7 @@ export const ImageComponent = observer((props: ImageEditorProps): React.ReactNod
                 <div draggable={draggable}>
                     <img
                         className={clsx(isFocused && styles.focusedImage)}
-                        src={gitImg?.type === 'file' && gitImg.isImage ? File.ImageDataUrl(gitImg) : src}
+                        src={gitImg?.type === 'bin_file' && gitImg.isImage ? gitImg.src : src}
                         width={props.width}
                         ref={imageRef}
                         draggable="false"

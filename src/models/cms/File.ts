@@ -16,16 +16,14 @@ class File extends iFileStub {
 
     constructor(props: FileProps, store: CmsStore) {
         super(props, store);
-        if (this.isImage) {
-            this.content = 'rawBase64' in props ? props.rawBase64 : props.content;
+        if ('rawBase64' in props) {
+            this.content = new TextDecoder().decode(
+                Uint8Array.from(atob(props.rawBase64), (c) => c.charCodeAt(0))
+            );
+        } else if ('binData' in props) {
+            this.content = new TextDecoder().decode(props.binData);
         } else {
-            if ('rawBase64' in props) {
-                this.content = new TextDecoder().decode(
-                    Uint8Array.from(atob(props.rawBase64), (c) => c.charCodeAt(0))
-                );
-            } else {
-                this.content = props.content;
-            }
+            this.content = props.content;
         }
         this._pristine = this.content;
         this.refContent = this.content;
@@ -71,13 +69,6 @@ class File extends iFileStub {
                 this.apiState = ApiState.IDLE;
             })
         );
-    }
-
-    static ImageDataUrl(file: File) {
-        if (file.extension === 'svg') {
-            return `data:image/svg+xml;base64,${file.content}`;
-        }
-        return `data:image/${file.extension};base64,${file.content}`;
     }
 
     @computed

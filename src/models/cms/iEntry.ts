@@ -14,7 +14,7 @@ export interface iEntryProps {
 }
 
 abstract class iEntry {
-    abstract readonly type: 'file' | 'file_stub' | 'dir';
+    abstract readonly type: 'file' | 'bin_file' | 'file_stub' | 'dir';
     readonly store: CmsStore;
 
     readonly name: string;

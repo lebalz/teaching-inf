@@ -20,6 +20,7 @@ import iEntry from '@tdev-models/cms/iEntry';
 import { trimSlashes } from '@tdev-models/helpers/trimSlashes';
 import PartialSettings, { REFRESH_THRESHOLD } from '@tdev-models/cms/PartialSettings';
 import imageCompression from 'browser-image-compression';
+import BinFile from '@tdev-models/cms/BinFile';
 const { organizationName, projectName } = siteConfig;
 if (!organizationName || !projectName) {
     throw new Error('"organizationName" and "projectName" must be set in docusaurus.config.ts');
@@ -205,7 +206,7 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
         return this.github?.defaultBranch?.name === this.activeBranchName;
     }
 
-    findEntry = computedFn(function <T = Dir | FileModel>(
+    findEntry = computedFn(function <T = Dir | FileModel | BinFile>(
         this: CmsStore,
         branch?: string,
         path?: string
