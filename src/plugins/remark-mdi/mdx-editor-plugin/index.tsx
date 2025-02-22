@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import React from 'react';
-import { DirectiveDescriptor, useLexicalNodeRemove, useMdastNodeUpdater } from '@mdxeditor/editor';
+import { DirectiveDescriptor } from '@mdxeditor/editor';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
 import * as MdiIcons from '@mdi/js';
@@ -9,12 +9,7 @@ import Popup from 'reactjs-popup';
 import Icon from '@mdi/react';
 import { camelCased, captialize } from '@tdev/plugins/helpers';
 import { transformMdiAttributes } from '@tdev/plugins/remark-mdi/plugin';
-import Editor from '@tdev-components/Cms/MdxEditor/PropertyEditor/Editor';
 import { PopupActions } from 'reactjs-popup/dist/types';
-import Card from '@tdev-components/shared/Card';
-import GenericAttributeEditor, {
-    GenericPropery
-} from '@tdev-components/Cms/MdxEditor/GenericAttributeEditor';
 import {
     DirectiveProperty,
     useDirectiveAttributeEditor

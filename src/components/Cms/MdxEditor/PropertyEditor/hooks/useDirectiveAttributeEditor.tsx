@@ -1,11 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
 import { Directives } from 'mdast-util-directive';
-import {
-    MdxJsxAttribute,
-    MdxJsxAttributeValueExpression,
-    MdxJsxExpressionAttribute
-} from 'mdast-util-mdx-jsx';
 import { useMdastNodeUpdater } from '@mdxeditor/editor';
 
 import type { GenericPropery, GenericValueProperty } from '../../GenericAttributeEditor';
