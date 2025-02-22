@@ -1,5 +1,7 @@
 .cms {
     --cms-tree-view-width: 0px;
+    --cms-toolbar-top-offset: 60px;
+
     display: grid;
     grid-template-areas:
         'nav nav'
@@ -13,14 +15,10 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        flex-wrap: wrap;
         background-color: var(--ifm-background-color);
         border-top-left-radius: var(--ifm-global-radius);
         border-top-right-radius: var(--ifm-global-radius);
         margin: 0 2px;
-        z-index: var(--ifm-z-index-overlay);
-        position: sticky;
-        top: 60px;
         .toggleFileTree {
             margin-right: 0.5em;
         }
@@ -28,8 +26,6 @@
     .fileTree {
         grid-area: fileTree;
         .tree {
-            position: sticky;
-            top: 60px;
             margin: 0;
             margin-right: 0.5rem;
         }
@@ -39,6 +35,14 @@
     }
     .footer {
         grid-area: footer;
+    }
+    &.showNav {
+        --cms-toolbar-top-offset: 88px;
+        .header {
+            position: sticky;
+            top: 60px;
+            z-index: var(--ifm-z-index-dropdown);
+        }
     }
     &.showFileTree {
         --cms-tree-view-width: 300px;

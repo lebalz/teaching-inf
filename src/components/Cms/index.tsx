@@ -42,7 +42,7 @@ const CmsLandingPage = observer(() => {
     }
 
     return (
-        <main className={clsx(styles.cms, showFileTree && styles.showFileTree)}>
+        <main className={clsx(styles.cms, showFileTree && styles.showFileTree, !isMobile && styles.showNav)}>
             <div className={clsx(styles.header)}>
                 <Button
                     icon={showFileTree ? mdiFileTree : mdiFileTreeOutline}
