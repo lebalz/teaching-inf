@@ -144,7 +144,7 @@ const config: Config = {
     /** The Domain Name where the api is running */
     APP_URL: process.env.NETLIFY
       ? process.env.CONTEXT === 'production' 
-        ? process.env.APP_URL 
+        ? process.env.URL 
         : process.env.DEPLOY_PRIME_URL
       : process.env.APP_URL || 'http://localhost:3000',
     /** The Domain Name of this app */
