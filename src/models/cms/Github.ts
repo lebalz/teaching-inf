@@ -556,11 +556,15 @@ class Github {
     }
 
     @action
-    fetchFile(branch: string, path: string, editAfterFetch: boolean = false) {
+    fetchFile(
+        branch: string,
+        path: string,
+        editAfterFetch: boolean = false
+    ): Promise<FileModel | BinFile | undefined> {
         const apiId = `${branch}:${path}`;
         if (this.apiStates.get(apiId) === ApiState.SYNCING) {
             console.log('Already fetching', apiId);
-            return Promise.resolve();
+            return Promise.resolve(undefined);
         }
         this.apiStates.set(apiId, ApiState.SYNCING);
         return this.octokit.repos
@@ -576,7 +580,7 @@ class Github {
                     const { data } = res || {};
                     if (!data || !('type' in data) || data.type !== 'file') {
                         this.apiStates.set(apiId, ApiState.ERROR);
-                        return;
+                        return undefined;
                     }
                     if ('content' in res.data) {
                         const props = FileStub.ValidateProps(res.data);
@@ -595,12 +599,14 @@ class Github {
                     }
                     console.log('Error fetching file', res.data);
                     this.apiStates.set(apiId, ApiState.ERROR);
+                    return undefined;
                 })
             )
             .catch(
                 action((err) => {
                     console.log('Error fetching file', err);
                     this.apiStates.set(apiId, ApiState.ERROR);
+                    return undefined;
                 })
             )
             .finally(() => {
@@ -611,11 +617,14 @@ class Github {
     }
 
     @action
-    fetchRawContent(file: iFileStub, editAfterFetch: boolean = false) {
+    fetchRawContent(
+        file: iFileStub,
+        editAfterFetch: boolean = false
+    ): Promise<FileModel | BinFile | undefined> {
         const apiId = `${file.branch}:${file.path}`;
         if (this.apiStates.get(apiId) === ApiState.SYNCING) {
             console.log('Already fetching', apiId);
-            return Promise.resolve();
+            return Promise.resolve(undefined);
         }
         this.apiStates.set(apiId, ApiState.SYNCING);
         return this.octokit.git
@@ -633,7 +642,7 @@ class Github {
             })
             .then(
                 action((binData) => {
-                    const nFile = Github.NewFileModel(file.props, binData, this.store);
+                    const nFile = Github.NewFileModel(file.props, binData, this.store) as FileModel | BinFile;
                     this._addFileEntry(file.branch, nFile);
                     if (editAfterFetch && nFile.type === 'file') {
                         nFile.setEditing(true);
@@ -645,6 +654,7 @@ class Github {
                 action((err) => {
                     console.log('Error fetching file', err);
                     this.apiStates.set(apiId, ApiState.ERROR);
+                    return undefined;
                 })
             )
             .finally(() => {

@@ -7,7 +7,7 @@ import {
 } from 'mdast-util-mdx-jsx';
 import { useMdastNodeUpdater } from '@mdxeditor/editor';
 
-import type { GenericPropery, GenericValueProperty } from '../../GenericAttributeEditor';
+import type { GenericPropery, GenericValueProperty } from '../GenericAttributeEditor';
 
 // @see https://github.com/mdx-editor/editor/blob/main/src/jsx-editors/GenericJsxEditor.tsx
 

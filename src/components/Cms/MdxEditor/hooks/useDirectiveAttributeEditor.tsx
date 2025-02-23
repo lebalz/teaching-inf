@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { Directives } from 'mdast-util-directive';
 import { useMdastNodeUpdater } from '@mdxeditor/editor';
 
-import type { GenericPropery, GenericValueProperty } from '../../GenericAttributeEditor';
+import type { GenericPropery, GenericValueProperty } from '../GenericAttributeEditor';
 import { Options, transformAttributes } from '@tdev-plugins/helpers';
 
 export type DirectiveProperty = Omit<GenericPropery, 'type'> & { type: React.HTMLInputTypeAttribute };
@@ -54,8 +54,15 @@ export const useDirectiveAttributeEditor = (
                 }
                 return acc;
             }, {});
-
-            updateMdastNode({ attributes: updatedAttributes });
+            const untouchedAttributes = mdastAttributes ? _.cloneDeep(mdastAttributes) : {};
+            if (updatedAttributes) {
+                Object.keys(untouchedAttributes).forEach((key) => {
+                    if (key in updatedAttributes) {
+                        delete untouchedAttributes[key];
+                    }
+                });
+            }
+            updateMdastNode({ attributes: { ...(updatedAttributes || {}), ...untouchedAttributes } });
         },
         [mdastAttributes, updateMdastNode, properties]
     );

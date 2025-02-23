@@ -1,9 +1,4 @@
-import {
-    JsxComponentDescriptor,
-    type JsxPropertyDescriptor,
-    NestedLexicalEditor,
-    useMdastNodeUpdater
-} from '@mdxeditor/editor';
+import { JsxComponentDescriptor, type JsxPropertyDescriptor, NestedLexicalEditor } from '@mdxeditor/editor';
 import BrowserWindow from '@tdev-components/BrowserWindow';
 import { MdxJsxFlowElement } from 'mdast-util-mdx';
 import GenericAttributeEditor, {
@@ -12,8 +7,7 @@ import GenericAttributeEditor, {
 import RemoveNode from '../../RemoveNode';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
-import { useAttributeEditorInNestedEditor } from '../../PropertyEditor/hooks/useAttributeEditorInNestedEditor';
-import { values } from 'lodash';
+import { useAttributeEditorInNestedEditor } from '../../hooks/useAttributeEditorInNestedEditor';
 import { parseExpression } from '../../PropertyEditor/parseValue';
 
 const props: GenericPropery[] = [

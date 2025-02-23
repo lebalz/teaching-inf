@@ -22,7 +22,7 @@ const PropertyEditor = (props: Props) => {
             return knownProps;
         }
         const unknownProps = Object.keys(values)
-            .filter((key) => !properties.find((prop) => prop.name === key))
+            .filter((key) => !!values[key] && !properties.find((prop) => prop.name === key))
             .map<GenericPropery>((key) => {
                 const value = values[key];
                 const valType =
@@ -40,7 +40,7 @@ const PropertyEditor = (props: Props) => {
         (values: Record<string, string>) => {
             const updatedAttributes = Object.entries(values)
                 .map<GenericValueProperty | undefined>(([name, value]) => {
-                    const property = properties.find((prop) => prop.name === name);
+                    const property = cProps.find((prop) => prop.name === name);
                     if (!property) {
                         return;
                     }
@@ -50,9 +50,9 @@ const PropertyEditor = (props: Props) => {
 
             props.onUpdate(updatedAttributes);
         },
-        [values, props.onUpdate, properties]
+        [values, props.onUpdate, cProps]
     );
-    if (properties.length === 0) {
+    if (cProps.length === 0) {
         return null;
     }
     return <Editor onChange={onChange} properties={cProps} onClose={props.onClose} canExtend={canExtend} />;

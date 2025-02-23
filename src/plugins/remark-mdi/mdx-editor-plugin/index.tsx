@@ -13,7 +13,7 @@ import { PopupActions } from 'reactjs-popup/dist/types';
 import {
     DirectiveProperty,
     useDirectiveAttributeEditor
-} from '@tdev-components/Cms/MdxEditor/PropertyEditor/hooks/useDirectiveAttributeEditor';
+} from '@tdev-components/Cms/MdxEditor/hooks/useDirectiveAttributeEditor';
 import PropertyEditor from '@tdev-components/Cms/MdxEditor/PropertyEditor';
 
 export const DEFAULT_SIZE = '1.25em';

@@ -11,13 +11,14 @@ import { PopupActions } from 'reactjs-popup/dist/types';
 import {
     DirectiveProperty,
     useDirectiveAttributeEditor
-} from '@tdev-components/Cms/MdxEditor/PropertyEditor/hooks/useDirectiveAttributeEditor';
+} from '@tdev-components/Cms/MdxEditor/hooks/useDirectiveAttributeEditor';
 import PropertyEditor from '@tdev-components/Cms/MdxEditor/PropertyEditor';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@tdev-hooks/useStore';
 import Card from '@tdev-components/shared/Card';
 import GenericAttributeEditor from '@tdev-components/Cms/MdxEditor/GenericAttributeEditor';
 import RemoveNode from '@tdev-components/Cms/MdxEditor/RemoveNode';
+import { useAssetFile } from '@tdev-components/Cms/MdxEditor/hooks/useAssetFile';
 
 const props: DirectiveProperty[] = [
     {
@@ -68,7 +69,6 @@ export const VideoDescriptor: DirectiveDescriptor = {
     },
     Editor: observer(({ mdastNode }) => {
         const cmsStore = useStore('cmsStore');
-        const { editedFile } = cmsStore;
         const { jsxAttributes, directiveAttributes, onUpdate } = useDirectiveAttributeEditor(
             props,
             mdastNode.attributes,
@@ -88,13 +88,8 @@ export const VideoDescriptor: DirectiveDescriptor = {
                   ? firstChild.url
                   : '';
         }, [mdastNode]);
-        const gitVideo = editedFile?.findEntryByRelativePath(src);
+        const gitVideo = useAssetFile(src);
 
-        React.useEffect(() => {
-            if (!gitVideo && src) {
-                editedFile?.loadAsset(src);
-            }
-        }, [src, gitVideo, editedFile]);
         return (
             <Card>
                 <div className={clsx(styles.actions)}>
