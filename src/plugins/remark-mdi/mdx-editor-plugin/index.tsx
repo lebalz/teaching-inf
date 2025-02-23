@@ -119,7 +119,7 @@ export const MdiDescriptor: DirectiveDescriptor = {
                             path={MdiIcons[mdiIcon as keyof typeof MdiIcons]}
                             size={1}
                             className={clsx(styles.icon, 'mdi-icon', jsxAttributes.className)}
-                            {...jsxAttributes.attributes}
+                            {...jsxAttributes.jsxAttributes}
                             style={jsxAttributes.style}
                         />
                     </span>

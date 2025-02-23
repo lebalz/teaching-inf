@@ -133,9 +133,14 @@ export const dashedString = (camelCased: string): string => {
     }, camelCased);
 };
 
+/**
+ * style, className and jsxAttributes have distinct keys
+ * attributes contains everything.
+ */
 export interface Options {
     style: { [key: string]: string | boolean };
     className: string;
+    jsxAttributes: { [key: string]: string | number | boolean };
     attributes: { [key: string]: string | number | boolean };
 }
 
@@ -151,19 +156,15 @@ export const transformAttributes = (
     const options: Options = {
         style: {},
         className: '',
-        attributes: {}
+        attributes: {},
+        jsxAttributes: {}
     };
     for (const [key, value] of Object.entries(attributes)) {
         let k = key;
         if (k in keyAliases) {
             k = keyAliases[k];
         }
-        if (KnownCssProperties.includes(dashedString(k))) {
-            options.style[camelCased(k)] = value === '' ? true : !value ? false : value;
-        } else if (k === 'className' && value) {
-            options.className = value;
-        }
-        options.attributes[k] =
+        const val =
             value === 'true'
                 ? true
                 : value === 'false'
@@ -175,6 +176,14 @@ export const transformAttributes = (
                       : !Number.isNaN(Number(value))
                         ? Number(value)
                         : value;
+        if (KnownCssProperties.includes(dashedString(k))) {
+            options.style[camelCased(k)] = typeof val === 'number' ? `${val}` : val;
+        } else if (k === 'className' && value) {
+            options.className = value;
+        } else {
+            options.jsxAttributes[k] = val;
+        }
+        options.attributes[k] = val;
     }
     return options;
 };

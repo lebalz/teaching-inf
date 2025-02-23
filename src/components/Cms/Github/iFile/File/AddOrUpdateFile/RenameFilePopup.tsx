@@ -27,7 +27,6 @@ const RenameFilePopup = observer((props: Props) => {
     const ref = React.useRef<PopupActions>(null);
     const { github, activeBranchName } = cmsStore;
     React.useLayoutEffect(() => {
-        console.log('file', file.path, file.name, file.isLoaded);
         if (!file.isLoaded) {
             cmsStore.fetchFile(file.path, file.branch);
         }

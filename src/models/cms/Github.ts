@@ -638,7 +638,6 @@ class Github {
                     if (editAfterFetch && nFile.type === 'file') {
                         nFile.setEditing(true);
                     }
-                    this.apiStates.delete(apiId);
                     return nFile;
                 })
             )
@@ -647,7 +646,12 @@ class Github {
                     console.log('Error fetching file', err);
                     this.apiStates.set(apiId, ApiState.ERROR);
                 })
-            );
+            )
+            .finally(() => {
+                if (this.apiStates.get(apiId) === ApiState.SYNCING) {
+                    this.apiStates.delete(apiId);
+                }
+            });
     }
 
     /**

@@ -144,10 +144,23 @@ abstract class iEntry {
         return this.URL.searchParams.get('ref')!;
     }
 
-    findEntryByRelativePath(relPath: string) {
+    resolvePath(relPath: string) {
         const base = this._isFileType ? this.parentPath : this.path;
-        const resolved = new URL(relPath, `path:/${base}/`).pathname.slice(1);
+        return new URL(relPath, `path:/${base}/`).pathname.slice(1);
+    }
+
+    findEntryByRelativePath(relPath: string) {
+        const resolved = this.resolvePath(relPath);
         return this.store.findEntry(this.branch, resolved);
+    }
+
+    loadAsset(relPath: string, force?: boolean) {
+        const entry = this.findEntryByRelativePath(relPath);
+        if (entry && !force) {
+            return Promise.resolve(entry);
+        }
+        const resolved = this.resolvePath(relPath);
+        return this.store.fetchFile(resolved, this.branch);
     }
 }
 

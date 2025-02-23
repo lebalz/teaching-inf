@@ -17,6 +17,7 @@ import { observer } from 'mobx-react-lite';
 import { useStore } from '@tdev-hooks/useStore';
 import Card from '@tdev-components/shared/Card';
 import GenericAttributeEditor from '@tdev-components/Cms/MdxEditor/GenericAttributeEditor';
+import RemoveNode from '@tdev-components/Cms/MdxEditor/RemoveNode';
 
 const props: DirectiveProperty[] = [
     {
@@ -66,37 +67,53 @@ export const VideoDescriptor: DirectiveDescriptor = {
         return node.name === 'video' && node.type === 'leafDirective';
     },
     Editor: observer(({ mdastNode }) => {
+        const cmsStore = useStore('cmsStore');
+        const { editedFile } = cmsStore;
         const { jsxAttributes, directiveAttributes, onUpdate } = useDirectiveAttributeEditor(
             props,
             mdastNode.attributes,
             (raw) => {
-                if (raw.attributes.autoplay !== undefined) {
-                    raw.attributes.autoPlay = raw.attributes.autoplay;
-                    delete raw.attributes.autoplay;
+                if (raw.jsxAttributes.autoplay !== undefined) {
+                    raw.jsxAttributes.autoPlay = raw.jsxAttributes.autoplay;
+                    delete raw.jsxAttributes.autoplay;
                 }
                 return raw;
             }
         );
-        const cmsStore = useStore('cmsStore');
-        const { editedFile } = cmsStore;
-        const firstChild = mdastNode.children[0];
-        const src =
-            firstChild.type === 'text' ? firstChild.value : firstChild.type === 'link' ? firstChild.url : '';
+        const src = React.useMemo(() => {
+            const firstChild = mdastNode.children[0];
+            return firstChild.type === 'text'
+                ? firstChild.value
+                : firstChild.type === 'link'
+                  ? firstChild.url
+                  : '';
+        }, [mdastNode]);
         const gitVideo = editedFile?.findEntryByRelativePath(src);
-        console.log('gitVideo', gitVideo?.type);
+
+        React.useEffect(() => {
+            if (!gitVideo && src) {
+                editedFile?.loadAsset(src);
+            }
+        }, [src, gitVideo, editedFile]);
         return (
             <Card>
-                <GenericAttributeEditor
-                    values={{ ...directiveAttributes, className: directiveAttributes.class }}
-                    onUpdate={onUpdate}
-                    properties={props}
-                    canExtend
-                />
+                <div className={clsx(styles.actions)}>
+                    <GenericAttributeEditor
+                        values={{ ...directiveAttributes, className: directiveAttributes.class }}
+                        onUpdate={onUpdate}
+                        properties={props}
+                        canExtend
+                    />
+                    {src}
+                    <RemoveNode />
+                </div>
                 <div className={clsx(styles.media)}>
                     <video
+                        key={gitVideo?.sha}
                         className={clsx(styles.video)}
                         style={{ maxWidth: '100%', ...jsxAttributes.style }}
-                        {...jsxAttributes.attributes}
+                        controls
+                        {...jsxAttributes.jsxAttributes}
                     >
                         <source src={gitVideo?.type === 'bin_file' ? gitVideo.src : src} />
                     </video>
