@@ -1,7 +1,13 @@
 import { CmsStore } from '@tdev-stores/CmsStore';
 import iEntry, { iEntryProps } from './iEntry';
 import { action, computed } from 'mobx';
-import { mdiFileCode, mdiFileDocumentOutline, mdiFileImage, mdiFilePdfBox } from '@mdi/js';
+import {
+    mdiFileCode,
+    mdiFileDocumentOutline,
+    mdiFileImage,
+    mdiFilePdfBox,
+    mdiLanguageMarkdown
+} from '@mdi/js';
 import { keysOfInterface } from '@tdev-models/helpers/keysOfInterface';
 import { isApplication, isAudio, isImage, isVideo } from './helpers';
 
@@ -147,6 +153,9 @@ export abstract class iFileStub extends iEntry {
         if (this.isImage) {
             return 'var(--ifm-color-blue)';
         }
+        if (this.isMarkdown) {
+            return 'var(--ifm-color-warning-dark)';
+        }
         if (this.isCode) {
             return 'var(--ifm-color-success)';
         }
@@ -160,6 +169,9 @@ export abstract class iFileStub extends iEntry {
     get icon() {
         if (this.isImage) {
             return mdiFileImage;
+        }
+        if (this.isMarkdown) {
+            return mdiLanguageMarkdown;
         }
         if (this.isCode) {
             return mdiFileCode;

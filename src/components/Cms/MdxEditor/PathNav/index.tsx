@@ -6,6 +6,9 @@ import { useStore } from '@tdev-hooks/useStore';
 import iEntry from '@tdev-models/cms/iEntry';
 import Icon from '@mdi/react';
 import BranchSelector from './BranchSelector';
+import NavMenu from '@tdev-components/Cms/Github/iFile/Dir/NavMenu';
+import Dir from '@tdev-models/cms/Dir';
+import NavFile from '@tdev-components/Cms/Github/iFile/File/NavFile';
 
 interface Props {
     item: iEntry;
@@ -22,86 +25,27 @@ const PathNav = observer((props: Props) => {
     }, [closeDropdown]);
     return (
         <div className={clsx(styles.pathNav)}>
-            <nav aria-label="breadcrumbs" className={clsx(styles.breadcrumbNav)}>
-                <ul className={clsx('breadcrumbs', 'breadcrumbs--sm', styles.breadcrumbs)}>
+            <nav aria-label="breadcrumbs" className={clsx(styles.breadcrumbs)}>
+                <div className={clsx(styles.part)}>
                     <BranchSelector compact />
-                    {item.tree.map((part, index) => {
-                        if (!part) {
-                            return null;
-                        }
+                </div>
+                {item.tree.map((part, idx) => {
+                    if (!part) {
+                        return null;
+                    }
+                    if (part.type === 'dir') {
                         return (
-                            <li
-                                className={clsx(
-                                    'breadcrumbs__item',
-                                    part.path === item.path && 'breadcrumbs__item--active'
-                                )}
-                                key={index}
-                            >
-                                {part.children.length > 0 ? (
-                                    <div className={clsx('dropdown dropdown--hoverable', styles.dropdown)}>
-                                        <button
-                                            className={clsx(
-                                                'button',
-                                                'button--secondary',
-                                                'button--sm',
-                                                'breadcrumbs__link',
-                                                styles.breadcrumbsButton
-                                            )}
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                e.stopPropagation();
-                                                cmsStore.setActiveEntry(part);
-                                            }}
-                                        >
-                                            {part.name}
-                                        </button>
-                                        {!closeDropdown && (
-                                            <ul className={clsx('dropdown__menu', styles.dropdownMenu)}>
-                                                {part.children.map((child, idx) => {
-                                                    return (
-                                                        <li key={idx}>
-                                                            <a
-                                                                className={clsx(
-                                                                    'dropdown__link',
-                                                                    styles.item,
-                                                                    child.path === item.path && styles.active
-                                                                )}
-                                                                onClick={(e) => {
-                                                                    e.preventDefault();
-                                                                    e.stopPropagation();
-                                                                    setCloseDropdown(true);
-                                                                    cmsStore.setActiveEntry(child);
-                                                                }}
-                                                            >
-                                                                <Icon
-                                                                    path={child.icon}
-                                                                    color={child.iconColor}
-                                                                    size={0.7}
-                                                                />{' '}
-                                                                {child.name}
-                                                            </a>
-                                                        </li>
-                                                    );
-                                                })}
-                                            </ul>
-                                        )}
-                                    </div>
-                                ) : (
-                                    <a
-                                        className={clsx('breadcrumbs__link')}
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            e.stopPropagation();
-                                        }}
-                                        href="#"
-                                    >
-                                        {part.name}
-                                    </a>
-                                )}
-                            </li>
+                            <div className={clsx(styles.part)} key={idx}>
+                                <NavMenu dir={part} partOf="nav" />
+                            </div>
                         );
-                    })}
-                </ul>
+                    }
+                    return (
+                        <div className={clsx(styles.part)} key={idx}>
+                            <NavFile file={part} isActive className={clsx(styles.part)} />
+                        </div>
+                    );
+                })}
             </nav>
         </div>
     );

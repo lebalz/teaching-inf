@@ -58,7 +58,7 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
         );
         reaction(
             () =>
-                [this.activeFileName, this.activeBranchName, this.github] as [
+                [this.activeFilePath, this.activeBranchName, this.github] as [
                     string | undefined,
                     string | undefined,
                     Github | undefined
@@ -139,7 +139,7 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
     }
 
     @computed
-    get activeFileName() {
+    get activeFilePath() {
         return this.settings?.activePath;
     }
 
