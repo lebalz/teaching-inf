@@ -215,16 +215,10 @@ export abstract class iFileStub extends iEntry {
         return main === this.branch;
     }
 
-    static ValidateProps(props: Partial<FileStubProps> | any, type: 'stub'): FileStubProps | undefined;
-    static ValidateProps(props: Partial<FileProps> | any, type: 'full'): FileProps | undefined;
-    static ValidateProps(
-        props: Partial<FileProps> | any,
-        type: 'stub' | 'full'
-    ): FileProps | FileStubProps | undefined {
+    static ValidateProps(props: Partial<FileStubProps> | any): FileStubProps | undefined {
         const validP = {} as FileProps;
         let isValid = true;
-        const keys = type === 'stub' ? FileStubPropKeys : FilePropKeys;
-        keys.forEach((k) => {
+        FileStubPropKeys.forEach((k) => {
             if (props[k] === undefined) {
                 isValid = false;
                 console.warn('Missing key', k);
@@ -232,12 +226,6 @@ export abstract class iFileStub extends iEntry {
                 (validP as any)[k] = props[k];
             }
         });
-        if (type === 'full') {
-            if (props['content'] === undefined && props['rawBase64'] === undefined) {
-                isValid = false;
-                console.warn('Missing key', 'content or rawBase64');
-            }
-        }
         if (isValid) {
             return validP;
         }

@@ -426,7 +426,7 @@ class Github {
             })
             .then(
                 action((res) => {
-                    const resContent = FileModel.ValidateProps(res.data.content, 'stub');
+                    const resContent = FileStub.ValidateProps(res.data.content);
                     if (!resContent) {
                         return;
                     }
@@ -579,7 +579,7 @@ class Github {
                         return;
                     }
                     if ('content' in res.data) {
-                        const props = FileModel.ValidateProps(res.data, 'stub');
+                        const props = FileStub.ValidateProps(res.data);
                         if (props) {
                             const file = Github.NewFileModel(res.data, res.data.content, this.store);
                             if (file.type === 'file_stub') {
