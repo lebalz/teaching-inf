@@ -8,9 +8,10 @@ import Loader from '@tdev-components/Loader';
 import File from '@tdev-models/cms/File';
 import { IMAGE_DIR_NAME } from '@tdev-models/cms/Dir';
 import Card from '@tdev-components/shared/Card';
+import BinFile from '@tdev-models/cms/BinFile';
 
 interface Props {
-    onSelect: (src: string, entry: File) => void;
+    onSelect: (src: string, entry: BinFile) => void;
 }
 
 const ImageGallery = observer((props: Props) => {
@@ -26,18 +27,14 @@ const ImageGallery = observer((props: Props) => {
         >
             <div className={clsx(styles.imageGallery)}>
                 {activeEntry.parent?.images.map((image) => {
-                    if (image.type === 'file') {
+                    if (image.type === 'bin_file') {
                         return (
                             <div
                                 onClick={() => props.onSelect(`./${image.name}`, image)}
                                 className={clsx(styles.image)}
                                 key={image.path}
                             >
-                                <ImagePreview
-                                    key={image.path}
-                                    src={File.ImageDataUrl(image)}
-                                    fileName={`./${image.name}`}
-                                />
+                                <ImagePreview key={image.path} src={image.src} fileName={`./${image.name}`} />
                             </div>
                         );
                     } else {
@@ -45,7 +42,7 @@ const ImageGallery = observer((props: Props) => {
                     }
                 })}
                 {activeEntry.parent?.imageDir?.images.map((image) => {
-                    if (image.type === 'file') {
+                    if (image.type === 'bin_file') {
                         return (
                             <div
                                 onClick={() => props.onSelect(`./${image.parent.name}/${image.name}`, image)}
@@ -54,7 +51,7 @@ const ImageGallery = observer((props: Props) => {
                             >
                                 <ImagePreview
                                     key={image.path}
-                                    src={File.ImageDataUrl(image)}
+                                    src={image.src}
                                     fileName={`./${IMAGE_DIR_NAME}/${image.name}`}
                                 />
                             </div>

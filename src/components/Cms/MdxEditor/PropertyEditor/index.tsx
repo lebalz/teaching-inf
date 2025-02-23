@@ -9,17 +9,32 @@ export interface Props {
     values: Record<string, string>;
     onUpdate: (values: GenericValueProperty[]) => void;
     onClose?: () => void;
+    canExtend?: boolean;
 }
 
 const PropertyEditor = (props: Props) => {
-    const { properties, values } = props;
-    const cProps = React.useMemo(
-        () =>
-            properties.map<GenericPropery>((prop) => {
-                return { ...prop, value: values[prop.name] || '' };
-            }),
-        [values, properties]
-    );
+    const { properties, values, canExtend } = props;
+    const cProps = React.useMemo(() => {
+        const knownProps = properties.map<GenericPropery>((prop) => {
+            return { ...prop, value: values[prop.name] || '' };
+        });
+        if (!canExtend) {
+            return knownProps;
+        }
+        const unknownProps = Object.keys(values)
+            .filter((key) => !properties.find((prop) => prop.name === key))
+            .map<GenericPropery>((key) => {
+                const value = values[key];
+                const valType =
+                    value === 'true' || value === 'false'
+                        ? 'checkbox'
+                        : /^(\{|\[)/.test(value)
+                          ? 'expression'
+                          : 'text';
+                return { name: key, value: value, type: valType };
+            });
+        return [...knownProps, ...unknownProps];
+    }, [values, properties, canExtend]);
 
     const onChange = React.useCallback(
         (values: Record<string, string>) => {
@@ -40,7 +55,7 @@ const PropertyEditor = (props: Props) => {
     if (properties.length === 0) {
         return null;
     }
-    return <Editor onChange={onChange} properties={cProps} onClose={props.onClose} />;
+    return <Editor onChange={onChange} properties={cProps} onClose={props.onClose} canExtend={canExtend} />;
 };
 
 export default PropertyEditor;

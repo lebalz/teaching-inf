@@ -1,26 +1,35 @@
 import { CmsStore } from '@tdev-stores/CmsStore';
-import { observable } from 'mobx';
+import { computed, observable } from 'mobx';
 import { BinFileProps, FileProps, iFileStub } from './FileStub';
 import { ApiState } from '@tdev-stores/iStore';
 
 class BinFile extends iFileStub {
     readonly type = 'bin_file';
-    blob: Blob;
+    binData: Uint8Array;
     src: string;
 
     @observable accessor apiState: ApiState = ApiState.IDLE;
 
     constructor(props: BinFileProps, store: CmsStore) {
         super(props, store);
-        this.blob = new Blob([props.binData], { type: `${this.mimeType}/${this.mimeExtension}` });
-        this.src = URL.createObjectURL(this.blob);
+        this.binData = props.binData;
+        const blob = new Blob([props.binData], { type: `${this.mimeType}/${this.mimeExtension}` });
+        this.src = URL.createObjectURL(blob);
     }
 
     get canEdit() {
         return false;
     }
 
-    get props(): FileProps {
+    /**
+     * @returns the binary data of the file, either as a Uint8Array or a string with the original,
+     * non-encoded content
+     */
+    get fileContent(): Uint8Array | string {
+        return this.binData;
+    }
+
+    get props(): BinFileProps {
         return {
             name: this.name,
             path: this.path,
@@ -30,7 +39,7 @@ class BinFile extends iFileStub {
             sha: this.sha,
             download_url: this.downloadUrl,
             size: this.size,
-            rawBase64: this.src
+            binData: this.binData
         };
     }
 }

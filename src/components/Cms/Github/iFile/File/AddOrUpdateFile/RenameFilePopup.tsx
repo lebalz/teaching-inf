@@ -13,27 +13,27 @@ import { ApiState } from '@tdev-stores/iStore';
 import FileStub from '@tdev-models/cms/FileStub';
 import File from '@tdev-models/cms/File';
 import { resolvePath } from '@tdev-models/helpers/resolvePath';
+import BinFile from '@tdev-models/cms/BinFile';
 
 interface Props {
-    file: File | FileStub;
+    file: File | BinFile | FileStub;
     disabled?: boolean;
     size?: number;
 }
-
-const IsDirRegex = /\//;
 
 const RenameFilePopup = observer((props: Props) => {
     const cmsStore = useStore('cmsStore');
     const { file } = props;
     const ref = React.useRef<PopupActions>(null);
     const { github, activeBranchName } = cmsStore;
-    React.useEffect(() => {
-        if (file.type !== 'file') {
+    React.useLayoutEffect(() => {
+        console.log('file', file.path, file.name, file.isLoaded);
+        if (!file.isLoaded) {
             cmsStore.fetchFile(file.path, file.branch);
         }
     }, [file]);
 
-    if (!github || !activeBranchName || file.type !== 'file') {
+    if (!github || !activeBranchName || !file.isLoadedFile()) {
         return null;
     }
 
@@ -62,11 +62,10 @@ const RenameFilePopup = observer((props: Props) => {
                     return github
                         .createOrUpdateFile(
                             newPath,
-                            file.content,
+                            file.fileContent,
                             activeBranchName,
                             file.sha,
-                            `Rename ${fileName}`,
-                            file.isImage
+                            `Rename ${fileName}`
                         )
                         .then((movedFile) => {
                             if (movedFile) {

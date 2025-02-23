@@ -32,6 +32,7 @@ export interface Props {
     onUpdate: (values: GenericValueProperty[]) => void;
     values: Record<string, string>;
     title?: string;
+    canExtend?: boolean;
 }
 
 const GenericAttributeEditor = (props: Props) => {
@@ -57,6 +58,7 @@ const GenericAttributeEditor = (props: Props) => {
                 onUpdate={onUpdate}
                 properties={properties}
                 onClose={() => ref.current?.close()}
+                canExtend={props.canExtend}
             />
         </Popup>
     );

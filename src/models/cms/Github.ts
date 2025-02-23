@@ -2,13 +2,13 @@ import { CmsStore } from '@tdev-stores/CmsStore';
 import { action, computed, IObservableArray, observable } from 'mobx';
 import { Octokit, RestEndpointMethodTypes as GhTypes } from '@octokit/rest';
 import siteConfig from '@generated/docusaurus.config';
-import FileStub, { iFileStub } from './FileStub';
+import FileStub, { FileStubProps, iFileStub } from './FileStub';
 import Dir from './Dir';
 import { default as FileModel } from './File';
 import { ApiState } from '@tdev-stores/iStore';
 import Branch from './Branch';
 import PR from './PR';
-import { isBinaryFile, withoutPreviewPRName } from './helpers';
+import { convertToBase64, isBinaryFile, withoutPreviewPRName } from './helpers';
 import blobToBase64 from '@tdev-models/helpers/blobToBase64';
 import BinFile from './BinFile';
 const { organizationName, projectName } = siteConfig;
@@ -154,7 +154,7 @@ class Github {
     }
 
     @action
-    deleteFile(file: FileModel | FileStub) {
+    deleteFile(file: FileModel | FileStub | BinFile) {
         file.apiState = ApiState.SYNCING;
         return this.octokit.repos
             .deleteFile({
@@ -363,14 +363,7 @@ class Github {
 
     @action
     saveFile(file: FileModel, commitMessage?: string) {
-        return this.createOrUpdateFile(
-            file.path,
-            file.content,
-            file.branch,
-            file.sha,
-            commitMessage,
-            file.isImage
-        );
+        return this.createOrUpdateFile(file.path, file.content, file.branch, file.sha, commitMessage);
     }
 
     @action
@@ -389,61 +382,77 @@ class Github {
             .then((res) => res.data);
     }
 
-    @action
-    createOrUpdateFile(
-        path: string,
-        content: string,
-        branch: string,
-        sha?: string,
-        commitMessage?: string,
-        skipBase64Transformation?: boolean
-    ) {
-        let base64Content = '';
-        if (skipBase64Transformation) {
-            base64Content = content;
-        } else {
-            const textContent = new TextEncoder().encode(content);
-            base64Content = btoa(String.fromCharCode(...textContent));
+    static NewFileModel(data: FileStubProps, content: string | Uint8Array | undefined, store: CmsStore) {
+        if (content === undefined || (content === '' && data.encoding === 'none')) {
+            return new FileStub(data, store);
         }
-        const current = this.store.findEntry(branch, path) as FileModel | undefined;
-        const branchModel = this.branches.find((b) => b.name === branch);
-        return this.octokit!.repos.createOrUpdateFileContents({
-            owner: organizationName!,
-            repo: projectName!,
-            path: path, // File path in repo
-            message: commitMessage || (sha ? `Update: ${path}` : `Create ${path}`),
-            content: base64Content,
-            branch: branch,
-            sha: sha
-        }).then(
-            action((res) => {
-                const resContent = FileModel.ValidateProps(res.data.content, 'stub');
-                if (!resContent) {
-                    return;
-                }
-                branchModel?.sync();
-                switch (res.status) {
-                    case 200:
-                        // file updated
-                        if (current) {
-                            const file = new FileModel({ ...resContent, content: content }, this.store);
-                            this._addFileEntry(branch, file);
-                            file.setEditing(true);
-                            return file;
-                        }
-                        break;
-                    case 201:
-                        // file created
-                        const file = new FileModel({ ...resContent, content: content }, this.store);
-                        this._addFileEntry(branch, file);
-                        return file;
-                }
-            })
-        );
+        if (isBinaryFile(data.path)) {
+            const bin =
+                typeof content === 'string'
+                    ? Uint8Array.from(atob(content), (c) => c.charCodeAt(0))
+                    : content;
+            return new BinFile({ ...data, binData: bin }, store);
+        }
+        const strData =
+            typeof content === 'string'
+                ? new TextDecoder().decode(Uint8Array.from(atob(content), (c) => c.charCodeAt(0)))
+                : new TextDecoder().decode(content);
+        return new FileModel({ ...data, content: strData }, store);
     }
 
     @action
-    fetchDirectoryTree(file: FileStub | FileModel) {
+    createOrUpdateFile(
+        path: string,
+        content: string | Uint8Array,
+        branch: string,
+        sha?: string,
+        commitMessage?: string
+    ) {
+        const binContent = typeof content === 'string' ? new TextEncoder().encode(content) : content;
+        const current = this.store.findEntry(branch, path) as FileModel | undefined;
+        const branchModel = this.branches.find((b) => b.name === branch);
+        return convertToBase64(binContent)
+            .then((base64Content) => {
+                // const base64Content = btoa(String.fromCharCode(...binContent));
+                return this.octokit!.repos.createOrUpdateFileContents({
+                    owner: organizationName!,
+                    repo: projectName!,
+                    path: path, // File path in repo
+                    message: commitMessage || (sha ? `Update: ${path}` : `Create ${path}`),
+                    content: base64Content,
+                    branch: branch,
+                    sha: sha
+                });
+            })
+            .then(
+                action((res) => {
+                    const resContent = FileModel.ValidateProps(res.data.content, 'stub');
+                    if (!resContent) {
+                        return;
+                    }
+                    branchModel?.sync();
+                    switch (res.status) {
+                        case 200:
+                            // file updated
+                            if (current) {
+                                const file = Github.NewFileModel(resContent, binContent, this.store);
+                                this._addFileEntry(branch, file);
+                                file.setEditing(true);
+                                return file;
+                            }
+                            break;
+                        case 201:
+                            // file created
+                            const file = Github.NewFileModel(resContent, binContent, this.store);
+                            this._addFileEntry(branch, file);
+                            return file;
+                    }
+                })
+            );
+    }
+
+    @action
+    fetchDirectoryTree(file: FileStub | FileModel | BinFile) {
         if (file.dir) {
             return Promise.resolve();
         }
@@ -530,7 +539,7 @@ class Github {
                                     arr.push(dir);
                                     break;
                                 case 'file':
-                                    const fstub = new FileStub(entry, this.store);
+                                    const fstub = Github.NewFileModel(entry, undefined, this.store);
                                     newEntries.push(fstub);
                                     arr.push(fstub);
                                     break;
@@ -549,6 +558,10 @@ class Github {
     @action
     fetchFile(branch: string, path: string, editAfterFetch: boolean = false) {
         const apiId = `${branch}:${path}`;
+        if (this.apiStates.get(apiId) === ApiState.SYNCING) {
+            console.log('Already fetching', apiId);
+            return Promise.resolve();
+        }
         this.apiStates.set(apiId, ApiState.SYNCING);
         return this.octokit.repos
             .getContent({
@@ -568,23 +581,9 @@ class Github {
                     if ('content' in res.data) {
                         const props = FileModel.ValidateProps(res.data, 'stub');
                         if (props) {
-                            this.apiStates.delete(apiId);
-                            const isBinary = isBinaryFile(path);
-                            const file =
-                                res.data.content === ''
-                                    ? new FileStub({ ...props }, this.store)
-                                    : isBinary
-                                      ? new BinFile(
-                                            {
-                                                ...props,
-                                                binData: Uint8Array.from(atob(res.data.content), (c) =>
-                                                    c.charCodeAt(0)
-                                                )
-                                            },
-                                            this.store
-                                        )
-                                      : new FileModel({ ...props, rawBase64: res.data.content }, this.store);
+                            const file = Github.NewFileModel(res.data, res.data.content, this.store);
                             if (file.type === 'file_stub') {
+                                this.apiStates.set(apiId, ApiState.IDLE);
                                 return this.fetchRawContent(file, editAfterFetch);
                             }
                             this._addFileEntry(branch, file);
@@ -603,12 +602,21 @@ class Github {
                     console.log('Error fetching file', err);
                     this.apiStates.set(apiId, ApiState.ERROR);
                 })
-            );
+            )
+            .finally(() => {
+                if (this.apiStates.get(apiId) === ApiState.SYNCING) {
+                    this.apiStates.delete(apiId);
+                }
+            });
     }
 
     @action
     fetchRawContent(file: iFileStub, editAfterFetch: boolean = false) {
         const apiId = `${file.branch}:${file.path}`;
+        if (this.apiStates.get(apiId) === ApiState.SYNCING) {
+            console.log('Already fetching', apiId);
+            return Promise.resolve();
+        }
         this.apiStates.set(apiId, ApiState.SYNCING);
         return this.octokit.git
             .getBlob({
@@ -625,16 +633,13 @@ class Github {
             })
             .then(
                 action((binData) => {
-                    if (file.isAsset) {
-                    }
-                    const nFile = file.isAsset
-                        ? new BinFile({ ...file.props, binData: binData }, this.store)
-                        : new FileModel({ ...file.props, binData: binData }, this.store);
+                    const nFile = Github.NewFileModel(file.props, binData, this.store);
                     this._addFileEntry(file.branch, nFile);
-                    if (editAfterFetch) {
-                        file.setEditing(true);
+                    if (editAfterFetch && nFile.type === 'file') {
+                        nFile.setEditing(true);
                     }
-                    return file;
+                    this.apiStates.delete(apiId);
+                    return nFile;
                 })
             )
             .catch(
@@ -649,12 +654,15 @@ class Github {
      * This method adds the File only to the entries map - it won't create or update the file on GitHub.
      */
     @action
-    _addFileEntry(branch: string, file: FileModel | BinFile | Dir) {
+    _addFileEntry(branch: string, file: FileModel | FileStub | BinFile | Dir) {
         if (!this.entries.has(branch)) {
             this.entries.set(branch, observable.array([this._createRootDir(branch)], { deep: false }));
         }
         const old = this.store.findEntry(branch, file.path);
         if (old) {
+            if (file.type === 'file_stub' && old.sha === file.sha) {
+                return;
+            }
             this.entries.get(branch)!.remove(old);
         }
         this.entries.get(branch)!.push(file);

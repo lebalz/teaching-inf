@@ -16,17 +16,9 @@ class File extends iFileStub {
 
     constructor(props: FileProps, store: CmsStore) {
         super(props, store);
-        if ('rawBase64' in props) {
-            this.content = new TextDecoder().decode(
-                Uint8Array.from(atob(props.rawBase64), (c) => c.charCodeAt(0))
-            );
-        } else if ('binData' in props) {
-            this.content = new TextDecoder().decode(props.binData);
-        } else {
-            this.content = props.content;
-        }
-        this._pristine = this.content;
-        this.refContent = this.content;
+        this.content = props.content;
+        this._pristine = props.content;
+        this.refContent = props.content;
     }
 
     get canEdit() {
@@ -36,6 +28,14 @@ class File extends iFileStub {
     @computed
     get isEditing() {
         return this.store.editedFile === this;
+    }
+
+    /**
+     * @returns the binary data of the file, either as a Uint8Array or a string with the original,
+     * non-encoded content
+     */
+    get fileContent(): Uint8Array | string {
+        return this.content;
     }
 
     @action
@@ -101,7 +101,7 @@ class File extends iFileStub {
             sha: this.sha,
             download_url: this.downloadUrl,
             size: this.size,
-            rawBase64: this.content
+            content: this.content
         };
     }
 }

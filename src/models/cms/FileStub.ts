@@ -8,39 +8,23 @@ import { isApplication, isAudio, isImage, isVideo } from './helpers';
 export interface FileStubProps extends iEntryProps {
     size: number;
     download_url: string | null;
+    encoding?: string;
 }
+
 export interface BinFileProps extends FileStubProps {
     binData: Uint8Array;
 }
-export interface RawFileProps extends FileStubProps {
-    rawBase64: string;
-}
-export interface ContentFileProps extends FileStubProps {
+export interface FileProps extends FileStubProps {
     content: string;
 }
-export type FileProps = RawFileProps | ContentFileProps | BinFileProps;
 
-const FilePropKeys: ReadonlyArray<keyof FileProps> = keysOfInterface<keyof FileProps>()(
-    'name',
-    'path',
-    'url',
-    'git_url',
-    'html_url',
-    'sha',
-    'size',
-    'download_url'
-);
+const FilePropKeys: ReadonlyArray<keyof FileProps> = keysOfInterface<
+    keyof Omit<FileProps, 'encoding' | 'content'>
+>()('name', 'path', 'url', 'git_url', 'html_url', 'sha', 'size', 'download_url');
 
-const FileStubPropKeys: ReadonlyArray<keyof FileStubProps> = keysOfInterface<keyof FileStubProps>()(
-    'name',
-    'path',
-    'url',
-    'git_url',
-    'html_url',
-    'sha',
-    'size',
-    'download_url'
-);
+const FileStubPropKeys: ReadonlyArray<keyof FileStubProps> = keysOfInterface<
+    keyof Omit<FileStubProps, 'encoding'>
+>()('name', 'path', 'url', 'git_url', 'html_url', 'sha', 'size', 'download_url');
 
 export abstract class iFileStub extends iEntry {
     readonly size: number;
@@ -111,7 +95,7 @@ export abstract class iFileStub extends iEntry {
         if (this.isAudio) {
             return 'audio';
         }
-        if (this.isBin) {
+        if (this.isApplicationType) {
             return 'application';
         }
     }
@@ -132,13 +116,13 @@ export abstract class iFileStub extends iEntry {
     }
 
     @computed
-    get isBin() {
+    get isApplicationType() {
         return isApplication(this.extension);
     }
 
     @computed
-    get isAsset() {
-        return this.isImage || this.isVideo || this.isBin || this.isAudio;
+    get isBinary() {
+        return this.isImage || this.isVideo || this.isApplicationType || this.isAudio;
     }
 
     @computed

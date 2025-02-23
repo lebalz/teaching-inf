@@ -33,7 +33,6 @@ export const useDirectiveAttributeEditor = (
 
     const onUpdate = React.useCallback(
         (values: DirectiveValueProperty[]) => {
-            console.log('values', values);
             const updatedAttributes = values.reduce<typeof mdastAttributes>((acc, prop) => {
                 if (!acc) {
                     return acc;
@@ -46,11 +45,15 @@ export const useDirectiveAttributeEditor = (
                 if (prop.name === 'className') {
                     acc.class = prop.value;
                 } else {
+                    if (prop.value === 'true') {
+                        prop.value = '';
+                    } else if (prop.value === 'false') {
+                        return acc;
+                    }
                     acc[prop.name] = prop.value;
                 }
                 return acc;
             }, {});
-            console.log('toUpdate', updatedAttributes);
 
             updateMdastNode({ attributes: updatedAttributes });
         },

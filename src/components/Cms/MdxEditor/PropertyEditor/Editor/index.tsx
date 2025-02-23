@@ -30,6 +30,7 @@ export interface Props {
     title?: string;
     onRemove?: () => void;
     onClose?: () => void;
+    canExtend?: boolean;
 }
 
 const isCheckbox = (type: string) => {
@@ -127,7 +128,7 @@ const Editor = (props: Props) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {props.properties.map((prop) => (
+                            {properties.map((prop) => (
                                 <tr key={prop.name}>
                                     <th className={styles.title}>
                                         {prop.name}

@@ -3,6 +3,7 @@ import { action, computed, observable } from 'mobx';
 import FileStub from './FileStub';
 import Dir from './Dir';
 import { ApiState } from '@tdev-stores/iStore';
+import BinFile from './BinFile';
 
 export interface iEntryProps {
     name: string;
@@ -49,8 +50,22 @@ abstract class iEntry {
     }
 
     @computed
+    get isLoaded() {
+        switch (this.type) {
+            case 'file':
+                return true;
+            case 'file_stub':
+                return false;
+            case 'bin_file':
+                return true;
+            case 'dir':
+                return true;
+        }
+    }
+
+    @computed
     get _isFileType(): boolean {
-        return this.type === 'file' || this.type === 'file_stub';
+        return this.type === 'file' || this.type === 'file_stub' || this.type === 'bin_file';
     }
 
     @action
@@ -67,8 +82,12 @@ abstract class iEntry {
         this.apiState = state;
     }
 
-    isFile(): this is File | FileStub {
+    isFile(): this is File | FileStub | BinFile {
         return this._isFileType;
+    }
+
+    isLoadedFile(): this is File | BinFile {
+        return this._isFileType && this.type !== 'file_stub';
     }
 
     @computed

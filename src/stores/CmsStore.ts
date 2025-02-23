@@ -328,14 +328,16 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
             return Promise.resolve(undefined);
         }
         return imageCompression(file, { maxSizeMB: maxSizeMB, maxWidthOrHeight: 3840, useWebWorker: true })
-            .then(function (compressedFile) {
-                return imageCompression.getDataUrlFromFile(compressedFile);
+            .then((compressedFile) => {
+                console.log(compressedFile);
+                return compressedFile.arrayBuffer();
+                // return imageCompression.getDataUrlFromFile(compressedFile);
             })
-            .then((dataUrl) => {
+            .then((binData) => {
                 // dataUrl looks like: data:image/jpeg;base64,/9j/4AAQSkZJRg...
                 // take only the content after the comma
-                const base64 = dataUrl.split(',')[1];
-                return github.createOrUpdateFile(imagePath, base64, branch, sha, undefined, true);
+                // const base64 = binData.split(',')[1];
+                return github.createOrUpdateFile(imagePath, new Uint8Array(binData), branch, sha);
             })
             .catch(function (error) {
                 console.log(error.message);

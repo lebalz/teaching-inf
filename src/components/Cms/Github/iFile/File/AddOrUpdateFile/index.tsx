@@ -12,13 +12,14 @@ import FileStub from '@tdev-models/cms/FileStub';
 import File from '@tdev-models/cms/File';
 import { resolvePath } from '@tdev-models/helpers/resolvePath';
 import { Confirm } from '@tdev-components/shared/Button/Confirm';
+import BinFile from '@tdev-models/cms/BinFile';
 
 export type Response = { state: ApiState; message?: string };
 
 interface Props {
     onDiscard: () => void;
     onCreateOrUpdate: (path: string, file?: FileStub) => Promise<Response>;
-    file?: File;
+    file?: File | BinFile;
 }
 
 const AddOrUpdateFile = observer((props: Props) => {

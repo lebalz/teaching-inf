@@ -11,6 +11,7 @@ import { resolvePath } from '@tdev-models/helpers/resolvePath';
 import { default as CmsFile } from '@tdev-models/cms/File';
 import TextInput from '../TextInput';
 import Checkbox from '../Checkbox';
+import BinFile from '@tdev-models/cms/BinFile';
 
 const convertToBase64 = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -28,7 +29,7 @@ const toMb = (bytes: number): number => {
     return Math.round((100 * bytes) / 1024 / 1024) / 100;
 };
 interface Props {
-    onFilesUploaded: (files: CmsFile) => void;
+    onFilesUploaded: (files: CmsFile | BinFile) => void;
     accept: string;
     className?: string;
     description?: string;
@@ -167,24 +168,24 @@ const FileUpload = observer((props: Props) => {
                                             1
                                         )
                                         .then((uploadedFile) => {
-                                            if (uploadedFile) {
+                                            if (uploadedFile && uploadedFile.type !== 'file_stub') {
                                                 props.onFilesUploaded(uploadedFile);
                                             }
                                         });
                                 } else {
-                                    convertToBase64(files[0])
+                                    files[0]
+                                        .arrayBuffer()
                                         .then((content) => {
                                             return cmsStore.github?.createOrUpdateFile(
                                                 resolvePath(imgDir, uploadName),
-                                                content,
+                                                new Uint8Array(content),
                                                 activeEntry.branch,
                                                 undefined,
-                                                `Upload ${uploadName}`,
-                                                true
+                                                `Upload ${uploadName}`
                                             );
                                         })
                                         .then((uploadedFile) => {
-                                            if (uploadedFile) {
+                                            if (uploadedFile && uploadedFile.type !== 'file_stub') {
                                                 props.onFilesUploaded(uploadedFile);
                                             }
                                         });

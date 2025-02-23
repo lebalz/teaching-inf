@@ -14,8 +14,9 @@ import { ApiState } from '@tdev-stores/iStore';
 import Link from '@docusaurus/Link';
 import { Delete } from '@tdev-components/shared/Button/Delete';
 import RenameFilePopup from './AddOrUpdateFile/RenameFilePopup';
+import BinFile from '@tdev-models/cms/BinFile';
 interface Props {
-    file: FileModel | FileStub;
+    file: FileModel | BinFile | FileStub;
     showActions?: 'always' | 'hover';
 }
 
@@ -28,7 +29,7 @@ const File = observer((props: Props) => {
         <li className={clsx(styles.file, shared.item)}>
             <Link
                 onClick={() => {
-                    if (!file.isAsset) {
+                    if (file.type !== 'bin_file') {
                         cmsStore.setIsEditing(file, true);
                     }
                 }}
@@ -39,9 +40,7 @@ const File = observer((props: Props) => {
                     {file.name}
                 </span>
             </Link>
-            {file.isImage && (
-                <ImagePreview src={file.type === 'file' ? FileModel.ImageDataUrl(file) : file.downloadUrl} />
-            )}
+            {file.isImage && <ImagePreview src={file.type === 'bin_file' ? file.src : file.downloadUrl} />}
             <div className={clsx(styles.actions, props.showActions === 'hover' && styles.onHover)}>
                 <Delete
                     onDelete={() => {

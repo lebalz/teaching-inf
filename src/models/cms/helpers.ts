@@ -27,3 +27,15 @@ export const isApplication = (fileName: string) => {
 export const isBinaryFile = (fileName: string) => {
     return isImage(fileName) || isVideo(fileName) || isApplication(fileName) || isAudio(fileName);
 };
+
+export const convertToBase64 = (binData: Uint8Array): Promise<string> => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(new Blob([binData]));
+        reader.onload = () => {
+            const base64String = (reader.result as string).split(',')[1];
+            resolve(base64String);
+        };
+        reader.onerror = (error) => reject(error);
+    });
+};

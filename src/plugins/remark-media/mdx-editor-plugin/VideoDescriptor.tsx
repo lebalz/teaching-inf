@@ -15,6 +15,8 @@ import {
 import PropertyEditor from '@tdev-components/Cms/MdxEditor/PropertyEditor';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@tdev-hooks/useStore';
+import Card from '@tdev-components/shared/Card';
+import GenericAttributeEditor from '@tdev-components/Cms/MdxEditor/GenericAttributeEditor';
 
 const props: DirectiveProperty[] = [
     {
@@ -40,20 +42,22 @@ const props: DirectiveProperty[] = [
         type: 'checkbox',
         description: 'Steuerung anzeigen',
         required: false
+    },
+    {
+        name: 'height',
+        type: 'string',
+        description: 'Höhe',
+        placeholder: '100%',
+        required: false
+    },
+    {
+        name: 'width',
+        type: 'string',
+        description: 'Breite (default: natürliche Video-Breite)',
+        placeholder: '100%',
+        required: false
     }
 ];
-/**
- * Pass this descriptor to the `directivesPlugin` `directiveDescriptors` parameter to enable {@link https://docusaurus.io/docs/markdown-features/admonitions | markdown admonitions}.
- *
- * @example
- * ```tsx
- * <MDXEditor
- *  plugins={[
- *   directivesPlugin({ directiveDescriptors: [ AdmonitionDirectiveDescriptor] }),
- *  ]} />
- * ```
- * @group Directive
- */
 export const VideoDescriptor: DirectiveDescriptor = {
     name: 'video',
     attributes: [],
@@ -64,7 +68,14 @@ export const VideoDescriptor: DirectiveDescriptor = {
     Editor: observer(({ mdastNode }) => {
         const { jsxAttributes, directiveAttributes, onUpdate } = useDirectiveAttributeEditor(
             props,
-            mdastNode.attributes
+            mdastNode.attributes,
+            (raw) => {
+                if (raw.attributes.autoplay !== undefined) {
+                    raw.attributes.autoPlay = raw.attributes.autoplay;
+                    delete raw.attributes.autoplay;
+                }
+                return raw;
+            }
         );
         const cmsStore = useStore('cmsStore');
         const { editedFile } = cmsStore;
@@ -72,33 +83,25 @@ export const VideoDescriptor: DirectiveDescriptor = {
         const src =
             firstChild.type === 'text' ? firstChild.value : firstChild.type === 'link' ? firstChild.url : '';
         const gitVideo = editedFile?.findEntryByRelativePath(src);
-        const ref = React.useRef<PopupActions>(null);
+        console.log('gitVideo', gitVideo?.type);
         return (
-            <Popup
-                trigger={
-                    <div className={clsx(styles.media)}>
-                        <video
-                            className={clsx(styles.video)}
-                            style={{ maxWidth: '100%', ...jsxAttributes.style }}
-                            {...jsxAttributes.attributes}
-                        >
-                            <source src={gitVideo?.type === 'bin_file' ? gitVideo.src : src} />
-                        </video>
-                    </div>
-                }
-                keepTooltipInside="#__docusaurus"
-                overlayStyle={{ background: 'rgba(0,0,0,0.5)' }}
-                ref={ref}
-                modal
-                on="click"
-            >
-                <PropertyEditor
+            <Card>
+                <GenericAttributeEditor
                     values={{ ...directiveAttributes, className: directiveAttributes.class }}
                     onUpdate={onUpdate}
                     properties={props}
-                    onClose={() => ref.current?.close()}
+                    canExtend
                 />
-            </Popup>
+                <div className={clsx(styles.media)}>
+                    <video
+                        className={clsx(styles.video)}
+                        style={{ maxWidth: '100%', ...jsxAttributes.style }}
+                        {...jsxAttributes.attributes}
+                    >
+                        <source src={gitVideo?.type === 'bin_file' ? gitVideo.src : src} />
+                    </video>
+                </div>
+            </Card>
         );
     })
 };
