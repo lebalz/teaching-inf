@@ -57,7 +57,7 @@ import { Box, strongPlugin } from '@tdev-plugins/remark-strong/mdx-editor-plugin
 import { ToolbarInsertBoxed } from '@tdev-plugins/remark-strong/mdx-editor-plugin/ToolbarInsertBoxed';
 import { useStore } from '@tdev-hooks/useStore';
 import { IMAGE_DIR_NAME } from '@tdev-models/cms/Dir';
-import { codeMirrorPlugin } from './plugins/codemirror';
+import { codeMirrorPlugin } from './plugins/Codemirror';
 import DefaultEditor from '@tdev-components/Cms/Github/DefaultEditor';
 import { Kbd, kbdPlugin } from '@tdev-plugins/remark-kbd/mdx-editor-plugin';
 import { ToolbarInsertKbd } from '@tdev-plugins/remark-kbd/mdx-editor-plugin/ToolbarInsertKbd';

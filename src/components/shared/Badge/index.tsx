@@ -7,7 +7,7 @@ type BadgeType = 'primary' | 'secondary' | 'blue' | 'success' | 'info' | 'warnin
 
 type Color = 'blue' | 'lightBlue' | 'green' | 'orange' | 'black' | 'red' | 'gray';
 
-const getType = (color?: Color): BadgeType | undefined => {
+const getType = (color?: Color | string): BadgeType | undefined => {
     switch (color) {
         case 'blue':
             return 'primary';
@@ -35,22 +35,39 @@ interface Props {
     noPaddingRight?: boolean;
     title?: string;
     style?: React.CSSProperties;
-    color?: Color;
+    color?: Color | string;
+    textColor?: string;
 }
 
 const Badge = observer((props: Props) => {
+    const badgeType = React.useMemo(() => {
+        return props.type || getType(props.color);
+    }, [props.type, props.color]);
+    const style = React.useMemo(() => {
+        if (badgeType || !props.color) {
+            return props.style;
+        }
+        const colors: Record<string, string> = {
+            ['--ifm-color-primary']: props.color,
+            ['--ifm-badge-color']: props.textColor || 'var(--ifm-color-white)'
+        };
+        return {
+            ...(props.style || {}),
+            ...colors
+        };
+    }, [props.style, props.color, props.textColor, badgeType]);
     return (
         <span
             className={clsx(
                 styles.badge,
                 'badge',
-                `badge--${props.type || getType(props.color) || 'secondary'}`,
+                `badge--${badgeType || (props.color ? 'primary' : 'secondary')}`,
                 (props.noPaddingLeft || props.noPadding) && styles.noPaddingLeft,
                 (props.noPaddingRight || props.noPadding) && styles.noPaddingRight,
-                props.color && styles[props.color],
+                props.color && badgeType && styles[props.color],
                 props.className
             )}
-            style={props.style}
+            style={style}
             title={props.title}
         >
             {props.children}

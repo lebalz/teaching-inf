@@ -10,17 +10,11 @@ import { useGithubAccess } from '@tdev-hooks/useGithubAccess';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
 import Directory from '@tdev-components/Cms/MdxEditor/Directory';
-import MdxEditor from '@tdev-components/Cms/MdxEditor';
-import DefaultEditor from '@tdev-components/Cms/Github/DefaultEditor';
-import { ApiState } from '@tdev-stores/iStore';
-import Card from '@tdev-components/shared/Card';
 import Details from '@theme/Details';
-import ImagePreview from '@tdev-components/Cms/Github/iFile/File/FilePreview/ImagePreview';
 import PR from '@tdev-components/Cms/Github/PR';
 import Branch from '@tdev-components/Cms/Github/Branch';
 import EditorNav from './MdxEditor/EditorNav';
 import { useLoadedFile } from './MdxEditor/hooks/useLoadedFile';
-import VideoPreview from './Github/iFile/File/FilePreview/VideoPreview';
 import ShowFile from './ShowFile';
 
 const CmsLandingPage = observer(() => {

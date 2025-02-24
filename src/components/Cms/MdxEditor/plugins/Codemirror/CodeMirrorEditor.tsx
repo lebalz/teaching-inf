@@ -30,6 +30,7 @@ import Button from '@tdev-components/shared/Button';
 import Popup from 'reactjs-popup';
 import { SIZE_S } from '@tdev-components/shared/iconSizes';
 import CopyBadge from '@tdev-components/shared/CopyBadge';
+import MyAttributes from '../../GenericAttributeEditor/AttributeBadges';
 
 export const COMMON_STATE_CONFIG_EXTENSIONS: Extension[] = [];
 
@@ -291,21 +292,12 @@ export const CodeMirrorEditor = ({ language, nodeKey, code, focusEmitter, meta }
                             })}
                         </Card>
                     </Popup>
-                    <div className={clsx(styles.props)}>
-                        {Object.entries(metaProps).map(([key, value]) => {
-                            if (key === 'title') {
-                                return null;
-                            }
-                            if (key === 'id') {
-                                return <CopyBadge key={key} label={key} value={value} />;
-                            }
-                            return (
-                                <Badge key={key} color="lightBlue" title={value}>
-                                    {key}
-                                </Badge>
-                            );
-                        })}
-                    </div>
+                    <MyAttributes
+                        className={clsx(styles.props)}
+                        attributes={metaProps}
+                        skippedAttributes={['title']}
+                        copyableAttributes={['id']}
+                    />
                     {metaProps.title && (
                         <h4>{sanitizedTitle(metaProps.title.replace(/^"/, '').replace(/"$/, ''))}</h4>
                     )}

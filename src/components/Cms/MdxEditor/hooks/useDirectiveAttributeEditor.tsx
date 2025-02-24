@@ -15,10 +15,10 @@ export const useDirectiveAttributeEditor = (
     jsxAttrTransformer?: (raw: Options) => Options
 ) => {
     const updateMdastNode = useMdastNodeUpdater();
-    const { jsxAttributes: attributes, directiveAttributes } = React.useMemo(() => {
+    const { jsxAttributes, directiveAttributes } = React.useMemo(() => {
         const rawAttributes = transformAttributes(mdastAttributes || {});
-        const jsxAttributes = jsxAttrTransformer ? jsxAttrTransformer(rawAttributes) : rawAttributes;
-        const directiveAttrs = {
+        const jsxAttributes: Options = jsxAttrTransformer ? jsxAttrTransformer(rawAttributes) : rawAttributes;
+        const directiveAttrs: Record<string, string> = {
             class: rawAttributes.className,
             ...rawAttributes.style,
             ...rawAttributes.attributes
@@ -67,5 +67,5 @@ export const useDirectiveAttributeEditor = (
         [mdastAttributes, updateMdastNode, properties]
     );
 
-    return { jsxAttributes: attributes, directiveAttributes: directiveAttributes, onUpdate: onUpdate };
+    return { jsxAttributes: jsxAttributes, directiveAttributes: directiveAttributes, onUpdate: onUpdate };
 };

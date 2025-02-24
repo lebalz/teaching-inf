@@ -1,6 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
-import PropertyEditor from './PropertyEditor';
+import PropertyEditor from '../PropertyEditor';
 import Popup from 'reactjs-popup';
 import { mdiCog } from '@mdi/js';
 import Button from '@tdev-components/shared/Button';
