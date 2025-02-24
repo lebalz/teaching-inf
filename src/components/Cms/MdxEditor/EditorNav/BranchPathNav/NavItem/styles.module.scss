@@ -8,8 +8,10 @@
     background-color: var(--ifm-breadcrumb-item-background-active);
     cursor: pointer;
     padding: 2px 8px;
+    margin-top: var(--cms-nav-margin-vertical);
+    margin-bottom: var(--cms-nav-margin-vertical);
 
-    font-size: 0.75rem;
+    font-size: var(--cms-nav-font-size);
     font-weight: var(--ifm-font-weight-bold);
     &:hover {
         background-color: var(--ifm-color-gray-300);

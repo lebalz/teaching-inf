@@ -12,6 +12,7 @@ interface Props {
     copyableAttributes?: string[];
     colors?: Record<string, string>;
     labels?: Record<string, string>;
+    title?: string;
 }
 
 const MyAttributes = observer((props: Props) => {
@@ -22,6 +23,7 @@ const MyAttributes = observer((props: Props) => {
 
     return (
         <div className={clsx(styles.attributes, props.className)}>
+            {props.title && <CopyBadge value={props.title} className={clsx(styles.badge)} color="blue" />}
             {Object.entries(props.attributes).map(([key, value], idx) => {
                 if (skipped.has(key)) {
                     return null;
@@ -30,7 +32,12 @@ const MyAttributes = observer((props: Props) => {
                     return <CopyBadge key={idx} label={key} value={value} />;
                 }
                 return (
-                    <Badge key={idx} color={colors[key] || 'lightBlue'} title={`${value}`}>
+                    <Badge
+                        key={idx}
+                        color={colors[key] || 'lightBlue'}
+                        title={`${key} = ${value}`}
+                        className={clsx(styles.badge)}
+                    >
                         {labels[key] || key}
                     </Badge>
                 );

@@ -93,13 +93,12 @@ export const VideoDescriptor: DirectiveDescriptor = {
                         properties={props}
                         canExtend
                     />
-                    <MyAttributes attributes={directiveAttributes} />
-                    {gitVideo?.name || src}
+                    <MyAttributes title={gitVideo?.name || src} attributes={directiveAttributes} />
                     <RemoveNode />
                 </div>
                 <div className={clsx(styles.media)}>
                     <video
-                        key={gitVideo?.sha}
+                        key={gitVideo?.type === 'bin_file' ? gitVideo?.sha : src}
                         className={clsx(styles.video)}
                         style={{ maxWidth: '100%', ...jsxAttributes.style }}
                         controls

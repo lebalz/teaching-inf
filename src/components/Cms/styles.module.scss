@@ -23,6 +23,9 @@
         .tree {
             margin: 0;
             margin-right: 0.5rem;
+
+            position: sticky;
+            top: var(--cms-toolbar-top-offset);
         }
         &:not(.showFileTree) {
             display: none;
@@ -35,7 +38,7 @@
         grid-area: footer;
     }
     &.showNav {
-        --cms-toolbar-top-offset: 88px;
+        --cms-toolbar-top-offset: 84px;
         .header {
             position: sticky;
             top: 60px;

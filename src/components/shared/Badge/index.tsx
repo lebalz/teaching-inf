@@ -5,9 +5,9 @@ import styles from './styles.module.scss';
 
 type BadgeType = 'primary' | 'secondary' | 'blue' | 'success' | 'info' | 'warning' | 'danger';
 
-type Color = 'blue' | 'lightBlue' | 'green' | 'orange' | 'black' | 'red' | 'gray';
+export type Color = 'blue' | 'lightBlue' | 'green' | 'orange' | 'black' | 'red' | 'gray';
 
-const getType = (color?: Color | string): BadgeType | undefined => {
+export const getType = (color?: Color | string): BadgeType | undefined => {
     switch (color) {
         case 'blue':
             return 'primary';

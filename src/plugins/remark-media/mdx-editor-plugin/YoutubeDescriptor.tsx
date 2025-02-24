@@ -13,20 +13,34 @@ import {
     useDirectiveAttributeEditor
 } from '@tdev-components/Cms/MdxEditor/hooks/useDirectiveAttributeEditor';
 import { observer } from 'mobx-react-lite';
-import { useStore } from '@tdev-hooks/useStore';
 import Card from '@tdev-components/shared/Card';
 import GenericAttributeEditor from '@tdev-components/Cms/MdxEditor/GenericAttributeEditor';
 import RemoveNode from '@tdev-components/Cms/MdxEditor/RemoveNode';
-import { useAssetFile } from '@tdev-components/Cms/MdxEditor/hooks/useAssetFile';
 import MyAttributes from '@tdev-components/Cms/MdxEditor/GenericAttributeEditor/MyAttributes';
+import { LeafDirectiveName } from '../plugin';
 
-const props: DirectiveProperty[] = [];
-export const AudioDescriptor: DirectiveDescriptor = {
-    name: 'audio',
+const props: DirectiveProperty[] = [
+    {
+        name: 'height',
+        type: 'string',
+        description: 'Höhe',
+        placeholder: '100%',
+        required: false
+    },
+    {
+        name: 'minWidth',
+        type: 'string',
+        description: 'Breite (default: natürliche Video-Breite)',
+        placeholder: '100%',
+        required: false
+    }
+];
+export const YoutubeDescriptor: DirectiveDescriptor = {
+    name: LeafDirectiveName.YOUTUBE,
     attributes: [],
     hasChildren: true,
     testNode(node) {
-        return node.name === 'audio' && node.type === 'leafDirective';
+        return node.name === LeafDirectiveName.YOUTUBE && node.type === 'leafDirective';
     },
     Editor: observer(({ mdastNode }) => {
         const { jsxAttributes, directiveAttributes, onUpdate } = useDirectiveAttributeEditor(
@@ -41,7 +55,6 @@ export const AudioDescriptor: DirectiveDescriptor = {
                   ? firstChild.url
                   : '';
         }, [mdastNode]);
-        const gitAudio = useAssetFile(src);
 
         return (
             <Card>
@@ -52,19 +65,25 @@ export const AudioDescriptor: DirectiveDescriptor = {
                         properties={props}
                         canExtend
                     />
-                    <MyAttributes title={gitAudio?.name || src} attributes={directiveAttributes} />
+                    <MyAttributes title={src} attributes={directiveAttributes} />
                     <RemoveNode />
                 </div>
                 <div className={clsx(styles.media)}>
-                    <audio
-                        key={gitAudio?.type === 'bin_file' ? gitAudio?.sha : src}
-                        className={clsx(styles.video)}
-                        style={{ maxWidth: '100%', ...jsxAttributes.style }}
-                        controls
+                    <iframe
+                        src={src}
+                        width={`${jsxAttributes.style?.minWidth || '100%'}`}
+                        height={`${jsxAttributes.style?.height || '100%'}`}
+                        frameBorder={0}
+                        allowFullScreen
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         {...jsxAttributes.jsxAttributes}
-                    >
-                        <source src={gitAudio?.type === 'bin_file' ? gitAudio.src : src} />
-                    </audio>
+                        style={{
+                            width: jsxAttributes.style?.minWidth
+                                ? (jsxAttributes.style?.minWidth as string)
+                                : '100%',
+                            aspectRatio: jsxAttributes.style.height ? undefined : '16 / 9'
+                        }}
+                    />
                 </div>
             </Card>
         );

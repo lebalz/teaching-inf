@@ -14,15 +14,9 @@ interface Props {
 
 const BranchPathNav = observer((props: Props) => {
     const { item } = props;
-    const [closeDropdown, setCloseDropdown] = React.useState(false);
     const isMobile = useIsMobileView(550);
-    React.useEffect(() => {
-        if (closeDropdown) {
-            setCloseDropdown(false);
-        }
-    }, [closeDropdown]);
     return (
-        <div className={clsx(styles.pathNav)}>
+        <div className={clsx(styles.pathNav, isMobile && styles.mobile)}>
             <nav aria-label="breadcrumbs" className={clsx(styles.breadcrumbs)}>
                 <div className={clsx(styles.part)}>
                     <BranchSelector compact />
