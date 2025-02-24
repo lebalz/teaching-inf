@@ -2,7 +2,6 @@ import React from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
-import { useStore } from '@tdev-hooks/useStore';
 import CopyBadge from '@tdev-components/shared/CopyBadge';
 import Badge from '@tdev-components/shared/Badge';
 
@@ -31,7 +30,7 @@ const MyAttributes = observer((props: Props) => {
                     return <CopyBadge key={idx} label={key} value={value} />;
                 }
                 return (
-                    <Badge key={idx} color={colors[key] || 'lightBlue'} title={value}>
+                    <Badge key={idx} color={colors[key] || 'lightBlue'} title={`${value}`}>
                         {labels[key] || key}
                     </Badge>
                 );

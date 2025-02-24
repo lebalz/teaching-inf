@@ -13,6 +13,7 @@ import Card from '@tdev-components/shared/Card';
 import GenericAttributeEditor from '@tdev-components/Cms/MdxEditor/GenericAttributeEditor';
 import RemoveNode from '@tdev-components/Cms/MdxEditor/RemoveNode';
 import { useAssetFile } from '@tdev-components/Cms/MdxEditor/hooks/useAssetFile';
+import MyAttributes from '@tdev-components/Cms/MdxEditor/GenericAttributeEditor/MyAttributes';
 
 const props: DirectiveProperty[] = [
     {
@@ -92,7 +93,8 @@ export const VideoDescriptor: DirectiveDescriptor = {
                         properties={props}
                         canExtend
                     />
-                    {src}
+                    <MyAttributes attributes={directiveAttributes} />
+                    {gitVideo?.name || src}
                     <RemoveNode />
                 </div>
                 <div className={clsx(styles.media)}>

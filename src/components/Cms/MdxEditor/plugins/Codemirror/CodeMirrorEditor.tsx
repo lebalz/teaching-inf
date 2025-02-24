@@ -30,7 +30,7 @@ import Button from '@tdev-components/shared/Button';
 import Popup from 'reactjs-popup';
 import { SIZE_S } from '@tdev-components/shared/iconSizes';
 import CopyBadge from '@tdev-components/shared/CopyBadge';
-import MyAttributes from '../../GenericAttributeEditor/AttributeBadges';
+import MyAttributes from '../../GenericAttributeEditor/MyAttributes';
 
 export const COMMON_STATE_CONFIG_EXTENSIONS: Extension[] = [];
 
