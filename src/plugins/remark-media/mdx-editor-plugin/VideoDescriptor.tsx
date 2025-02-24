@@ -68,7 +68,6 @@ export const VideoDescriptor: DirectiveDescriptor = {
         return node.name === 'video' && node.type === 'leafDirective';
     },
     Editor: observer(({ mdastNode }) => {
-        const cmsStore = useStore('cmsStore');
         const { jsxAttributes, directiveAttributes, onUpdate } = useDirectiveAttributeEditor(
             props,
             mdastNode.attributes,

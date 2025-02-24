@@ -6,6 +6,7 @@ export default class CmsViewStore extends iViewStore<CmsStore> {
     @observable accessor isMobile = false;
     @observable accessor showFileTree = false;
     @observable accessor isNavOverviewExpanded = false;
+    @observable accessor openInlineMathEditor: string | null = null;
 
     constructor(parent: CmsStore) {
         super(parent);
@@ -28,6 +29,10 @@ export default class CmsViewStore extends iViewStore<CmsStore> {
     @action
     setIsNavOverviewExpanded(isExpanded: boolean) {
         this.isNavOverviewExpanded = isExpanded;
+    }
+    @action
+    setOpenInlineMathEditor(id: string | null) {
+        this.openInlineMathEditor = id;
     }
 
     @computed

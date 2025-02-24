@@ -1,4 +1,12 @@
-import { ButtonOrDropdownButton, insertJsx$, insertMarkdown$, usePublisher } from '@mdxeditor/editor';
+import {
+    ButtonOrDropdownButton,
+    insertJsx$,
+    insertMarkdown$,
+    usePublisher,
+    insertDecoratorNode$,
+    useCellValue,
+    currentSelection$
+} from '@mdxeditor/editor';
 import React from 'react';
 import {
     mdiApplicationOutline,
@@ -10,6 +18,7 @@ import {
 import Button from '@tdev-components/shared/Button';
 import Icon from '@mdi/react';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
+import { $createMathNode } from '../mathPlugin/MathNode';
 
 /**
  * A toolbar dropdown button that allows the user to insert admonitions.
@@ -24,13 +33,24 @@ export const InsertJsxElements = () => {
 
     return (
         <>
-            <Button
-                icon={mdiMathIntegral}
-                title="InlineMath"
-                onClick={() => {
-                    insertMdx('$\\LaTeX$');
+            <ButtonOrDropdownButton
+                items={[
+                    {
+                        label: <Button icon={mdiMathIntegral} text="Inline Math" iconSide="left" />,
+                        value: 'InlineMath'
+                    }
+                ]}
+                title="Inline Math Einfügen"
+                onChoose={(value) => {
+                    setTimeout(() => {
+                        editor.update(() => {
+                            insertMdx('$\\LaTeX$');
+                        });
+                    }, 0);
                 }}
-            />
+            >
+                <Icon path={mdiMathIntegral} size={1} />
+            </ButtonOrDropdownButton>
             <ButtonOrDropdownButton
                 items={[
                     {

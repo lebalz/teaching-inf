@@ -173,12 +173,12 @@ const CmsMdxEditor = observer((props: Props) => {
                                     <ToolbarInsertKbd />
                                     <ListsToggle />
                                     <InsertCodeBlock />
+                                    <InsertTable />
                                     <CreateLink />
                                     <CodeToggle />
                                     <BlockTypeSelect />
                                     <InsertAdmonition />
                                     <InsertFrontmatter />
-                                    <InsertTable />
                                     <ConditionalContents
                                         options={[
                                             {

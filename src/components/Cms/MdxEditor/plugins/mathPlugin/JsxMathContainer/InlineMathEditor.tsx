@@ -27,7 +27,7 @@ const InlineMathEditor = (props: Props) => {
                 </span>
             }
             ref={ref}
-            on={['click']}
+            on="hover"
             offsetY={-5}
             nested
             closeOnEscape={true}

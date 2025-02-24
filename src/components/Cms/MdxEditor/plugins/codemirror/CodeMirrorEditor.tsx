@@ -19,7 +19,10 @@ import styles from './styles.module.scss';
 import Card from '@tdev-components/shared/Card';
 import RemoveNode from '@tdev-components/Cms/MdxEditor/RemoveNode';
 import clsx from 'clsx';
-import GenericAttributeEditor, { GenericPropery, GenericValueProperty } from '../../GenericAttributeEditor';
+import GenericAttributeEditor, {
+    GenericPropery,
+    GenericValueProperty
+} from '@tdev-components/Cms/MdxEditor/GenericAttributeEditor';
 import { extractMetaProps, sanitizedTitle } from '@tdev/theme/CodeBlock';
 import { v4 } from 'uuid';
 import Badge from '@tdev-components/shared/Badge';

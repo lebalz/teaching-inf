@@ -1,23 +1,12 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import React from 'react';
-import {
-    DirectiveDescriptor,
-    DirectiveEditorProps,
-    NestedLexicalEditor,
-    useMdastNodeUpdater
-} from '@mdxeditor/editor';
-import { ContainerDirective, LeafDirective, Directives } from 'mdast-util-directive';
-import { BlockContent, PhrasingContent } from 'mdast';
+import { NestedLexicalEditor } from '@mdxeditor/editor';
+import { ContainerDirective, LeafDirective } from 'mdast-util-directive';
+import { BlockContent } from 'mdast';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
-import { mdiChevronRight, mdiMinusBoxOutline, mdiPlusBoxOutline } from '@mdi/js';
+import { mdiMinusBoxOutline, mdiPlusBoxOutline } from '@mdi/js';
 import Button from '@tdev-components/shared/Button';
-import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import Popup from 'reactjs-popup';
-import Card from '@tdev-components/shared/Card';
 import { SIZE_S } from '@tdev-components/shared/iconSizes';
-import FlexCardEditor from './FlexCardEditor';
 
 const isBreak = (node?: BlockContent | any): node is LeafDirective => {
     if (!node) {
@@ -74,22 +63,4 @@ const ItemEditor = (props: ItemProps) => {
     );
 };
 
-export const FlexDirectiveDescriptor: DirectiveDescriptor = {
-    name: 'flex',
-    attributes: [],
-    hasChildren: true,
-    testNode(node) {
-        return node.name === 'flex';
-    },
-    Editor: FlexCardEditor
-};
-
-export const CardsDirectiveDescriptor: DirectiveDescriptor = {
-    name: 'cards',
-    attributes: [],
-    hasChildren: true,
-    testNode(node) {
-        return node.name === 'cards';
-    },
-    Editor: FlexCardEditor
-};
+export default ItemEditor;
