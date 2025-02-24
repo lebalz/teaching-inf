@@ -5,8 +5,7 @@ import {
     mdiDotsVerticalCircleOutline,
     mdiFormatListCheckbox,
     mdiMathIntegral,
-    mdiMathIntegralBox,
-    mdiMathSin
+    mdiMathIntegralBox
 } from '@mdi/js';
 import Button from '@tdev-components/shared/Button';
 import Icon from '@mdi/react';
