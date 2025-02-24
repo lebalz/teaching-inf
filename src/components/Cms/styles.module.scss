@@ -24,6 +24,10 @@
             margin: 0;
             margin-right: 0.5rem;
         }
+        &:not(.showFileTree) {
+            max-height: 95vh;
+            overflow-y: auto;
+        }
     }
     .content {
         grid-area: content;

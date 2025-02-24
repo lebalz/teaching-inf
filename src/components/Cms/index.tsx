@@ -46,7 +46,7 @@ const CmsLandingPage = observer(() => {
             <div className={clsx(styles.header)}>
                 <EditorNav />
             </div>
-            <div className={clsx(styles.fileTree)}>
+            <div className={clsx(styles.fileTree, viewStore.showFileTree && styles.showFileTree)}>
                 <Directory dir={cmsStore.rootDir} className={clsx(styles.tree)} showActions="hover" compact />
             </div>
             <div className={clsx(styles.content)}>
