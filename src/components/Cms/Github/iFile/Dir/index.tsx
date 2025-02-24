@@ -7,6 +7,7 @@ import shared from '../styles.module.scss';
 import styles from './styles.module.scss';
 import Icon from '@mdi/react';
 import AddFilePopup from '../File/AddOrUpdateFile/AddFilePopup';
+import { useStore } from '@tdev-hooks/useStore';
 
 interface Props {
     dir: DirModel;
@@ -15,6 +16,7 @@ interface Props {
 
 const Dir = observer((props: Props) => {
     const { dir } = props;
+    const cmsStore = useStore('cmsStore');
     return (
         <li className={clsx(shared.item)}>
             <div className={clsx(styles.dirName)}>
@@ -22,6 +24,7 @@ const Dir = observer((props: Props) => {
                     className={clsx(styles.dir)}
                     onClick={() => {
                         dir.setOpen(!dir.isOpen);
+                        // cmsStore.setActiveEntry(dir);
                     }}
                 >
                     <Icon spin={dir.isSyncing} path={dir.icon} size={0.8} color={dir.iconColor} />

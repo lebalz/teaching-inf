@@ -17,6 +17,7 @@ const Directory = observer((props: Props) => {
     const { dir } = props;
     React.useEffect(() => {
         if (dir && !dir.isOpen) {
+            console.log('Open from Directory.tsx');
             dir.setOpen(true);
         }
     }, [dir]);

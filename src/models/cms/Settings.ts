@@ -1,4 +1,4 @@
-import { CmsSettings, FullCmsSettings } from '@tdev-api/cms';
+import { FullCmsSettings } from '@tdev-api/cms';
 import { CmsStore } from '@tdev-stores/CmsStore';
 import _ from 'lodash';
 import { action, computed } from 'mobx';
@@ -27,11 +27,8 @@ class Settings extends PartialSettings {
 
     @action
     setActiveEntry(entry: iEntry) {
-        this.setActiveBranchName(entry.branch, false);
-        this.setActivePath(entry.path, false);
-        if (entry._isFileType) {
-            this.save();
-        } else {
+        this.setLocation(entry.branch, entry.path);
+        if (entry.type === 'dir') {
             (entry as Dir).setOpen(true);
         }
     }

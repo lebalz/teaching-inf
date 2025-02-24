@@ -45,10 +45,11 @@ class PartialSettings {
 
     @action
     setActivePath(path: string, save: boolean = true) {
-        if (this.activePath === path) {
+        const newPath = (path || '').replaceAll(/(^\/|\/$)/g, ''); // remove leading and trailing slashes
+        if (this.activePath === newPath) {
             return;
         }
-        this.activePath = path;
+        this.activePath = newPath;
         if (save) {
             this.save();
         }

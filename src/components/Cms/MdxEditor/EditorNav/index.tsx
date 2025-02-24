@@ -19,7 +19,6 @@ const EditorNav = observer((props: Props) => {
     const { activeEntry, viewStore } = cmsStore;
     const { showFileTree } = viewStore;
     const isMobile = useIsMobileView(900);
-
     React.useEffect(() => {
         viewStore.setIsMobile(isMobile);
     }, [isMobile, viewStore]);

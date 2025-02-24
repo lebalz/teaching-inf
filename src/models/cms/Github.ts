@@ -20,6 +20,7 @@ export type GhPr =
     | GhTypes['pulls']['create']['response']['data'];
 
 const PR_PAGE_SIZE = 20;
+type FileEntry = FileStub | BinFile | FileModel | Dir;
 
 class Github {
     readonly store: CmsStore;
@@ -459,14 +460,14 @@ class Github {
     }
 
     @action
-    fetchDirectoryTree(file: FileStub | FileModel | BinFile) {
+    fetchDirectoryTree(file: FileStub | FileModel | BinFile | Dir, openTree?: boolean) {
         if (file.dir) {
             return Promise.resolve();
         }
         const path = file.path;
         const branch = file.branch;
         const parts = path.split('/').slice(0, -1);
-        const promises: Promise<(FileModel | Dir | FileStub | BinFile)[]>[] = [];
+        const promises: Promise<FileEntry[]>[] = [];
         for (let i = 1; i <= parts.length; i++) {
             const dirPath = parts.slice(0, i).join('/');
             const dir = this.store.findEntry(branch, dirPath) as Dir | undefined;
@@ -481,6 +482,9 @@ class Github {
                     let curr: Dir | undefined = file.dir;
                     while (curr) {
                         curr.setIsFetched(true);
+                        if (openTree) {
+                            curr.setOpen(true);
+                        }
                         curr = curr.dir;
                     }
                 }
@@ -517,43 +521,7 @@ class Github {
             .then(
                 action((res) => {
                     const dir = this.store.findEntry(branch, path) as Dir | undefined;
-                    const entries = res.data;
-                    if (Array.isArray(entries)) {
-                        if (entries.length === 0) {
-                            return [];
-                        }
-                        if (!this.entries.has(branch)) {
-                            this.entries.set(
-                                branch,
-                                observable.array([this._createRootDir(branch)], { deep: false })
-                            );
-                        }
-                        const newEntries: (Dir | FileStub | FileModel | BinFile)[] = [];
-                        const arr = this.entries.get(branch)!;
-                        entries.forEach((entry) => {
-                            const old = arr.find((e) => e.path === entry.path);
-                            if (old) {
-                                if (!force && old.sha === entry.sha) {
-                                    newEntries.push(old);
-                                    return;
-                                }
-                                arr.remove(old);
-                            }
-                            switch (entry.type) {
-                                case 'dir':
-                                    const dir = new Dir(entry, this.store);
-                                    newEntries.push(dir);
-                                    arr.push(dir);
-                                    break;
-                                case 'file':
-                                    const fstub = Github.NewFileModel(entry, undefined, this.store);
-                                    newEntries.push(fstub);
-                                    arr.push(fstub);
-                                    break;
-                            }
-                        });
-                        return newEntries;
-                    }
+                    this._handleDirectoryResponse(res.data, branch, true, force);
                     if (dir) {
                         dir.setIsFetched(true);
                     }
@@ -563,8 +531,17 @@ class Github {
     }
 
     @action
-    fetchFile(file: iFileStub, editAfterFetch: boolean = false): Promise<FileModel | BinFile | undefined> {
+    fetchFile(
+        file: iFileStub,
+        editAfterFetch: boolean = false
+    ): Promise<FileModel | BinFile | FileEntry[] | undefined> {
         const { branch, path } = file;
+        if (path === '/') {
+            if (file.type === 'file_stub') {
+                this._rmFileEntry(file as FileStub);
+            }
+            return Promise.resolve(undefined);
+        }
         if (file.apiState === ApiState.SYNCING) {
             console.log('Already fetching', file.path, file.branch);
             return Promise.resolve(undefined);
@@ -583,8 +560,10 @@ class Github {
                         action((res) => {
                             const { data } = res || {};
                             if (!data || !('type' in data) || data.type !== 'file') {
-                                if (file.isDummy) {
+                                // we loaded a directory...
+                                if (Array.isArray(data) && file.isDummy) {
                                     this._rmFileEntry(file as FileStub);
+                                    return this._handleDirectoryResponse(data, branch, true, false);
                                 }
                                 return undefined;
                             }
@@ -658,6 +637,49 @@ class Github {
                     return undefined;
                 })
             );
+    }
+
+    @action
+    _handleDirectoryResponse(
+        entries: GhTypes['repos']['getContent']['response']['data'],
+        branch: string,
+        loadRecursive: boolean,
+        force: boolean
+    ) {
+        if (!Array.isArray(entries) || entries.length === 0) {
+            return [];
+        }
+        if (!this.entries.has(branch)) {
+            this.entries.set(branch, observable.array([this._createRootDir(branch)], { deep: false }));
+        }
+        const newEntries: FileEntry[] = [];
+        const arr = this.entries.get(branch)!;
+        entries.forEach((entry) => {
+            const old = arr.find((e) => e.path === entry.path);
+            if (old) {
+                if (!force && old.sha === entry.sha) {
+                    newEntries.push(old);
+                    return;
+                }
+                arr.remove(old);
+            }
+            switch (entry.type) {
+                case 'dir':
+                    const dir = new Dir(entry, this.store);
+                    newEntries.push(dir);
+                    arr.push(dir);
+                    break;
+                case 'file':
+                    const fstub = Github.NewFileModel(entry, undefined, this.store);
+                    newEntries.push(fstub);
+                    arr.push(fstub);
+                    break;
+            }
+        });
+        if (loadRecursive && newEntries.length > 0) {
+            this.fetchDirectoryTree(newEntries[0]);
+        }
+        return newEntries;
     }
 
     /**

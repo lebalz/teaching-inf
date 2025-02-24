@@ -48,6 +48,7 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
             () => [this.activeBranchName, this.github] as [string | undefined, Github | undefined],
             action(([branch, github]) => {
                 if (branch && github) {
+                    console.log('running r1');
                     const { defaultBranchName } = github;
                     github.fetchDirectory(branch).catch((err) => {
                         console.log(`invalid branch, resetting to default: ${defaultBranchName}`, err);
@@ -68,8 +69,10 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
                     Github | undefined
                 ],
             action(([fileName, branch, github]) => {
+                console.log('running r2');
+
                 if (fileName && branch && github) {
-                    const dummy = FileStub.DummyFile(fileName, branch, this, true);
+                    const dummy = FileStub.DummyFile(fileName, branch, this, false);
                     this.fetchFile(dummy).catch(() => {
                         this.github?._rmFileEntry(dummy);
                     });
@@ -114,12 +117,15 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
             return Promise.resolve(undefined);
         }
         return github.fetchFile(fToLoad).then((file) => {
-            if (file && file.isFile()) {
+            if (Array.isArray(file)) {
+                // we loaded a directory, everything is fine...
+            } else if (file && file.isFile()) {
                 if (file.dir) {
                     return file.dir.fetchDirectory()?.then(() => file);
                 } else {
-                    return github.fetchDirectoryTree(file).then(() => {
-                        return file.dir?.fetchDirectory()?.then(() => file);
+                    return github.fetchDirectoryTree(file, true).then(() => {
+                        return file;
+                        // return file.dir?.fetchDirectory()?.then(() => file);
                     });
                 }
             }

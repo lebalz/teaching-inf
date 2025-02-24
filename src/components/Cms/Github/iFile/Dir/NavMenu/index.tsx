@@ -11,6 +11,7 @@ import Badge from '@tdev-components/shared/Badge';
 import Loader from '@tdev-components/Loader';
 import NavFile from '../../File/NavFile';
 import NavItem from '@tdev-components/Cms/MdxEditor/EditorNav/BranchPathNav/NavItem';
+import { action } from 'mobx';
 
 interface Props {
     dir: Dir;
@@ -33,9 +34,10 @@ const NavMenu = observer((props: Props) => {
             trigger={
                 <div>
                     <NavItem
-                        onClick={() => {
+                        onClick={action(() => {
+                            dir.setOpen(true);
                             cmsStore.setActiveEntry(dir);
-                        }}
+                        })}
                         icon={partOf === 'menu' ? dir.icon : undefined}
                         color={dir.iconColor}
                         name={dir.name}

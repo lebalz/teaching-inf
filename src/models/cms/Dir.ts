@@ -15,20 +15,20 @@ class Dir extends iEntry {
 
     constructor(props: DirProps, store: CmsStore) {
         super(props, store);
-        when(
-            () => this.isFetched,
-            () => {
-                this.imageDir?.fetchDirectory()?.then((imgDir) => {
-                    if (imgDir) {
-                        imgDir.children.forEach((img) => {
-                            if (img.type === 'file_stub') {
-                                img.fetchContent();
-                            }
-                        });
-                    }
-                });
-            }
-        );
+        // when(
+        //     () => this.isFetched,
+        //     () => {
+        //         this.imageDir?.fetchDirectory()?.then((imgDir) => {
+        //             if (imgDir) {
+        //                 imgDir.children.forEach((img) => {
+        //                     if (img.type === 'file_stub') {
+        //                         img.fetchContent();
+        //                     }
+        //                 });
+        //             }
+        //         });
+        //     }
+        // );
     }
 
     @action
@@ -44,14 +44,17 @@ class Dir extends iEntry {
         if (this.isFetched && !force) {
             return Promise.resolve(this);
         }
-        this.apiState = ApiState.SYNCING;
-        return this.store.github?.fetchDirectory(this.branch, this.path, force).then(
-            action(() => {
-                this.apiState = ApiState.IDLE;
-                this.setIsFetched(true);
-                return this;
-            })
-        );
+        if (this.isSyncing) {
+            return Promise.resolve(this);
+        }
+        return this.withApiState(() => {
+            return this.store.github!.fetchDirectory(this.branch, this.path, force).then(
+                action(() => {
+                    this.setIsFetched(true);
+                    return this;
+                })
+            );
+        });
     }
 
     @action
