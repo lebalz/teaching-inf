@@ -19,7 +19,7 @@ export type Response = { state: ApiState; message?: string };
 interface Props {
     onDiscard: () => void;
     onCreateOrUpdate: (path: string, file?: FileStub) => Promise<Response>;
-    file?: File | BinFile;
+    file?: File | BinFile | FileStub;
 }
 
 const AddOrUpdateFile = observer((props: Props) => {
@@ -69,7 +69,12 @@ const AddOrUpdateFile = observer((props: Props) => {
                             });
                         }}
                         disableConfirm={!props.file?.isOnMainBranch}
-                        disabled={!name || name === props.file?.name || apiState !== ApiState.IDLE}
+                        disabled={
+                            !name ||
+                            name === props.file?.name ||
+                            apiState !== ApiState.IDLE ||
+                            (props.file && !props.file.isLoaded)
+                        }
                         color={isUpdate ? 'orange' : 'green'}
                         confirmText={`Wirklich auf dem ${props.file?.branch}-Branch ändern?`}
                     />

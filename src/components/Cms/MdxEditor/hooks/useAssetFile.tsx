@@ -1,5 +1,5 @@
 import { useStore } from '@tdev-hooks/useStore';
-import { observer } from 'mobx-react-lite';
+import FileStub from '@tdev-models/cms/FileStub';
 import React from 'react';
 const isRelPath = (path?: string) => {
     if (!path) {
@@ -36,7 +36,8 @@ export const useAssetFile = (relPath: string) => {
     React.useEffect(() => {
         const { branch } = editedFile || {};
         if (branch && path && !cmsStore.findEntry(branch, path)) {
-            cmsStore.fetchFile(path, branch);
+            console.log('fetching file from useAssetFile', path, branch);
+            cmsStore.fetchFile(FileStub.DummyFile(path, branch, cmsStore, false)); // TODO: set it to true?
         }
     }, [editedFile, path, cmsStore]);
 

@@ -1,7 +1,7 @@
 import { CmsStore } from '@tdev-stores/CmsStore';
-import { computed, observable } from 'mobx';
-import { BinFileProps, FileProps, iFileStub } from './FileStub';
+import { observable } from 'mobx';
 import { ApiState } from '@tdev-stores/iStore';
+import iFileStub, { BinFileProps } from './iFileStub';
 
 class BinFile extends iFileStub {
     readonly type = 'bin_file';

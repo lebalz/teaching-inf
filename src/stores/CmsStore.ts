@@ -15,13 +15,14 @@ import { computedFn } from 'mobx-utils';
 import _ from 'lodash';
 import Settings from '@tdev-models/cms/Settings';
 import Github from '@tdev-models/cms/Github';
-import FileStub from '@tdev-models/cms/FileStub';
+import FileStub, { DUMMY_PROPS } from '@tdev-models/cms/FileStub';
 import iEntry from '@tdev-models/cms/iEntry';
 import { trimSlashes } from '@tdev-models/helpers/trimSlashes';
 import PartialSettings, { REFRESH_THRESHOLD } from '@tdev-models/cms/PartialSettings';
 import imageCompression from 'browser-image-compression';
 import BinFile from '@tdev-models/cms/BinFile';
 import CmsViewStore from './ViewStores/CmsViewStore';
+import iFileStub from '@tdev-models/cms/iFileStub';
 const { organizationName, projectName } = siteConfig;
 if (!organizationName || !projectName) {
     throw new Error('"organizationName" and "projectName" must be set in docusaurus.config.ts');
@@ -68,7 +69,10 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
                 ],
             action(([fileName, branch, github]) => {
                 if (fileName && branch && github) {
-                    this.fetchFile(fileName, branch);
+                    const dummy = FileStub.DummyFile(fileName, branch, this, true);
+                    this.fetchFile(dummy).catch(() => {
+                        this.github?._rmFileEntry(dummy);
+                    });
                 }
             })
         );
@@ -104,12 +108,12 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
     }
 
     @action
-    fetchFile(fileName: string, branch: string) {
+    fetchFile(fToLoad: iFileStub) {
         const github = this.github;
         if (!github) {
             return Promise.resolve(undefined);
         }
-        return github.fetchFile(branch, fileName).then((file) => {
+        return github.fetchFile(fToLoad).then((file) => {
             if (file && file.isFile()) {
                 if (file.dir) {
                     return file.dir.fetchDirectory()?.then(() => file);
@@ -228,8 +232,8 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
         const refPath = trimSlashes(parentPath);
         return _.orderBy(
             this.github.entries.get(branch)!.filter((entry) => entry.parentPath === refPath),
-            ['type', 'name'],
-            ['asc', 'asc']
+            [(e) => (e.type === 'dir' ? 1 : -1), 'name'],
+            ['desc', 'asc']
         );
     });
 

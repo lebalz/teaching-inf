@@ -1,19 +1,17 @@
 import React from 'react';
-import clsx from 'clsx';
-import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@tdev-hooks/useStore';
 import Popup from 'reactjs-popup';
 import AddOrUpdateFile from '.';
 import Button from '@tdev-components/shared/Button';
-import { mdiFileEdit, mdiFileMove, mdiFilePlus } from '@mdi/js';
-import { trimSlashes } from '@tdev-models/helpers/trimSlashes';
+import { mdiFileEdit } from '@mdi/js';
 import { PopupActions } from 'reactjs-popup/dist/types';
 import { ApiState } from '@tdev-stores/iStore';
 import FileStub from '@tdev-models/cms/FileStub';
 import File from '@tdev-models/cms/File';
 import { resolvePath } from '@tdev-models/helpers/resolvePath';
 import BinFile from '@tdev-models/cms/BinFile';
+import { action } from 'mobx';
 
 interface Props {
     file: File | BinFile | FileStub;
@@ -23,16 +21,11 @@ interface Props {
 
 const RenameFilePopup = observer((props: Props) => {
     const cmsStore = useStore('cmsStore');
-    const { file } = props;
     const ref = React.useRef<PopupActions>(null);
     const { github, activeBranchName } = cmsStore;
-    React.useLayoutEffect(() => {
-        if (!file.isLoaded) {
-            cmsStore.fetchFile(file.path, file.branch);
-        }
-    }, [file]);
+    const file = cmsStore.findEntry(props.file.branch, props.file.path) as File | BinFile | FileStub;
 
-    if (!github || !activeBranchName || !file.isLoadedFile()) {
+    if (!github || !activeBranchName || !file) {
         return null;
     }
 
@@ -50,6 +43,11 @@ const RenameFilePopup = observer((props: Props) => {
             }
             on="click"
             disabled={props.disabled}
+            onOpen={action(() => {
+                if (!file.isLoaded && file.apiState !== ApiState.SYNCING) {
+                    cmsStore.fetchFile(file);
+                }
+            })}
             modal
             ref={ref}
             overlayStyle={{ background: 'rgba(0,0,0,0.5)' }}
@@ -58,6 +56,9 @@ const RenameFilePopup = observer((props: Props) => {
                 file={file}
                 onCreateOrUpdate={(fileName: string) => {
                     const newPath = resolvePath(file.parentPath || '', fileName);
+                    if (!file.isLoadedFile()) {
+                        return Promise.resolve({ state: ApiState.ERROR, message: 'File not loaded' });
+                    }
                     return github
                         .createOrUpdateFile(
                             newPath,
@@ -69,6 +70,7 @@ const RenameFilePopup = observer((props: Props) => {
                         .then((movedFile) => {
                             if (movedFile) {
                                 return github.deleteFile(file).then(() => {
+                                    github._rmFileEntry(file);
                                     return movedFile;
                                 });
                             }
@@ -76,12 +78,11 @@ const RenameFilePopup = observer((props: Props) => {
                         })
                         .then((movedFile) => {
                             if (movedFile) {
-                                cmsStore.github?.clearEntries(file.branch);
-                                cmsStore.fetchFile(movedFile.path, movedFile.branch).then((reloadedFile) => {
-                                    if (reloadedFile) {
-                                        reloadedFile.openRecursive();
-                                    }
-                                });
+                                // cmsStore.fetchFile(movedFile).then((reloadedFile) => {
+                                //     if (reloadedFile) {
+                                //         reloadedFile.openRecursive();
+                                //     }
+                                // });
                                 // cmsStore.setActiveEntry(movedFile, true);
                             }
                             ref.current?.close();

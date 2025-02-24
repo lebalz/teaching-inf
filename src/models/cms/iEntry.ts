@@ -82,6 +82,20 @@ abstract class iEntry {
         this.apiState = state;
     }
 
+    @action
+    withApiState<T>(fn: () => Promise<T>): Promise<T> {
+        this.setApiState(ApiState.SYNCING);
+        return fn()
+            .then((res) => {
+                this.setApiState(ApiState.IDLE);
+                return res;
+            })
+            .catch((e) => {
+                this.setApiState(ApiState.ERROR);
+                throw e;
+            });
+    }
+
     isFile(): this is File | FileStub | BinFile {
         return this._isFileType;
     }
@@ -154,14 +168,14 @@ abstract class iEntry {
         return this.store.findEntry(this.branch, resolved);
     }
 
-    loadAsset(relPath: string, force?: boolean) {
-        const entry = this.findEntryByRelativePath(relPath);
-        if (entry && !force) {
-            return Promise.resolve(entry);
-        }
-        const resolved = this.resolvePath(relPath);
-        return this.store.fetchFile(resolved, this.branch);
-    }
+    // loadAsset(relPath: string, force?: boolean) {
+    //     const entry = this.findEntryByRelativePath(relPath);
+    //     if (entry && !force) {
+    //         return Promise.resolve(entry);
+    //     }
+    //     const resolved = this.resolvePath(relPath);
+    //     return this.store.fetchFile(resolved, this.branch);
+    // }
 }
 
 export default iEntry;

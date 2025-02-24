@@ -1,8 +1,8 @@
 import { CmsStore } from '@tdev-stores/CmsStore';
 import { action, computed, observable } from 'mobx';
-import { FileProps, iFileStub } from './FileStub';
 import { ApiState } from '@tdev-stores/iStore';
 import { Position } from 'unist';
+import iFileStub, { FileProps } from './iFileStub';
 
 class File extends iFileStub {
     readonly type = 'file';

@@ -2,14 +2,14 @@ import { CmsStore } from '@tdev-stores/CmsStore';
 import { action, computed, IObservableArray, observable } from 'mobx';
 import { Octokit, RestEndpointMethodTypes as GhTypes } from '@octokit/rest';
 import siteConfig from '@generated/docusaurus.config';
-import FileStub, { FileStubProps, iFileStub } from './FileStub';
+import { FileStubProps, iFileStub } from './iFileStub';
+import FileStub from './FileStub';
 import Dir from './Dir';
 import { default as FileModel } from './File';
 import { ApiState } from '@tdev-stores/iStore';
 import Branch from './Branch';
 import PR from './PR';
 import { convertToBase64, isBinaryFile, withoutPreviewPRName } from './helpers';
-import blobToBase64 from '@tdev-models/helpers/blobToBase64';
 import BinFile from './BinFile';
 const { organizationName, projectName } = siteConfig;
 
@@ -155,26 +155,30 @@ class Github {
 
     @action
     deleteFile(file: FileModel | FileStub | BinFile) {
-        file.apiState = ApiState.SYNCING;
-        return this.octokit.repos
-            .deleteFile({
-                owner: organizationName!,
-                repo: projectName!,
-                message: `Delete ${file.path}`,
-                path: file.path,
-                sha: file.sha,
-                branch: file.branch
+        if (file.isDummy) {
+            this._rmFileEntry(file);
+            return Promise.resolve();
+        }
+        return file
+            .withApiState(() => {
+                return this.octokit.repos
+                    .deleteFile({
+                        owner: organizationName!,
+                        repo: projectName!,
+                        message: `Delete ${file.path}`,
+                        path: file.path,
+                        sha: file.sha,
+                        branch: file.branch
+                    })
+                    .then(
+                        action((res) => {
+                            if (res.status === 200) {
+                                const current = this.store.findEntry(file.branch, file.path);
+                                this._rmFileEntry(current);
+                            }
+                        })
+                    );
             })
-            .then(
-                action((res) => {
-                    if (res.status === 200) {
-                        const current = this.store.findEntry(file.branch, file.path);
-                        if (current) {
-                            this.entries.get(file.branch)!.remove(current);
-                        }
-                    }
-                })
-            )
             .catch((err) => {
                 console.error('Error deleting file', err);
                 this.store.findEntry(file.branch, file.path)?.setApiState(ApiState.ERROR);
@@ -559,112 +563,101 @@ class Github {
     }
 
     @action
-    fetchFile(
-        branch: string,
-        path: string,
-        editAfterFetch: boolean = false
-    ): Promise<FileModel | BinFile | undefined> {
-        const apiId = `${branch}:${path}`;
-        if (this.apiStates.get(apiId) === ApiState.SYNCING) {
-            console.log('Already fetching', apiId);
+    fetchFile(file: iFileStub, editAfterFetch: boolean = false): Promise<FileModel | BinFile | undefined> {
+        const { branch, path } = file;
+        if (file.apiState === ApiState.SYNCING) {
+            console.log('Already fetching', file.path, file.branch);
             return Promise.resolve(undefined);
         }
-        this.apiStates.set(apiId, ApiState.SYNCING);
-        return this.octokit.repos
-            .getContent({
-                owner: organizationName!,
-                repo: projectName!,
-                path: path,
-                ref: branch,
-                _: Date.now() // disable cache
+        return file
+            .withApiState(() => {
+                return this.octokit.repos
+                    .getContent({
+                        owner: organizationName!,
+                        repo: projectName!,
+                        path: path,
+                        ref: branch,
+                        _: Date.now() // disable cache
+                    })
+                    .then(
+                        action((res) => {
+                            const { data } = res || {};
+                            if (!data || !('type' in data) || data.type !== 'file') {
+                                if (file.isDummy) {
+                                    this._rmFileEntry(file as FileStub);
+                                }
+                                return undefined;
+                            }
+                            if ('content' in res.data) {
+                                const props = FileStub.ValidateProps(res.data);
+                                if (props) {
+                                    const file = Github.NewFileModel(res.data, res.data.content, this.store);
+                                    if (file.type === 'file_stub') {
+                                        return this.fetchRawContent(file, editAfterFetch, true);
+                                    }
+                                    this._addFileEntry(branch, file);
+                                    if (editAfterFetch) {
+                                        file.setEditing(true);
+                                    }
+                                    return file;
+                                }
+                            }
+                            throw new Error('Invalid file data: missing "content" property');
+                        })
+                    );
             })
-            .then(
-                action((res) => {
-                    const { data } = res || {};
-                    if (!data || !('type' in data) || data.type !== 'file') {
-                        this.apiStates.set(apiId, ApiState.ERROR);
-                        return undefined;
-                    }
-                    if ('content' in res.data) {
-                        const props = FileStub.ValidateProps(res.data);
-                        if (props) {
-                            const file = Github.NewFileModel(res.data, res.data.content, this.store);
-                            if (file.type === 'file_stub') {
-                                this.apiStates.set(apiId, ApiState.IDLE);
-                                return this.fetchRawContent(file, editAfterFetch);
-                            }
-                            this._addFileEntry(branch, file);
-                            if (editAfterFetch) {
-                                file.setEditing(true);
-                            }
-                            return file;
-                        }
-                    }
-                    console.log('Error fetching file', res.data);
-                    this.apiStates.set(apiId, ApiState.ERROR);
-                    return undefined;
-                })
-            )
             .catch(
                 action((err) => {
                     console.log('Error fetching file', err);
-                    this.apiStates.set(apiId, ApiState.ERROR);
                     return undefined;
                 })
-            )
-            .finally(() => {
-                if (this.apiStates.get(apiId) === ApiState.SYNCING) {
-                    this.apiStates.delete(apiId);
-                }
-            });
+            );
     }
 
     @action
     fetchRawContent(
         file: iFileStub,
-        editAfterFetch: boolean = false
+        editAfterFetch: boolean = false,
+        skipSyncCheck: boolean = false
     ): Promise<FileModel | BinFile | undefined> {
-        const apiId = `${file.branch}:${file.path}`;
-        if (this.apiStates.get(apiId) === ApiState.SYNCING) {
-            console.log('Already fetching', apiId);
+        if (!skipSyncCheck && file.apiState === ApiState.SYNCING) {
+            console.log('Already fetching', file.path, file.branch);
             return Promise.resolve(undefined);
         }
-        this.apiStates.set(apiId, ApiState.SYNCING);
-        return this.octokit.git
-            .getBlob({
-                owner: organizationName!,
-                repo: projectName!,
-                path: file.path,
-                ref: file.branch,
-                file_sha: file.sha,
-                mediaType: { format: 'raw' },
-                _: Date.now() // disable cache
+        return file
+            .withApiState(() => {
+                return this.octokit.git
+                    .getBlob({
+                        owner: organizationName!,
+                        repo: projectName!,
+                        path: file.path,
+                        ref: file.branch,
+                        file_sha: file.sha,
+                        mediaType: { format: 'raw' },
+                        _: Date.now() // disable cache
+                    })
+                    .then((res) => {
+                        return res.data as any as Uint8Array;
+                    })
+                    .then(
+                        action((binData) => {
+                            const nFile = Github.NewFileModel(file.props, binData, this.store) as
+                                | FileModel
+                                | BinFile;
+                            this._addFileEntry(file.branch, nFile);
+                            if (editAfterFetch && nFile.type === 'file') {
+                                nFile.setEditing(true);
+                            }
+                            return nFile;
+                        })
+                    );
             })
-            .then((res) => {
-                return res.data as any as Uint8Array;
-            })
-            .then(
-                action((binData) => {
-                    const nFile = Github.NewFileModel(file.props, binData, this.store) as FileModel | BinFile;
-                    this._addFileEntry(file.branch, nFile);
-                    if (editAfterFetch && nFile.type === 'file') {
-                        nFile.setEditing(true);
-                    }
-                    return nFile;
-                })
-            )
             .catch(
                 action((err) => {
                     console.log('Error fetching file', err);
-                    this.apiStates.set(apiId, ApiState.ERROR);
                     return undefined;
                 })
-            )
-            .finally(() => {
-                if (this.apiStates.get(apiId) === ApiState.SYNCING) {
-                    this.apiStates.delete(apiId);
-                }
-            });
+            );
     }
 
     /**
@@ -683,6 +676,17 @@ class Github {
             this.entries.get(branch)!.remove(old);
         }
         this.entries.get(branch)!.push(file);
+    }
+
+    /**
+     * This method removes the File only from the entries map - it won't delete or update the file on GitHub.
+     */
+    @action
+    _rmFileEntry(file: FileModel | FileStub | BinFile | Dir | undefined) {
+        if (!file || !this.entries.has(file.branch)) {
+            return;
+        }
+        this.entries.get(file.branch)!.remove(file);
     }
 
     @action
