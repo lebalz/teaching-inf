@@ -6,6 +6,8 @@ import File from './File';
 import iEntry from './iEntry';
 import Dir from './Dir';
 import PartialSettings from './PartialSettings';
+import BinFile from './BinFile';
+import FileStub from './FileStub';
 
 class Settings extends PartialSettings {
     constructor(props: FullCmsSettings, store: CmsStore) {
@@ -13,7 +15,7 @@ class Settings extends PartialSettings {
     }
 
     @computed
-    get activeEntry(): File | undefined {
+    get activeEntry(): File | BinFile | FileStub | undefined {
         if (!this.activePath || !this.activeBranchName) {
             return;
         }

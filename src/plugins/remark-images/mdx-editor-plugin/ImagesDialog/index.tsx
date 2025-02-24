@@ -11,7 +11,7 @@ import ImageGallery from './ImageGallery';
 import { usePublisher } from '@mdxeditor/editor';
 import { insertImage$ } from '..';
 import TextInput from '@tdev-components/shared/TextInput';
-import ImagePreview from '@tdev-components/Cms/Github/iFile/File/ImagePreview';
+import ImagePreview from '@tdev-components/Cms/Github/iFile/File/FilePreview/ImagePreview';
 import Button from '@tdev-components/shared/Button';
 import { default as CmsFile } from '@tdev-models/cms/File';
 import FileUpload from '@tdev-components/shared/FileUpload';

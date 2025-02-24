@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@tdev-hooks/useStore';
-import ImagePreview from '@tdev-components/Cms/Github/iFile/File/ImagePreview';
+import ImagePreview from '@tdev-components/Cms/Github/iFile/File/FilePreview/ImagePreview';
 import Loader from '@tdev-components/Loader';
 import { IMAGE_DIR_NAME } from '@tdev-models/cms/Dir';
 import Card from '@tdev-components/shared/Card';

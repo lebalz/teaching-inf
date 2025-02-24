@@ -15,20 +15,23 @@ import DefaultEditor from '@tdev-components/Cms/Github/DefaultEditor';
 import { ApiState } from '@tdev-stores/iStore';
 import Card from '@tdev-components/shared/Card';
 import Details from '@theme/Details';
-import ImagePreview from '@tdev-components/Cms/Github/iFile/File/ImagePreview';
+import ImagePreview from '@tdev-components/Cms/Github/iFile/File/FilePreview/ImagePreview';
 import PR from '@tdev-components/Cms/Github/PR';
 import Branch from '@tdev-components/Cms/Github/Branch';
 import EditorNav from './MdxEditor/EditorNav';
+import { useLoadedFile } from './MdxEditor/hooks/useLoadedFile';
+import VideoPreview from './Github/iFile/File/FilePreview/VideoPreview';
+import ShowFile from './ShowFile';
 
 const CmsLandingPage = observer(() => {
     const cmsStore = useStore('cmsStore');
     const access = useGithubAccess();
     const { settings, github, activeEntry, viewStore } = cmsStore;
-
+    const entry = useLoadedFile(activeEntry);
     if (access === 'no-token') {
         return <Redirect to={'/gh-login'} />;
     }
-    if (access === 'loading' || !settings || !github || !activeEntry) {
+    if (access === 'loading' || !settings || !github || !entry) {
         return <Layout>Loading...</Layout>;
     }
 
@@ -47,38 +50,7 @@ const CmsLandingPage = observer(() => {
                 <Directory dir={cmsStore.rootDir} className={clsx(styles.tree)} showActions="hover" compact />
             </div>
             <div className={clsx(styles.content)}>
-                {activeEntry.type === 'dir' ? (
-                    <Directory dir={activeEntry} />
-                ) : (
-                    <>
-                        {activeEntry.type === 'file' && activeEntry.content !== undefined ? (
-                            <>
-                                {activeEntry.isImage && (
-                                    <ImagePreview src={activeEntry.content} fileName={activeEntry.name} />
-                                )}
-                                {activeEntry.isMarkdown && (
-                                    <MdxEditor file={activeEntry} key={activeEntry.downloadUrl} />
-                                )}
-                                {!activeEntry.isImage && !activeEntry.isMarkdown && (
-                                    <DefaultEditor file={activeEntry} />
-                                )}
-                            </>
-                        ) : (
-                            <>
-                                {github.apiStates.get(
-                                    `${settings.activeBranchName}:${settings.activePath}`
-                                ) === ApiState.SYNCING && (
-                                    <Card>
-                                        <Loader
-                                            label={`${settings.activeBranchName}:${settings.activePath} wird geladen...`}
-                                            size={2}
-                                        />
-                                    </Card>
-                                )}
-                            </>
-                        )}
-                    </>
-                )}
+                <ShowFile file={entry} />
             </div>
             <div className={clsx(styles.footer)}>
                 <Details summary={'Files'}>

@@ -3,7 +3,7 @@ import styles from './styles.module.scss';
 import Icon from '@mdi/react';
 import { mdiCheckCircle, mdiCloudArrowUpOutline } from '@mdi/js';
 import clsx from 'clsx';
-import ImagePreview from '@tdev-components/Cms/Github/iFile/File/ImagePreview';
+import ImagePreview from '@tdev-components/Cms/Github/iFile/File/FilePreview/ImagePreview';
 import Button from '../Button';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@tdev-hooks/useStore';

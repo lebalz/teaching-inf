@@ -5,7 +5,7 @@ import { default as FileModel } from '@tdev-models/cms/File';
 import FileStub from '@tdev-models/cms/FileStub';
 import shared from '../styles.module.scss';
 import styles from './styles.module.scss';
-import ImagePreview from './ImagePreview';
+import ImagePreview from './FilePreview/ImagePreview';
 import Icon from '@mdi/react';
 import Button from '@tdev-components/shared/Button';
 import { mdiContentSave, mdiLoading, mdiRestore } from '@mdi/js';
@@ -15,6 +15,7 @@ import Link from '@docusaurus/Link';
 import { Delete } from '@tdev-components/shared/Button/Delete';
 import RenameFilePopup from './AddOrUpdateFile/RenameFilePopup';
 import BinFile from '@tdev-models/cms/BinFile';
+import PreviewPopup from './FilePreview/PreviewPopup';
 interface Props {
     file: FileModel | BinFile | FileStub;
     showActions?: 'always' | 'hover';
@@ -31,16 +32,19 @@ const File = observer((props: Props) => {
                 onClick={() => {
                     if (file.type !== 'bin_file') {
                         cmsStore.setIsEditing(file, true);
+                    } else {
+                        cmsStore.setActiveEntry(file);
                     }
                 }}
                 className={clsx(styles.fileLink)}
             >
                 <Icon path={file.icon} size={BUTTON_SIZE} color={file.iconColor} />
-                <span className={clsx(shared.item, styles.fName)} title={file.name}>
-                    {file.name}
-                </span>
+                <PreviewPopup file={file} inlineTrigger>
+                    <span className={clsx(shared.item, styles.fName)} title={file.name}>
+                        {file.name}
+                    </span>
+                </PreviewPopup>
             </Link>
-            {file.isImage && <ImagePreview src={file.type === 'bin_file' ? file.src : file.downloadUrl} />}
             <div className={clsx(styles.actions, props.showActions === 'hover' && styles.onHover)}>
                 <Delete
                     onDelete={() => {

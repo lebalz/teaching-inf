@@ -219,7 +219,7 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
         });
     }
 
-    findEntry = computedFn(function <T = Dir | FileModel | BinFile>(
+    findEntry = computedFn(function <T = Dir | FileModel | BinFile | FileStub>(
         this: CmsStore,
         branch?: string,
         path?: string
