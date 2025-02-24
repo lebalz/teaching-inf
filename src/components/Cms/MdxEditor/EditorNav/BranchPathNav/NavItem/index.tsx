@@ -11,6 +11,7 @@ interface Props {
     name: string;
     isActive?: boolean;
     className?: string;
+    propagateClick?: boolean;
 }
 
 const NavItem = observer((props: Props) => {
@@ -18,8 +19,10 @@ const NavItem = observer((props: Props) => {
         <div
             className={clsx(styles.navItem, props.className, props.isActive && styles.active)}
             onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
+                if (!props.propagateClick) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
                 props.onClick?.(e);
             }}
         >

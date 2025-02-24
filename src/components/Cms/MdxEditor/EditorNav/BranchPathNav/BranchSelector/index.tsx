@@ -73,6 +73,7 @@ const BranchSelector = observer((props: Props) => {
                                 icon={mdiSourceBranchPlus}
                                 color={'var(--ifm-color-warning)'}
                                 name="Neuer Branch"
+                                propagateClick
                             />
                         </div>
                     }

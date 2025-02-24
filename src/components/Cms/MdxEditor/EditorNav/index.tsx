@@ -8,10 +8,9 @@ import { mdiFileTree, mdiFileTreeOutline } from '@mdi/js';
 import { SIZE_S } from '@tdev-components/shared/iconSizes';
 import BranchPathNav from './BranchPathNav';
 import Loader from '@tdev-components/Loader';
-import PR from '@tdev-components/Cms/Github/PR';
-import Branch from '@tdev-components/Cms/Github/Branch';
 import useIsMobileView from '@tdev-hooks/useIsMobileView';
-import OverviewSmall from '@tdev-components/Cms/Github/PR/ExpandableOverwiew';
+import { default as PrOverview } from '@tdev-components/Cms/Github/PR/ExpandableOverwiew';
+import { default as BranchOverview } from '@tdev-components/Cms/Github/Branch/ExpandableOverwiew';
 
 interface Props {}
 
@@ -45,9 +44,9 @@ const EditorNav = observer((props: Props) => {
             <span className={clsx(styles.spacer)} />
             {cmsStore.activeBranch &&
                 (cmsStore.activeBranch.PR ? (
-                    <OverviewSmall pr={cmsStore.activeBranch.PR} />
+                    <PrOverview pr={cmsStore.activeBranch.PR} />
                 ) : (
-                    <Branch branch={cmsStore.activeBranch} hideName compact />
+                    <BranchOverview branch={cmsStore.activeBranch} />
                 ))}
         </div>
     );

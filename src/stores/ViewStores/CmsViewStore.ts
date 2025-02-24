@@ -5,7 +5,7 @@ import { action, computed, observable } from 'mobx';
 export default class CmsViewStore extends iViewStore<CmsStore> {
     @observable accessor isMobile = false;
     @observable accessor showFileTree = false;
-    @observable accessor isPrOverviewExpanded = false;
+    @observable accessor isNavOverviewExpanded = false;
 
     constructor(parent: CmsStore) {
         super(parent);
@@ -21,8 +21,8 @@ export default class CmsViewStore extends iViewStore<CmsStore> {
         this.isMobile = isMobile;
     }
     @action
-    setIsPrOverviewExpanded(isExpanded: boolean) {
-        this.isPrOverviewExpanded = isExpanded;
+    setIsNavOverviewExpanded(isExpanded: boolean) {
+        this.isNavOverviewExpanded = isExpanded;
     }
 
     @computed

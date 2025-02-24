@@ -69,6 +69,11 @@ class Branch {
     get PR() {
         return this.gitProvider.store.findPrByBranch(this.name);
     }
+
+    @computed
+    get isDefault() {
+        return this.name === this.gitProvider.defaultBranchName;
+    }
 }
 
 export default Branch;

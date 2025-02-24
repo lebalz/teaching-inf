@@ -1,27 +1,23 @@
-.PrState {
+.branchState {
     display: flex;
     align-items: center;
-    .pr {
+    .branch {
         gap: 0.15em;
+        margin: 0;
         padding: 0;
-        .prName {
-            white-space: nowrap;
+        .name {
+            display: none;
         }
     }
-    .prSpacer {
+    .branchSpacer {
         display: none;
     }
     &:not(.expanded) {
-        .prName,
-        .draft,
-        .sync,
-        .rebase,
-        .merge {
+        .delete {
             display: none;
         }
         &.mobile {
-            .reload,
-            .preview {
+            .sync {
                 display: none;
             }
         }

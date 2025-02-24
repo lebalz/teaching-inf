@@ -142,6 +142,11 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
     }
 
     @computed
+    get isOnDefaultBranch() {
+        return !!this.activeBranch?.isDefault;
+    }
+
+    @computed
     get activeFilePath() {
         return this.settings?.activePath;
     }
@@ -202,11 +207,6 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
                     return null;
                 });
         });
-    }
-
-    @computed
-    get isOnMainBranch() {
-        return this.github?.defaultBranch?.name === this.activeBranchName;
     }
 
     findEntry = computedFn(function <T = Dir | FileModel | BinFile>(

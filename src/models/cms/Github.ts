@@ -257,6 +257,9 @@ class Github {
                     if (current) {
                         this.branches.remove(current);
                     }
+                    if (this.defaultBranchName) {
+                        this.store.setBranch(this.defaultBranchName);
+                    }
                 })
             );
     }

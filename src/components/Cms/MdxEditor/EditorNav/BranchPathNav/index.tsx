@@ -2,7 +2,6 @@ import React from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
-import { useStore } from '@tdev-hooks/useStore';
 import iEntry from '@tdev-models/cms/iEntry';
 import BranchSelector from './BranchSelector';
 import NavMenu from '@tdev-components/Cms/Github/iFile/Dir/NavMenu';
