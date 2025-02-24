@@ -4,18 +4,15 @@ import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@tdev-hooks/useStore';
 import iEntry from '@tdev-models/cms/iEntry';
-import Icon from '@mdi/react';
 import BranchSelector from './BranchSelector';
 import NavMenu from '@tdev-components/Cms/Github/iFile/Dir/NavMenu';
-import Dir from '@tdev-models/cms/Dir';
 import NavFile from '@tdev-components/Cms/Github/iFile/File/NavFile';
 
 interface Props {
     item: iEntry;
 }
 
-const PathNav = observer((props: Props) => {
-    const cmsStore = useStore('cmsStore');
+const BranchPathNav = observer((props: Props) => {
     const { item } = props;
     const [closeDropdown, setCloseDropdown] = React.useState(false);
     React.useEffect(() => {
@@ -51,4 +48,4 @@ const PathNav = observer((props: Props) => {
     );
 });
 
-export default PathNav;
+export default BranchPathNav;

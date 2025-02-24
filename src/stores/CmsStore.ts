@@ -21,6 +21,7 @@ import { trimSlashes } from '@tdev-models/helpers/trimSlashes';
 import PartialSettings, { REFRESH_THRESHOLD } from '@tdev-models/cms/PartialSettings';
 import imageCompression from 'browser-image-compression';
 import BinFile from '@tdev-models/cms/BinFile';
+import CmsViewStore from './ViewStores/CmsViewStore';
 const { organizationName, projectName } = siteConfig;
 if (!organizationName || !projectName) {
     throw new Error('"organizationName" and "projectName" must be set in docusaurus.config.ts');
@@ -31,6 +32,7 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
     @observable.ref accessor settings: Settings | undefined;
     @observable.ref accessor partialSettings: PartialSettings | undefined;
     @observable.ref accessor github: Github | undefined;
+    @observable.ref accessor viewStore: CmsViewStore;
 
     @observable accessor initialized = false;
 
@@ -40,6 +42,7 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
     constructor(store: RootStore) {
         super();
         this.root = store;
+        this.viewStore = new CmsViewStore(this);
         reaction(
             () => [this.activeBranchName, this.github] as [string | undefined, Github | undefined],
             action(([branch, github]) => {

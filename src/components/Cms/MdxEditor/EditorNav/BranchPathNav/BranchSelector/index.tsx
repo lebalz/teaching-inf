@@ -50,6 +50,7 @@ const BranchSelector = observer((props: Props) => {
                     const isActive = br === activeBranchName;
                     return (
                         <NavItem
+                            key={idx}
                             icon={mdiSourceBranch}
                             color={
                                 isActive

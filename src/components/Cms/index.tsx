@@ -9,7 +9,6 @@ import { useStore } from '@tdev-hooks/useStore';
 import { useGithubAccess } from '@tdev-hooks/useGithubAccess';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
-import PathNav from '@tdev-components/Cms/MdxEditor/PathNav';
 import Directory from '@tdev-components/Cms/MdxEditor/Directory';
 import MdxEditor from '@tdev-components/Cms/MdxEditor';
 import DefaultEditor from '@tdev-components/Cms/Github/DefaultEditor';
@@ -19,20 +18,12 @@ import Details from '@theme/Details';
 import ImagePreview from '@tdev-components/Cms/Github/iFile/File/ImagePreview';
 import PR from '@tdev-components/Cms/Github/PR';
 import Branch from '@tdev-components/Cms/Github/Branch';
-import Button from '@tdev-components/shared/Button';
-import { mdiFileTree, mdiFileTreeOutline } from '@mdi/js';
-import { SIZE_S } from '@tdev-components/shared/iconSizes';
-import useIsMobileView from '@tdev-hooks/useIsMobileView';
+import EditorNav from './MdxEditor/EditorNav';
 
 const CmsLandingPage = observer(() => {
     const cmsStore = useStore('cmsStore');
     const access = useGithubAccess();
-    const isMobile = useIsMobileView(900);
-    const [showFileTree, setShowFileTree] = React.useState(false);
-    const { settings, github, activeEntry } = cmsStore;
-    React.useEffect(() => {
-        setShowFileTree(!isMobile);
-    }, [isMobile]);
+    const { settings, github, activeEntry, viewStore } = cmsStore;
 
     if (access === 'no-token') {
         return <Redirect to={'/gh-login'} />;
@@ -42,24 +33,15 @@ const CmsLandingPage = observer(() => {
     }
 
     return (
-        <main className={clsx(styles.cms, showFileTree && styles.showFileTree, !isMobile && styles.showNav)}>
+        <main
+            className={clsx(
+                styles.cms,
+                viewStore.showFileTree && styles.showFileTree,
+                viewStore.canDisplayFileTree && styles.showNav
+            )}
+        >
             <div className={clsx(styles.header)}>
-                <Button
-                    icon={showFileTree ? mdiFileTree : mdiFileTreeOutline}
-                    color={showFileTree ? 'blue' : undefined}
-                    onClick={() => {
-                        setShowFileTree(!showFileTree);
-                    }}
-                    className={clsx(styles.toggleFileTree)}
-                    size={SIZE_S}
-                />
-                <PathNav item={activeEntry} />
-                {cmsStore.activeBranch &&
-                    (cmsStore.activeBranch.PR ? (
-                        <PR pr={cmsStore.activeBranch.PR} compact />
-                    ) : (
-                        <Branch branch={cmsStore.activeBranch} hideName compact />
-                    ))}
+                <EditorNav />
             </div>
             <div className={clsx(styles.fileTree)}>
                 <Directory dir={cmsStore.rootDir} className={clsx(styles.tree)} showActions="hover" compact />

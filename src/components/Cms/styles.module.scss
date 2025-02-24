@@ -12,16 +12,11 @@
     min-height: 60vh;
     .header {
         grid-area: nav;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
         background-color: var(--ifm-background-color);
         border-top-left-radius: var(--ifm-global-radius);
         border-top-right-radius: var(--ifm-global-radius);
-        margin: 0 2px;
-        .toggleFileTree {
-            margin-right: 0.5em;
-        }
+        overflow-x: auto;
+        scrollbar-width: thin;
     }
     .fileTree {
         grid-area: fileTree;

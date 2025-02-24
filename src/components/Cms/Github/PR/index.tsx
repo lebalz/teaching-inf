@@ -24,14 +24,30 @@ import { ApiState } from '@tdev-stores/iStore';
 import Link from '@docusaurus/Link';
 import { SIZE_S, SIZE_XS } from '@tdev-components/shared/iconSizes';
 
+type PRElements =
+    | 'prName'
+    | 'reload'
+    | 'preview'
+    | 'commits'
+    | 'merged'
+    | 'closed'
+    | 'blocked'
+    | 'draft'
+    | 'sync'
+    | 'rebase'
+    | 'merge'
+    | 'spacer';
+
 interface Props {
     pr: PrModel;
     compact?: boolean;
+    className?: string;
+    classNames?: { [key in PRElements]?: string };
 }
 
 const PR = observer((props: Props) => {
     const cmsStore = useStore('cmsStore');
-    const { pr } = props;
+    const { pr, classNames } = props;
     const github = cmsStore.github;
     React.useEffect(() => {
         if (github?.defaultBranchName) {
@@ -44,8 +60,8 @@ const PR = observer((props: Props) => {
     }
 
     return (
-        <div className={clsx(styles.PR)}>
-            <Badge noPaddingLeft>
+        <div className={clsx(styles.PR, props.className)}>
+            <Badge noPaddingLeft className={clsx(classNames?.prName)}>
                 <Icon path={mdiRecordCircleOutline} size={SIZE_XS} color="var(--ifm-color-success)" />
                 <Link
                     to={pr.htmlUrl}
@@ -64,8 +80,9 @@ const PR = observer((props: Props) => {
                 }}
                 size={SIZE_S}
                 title="PR Status aktualisieren"
+                className={clsx(classNames?.reload)}
             />
-            <div className={clsx(styles.spacer)}></div>
+            <div className={clsx(styles.spacer, classNames?.spacer)}></div>
             <Button
                 icon={pr.hasPreview ? mdiEye : mdiEyeOff}
                 size={SIZE_S}
@@ -78,30 +95,44 @@ const PR = observer((props: Props) => {
                 onClick={() => {
                     pr.setPreview(!pr.hasPreview);
                 }}
+                className={clsx(classNames?.preview)}
             />
             {pr.branch && (pr.branch.aheadBy > 0 || pr.branch.behindBy > 0) && (
                 <Badge
                     noPaddingLeft
                     style={{ gap: 0 }}
                     title={`Branch ist ${pr.branch.aheadBy} Commits vor- und ${pr.branch.behindBy} Commits hinter dem ${github.defaultBranchName}-Branch`}
+                    className={clsx(classNames?.commits)}
                 >
                     <Icon path={mdiSourceCommit} size={SIZE_XS} />+{pr.branch.aheadBy}
                     {pr.branch.behindBy > 0 && `/-${pr.branch.behindBy}`}
                 </Badge>
             )}
             {pr.merged && (
-                <Badge noPaddingLeft title={`Merged: ${pr.mergedAt}`}>
+                <Badge noPaddingLeft title={`Merged: ${pr.mergedAt}`} className={clsx(classNames?.merged)}>
                     <Icon path={mdiSourceMerge} size={SIZE_XS} color="var(--ifm-color-violet)" /> Merged
                 </Badge>
             )}
             {pr.state === 'closed' && (
-                <Badge noPaddingLeft title={`Merged: ${pr.updatedAt}`}>
+                <Badge noPaddingLeft title={`Merged: ${pr.updatedAt}`} className={clsx(classNames?.closed)}>
                     <Icon path={mdiCloseCircle} size={SIZE_XS} color="var(--ifm-color-danger)" /> Closed
                 </Badge>
             )}
-            {pr.hasBlockingLabel && <Badge type="danger">Blocked</Badge>}
-            {pr.isDraft && <Badge type="danger">Draft</Badge>}
-            {pr.isClosed && <Badge type="danger">Closed</Badge>}
+            {pr.hasBlockingLabel && (
+                <Badge type="danger" className={clsx(classNames?.blocked)}>
+                    Blocked
+                </Badge>
+            )}
+            {pr.isDraft && (
+                <Badge type="danger" className={clsx(classNames?.draft)}>
+                    Draft
+                </Badge>
+            )}
+            {pr.isClosed && (
+                <Badge type="danger" className={clsx(classNames?.closed)}>
+                    Closed
+                </Badge>
+            )}
             {pr.isSynced && (
                 <>
                     {pr.branch && pr.mergeableState === 'clean' && pr.branch.behindBy > 0 && (
@@ -114,6 +145,7 @@ const PR = observer((props: Props) => {
                             onConfirm={() => {
                                 github.rebaseBranch(github.defaultBranchName!, pr.branchName);
                             }}
+                            className={clsx(classNames?.rebase)}
                         />
                     )}
                     <Confirm
@@ -127,6 +159,7 @@ const PR = observer((props: Props) => {
                         text={''}
                         confirmText="Mergen?"
                         title={`In den ${github.defaultBranchName}-Branch Mergen: ${pr.mergeableState}`}
+                        className={clsx(classNames?.merge)}
                     />
                 </>
             )}

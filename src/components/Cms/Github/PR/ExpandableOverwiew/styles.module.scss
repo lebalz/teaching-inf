@@ -1,0 +1,28 @@
+.PrState {
+    display: flex;
+    align-items: center;
+    .pr {
+        gap: 0.15em;
+        .prName {
+            white-space: nowrap;
+        }
+    }
+    .prSpacer {
+        display: none;
+    }
+    &:not(.expanded) {
+        .prName,
+        .draft,
+        .sync,
+        .rebase,
+        .merge {
+            display: none;
+        }
+        &.mobile {
+            .reload,
+            .preview {
+                display: none;
+            }
+        }
+    }
+}

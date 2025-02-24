@@ -10,7 +10,7 @@ import Card from '@tdev-components/shared/Card';
 import Badge from '@tdev-components/shared/Badge';
 import Loader from '@tdev-components/Loader';
 import NavFile from '../../File/NavFile';
-import NavItem from '@tdev-components/Cms/MdxEditor/PathNav/NavItem';
+import NavItem from '@tdev-components/Cms/MdxEditor/EditorNav/BranchPathNav/NavItem';
 
 interface Props {
     dir: Dir;

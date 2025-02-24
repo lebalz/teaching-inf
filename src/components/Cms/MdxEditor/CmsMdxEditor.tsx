@@ -27,9 +27,7 @@ import {
     tablePlugin,
     thematicBreakPlugin,
     toolbarPlugin,
-    UndoRedo,
-    useCell,
-    viewMode$
+    UndoRedo
 } from '@mdxeditor/editor';
 import _ from 'lodash';
 import '@mdxeditor/editor/style.css';

@@ -2,10 +2,8 @@
     display: flex;
     justify-content: flex-end;
     border-radius: var(--ifm-global-radius);
-    padding: 2px 0.5em;
     gap: 0.5em;
     align-items: center;
-    flex-wrap: wrap;
     .link {
         &.compact {
             max-width: 6em;

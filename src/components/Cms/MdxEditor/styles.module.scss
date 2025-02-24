@@ -8,6 +8,7 @@
     .toolbar {
         top: var(--cms-toolbar-top-offset);
         z-index: calc(var(--ifm-z-index-dropdown) + 1);
+        scrollbar-width: thin;
     }
     // style native details element according to docusaurus theme
     :global(details):not([class]) {

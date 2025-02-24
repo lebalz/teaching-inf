@@ -6,7 +6,7 @@ import { useStore } from '@tdev-hooks/useStore';
 import File from '@tdev-models/cms/File';
 import BinFile from '@tdev-models/cms/BinFile';
 import FileStub from '@tdev-models/cms/FileStub';
-import NavItem from '@tdev-components/Cms/MdxEditor/PathNav/NavItem';
+import NavItem from '@tdev-components/Cms/MdxEditor/EditorNav/BranchPathNav/NavItem';
 
 interface Props {
     file: File | BinFile | FileStub;
