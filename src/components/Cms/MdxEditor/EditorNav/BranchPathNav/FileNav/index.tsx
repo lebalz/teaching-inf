@@ -14,7 +14,7 @@ interface Props {
     className?: string;
 }
 
-const NavFile = observer((props: Props) => {
+const FileNav = observer((props: Props) => {
     const { file } = props;
     const cmsStore = useStore('cmsStore');
 
@@ -32,4 +32,4 @@ const NavFile = observer((props: Props) => {
     );
 });
 
-export default NavFile;
+export default FileNav;

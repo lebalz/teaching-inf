@@ -43,6 +43,7 @@ const BranchSelector = observer((props: Props) => {
                     />
                 </div>
             }
+            position="bottom left"
             nested
         >
             <Card classNames={{ body: styles.menu, card: styles.menuCard }}>

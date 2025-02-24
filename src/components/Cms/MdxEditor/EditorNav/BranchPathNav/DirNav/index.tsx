@@ -7,24 +7,45 @@ import Dir from '@tdev-models/cms/Dir';
 import Popup from 'reactjs-popup';
 import { PopupActions } from 'reactjs-popup/dist/types';
 import Card from '@tdev-components/shared/Card';
-import Badge from '@tdev-components/shared/Badge';
 import Loader from '@tdev-components/Loader';
-import NavFile from '../../File/NavFile';
 import NavItem from '@tdev-components/Cms/MdxEditor/EditorNav/BranchPathNav/NavItem';
 import { action } from 'mobx';
+import FileNav from '@tdev-components/Cms/MdxEditor/EditorNav/BranchPathNav/FileNav';
 
 interface Props {
     dir: Dir;
     partOf: 'nav' | 'menu';
     isActive?: boolean;
     className?: string;
+    noDropdown?: boolean;
 }
 
-const NavMenu = observer((props: Props) => {
+const DirItem = observer((props: Props) => {
+    const cmsStore = useStore('cmsStore');
+    const { dir, partOf, isActive, className } = props;
+    return (
+        <NavItem
+            onClick={action(() => {
+                dir.setOpen(true);
+                cmsStore.setActiveEntry(dir);
+            })}
+            icon={partOf === 'menu' ? dir.icon : undefined}
+            color={dir.iconColor}
+            name={dir.name}
+            isActive={isActive}
+            className={clsx(className)}
+        />
+    );
+});
+
+const DirNav = observer((props: Props) => {
     const { dir, partOf } = props;
     const cmsStore = useStore('cmsStore');
     const activeFilePath = cmsStore.activeFilePath || '';
     const ref = React.useRef<PopupActions>(null);
+    if (props.noDropdown) {
+        return <DirItem {...props} />;
+    }
 
     return (
         <Popup
@@ -33,23 +54,13 @@ const NavMenu = observer((props: Props) => {
             arrow={false}
             trigger={
                 <div>
-                    <NavItem
-                        onClick={action(() => {
-                            dir.setOpen(true);
-                            cmsStore.setActiveEntry(dir);
-                        })}
-                        icon={partOf === 'menu' ? dir.icon : undefined}
-                        color={dir.iconColor}
-                        name={dir.name}
-                        isActive={props.isActive}
-                        className={clsx(props.className)}
-                    />
+                    <DirItem {...props} />
                 </div>
             }
             onOpen={() => {
                 dir.fetchDirectory();
             }}
-            position={partOf === 'menu' ? 'right top' : undefined}
+            position={partOf === 'menu' ? 'right top' : 'bottom left'}
             offsetY={partOf === 'menu' ? -15 : 0}
             offsetX={partOf === 'menu' ? 5 : 0}
             nested
@@ -59,7 +70,7 @@ const NavMenu = observer((props: Props) => {
                 {dir.children.map((c, idx) => {
                     if (c.type === 'dir') {
                         return (
-                            <NavMenu
+                            <DirNav
                                 dir={c}
                                 key={idx}
                                 partOf="menu"
@@ -67,11 +78,11 @@ const NavMenu = observer((props: Props) => {
                             />
                         );
                     }
-                    return <NavFile file={c} key={idx} isActive={activeFilePath === c.path} />;
+                    return <FileNav file={c} key={idx} isActive={activeFilePath === c.path} />;
                 })}
             </Card>
         </Popup>
     );
 });
 
-export default NavMenu;
+export default DirNav;

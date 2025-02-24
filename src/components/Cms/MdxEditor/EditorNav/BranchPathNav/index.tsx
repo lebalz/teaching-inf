@@ -4,8 +4,9 @@ import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
 import iEntry from '@tdev-models/cms/iEntry';
 import BranchSelector from './BranchSelector';
-import NavMenu from '@tdev-components/Cms/Github/iFile/Dir/NavMenu';
-import NavFile from '@tdev-components/Cms/Github/iFile/File/NavFile';
+import FileNav from '@tdev-components/Cms/MdxEditor/EditorNav/BranchPathNav/FileNav';
+import DirNav from './DirNav';
+import useIsMobileView from '@tdev-hooks/useIsMobileView';
 
 interface Props {
     item: iEntry;
@@ -14,6 +15,7 @@ interface Props {
 const BranchPathNav = observer((props: Props) => {
     const { item } = props;
     const [closeDropdown, setCloseDropdown] = React.useState(false);
+    const isMobile = useIsMobileView(550);
     React.useEffect(() => {
         if (closeDropdown) {
             setCloseDropdown(false);
@@ -32,13 +34,13 @@ const BranchPathNav = observer((props: Props) => {
                     if (part.type === 'dir') {
                         return (
                             <div className={clsx(styles.part)} key={idx}>
-                                <NavMenu dir={part} partOf="nav" />
+                                <DirNav dir={part} partOf="nav" noDropdown={isMobile} />
                             </div>
                         );
                     }
                     return (
                         <div className={clsx(styles.part)} key={idx}>
-                            <NavFile file={part} isActive className={clsx(styles.part)} />
+                            <FileNav file={part} isActive className={clsx(styles.part)} />
                         </div>
                     );
                 })}

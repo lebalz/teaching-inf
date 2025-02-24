@@ -21,6 +21,8 @@ export default class CmsViewStore extends iViewStore<CmsStore> {
         this.isMobile = isMobile;
         if (!isMobile && !this.showFileTree) {
             this.setShowFileTree(true);
+        } else if (isMobile && this.showFileTree) {
+            this.setShowFileTree(false);
         }
     }
     @action
