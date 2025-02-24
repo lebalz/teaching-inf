@@ -25,6 +25,7 @@ export const useAssetFile = (relPath: string) => {
     const isRelAsset = React.useMemo(() => {
         return isRelPath(relPath);
     }, [relPath]);
+    // editedFile.findEntryByRelativePath(relPath);
 
     const path = React.useMemo(() => {
         if (!isRelAsset) {
@@ -36,8 +37,7 @@ export const useAssetFile = (relPath: string) => {
     React.useEffect(() => {
         const { branch } = editedFile || {};
         if (branch && path && !cmsStore.findEntry(branch, path)) {
-            console.log('fetching file from useAssetFile', path, branch);
-            cmsStore.fetchFile(FileStub.DummyFile(path, branch, cmsStore, false)); // TODO: set it to true?
+            cmsStore.fetchFile(FileStub.DummyFile(path, branch, cmsStore, true)); // TODO: set it to true?
         }
     }, [editedFile, path, cmsStore]);
 

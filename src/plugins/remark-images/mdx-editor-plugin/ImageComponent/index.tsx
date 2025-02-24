@@ -26,8 +26,7 @@ import { observer } from 'mobx-react-lite';
 import { useStore } from '@tdev-hooks/useStore';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
-import TextInput from '@tdev-components/shared/TextInput';
-import File from '@tdev-models/cms/File';
+import { useAssetFile } from '@tdev-components/Cms/MdxEditor/hooks/useAssetFile';
 
 export interface ImageEditorProps {
     nodeKey: string;
@@ -45,6 +44,7 @@ export const ImageComponent = observer((props: ImageEditorProps): React.ReactNod
     const [selection, setSelection] = React.useState<BaseSelection | null>(null);
     const activeEditorRef = React.useRef<LexicalEditor | null>(null);
     const [isResizing, setIsResizing] = React.useState<boolean>(false);
+    const gitImg = useAssetFile(src);
 
     const onDelete = React.useCallback(
         (payload: KeyboardEvent) => {
@@ -138,9 +138,6 @@ export const ImageComponent = observer((props: ImageEditorProps): React.ReactNod
     const onResizeStart = () => {
         setIsResizing(true);
     };
-
-    const { editedFile } = cmsStore;
-    const gitImg = editedFile?.findEntryByRelativePath(src);
 
     const draggable = $isNodeSelection(selection);
     const isFocused = isSelected;

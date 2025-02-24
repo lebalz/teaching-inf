@@ -221,7 +221,6 @@ export abstract class iFileStub extends iEntry {
         if (this.isLF) {
             return this.store.github?.fetchRawContent(this, editAfterFetch);
         }
-        console.log('fetching file from FileStub#fetchContent', this.path, this.branch);
         this.store.github?.fetchFile(this, editAfterFetch);
     }
 

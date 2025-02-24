@@ -677,7 +677,7 @@ class Github {
             }
         });
         if (loadRecursive && newEntries.length > 0) {
-            this.fetchDirectoryTree(newEntries[0]);
+            this.fetchDirectoryTree(newEntries[0], true);
         }
         return newEntries;
     }
