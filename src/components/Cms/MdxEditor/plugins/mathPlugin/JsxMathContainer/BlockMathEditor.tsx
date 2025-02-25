@@ -26,7 +26,7 @@ const BlockMathEditor = (props: Props) => {
                 <TabItem value="latex" label="Latex">
                     <CodeEditor
                         lang="tex"
-                        value={mdastNode.value}
+                        defaultValue={mdastNode.value}
                         onChange={(value) => {
                             updateMdastNode({ value: value });
                         }}

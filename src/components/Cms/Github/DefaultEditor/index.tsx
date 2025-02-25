@@ -26,7 +26,7 @@ const DefaultEditor = observer((props: Props) => {
             </div>
             <CodeEditor
                 lang={file.extension}
-                value={file.content}
+                defaultValue={file.content}
                 maxLines={60}
                 onChange={action((code) => file.setContent(code))}
             />

@@ -34,6 +34,14 @@ interface Props {
 }
 
 const CodeEditor = (props: Props) => {
+    const ref = React.useRef<AceEditor>(null);
+    React.useEffect(() => {
+        if (props.value !== undefined && ref.current) {
+            if (props.value !== ref.current.editor.getValue()) {
+                ref.current.editor.setValue(props.value);
+            }
+        }
+    }, [ref, props.value]);
     return (
         <div className={clsx(styles.editor, props.className)}>
             <AceEditor
@@ -44,6 +52,7 @@ const CodeEditor = (props: Props) => {
                     fontSize: 'var(--ifm-code-font-size)',
                     fontFamily: 'var(--ifm-font-family-monospace)'
                 }}
+                ref={ref}
                 fontSize={'var(--ifm-code-font-size)'}
                 focus={!!props.focus}
                 navigateToFileEnd={false}
