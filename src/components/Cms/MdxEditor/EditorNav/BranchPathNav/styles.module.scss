@@ -1,10 +1,6 @@
 .pathNav {
     --cms-nav-font-size: 0.75rem;
     --cms-nav-margin-vertical: 0px;
-    &.mobile {
-        --cms-nav-font-size: 0.85rem;
-        --cms-nav-margin-vertical: 4px;
-    }
     .breadcrumbs {
         display: flex;
         .part {
@@ -29,5 +25,12 @@
                 }
             }
         }
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .pathNav {
+        --cms-nav-font-size: 0.85rem;
+        --cms-nav-margin-vertical: 4px;
     }
 }

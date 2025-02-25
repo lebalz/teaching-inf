@@ -19,7 +19,12 @@
         .merge {
             display: none;
         }
-        &.mobile {
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .PrState {
+        &:not(.expanded) {
             .reload,
             .preview {
                 display: none;

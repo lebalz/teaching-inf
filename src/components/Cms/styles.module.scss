@@ -37,22 +37,8 @@
     .footer {
         grid-area: footer;
     }
-    &.showNav {
-        --cms-toolbar-top-offset: 84px;
-        .header {
-            position: sticky;
-            top: 60px;
-            z-index: var(--ifm-z-index-dropdown);
-        }
-    }
     &.showFileTree {
         --cms-tree-view-width: 300px;
-    }
-}
-
-@media screen and (max-width: 1200px) {
-    .cms {
-        margin: 0 1em;
     }
 }
 
@@ -62,6 +48,23 @@
         .header {
             justify-content: flex-start;
         }
+    }
+}
+
+@media screen and (min-width: 900px) {
+    .cms {
+        --cms-toolbar-top-offset: 84px;
+        .header {
+            position: sticky;
+            top: 60px;
+            z-index: var(--ifm-z-index-dropdown);
+        }
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .cms {
+        margin: 0 1em;
     }
 }
 

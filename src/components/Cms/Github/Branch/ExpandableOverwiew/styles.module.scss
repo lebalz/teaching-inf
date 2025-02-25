@@ -16,8 +16,13 @@
         .delete {
             display: none;
         }
-        &.mobile {
-            .sync {
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .branchState {
+        &:not(.expanded) {
+            .reload {
                 display: none;
             }
         }

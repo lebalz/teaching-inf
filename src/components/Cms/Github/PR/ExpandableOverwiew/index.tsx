@@ -28,13 +28,7 @@ const ExpandableOverview = observer((props: Props) => {
     }
 
     return (
-        <div
-            className={clsx(
-                styles.PrState,
-                viewStore.isMobile && styles.mobile,
-                viewStore.isNavOverviewExpanded && styles.expanded
-            )}
-        >
+        <div className={clsx(styles.PrState, viewStore.isNavOverviewExpanded && styles.expanded)}>
             <PR
                 pr={pr}
                 className={clsx(styles.pr)}

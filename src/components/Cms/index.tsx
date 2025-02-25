@@ -30,13 +30,7 @@ const CmsLandingPage = observer(() => {
     }
 
     return (
-        <main
-            className={clsx(
-                styles.cms,
-                viewStore.showFileTree && styles.showFileTree,
-                viewStore.canDisplayFileTree && styles.showNav
-            )}
-        >
+        <main className={clsx(styles.cms, viewStore.showFileTree && styles.showFileTree)}>
             <div className={clsx(styles.header)}>
                 <EditorNav />
             </div>

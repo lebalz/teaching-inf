@@ -16,7 +16,7 @@ const BranchPathNav = observer((props: Props) => {
     const { item } = props;
     const isMobile = useIsMobileView(550);
     return (
-        <div className={clsx(styles.pathNav, isMobile && styles.mobile)}>
+        <div className={clsx(styles.pathNav)}>
             <nav aria-label="breadcrumbs" className={clsx(styles.breadcrumbs)}>
                 <div className={clsx(styles.part)}>
                     <BranchSelector compact />
