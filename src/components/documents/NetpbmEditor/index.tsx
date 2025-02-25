@@ -104,33 +104,36 @@ const NetpbmEditor = observer((props: Props) => {
 
     return (
         <div>
-            <textarea 
-                rows={10}
-                className={clsx(styles.editor)}
-                onChange={(e) => setData(e.target.value)}
-                defaultValue={data} />
-            <details>
-                <summary>
-                    {displaySyntaxErrors?.length > 0 &&  <span>❌</span>}
-                    {displaySyntaxErrors?.length == 0 && displayWarnings?.length > 0 && <span>⚠️</span>}
-                    {displaySyntaxErrors?.length == 0 && displayWarnings?.length == 0 && <span>✅</span>}
-                    <span> Validierung</span>
-                </summary>
-                {displaySyntaxErrors?.length > 0 && (<Admonition type="danger" title="Syntaxfehler">
-                        <ul>
-                            {displaySyntaxErrors.map((error, index) => (
-                                <li key={index}>{error}</li>
-                            ))}
-                        </ul>
-                    </Admonition>)}
-                {displayWarnings?.length > 0 && (<Admonition type="warning" title="Warnungen">
-                        <ul>
-                            {displayWarnings.map((warnung, index) => (
-                                <li key={index}>{warnung}</li>
-                            ))}
-                        </ul>
-                    </Admonition>)}
-            </details>
+            <div className={clsx(styles.editor, { [styles.hidden]: props.noEditor })}>
+                <textarea 
+                    rows={10}
+                    className={clsx(styles.editorTextArea)}
+                    onChange={(e) => setData(e.target.value)}
+                    disabled={props.readonly}
+                    defaultValue={data} />
+                <details>
+                    <summary>
+                        {displaySyntaxErrors?.length > 0 &&  <span>❌</span>}
+                        {displaySyntaxErrors?.length == 0 && displayWarnings?.length > 0 && <span>⚠️</span>}
+                        {displaySyntaxErrors?.length == 0 && displayWarnings?.length == 0 && <span>✅</span>}
+                        <span> Validierung</span>
+                    </summary>
+                    {displaySyntaxErrors?.length > 0 && (<Admonition type="danger" title="Syntaxfehler">
+                            <ul>
+                                {displaySyntaxErrors.map((error, index) => (
+                                    <li key={index}>{error}</li>
+                                ))}
+                            </ul>
+                        </Admonition>)}
+                    {displayWarnings?.length > 0 && (<Admonition type="warning" title="Warnungen">
+                            <ul>
+                                {displayWarnings.map((warnung, index) => (
+                                    <li key={index}>{warnung}</li>
+                                ))}
+                            </ul>
+                        </Admonition>)}
+                </details>
+            </div>
             <ImageCanvas width={width} height={height} pixels={pixels} />
         </div>
     );
