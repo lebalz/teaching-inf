@@ -3,6 +3,8 @@ import styles from './styles.module.scss';
 import React, { RefObject } from 'react';
 import clsx from 'clsx';
 import Admonition from '@theme/Admonition';
+import {parseP1, PATTERN as PATTERN_P1} from './parser/p1Parser';
+import { ParserMessage, ParserResult } from './util';
 
 interface Props {
     default?: string;
@@ -13,7 +15,6 @@ interface Props {
 const NetpbmEditor = observer((props: Props) => {
 
     const SUPPORTED_FORMATS = ['P1', 'P2'];
-    const FORMAT_P1 = /P1\s+(?<width>\d+)\s+(?<height>\d+)\s+(?<raster>[\d\D\s]*)/;
 
     const [data, setData] = React.useState<string>(props.default || '');
     const [sanitizedData, setSanitizedData] = React.useState<string>('');
@@ -53,59 +54,14 @@ const NetpbmEditor = observer((props: Props) => {
         setPixels(new Uint8ClampedArray());
     };
 
-    const pushSyntaxError = (error: string | React.ReactElement) => {
-        syntaxErrors.push(error);
+    const pushSyntaxError = (error: ParserMessage | ParserMessage[]) => {
+        if (Array.isArray(error)) {
+            syntaxErrors.push(...error);
+        } else {
+            syntaxErrors.push(error);
+        }
         setDisplaySyntaxErrors(syntaxErrors);
     }
-
-    const pushWarning = (warning: string | React.ReactElement) => {  
-        warnings.push(warning);
-        setDisplayWarnings(warnings);
-    }
-
-    const parseP1 = (match: RegExpExecArray) => {
-        try {          
-            const { width: parsedWidth, height: parsedHeight, raster } = match.groups as { width: string, height: string, raster: string };
-            const width = parseInt(parsedWidth);
-            const height = parseInt(parsedHeight);
-            
-            const bits = raster.split(/\s+/);
-
-            if (bits.length === 0) {
-                pushSyntaxError('Keine Rasterdaten gefunden.');
-                return;
-            }
-
-            if (bits.length !== width * height) {
-                pushSyntaxError(`Bildgrösse ist ${width}x${height} (${width*height} Bits), aber es wurden ${bits.length} Bits gefunden.`);
-            }
-
-            const rasterData2D = [];
-            for (let row = 0; row < height; row++) {
-                for (let col = 0; col < width; col++) {
-                    const bitAscii = bits[row * width + col];
-                    if (!bitAscii) {
-                        continue;
-                    }
-
-                    const bitValue = parseInt(bitAscii);
-                    if (bitValue !== 0 && bitValue !== 1) {
-                        pushSyntaxError(<span>Ungültiger Wert in den Rasterdaten: <code>{bitAscii}</code>.</span>);
-                    }
-                    rasterData2D.push(bitValue); // red
-                    rasterData2D.push(bitValue); // green
-                    rasterData2D.push(bitValue); // blue
-                    rasterData2D.push(255); // alpha
-                }
-            }
-            
-            setHeight(parseInt(parsedHeight));
-            setWidth(parseInt(parsedWidth));
-            setPixels(new Uint8ClampedArray(rasterData2D.map(bit => bit * 255)));
-        } catch (e) {
-            pushSyntaxError('Fehler beim Parsen der Bilddaten: ' + e);
-        }
-    };
 
     const createErrorReport = () => {
         if (!sanitizedData) {
@@ -132,13 +88,23 @@ const NetpbmEditor = observer((props: Props) => {
         warnings = [];
     };
 
+    const processParserResult =(result: ParserResult) => {
+        const { imageData, syntaxErrors } = result;
+        pushSyntaxError(syntaxErrors || []);
+        if (imageData) {
+            setHeight(imageData.height);
+            setWidth(imageData.width);
+            setPixels(imageData.pixels);
+        }
+    }
+
     const render = () => {
         resetImageData();
         resetErrorsAndWarnings();
 
-        const matchP1 = FORMAT_P1.exec(sanitizedData);
+        const matchP1 = PATTERN_P1.exec(sanitizedData);
         if (matchP1) {
-            parseP1(matchP1);
+            processParserResult(parseP1(matchP1));
         } else {
             createErrorReport();
         }
