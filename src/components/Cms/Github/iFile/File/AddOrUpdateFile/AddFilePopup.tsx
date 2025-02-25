@@ -11,6 +11,7 @@ import { PopupActions } from 'reactjs-popup/dist/types';
 import { ApiState } from '@tdev-stores/iStore';
 import Dir from '@tdev-models/cms/Dir';
 import { resolvePath } from '@tdev-models/helpers/resolvePath';
+import { v4 as uuidv4 } from 'uuid';
 
 interface Props {
     dir: Dir;
@@ -42,9 +43,16 @@ const AddFilePopup = observer((props: Props) => {
             <AddOrUpdateFile
                 onCreateOrUpdate={(path: string) => {
                     const absPath = resolvePath(dir.path, path);
-                    const isDir = /\//.test(path);
+                    const isMarkdown = /\.mdx?$/i.test(path);
+                    const content = isMarkdown ? `---\nid: ${uuidv4()}\n---\n` : '\n';
                     return github
-                        .createOrUpdateFile(absPath, '\n', activeBranchName, undefined, `Create new ${path}`)
+                        .createOrUpdateFile(
+                            absPath,
+                            content,
+                            activeBranchName,
+                            undefined,
+                            `Create new ${path}`
+                        )
                         .then((file) => {
                             ref.current?.close();
                             if (file) {
