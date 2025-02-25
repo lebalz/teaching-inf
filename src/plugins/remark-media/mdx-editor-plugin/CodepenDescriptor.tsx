@@ -15,6 +15,26 @@ import { LeafDirectiveName } from '../plugin';
 
 const props: DirectiveProperty[] = [
     {
+        name: 'editable',
+        type: 'checkbox',
+        description: 'Bearbeitbar?',
+        required: false
+    },
+    {
+        name: 'theme',
+        type: 'string',
+        description: 'light, dark',
+        placeholder: 'light oder dark',
+        required: false
+    },
+    {
+        name: 'defaultTab',
+        type: 'string',
+        description: 'html,result',
+        placeholder: 'html,js,css,result',
+        required: false
+    },
+    {
         name: 'height',
         type: 'string',
         description: 'Höhe',
@@ -24,17 +44,17 @@ const props: DirectiveProperty[] = [
     {
         name: 'minWidth',
         type: 'string',
-        description: 'Breite (default: natürliche Video-Breite)',
+        description: 'Breite',
         placeholder: '100%',
         required: false
     }
 ];
-export const YoutubeDescriptor: DirectiveDescriptor = {
-    name: LeafDirectiveName.YOUTUBE,
+export const CodepenDescriptor: DirectiveDescriptor = {
+    name: LeafDirectiveName.CODEPEN,
     attributes: [],
     hasChildren: true,
     testNode(node) {
-        return node.name === LeafDirectiveName.YOUTUBE && node.type === 'leafDirective';
+        return node.name === LeafDirectiveName.CODEPEN && node.type === 'leafDirective';
     },
     Editor: observer(({ mdastNode }) => {
         const { jsxAttributes, directiveAttributes, onUpdate } = useDirectiveAttributeEditor(
@@ -43,13 +63,30 @@ export const YoutubeDescriptor: DirectiveDescriptor = {
         );
         const src = React.useMemo(() => {
             const firstChild = mdastNode.children[0];
-            return firstChild.type === 'text'
-                ? firstChild.value
-                : firstChild.type === 'link'
-                  ? firstChild.url
-                  : '';
-        }, [mdastNode]);
+            const val =
+                firstChild.type === 'text'
+                    ? firstChild.value
+                    : firstChild.type === 'link'
+                      ? firstChild.url
+                      : '';
+            let pen = val;
+            if (/codepen\.io\/.*\/pen\/.*/.test(val)) {
+                pen = val.replace(/\/pen\//, '/embed/');
+            }
 
+            const penSource = new URL(pen);
+            penSource.searchParams.set('editable', 'true');
+            if (directiveAttributes.theme) {
+                penSource.searchParams.set('theme-id', `${directiveAttributes.theme}`);
+            }
+            if (directiveAttributes.defaultTab) {
+                penSource.searchParams.set('default-tab', `${directiveAttributes.defaultTab}`);
+            }
+            if (directiveAttributes.editable !== undefined && !directiveAttributes.editable) {
+                penSource.searchParams.delete('editable');
+            }
+            return penSource.toString();
+        }, [mdastNode, directiveAttributes]);
         return (
             <Card>
                 <div className={clsx(styles.actions)}>
@@ -66,14 +103,14 @@ export const YoutubeDescriptor: DirectiveDescriptor = {
                     <iframe
                         src={src}
                         width={`${jsxAttributes.style?.minWidth || '100%'}`}
-                        height={`${jsxAttributes.style?.height || '100%'}`}
-                        allow="accelerometer; fullscreen; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        {...jsxAttributes.jsxAttributes}
+                        height={`${jsxAttributes.style?.height || '500px'}`}
+                        title="Codepen"
+                        loading="lazy"
+                        allow="fullscreen"
                         style={{
                             width: jsxAttributes.style?.minWidth
                                 ? (jsxAttributes.style?.minWidth as string)
                                 : '100%',
-                            aspectRatio: jsxAttributes.style.height ? undefined : '16 / 9',
                             ...jsxAttributes.style
                         }}
                     />

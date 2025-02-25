@@ -29,12 +29,12 @@ const props: DirectiveProperty[] = [
         required: false
     }
 ];
-export const YoutubeDescriptor: DirectiveDescriptor = {
-    name: LeafDirectiveName.YOUTUBE,
+export const CircuitDescriptor: DirectiveDescriptor = {
+    name: LeafDirectiveName.CIRCUITVERSE,
     attributes: [],
     hasChildren: true,
     testNode(node) {
-        return node.name === LeafDirectiveName.YOUTUBE && node.type === 'leafDirective';
+        return node.name === LeafDirectiveName.CIRCUITVERSE && node.type === 'leafDirective';
     },
     Editor: observer(({ mdastNode }) => {
         const { jsxAttributes, directiveAttributes, onUpdate } = useDirectiveAttributeEditor(
@@ -66,14 +66,14 @@ export const YoutubeDescriptor: DirectiveDescriptor = {
                     <iframe
                         src={src}
                         width={`${jsxAttributes.style?.minWidth || '100%'}`}
-                        height={`${jsxAttributes.style?.height || '100%'}`}
-                        allow="accelerometer; fullscreen; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        height={`${jsxAttributes.style?.height || '315px'}`}
                         {...jsxAttributes.jsxAttributes}
+                        allow="fullscreen"
                         style={{
                             width: jsxAttributes.style?.minWidth
                                 ? (jsxAttributes.style?.minWidth as string)
                                 : '100%',
-                            aspectRatio: jsxAttributes.style.height ? undefined : '16 / 9',
+                            maxWidth: '100%',
                             ...jsxAttributes.style
                         }}
                     />
