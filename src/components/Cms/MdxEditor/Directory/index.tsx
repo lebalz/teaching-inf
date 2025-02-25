@@ -9,6 +9,7 @@ import Dir from '@tdev-components/Cms/Github/iFile/Dir';
 interface Props {
     dir?: DirModel;
     className?: string;
+    contentClassName?: string;
     showActions?: 'always' | 'hover';
     compact?: boolean;
 }
@@ -29,7 +30,8 @@ const Directory = observer((props: Props) => {
         <div className={clsx(styles.directory, props.className, props.compact && styles.compact)}>
             <Card
                 classNames={{
-                    body: styles.cardBody
+                    body: styles.cardBody,
+                    card: props.contentClassName
                 }}
             >
                 <ul className={clsx(styles.dirTree)}>

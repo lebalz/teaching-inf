@@ -78,13 +78,7 @@ export const PdfDescriptor: DirectiveDescriptor = {
         }, [src]);
         const gitPDf = useAssetFile(src, false);
         return (
-            <Card
-                header={
-                    <div>
-                        {gitPDf?.type} {gitPDf?.type === 'bin_file' && gitPDf.binData.length}
-                    </div>
-                }
-            >
+            <Card>
                 <div className={clsx(styles.actions)}>
                     <GenericAttributeEditor
                         values={{ ...directiveAttributes, className: directiveAttributes.class }}
