@@ -4,3 +4,12 @@
     // resize: vertical;
     resize: none;
 }
+
+.canvas {
+    display: block;
+    max-height: 400px;
+    max-width: 100%;
+    width: auto;
+    height: 400px;
+    object-fit: contain;
+}
