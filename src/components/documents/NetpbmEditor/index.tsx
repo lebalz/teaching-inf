@@ -1,10 +1,11 @@
 import { observer } from 'mobx-react-lite';
 import styles from './styles.module.scss';
-import React, { RefObject } from 'react';
+import React from 'react';
 import clsx from 'clsx';
 import Admonition from '@theme/Admonition';
 import {parseP1, PATTERN as PATTERN_P1} from './parser/p1Parser';
 import { ParserMessage, ParserResult } from './util';
+import ImageCanvas from './ImageCanvas';
 
 interface Props {
     default?: string;
@@ -24,8 +25,6 @@ const NetpbmEditor = observer((props: Props) => {
     const [width, setWidth] = React.useState<number>(0);
     const [pixels, setPixels] = React.useState<Uint8ClampedArray>();
 
-    const canvasRef = React.useRef<HTMLCanvasElement>(null);
-
     let syntaxErrors: (string|React.ReactElement)[] = [];
     let warnings: (string|React.ReactElement)[] = [];
 
@@ -37,16 +36,6 @@ const NetpbmEditor = observer((props: Props) => {
 
         setSanitizedData(result);
     }, [data]);
-
-    React.useEffect(() => {
-        if (!pixels || pixels.length === 0 || width === 0 || height === 0) {
-            return;
-        }
-        console.log(pixels, width, height);
-        
-        const imageData = new ImageData(pixels, width, height);
-        canvasRef.current?.getContext('2d')?.putImageData(imageData, 0, 0);
-    }, [pixels]);
 
     const resetImageData = () => {
         setHeight(0);
@@ -72,7 +61,6 @@ const NetpbmEditor = observer((props: Props) => {
         if (!SUPPORTED_FORMATS.includes(lines[0].trim())) {
             pushSyntaxError(<span>Unbekanntes Format auf der ersten Zeile: <code>{lines[0].trim()}</code>. Unterstützte Formate: <code>{SUPPORTED_FORMATS.join(', ')}</code>.</span>);
         }
-
 
         const dimensionLinePattern = /\s*\d+\s+\d+\s*/;
         const dimensionLineMatch = dimensionLinePattern.exec(lines[1]);
@@ -143,7 +131,7 @@ const NetpbmEditor = observer((props: Props) => {
                         </ul>
                     </Admonition>)}
             </details>
-            <canvas ref={canvasRef} width={width} height={height} />
+            <ImageCanvas width={width} height={height} pixels={pixels} />
         </div>
     );
 });
