@@ -66,6 +66,7 @@ import { footnotePlugin } from './plugins/footnote';
 import Button from '@tdev-components/shared/Button';
 import { mathPlugin } from './plugins/mathPlugin';
 import MediaDescriptors from '@tdev-plugins/remark-media/mdx-editor-plugin';
+import { PdfDescriptor } from '@tdev-plugins/remark-pdf/mdx-editor-plugin/PdfDescriptor';
 
 export interface Props {
     file: FileModel;
@@ -125,7 +126,8 @@ const CmsMdxEditor = observer((props: Props) => {
                             MdiDescriptor,
                             FlexDirectiveDescriptor,
                             CardsDirectiveDescriptor,
-                            ...MediaDescriptors
+                            ...MediaDescriptors,
+                            PdfDescriptor
                         ]
                     }),
                     thematicBreakPlugin(),

@@ -2,7 +2,7 @@ import { useStore } from '@tdev-hooks/useStore';
 import FileStub from '@tdev-models/cms/FileStub';
 import { ApiState } from '@tdev-stores/iStore';
 import React from 'react';
-const isRelPath = (path?: string) => {
+export const isRelPath = (path?: string) => {
     if (!path) {
         return false;
     }
