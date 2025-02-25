@@ -14,6 +14,7 @@ import GenericAttributeEditor from '@tdev-components/Cms/MdxEditor/GenericAttrib
 import RemoveNode from '@tdev-components/Cms/MdxEditor/RemoveNode';
 import { useAssetFile } from '@tdev-components/Cms/MdxEditor/hooks/useAssetFile';
 import MyAttributes from '@tdev-components/Cms/MdxEditor/GenericAttributeEditor/MyAttributes';
+import { LeafDirectiveName } from '../plugin';
 
 const props: DirectiveProperty[] = [
     {
@@ -56,11 +57,11 @@ const props: DirectiveProperty[] = [
     }
 ];
 export const VideoDescriptor: DirectiveDescriptor = {
-    name: 'video',
+    name: LeafDirectiveName.VIDEO,
     attributes: [],
     hasChildren: true,
     testNode(node) {
-        return node.name === 'video' && node.type === 'leafDirective';
+        return node.name === LeafDirectiveName.VIDEO && node.type === 'leafDirective';
     },
     Editor: observer(({ mdastNode }) => {
         const { jsxAttributes, directiveAttributes, onUpdate } = useDirectiveAttributeEditor(
@@ -98,13 +99,15 @@ export const VideoDescriptor: DirectiveDescriptor = {
                 </div>
                 <div className={clsx(styles.media)}>
                     <video
-                        key={gitVideo?.type === 'bin_file' ? gitVideo?.sha : src}
                         className={clsx(styles.video)}
                         style={{ maxWidth: '100%', ...jsxAttributes.style }}
                         controls
                         {...jsxAttributes.jsxAttributes}
                     >
-                        <source src={gitVideo?.type === 'bin_file' ? gitVideo.src : src} />
+                        <source
+                            key={gitVideo?.type === 'bin_file' ? gitVideo?.sha : src}
+                            src={gitVideo?.type === 'bin_file' ? gitVideo.src : src}
+                        />
                     </video>
                 </div>
             </Card>

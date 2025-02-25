@@ -4,10 +4,6 @@ import React from 'react';
 import { DirectiveDescriptor } from '@mdxeditor/editor';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
-import * as MdiIcons from '@mdi/js';
-import Popup from 'reactjs-popup';
-import Icon from '@mdi/react';
-import { PopupActions } from 'reactjs-popup/dist/types';
 import {
     DirectiveProperty,
     useDirectiveAttributeEditor

@@ -1,5 +1,6 @@
 import { useStore } from '@tdev-hooks/useStore';
 import FileStub from '@tdev-models/cms/FileStub';
+import { ApiState } from '@tdev-stores/iStore';
 import React from 'react';
 const isRelPath = (path?: string) => {
     if (!path) {
@@ -19,7 +20,7 @@ const isRelPath = (path?: string) => {
     }
     return true;
 };
-export const useAssetFile = (relPath: string) => {
+export const useAssetFile = (relPath: string, withDummy: boolean = true) => {
     const cmsStore = useStore('cmsStore');
     const { editedFile } = cmsStore;
     const isRelAsset = React.useMemo(() => {
@@ -34,12 +35,25 @@ export const useAssetFile = (relPath: string) => {
         return editedFile?.resolvePath(relPath);
     }, [relPath, isRelAsset, editedFile]);
 
+    const file = cmsStore.findEntry(editedFile?.branch, path);
+
     React.useEffect(() => {
         const { branch } = editedFile || {};
-        if (branch && path && !cmsStore.findEntry(branch, path)) {
-            cmsStore.fetchFile(FileStub.DummyFile(path, branch, cmsStore, true)); // TODO: set it to true?
+        if (file && file.type === 'file_stub' && file.apiState === ApiState.SYNCING) {
+            return;
         }
-    }, [editedFile, path, cmsStore]);
+        if (file && file.type === 'file_stub') {
+            cmsStore.fetchFile(file);
+            return;
+        }
+        if (!file && branch && path) {
+            cmsStore.fetchFile(FileStub.DummyFile(path, branch, cmsStore, withDummy));
+        }
+    }, [editedFile, file, path, cmsStore]);
 
-    return cmsStore.findEntry(editedFile?.branch, path);
+    if (!withDummy && file?.type === 'file_stub') {
+        return undefined;
+    }
+
+    return file;
 };
