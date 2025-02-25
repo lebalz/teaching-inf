@@ -6,6 +6,7 @@ import Admonition from '@theme/Admonition';
 import {parseP1, PATTERN as PATTERN_P1} from './parser/p1Parser';
 import { ParserMessage, ParserResult } from './util';
 import ImageCanvas from './ImageCanvas';
+import { parseP2, PATTERN as PATTERN_P2 } from './parser/p2Parser';
 
 interface Props {
     default?: string;
@@ -67,6 +68,8 @@ const NetpbmEditor = observer((props: Props) => {
         if (!dimensionLineMatch) {
             pushSyntaxError(<span>Auf der zweiten Zeile werden die Dimensionen des Bildes im Format <code>BREITE HÖHE</code> (z.B. <code>10 6</code>) erwartet.</span>);
         }
+
+        // TODO: Max value for P2/P3.
     }
 
     const resetErrorsAndWarnings = () => {
@@ -91,8 +94,13 @@ const NetpbmEditor = observer((props: Props) => {
         resetErrorsAndWarnings();
 
         const matchP1 = PATTERN_P1.exec(sanitizedData);
+        const matchP2 = PATTERN_P2.exec(sanitizedData);
+
         if (matchP1) {
             processParserResult(parseP1(matchP1));
+        }
+        else if (matchP2) {
+            processParserResult(parseP2(matchP2));
         } else {
             createErrorReport();
         }
