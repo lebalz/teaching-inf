@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import React from 'react';
 import { DirectiveDescriptor } from '@mdxeditor/editor';
 import styles from './styles.module.scss';
