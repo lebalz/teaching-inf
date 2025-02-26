@@ -33,35 +33,28 @@ export const useDirectiveAttributeEditor = (
 
     const onUpdate = React.useCallback(
         (values: DirectiveValueProperty[]) => {
+            const untouchedAttributes = mdastAttributes ? _.cloneDeep(mdastAttributes) : {};
             const updatedAttributes = values.reduce<typeof mdastAttributes>((acc, prop) => {
                 if (!acc) {
                     return acc;
                 }
+                // for directives, the attribute "className" is called "class"
+                // --> like that, tha values will be correctly transformed to ".name"
+                const name = prop.name === 'className' ? 'class' : prop.name;
+                if (name in untouchedAttributes) {
+                    delete untouchedAttributes[name];
+                }
                 if (prop.value === '' || !prop.value) {
                     return acc;
                 }
-                // for directives, the attribute "className" is called "class"
-                // --> like that, tha values will be correctly transformed to ".name"
-                if (prop.name === 'className') {
-                    acc.class = prop.value;
-                } else {
-                    if (prop.value === 'true') {
-                        prop.value = '';
-                    } else if (prop.value === 'false') {
-                        return acc;
-                    }
-                    acc[prop.name] = prop.value;
+                if (prop.value === 'true') {
+                    prop.value = '';
+                } else if (prop.value === 'false') {
+                    return acc;
                 }
+                acc[name] = prop.value;
                 return acc;
             }, {});
-            const untouchedAttributes = mdastAttributes ? _.cloneDeep(mdastAttributes) : {};
-            if (updatedAttributes) {
-                Object.keys(untouchedAttributes).forEach((key) => {
-                    if (key in updatedAttributes) {
-                        delete untouchedAttributes[key];
-                    }
-                });
-            }
             updateMdastNode({ attributes: { ...(updatedAttributes || {}), ...untouchedAttributes } });
         },
         [mdastAttributes, updateMdastNode, properties]

@@ -1,10 +1,9 @@
 import React from 'react';
 import _ from 'lodash';
 import Card from '@tdev-components/shared/Card';
-import { useForm } from 'react-hook-form';
 import styles from './styles.module.scss';
 import Button from '@tdev-components/shared/Button';
-import { mdiCircleSmall, mdiClose, mdiContentSave, mdiRestore, mdiSync } from '@mdi/js';
+import { mdiCircleSmall, mdiClose, mdiContentSave, mdiIdentifier, mdiRestore } from '@mdi/js';
 import { Delete } from '@tdev-components/shared/Button/Delete';
 import clsx from 'clsx';
 import CodeEditor from '@tdev-components/shared/CodeEditor';
@@ -12,6 +11,11 @@ import { GenericPropery } from '../../GenericAttributeEditor';
 import useIsMobileView from '@tdev-hooks/useIsMobileView';
 import { SIZE_S } from '@tdev-components/shared/iconSizes';
 import Icon from '@mdi/react';
+import TextInput from '@tdev-components/shared/TextInput';
+import { v4 as uuidv4 } from 'uuid';
+import Form from '@tdev-models/Form';
+import { observer } from 'mobx-react-lite';
+import Input from './Input';
 
 /* @see https://github.com/mdx-editor/editor/blob/main/src/plugins/core/PropertyPopover.tsx */
 
@@ -33,52 +37,16 @@ export interface Props {
     canExtend?: boolean;
 }
 
-const isCheckbox = (type: string) => {
-    return type === 'checkbox' || type === 'boolean';
-};
-
-const getInputType = (type?: React.HTMLInputTypeAttribute): React.HTMLInputTypeAttribute => {
-    if (!type) {
-        return 'string';
-    }
-    if (isCheckbox(type)) {
-        return 'checkbox';
-    }
-    return type;
-};
-
 const DEFAULT_VALUE = '' as const;
 
-const Editor = (props: Props) => {
+const Editor = observer((props: Props) => {
     const { properties, title } = props;
-    const initValues = React.useMemo(() => {
-        return properties.reduce<Record<string, string | number>>((acc, { value, name, type }) => {
-            acc[name] = value || DEFAULT_VALUE;
-            return acc;
-        }, {});
+    const form = React.useMemo(() => {
+        return new Form<string>(properties, DEFAULT_VALUE);
     }, [properties]);
-    const { register, handleSubmit, setValue, watch, resetField, formState } = useForm({
-        defaultValues: initValues
-    });
+    const [newAttrName, setNewAttrName] = React.useState<string>('');
+    const [newAttrValue, setNewAttrValue] = React.useState<string>('');
     const isMobile = useIsMobileView(768);
-
-    React.useEffect(() => {
-        const subscription = watch((value, { name }) => {
-            const prop = properties.find((p) => p.name === name);
-            if (!prop) {
-                return;
-            }
-            if (prop.sideEffect) {
-                const sideEffects = prop.sideEffect(value, initValues);
-                if (sideEffects) {
-                    sideEffects.forEach(({ name, value }) => {
-                        setValue(name, value, { shouldDirty: true });
-                    });
-                }
-            }
-        });
-        return () => subscription.unsubscribe();
-    }, [watch, initValues, properties, setValue]);
 
     return (
         <Card
@@ -102,14 +70,10 @@ const Editor = (props: Props) => {
                         icon={mdiContentSave}
                         color={'green'}
                         iconSide="right"
-                        onClick={handleSubmit((data) => {
-                            const res: Record<string, string> = {};
-                            Object.entries(data).forEach(([key, val]) => {
-                                res[key] = `${val}`;
-                            });
-                            props.onChange(res);
+                        onClick={() => {
+                            props.onChange(form.values);
                             props.onClose?.();
-                        })}
+                        }}
                     >
                         Speichern
                     </Button>
@@ -128,82 +92,68 @@ const Editor = (props: Props) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {properties.map((prop) => (
-                                <tr key={prop.name}>
-                                    <th className={styles.title}>
-                                        {prop.name}
-                                        {formState.dirtyFields[prop.name] && (
-                                            <Icon
-                                                path={mdiCircleSmall}
-                                                size={1}
-                                                color="var(--ifm-color-warning)"
-                                                className={clsx(styles.dirtyIndicator)}
-                                            />
+                            {form.fieldNames.map((name, idx) => {
+                                const config = form.getConfig(name) || { name: name, type: 'expression' };
+                                return (
+                                    <tr key={idx}>
+                                        <th className={styles.title}>
+                                            {name}
+                                            {form.dirtyFields.has(name) && (
+                                                <Icon
+                                                    path={mdiCircleSmall}
+                                                    size={1}
+                                                    color="var(--ifm-color-warning)"
+                                                    className={clsx(styles.dirtyIndicator)}
+                                                />
+                                            )}
+                                        </th>
+                                        {!isMobile && (
+                                            <td className={styles.readOnlyColumnCell}>
+                                                {config.description}
+                                            </td>
                                         )}
-                                    </th>
-                                    {!isMobile && (
-                                        <td className={styles.readOnlyColumnCell}>{prop.description}</td>
-                                    )}
 
-                                    <td className={clsx(styles.propertyEditorCell)}>
-                                        <div className={clsx(styles.content)}>
-                                            {prop.type === 'expression' ? (
-                                                <CodeEditor
-                                                    defaultValue={(prop.value || DEFAULT_VALUE).trim()}
-                                                    placeholder={prop.placeholder || 'Wert'}
+                                        <td className={clsx(styles.propertyEditorCell)}>
+                                            <div className={clsx(styles.content)}>
+                                                <Input
+                                                    value={(form.getValue(name) || DEFAULT_VALUE).trim()}
                                                     onChange={(value) => {
-                                                        setValue(prop.name, value, {
-                                                            shouldDirty: value !== prop.value
-                                                        });
+                                                        form.setValue(name, value);
                                                     }}
-                                                    className={clsx(styles.codeEditor)}
-                                                    lang={prop.lang}
-                                                    hideLineNumbers
+                                                    config={config}
                                                 />
-                                            ) : (
-                                                <input
-                                                    {...register(prop.name)}
-                                                    onChange={(e) => {
-                                                        const val = isCheckbox(prop.type)
-                                                            ? e.target.checked
-                                                                ? 'true'
-                                                                : ''
-                                                            : e.target.value;
-                                                        setValue(prop.name, val, {
-                                                            shouldDirty: true
-                                                        });
-                                                    }}
-                                                    className={styles.propertyEditorInput}
-                                                    type={getInputType(prop.type)}
-                                                    title={prop.description}
-                                                    placeholder={
-                                                        prop.placeholder ? `${prop.placeholder}` : undefined
-                                                    }
-                                                />
-                                            )}
-                                            {(prop.onRecalc || prop.resettable) && (
-                                                <div className={clsx(styles.spacer)} />
-                                            )}
-                                            {prop.resettable && formState.dirtyFields[prop.name] && (
-                                                <Button
-                                                    icon={mdiRestore}
-                                                    onClick={() => {
-                                                        resetField(prop.name, {
-                                                            keepDirty: false,
-                                                            keepTouched: false
-                                                        });
-                                                    }}
-                                                    size={SIZE_S}
-                                                    title="Änderungen verwerfen"
-                                                />
-                                            )}
-                                            {prop.onRecalc && (
+                                                {config.type !== 'checkbox' && (
+                                                    <Button
+                                                        icon={mdiIdentifier}
+                                                        title="Neue UUIDv4 einfügen"
+                                                        color="blue"
+                                                        size={SIZE_S}
+                                                        onClick={() => {
+                                                            form.setValue(name, uuidv4());
+                                                        }}
+                                                    />
+                                                )}
+                                                {form.getConfig(name)
+                                                    ?.resettable /** || config.onRecalc */ && (
+                                                    <div className={clsx(styles.spacer)} />
+                                                )}
+                                                {config.resettable && form.dirtyFields.has(name) && (
+                                                    <Button
+                                                        icon={mdiRestore}
+                                                        onClick={() => {
+                                                            form.resetField(name);
+                                                        }}
+                                                        size={SIZE_S}
+                                                        title="Änderungen verwerfen"
+                                                    />
+                                                )}
+                                                {/* {name.onRecalc && (
                                                 <Button
                                                     icon={mdiSync}
                                                     onClick={() => {
-                                                        const newVal = prop.onRecalc?.();
+                                                        const newVal = name.onRecalc?.();
                                                         if (newVal) {
-                                                            setValue(prop.name, newVal, {
+                                                            setValue(name.name, newVal, {
                                                                 shouldDirty: true,
                                                                 shouldTouch: true
                                                             });
@@ -212,20 +162,75 @@ const Editor = (props: Props) => {
                                                     size={SIZE_S}
                                                     title="Neu berechnen"
                                                 />
-                                            )}
-                                        </div>
+                                            )} */}
+                                            </div>
+                                        </td>
+                                        {isMobile && (
+                                            <td className={styles.readOnlyColumnCell}>
+                                                {config.description}
+                                            </td>
+                                        )}
+                                    </tr>
+                                );
+                            })}
+                            {props.canExtend && (
+                                <tr>
+                                    <td>
+                                        <TextInput
+                                            placeholder="Neues Attribut..."
+                                            value={newAttrName}
+                                            onChange={(value) => {
+                                                setNewAttrName(value || '');
+                                            }}
+                                        />
                                     </td>
-                                    {isMobile && (
-                                        <td className={styles.readOnlyColumnCell}>{prop.description}</td>
-                                    )}
+                                    <td>
+                                        <CodeEditor
+                                            value={newAttrValue}
+                                            placeholder={'Wert...'}
+                                            onChange={(value) => {
+                                                setNewAttrValue(value || '');
+                                            }}
+                                            className={clsx(styles.codeEditor)}
+                                            hideLineNumbers
+                                        />
+                                        <Button
+                                            icon={mdiIdentifier}
+                                            title="Neue UUIDv4 einfügen"
+                                            color="blue"
+                                            size={SIZE_S}
+                                            onClick={() => {
+                                                setNewAttrValue(uuidv4());
+                                            }}
+                                        />
+                                    </td>
+                                    <td>
+                                        <Button
+                                            text="Hinzufügen"
+                                            disabled={
+                                                !newAttrName.replaceAll(' ', '') ||
+                                                !newAttrValue.trim() ||
+                                                form.fields.has(newAttrValue.replaceAll(' ', ''))
+                                            }
+                                            onClick={() => {
+                                                const newName = newAttrName.replaceAll(' ', '');
+                                                const newVal = newAttrValue.trim();
+                                                if (newName && newVal && !form.fields.has(newName)) {
+                                                    form.setValue(newAttrName, newAttrValue);
+                                                    setNewAttrName('');
+                                                    setNewAttrValue('');
+                                                }
+                                            }}
+                                        />
+                                    </td>
                                 </tr>
-                            ))}
+                            )}
                         </tbody>
                     </table>
                 </form>
             }
         </Card>
     );
-};
+});
 
 export default Editor;

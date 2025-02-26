@@ -33,7 +33,7 @@ const TextInput = observer((props: Props) => {
                 spellCheck={!props.noSpellCheck}
                 type={props.type || 'text'}
                 placeholder={props.placeholder}
-                value={props.value || text}
+                value={props.value ?? text}
                 className={clsx(props.className, styles.textInput)}
                 onChange={(e) => {
                     if (props.value === undefined) {

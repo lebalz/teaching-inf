@@ -22,14 +22,6 @@
             .content {
                 display: flex;
                 align-items: center;
-                input[type='number'],
-                input[type='search'],
-                input[type='string'] {
-                    width: calc(100% - 1px);
-                }
-            }
-            .codeEditor {
-                flex-grow: 1;
             }
         }
     }

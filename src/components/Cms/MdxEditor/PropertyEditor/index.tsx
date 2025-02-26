@@ -24,13 +24,8 @@ const PropertyEditor = (props: Props) => {
         const unknownProps = Object.keys(values)
             .filter((key) => !!values[key] && !properties.find((prop) => prop.name === key))
             .map<GenericPropery>((key) => {
-                const value = values[key];
-                const valType =
-                    value === 'true' || value === 'false'
-                        ? 'checkbox'
-                        : /^(\{|\[)/.test(value)
-                          ? 'expression'
-                          : 'text';
+                const value = `${values[key]}`;
+                const valType = value === 'true' || value === 'false' ? 'checkbox' : 'expression';
                 return { name: key, value: value, type: valType };
             });
         return [...knownProps, ...unknownProps];
@@ -42,12 +37,14 @@ const PropertyEditor = (props: Props) => {
                 .map<GenericValueProperty | undefined>(([name, value]) => {
                     const property = cProps.find((prop) => prop.name === name);
                     if (!property) {
-                        return;
+                        if (!canExtend || !value) {
+                            return;
+                        }
+                        return { name: name, value: value, type: 'expression' };
                     }
                     return { ...property, value: value };
                 })
                 .filter((a) => !!a);
-
             props.onUpdate(updatedAttributes);
         },
         [values, props.onUpdate, cProps]

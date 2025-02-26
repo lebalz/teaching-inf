@@ -4,6 +4,7 @@
     justify-content: space-between;
     .dir {
         cursor: pointer;
+        text-wrap: nowrap;
         display: flex;
         align-items: center;
         flex-grow: 1;

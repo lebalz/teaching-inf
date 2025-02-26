@@ -15,7 +15,7 @@ import { computedFn } from 'mobx-utils';
 import _ from 'lodash';
 import Settings from '@tdev-models/cms/Settings';
 import Github from '@tdev-models/cms/Github';
-import FileStub, { DUMMY_PROPS } from '@tdev-models/cms/FileStub';
+import FileStub from '@tdev-models/cms/FileStub';
 import iEntry from '@tdev-models/cms/iEntry';
 import { trimSlashes } from '@tdev-models/helpers/trimSlashes';
 import PartialSettings, { REFRESH_THRESHOLD } from '@tdev-models/cms/PartialSettings';
@@ -48,7 +48,6 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
             () => [this.activeBranchName, this.github] as [string | undefined, Github | undefined],
             action(([branch, github]) => {
                 if (branch && github) {
-                    console.log('running r1');
                     const { defaultBranchName } = github;
                     github.fetchDirectory(branch).catch((err) => {
                         console.log(`invalid branch, resetting to default: ${defaultBranchName}`, err);
@@ -69,8 +68,6 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
                     Github | undefined
                 ],
             action(([fileName, branch, github]) => {
-                console.log('running r2');
-
                 if (fileName && branch && github) {
                     const dummy = FileStub.DummyFile(fileName, branch, this, false);
                     this.fetchFile(dummy).catch(() => {

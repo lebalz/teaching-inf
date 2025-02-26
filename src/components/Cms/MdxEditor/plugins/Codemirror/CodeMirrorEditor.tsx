@@ -46,24 +46,49 @@ const PYTHON_PROPS: GenericPropery[] = [
         type: 'checkbox',
         required: false,
         sideEffect: (props, initial) => {
-            if (props.live_py && !props.id && !props.slim) {
-                return [{ name: 'id', value: (initial.id as string) || v4() }];
-            } else if (!props.live_py) {
-                const change = [];
-                if (props.slim) {
-                    change.push({ name: 'slim', value: '' });
+            const livePy = props.live_py === 'true';
+            const slim = props.slim === 'true';
+            const delta: { name: string; value: string }[] = [];
+            if (livePy) {
+                if (!slim && !props.id) {
+                    delta.push({ name: 'id', value: (initial.id as string) || v4() });
+                }
+            } else {
+                if (slim) {
+                    delta.push({ name: 'slim', value: '' });
                 }
                 if (props.id) {
-                    change.push({ name: 'id', value: '' });
+                    delta.push({ name: 'id', value: '' });
                 }
-                return change;
             }
+            return delta;
         }
     },
     {
         name: 'slim',
         type: 'checkbox',
-        required: false
+        required: false,
+        sideEffect: (props, initial) => {
+            const delta: { name: string; value: string }[] = [];
+            const slim = props.slim === 'true';
+            const livePy = props.live_py === 'true';
+            if (livePy && slim && !props.id) {
+                return;
+            }
+            if (slim) {
+                if (!livePy) {
+                    delta.push({ name: 'live_py', value: 'true' });
+                }
+                if (props.id) {
+                    delta.push({ name: 'id', value: '' });
+                }
+            } else {
+                if (livePy) {
+                    delta.push({ name: 'id', value: `${initial.id}` || v4() });
+                }
+            }
+            return delta;
+        }
     },
     {
         name: 'id',
@@ -71,15 +96,19 @@ const PYTHON_PROPS: GenericPropery[] = [
         required: false,
         sideEffect: (props, initial) => {
             const delta: { name: string; value: string }[] = [];
-            if (!props.live_py) {
-                return;
-            }
+            const livePy = props.live_py === 'true';
+            const slim = props.slim === 'true';
             if (props.id) {
-                if (props.slim) {
+                if (slim) {
                     delta.push({ name: 'slim', value: '' });
                 }
-            } else if (!props.slim) {
-                delta.push({ name: 'slim', value: 'true' });
+                if (!livePy) {
+                    delta.push({ name: 'live_py', value: 'true' });
+                }
+            } else {
+                if (!slim) {
+                    delta.push({ name: 'slim', value: 'true' });
+                }
             }
             return delta;
         },
