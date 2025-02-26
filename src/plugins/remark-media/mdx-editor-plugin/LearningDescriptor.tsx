@@ -16,14 +16,14 @@ import { LeafDirectiveName } from '../plugin';
 const props: DirectiveProperty[] = [
     {
         name: 'height',
-        type: 'string',
+        type: 'text',
         description: 'Höhe',
         placeholder: '100%',
         required: false
     },
     {
         name: 'minWidth',
-        type: 'string',
+        type: 'text',
         description: 'Breite (default: natürliche Video-Breite)',
         placeholder: '100%',
         required: false

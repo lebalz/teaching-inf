@@ -16,6 +16,7 @@ interface Props {
     label?: string;
     noSpellCheck?: boolean;
     noAutoFocus?: boolean;
+    required?: boolean;
 }
 
 const TextInput = observer((props: Props) => {
@@ -35,6 +36,7 @@ const TextInput = observer((props: Props) => {
                 placeholder={props.placeholder}
                 value={props.value ?? text}
                 className={clsx(props.className, styles.textInput)}
+                required={props.required}
                 onChange={(e) => {
                     if (props.value === undefined) {
                         setText(e.target.value);

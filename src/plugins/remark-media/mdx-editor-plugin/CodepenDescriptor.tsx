@@ -22,28 +22,28 @@ const props: DirectiveProperty[] = [
     },
     {
         name: 'theme',
-        type: 'string',
+        type: 'text',
         description: 'light, dark',
         placeholder: 'light oder dark',
         required: false
     },
     {
         name: 'defaultTab',
-        type: 'string',
+        type: 'text',
         description: 'html,result',
         placeholder: 'html,js,css,result',
         required: false
     },
     {
         name: 'height',
-        type: 'string',
+        type: 'text',
         description: 'Höhe',
         placeholder: '100%',
         required: false
     },
     {
         name: 'minWidth',
-        type: 'string',
+        type: 'text',
         description: 'Breite',
         placeholder: '100%',
         required: false

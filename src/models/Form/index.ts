@@ -28,10 +28,10 @@ export default class Form<T = string> {
     }
 
     @action
-    resetField(name: string) {
+    resetField(name: string, toDefault?: boolean) {
         const field = this.find(name);
         if (field?.isInitField) {
-            field.resetValue();
+            field.resetValue(toDefault);
         } else {
             this.removeField(name);
         }
@@ -43,7 +43,7 @@ export default class Form<T = string> {
         if (field) {
             field.setValue(value);
         } else {
-            this.fields.push(new Field({ name, value, type: 'string' }, this));
+            this.fields.push(new Field({ name, value, type: 'text', removable: true }, this));
         }
     }
 

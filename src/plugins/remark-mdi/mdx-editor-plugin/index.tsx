@@ -21,13 +21,13 @@ export const DEFAULT_SIZE = '1.25em';
 const props: DirectiveProperty[] = [
     {
         name: 'spin',
-        type: 'string',
+        type: 'text',
         placeholder: 'true',
         description: 'true = 2s, -2 counterclockwise, {spin}s',
         required: false
     },
 
-    { name: 'size', type: 'string', description: '2, 1em, 48px', required: false, placeholder: DEFAULT_SIZE },
+    { name: 'size', type: 'text', description: '2, 1em, 48px', required: false, placeholder: DEFAULT_SIZE },
     {
         name: 'rotate',
         type: 'number',
@@ -37,21 +37,21 @@ const props: DirectiveProperty[] = [
     },
     {
         name: 'color',
-        type: 'string',
+        type: 'text',
         description: 'rgb() / rgba() / #000',
         required: false,
         placeholder: 'undefined'
     },
     {
         name: 'className',
-        type: 'string',
+        type: 'text',
         description: 'additional class names',
         required: false,
         placeholder: 'undefined'
     },
     {
         name: 'title',
-        type: 'string',
+        type: 'text',
         description: 'A11y <title>{title}</title>',
         required: false,
         placeholder: 'undefined'

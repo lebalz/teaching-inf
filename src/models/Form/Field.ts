@@ -11,7 +11,9 @@ export interface FormField<T> {
     type: React.HTMLInputTypeAttribute | 'expression';
     label?: string;
     resettable?: boolean;
+    removable?: boolean;
     sideEffect?: (fields: Form<T>) => void;
+    generateNewValue?: () => T;
 }
 
 export default class Field<T = string> {
@@ -26,7 +28,9 @@ export default class Field<T = string> {
     readonly resettable?: boolean;
     readonly _pristine: T | undefined;
     readonly sideEffect?: (fields: Form<T>) => void;
+    readonly generateNewValue?: () => T;
     readonly isInitField: boolean;
+    readonly isRemovable: boolean;
 
     @observable accessor value: T;
 
@@ -43,12 +47,18 @@ export default class Field<T = string> {
         this.type = data.type;
         this.label = data.label;
         this.resettable = data.resettable;
+        this.isRemovable = data.removable ?? false;
         this.sideEffect = data.sideEffect;
+        this.generateNewValue = data.generateNewValue;
     }
 
     @action
-    resetValue(skipSideEffects?: boolean) {
-        this.setValue(this.form.defaultValue, skipSideEffects);
+    resetValue(toDefault?: boolean, skipSideEffects?: boolean) {
+        if (toDefault) {
+            this.setValue(this.form.defaultValue, skipSideEffects);
+        } else {
+            this.setValue(this._pristine || this.form.defaultValue, skipSideEffects);
+        }
     }
 
     @action
@@ -59,6 +69,18 @@ export default class Field<T = string> {
         this.value = value;
         if (!skipSideEffects) {
             this.form.runSideEffect(this);
+        }
+    }
+
+    @computed
+    get canRegenerateValue() {
+        return !!this.generateNewValue;
+    }
+
+    @action
+    regenerateValue() {
+        if (this.generateNewValue) {
+            this.setValue(this.generateNewValue());
         }
     }
 

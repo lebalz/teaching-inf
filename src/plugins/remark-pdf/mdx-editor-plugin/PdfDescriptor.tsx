@@ -31,13 +31,13 @@ const props: DirectiveProperty[] = [
     {
         name: 'width',
         description: 'Breite',
-        type: 'string',
+        type: 'text',
         required: false
     },
     {
         name: 'minWidth',
         description: 'Mindestbreite',
-        type: 'string',
+        type: 'text',
         required: false
     },
     {

@@ -25,8 +25,8 @@ const PropertyEditor = (props: Props) => {
             .filter((key) => !!values[key] && !properties.find((prop) => prop.name === key))
             .map<GenericPropery>((key) => {
                 const value = `${values[key]}`;
-                const valType = value === 'true' || value === 'false' ? 'checkbox' : 'expression';
-                return { name: key, value: value, type: valType };
+                const valType = value === 'true' || value === 'false' ? 'checkbox' : 'text';
+                return { name: key, value: value, type: valType, removable: true };
             });
         return [...knownProps, ...unknownProps];
     }, [values, properties, canExtend]);
@@ -40,7 +40,7 @@ const PropertyEditor = (props: Props) => {
                         if (!canExtend || !value) {
                             return;
                         }
-                        return { name: name, value: value, type: 'expression' };
+                        return { name: name, value: value, type: 'text' };
                     }
                     return { ...property, value: value };
                 })
@@ -49,7 +49,7 @@ const PropertyEditor = (props: Props) => {
         },
         [values, props.onUpdate, cProps]
     );
-    if (cProps.length === 0) {
+    if (cProps.length === 0 && !canExtend) {
         return null;
     }
     return <Editor onChange={onChange} properties={cProps} onClose={props.onClose} canExtend={canExtend} />;

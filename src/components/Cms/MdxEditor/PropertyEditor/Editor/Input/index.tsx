@@ -36,27 +36,14 @@ const Input = observer((props: Props) => {
             />
         );
     }
-    if (field.type === 'string') {
-        return (
-            <TextInput
-                onChange={(val) => field.setValue(val)}
-                value={field.value}
-                noAutoFocus
-                noSpellCheck
-                placeholder={field.placeholder}
-            />
-        );
-    }
     return (
-        <input
-            onChange={(e) => {
-                field.setValue(e.target.value);
-            }}
+        <TextInput
+            onChange={(val) => field.setValue(val)}
             value={field.value}
-            className={styles.generic}
-            type={field.type}
-            title={field.description}
+            noAutoFocus
+            noSpellCheck
             placeholder={field.placeholder}
+            type={field.type}
         />
     );
 });

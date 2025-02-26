@@ -11,10 +11,10 @@ import { useAttributeEditorInNestedEditor } from '../../hooks/useAttributeEditor
 import { parseExpression } from '../../PropertyEditor/parseValue';
 
 const props: GenericPropery[] = [
-    { name: 'url', type: 'string', required: false, placeholder: 'http://localhost:3000' },
-    { name: 'minHeight', type: 'string', required: false, placeholder: 'undefined' },
-    { name: 'maxHeight', type: 'string', required: false, placeholder: 'undefined' },
-    { name: 'className', type: 'string', required: false, placeholder: 'undefined' },
+    { name: 'url', type: 'text', required: false, placeholder: 'http://localhost:3000' },
+    { name: 'minHeight', type: 'text', required: false, placeholder: 'undefined' },
+    { name: 'maxHeight', type: 'text', required: false, placeholder: 'undefined' },
+    { name: 'className', type: 'text', required: false, placeholder: 'undefined' },
     {
         name: 'style',
         type: 'expression',
@@ -67,6 +67,7 @@ const BrowserWindowDescriptor: JsxComponentDescriptor = {
                         properties={descriptor.props}
                         onUpdate={onUpdate}
                         values={values}
+                        canExtend
                     />
                     <RemoveNode />
                 </div>

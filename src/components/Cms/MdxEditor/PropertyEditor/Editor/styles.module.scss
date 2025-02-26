@@ -17,12 +17,20 @@
             }
         }
         .propertyEditorCell {
-            min-width: 20em;
+            min-width: 24em;
             text-align: right;
             .content {
                 display: flex;
                 align-items: center;
             }
+        }
+        .description {
+            font-size: 0.8em;
+            color: var(--ifm-color-emphasis-600);
+            max-width: 20em;
+        }
+        .addAttribute {
+            display: inline-flex;
         }
     }
     .buttonsFooter {

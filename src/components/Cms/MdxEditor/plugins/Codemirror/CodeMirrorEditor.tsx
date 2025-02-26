@@ -55,8 +55,8 @@ const PYTHON_PROPS: GenericPropery[] = [
                 const id = form.find('id');
                 form.setValue('id', id?._pristine || v4());
             } else {
-                form.resetField('slim');
-                form.resetField('id');
+                form.resetField('slim', true);
+                form.resetField('id', true);
             }
         })
     },
@@ -75,7 +75,7 @@ const PYTHON_PROPS: GenericPropery[] = [
             }
             if (slim.checkboxValue) {
                 form.setValue('live_py', 'true');
-                form.resetField('id');
+                form.resetField('id', true);
             } else {
                 if (livePy.checkboxValue) {
                     const id = form.find('id');
@@ -86,7 +86,7 @@ const PYTHON_PROPS: GenericPropery[] = [
     },
     {
         name: 'id',
-        type: 'string',
+        type: 'text',
         required: false,
         sideEffect: (form) => {
             const livePy = form.find('live_py');
@@ -95,16 +95,16 @@ const PYTHON_PROPS: GenericPropery[] = [
                 return;
             }
             if (form.find('id')) {
-                slim.resetValue();
+                slim.resetValue(true);
                 livePy.setValue('true');
             } else {
                 slim.setValue('true');
             }
         },
-        resettable: true
-        // onRecalc: () => {
-        //     return v4();
-        // }
+        resettable: true,
+        generateNewValue: () => {
+            return v4();
+        }
     },
     { name: 'readonly', type: 'checkbox', required: false },
     { name: 'noDownload', type: 'checkbox', required: false },
@@ -256,12 +256,12 @@ export const CodeMirrorEditor = ({ language, nodeKey, code, focusEmitter, meta }
 
     const properties = React.useMemo<GenericPropery[]>(() => {
         const props: GenericPropery[] = [
-            { name: 'title', type: 'string', required: false, placeholder: 'Title' }
+            { name: 'title', type: 'text', required: false, placeholder: 'Title' }
         ];
         if (['python', 'py', 'mpy'].includes(language)) {
             props.push(...PYTHON_PROPS);
         } else {
-            props.push({ name: 'highlightedLines', type: 'string', required: false, placeholder: '1,4-6,9' });
+            props.push({ name: 'highlightedLines', type: 'text', required: false, placeholder: '1,4-6,9' });
             props.push({ name: 'showLineNumbers', type: 'checkbox', required: false });
         }
         return props;
@@ -275,41 +275,51 @@ export const CodeMirrorEditor = ({ language, nodeKey, code, focusEmitter, meta }
             }}
             header={
                 <>
-                    <Popup
-                        trigger={
-                            <div>
-                                <Badge color="blue">{language || '-'}</Badge>
-                            </div>
-                        }
-                        on={['click', 'hover']}
-                        keepTooltipInside="#__docusaurus"
-                        position={['bottom left', 'top left', 'left center']}
-                        closeOnDocumentClick
-                        lockScroll
-                        closeOnEscape
-                    >
-                        <Card classNames={{ body: styles.languagePopup }}>
-                            {[['', '-'], ...Object.entries(codeBlockLanguages)].map(([value, label], idx) => {
-                                return (
-                                    <Button
-                                        key={idx}
-                                        text={label}
-                                        color={value === language ? 'blue' : undefined}
-                                        onClick={() => {
-                                            parentEditor.update(() => {
-                                                lexicalNode.setLanguage(value);
-                                                setTimeout(() => {
+                    <div className={clsx(styles.actions)}>
+                        <Popup
+                            trigger={
+                                <div>
+                                    <Badge color="blue">{language || '-'}</Badge>
+                                </div>
+                            }
+                            on={['click', 'hover']}
+                            keepTooltipInside="#__docusaurus"
+                            position={['bottom left', 'top left', 'left center']}
+                            closeOnDocumentClick
+                            lockScroll
+                            closeOnEscape
+                        >
+                            <Card classNames={{ body: styles.languagePopup }}>
+                                {[['', '-'], ...Object.entries(codeBlockLanguages)].map(
+                                    ([value, label], idx) => {
+                                        return (
+                                            <Button
+                                                key={idx}
+                                                text={label}
+                                                color={value === language ? 'blue' : undefined}
+                                                onClick={() => {
                                                     parentEditor.update(() => {
-                                                        lexicalNode.getLatest().select();
+                                                        lexicalNode.setLanguage(value);
+                                                        setTimeout(() => {
+                                                            parentEditor.update(() => {
+                                                                lexicalNode.getLatest().select();
+                                                            });
+                                                        });
                                                     });
-                                                });
-                                            });
-                                        }}
-                                    />
-                                );
-                            })}
-                        </Card>
-                    </Popup>
+                                                }}
+                                            />
+                                        );
+                                    }
+                                )}
+                            </Card>
+                        </Popup>
+                        <GenericAttributeEditor
+                            onUpdate={onUpdate}
+                            properties={properties}
+                            values={metaProps}
+                            title="Eigenschaften"
+                        />
+                    </div>
                     <MyAttributes
                         className={clsx(styles.props)}
                         attributes={metaProps}
@@ -328,12 +338,6 @@ export const CodeMirrorEditor = ({ language, nodeKey, code, focusEmitter, meta }
                                 });
                             }}
                             size={SIZE_S}
-                        />
-                        <GenericAttributeEditor
-                            onUpdate={onUpdate}
-                            properties={properties}
-                            values={metaProps}
-                            title="Eigenschaften"
                         />
                     </div>
                 </>

@@ -3,10 +3,9 @@ import _ from 'lodash';
 import Card from '@tdev-components/shared/Card';
 import styles from './styles.module.scss';
 import Button from '@tdev-components/shared/Button';
-import { mdiCircleSmall, mdiClose, mdiContentSave, mdiIdentifier, mdiRestore } from '@mdi/js';
+import { mdiCircleSmall, mdiClose, mdiContentSave, mdiIdentifier, mdiRestore, mdiSync } from '@mdi/js';
 import { Delete } from '@tdev-components/shared/Button/Delete';
 import clsx from 'clsx';
-import CodeEditor from '@tdev-components/shared/CodeEditor';
 import { GenericPropery } from '../../GenericAttributeEditor';
 import useIsMobileView from '@tdev-hooks/useIsMobileView';
 import { SIZE_S } from '@tdev-components/shared/iconSizes';
@@ -86,9 +85,9 @@ const Editor = observer((props: Props) => {
                         <thead>
                             <tr>
                                 <th className={styles.readOnlyColumnCell}>Attribut</th>
-                                {!isMobile && <th>Wert</th>}
-                                <th className={styles.readOnlyColumnCell}>Beschreibung</th>
                                 {isMobile && <th>Wert</th>}
+                                <th className={styles.readOnlyColumnCell}>Beschreibung</th>
+                                {!isMobile && <th>Wert</th>}
                             </tr>
                         </thead>
                         <tbody>
@@ -107,56 +106,51 @@ const Editor = observer((props: Props) => {
                                             )}
                                         </th>
                                         {!isMobile && (
-                                            <td className={styles.readOnlyColumnCell}>{field.description}</td>
+                                            <td className={styles.description}>{field.description}</td>
                                         )}
 
                                         <td className={clsx(styles.propertyEditorCell)}>
                                             <div className={clsx(styles.content)}>
                                                 <Input field={field} />
-                                                {!field.isCheckbox && (
-                                                    <Button
-                                                        icon={mdiIdentifier}
-                                                        title="Neue UUIDv4 einfügen"
-                                                        color="blue"
-                                                        size={SIZE_S}
-                                                        onClick={() => {
-                                                            field.setValue(uuidv4());
-                                                        }}
-                                                    />
-                                                )}
                                                 {field.resettable /** || field.onRecalc */ && (
                                                     <div className={clsx(styles.spacer)} />
                                                 )}
-                                                {field.resettable && field.isDirty && (
+                                                {field.canRegenerateValue && (
+                                                    <Button
+                                                        icon={mdiSync}
+                                                        onClick={() => {
+                                                            field.regenerateValue();
+                                                        }}
+                                                        size={SIZE_S}
+                                                        title="Neu berechnen"
+                                                    />
+                                                )}
+                                                {field.isDirty && (
                                                     <Button
                                                         icon={mdiRestore}
                                                         onClick={() => {
                                                             field.resetValue();
                                                         }}
                                                         size={SIZE_S}
+                                                        color="orange"
                                                         title="Änderungen verwerfen"
                                                     />
                                                 )}
-                                                {/* {name.onRecalc && (
-                                                <Button
-                                                    icon={mdiSync}
-                                                    onClick={() => {
-                                                        const newVal = name.onRecalc?.();
-                                                        if (newVal) {
-                                                            setValue(name.name, newVal, {
-                                                                shouldDirty: true,
-                                                                shouldTouch: true
-                                                            });
-                                                        }
-                                                    }}
-                                                    size={SIZE_S}
-                                                    title="Neu berechnen"
-                                                />
-                                            )} */}
+                                                {field.isRemovable && (
+                                                    <Button
+                                                        icon={mdiClose}
+                                                        onClick={() => {
+                                                            form.removeField(field.name);
+                                                        }}
+                                                        size={SIZE_S}
+                                                        color="red"
+                                                        title="Entfernen"
+                                                    />
+                                                )}
                                             </div>
                                         </td>
                                         {isMobile && (
-                                            <td className={styles.readOnlyColumnCell}>{field.description}</td>
+                                            <td className={styles.description}>{field.description}</td>
                                         )}
                                     </tr>
                                 );
@@ -167,49 +161,51 @@ const Editor = observer((props: Props) => {
                                         <TextInput
                                             placeholder="Neues Attribut..."
                                             value={newAttrName}
+                                            required
                                             onChange={(value) => {
                                                 setNewAttrName(value || '');
                                             }}
                                         />
                                     </td>
-                                    <td>
-                                        <CodeEditor
-                                            value={newAttrValue}
-                                            placeholder={'Wert...'}
-                                            onChange={(value) => {
-                                                setNewAttrValue(value || '');
-                                            }}
-                                            className={clsx(styles.codeEditor)}
-                                            hideLineNumbers
-                                        />
-                                        <Button
-                                            icon={mdiIdentifier}
-                                            title="Neue UUIDv4 einfügen"
-                                            color="blue"
-                                            size={SIZE_S}
-                                            onClick={() => {
-                                                setNewAttrValue(uuidv4());
-                                            }}
-                                        />
-                                    </td>
-                                    <td>
-                                        <Button
-                                            text="Hinzufügen"
-                                            disabled={
-                                                !newAttrName.replaceAll(' ', '') ||
-                                                !newAttrValue.trim() ||
-                                                !!form.find(newAttrValue.replaceAll(' ', ''))
-                                            }
-                                            onClick={() => {
-                                                const newName = newAttrName.replaceAll(' ', '');
-                                                const newVal = newAttrValue.trim();
-                                                if (newName && newVal && !form.find(newName)) {
-                                                    form.setValue(newAttrName, newAttrValue);
-                                                    setNewAttrName('');
-                                                    setNewAttrValue('');
+                                    <td colSpan={2}>
+                                        <div className={clsx(styles.addAttribute)}>
+                                            <TextInput
+                                                value={newAttrValue}
+                                                placeholder={'Wert...'}
+                                                onChange={(value) => {
+                                                    setNewAttrValue(value || '');
+                                                }}
+                                                type="text"
+                                                required
+                                            />
+                                            <Button
+                                                icon={mdiIdentifier}
+                                                title="Neue UUIDv4 einfügen"
+                                                color="blue"
+                                                size={SIZE_S}
+                                                onClick={() => {
+                                                    setNewAttrValue(uuidv4());
+                                                }}
+                                            />
+                                            <Button
+                                                text="Hinzufügen"
+                                                disabled={
+                                                    !newAttrName.replaceAll(' ', '') ||
+                                                    !newAttrValue.trim() ||
+                                                    !!form.find(newAttrValue.replaceAll(' ', ''))
                                                 }
-                                            }}
-                                        />
+                                                color="blue"
+                                                onClick={() => {
+                                                    const newName = newAttrName.replaceAll(' ', '');
+                                                    const newVal = newAttrValue.trim();
+                                                    if (newName && newVal && !form.find(newName)) {
+                                                        form.setValue(newAttrName, newAttrValue);
+                                                        setNewAttrName('');
+                                                        setNewAttrValue('');
+                                                    }
+                                                }}
+                                            />
+                                        </div>
                                     </td>
                                 </tr>
                             )}
