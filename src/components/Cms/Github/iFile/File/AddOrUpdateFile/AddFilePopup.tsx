@@ -44,7 +44,7 @@ const AddFilePopup = observer((props: Props) => {
                 onCreateOrUpdate={(path: string) => {
                     const absPath = resolvePath(dir.path, path);
                     const isMarkdown = /\.mdx?$/i.test(path);
-                    const content = isMarkdown ? `---\nid: ${uuidv4()}\n---\n` : '\n';
+                    const content = isMarkdown ? `---\npage_id: ${uuidv4()}\n---\n` : '\n';
                     return github
                         .createOrUpdateFile(
                             absPath,
