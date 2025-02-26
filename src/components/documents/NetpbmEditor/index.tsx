@@ -8,18 +8,22 @@ import { ParserMessage, ParserResult } from './util';
 import ImageCanvas from './ImageCanvas';
 import { parseP2, PATTERN as PATTERN_P2 } from './parser/p2Parser';
 import { parseP3, PATTERN as PATTERN_P3 } from './parser/p3Parser';
+import { MetaInit, ModelMeta } from '@tdev-models/documents/NetpbmGrapic';
+import { useFirstMainDocument } from '@tdev-hooks/useFirstMainDocument';
+import { Source } from '@tdev-models/iDocument';
 
-interface Props {
-    default?: string;
+interface Props extends MetaInit {
+    id: string;
+    // default?: string;
     noEditor?: boolean;
-    readonly?: boolean;
+    // readonly?: boolean;
 }
 
 const NetpbmEditor = observer((props: Props) => {
 
     const SUPPORTED_FORMATS = ['P1', 'P2', 'P3'];
 
-    const [data, setData] = React.useState<string>(props.default || '');
+    // const [data, setData] = React.useState<string>(props.default || '');
     const [sanitizedData, setSanitizedData] = React.useState<string>('');
     const [displaySyntaxErrors, setDisplaySyntaxErrors] = React.useState<(string|React.ReactElement)[]>([]);
     const [displayWarnings, setDisplayWarnings] = React.useState<(string|React.ReactElement)[]>([]);
@@ -30,14 +34,17 @@ const NetpbmEditor = observer((props: Props) => {
     let syntaxErrors: (string|React.ReactElement)[] = [];
     let warnings: (string|React.ReactElement)[] = [];
 
+    const [meta] = React.useState(new ModelMeta(props));
+    const doc = useFirstMainDocument(props.id, meta);
+
     React.useEffect(() => {
-        const result = data.trim()
+        const result = doc.data.imageData.trim()
             .split('\n')
             .filter((line) => !line.trim().startsWith('#')) // Remove comments.
             .join('\n');
 
         setSanitizedData(result);
-    }, [data]);
+    }, [doc.data.imageData]);
 
     const resetImageData = () => {
         setHeight(0);
@@ -120,9 +127,9 @@ const NetpbmEditor = observer((props: Props) => {
                 <textarea 
                     rows={10}
                     className={clsx(styles.editorTextArea)}
-                    onChange={(e) => setData(e.target.value)}
-                    disabled={props.readonly}
-                    defaultValue={data} />
+                    onChange={e => doc.setData({ imageData: e.target.value }, Source.LOCAL)}
+                    value={doc.data.imageData}
+                    disabled={props.readonly} />
                 <details>
                     <summary>
                         {displaySyntaxErrors?.length > 0 &&  <span>❌</span>}
