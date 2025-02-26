@@ -11,6 +11,9 @@ import { parseP3, PATTERN as PATTERN_P3 } from './parser/p3Parser';
 import { MetaInit, ModelMeta } from '@tdev-models/documents/NetpbmGrapic';
 import { useFirstMainDocument } from '@tdev-hooks/useFirstMainDocument';
 import { Source } from '@tdev-models/iDocument';
+import SyncStatus from '@tdev-components/SyncStatus';
+import Icon from '@mdi/react';
+import { mdiFlashTriangle } from '@mdi/js';
 
 interface Props extends MetaInit {
     id: string;
@@ -121,15 +124,28 @@ const NetpbmEditor = observer((props: Props) => {
         render();
     }, [sanitizedData]);
 
+    // TODO: Taken and adapted from src/components/documents/String/index.tsx -> could we factor this out?
+    const StateIcons = () => (
+        <span className={clsx(styles.stateIcons)}>
+            <SyncStatus model={doc} size={0.7} />
+            {doc.root?.isDummy && (
+                <Icon path={mdiFlashTriangle} size={0.7} color="orange" title="Wird nicht gespeichert." />
+            )}
+        </span>
+    );
+
     return (
         <div>
             <div className={clsx(styles.editor, { [styles.hidden]: props.noEditor })}>
-                <textarea 
-                    rows={10}
-                    className={clsx(styles.editorTextArea)}
-                    onChange={e => doc.setData({ imageData: e.target.value }, Source.LOCAL)}
-                    value={doc.data.imageData}
-                    disabled={props.readonly} />
+                <div className={styles.textAreaWrapper}>
+                    <StateIcons />
+                    <textarea 
+                        rows={10}
+                        className={clsx(styles.editorTextArea)}
+                        onChange={e => doc.setData({ imageData: e.target.value }, Source.LOCAL)}
+                        value={doc.data.imageData}
+                        disabled={props.readonly} />
+                </div>
                 <details>
                     <summary>
                         {displaySyntaxErrors?.length > 0 &&  <span>❌</span>}

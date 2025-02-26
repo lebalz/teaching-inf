@@ -1,16 +1,25 @@
 .editor {
     width: 100%;
 
+    .textAreaWrapper {
+        position: relative;
+    }
+
     .editorTextArea {
         display: block;
         width: 100%;
-        // resize: vertical;
         resize: vertical;
         min-height: 100px;
         max-height: 600px;
         white-space: pre;
         overflow-wrap: normal;
         overflow-x: scroll;
+    }
+
+    .stateIcons {
+        position: absolute;
+        right: 0.5em;
+        top: 0.5em;
     }
 }
 
