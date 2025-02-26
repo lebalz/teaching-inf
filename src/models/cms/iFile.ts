@@ -30,7 +30,7 @@ const FileStubPropKeys: ReadonlyArray<keyof FileStubProps> = keysOfInterface<
     keyof Omit<FileStubProps, 'encoding'>
 >()('name', 'path', 'url', 'git_url', 'html_url', 'sha', 'size', 'download_url');
 
-export abstract class iFileStub extends iEntry {
+export abstract class iFile extends iEntry {
     readonly size: number;
     readonly downloadUrl: string;
 
@@ -152,7 +152,7 @@ export abstract class iFileStub extends iEntry {
     }
 
     @computed
-    get iconColor() {
+    get iconColor(): string | undefined {
         if (this.isImage) {
             return 'var(--ifm-color-blue)';
         }
@@ -170,7 +170,7 @@ export abstract class iFileStub extends iEntry {
 
     @computed
     get icon() {
-        if (this.apiState === ApiState.SYNCING) {
+        if (this.isSyncing) {
             return mdiLoading;
         }
         if (this.isImage) {
@@ -225,6 +225,11 @@ export abstract class iFileStub extends iEntry {
     }
 
     @computed
+    get isSyncing() {
+        return this.apiState === ApiState.SYNCING;
+    }
+
+    @computed
     get isOnMainBranch() {
         const main = this.store.github?.defaultBranch?.name;
         if (!main) {
@@ -250,4 +255,4 @@ export abstract class iFileStub extends iEntry {
     }
 }
 
-export default iFileStub;
+export default iFile;

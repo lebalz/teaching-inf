@@ -44,7 +44,7 @@ const RenameFilePopup = observer((props: Props) => {
             on="click"
             disabled={props.disabled}
             onOpen={action(() => {
-                if (!file.isLoaded && file.apiState !== ApiState.SYNCING) {
+                if (file.mustBeFetched && !file.isSyncing) {
                     cmsStore.fetchFile(file);
                 }
             })}

@@ -6,7 +6,11 @@ import { ApiState } from '@tdev-stores/iStore';
 
 interface DirProps extends iEntryProps {}
 
-export const IMAGE_DIR_NAME = 'images' as const;
+export enum Asset {
+    IMAGE = 'images',
+    FILE = 'assets'
+}
+
 class Dir extends iEntry {
     readonly type = 'dir';
     @observable accessor isFetched: boolean = false;
@@ -15,20 +19,6 @@ class Dir extends iEntry {
 
     constructor(props: DirProps, store: CmsStore) {
         super(props, store);
-        // when(
-        //     () => this.isFetched,
-        //     () => {
-        //         this.imageDir?.fetchDirectory()?.then((imgDir) => {
-        //             if (imgDir) {
-        //                 imgDir.children.forEach((img) => {
-        //                     if (img.type === 'file_stub') {
-        //                         img.fetchContent();
-        //                     }
-        //                 });
-        //             }
-        //         });
-        //     }
-        // );
     }
 
     @action
@@ -62,23 +52,12 @@ class Dir extends iEntry {
         this.isFetched = fetched;
     }
 
-    @computed
-    get imageDir(): Dir | undefined {
-        return this.children.find((child) => child.name === IMAGE_DIR_NAME) as Dir;
-    }
-
-    @computed
-    get imageDirPath(): string {
-        return `${this.path}/${IMAGE_DIR_NAME}`;
-    }
-
     /**
-     * The images which are direct children of this folder
+     * used to upload images to this folder
      */
     @computed
-    get images() {
-        const images = this.children.filter((child) => child.isFile() && child.isImage);
-        return images;
+    get imageDirPath(): string {
+        return `${this.path}/${Asset.IMAGE}`;
     }
 
     @computed
@@ -88,18 +67,34 @@ class Dir extends iEntry {
 
     @computed
     get iconColor() {
-        return 'var(--ifm-color-primary)';
+        if (this.isFetched || this.isSyncing) {
+            return 'var(--ifm-color-primary)';
+        }
+        return 'var(--ifm-color-gray-700)';
+    }
+
+    @computed
+    get iconOpen() {
+        if (this.isSyncing) {
+            return mdiLoading;
+        }
+        return mdiFolderOpen;
+    }
+
+    @computed
+    get iconClosed() {
+        if (this.isSyncing) {
+            return mdiLoading;
+        }
+        return mdiFolder;
     }
 
     @computed
     get icon() {
-        if (this.isSyncing) {
-            return mdiLoading;
-        }
         if (this.isOpen) {
-            return mdiFolderOpen;
+            return this.iconOpen;
         }
-        return mdiFolder;
+        return this.iconClosed;
     }
 }
 

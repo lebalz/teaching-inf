@@ -96,7 +96,7 @@ const FileUpload = observer((props: Props) => {
                         <Icon path={mdiCloudArrowUpOutline} size={1} color="var(--ifm-color-primary)" />
                         <div className={clsx(styles.info)}>
                             <p>{props.description || 'Dateien per Drag&Drop hochladen'}</p>
-                            <p>Max. Dateigrösse: 30MB</p>
+                            <p>Max. Dateigrösse: 100 MB</p>
                         </div>
                     </div>
                     <input

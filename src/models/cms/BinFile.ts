@@ -1,9 +1,9 @@
 import { CmsStore } from '@tdev-stores/CmsStore';
 import { observable } from 'mobx';
 import { ApiState } from '@tdev-stores/iStore';
-import iFileStub, { BinFileProps } from './iFileStub';
+import iFile, { BinFileProps } from './iFile';
 
-class BinFile extends iFileStub {
+class BinFile extends iFile {
     readonly type = 'bin_file';
     binData: Uint8Array;
     src: string;

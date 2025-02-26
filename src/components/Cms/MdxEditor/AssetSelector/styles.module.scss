@@ -1,4 +1,4 @@
-.gallery {
+.assets {
     overflow-y: auto;
     max-height: 15em;
     position: relative;
@@ -14,17 +14,11 @@
             border-top-right-radius: 0;
         }
     }
-    .imageGallery {
-        display: flex;
-        align-items: flex-start;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        .image {
-            cursor: pointer;
-            border-radius: var(--ifm-card-border-radius);
-            &:hover {
-                box-shadow: var(--ifm-global-shadow-md);
-            }
+    .selector {
+        .pathNav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
     }
 }

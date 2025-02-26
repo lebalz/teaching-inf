@@ -56,7 +56,6 @@ import { InsertImage } from '@tdev-plugins/remark-images/mdx-editor-plugin/Inser
 import { Box, strongPlugin } from '@tdev-plugins/remark-strong/mdx-editor-plugin';
 import { ToolbarInsertBoxed } from '@tdev-plugins/remark-strong/mdx-editor-plugin/ToolbarInsertBoxed';
 import { useStore } from '@tdev-hooks/useStore';
-import { IMAGE_DIR_NAME } from '@tdev-models/cms/Dir';
 import { codeMirrorPlugin } from './plugins/Codemirror';
 import DefaultEditor from '@tdev-components/Cms/Github/DefaultEditor';
 import { Kbd, kbdPlugin } from '@tdev-plugins/remark-kbd/mdx-editor-plugin';
@@ -67,6 +66,7 @@ import Button from '@tdev-components/shared/Button';
 import { mathPlugin } from './plugins/mathPlugin';
 import MediaDescriptors from '@tdev-plugins/remark-media/mdx-editor-plugin';
 import { PdfDescriptor } from '@tdev-plugins/remark-pdf/mdx-editor-plugin/PdfDescriptor';
+import { Asset } from '@tdev-models/cms/Dir';
 
 export interface Props {
     file: FileModel;
@@ -215,7 +215,7 @@ const CmsMdxEditor = observer((props: Props) => {
                                 .uploadImage(img, fPath, activeEntry.branch, current?.sha)
                                 .then((file) => {
                                     if (file) {
-                                        return `./${IMAGE_DIR_NAME}/${file.name}`;
+                                        return `./${Asset.IMAGE}/${file.name}`;
                                     }
                                     return Promise.reject('Upload Error');
                                 });

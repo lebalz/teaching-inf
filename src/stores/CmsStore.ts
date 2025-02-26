@@ -22,7 +22,7 @@ import PartialSettings, { REFRESH_THRESHOLD } from '@tdev-models/cms/PartialSett
 import imageCompression from 'browser-image-compression';
 import BinFile from '@tdev-models/cms/BinFile';
 import CmsViewStore from './ViewStores/CmsViewStore';
-import iFileStub from '@tdev-models/cms/iFileStub';
+import iFile from '@tdev-models/cms/iFile';
 const { organizationName, projectName } = siteConfig;
 if (!organizationName || !projectName) {
     throw new Error('"organizationName" and "projectName" must be set in docusaurus.config.ts');
@@ -108,7 +108,7 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
     }
 
     @action
-    fetchFile(fToLoad: iFileStub) {
+    fetchFile(fToLoad: iFile) {
         const github = this.github;
         if (!github) {
             return Promise.resolve(undefined);

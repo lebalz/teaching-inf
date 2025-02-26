@@ -2,7 +2,7 @@ import { CmsStore } from '@tdev-stores/CmsStore';
 import { action, computed, IObservableArray, observable } from 'mobx';
 import { Octokit, RestEndpointMethodTypes as GhTypes } from '@octokit/rest';
 import siteConfig from '@generated/docusaurus.config';
-import { FileStubProps, iFileStub } from './iFileStub';
+import { FileStubProps, iFile } from './iFile';
 import FileStub from './FileStub';
 import Dir from './Dir';
 import { default as FileModel } from './File';
@@ -532,7 +532,7 @@ class Github {
 
     @action
     fetchFile(
-        file: iFileStub,
+        file: iFile,
         editAfterFetch: boolean = false
     ): Promise<FileModel | BinFile | FileEntry[] | undefined> {
         const { branch, path } = file;
@@ -542,7 +542,7 @@ class Github {
             }
             return Promise.resolve(undefined);
         }
-        if (file.apiState === ApiState.SYNCING) {
+        if (file.isSyncing) {
             console.log('Already fetching', file.path, file.branch);
             return Promise.resolve(undefined);
         }
@@ -595,11 +595,11 @@ class Github {
 
     @action
     fetchRawContent(
-        file: iFileStub,
+        file: iFile,
         editAfterFetch: boolean = false,
         skipSyncCheck: boolean = false
     ): Promise<FileModel | BinFile | undefined> {
-        if (!skipSyncCheck && file.apiState === ApiState.SYNCING) {
+        if (!skipSyncCheck && file.isSyncing) {
             console.log('Already fetching', file.path, file.branch);
             return Promise.resolve(undefined);
         }

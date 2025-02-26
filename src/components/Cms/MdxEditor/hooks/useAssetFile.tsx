@@ -39,7 +39,7 @@ export const useAssetFile = (relPath: string, withDummy: boolean = true) => {
 
     React.useEffect(() => {
         const { branch } = editedFile || {};
-        if (file && file.type === 'file_stub' && file.apiState === ApiState.SYNCING) {
+        if (file && file.type === 'file_stub' && file.isSyncing) {
             return;
         }
         if (file && file.type === 'file_stub') {

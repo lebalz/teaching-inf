@@ -1,5 +1,6 @@
 import { type CmsStore } from '@tdev-stores/CmsStore';
-import iFileStub, { FileStubProps } from './iFileStub';
+import iFile, { FileStubProps } from './iFile';
+import { computed } from 'mobx';
 
 export const DUMMY_PROPS: FileStubProps = {
     name: '',
@@ -13,7 +14,7 @@ export const DUMMY_PROPS: FileStubProps = {
     encoding: ''
 } as const;
 
-class FileStub extends iFileStub {
+class FileStub extends iFile {
     readonly type = 'file_stub';
     static DummyFile(path: string, branch: string, store: CmsStore, addToStore?: boolean) {
         const pathParts = path.split('/');
@@ -27,6 +28,11 @@ class FileStub extends iFileStub {
         }
 
         return dummy;
+    }
+
+    @computed
+    get iconColor() {
+        return 'var(--ifm-color-gray-600)';
     }
 }
 

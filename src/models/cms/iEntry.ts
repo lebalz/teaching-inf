@@ -4,6 +4,7 @@ import FileStub from './FileStub';
 import Dir from './Dir';
 import { ApiState } from '@tdev-stores/iStore';
 import BinFile from './BinFile';
+import { t } from '@excalidraw/excalidraw/types/i18n';
 
 export interface iEntryProps {
     name: string;
@@ -49,15 +50,19 @@ abstract class iEntry {
         };
     }
 
+    /**
+     * returns true if the file type has initially (dir) or by design (file_stub) no content
+     * and thus must be fetched from the server
+     */
     @computed
-    get isLoaded() {
+    get mustBeFetched() {
         switch (this.type) {
             case 'file':
-                return true;
-            case 'file_stub':
                 return false;
-            case 'bin_file':
+            case 'file_stub':
                 return true;
+            case 'bin_file':
+                return false;
             case 'dir':
                 return true;
         }
@@ -164,19 +169,40 @@ abstract class iEntry {
         return new URL(relPath, `path:/${base}/`).pathname.slice(1);
     }
 
+    /**
+     *
+     * @param to the file for which the relative path should be calculated
+     * @returns the relative path from this entry to the given file
+     * @example
+     * ```ts
+     * const file = store.findEntry('main', 'docs/gallery/index.mdx');
+     * file.relativePath('docs/gallery/images/snow.jpg')    // => './images/snow.jpg'
+     * file.relativePath('docs/images/snow.jpg')            // => '../images/snow.jpg'
+     * // static files are referenced as absolute pagth
+     * file.relativePath('static/images/snow.jpg')            // => '/static/images/snow.jpg'
+     * ```
+     */
+    relativePath(to: iEntry) {
+        const thisParts = this._isFileType ? this.pathParts.slice(0, -1) : this.pathParts.slice();
+        const pathLength = thisParts.length - 1; // the path always starts with '/' - do not count this
+        const toParts = to.pathParts.slice();
+        // remove common parts
+        while (toParts[0] === thisParts[0]) {
+            toParts.splice(0, 1);
+            thisParts.splice(0, 1);
+        }
+        if (thisParts.length === pathLength && toParts[1] === 'static') {
+            // it is an absolute path and can not be resolved by docusaurus - return the absolute path
+            return ['/', ...to.pathParts.slice(2)].join('/');
+        }
+        const relPath = [...(thisParts.length > 0 ? thisParts.map(() => '..') : ['.']), ...toParts];
+        return relPath.join('/');
+    }
+
     findEntryByRelativePath(relPath: string) {
         const resolved = this.resolvePath(relPath);
         return this.store.findEntry(this.branch, resolved);
     }
-
-    // loadAsset(relPath: string, force?: boolean) {
-    //     const entry = this.findEntryByRelativePath(relPath);
-    //     if (entry && !force) {
-    //         return Promise.resolve(entry);
-    //     }
-    //     const resolved = this.resolvePath(relPath);
-    //     return this.store.fetchFile(resolved, this.branch);
-    // }
 }
 
 export default iEntry;

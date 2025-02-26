@@ -66,7 +66,7 @@ const DirNav = observer((props: Props) => {
             nested
         >
             <Card classNames={{ body: styles.menu, card: styles.menuCard }}>
-                {!dir.isLoaded && <Loader />}
+                {!dir.isFetched && <Loader />}
                 {dir.children.map((c, idx) => {
                     if (c.type === 'dir') {
                         return (

@@ -13,20 +13,29 @@ import { insertImage$ } from '..';
 import TextInput from '@tdev-components/shared/TextInput';
 import ImagePreview from '@tdev-components/Cms/Github/iFile/File/FilePreview/ImagePreview';
 import Button from '@tdev-components/shared/Button';
-import { default as CmsFile } from '@tdev-models/cms/File';
 import FileUpload from '@tdev-components/shared/FileUpload';
-import { IMAGE_DIR_NAME } from '@tdev-models/cms/Dir';
 import clsx from 'clsx';
+import { Asset } from '@tdev-models/cms/Dir';
+import BinFile from '@tdev-models/cms/BinFile';
+import AssetSelector from '@tdev-components/Cms/MdxEditor/AssetSelector';
+import FileStub from '@tdev-models/cms/FileStub';
+import iFile from '@tdev-models/cms/iFile';
+import { useStore } from '@tdev-hooks/useStore';
 
 interface Props {
     onClose: () => void;
 }
 
 export const ImageDialog = observer((props: Props) => {
+    const cmsStore = useStore('cmsStore');
     const [src, setSrc] = React.useState('');
-    const [file, setFile] = React.useState<CmsFile | null>(null);
+    const [file, setFile] = React.useState<BinFile | null>(null);
     const [cleanSrc, setCleanSrc] = React.useState(0);
     const insertImage = usePublisher(insertImage$);
+    const { activeEntry } = cmsStore;
+    if (!activeEntry) {
+        return null;
+    }
 
     return (
         <Card
@@ -66,16 +75,21 @@ export const ImageDialog = observer((props: Props) => {
                     <img
                         title="Ausgewähltes Bild"
                         className={clsx(styles.previewImage)}
-                        src={file ? CmsFile.ImageDataUrl(file) : src}
+                        src={file ? file.src : src}
                     />
                 ) : null
             }
         >
-            <ImageGallery
-                onSelect={(src, file) => {
+            <AssetSelector
+                onSelect={(selected) => {
+                    console.log('Selected', selected.path, file?.relativePath(selected));
+                    const src = activeEntry.relativePath(selected);
                     setSrc(src);
-                    setFile(file);
+                    setFile(selected as BinFile);
                     setCleanSrc((prev) => prev + 1);
+                }}
+                filter={(entry): entry is BinFile => {
+                    return entry.isImage;
                 }}
             />
             <TextInput
@@ -91,7 +105,7 @@ export const ImageDialog = observer((props: Props) => {
             />
             <FileUpload
                 onFilesUploaded={(file) => {
-                    insertImage({ src: `./${IMAGE_DIR_NAME}/${file.name}` });
+                    insertImage({ src: `./${Asset.IMAGE}/${file.name}` });
                     props.onClose();
                 }}
                 accept="image/*"

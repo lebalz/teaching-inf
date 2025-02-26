@@ -73,7 +73,7 @@ const AddOrUpdateFile = observer((props: Props) => {
                             !name ||
                             name === props.file?.name ||
                             apiState !== ApiState.IDLE ||
-                            (props.file && !props.file.isLoaded)
+                            (props.file && props.file.mustBeFetched)
                         }
                         color={isUpdate ? 'orange' : 'green'}
                         confirmText={`Wirklich auf dem ${props.file?.branch}-Branch ändern?`}
