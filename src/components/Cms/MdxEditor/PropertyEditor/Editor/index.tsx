@@ -47,7 +47,7 @@ const Editor = observer((props: Props) => {
     const [newAttrName, setNewAttrName] = React.useState<string>('');
     const [newAttrValue, setNewAttrValue] = React.useState<string>('');
     const isMobile = useIsMobileView(768);
-
+    console.log('render form');
     return (
         <Card
             header={title && <h4>{title}</h4>}
@@ -92,13 +92,12 @@ const Editor = observer((props: Props) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {form.fieldNames.map((name, idx) => {
-                                const config = form.getConfig(name) || { name: name, type: 'expression' };
+                            {form.fields.map((field, idx) => {
                                 return (
                                     <tr key={idx}>
                                         <th className={styles.title}>
-                                            {name}
-                                            {form.dirtyFields.has(name) && (
+                                            {field.name}
+                                            {field.isDirty && (
                                                 <Icon
                                                     path={mdiCircleSmall}
                                                     size={1}
@@ -108,40 +107,31 @@ const Editor = observer((props: Props) => {
                                             )}
                                         </th>
                                         {!isMobile && (
-                                            <td className={styles.readOnlyColumnCell}>
-                                                {config.description}
-                                            </td>
+                                            <td className={styles.readOnlyColumnCell}>{field.description}</td>
                                         )}
 
                                         <td className={clsx(styles.propertyEditorCell)}>
                                             <div className={clsx(styles.content)}>
-                                                <Input
-                                                    value={(form.getValue(name) || DEFAULT_VALUE).trim()}
-                                                    onChange={(value) => {
-                                                        form.setValue(name, value);
-                                                    }}
-                                                    config={config}
-                                                />
-                                                {config.type !== 'checkbox' && (
+                                                <Input field={field} />
+                                                {!field.isCheckbox && (
                                                     <Button
                                                         icon={mdiIdentifier}
                                                         title="Neue UUIDv4 einfügen"
                                                         color="blue"
                                                         size={SIZE_S}
                                                         onClick={() => {
-                                                            form.setValue(name, uuidv4());
+                                                            field.setValue(uuidv4());
                                                         }}
                                                     />
                                                 )}
-                                                {form.getConfig(name)
-                                                    ?.resettable /** || config.onRecalc */ && (
+                                                {field.resettable /** || field.onRecalc */ && (
                                                     <div className={clsx(styles.spacer)} />
                                                 )}
-                                                {config.resettable && form.dirtyFields.has(name) && (
+                                                {field.resettable && field.isDirty && (
                                                     <Button
                                                         icon={mdiRestore}
                                                         onClick={() => {
-                                                            form.resetField(name);
+                                                            field.resetValue();
                                                         }}
                                                         size={SIZE_S}
                                                         title="Änderungen verwerfen"
@@ -166,9 +156,7 @@ const Editor = observer((props: Props) => {
                                             </div>
                                         </td>
                                         {isMobile && (
-                                            <td className={styles.readOnlyColumnCell}>
-                                                {config.description}
-                                            </td>
+                                            <td className={styles.readOnlyColumnCell}>{field.description}</td>
                                         )}
                                     </tr>
                                 );
@@ -210,12 +198,12 @@ const Editor = observer((props: Props) => {
                                             disabled={
                                                 !newAttrName.replaceAll(' ', '') ||
                                                 !newAttrValue.trim() ||
-                                                form.fields.has(newAttrValue.replaceAll(' ', ''))
+                                                !!form.find(newAttrValue.replaceAll(' ', ''))
                                             }
                                             onClick={() => {
                                                 const newName = newAttrName.replaceAll(' ', '');
                                                 const newVal = newAttrValue.trim();
-                                                if (newName && newVal && !form.fields.has(newName)) {
+                                                if (newName && newVal && !form.find(newName)) {
                                                     form.setValue(newAttrName, newAttrValue);
                                                     setNewAttrName('');
                                                     setNewAttrValue('');

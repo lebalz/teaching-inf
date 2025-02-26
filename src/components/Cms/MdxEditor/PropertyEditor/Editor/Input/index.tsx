@@ -3,60 +3,60 @@ import clsx from 'clsx';
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@tdev-hooks/useStore';
-import { FormField } from '@tdev-models/Form';
 import CodeEditor from '@tdev-components/shared/CodeEditor';
 import Checkbox from '@tdev-components/shared/Checkbox';
 import TextInput from '@tdev-components/shared/TextInput';
+import Field from '@tdev-models/Form/Field';
+import { action } from 'mobx';
 
 interface Props {
-    config: FormField<string>;
-    onChange: (value: string) => void;
-    value: string;
+    field: Field<string>;
 }
 
 const Input = observer((props: Props) => {
-    const { config, onChange, value } = props;
-    if (config.type === 'expression') {
+    const { field } = props;
+    console.log('render', field.name);
+    if (field.type === 'expression') {
         return (
             <CodeEditor
-                value={value}
-                placeholder={config.placeholder || 'Wert'}
-                onChange={onChange}
+                value={field.value}
+                placeholder={field.placeholder || 'Wert'}
+                onChange={action((val) => field.setValue(val))}
                 className={clsx(styles.codeEditor)}
-                lang={config.lang}
+                lang={field.lang}
                 hideLineNumbers
             />
         );
     }
-    if (config.type === 'checkbox') {
+    if (field.isCheckbox) {
         return (
             <Checkbox
-                checked={typeof value === 'boolean' ? value : value === 'true'}
-                onChange={(checked) => onChange(`${checked}`)}
+                checked={typeof field.value === 'boolean' ? field.value : field.value === 'true'}
+                onChange={(checked) => field.setValue(`${checked}`)}
             />
         );
     }
-    if (config.type === 'string') {
+    if (field.type === 'string') {
         return (
             <TextInput
-                onChange={onChange}
-                value={value}
+                onChange={(val) => field.setValue(val)}
+                value={field.value}
                 noAutoFocus
                 noSpellCheck
-                placeholder={config.placeholder}
+                placeholder={field.placeholder}
             />
         );
     }
     return (
         <input
             onChange={(e) => {
-                onChange(e.target.value);
+                field.setValue(e.target.value);
             }}
-            value={value}
+            value={field.value}
             className={styles.generic}
-            type={config.type}
-            title={config.description}
-            placeholder={config.placeholder}
+            type={field.type}
+            title={field.description}
+            placeholder={field.placeholder}
         />
     );
 });

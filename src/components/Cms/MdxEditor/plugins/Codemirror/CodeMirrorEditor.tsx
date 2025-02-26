@@ -29,8 +29,8 @@ import Badge from '@tdev-components/shared/Badge';
 import Button from '@tdev-components/shared/Button';
 import Popup from 'reactjs-popup';
 import { SIZE_S } from '@tdev-components/shared/iconSizes';
-import CopyBadge from '@tdev-components/shared/CopyBadge';
 import MyAttributes from '../../GenericAttributeEditor/MyAttributes';
+import { action } from 'mobx';
 
 export const COMMON_STATE_CONFIG_EXTENSIONS: Extension[] = [];
 
@@ -45,77 +45,66 @@ const PYTHON_PROPS: GenericPropery[] = [
         name: 'live_py',
         type: 'checkbox',
         required: false,
-        sideEffect: (props, initial) => {
-            const livePy = props.live_py === 'true';
-            const slim = props.slim === 'true';
-            const delta: { name: string; value: string }[] = [];
-            if (livePy) {
-                if (!slim && !props.id) {
-                    delta.push({ name: 'id', value: (initial.id as string) || v4() });
-                }
-            } else {
-                if (slim) {
-                    delta.push({ name: 'slim', value: '' });
-                }
-                if (props.id) {
-                    delta.push({ name: 'id', value: '' });
-                }
+        sideEffect: action((form) => {
+            const livePy = form.find('live_py');
+            const slim = form.find('slim');
+            if (!livePy || !slim) {
+                return;
             }
-            return delta;
-        }
+            if (livePy.checkboxValue) {
+                const id = form.find('id');
+                form.setValue('id', id?._pristine || v4());
+            } else {
+                form.resetField('slim');
+                form.resetField('id');
+            }
+        })
     },
     {
         name: 'slim',
         type: 'checkbox',
         required: false,
-        sideEffect: (props, initial) => {
-            const delta: { name: string; value: string }[] = [];
-            const slim = props.slim === 'true';
-            const livePy = props.live_py === 'true';
-            if (livePy && slim && !props.id) {
+        sideEffect: (form) => {
+            const livePy = form.find('live_py');
+            const slim = form.find('slim');
+            if (!livePy || !slim) {
                 return;
             }
-            if (slim) {
-                if (!livePy) {
-                    delta.push({ name: 'live_py', value: 'true' });
-                }
-                if (props.id) {
-                    delta.push({ name: 'id', value: '' });
-                }
+            if (livePy.checkboxValue && slim.checkboxValue && !form.find('id')) {
+                return;
+            }
+            if (slim.checkboxValue) {
+                form.setValue('live_py', 'true');
+                form.resetField('id');
             } else {
-                if (livePy) {
-                    delta.push({ name: 'id', value: `${initial.id}` || v4() });
+                if (livePy.checkboxValue) {
+                    const id = form.find('id');
+                    form.setValue('id', id?._pristine || v4());
                 }
             }
-            return delta;
         }
     },
     {
         name: 'id',
         type: 'string',
         required: false,
-        sideEffect: (props, initial) => {
-            const delta: { name: string; value: string }[] = [];
-            const livePy = props.live_py === 'true';
-            const slim = props.slim === 'true';
-            if (props.id) {
-                if (slim) {
-                    delta.push({ name: 'slim', value: '' });
-                }
-                if (!livePy) {
-                    delta.push({ name: 'live_py', value: 'true' });
-                }
-            } else {
-                if (!slim) {
-                    delta.push({ name: 'slim', value: 'true' });
-                }
+        sideEffect: (form) => {
+            const livePy = form.find('live_py');
+            const slim = form.find('slim');
+            if (!livePy || !slim) {
+                return;
             }
-            return delta;
+            if (form.find('id')) {
+                slim.resetValue();
+                livePy.setValue('true');
+            } else {
+                slim.setValue('true');
+            }
         },
-        resettable: true,
-        onRecalc: () => {
-            return v4();
-        }
+        resettable: true
+        // onRecalc: () => {
+        //     return v4();
+        // }
     },
     { name: 'readonly', type: 'checkbox', required: false },
     { name: 'noDownload', type: 'checkbox', required: false },

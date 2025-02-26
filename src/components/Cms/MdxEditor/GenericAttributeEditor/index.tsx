@@ -5,23 +5,23 @@ import Popup from 'reactjs-popup';
 import { mdiCog } from '@mdi/js';
 import Button from '@tdev-components/shared/Button';
 import { PopupActions } from 'reactjs-popup/dist/types';
+import Field, { FormField } from '@tdev-models/Form/Field';
 
-export interface GenericPropery {
-    name: string;
-    required?: boolean;
-    placeholder?: string;
-    label?: string;
-    description?: string;
-    type: React.HTMLInputTypeAttribute | 'expression';
-    value?: string;
-    lang?: string;
-    sideEffect?: (
-        props: Record<string, string | number | undefined>,
-        initial: Record<string, string | number | undefined>
-    ) => { name: string; value: string }[] | void;
-    resettable?: boolean;
-    onRecalc?: () => string;
-}
+// export interface GenericPropery {
+//     name: string;
+//     required?: boolean;
+//     placeholder?: string;
+//     label?: string;
+//     description?: string;
+//     type: React.HTMLInputTypeAttribute | 'expression';
+//     value?: string;
+//     lang?: string;
+//     sideEffect?: (fields: Field<T>[]) => void;;
+//     resettable?: boolean;
+//     onRecalc?: () => string;
+// }
+
+export type GenericPropery = FormField<string>;
 
 export interface GenericValueProperty extends GenericPropery {
     value: string;
