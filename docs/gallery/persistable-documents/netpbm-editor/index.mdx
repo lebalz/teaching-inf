@@ -14,6 +14,10 @@ Diese Komponente bietet einen Live Viewer und einen speicherbaren Editor für Ne
 Die Implementation ist nah am offiziellen Netpbm-Standard gehalten, kann aber gewisse Freiheiten in Anspruch nehmen, um die Benutzererfahrung zu verbessern.
 :::
 
+:::warning[Formate]
+Es werden zurzeit nur die ASCII-basierten Formate P1-P3 unterstützt. Die binären Formate P4-P6 sind nicht implementiert.
+:::
+
 ```mdx
 <NetpbmEditor />
 ```
@@ -260,9 +264,6 @@ Die Komponente kann auch als reiner Viewer verwendet werden, indem man mit dem P
 </BrowserWindow>
 
 ## Offen Themen
-Zu implementieren oder ggf. explizit auszuklammern.
-- [ ] Reset to default?
-- [ ] Download?
-- [ ] Upload?
-- [ ] Undo/Redo im Editor?
-- [ ] P4-6 binary?
+- [ ] Editor zurücksetzen auf Default-Wert?
+- [ ] Download als PNG?
+- [ ] Upload aus Datei?
