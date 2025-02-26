@@ -7,6 +7,7 @@ import {parseP1, PATTERN as PATTERN_P1} from './parser/p1Parser';
 import { ParserMessage, ParserResult } from './util';
 import ImageCanvas from './ImageCanvas';
 import { parseP2, PATTERN as PATTERN_P2 } from './parser/p2Parser';
+import { parseP3, PATTERN as PATTERN_P3 } from './parser/p3Parser';
 
 interface Props {
     default?: string;
@@ -16,7 +17,7 @@ interface Props {
 
 const NetpbmEditor = observer((props: Props) => {
 
-    const SUPPORTED_FORMATS = ['P1', 'P2'];
+    const SUPPORTED_FORMATS = ['P1', 'P2', 'P3'];
 
     const [data, setData] = React.useState<string>(props.default || '');
     const [sanitizedData, setSanitizedData] = React.useState<string>('');
@@ -95,13 +96,16 @@ const NetpbmEditor = observer((props: Props) => {
 
         const matchP1 = PATTERN_P1.exec(sanitizedData);
         const matchP2 = PATTERN_P2.exec(sanitizedData);
+        const matchP3 = PATTERN_P3.exec(sanitizedData);
 
         if (matchP1) {
             processParserResult(parseP1(matchP1));
-        }
-        else if (matchP2) {
+        } else if (matchP2) {
             processParserResult(parseP2(matchP2));
-        } else {
+        } else if (matchP3) {
+            processParserResult(parseP3(matchP3));
+        } 
+        else {
             createErrorReport();
         }
     };
