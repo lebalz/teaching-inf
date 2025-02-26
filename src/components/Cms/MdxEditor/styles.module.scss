@@ -1,3 +1,9 @@
+:global(:root) {
+    --cms-tree-indent: 1.25em;
+    --cms-tree-dir-indicator-line-style: solid;
+    --cms-tree-dir-indicator-line-width: 1px;
+    --cms-tree-dir-indicator-line-color: var(--ifm-color-gray-500);
+}
 .mdxEditor {
     margin: 1em 1px;
     margin-top: 0;

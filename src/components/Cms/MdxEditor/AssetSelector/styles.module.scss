@@ -15,10 +15,16 @@
         }
     }
     .selector {
+        --cms-tree-indent: 0.75em;
         .pathNav {
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 1em;
+            .path {
+                font-weight: 500;
+                font-style: italic;
+            }
         }
     }
 }

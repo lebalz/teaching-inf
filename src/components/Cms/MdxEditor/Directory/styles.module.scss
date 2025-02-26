@@ -1,8 +1,8 @@
 .directory {
-    --ifm-list-left-padding: 1.25em;
+    --ifm-list-left-padding: var(--cms-tree-indent);
     margin: 2em;
     &.compact {
-        --ifm-list-left-padding: 0.5em;
+        --cms-tree-indent: 0.5em;
     }
     .cardBody {
         padding-top: 0.25em;

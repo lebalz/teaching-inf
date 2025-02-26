@@ -40,7 +40,7 @@ const Dir = observer((props: Props) => {
     }, [dir, expandedByDefault]);
 
     return (
-        <li className={clsx(shared.item)}>
+        <li className={clsx(shared.item, styles.dir)}>
             <div className={clsx(styles.dirName)}>
                 <span
                     className={clsx(styles.dir)}
