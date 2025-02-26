@@ -3,7 +3,7 @@ export type ParserMessage = string | React.ReactElement;
 export interface ParserImageDataResult {
     pixels: Uint8ClampedArray;
     width: number;
-    height: number; 
+    height: number;
 }
 
 export interface ParserResult {
@@ -11,4 +11,3 @@ export interface ParserResult {
     syntaxErrors?: ParserMessage[];
     warnings?: ParserMessage[];
 }
-

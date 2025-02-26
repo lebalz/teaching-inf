@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from "react";
-import styles from "./styles.module.scss";
-import clsx from "clsx";
+import React, { useEffect, useRef } from 'react';
+import styles from './styles.module.scss';
+import clsx from 'clsx';
 
 interface Props {
     pixels?: Uint8ClampedArray;
@@ -8,8 +8,7 @@ interface Props {
     height: number;
 }
 
-const ImageCanvas = ({width, height, pixels}: Props) => {
-    
+const ImageCanvas = ({ width, height, pixels }: Props) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
     const scale = 10;
@@ -18,17 +17,17 @@ const ImageCanvas = ({width, height, pixels}: Props) => {
 
     const hidden = () => {
         return !pixels || pixels.length === 0 || width === 0 || height === 0;
-    }
+    };
 
     useEffect(() => {
         if (hidden()) {
             return;
         }
-        
+
         const canvas = canvasRef.current;
         const ctx = canvas?.getContext('2d');
 
-        if (!canvas || !ctx) {  
+        if (!canvas || !ctx) {
             return;
         }
 
@@ -54,15 +53,9 @@ const ImageCanvas = ({width, height, pixels}: Props) => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.imageSmoothingEnabled = false;
         ctx.drawImage(tempCanvas, offsetX, offsetY, width * scale, height * scale);
-
     }, [pixels, width, height, scale, offsetX, offsetY]);
 
-    return (
-        <canvas 
-            className={clsx(styles.canvas, { [styles.hidden]: hidden() })} 
-            ref={canvasRef} 
-        />
-    );
-}
+    return <canvas className={clsx(styles.canvas, { [styles.hidden]: hidden() })} ref={canvasRef} />;
+};
 
 export default ImageCanvas;

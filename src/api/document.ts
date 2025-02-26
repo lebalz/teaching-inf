@@ -49,7 +49,7 @@ export enum DocumentType {
     TextMessage = 'text_message',
     DynamicDocumentRoot = 'dynamic_document_root',
     DynamicDocumentRoots = 'dynamic_document_roots',
-    NetpbmGraphic = 'netpbm_graphic',
+    NetpbmGraphic = 'netpbm_graphic'
 }
 
 /**
