@@ -144,8 +144,6 @@ export const parseP3Raster = ({ width, height, maxValue, raster }: RasterParserI
             for (let col = 0; col < width; col++) {
                 for (let val = 0; val < 3; val++) {
                     const byteAscii = bytes[row * width * 3 + col * 3 + val];
-                    console.log(byteAscii);
-
                     if (!byteAscii) {
                         continue;
                     }
