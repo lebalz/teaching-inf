@@ -60,6 +60,9 @@
             align-items: center;
             /* needed for custom labels which are possibly wrapped by a paragraph*/
             --ifm-paragraph-margin-bottom: 0;
+            .labelIcon {
+                margin-right: 0.5em;
+            }
         }
     }
 

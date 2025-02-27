@@ -18,6 +18,8 @@ interface Props extends MetaInit {
     labelWidth?: string;
     inputWidth?: string;
     children?: ReactNode;
+    icon?: string;
+    iconColor?: string;
     type?: React.HTMLInputTypeAttribute | undefined;
     stateIconsPosition?: 'inside' | 'outside' | 'hidden';
     hideWarning?: boolean;
@@ -100,7 +102,7 @@ const String = observer((props: Props) => {
             className={clsx(
                 styles.string,
                 doc.hasSolution && styles.withSolution,
-                (props.label || props.children) && styles.withLabel,
+                (props.label || props.children || props.icon) && styles.withLabel,
                 styles[doc.answer],
                 'notranslate'
             )}
@@ -108,8 +110,16 @@ const String = observer((props: Props) => {
             inline={props.inline}
         >
             <>
-                {props.label && (
+                {(props.label || props.icon) && (
                     <label className={styles.label} style={{ width: props.labelWidth }} htmlFor={inputId}>
+                        {props.icon && (
+                            <Icon
+                                className={clsx(styles.labelIcon)}
+                                path={props.icon}
+                                color={props.iconColor}
+                                size={0.7}
+                            />
+                        )}
                         {props.label}
                     </label>
                 )}

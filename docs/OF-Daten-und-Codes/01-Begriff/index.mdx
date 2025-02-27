@@ -1,0 +1,97 @@
+---
+page_id: 1390dc8a-5886-4637-b97c-816b5c285979
+sidebar_custom_props:
+  source:
+    name: Gym-Kirchenfeld
+    ref: https://gitlab.gymkirchenfeld.ch/teach/code/-/tree/main/1-basics/1-code
+---
+
+# 1. Begriff
+
+:::aufgabe[Aufgabe]
+<Answer type="state" id="25824703-94fb-41dd-a773-0386feecad38" />
+
+1. Wo befindet sich der Ort `königin.gesehen.damals`? Verwenden Sie die Seite [what3words.com](https://what3words.com/).
+    <Answer type="string" id="18e8558f-6c5e-48a0-b611-23fcca93dd3a" label="königin.gesehen.damals" />
+2. Bei welchen drei Wörtern wohnen Sie?
+    <Answer type="string" id="8dec9e36-b0d5-4674-9919-372af9c38a3c" label="Wohnort" icon={mdiHome} />
+3. In welchen Situationen ist dieser Code vorteilhafter als eine Adresse? 
+    <Answer type="text" id="febd99e4-31b1-451f-89fa-e8f11134758c" />
+:::
+
+## Begriffsdefinitionen
+
+:::info[Information]
+Unter einer Information versteht man «das Wissen, das ein Sender einem Empfänger über einen Informationskanal übermittelt». [^1]
+:::
+
+:::info[Daten]
+Daten sind Zeichen oder Symbole, die Informationen darstellen. Daten können gesendet, empfangen und verarbeitet werden.
+:::
+
+::::info[Code]
+Ein Code ist eine «Sprache», die festlegt, wie Informationen vom Sender in Daten übersetzt und vom Empfänger wieder interpretiert werden.
+
+![](images/code.svg)
+
+:::warning[Code $\neq$ Verschlüsselung]
+Ein Code ist nicht dasselbe wie eine Verschlüsselung. Bei einer Verschlüsselung wird die Information so verändert, dass sie nur mit einem Schlüssel wieder entschlüsselt werden kann. Bei einem Code ist die Umwandlung festgelegt und kann ohne Schlüssel rückgängig gemacht werden.
+:::
+::::
+
+
+## Code
+Die Informationsübertragung kann nur funktionieren, wenn Sender:in und Empfänger:in den gleichen Code verwenden. Bei zwischenmenschlicher Kommunikation ist der Code normalerweise nicht explizit festgelegt. Dann muss die Empfänger:in den Code erraten, was zu Missverständnissen führen kann.
+
+![--width=400px](images/cover.svg)
+
+Ein Code ist eine Vorschrift, welche Daten von einer Darstellung in eine andere umwandelt. Dabei darf **keine Information verloren gehen, eine Rückumwandlung muss ohne Inhaltsverlust möglich sein**.
+
+Beispiel eines Codes: Umwandlung von Braillezeichen in Buchstaben und umgekehrt.
+
+![](images/code-1.svg)
+
+Das Ziel dieser Umwandlung ist es, eine für einen bestimmten Zweck optimierte Darstellung Informationen zu erreichen. So ist die Brailleschrift dafür optimiert, per Tastsinn gelesen werden zu können.
+
+## Beispiele für Codes
+
+:::cards{cols=3 width=200px}
+![](images/braille.jpg)
+#### Brailleschrift
+::br
+![](images/ascii.png)
+#### ASCII
+::br
+![](images/dna_transcription.png)
+#### Genetischer Code
+::br
+<QrCode />
+#### QR-Code
+::br{justify=space-between}
+![--width=100%](images/isbn.png)
+#### ISBN
+::br
+![](images/what3words.jpg)
+#### [what3words.com](https://what3words.com/)
+:::
+
+
+```mdx-code-block
+import { mdiHome, mdiCompass } from '@mdi/js';
+import Generator from '@tdev-components/shared/QR-Code/Generator';
+import { useStore } from '@tdev-hooks/useStore';
+import { observer } from 'mobx-react-lite';
+
+export const QrCode = () => {
+    const userStore = useStore('userStore');
+    const user = userStore.viewedUser;
+    return (
+        <Generator withInput size="30em" text={user?.name || 'Hallo Welt'} />
+    )
+
+}
+```
+
+
+
+[^1]: Quelle: [Wikipedia: Information](https://de.wikipedia.org/wiki/Information)

@@ -226,6 +226,11 @@ const config: Config = {
       if (params.filePath.startsWith(`${BUILD_LOCATION}/blog/`)) {
         return result;
       }
+      const fileName = path.basename(params.filePath);
+      if (fileName.startsWith('_')) {
+        // it is a partial, don't add frontmatter
+        return result;
+      }
       if (process.env.NODE_ENV !== 'production') {
         let needsRewrite = false;
         /**
