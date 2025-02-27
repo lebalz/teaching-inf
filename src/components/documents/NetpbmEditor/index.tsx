@@ -2,15 +2,15 @@ import { observer } from 'mobx-react-lite';
 import styles from './styles.module.scss';
 import React from 'react';
 import clsx from 'clsx';
-import { ParserMessage, ParserResult } from './types';
+import { ParserResult } from './types';
 import ImageCanvas from './ImageCanvas';
 import { MetaInit, ModelMeta } from '@tdev-models/documents/NetpbmGrapic';
 import { useFirstMainDocument } from '@tdev-hooks/useFirstMainDocument';
 import { Source } from '@tdev-models/iDocument';
 import SyncStatus from '@tdev-components/SyncStatus';
 import Icon from '@mdi/react';
-import { mdiAlertCircle, mdiCheckAll, mdiFlashTriangle } from '@mdi/js';
-import { parse, SUPPORTED_FORMATS } from './parser/parser';
+import { mdiAlertCircle, mdiAlertCircleOutline, mdiCheckAll, mdiFlashTriangle } from '@mdi/js';
+import { parse } from './parser/parser';
 
 interface Props extends MetaInit {
     id: string;
@@ -24,9 +24,6 @@ const NetpbmEditor = observer((props: Props) => {
     const [height, setHeight] = React.useState<number>(0);
     const [width, setWidth] = React.useState<number>(0);
     const [pixels, setPixels] = React.useState<Uint8ClampedArray>();
-
-    let errors: (string | React.ReactElement)[] = [];
-    let warnings: (string | React.ReactElement)[] = [];
 
     const [meta] = React.useState(new ModelMeta(props));
     const doc = useFirstMainDocument(props.id, meta);
@@ -47,25 +44,15 @@ const NetpbmEditor = observer((props: Props) => {
         setPixels(new Uint8ClampedArray());
     };
 
-    const appendError = (error: ParserMessage | ParserMessage[]) => {
-        if (Array.isArray(error)) {
-            errors.push(...error);
-        } else {
-            errors.push(error);
-        }
-        setDisplayedErrors(errors);
-    };
-
     const resetErrorsAndWarnings = () => {
         setDisplayedErrors([]);
         setDisplayedWarnings([]);
-        errors = [];
-        warnings = [];
     };
 
     const processParserResult = (result: ParserResult) => {
-        const { imageData, errors } = result;
-        appendError(errors || []);
+        const { imageData, errors, warnings } = result;
+        setDisplayedErrors(errors || []);
+        setDisplayedWarnings(warnings || []);
         if (imageData) {
             setHeight(imageData.height);
             setWidth(imageData.width);
@@ -117,27 +104,31 @@ const NetpbmEditor = observer((props: Props) => {
                     })}
                 >
                     {!hasErrorsOrWarnings() && (
-                        <div className={styles.summaryLabel}>
-                            <Icon path={mdiCheckAll} size={1} /> Ok
-                        </div>
+                        <>
+                            <span>Keine Fehler gefunden</span>
+                            <span className={styles.iconContainer}>
+                                <Icon path={mdiCheckAll} size={0.8} />
+                            </span>
+                        </>
                     )}
                     {hasErrorsOrWarnings() && (
                         <details>
                             <summary>
-                                {hasErrors() && !hasWarnings() && (
-                                    <div className={styles.summaryLabel}>
-                                        <Icon path={mdiAlertCircle} size={0.8} color="red" /> Fehler
-                                    </div>
-                                )}
-                                {hasErrors() && hasWarnings() && (
-                                    <div className={styles.summaryLabel}>
-                                        <Icon path={mdiAlertCircle} size={1} color="red" /> Fehler & Warnungen
-                                    </div>
+                                {hasErrors() && (
+                                    <>
+                                        <span>Fehler in den Bilddaten</span>
+                                        <span className={styles.iconContainer}>
+                                            <Icon path={mdiAlertCircle} size={0.8} color="red" />
+                                        </span>
+                                    </>
                                 )}
                                 {!hasErrors() && hasWarnings() && (
-                                    <div className={styles.summaryLabel}>
-                                        <Icon path={mdiAlertCircle} size={1} color="red" /> Warnungen
-                                    </div>
+                                    <>
+                                        <span>Warnungen anzeigen</span>
+                                        <span className={styles.iconContainer}>
+                                            <Icon path={mdiAlertCircleOutline} size={0.8} color="orange" />
+                                        </span>
+                                    </>
                                 )}
                             </summary>
                             <ul>
