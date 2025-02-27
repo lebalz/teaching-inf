@@ -56,6 +56,10 @@ export const parserP1Raster = ({ width, height, raster }: RasterParserInput): Pa
     }
 };
 
+const scaleByMaxValue = (value: number, maxValue: number): number => {
+    return (value / maxValue) * 255;
+};
+
 export const parseP2Raster = ({ width, height, maxValue, raster }: RasterParserInput): ParserResult => {
     if (!maxValue) {
         return { errors: ['Maximalwert nicht angegeben oder 0'] };
@@ -104,9 +108,10 @@ export const parseP2Raster = ({ width, height, maxValue, raster }: RasterParserI
                     );
                 }
 
-                pixels[row * width * 4 + col * 4] = byteValue; // red
-                pixels[row * width * 4 + col * 4 + 1] = byteValue; // green
-                pixels[row * width * 4 + col * 4 + 2] = byteValue; // blue
+                const byteValueScaled = scaleByMaxValue(byteValue, maxValue);
+                pixels[row * width * 4 + col * 4] = byteValueScaled; // red
+                pixels[row * width * 4 + col * 4 + 1] = byteValueScaled; // green
+                pixels[row * width * 4 + col * 4 + 2] = byteValueScaled; // blue
                 pixels[row * width * 4 + col * 4 + 3] = 255; // alpha
             }
         }
@@ -176,7 +181,7 @@ export const parseP3Raster = ({ width, height, maxValue, raster }: RasterParserI
                         );
                     }
 
-                    pixels[row * width * 4 + col * 4 + val] = byteValue;
+                    pixels[row * width * 4 + col * 4 + val] = scaleByMaxValue(byteValue, maxValue);
                     if (val === 2) {
                         pixels[row * width * 4 + col * 4 + 3] = 255; // alpha
                     }
