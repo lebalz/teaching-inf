@@ -31,9 +31,11 @@ Mit dem Parameter `default` kann ein Standardwert für den Editor festgelegt wer
 
 **Beispiel für eine P1 Portable Bitmap:**
 
-```mdx
-<NetpbmEditor id="390ba9f2-ad20-4c09-b8af-b602213679f4" default="P1
+````mdx
+<NetpbmEditor id="275bde1c-6db0-473e-ac3e-cf22dbad6a82">
+    ```
     # Beispiel einer Bitmap für den Buchstaben 'J'
+    P1
     7 9
     0 0 0 0 0 0 0
     0 0 0 0 0 1 0
@@ -43,22 +45,28 @@ Mit dem Parameter `default` kann ein Standardwert für den Editor festgelegt wer
     0 0 0 0 0 1 0
     0 1 0 0 0 1 0
     0 0 1 1 1 0 0
-    0 0 0 0 0 0 0" />
-```
+    0 0 0 0 0 0 0
+    ```
+</NetpbmEditor>
+````
 
 <BrowserWindow>
-    <NetpbmEditor id="390ba9f2-ad20-4c09-b8af-b602213679f4" default="P1
-        # Beispiel einer Bitmap für den Buchstaben 'J'
-        7 9
-        0 0 0 0 0 0 0
-        0 0 0 0 0 1 0
-        0 0 0 0 0 1 0
-        0 0 0 0 0 1 0
-        0 0 0 0 0 1 0
-        0 0 0 0 0 1 0
-        0 1 0 0 0 1 0
-        0 0 1 1 1 0 0
-        0 0 0 0 0 0 0" />
+    <NetpbmEditor id="275bde1c-6db0-473e-ac3e-cf22dbad6a82">
+    ```
+    # Beispiel einer Bitmap für den Buchstaben 'J'
+    P1
+    7 9
+    0 0 0 0 0 0 0
+    0 0 0 0 0 1 0
+    0 0 0 0 0 1 0
+    0 0 0 0 0 1 0
+    0 0 0 0 0 1 0
+    0 0 0 0 0 1 0
+    0 1 0 0 0 1 0
+    0 0 1 1 1 0 0
+    0 0 0 0 0 0 0
+    ```
+    </NetpbmEditor>
 </BrowserWindow>
 
 Der Editor kann auch ohne Persistierung verwendet werden, indem der `id`-Parameter weggelassen wird:
