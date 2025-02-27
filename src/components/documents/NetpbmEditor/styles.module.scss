@@ -1,5 +1,9 @@
 .editor {
     width: 100%;
+    border: 1px solid black;
+    border-radius: 0.5em;
+    margin-bottom: 1em;
+    overflow: hidden;
 
     .textAreaWrapper {
         position: relative;
@@ -14,6 +18,14 @@
         white-space: pre;
         overflow-wrap: normal;
         overflow-x: scroll;
+        box-sizing: border-box;
+        border: none;
+        padding: 0.5em;
+    }
+
+    .validationWrapper {
+        padding: 0.3em 0.5em;
+        border-radius: 0;
     }
 
     .stateIcons {

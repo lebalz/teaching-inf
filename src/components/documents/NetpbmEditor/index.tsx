@@ -2,7 +2,6 @@ import { observer } from 'mobx-react-lite';
 import styles from './styles.module.scss';
 import React from 'react';
 import clsx from 'clsx';
-import Admonition from '@theme/Admonition';
 import { parseP1, PATTERN as PATTERN_P1 } from './parser/p1Parser';
 import { ParserMessage, ParserResult } from './util';
 import ImageCanvas from './ImageCanvas';
@@ -133,7 +132,6 @@ const NetpbmEditor = observer((props: Props) => {
         render();
     }, [sanitizedData]);
 
-    // TODO: Taken and adapted from src/components/documents/String/index.tsx -> could we factor this out?
     const StateIcons = () => (
         <span className={clsx(styles.stateIcons)}>
             <SyncStatus model={doc} size={0.7} />
@@ -142,6 +140,10 @@ const NetpbmEditor = observer((props: Props) => {
             )}
         </span>
     );
+
+    const hasErrorsOrWarnings = () => displaySyntaxErrors.length > 0 || displayWarnings.length > 0;
+    const hasWarnings = () => displayWarnings.length > 0;
+    const hasErrors = () => displaySyntaxErrors.length > 0;
 
     return (
         <div>
@@ -156,32 +158,32 @@ const NetpbmEditor = observer((props: Props) => {
                         disabled={props.readonly}
                     />
                 </div>
-                <details>
-                    <summary>
-                        {displaySyntaxErrors?.length > 0 && <span>❌</span>}
-                        {displaySyntaxErrors?.length == 0 && displayWarnings?.length > 0 && <span>⚠️</span>}
-                        {displaySyntaxErrors?.length == 0 && displayWarnings?.length == 0 && <span>✅</span>}
-                        <span> Validierung</span>
-                    </summary>
-                    {displaySyntaxErrors?.length > 0 && (
-                        <Admonition type="danger" title="Syntaxfehler">
-                            <ul>
-                                {displaySyntaxErrors.map((error, index) => (
-                                    <li key={index}>{error}</li>
-                                ))}
-                            </ul>
-                        </Admonition>
-                    )}
-                    {displayWarnings?.length > 0 && (
-                        <Admonition type="warning" title="Warnungen">
+                <div
+                    className={clsx(styles.validationWrapper, 'alert', {
+                        ['alert--success']: !hasErrorsOrWarnings(),
+                        ['alert--warning']: hasWarnings() && !hasErrors(),
+                        ['alert--danger']: hasErrors()
+                    })}
+                >
+                    {!hasErrorsOrWarnings() && <span>✅ Ok</span>}
+                    {hasErrorsOrWarnings() && (
+                        <details>
+                            <summary>
+                                {hasErrors() && !hasWarnings() && <span>❌ Fehler</span>}
+                                {hasErrors() && hasWarnings() && <span>❌ Fehler & Warnungen</span>}
+                                {!hasErrors() &&  hasWarnings() && <span>⚠️ Warnungen</span>}
+                            </summary>
                             <ul>
                                 {displayWarnings.map((warnung, index) => (
-                                    <li key={index}>{warnung}</li>
+                                    <li key={index}>⚠️ {warnung}</li>
+                                ))}
+                                {displaySyntaxErrors.map((error, index) => (
+                                    <li key={index}>❌ {error}</li>
                                 ))}
                             </ul>
-                        </Admonition>
+                        </details>
                     )}
-                </details>
+                </div>
             </div>
             <ImageCanvas width={width} height={height} pixels={pixels} />
         </div>
