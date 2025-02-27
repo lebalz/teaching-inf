@@ -2,17 +2,15 @@ import { observer } from 'mobx-react-lite';
 import styles from './styles.module.scss';
 import React from 'react';
 import clsx from 'clsx';
-import { parseP1, PATTERN as PATTERN_P1 } from './parser/p1Parser';
 import { ParserMessage, ParserResult } from './types';
 import ImageCanvas from './ImageCanvas';
-import { parseP2, PATTERN as PATTERN_P2 } from './parser/p2Parser';
-import { parseP3, PATTERN as PATTERN_P3 } from './parser/p3Parser';
 import { MetaInit, ModelMeta } from '@tdev-models/documents/NetpbmGrapic';
 import { useFirstMainDocument } from '@tdev-hooks/useFirstMainDocument';
 import { Source } from '@tdev-models/iDocument';
 import SyncStatus from '@tdev-components/SyncStatus';
 import Icon from '@mdi/react';
 import { mdiAlertCircle, mdiCheckAll, mdiFlashTriangle } from '@mdi/js';
+import { parse, SUPPORTED_FORMATS } from './parser/parser';
 
 interface Props extends MetaInit {
     id: string;
@@ -20,8 +18,6 @@ interface Props extends MetaInit {
 }
 
 const NetpbmEditor = observer((props: Props) => {
-    const SUPPORTED_FORMATS = ['P1', 'P2', 'P3'];
-
     const [sanitizedData, setSanitizedData] = React.useState<string>('');
     const [displayedErrors, setDisplayedErrors] = React.useState<(string | React.ReactElement)[]>([]);
     const [displayedWarnings, setDisplayedWarnings] = React.useState<(string | React.ReactElement)[]>([]);
@@ -60,35 +56,6 @@ const NetpbmEditor = observer((props: Props) => {
         setDisplayedErrors(errors);
     };
 
-    const createErrorReport = () => {
-        if (!sanitizedData) {
-            return;
-        }
-
-        const lines = sanitizedData.split('\n');
-        if (!SUPPORTED_FORMATS.includes(lines[0].trim())) {
-            appendError(
-                <span>
-                    Unbekanntes Format auf der ersten Zeile: <code>{lines[0].trim()}</code>. Unterstützte
-                    Formate: <code>{SUPPORTED_FORMATS.join(', ')}</code>.
-                </span>
-            );
-        }
-
-        const dimensionLinePattern = /\s*\d+\s+\d+\s*/;
-        const dimensionLineMatch = dimensionLinePattern.exec(lines[1]);
-        if (!dimensionLineMatch) {
-            appendError(
-                <span>
-                    Auf der zweiten Zeile werden die Dimensionen des Bildes im Format <code>BREITE HÖHE</code>{' '}
-                    (z.B. <code>10 6</code>) erwartet.
-                </span>
-            );
-        }
-
-        // TODO: Max value for P2/P3.
-    };
-
     const resetErrorsAndWarnings = () => {
         setDisplayedErrors([]);
         setDisplayedWarnings([]);
@@ -109,20 +76,7 @@ const NetpbmEditor = observer((props: Props) => {
     const render = () => {
         resetImageData();
         resetErrorsAndWarnings();
-
-        const matchP1 = PATTERN_P1.exec(sanitizedData);
-        const matchP2 = PATTERN_P2.exec(sanitizedData);
-        const matchP3 = PATTERN_P3.exec(sanitizedData);
-
-        if (matchP1) {
-            processParserResult(parseP1(matchP1));
-        } else if (matchP2) {
-            processParserResult(parseP2(matchP2));
-        } else if (matchP3) {
-            processParserResult(parseP3(matchP3));
-        } else {
-            createErrorReport();
-        }
+        processParserResult(parse(sanitizedData));
     };
 
     React.useEffect(() => {
