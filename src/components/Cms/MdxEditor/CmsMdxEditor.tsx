@@ -67,6 +67,8 @@ import { mathPlugin } from './plugins/mathPlugin';
 import MediaDescriptors from '@tdev-plugins/remark-media/mdx-editor-plugin';
 import { PdfDescriptor } from '@tdev-plugins/remark-pdf/mdx-editor-plugin/PdfDescriptor';
 import { Asset } from '@tdev-models/cms/Dir';
+import DraggableBlockNode from './plugins/DraggableBlockPlugin/DraggableBlockNode';
+import { draggableBlockPlugin } from './plugins/DraggableBlockPlugin';
 
 export interface Props {
     file: FileModel;
@@ -91,6 +93,7 @@ const CmsMdxEditor = observer((props: Props) => {
             )}
         >
             <MDXEditor
+                contentEditableClassName="cms-contenteditable"
                 markdown={file.refContent!}
                 placeholder="Schreibe deine Inhalte hier..."
                 onError={(error) => {
@@ -131,6 +134,7 @@ const CmsMdxEditor = observer((props: Props) => {
                         ]
                     }),
                     thematicBreakPlugin(),
+                    draggableBlockPlugin(),
                     tablePlugin(),
                     diffSourcePlugin({ diffMarkdown: file._pristine, viewMode: 'rich-text' }),
                     codeBlockPlugin({ defaultCodeBlockLanguage: 'py' }),
