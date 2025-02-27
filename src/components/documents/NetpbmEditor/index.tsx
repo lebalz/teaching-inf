@@ -12,7 +12,7 @@ import { useFirstMainDocument } from '@tdev-hooks/useFirstMainDocument';
 import { Source } from '@tdev-models/iDocument';
 import SyncStatus from '@tdev-components/SyncStatus';
 import Icon from '@mdi/react';
-import { mdiFlashTriangle } from '@mdi/js';
+import { mdiAlertCircle, mdiCheckAll, mdiFlashTriangle } from '@mdi/js';
 
 interface Props extends MetaInit {
     id: string;
@@ -151,7 +151,7 @@ const NetpbmEditor = observer((props: Props) => {
                 <div className={styles.textAreaWrapper}>
                     <StateIcons />
                     <textarea
-                        rows={10}
+                        rows={12}
                         className={clsx(styles.editorTextArea)}
                         onChange={(e) => doc.setData({ imageData: e.target.value }, Source.LOCAL)}
                         value={doc.data.imageData}
@@ -160,18 +160,18 @@ const NetpbmEditor = observer((props: Props) => {
                 </div>
                 <div
                     className={clsx(styles.validationWrapper, 'alert', {
-                        ['alert--success']: !hasErrorsOrWarnings(),
+                        ['alert--secondary']: !hasErrorsOrWarnings(),
                         ['alert--warning']: hasWarnings() && !hasErrors(),
                         ['alert--danger']: hasErrors()
                     })}
                 >
-                    {!hasErrorsOrWarnings() && <span>✅ Ok</span>}
+                    {!hasErrorsOrWarnings() && <div className={styles.summaryLabel}><Icon path={mdiCheckAll} size={1} /> Ok</div>}
                     {hasErrorsOrWarnings() && (
                         <details>
                             <summary>
-                                {hasErrors() && !hasWarnings() && <span>❌ Fehler</span>}
-                                {hasErrors() && hasWarnings() && <span>❌ Fehler & Warnungen</span>}
-                                {!hasErrors() && hasWarnings() && <span>⚠️ Warnungen</span>}
+                                {hasErrors() && !hasWarnings() && <div className={styles.summaryLabel}><Icon path={mdiAlertCircle} size={0.8} color="red" /> Fehler</div>}
+                                {hasErrors() && hasWarnings() && <div className={styles.summaryLabel}><Icon path={mdiAlertCircle} size={1} color="red" /> Fehler & Warnungen</div>}
+                                {!hasErrors() && hasWarnings() && <div className={styles.summaryLabel}><Icon path={mdiAlertCircle} size={1} color="red" /> Warnungen</div>}
                             </summary>
                             <ul>
                                 {displayedWarnings.map((warnung, index) => (
