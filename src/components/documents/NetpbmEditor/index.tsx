@@ -116,13 +116,29 @@ const NetpbmEditor = observer((props: Props) => {
                         ['alert--danger']: hasErrors()
                     })}
                 >
-                    {!hasErrorsOrWarnings() && <div className={styles.summaryLabel}><Icon path={mdiCheckAll} size={1} /> Ok</div>}
+                    {!hasErrorsOrWarnings() && (
+                        <div className={styles.summaryLabel}>
+                            <Icon path={mdiCheckAll} size={1} /> Ok
+                        </div>
+                    )}
                     {hasErrorsOrWarnings() && (
                         <details>
                             <summary>
-                                {hasErrors() && !hasWarnings() && <div className={styles.summaryLabel}><Icon path={mdiAlertCircle} size={0.8} color="red" /> Fehler</div>}
-                                {hasErrors() && hasWarnings() && <div className={styles.summaryLabel}><Icon path={mdiAlertCircle} size={1} color="red" /> Fehler & Warnungen</div>}
-                                {!hasErrors() && hasWarnings() && <div className={styles.summaryLabel}><Icon path={mdiAlertCircle} size={1} color="red" /> Warnungen</div>}
+                                {hasErrors() && !hasWarnings() && (
+                                    <div className={styles.summaryLabel}>
+                                        <Icon path={mdiAlertCircle} size={0.8} color="red" /> Fehler
+                                    </div>
+                                )}
+                                {hasErrors() && hasWarnings() && (
+                                    <div className={styles.summaryLabel}>
+                                        <Icon path={mdiAlertCircle} size={1} color="red" /> Fehler & Warnungen
+                                    </div>
+                                )}
+                                {!hasErrors() && hasWarnings() && (
+                                    <div className={styles.summaryLabel}>
+                                        <Icon path={mdiAlertCircle} size={1} color="red" /> Warnungen
+                                    </div>
+                                )}
                             </summary>
                             <ul>
                                 {displayedWarnings.map((warnung, index) => (

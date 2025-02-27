@@ -81,8 +81,8 @@ export const parseP2Raster = ({ width, height, maxValue, raster }: RasterParserI
         if (maxValue <= 1 || maxValue >= 65536) {
             errors.push(
                 <span>
-                    Maximalwert <code>{maxValue}</code> ungültig. Der Wert muss grösser als 0 und kleiner als 65536
-                    sein.
+                    Maximalwert <code>{maxValue}</code> ungültig. Der Wert muss grösser als 0 und kleiner als
+                    65536 sein.
                 </span>
             );
         }
@@ -150,8 +150,8 @@ export const parseP3Raster = ({ width, height, maxValue, raster }: RasterParserI
         if (maxValue <= 1 || maxValue >= 65536) {
             errors.push(
                 <span>
-                    Maximalwert <code>{maxValue}</code> ungültig. Der Wert muss grösser als 0 und kleiner als 65536
-                    sein.
+                    Maximalwert <code>{maxValue}</code> ungültig. Der Wert muss grösser als 0 und kleiner als
+                    65536 sein.
                 </span>
             );
         }

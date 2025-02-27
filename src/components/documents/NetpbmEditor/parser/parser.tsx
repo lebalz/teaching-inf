@@ -4,13 +4,15 @@ import { parseP2Raster, parseP3Raster, parserP1Raster } from './rasterParser';
 export const SUPPORTED_FORMATS = ['P1', 'P2', 'P3'];
 
 export const PATTERN_P1 = /(?<format>P1)\s+(?<width>\d+)\s+(?<height>\d+)\s+(?<raster>[\d\D\s]*)/;
-export const PATTERN_P2 = /(?<format>P2)\s+(?<width>\d+)\s+(?<height>\d+)\s+(?<max>\d+)\s+(?<raster>[\d\D\s]*)/;
-export const PATTERN_P3 = /(?<format>P3)\s+(?<width>\d+)\s+(?<height>\d+)\s+(?<max>\d+)\s+(?<raster>[\d\D\s]*)/;
+export const PATTERN_P2 =
+    /(?<format>P2)\s+(?<width>\d+)\s+(?<height>\d+)\s+(?<max>\d+)\s+(?<raster>[\d\D\s]*)/;
+export const PATTERN_P3 =
+    /(?<format>P3)\s+(?<width>\d+)\s+(?<height>\d+)\s+(?<max>\d+)\s+(?<raster>[\d\D\s]*)/;
 
 const DATA_PARSERS: { [key: string]: (input: RasterParserInput) => ParserResult } = {
     P1: parserP1Raster,
     P2: parseP2Raster,
-    P3: parseP3Raster,
+    P3: parseP3Raster
 };
 
 function createErrorReport(sanitizedData: string): ParserMessage[] {
@@ -24,8 +26,8 @@ function createErrorReport(sanitizedData: string): ParserMessage[] {
     if (!SUPPORTED_FORMATS.includes(lines[0].trim())) {
         errors.push(
             <span>
-                Unbekanntes Format auf der ersten Zeile: <code>{lines[0].trim()}</code>. Unterstützte
-                Formate: <code>{SUPPORTED_FORMATS.join(', ')}</code>.
+                Unbekanntes Format auf der ersten Zeile: <code>{lines[0].trim()}</code>. Unterstützte Formate:{' '}
+                <code>{SUPPORTED_FORMATS.join(', ')}</code>.
             </span>
         );
     }
@@ -44,7 +46,7 @@ function createErrorReport(sanitizedData: string): ParserMessage[] {
     // TODO: Max value for P2/P3.
 
     return errors;
-};
+}
 
 export const parse = (sanitizedData: string): ParserResult => {
     const matchP1 = PATTERN_P1.exec(sanitizedData);
@@ -59,7 +61,9 @@ export const parse = (sanitizedData: string): ParserResult => {
     }
 
     if (!match.groups) {
-        return { errors: ['Unerwarteter Fehler beim Parsen der Bilddaten: Keine Gruppen im regulären Ausdruck.'] };
+        return {
+            errors: ['Unerwarteter Fehler beim Parsen der Bilddaten: Keine Gruppen im regulären Ausdruck.']
+        };
     }
 
     const rasterParserInput: RasterParserInput = {
@@ -68,7 +72,7 @@ export const parse = (sanitizedData: string): ParserResult => {
         height: parseInt(match.groups.height),
         maxValue: match.groups.max ? parseInt(match.groups.max) : undefined,
         raster: match.groups.raster
-    }
+    };
 
     return DATA_PARSERS[rasterParserInput.format](rasterParserInput);
-}
+};
