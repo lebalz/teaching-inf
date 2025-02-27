@@ -8,6 +8,6 @@ export interface ParserImageDataResult {
 
 export interface ParserResult {
     imageData?: ParserImageDataResult;
-    syntaxErrors?: ParserMessage[];
+    errors?: ParserMessage[];
     warnings?: ParserMessage[];
 }

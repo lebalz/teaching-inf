@@ -3,7 +3,7 @@ import { ParserResult } from '../util';
 export const PATTERN = /P1\s+(?<width>\d+)\s+(?<height>\d+)\s+(?<raster>[\d\D\s]*)/;
 
 export const parseP1 = (match: RegExpExecArray): ParserResult => {
-    const syntaxErrors = [];
+    const errors = [];
 
     try {
         const {
@@ -18,12 +18,12 @@ export const parseP1 = (match: RegExpExecArray): ParserResult => {
         const expectedNumberOfBits = width * height;
 
         if (bits.length === 0) {
-            syntaxErrors.push('Keine Rasterdaten gefunden.');
-            return { syntaxErrors };
+            errors.push('Keine Rasterdaten gefunden.');
+            return { errors: errors };
         }
 
         if (bits.length !== expectedNumberOfBits) {
-            syntaxErrors.push(
+            errors.push(
                 `Bildgrösse ist ${width}x${height} (${expectedNumberOfBits} Bits), aber es wurden ${bits.length} Bits gefunden.`
             );
         }
@@ -38,7 +38,7 @@ export const parseP1 = (match: RegExpExecArray): ParserResult => {
 
                 const bitValue = parseInt(bitAscii);
                 if (bitValue !== 0 && bitValue !== 1) {
-                    syntaxErrors.push(
+                    errors.push(
                         <span>
                             Ungültiger Wert in den Rasterdaten: <code>{bitAscii}</code>.
                         </span>
@@ -58,10 +58,10 @@ export const parseP1 = (match: RegExpExecArray): ParserResult => {
                 width,
                 height
             },
-            syntaxErrors
+            errors: errors
         };
     } catch (e) {
-        syntaxErrors.push('Fehler beim Parsen der Bilddaten: ' + e);
-        return { syntaxErrors };
+        errors.push('Fehler beim Parsen der Bilddaten: ' + e);
+        return { errors: errors };
     }
 };

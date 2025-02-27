@@ -3,7 +3,7 @@ import { ParserResult } from '../util';
 export const PATTERN = /P2\s+(?<width>\d+)\s+(?<height>\d+)\s+(?<max>\d+)\s+(?<raster>[\d\D\s]*)/;
 
 export const parseP2 = (match: RegExpExecArray): ParserResult => {
-    const syntaxErrors = [];
+    const errors = [];
 
     try {
         const {
@@ -20,18 +20,18 @@ export const parseP2 = (match: RegExpExecArray): ParserResult => {
         const expectedNumberOfBytes = width * height;
 
         if (bytes.length === 0) {
-            syntaxErrors.push('Keine Rasterdaten gefunden.');
-            return { syntaxErrors };
+            errors.push('Keine Rasterdaten gefunden.');
+            return { errors: errors };
         }
 
         if (bytes.length !== expectedNumberOfBytes) {
-            syntaxErrors.push(
+            errors.push(
                 `Bildgrösse ist ${width}x${height} (${expectedNumberOfBytes} Bytes), aber es wurden ${bytes.length} Bytes gefunden.`
             );
         }
 
         if (max <= 1 || max >= 65536) {
-            syntaxErrors.push(
+            errors.push(
                 <span>
                     Maximalwert <code>{max}</code> ungültig. Der Wert muss grösser als 0 und kleiner als 65536
                     sein.
@@ -49,7 +49,7 @@ export const parseP2 = (match: RegExpExecArray): ParserResult => {
 
                 const byteValue = parseInt(byteAscii);
                 if (isNaN(byteValue)) {
-                    syntaxErrors.push(
+                    errors.push(
                         <span>
                             Ungültiger Wert in den Rasterdaten: <code>{byteAscii}</code>.
                         </span>
@@ -69,10 +69,10 @@ export const parseP2 = (match: RegExpExecArray): ParserResult => {
                 width,
                 height
             },
-            syntaxErrors
+            errors: errors
         };
     } catch (e) {
-        syntaxErrors.push('Fehler beim Parsen der Bilddaten: ' + e);
-        return { syntaxErrors };
+        errors.push('Fehler beim Parsen der Bilddaten: ' + e);
+        return { errors: errors };
     }
 };

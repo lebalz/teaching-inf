@@ -26,13 +26,13 @@ const NetpbmEditor = observer((props: Props) => {
 
     // const [data, setData] = React.useState<string>(props.default || '');
     const [sanitizedData, setSanitizedData] = React.useState<string>('');
-    const [displaySyntaxErrors, setDisplaySyntaxErrors] = React.useState<(string | React.ReactElement)[]>([]);
-    const [displayWarnings, setDisplayWarnings] = React.useState<(string | React.ReactElement)[]>([]);
+    const [displayedErrors, setDisplayedErrors] = React.useState<(string | React.ReactElement)[]>([]);
+    const [displayedWarnings, setDisplayedWarnings] = React.useState<(string | React.ReactElement)[]>([]);
     const [height, setHeight] = React.useState<number>(0);
     const [width, setWidth] = React.useState<number>(0);
     const [pixels, setPixels] = React.useState<Uint8ClampedArray>();
 
-    let syntaxErrors: (string | React.ReactElement)[] = [];
+    let errors: (string | React.ReactElement)[] = [];
     let warnings: (string | React.ReactElement)[] = [];
 
     const [meta] = React.useState(new ModelMeta(props));
@@ -54,13 +54,13 @@ const NetpbmEditor = observer((props: Props) => {
         setPixels(new Uint8ClampedArray());
     };
 
-    const pushSyntaxError = (error: ParserMessage | ParserMessage[]) => {
+    const appendError = (error: ParserMessage | ParserMessage[]) => {
         if (Array.isArray(error)) {
-            syntaxErrors.push(...error);
+            errors.push(...error);
         } else {
-            syntaxErrors.push(error);
+            errors.push(error);
         }
-        setDisplaySyntaxErrors(syntaxErrors);
+        setDisplayedErrors(errors);
     };
 
     const createErrorReport = () => {
@@ -70,7 +70,7 @@ const NetpbmEditor = observer((props: Props) => {
 
         const lines = sanitizedData.split('\n');
         if (!SUPPORTED_FORMATS.includes(lines[0].trim())) {
-            pushSyntaxError(
+            appendError(
                 <span>
                     Unbekanntes Format auf der ersten Zeile: <code>{lines[0].trim()}</code>. Unterstützte
                     Formate: <code>{SUPPORTED_FORMATS.join(', ')}</code>.
@@ -81,7 +81,7 @@ const NetpbmEditor = observer((props: Props) => {
         const dimensionLinePattern = /\s*\d+\s+\d+\s*/;
         const dimensionLineMatch = dimensionLinePattern.exec(lines[1]);
         if (!dimensionLineMatch) {
-            pushSyntaxError(
+            appendError(
                 <span>
                     Auf der zweiten Zeile werden die Dimensionen des Bildes im Format <code>BREITE HÖHE</code>{' '}
                     (z.B. <code>10 6</code>) erwartet.
@@ -93,15 +93,15 @@ const NetpbmEditor = observer((props: Props) => {
     };
 
     const resetErrorsAndWarnings = () => {
-        setDisplaySyntaxErrors([]);
-        setDisplayWarnings([]);
-        syntaxErrors = [];
+        setDisplayedErrors([]);
+        setDisplayedWarnings([]);
+        errors = [];
         warnings = [];
     };
 
     const processParserResult = (result: ParserResult) => {
-        const { imageData, syntaxErrors } = result;
-        pushSyntaxError(syntaxErrors || []);
+        const { imageData, errors } = result;
+        appendError(errors || []);
         if (imageData) {
             setHeight(imageData.height);
             setWidth(imageData.width);
@@ -141,9 +141,9 @@ const NetpbmEditor = observer((props: Props) => {
         </span>
     );
 
-    const hasErrorsOrWarnings = () => displaySyntaxErrors.length > 0 || displayWarnings.length > 0;
-    const hasWarnings = () => displayWarnings.length > 0;
-    const hasErrors = () => displaySyntaxErrors.length > 0;
+    const hasErrorsOrWarnings = () => displayedErrors.length > 0 || displayedWarnings.length > 0;
+    const hasWarnings = () => displayedWarnings.length > 0;
+    const hasErrors = () => displayedErrors.length > 0;
 
     return (
         <div>
@@ -171,13 +171,13 @@ const NetpbmEditor = observer((props: Props) => {
                             <summary>
                                 {hasErrors() && !hasWarnings() && <span>❌ Fehler</span>}
                                 {hasErrors() && hasWarnings() && <span>❌ Fehler & Warnungen</span>}
-                                {!hasErrors() &&  hasWarnings() && <span>⚠️ Warnungen</span>}
+                                {!hasErrors() && hasWarnings() && <span>⚠️ Warnungen</span>}
                             </summary>
                             <ul>
-                                {displayWarnings.map((warnung, index) => (
+                                {displayedWarnings.map((warnung, index) => (
                                     <li key={index}>⚠️ {warnung}</li>
                                 ))}
-                                {displaySyntaxErrors.map((error, index) => (
+                                {displayedErrors.map((error, index) => (
                                     <li key={index}>❌ {error}</li>
                                 ))}
                             </ul>
