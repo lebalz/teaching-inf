@@ -1,10 +1,16 @@
-import { ParserResult, RasterParserInput } from '../types';
+import { ParserMessage, ParserResult, RasterParserInput } from '../types';
+import {
+    scaleByMaxValue,
+    splitRasterData,
+    validateMatchingNumberOfRasterBytes,
+    validateMaxValue
+} from './util';
 
 export const parserP1Raster = ({ width, height, raster }: RasterParserInput): ParserResult => {
     const errors = [];
 
     try {
-        const bits = raster.split(/\s+/);
+        const bits = splitRasterData(raster);
         const expectedNumberOfBits = width * height;
 
         if (bits.length === 0) {
@@ -56,19 +62,15 @@ export const parserP1Raster = ({ width, height, raster }: RasterParserInput): Pa
     }
 };
 
-const scaleByMaxValue = (value: number, maxValue: number): number => {
-    return (value / maxValue) * 255;
-};
-
 export const parseP2Raster = ({ width, height, maxValue, raster }: RasterParserInput): ParserResult => {
     if (!maxValue) {
         return { errors: ['Maximalwert nicht angegeben oder 0'] };
     }
 
-    const errors = [];
+    const errors: ParserMessage[] = [];
 
     try {
-        const bytes = raster.split(/\s+/);
+        const bytes = splitRasterData(raster);
         const expectedNumberOfBytes = width * height;
 
         if (bytes.length === 0) {
@@ -76,20 +78,8 @@ export const parseP2Raster = ({ width, height, maxValue, raster }: RasterParserI
             return { errors: errors };
         }
 
-        if (bytes.length !== expectedNumberOfBytes) {
-            errors.push(
-                `Bildgrösse ist ${width}x${height} (${expectedNumberOfBytes} Bytes), aber es wurden ${bytes.length} Bytes gefunden.`
-            );
-        }
-
-        if (maxValue <= 1 || maxValue >= 65536) {
-            errors.push(
-                <span>
-                    Maximalwert <code>{maxValue}</code> ungültig. Der Wert muss grösser als 0 und kleiner als
-                    65536 sein.
-                </span>
-            );
-        }
+        validateMatchingNumberOfRasterBytes(bytes, expectedNumberOfBytes, width, height, errors);
+        validateMaxValue(maxValue, errors);
 
         const pixels = new Uint8ClampedArray(width * height * 4);
         for (let row = 0; row < height; row++) {
@@ -135,10 +125,10 @@ export const parseP3Raster = ({ width, height, maxValue, raster }: RasterParserI
         return { errors: ['Maximalwert nicht angegeben oder 0'] };
     }
 
-    const errors = [];
+    const errors: ParserMessage[] = [];
 
     try {
-        const bytes = raster.split(/\s+/);
+        const bytes = splitRasterData(raster);
         const expectedNumberOfBytes = width * height * 3;
 
         if (bytes.length === 0) {
@@ -146,20 +136,8 @@ export const parseP3Raster = ({ width, height, maxValue, raster }: RasterParserI
             return { errors: errors };
         }
 
-        if (bytes.length !== expectedNumberOfBytes) {
-            errors.push(
-                `Bildgrösse ist ${width}x${height} (${expectedNumberOfBytes} Bytes), aber es wurden ${bytes.length} Bytes gefunden.`
-            );
-        }
-
-        if (maxValue <= 1 || maxValue >= 65536) {
-            errors.push(
-                <span>
-                    Maximalwert <code>{maxValue}</code> ungültig. Der Wert muss grösser als 0 und kleiner als
-                    65536 sein.
-                </span>
-            );
-        }
+        validateMatchingNumberOfRasterBytes(bytes, expectedNumberOfBytes, width, height, errors);
+        validateMaxValue(maxValue, errors);
 
         const pixels = new Uint8ClampedArray(width * height * 4);
         for (let row = 0; row < height; row++) {

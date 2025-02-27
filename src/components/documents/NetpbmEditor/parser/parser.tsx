@@ -43,8 +43,6 @@ function createErrorReport(sanitizedData: string): ParserMessage[] {
         );
     }
 
-    // TODO: Max value for P2/P3.
-
     return errors;
 }
 
