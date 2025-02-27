@@ -3,7 +3,7 @@ import styles from './styles.module.scss';
 import React from 'react';
 import clsx from 'clsx';
 import { parseP1, PATTERN as PATTERN_P1 } from './parser/p1Parser';
-import { ParserMessage, ParserResult } from './util';
+import { ParserMessage, ParserResult } from './types';
 import ImageCanvas from './ImageCanvas';
 import { parseP2, PATTERN as PATTERN_P2 } from './parser/p2Parser';
 import { parseP3, PATTERN as PATTERN_P3 } from './parser/p3Parser';
@@ -16,15 +16,12 @@ import { mdiAlertCircle, mdiCheckAll, mdiFlashTriangle } from '@mdi/js';
 
 interface Props extends MetaInit {
     id: string;
-    // default?: string;
     noEditor?: boolean;
-    // readonly?: boolean;
 }
 
 const NetpbmEditor = observer((props: Props) => {
     const SUPPORTED_FORMATS = ['P1', 'P2', 'P3'];
 
-    // const [data, setData] = React.useState<string>(props.default || '');
     const [sanitizedData, setSanitizedData] = React.useState<string>('');
     const [displayedErrors, setDisplayedErrors] = React.useState<(string | React.ReactElement)[]>([]);
     const [displayedWarnings, setDisplayedWarnings] = React.useState<(string | React.ReactElement)[]>([]);

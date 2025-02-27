@@ -5,16 +5,14 @@ import DocumentStore from '@tdev-stores/DocumentStore';
 import { TypeMeta } from '@tdev-models/DocumentRoot';
 
 export interface MetaInit {
-    readonly?: boolean; // TODO: Do we need this here?
-    default?: string; // TODO: Do we need this here?
-    // TODO: Do we need noEditor?
+    readonly?: boolean;
+    default?: string;
 }
 
 export class ModelMeta extends TypeMeta<DocumentType.NetpbmGraphic> {
     readonly type = DocumentType.NetpbmGraphic;
     readonly readonly?: boolean;
-    readonly default?: string; // TODO: Do we need this here?
-    // TODO: Do we need noEditor?
+    readonly default?: string;
 
     constructor(props: Partial<MetaInit>) {
         super(DocumentType.NetpbmGraphic, props.readonly ? Access.RO_User : undefined);

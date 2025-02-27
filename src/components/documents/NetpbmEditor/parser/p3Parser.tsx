@@ -1,4 +1,4 @@
-import { ParserResult } from '../util';
+import { ParserResult } from '../types';
 
 export const PATTERN = /P3\s+(?<width>\d+)\s+(?<height>\d+)\s+(?<max>\d+)\s+(?<raster>[\d\D\s]*)/;
 
