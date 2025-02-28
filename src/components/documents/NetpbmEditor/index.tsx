@@ -47,27 +47,36 @@ const NetpbmEditor = observer((props: Props) => {
         setSanitizedData(result);
     }, [doc.data.imageData]);
 
-    const resetImageData = () => {
-        setHeight(0);
-        setWidth(0);
-        setPixels(new Uint8ClampedArray());
-    };
+    const resetImageData = React.useMemo(
+        () => () => {
+            setHeight(0);
+            setWidth(0);
+            setPixels(new Uint8ClampedArray());
+        },
+        []
+    );
 
-    const resetErrorsAndWarnings = () => {
-        setDisplayedErrors([]);
-        setDisplayedWarnings([]);
-    };
+    const resetErrorsAndWarnings = React.useMemo(
+        () => () => {
+            setDisplayedErrors([]);
+            setDisplayedWarnings([]);
+        },
+        []
+    );
 
-    const processParserResult = (result: ParserResult) => {
-        const { imageData, errors, warnings } = result;
-        setDisplayedErrors(errors || []);
-        setDisplayedWarnings(warnings || []);
-        if (imageData) {
-            setHeight(imageData.height);
-            setWidth(imageData.width);
-            setPixels(imageData.pixels);
-        }
-    };
+    const processParserResult = React.useMemo(
+        () => (result: ParserResult) => {
+            const { imageData, errors, warnings } = result;
+            setDisplayedErrors(errors || []);
+            setDisplayedWarnings(warnings || []);
+            if (imageData) {
+                setHeight(imageData.height);
+                setWidth(imageData.width);
+                setPixels(imageData.pixels);
+            }
+        },
+        []
+    );
 
     const render = () => {
         resetImageData();
