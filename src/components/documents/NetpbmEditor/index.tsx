@@ -4,13 +4,22 @@ import React from 'react';
 import clsx from 'clsx';
 import { ParserResult } from './types';
 import ImageCanvas from './ImageCanvas';
-import { MetaInit, ModelMeta } from '@tdev-models/documents/NetpbmGrapic';
+import NetpbmGraphic, { MetaInit, ModelMeta } from '@tdev-models/documents/NetpbmGrapic';
 import { useFirstMainDocument } from '@tdev-hooks/useFirstMainDocument';
 import { Source } from '@tdev-models/iDocument';
 import SyncStatus from '@tdev-components/SyncStatus';
 import Icon from '@mdi/react';
 import { mdiAlertCircle, mdiAlertCircleOutline, mdiCheckAll, mdiFlashTriangle } from '@mdi/js';
 import { parse } from './parser/parser';
+
+const StateIcons = observer(({doc}: {doc: NetpbmGraphic}) => (
+    <span className={clsx(styles.stateIcons)}>
+        <SyncStatus model={doc} size={0.7} />
+        {doc.root?.isDummy && (
+            <Icon path={mdiFlashTriangle} size={0.7} color="orange" title="Wird nicht gespeichert." />
+        )}
+    </span>
+));
 
 interface Props extends MetaInit {
     id: string;
@@ -70,15 +79,6 @@ const NetpbmEditor = observer((props: Props) => {
         render();
     }, [sanitizedData]);
 
-    const StateIcons = () => (
-        <span className={clsx(styles.stateIcons)}>
-            <SyncStatus model={doc} size={0.7} />
-            {doc.root?.isDummy && (
-                <Icon path={mdiFlashTriangle} size={0.7} color="orange" title="Wird nicht gespeichert." />
-            )}
-        </span>
-    );
-
     const hasErrorsOrWarnings = () => displayedErrors.length > 0 || displayedWarnings.length > 0;
     const hasWarnings = () => displayedWarnings.length > 0;
     const hasErrors = () => displayedErrors.length > 0;
@@ -87,7 +87,7 @@ const NetpbmEditor = observer((props: Props) => {
         <div>
             <div className={clsx(styles.editor, { [styles.hidden]: props.noEditor })}>
                 <div className={styles.textAreaWrapper}>
-                    <StateIcons />
+                    <StateIcons doc={doc} />
                     <textarea
                         rows={12}
                         className={clsx(styles.editorTextArea)}
