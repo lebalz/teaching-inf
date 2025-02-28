@@ -35,6 +35,7 @@ import Excalidoc from '@tdev-models/documents/Excalidoc';
 import TextMessage from '@tdev-models/documents/TextMessage';
 import DynamicDocumentRoots from '@tdev-models/documents/DynamicDocumentRoots';
 import { DynamicDocumentRootModel } from '@tdev-models/documents/DynamicDocumentRoot';
+import NetpbmGraphic from '@tdev-models/documents/NetpbmGrapic';
 
 const IsNotUniqueError = (error: any) => {
     try {
@@ -85,6 +86,8 @@ export function CreateDocumentModel(data: DocumentProps<DocumentType>, store: Do
             );
         case DocumentType.DynamicDocumentRoots:
             return new DynamicDocumentRoots(data as DocumentProps<DocumentType.DynamicDocumentRoots>, store);
+        case DocumentType.NetpbmGraphic:
+            return new NetpbmGraphic(data as DocumentProps<DocumentType.NetpbmGraphic>, store);
     }
 }
 class DocumentStore extends iStore<`delete-${string}`> {
