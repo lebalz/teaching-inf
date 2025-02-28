@@ -79,9 +79,13 @@ const NetpbmEditor = observer((props: Props) => {
         render();
     }, [sanitizedData]);
 
-    const hasErrorsOrWarnings = () => displayedErrors.length > 0 || displayedWarnings.length > 0;
-    const hasWarnings = () => displayedWarnings.length > 0;
-    const hasErrors = () => displayedErrors.length > 0;
+    const { hasErrorsOrWarnings, hasWarnings, hasErrors } = React.useMemo(() => {
+        return {
+            hasErrorsOrWarnings: displayedErrors.length > 0 || displayedWarnings.length > 0,
+            hasWarnings: displayedWarnings.length > 0,
+            hasErrors: displayedErrors.length > 0
+        };
+    }, [displayedErrors, displayedWarnings]);
 
     return (
         <div>
@@ -98,12 +102,12 @@ const NetpbmEditor = observer((props: Props) => {
                 </div>
                 <div
                     className={clsx(styles.validationWrapper, 'alert', {
-                        ['alert--secondary']: !hasErrorsOrWarnings(),
-                        ['alert--warning']: hasWarnings() && !hasErrors(),
-                        ['alert--danger']: hasErrors()
+                        ['alert--secondary']: !hasErrorsOrWarnings,
+                        ['alert--warning']: hasWarnings && !hasErrors,
+                        ['alert--danger']: hasErrors
                     })}
                 >
-                    {!hasErrorsOrWarnings() && (
+                    {!hasErrorsOrWarnings && (
                         <>
                             <span>Keine Fehler gefunden</span>
                             <span className={styles.iconContainer}>
@@ -111,10 +115,10 @@ const NetpbmEditor = observer((props: Props) => {
                             </span>
                         </>
                     )}
-                    {hasErrorsOrWarnings() && (
+                    {hasErrorsOrWarnings && (
                         <details>
                             <summary>
-                                {hasErrors() && (
+                                {hasErrors && (
                                     <>
                                         <span>Fehler in den Bilddaten</span>
                                         <span className={styles.iconContainer}>
@@ -122,7 +126,7 @@ const NetpbmEditor = observer((props: Props) => {
                                         </span>
                                     </>
                                 )}
-                                {!hasErrors() && hasWarnings() && (
+                                {!hasErrors && hasWarnings && (
                                     <>
                                         <span>Warnungen anzeigen</span>
                                         <span className={styles.iconContainer}>
