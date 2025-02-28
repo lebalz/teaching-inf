@@ -12,7 +12,7 @@ import Icon from '@mdi/react';
 import { mdiAlertCircle, mdiAlertCircleOutline, mdiCheckAll, mdiFlashTriangle } from '@mdi/js';
 import { parse } from './parser/parser';
 
-const StateIcons = observer(({doc}: {doc: NetpbmGraphic}) => (
+const StateIcons = observer(({ doc }: { doc: NetpbmGraphic }) => (
     <span className={clsx(styles.stateIcons)}>
         <SyncStatus model={doc} size={0.7} />
         {doc.root?.isDummy && (
