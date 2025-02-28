@@ -12,7 +12,7 @@ import { $isKbdNode, TOGGLE_KBD_COMMAND } from './KbdNode';
 export const ToolbarInsertKbd: React.FC = () => {
     const [selection, editor] = useCellValues(currentSelection$, activeEditor$);
     const [isActive, setIsActive] = React.useState(false);
-    React.useLayoutEffect(() => {
+    React.useEffect(() => {
         setTimeout(() => {
             editor?.read(() => {
                 try {

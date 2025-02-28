@@ -30,7 +30,7 @@ interface Props<T extends iFile = iFile> {
 const Dir = observer((props: Props) => {
     const { dir, filter, useLocalMode, expandedByDefault } = props;
     const [isOpen, setOpen] = React.useState(!!props.expandedOnLoad);
-    React.useLayoutEffect(() => {
+    React.useEffect(() => {
         if (expandedByDefault && expandedByDefault.includes(dir.name)) {
             setOpen(true);
             if (!dir.isFetched) {

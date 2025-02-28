@@ -15,7 +15,7 @@ const BoxIcon =
 export const ToolbarInsertBoxed: React.FC = () => {
     const [selection, editor] = useCellValues(currentSelection$, activeEditor$);
     const [isActive, setIsActive] = React.useState(false);
-    React.useLayoutEffect(() => {
+    React.useEffect(() => {
         setTimeout(() => {
             editor?.read(() => {
                 try {

@@ -95,7 +95,7 @@ export default function MdiPickerPlugin() {
     const [queryString, setQueryString] = useState<string | null>(null);
     const [mdiIcons, setMdiIcons] = useState<Array<keyof typeof Mdi>>([]);
 
-    React.useLayoutEffect(() => {
+    React.useEffect(() => {
         setMdiIcons(Object.keys(Mdi) as (keyof typeof Mdi)[]);
     }, []);
 
