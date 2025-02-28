@@ -15,6 +15,7 @@ const DATA_PARSERS: { [key: string]: (input: RasterParserInput) => ParserResult 
     P3: parseP3Raster
 };
 
+// TODO: We could technically have a single-line PBM, so the line-based checks may not be reliable.
 function createErrorReport(sanitizedData: string): ParserMessage[] {
     const errors: ParserMessage[] = [];
 
@@ -32,7 +33,7 @@ function createErrorReport(sanitizedData: string): ParserMessage[] {
         );
     }
 
-    const dimensionLinePattern = /\s*\d+\s+\d+\s*/;
+    const dimensionLinePattern = /^\s*\d+\s+\d+\s*$/;
     const dimensionLineMatch = dimensionLinePattern.exec(lines[1]);
     if (!dimensionLineMatch) {
         errors.push(
@@ -41,6 +42,11 @@ function createErrorReport(sanitizedData: string): ParserMessage[] {
                 (z.B. <code>10 6</code>) erwartet.
             </span>
         );
+    }
+
+    // Catch-all, in case we aren't able to identify the specific error.
+    if (errors.length === 0) {
+        errors.push('Ungültiges Datenformat.');
     }
 
     return errors;
