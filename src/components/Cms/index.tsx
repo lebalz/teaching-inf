@@ -26,7 +26,7 @@ const CmsLandingPage = observer(() => {
         return <Redirect to={'/gh-login'} />;
     }
     if (access === 'loading' || !settings || !github || !entry) {
-        return <Layout>Loading...</Layout>;
+        return <Loader label="Laden..." />;
     }
 
     return (
