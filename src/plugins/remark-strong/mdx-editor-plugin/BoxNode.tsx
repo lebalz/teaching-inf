@@ -63,7 +63,10 @@ export class BoxNode extends ElementNode {
     }
 
     exportJSON(): SerializedBoxNode {
-        return super.exportJSON();
+        return {
+            ...super.exportJSON(),
+            children: this.getChildren().map((child) => child.exportJSON())
+        };
     }
 
     insertNewAfter(_: RangeSelection, restoreSelection = true): null | ElementNode {

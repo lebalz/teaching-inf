@@ -10,6 +10,7 @@
 import type { BaseSelection, EditorConfig, LexicalNode, NodeKey, SerializedElementNode } from 'lexical';
 
 import { $applyNodeReplacement, $isRangeSelection, ElementNode, Spread } from 'lexical';
+import styles from './styles.module.scss';
 
 export type SerializedImageCaptionNode = Spread<{}, SerializedElementNode>;
 
@@ -31,6 +32,7 @@ export class ImageCaptionNode extends ElementNode {
 
     createDOM(config: EditorConfig): ImageCaptionHTMLElementType {
         const element = document.createElement('div');
+        element.classList.add(styles.imageCaption);
         return element;
     }
 

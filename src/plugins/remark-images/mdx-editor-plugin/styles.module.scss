@@ -1,3 +1,8 @@
 .imageFigure {
     text-align: center;
+    // border: 1px solid red;
+}
+.imageCaption {
+    background-color: var(--ifm-color-gray-300);
+    border-radius: var(--ifm-global-radius);
 }
