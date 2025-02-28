@@ -29,6 +29,18 @@ export const validateMaxValue = (maxValue: number, errors: ParserMessage[]) => {
     }
 };
 
+export const parseByteAscii = (byteAscii: string, errors: ParserMessage[]): number => {
+    if (!byteAscii.match(/^\d+$/)) {
+        errors.push(
+            <span>
+                Ungültiger Wert in den Rasterdaten: <code>{byteAscii}</code>.
+            </span>
+        );
+        return 0;
+    }
+    return parseInt(byteAscii);
+};
+
 export const scaleByMaxValue = (value: number, maxValue: number): number => {
     return (value / maxValue) * 255;
 };

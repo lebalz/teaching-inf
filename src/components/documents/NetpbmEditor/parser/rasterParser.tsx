@@ -1,5 +1,6 @@
 import { ParserMessage, ParserResult, RasterParserInput } from '../types';
 import {
+    parseByteAscii,
     scaleByMaxValue,
     splitRasterData,
     validateMatchingNumberOfRasterBytes,
@@ -32,14 +33,7 @@ export const parserP1Raster = ({ width, height, raster }: RasterParserInput): Pa
                     continue;
                 }
 
-                const bitValue = parseInt(bitAscii);
-                if (bitValue !== 0 && bitValue !== 1) {
-                    errors.push(
-                        <span>
-                            Ungültiger Wert in den Rasterdaten: <code>{bitAscii}</code>.
-                        </span>
-                    );
-                }
+                const bitValue = parseByteAscii(bitAscii, errors);
 
                 pixels[row * width * 4 + col * 4] = bitValue * 255; // red
                 pixels[row * width * 4 + col * 4 + 1] = bitValue * 255; // green
@@ -89,14 +83,7 @@ export const parseP2Raster = ({ width, height, maxValue, raster }: RasterParserI
                     continue;
                 }
 
-                const byteValue = parseInt(byteAscii);
-                if (isNaN(byteValue)) {
-                    errors.push(
-                        <span>
-                            Ungültiger Wert in den Rasterdaten: <code>{byteAscii}</code>.
-                        </span>
-                    );
-                }
+                const byteValue = parseByteAscii(byteAscii, errors);
 
                 const byteValueScaled = scaleByMaxValue(byteValue, maxValue);
                 pixels[row * width * 4 + col * 4] = byteValueScaled; // red
@@ -148,14 +135,7 @@ export const parseP3Raster = ({ width, height, maxValue, raster }: RasterParserI
                         continue;
                     }
 
-                    const byteValue = parseInt(byteAscii);
-                    if (isNaN(byteValue)) {
-                        errors.push(
-                            <span>
-                                Ungültiger Wert in den Rasterdaten: <code>{byteAscii}</code>.
-                            </span>
-                        );
-                    }
+                    const byteValue = parseByteAscii(byteAscii, errors);
 
                     pixels[row * width * 4 + col * 4 + val] = scaleByMaxValue(byteValue, maxValue);
                     if (val === 2) {
