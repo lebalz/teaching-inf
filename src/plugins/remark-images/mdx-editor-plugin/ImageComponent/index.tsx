@@ -26,7 +26,7 @@ import clsx from 'clsx';
 import styles from './styles.module.scss';
 import { useAssetFile } from '@tdev-components/Cms/MdxEditor/hooks/useAssetFile';
 import Icon from '@mdi/react';
-import { mdiImage, mdiLink } from '@mdi/js';
+import { mdiImage, mdiImageEditOutline, mdiLink } from '@mdi/js';
 import Loader from '@tdev-components/Loader';
 import RemoveNode from '@tdev-components/Cms/MdxEditor/RemoveNode';
 import { $isImageFigureNode } from '../ImageFigureNode';
@@ -38,6 +38,7 @@ import Popup from 'reactjs-popup';
 import { ImageDialog } from '../ImagesDialog';
 import Button from '@tdev-components/shared/Button';
 import { PopupActions } from 'reactjs-popup/dist/types';
+import { SIZE_S } from '@tdev-components/shared/iconSizes';
 
 export interface ImageEditorProps {
     nodeKey: string;
@@ -172,7 +173,7 @@ export const ImageComponent = observer((props: ImageEditorProps): React.ReactNod
                         on="click"
                         trigger={
                             <span>
-                                <Button icon={mdiLink} />
+                                <Button icon={mdiImageEditOutline} size={SIZE_S} />
                             </span>
                         }
                         modal
@@ -196,7 +197,6 @@ export const ImageComponent = observer((props: ImageEditorProps): React.ReactNod
                             }}
                         />
                     </Popup>
-                    <div className={styles.spacer} />
                     <GenericAttributeEditor
                         onUpdate={(values) => {
                             editor.update(() => {

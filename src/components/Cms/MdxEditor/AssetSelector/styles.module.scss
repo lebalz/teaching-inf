@@ -4,7 +4,8 @@
     position: relative;
     .header {
         position: sticky;
-        top: calc(-1 * var(--ifm-card-vertical-spacing) - 6px);
+        top: calc(-1 * var(--ifm-card-vertical-spacing) + 10px);
+        z-index: var(--ifm-z-index-dropdown);
         h4 {
             background-color: var(--ifm-card-background-color);
             display: inline-block;
@@ -12,6 +13,7 @@
             padding-right: 8px;
             border-top-left-radius: 0;
             border-top-right-radius: 0;
+            margin-bottom: 0;
         }
     }
     .selector {

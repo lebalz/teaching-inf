@@ -31,6 +31,7 @@ export const ImageDialog = observer((props: Props) => {
     const cmsStore = useStore('cmsStore');
     const [src, setSrc] = React.useState(props.src || '');
     const [file, setFile] = React.useState<BinFile | null>(props.binFile || null);
+    const [isUploading, setIsUploading] = React.useState(false);
     const [cleanSrc, setCleanSrc] = React.useState(0);
     const insertImage = usePublisher(insertImage$);
     const { activeEntry } = cmsStore;
@@ -49,35 +50,37 @@ export const ImageDialog = observer((props: Props) => {
                 footer: styles.footer
             }}
             footer={
-                <>
-                    <Button onClick={props.onClose} text="Abbrechen" />
-                    <Button
-                        color="orange"
-                        disabled={!src}
-                        onClick={() => {
-                            setSrc('');
-                            setFile(null);
-                            setCleanSrc((prev) => prev + 1);
-                        }}
-                        text="Entfernen"
-                    />
-                    <Button
-                        onClick={() => {
-                            if (props.onSelect) {
-                                props.onSelect(src);
-                            } else {
-                                insertImage({ src: src });
-                            }
-                            props.onClose();
-                        }}
-                        text={isUpdatingSrc ? 'Aktualisieren' : 'Einfügen'}
-                        disabled={!src}
-                        color="green"
-                    />
-                </>
+                !isUploading && (
+                    <>
+                        <Button onClick={props.onClose} text="Abbrechen" />
+                        <Button
+                            color="orange"
+                            disabled={!src}
+                            onClick={() => {
+                                setSrc('');
+                                setFile(null);
+                                setCleanSrc((prev) => prev + 1);
+                            }}
+                            text="Entfernen"
+                        />
+                        <Button
+                            onClick={() => {
+                                if (props.onSelect) {
+                                    props.onSelect(src);
+                                } else {
+                                    insertImage({ src: src });
+                                }
+                                props.onClose();
+                            }}
+                            text={isUpdatingSrc ? 'Aktualisieren' : 'Einfügen'}
+                            disabled={!src}
+                            color="green"
+                        />
+                    </>
+                )
             }
             image={
-                src ? (
+                src && !isUploading ? (
                     <img
                         title="Ausgewähltes Bild"
                         className={clsx(styles.previewImage)}
@@ -86,28 +89,6 @@ export const ImageDialog = observer((props: Props) => {
                 ) : null
             }
         >
-            <AssetSelector
-                onSelect={(selected) => {
-                    const src = activeEntry.relativePath(selected);
-                    setSrc(src);
-                    setFile(selected as BinFile);
-                    setCleanSrc((prev) => prev + 1);
-                }}
-                filter={(entry): entry is BinFile => {
-                    return entry.isImage;
-                }}
-            />
-            <TextInput
-                label="Bild URL"
-                type="url"
-                key={cleanSrc}
-                onChange={(src) => {
-                    setSrc(src);
-                    if (file) {
-                        setFile(null);
-                    }
-                }}
-            />
             <FileUpload
                 onFilesUploaded={(file) => {
                     insertImage({ src: `./${Asset.IMAGE}/${file.name}` });
@@ -115,7 +96,43 @@ export const ImageDialog = observer((props: Props) => {
                 }}
                 accept="image/*"
                 description="Bilder per Drag&Drop hochladen"
+                onFileSelected={() => setIsUploading(true)}
+                onDiscard={() => setIsUploading(false)}
+                className={clsx(styles.fileUpload)}
+                uploadButtonLabel={isUpdatingSrc ? 'Hochladen und aktualisieren' : 'Hochladen und einfügen'}
+                uploadDir={activeEntry.parent.imageDirPath}
+                branch={activeEntry.branch}
             />
+            {!isUploading && (
+                <>
+                    <TextInput
+                        label="Bild URL"
+                        type="url"
+                        key={cleanSrc}
+                        className={clsx(styles.srcInput)}
+                        value={src}
+                        onChange={(src) => {
+                            setSrc(src);
+                            if (file) {
+                                setFile(null);
+                            }
+                        }}
+                    />
+                    <AssetSelector
+                        header="Vorhandene Bilder"
+                        className={clsx(styles.assetSelector)}
+                        onSelect={(selected) => {
+                            const src = activeEntry.relativePath(selected);
+                            setSrc(src);
+                            setFile(selected as BinFile);
+                            setCleanSrc((prev) => prev + 1);
+                        }}
+                        filter={(entry): entry is BinFile => {
+                            return entry.isImage;
+                        }}
+                    />
+                </>
+            )}
         </Card>
     );
 });

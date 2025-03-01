@@ -30,9 +30,14 @@ const toMb = (bytes: number): number => {
 };
 interface Props {
     onFilesUploaded: (files: CmsFile | BinFile) => void;
+    onDiscard?: () => void;
+    onFileSelected?: () => void;
     accept: string;
     className?: string;
     description?: string;
+    uploadDir: string;
+    branch: string;
+    uploadButtonLabel: string;
 }
 
 const FileUpload = observer((props: Props) => {
@@ -40,15 +45,11 @@ const FileUpload = observer((props: Props) => {
     const [isDragOver, setIsDragOver] = useState(false);
     const labelRef = React.useRef<HTMLLabelElement>(null);
     const cmsStore = useStore('cmsStore');
-    const { activeEntry } = cmsStore;
     const [uploadName, setUploadName] = React.useState('');
     const [compress, setCompress] = React.useState(true);
 
     const inputId = useId();
     const labelId = useId();
-    if (!activeEntry) {
-        return null;
-    }
 
     const handleFileChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
         const selectedFiles = event.target.files;
@@ -56,6 +57,7 @@ const FileUpload = observer((props: Props) => {
             const newFiles = Array.from(selectedFiles);
             setUploadName(newFiles[0].name);
             setFiles(newFiles);
+            props.onFileSelected?.();
         }
     };
 
@@ -67,6 +69,7 @@ const FileUpload = observer((props: Props) => {
             const newFiles = Array.from(droppedFiles);
             setUploadName(newFiles[0].name);
             setFiles(newFiles);
+            props.onFileSelected?.();
         }
     };
 
@@ -154,47 +157,58 @@ const FileUpload = observer((props: Props) => {
                 )}
 
                 {files.length > 0 && (
-                    <Button
-                        onClick={() => {
-                            if (files[0].type.startsWith('image/')) {
-                                const imgDir = activeEntry.parent.imageDirPath;
-                                if (compress) {
-                                    cmsStore
-                                        .uploadImage(
-                                            files[0],
-                                            resolvePath(imgDir, uploadName),
-                                            activeEntry.branch,
-                                            undefined,
-                                            1
-                                        )
-                                        .then((uploadedFile) => {
-                                            if (uploadedFile && uploadedFile.type !== 'file_stub') {
-                                                props.onFilesUploaded(uploadedFile);
-                                            }
-                                        });
-                                } else {
-                                    files[0]
-                                        .arrayBuffer()
-                                        .then((content) => {
-                                            return cmsStore.github?.createOrUpdateFile(
+                    <div className={clsx(styles.actions)}>
+                        <Button
+                            onClick={() => {
+                                setFiles([]);
+                                setUploadName('');
+                                props.onDiscard?.();
+                            }}
+                            text={'Verwerfen'}
+                            color="black"
+                        />
+                        <Button
+                            onClick={() => {
+                                if (files[0].type.startsWith('image/')) {
+                                    const imgDir = props.uploadDir;
+                                    if (compress) {
+                                        cmsStore
+                                            .uploadImage(
+                                                files[0],
                                                 resolvePath(imgDir, uploadName),
-                                                new Uint8Array(content),
-                                                activeEntry.branch,
+                                                props.branch,
                                                 undefined,
-                                                `Upload ${uploadName}`
-                                            );
-                                        })
-                                        .then((uploadedFile) => {
-                                            if (uploadedFile && uploadedFile.type !== 'file_stub') {
-                                                props.onFilesUploaded(uploadedFile);
-                                            }
-                                        });
+                                                1
+                                            )
+                                            .then((uploadedFile) => {
+                                                if (uploadedFile && uploadedFile.type !== 'file_stub') {
+                                                    props.onFilesUploaded(uploadedFile);
+                                                }
+                                            });
+                                    } else {
+                                        files[0]
+                                            .arrayBuffer()
+                                            .then((content) => {
+                                                return cmsStore.github?.createOrUpdateFile(
+                                                    resolvePath(imgDir, uploadName),
+                                                    new Uint8Array(content),
+                                                    props.branch,
+                                                    undefined,
+                                                    `Upload ${uploadName}`
+                                                );
+                                            })
+                                            .then((uploadedFile) => {
+                                                if (uploadedFile && uploadedFile.type !== 'file_stub') {
+                                                    props.onFilesUploaded(uploadedFile);
+                                                }
+                                            });
+                                    }
                                 }
-                            }
-                        }}
-                        text="Hochladen und einfügen"
-                        color="blue"
-                    />
+                            }}
+                            text={props.uploadButtonLabel}
+                            color="blue"
+                        />
+                    </div>
                 )}
             </div>
         </section>

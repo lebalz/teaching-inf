@@ -1,8 +1,15 @@
 .imageDialog {
     max-height: 80vh;
     max-width: 95vw;
+    width: 35em;
     .body {
         overflow-y: auto;
+        .fileUpload {
+            margin-bottom: 1em;
+        }
+        .srcInput {
+            margin-bottom: 1em;
+        }
     }
     .preview {
         .previewImage {

@@ -12,6 +12,8 @@ import { mdiFolderArrowLeftOutline, mdiFolderArrowUpOutline } from '@mdi/js';
 interface Props<T extends iFile = iFile> {
     onSelect: (entry: T) => void;
     filter: (entry: iFile) => entry is T;
+    header?: string;
+    className?: string;
 }
 
 const AssetSelector = observer((props: Props) => {
@@ -27,7 +29,12 @@ const AssetSelector = observer((props: Props) => {
         return null;
     }
     return (
-        <Card classNames={{ card: styles.assets, header: styles.header }} header={<h4>Verfügbare Bilder</h4>}>
+        <div className={clsx(styles.assets, props.className)}>
+            {props.header && (
+                <div className={clsx(styles.header)}>
+                    <h4>{props.header}</h4>
+                </div>
+            )}
             <div className={clsx(styles.selector)}>
                 <div className={clsx(styles.pathNav)}>
                     <div className={clsx(styles.path)}>{assetEntrypoint.path}</div>
@@ -52,7 +59,7 @@ const AssetSelector = observer((props: Props) => {
                     onSelect={props.onSelect}
                 />
             </div>
-        </Card>
+        </div>
     );
 });
 
