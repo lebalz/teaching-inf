@@ -59,14 +59,12 @@ export class BoxNode extends ElementNode {
     }
 
     static importJSON(serializedNode: SerializedBoxNode): BoxNode {
+        console.log(serializedNode);
         return $createBoxNode().updateFromJSON(serializedNode);
     }
 
     exportJSON(): SerializedBoxNode {
-        return {
-            ...super.exportJSON(),
-            children: this.getChildren().map((child) => child.exportJSON())
-        };
+        return super.exportJSON();
     }
 
     insertNewAfter(_: RangeSelection, restoreSelection = true): null | ElementNode {
@@ -95,7 +93,6 @@ export class BoxNode extends ElementNode {
         if (!$isRangeSelection(selection)) {
             return false;
         }
-
         const anchorNode = selection.anchor.getNode();
         const focusNode = selection.focus.getNode();
 
