@@ -9,7 +9,7 @@
         top: 0;
         width: var(--cms-img-width);
         max-width: min(90vw, 100%, var(--cms-img-width));
-        z-index: var(--ifm-z-index-dropdown);
+        z-index: calc(var(--ifm-z-index-dropdown) / 2);
         justify-content: flex-end;
         align-items: center;
         gap: 0.5em;
