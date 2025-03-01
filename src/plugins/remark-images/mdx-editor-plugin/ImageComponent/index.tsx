@@ -18,6 +18,7 @@ import {
     DRAGSTART_COMMAND,
     KEY_BACKSPACE_COMMAND,
     KEY_DELETE_COMMAND,
+    KEY_ENTER_COMMAND,
     SELECTION_CHANGE_COMMAND
 } from 'lexical';
 import ImageResizer from '../ImageResizer';

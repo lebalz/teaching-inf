@@ -44,8 +44,8 @@ export class ImageFigureNode extends ElementNode {
         const element = document.createElement('div');
         element.classList.add(styles.imageFigure);
         if (this.__width || this.imageNode()?.__width) {
-            const width = this.__width || this.imageNode()?.__width;
-            element.style.setProperty('--cms-img-width', `${width}px`);
+            const width = (this.__width || this.imageNode()?.__width || '').toString();
+            element.style.setProperty('--cms-img-width', /\d$/.test(width) ? `${width}px` : width);
         }
 
         return element;

@@ -2,28 +2,24 @@
  * By Mdx Editor, @url https://github.com/mdx-editor/editor/tree/main/src/plugins/image
  */
 
-import { $wrapNodeInElement, CAN_USE_DOM, mergeRegister } from '@lexical/utils';
-import { $convertToMarkdownString } from '@lexical/markdown';
+import { $wrapNodeInElement } from '@lexical/utils';
 import { Cell, Signal, withLatestFrom } from '@mdxeditor/gurx';
 import {
     $createParagraphNode,
-    $createRangeSelection,
     $getSelection,
     $insertNodes,
-    $isNodeSelection,
+    $isParagraphNode,
+    $isRangeSelection,
     $isRootOrShadowRoot,
-    $setSelection,
     COMMAND_PRIORITY_CRITICAL,
     COMMAND_PRIORITY_EDITOR,
     COMMAND_PRIORITY_HIGH,
     COMMAND_PRIORITY_LOW,
-    DRAGOVER_COMMAND,
-    DRAGSTART_COMMAND,
-    DROP_COMMAND,
-    LexicalCommand,
-    LexicalEditor,
-    PASTE_COMMAND,
-    createCommand
+    COMMAND_PRIORITY_NORMAL,
+    ElementNode,
+    KEY_DOWN_COMMAND,
+    KEY_ENTER_COMMAND,
+    LexicalEditor
 } from 'lexical';
 import {
     LexicalImageCaptionVisitor,
@@ -36,18 +32,19 @@ import {
     addImportVisitor$,
     addLexicalNode$,
     addMdastExtension$,
+    createRootEditorSubscription$,
     createActiveEditorSubscription$,
     realmPlugin
 } from '@mdxeditor/editor';
-import { $createImageNode, $isImageNode, CreateImageNodeParameters, ImageNode } from './ImageNode';
+import { $createImageNode, ImageNode } from './ImageNode';
 import { MdastImageCaptionVisitor, MdastImageFigureVisitor, MdastImageVisitor } from './MdastImageVisitor';
 import React from 'react';
 import { rootStore } from '@tdev/stores/rootStore';
 import type { Parent, PhrasingContent, Root, Image } from 'mdast';
 import { transformer } from '../transformer';
 import { transformer as strongTransformer } from '@tdev-plugins/remark-strong/plugin';
-import { $createImageCaptionNode, ImageCaptionNode } from './ImageCaptionNode';
-import { $createImageFigureNode, ImageFigureNode, SerializedImageFigureNode } from './ImageFigureNode';
+import { $createImageCaptionNode, $isImageCaptionNode, ImageCaptionNode } from './ImageCaptionNode';
+import { $createImageFigureNode, ImageFigureNode } from './ImageFigureNode';
 import { fromMarkdown } from 'mdast-util-from-markdown';
 import { directiveFromMarkdown } from 'mdast-util-directive';
 import { directive } from 'micromark-extension-directive';
@@ -118,6 +115,7 @@ const internalInsertImage$ = Signal<SrcImageParameters>((r) => {
                 src: values.src
             });
             const imageCaption = $createImageCaptionNode();
+            imageCaption.append($createParagraphNode());
             imageFigure.append(imageNode, imageCaption);
 
             $insertNodes([imageFigure]);
@@ -180,6 +178,116 @@ export const disableImageSettingsButton$ = Cell<boolean>(false);
  * @group Image
  */
 export const saveImage$ = Signal<SaveImageParameters>();
+
+const handledKeys = new Set(['Enter', 'Backspace', 'Delete', 'ArrowLeft']);
+
+const keyHandler = (editor: LexicalEditor) => {
+    return editor.registerCommand<KeyboardEvent>(
+        KEY_DOWN_COMMAND,
+        (event, activeEditor) => {
+            const shouldHandle = handledKeys.has(event.key);
+            if (!shouldHandle) {
+                return false;
+            }
+            let shouldPrevent = false;
+
+            activeEditor.read(() => {
+                const selection = $getSelection();
+
+                if ($isRangeSelection(selection)) {
+                    const firstNode = selection.getNodes()[0];
+                    if (firstNode) {
+                        const isFirstCaption = $isImageCaptionNode(firstNode);
+                        const caption = isFirstCaption
+                            ? firstNode
+                            : firstNode.getParents().find((parent) => $isImageCaptionNode(parent));
+                        if (!caption) {
+                            return false;
+                        }
+                        switch (event.key) {
+                            case 'Backspace':
+                                if (
+                                    (isFirstCaption || $isParagraphNode(firstNode.getParent())) &&
+                                    selection.anchor.offset === 0 &&
+                                    selection.focus.offset === 0
+                                ) {
+                                    shouldPrevent = true;
+                                }
+                                break;
+                            case 'Delete':
+                                const end = caption.getTextContentSize();
+                                if (
+                                    (isFirstCaption || $isParagraphNode(firstNode.getParent())) &&
+                                    selection.anchor.offset === end &&
+                                    selection.focus.offset === end
+                                ) {
+                                    shouldPrevent = true;
+                                }
+                                break;
+                            case 'Enter':
+                                shouldPrevent = true;
+                                const figure = caption.getParent();
+                                const nextSibling = figure?.getNextSibling();
+                                if ($isParagraphNode(nextSibling)) {
+                                    setTimeout(() => {
+                                        activeEditor.update(() => {
+                                            nextSibling.selectStart();
+                                        });
+                                    }, 0);
+                                } else {
+                                    setTimeout(() => {
+                                        activeEditor.update(
+                                            () => {
+                                                const newParagraph = $createParagraphNode();
+                                                figure?.insertAfter(newParagraph);
+                                                newParagraph.selectStart();
+                                            },
+                                            { discrete: true }
+                                        );
+                                    }, 0);
+                                }
+                                break;
+                            case 'ArrowLeft':
+                                if (
+                                    (isFirstCaption || $isParagraphNode(firstNode.getParent())) &&
+                                    selection.anchor.offset === 0 &&
+                                    selection.focus.offset === 0
+                                ) {
+                                    const figure = caption.getParent();
+                                    const previousSibling = figure?.getPreviousSibling();
+                                    setTimeout(() => {
+                                        activeEditor.update(
+                                            () => {
+                                                if ($isParagraphNode(previousSibling)) {
+                                                    previousSibling.selectEnd();
+                                                } else {
+                                                    const newParagraph = $createParagraphNode();
+                                                    figure?.insertBefore(newParagraph);
+                                                    newParagraph.selectEnd();
+                                                }
+                                            },
+                                            { discrete: true }
+                                        );
+                                    }, 0);
+                                    shouldPrevent = true;
+                                }
+                        }
+                    }
+                }
+            });
+
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+            if (shouldPrevent) {
+                event.preventDefault();
+                event.stopPropagation();
+                return true;
+            }
+
+            return false;
+        },
+        COMMAND_PRIORITY_EDITOR
+    );
+};
 
 /**
  * A plugin that adds support for images.
@@ -253,7 +361,9 @@ export const imagePlugin = realmPlugin<{
                         }
                     ]
                 }
-            ]
+            ],
+            [createRootEditorSubscription$]: keyHandler,
+            [createActiveEditorSubscription$]: keyHandler
         });
     },
 
