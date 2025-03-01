@@ -15,24 +15,35 @@ import { useStore } from '@tdev-hooks/useStore';
 
 interface Props {
     onClose: () => void;
+    /**
+     * the current image src - in this case, the image to be updated
+     */
+    src?: string;
+    /**
+     * the current image src - in this case, the image to be updated
+     */
+    binFile?: BinFile;
+    onSelect?: (src: string) => void;
+    className?: string;
 }
 
 export const ImageDialog = observer((props: Props) => {
     const cmsStore = useStore('cmsStore');
-    const [src, setSrc] = React.useState('');
-    const [file, setFile] = React.useState<BinFile | null>(null);
+    const [src, setSrc] = React.useState(props.src || '');
+    const [file, setFile] = React.useState<BinFile | null>(props.binFile || null);
     const [cleanSrc, setCleanSrc] = React.useState(0);
     const insertImage = usePublisher(insertImage$);
     const { activeEntry } = cmsStore;
     if (!activeEntry) {
         return null;
     }
+    const isUpdatingSrc = props.src || props.binFile;
 
     return (
         <Card
             header={<h4>Bild Einfügen</h4>}
             classNames={{
-                card: styles.imageDialog,
+                card: clsx(styles.imageDialog, props.className),
                 body: styles.body,
                 image: styles.preview,
                 footer: styles.footer
@@ -52,10 +63,14 @@ export const ImageDialog = observer((props: Props) => {
                     />
                     <Button
                         onClick={() => {
-                            insertImage({ src: src });
+                            if (props.onSelect) {
+                                props.onSelect(src);
+                            } else {
+                                insertImage({ src: src });
+                            }
                             props.onClose();
                         }}
-                        text="Einfügen"
+                        text={isUpdatingSrc ? 'Aktualisieren' : 'Einfügen'}
                         disabled={!src}
                         color="green"
                     />

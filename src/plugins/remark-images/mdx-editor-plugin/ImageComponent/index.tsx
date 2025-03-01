@@ -26,13 +26,18 @@ import clsx from 'clsx';
 import styles from './styles.module.scss';
 import { useAssetFile } from '@tdev-components/Cms/MdxEditor/hooks/useAssetFile';
 import Icon from '@mdi/react';
-import { mdiImage } from '@mdi/js';
+import { mdiImage, mdiLink } from '@mdi/js';
 import Loader from '@tdev-components/Loader';
 import RemoveNode from '@tdev-components/Cms/MdxEditor/RemoveNode';
 import { $isImageFigureNode } from '../ImageFigureNode';
 import GenericAttributeEditor from '@tdev-components/Cms/MdxEditor/GenericAttributeEditor';
 import { ParsedOptions } from '@tdev-plugins/helpers';
 import { asStringRecord } from '@tdev-components/Cms/MdxEditor/helpers/asStringRecord';
+import Badge from '@tdev-components/shared/Badge';
+import Popup from 'reactjs-popup';
+import { ImageDialog } from '../ImagesDialog';
+import Button from '@tdev-components/shared/Button';
+import { PopupActions } from 'reactjs-popup/dist/types';
 
 export interface ImageEditorProps {
     nodeKey: string;
@@ -42,7 +47,7 @@ export interface ImageEditorProps {
 
 export const ImageComponent = observer((props: ImageEditorProps): React.ReactNode => {
     const { src, nodeKey } = props;
-    const cmsStore = useStore('cmsStore');
+    const ref = React.useRef<PopupActions>(null);
 
     const imageRef = React.useRef<null | HTMLImageElement>(null);
     const [isSelected, setSelected, clearSelection] = useLexicalNodeSelection(nodeKey);
@@ -159,6 +164,39 @@ export const ImageComponent = observer((props: ImageEditorProps): React.ReactNod
         <div className={clsx(styles.imageEditor, isResizing && 'resizing')}>
             {!isResizing && (
                 <div className={clsx(styles.actions, isFocused && styles.focused)}>
+                    <Badge title="Anzahl Optionen" type="primary">
+                        {Object.keys(imgOptions).length}
+                    </Badge>
+                    <div className={styles.spacer} />
+                    <Popup
+                        on="click"
+                        trigger={
+                            <span>
+                                <Button icon={mdiLink} />
+                            </span>
+                        }
+                        modal
+                        ref={ref}
+                        overlayStyle={{ background: 'rgba(0,0,0,0.5)' }}
+                    >
+                        <ImageDialog
+                            onSelect={(src) => {
+                                editor.update(() => {
+                                    const node = $getNodeByKey(nodeKey);
+                                    if ($isImageNode(node)) {
+                                        node.setSrc(src);
+                                    }
+                                });
+                            }}
+                            className={clsx(styles.imageDialog)}
+                            src={src}
+                            binFile={gitImg?.type === 'bin_file' ? gitImg : undefined}
+                            onClose={() => {
+                                ref.current?.close();
+                            }}
+                        />
+                    </Popup>
+                    <div className={styles.spacer} />
                     <GenericAttributeEditor
                         onUpdate={(values) => {
                             editor.update(() => {

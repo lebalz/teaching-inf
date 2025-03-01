@@ -10,7 +10,15 @@
         width: var(--cms-img-width);
         z-index: var(--ifm-z-index-dropdown);
         justify-content: flex-end;
+        align-items: center;
+        gap: 0.5em;
         background: rgba(255, 255, 255, 0.6);
+        padding-left: 0.5rem;
+        .spacer {
+            flex-grow: 1;
+            flex-shrink: 1;
+            flex-basis: 0;
+        }
         &.focused {
             display: flex;
         }
@@ -44,6 +52,9 @@
             border: 1px solid var(--ifm-color-secondary);
         }
     }
+}
+.imageDialog {
+    width: 60em;
 }
 :global(.flex-card-container) {
     :global(.flex-cards) {
