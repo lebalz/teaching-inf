@@ -28,6 +28,9 @@ import { useStore } from '@tdev-hooks/useStore';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
 import { useAssetFile } from '@tdev-components/Cms/MdxEditor/hooks/useAssetFile';
+import Icon from '@mdi/react';
+import { mdiImage, mdiImageArea } from '@mdi/js';
+import Loader from '@tdev-components/Loader';
 
 export interface ImageEditorProps {
     nodeKey: string;
@@ -46,21 +49,6 @@ export const ImageComponent = observer((props: ImageEditorProps): React.ReactNod
     const activeEditorRef = React.useRef<LexicalEditor | null>(null);
     const [isResizing, setIsResizing] = React.useState<boolean>(false);
     const gitImg = useAssetFile(src);
-
-    const onDelete = React.useCallback(
-        (payload: KeyboardEvent) => {
-            if (isSelected && $isNodeSelection($getSelection())) {
-                const event: KeyboardEvent = payload;
-                event.preventDefault();
-                const node = $getNodeByKey(nodeKey);
-                if ($isImageNode(node)) {
-                    node!.remove();
-                }
-            }
-            return false;
-        },
-        [isSelected, nodeKey]
-    );
 
     React.useEffect(() => {
         let isMounted = true;
@@ -112,15 +100,13 @@ export const ImageComponent = observer((props: ImageEditorProps): React.ReactNod
                     return false;
                 },
                 COMMAND_PRIORITY_LOW
-            ),
-            editor.registerCommand(KEY_DELETE_COMMAND, onDelete, COMMAND_PRIORITY_LOW),
-            editor.registerCommand(KEY_BACKSPACE_COMMAND, onDelete, COMMAND_PRIORITY_LOW)
+            )
         );
         return () => {
             isMounted = false;
             unregister();
         };
-    }, [clearSelection, editor, isResizing, isSelected, nodeKey, onDelete, setSelected]);
+    }, [clearSelection, editor, isResizing, isSelected, nodeKey, setSelected]);
 
     const onResizeEnd = (nextWidth: number, nextHeight: number) => {
         // Delay hiding the resize bars for click case
@@ -142,21 +128,26 @@ export const ImageComponent = observer((props: ImageEditorProps): React.ReactNod
 
     const draggable = $isNodeSelection(selection);
     const isFocused = isSelected;
-    if (gitImg && (gitImg.type !== 'bin_file' || !gitImg.isImage)) {
-        return null;
-    }
+    const showPlaceholder = gitImg && (gitImg.type !== 'bin_file' || !gitImg.isImage);
 
     return (
         <div className={clsx(styles.imageEditor, isResizing && 'resizing')}>
             <div className={styles.imageWrapper} data-editor-block-type="image">
                 <div draggable={draggable}>
-                    <img
-                        className={clsx(isFocused && styles.focusedImage)}
-                        src={gitImg?.type === 'bin_file' && gitImg.isImage ? gitImg.src : src}
-                        width={props.width}
-                        ref={imageRef}
-                        draggable="false"
-                    />
+                    {showPlaceholder ? (
+                        <div className={clsx(styles.placeholder, isFocused && styles.focusedImage)}>
+                            <Icon path={mdiImage} size={3} color="var(--ifm-color-secondary)" />
+                            <Loader label="Laden..." />
+                        </div>
+                    ) : (
+                        <img
+                            className={clsx(isFocused && styles.focusedImage)}
+                            src={gitImg?.type === 'bin_file' && gitImg.isImage ? gitImg.src : src}
+                            width={props.width}
+                            ref={imageRef}
+                            draggable="false"
+                        />
+                    )}
                 </div>
                 {draggable && isFocused && (
                     <ImageResizer
