@@ -32,7 +32,7 @@ const Generator = (props: Props) => {
     const [width, setWidth] = React.useState<number | undefined>(208); // 13 * 16 = 208, 1em = 16px
     const ref = React.useRef<HTMLDivElement>(null);
     const isBrowser = useIsBrowser();
-    React.useLayoutEffect(() => {
+    React.useEffect(() => {
         const element = ref.current;
         if (element) {
             const { width } = element.getBoundingClientRect();

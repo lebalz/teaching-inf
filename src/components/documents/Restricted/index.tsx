@@ -12,7 +12,7 @@ import AccessBadge from '@tdev-components/PermissionsPanel/AccessBadge';
 
 interface Props extends MetaInit {
     id: string;
-    children: ReactNode;
+    children: React.ReactNode;
     access?: Access;
 }
 

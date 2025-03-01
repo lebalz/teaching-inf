@@ -10,8 +10,8 @@ import { useDocument } from '@tdev-hooks/useContextDocument';
 import { observer } from 'mobx-react-lite';
 import { mdiClose } from '@mdi/js';
 export interface Props {
-    controls?: ReactNode;
-    main?: ReactNode;
+    controls?: React.ReactNode;
+    main?: React.ReactNode;
 }
 const Graphics = observer((props: Props) => {
     const script = useDocument<DocumentType.Script>();

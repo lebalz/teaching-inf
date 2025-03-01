@@ -151,7 +151,7 @@ const MsalAccount = observer(() => {
 });
 
 // Default implementation, that you can customize
-function Root({ children }: { children: ReactNode }) {
+function Root({ children }: { children: React.ReactNode }) {
     React.useEffect(() => {
         if (!rootStore) {
             return;

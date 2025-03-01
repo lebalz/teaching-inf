@@ -22,7 +22,7 @@ interface Props {
     readonly recentPosts: readonly { readonly content: Content }[];
 }
 
-export default function Home({ recentPosts }: Props) {
+export default function Home({ recentPosts }: Props): React.ReactNode {
     const images = [
         {
             original: './img/index/artificial-intelligence.jpg'

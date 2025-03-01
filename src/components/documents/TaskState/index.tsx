@@ -59,7 +59,7 @@ export const mdiColor: { [key in StateType]: string } = {
 
 interface Props extends MetaInit {
     id: string;
-    children?: ReactNode;
+    children?: React.ReactNode;
     label?: string;
     pagePosition?: number;
     inline?: boolean;

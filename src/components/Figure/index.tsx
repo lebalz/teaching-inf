@@ -17,7 +17,7 @@ interface Props {
 
 const IMG_STYLE_PROPS = ['width', 'maxWidth', 'maxHeight', 'height'];
 
-export default function Figure(props: Props): ReactNode {
+export default function Figure(props: Props): React.ReactNode {
     const ref = React.useRef<HTMLElement>(null);
     const opts = { ...props.options };
     if (opts) {
@@ -54,8 +54,8 @@ export default function Figure(props: Props): ReactNode {
         }
     }, [ref]);
     return (
-        <figure className={clsx(styles.figure, 'figure')} style={opts} ref={ref}>
+        <span className={clsx(styles.figure, 'figure')} style={opts} ref={ref}>
             {props.children}
-        </figure>
+        </span>
     );
 }
