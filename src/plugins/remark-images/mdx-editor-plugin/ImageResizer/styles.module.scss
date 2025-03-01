@@ -7,6 +7,7 @@
     border-radius: 50%;
     position: absolute;
     border: var(--ifm-resizer-handle-border-width) solid var(--ifm-color-primary);
+    z-index: calc(var(--ifm-z-index-dropdown) + 1);
 
     &.imageResizerN {
         top: calc(-1 * var(--ifm-resizer-handle-size) / 2);

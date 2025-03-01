@@ -31,6 +31,8 @@ import { useAssetFile } from '@tdev-components/Cms/MdxEditor/hooks/useAssetFile'
 import Icon from '@mdi/react';
 import { mdiImage, mdiImageArea } from '@mdi/js';
 import Loader from '@tdev-components/Loader';
+import RemoveNode from '@tdev-components/Cms/MdxEditor/RemoveNode';
+import { $isImageFigureNode } from '../ImageFigureNode';
 
 export interface ImageEditorProps {
     nodeKey: string;
@@ -122,6 +124,20 @@ export const ImageComponent = observer((props: ImageEditorProps): React.ReactNod
         });
     };
 
+    const removeImageFigure = React.useCallback(() => {
+        editor?.update(() => {
+            const node = $getNodeByKey(nodeKey);
+            const figure = node?.getParent();
+            console.log(nodeKey, node, figure);
+            if ($isImageNode(node) && $isImageFigureNode(figure)) {
+                const focusNext =
+                    figure.getPreviousSibling() || figure.getNextSibling() || figure.getParent();
+                figure.remove(false);
+                focusNext?.selectEnd();
+            }
+        });
+    }, [nodeKey, editor]);
+
     const onResizeStart = () => {
         setIsResizing(true);
     };
@@ -132,6 +148,11 @@ export const ImageComponent = observer((props: ImageEditorProps): React.ReactNod
 
     return (
         <div className={clsx(styles.imageEditor, isResizing && 'resizing')}>
+            {!isResizing && (
+                <div className={clsx(styles.actions, isFocused && styles.focused)}>
+                    <RemoveNode onRemove={removeImageFigure} className={clsx(styles.remove)} />
+                </div>
+            )}
             <div className={styles.imageWrapper} data-editor-block-type="image">
                 <div draggable={draggable}>
                     {showPlaceholder ? (
