@@ -84,3 +84,88 @@ Für viele Erweiterungen wurden Plugins geschrieben. Die Plugins sind grundsätz
 - [ ] Deflist Komponente hinzufügen
 - [ ] Darkmode
 - [ ] Ansichts-Einstellungen speichern (Richtext / Markdown)
+
+
+## Installation
+
+```ts title="docusaurus.config.ts"
+import dynamicRouterPlugin, { Config as DynamicRouteConfig} from './src/plugins/plugin-dynamic-routes';
+
+const config: Config = {
+    presets: [
+        [
+            'classic',
+            {
+                docs: {
+                    editUrl: '/cms/',
+                },
+                blog: {
+                    editUrl: '/cms/',
+                },
+                pages: {
+                    editUrl: '/cms/',
+                },
+            }
+        ]
+    ],
+    themeConfig: {
+        navbar: {
+            items: [
+                {
+                    to: '/cms',
+                    label: 'CMS',
+                    position: 'left',
+                }
+            ]
+        }
+    },
+    plugins: [
+        [
+            dynamicRouterPlugin,
+            {
+                routes: [
+                    {
+                        path: '/rooms/',
+                        component: '@tdev-components/Rooms',
+                    },
+                    {
+                        path: '/cms/',
+                        component: '@tdev-components/Cms',
+                    }
+                ]
+            } satisfies DynamicRouteConfig
+        ],
+    ]
+};
+```
+
+```json title="package.json"
+{
+    
+    "dependencies": {
+        "@lexical/clipboard": "^0.23.1",
+        "@lexical/link": "^0.23.1",
+        "@lexical/list": "^0.23.1",
+        "@lexical/markdown": "^0.23.1",
+        "@lexical/react": "^0.23.1",
+        "@lexical/rich-text": "^0.23.1",
+        "@lexical/selection": "^0.23.1",
+        "@lexical/utils": "^0.23.1",
+        "@mdxeditor/editor": "^3.24.0",
+        "@octokit/rest": "^21.1.0",
+        "browser-image-compression": "^2.0.2",
+        "mdast-util-gfm-footnote": "^2.1.0",
+        "mdast-util-math": "^3.0.0",
+        "micromark-extension-math": "^3.1.0",
+        "react-katex": "^3.0.1",
+        "react-select": "^5.9.0",
+    },
+    "devDependencies": {
+        "@types/react-dom": "^19.0.3",
+        "@types/react-katex": "^3.0.4",
+    },
+    "peerDependencies": {
+        "react-hook-form": "*"
+    },
+}
+```
