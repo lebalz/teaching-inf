@@ -16,9 +16,6 @@ import {
     CLICK_COMMAND,
     COMMAND_PRIORITY_LOW,
     DRAGSTART_COMMAND,
-    KEY_BACKSPACE_COMMAND,
-    KEY_DELETE_COMMAND,
-    KEY_ENTER_COMMAND,
     SELECTION_CHANGE_COMMAND
 } from 'lexical';
 import ImageResizer from '../ImageResizer';
@@ -29,10 +26,13 @@ import clsx from 'clsx';
 import styles from './styles.module.scss';
 import { useAssetFile } from '@tdev-components/Cms/MdxEditor/hooks/useAssetFile';
 import Icon from '@mdi/react';
-import { mdiImage, mdiImageArea } from '@mdi/js';
+import { mdiImage } from '@mdi/js';
 import Loader from '@tdev-components/Loader';
 import RemoveNode from '@tdev-components/Cms/MdxEditor/RemoveNode';
 import { $isImageFigureNode } from '../ImageFigureNode';
+import GenericAttributeEditor from '@tdev-components/Cms/MdxEditor/GenericAttributeEditor';
+import { ParsedOptions } from '@tdev-plugins/helpers';
+import { asStringRecord } from '@tdev-components/Cms/MdxEditor/helpers/asStringRecord';
 
 export interface ImageEditorProps {
     nodeKey: string;
@@ -51,6 +51,7 @@ export const ImageComponent = observer((props: ImageEditorProps): React.ReactNod
     const activeEditorRef = React.useRef<LexicalEditor | null>(null);
     const [isResizing, setIsResizing] = React.useState<boolean>(false);
     const gitImg = useAssetFile(src);
+    const [imgOptions, setImgOptions] = React.useState<ParsedOptions>({});
 
     React.useEffect(() => {
         let isMounted = true;
@@ -141,6 +142,14 @@ export const ImageComponent = observer((props: ImageEditorProps): React.ReactNod
     const onResizeStart = () => {
         setIsResizing(true);
     };
+    React.useEffect(() => {
+        editor.read(() => {
+            const node = $getNodeByKey(nodeKey);
+            if ($isImageNode(node)) {
+                setImgOptions(node.__options);
+            }
+        });
+    }, [nodeKey]);
 
     const draggable = $isNodeSelection(selection);
     const isFocused = isSelected;
@@ -150,6 +159,23 @@ export const ImageComponent = observer((props: ImageEditorProps): React.ReactNod
         <div className={clsx(styles.imageEditor, isResizing && 'resizing')}>
             {!isResizing && (
                 <div className={clsx(styles.actions, isFocused && styles.focused)}>
+                    <GenericAttributeEditor
+                        onUpdate={(values) => {
+                            editor.update(() => {
+                                const node = $getNodeByKey(nodeKey);
+                                if ($isImageNode(node)) {
+                                    node.setOptions(values);
+                                }
+                                const n = node?.getLatest();
+                                if ($isImageNode(n)) {
+                                    setImgOptions(n.__options);
+                                }
+                            });
+                        }}
+                        properties={[{ name: 'width', type: 'string', removable: false }]}
+                        values={asStringRecord(imgOptions)}
+                        canExtend
+                    />
                     <RemoveNode onRemove={removeImageFigure} className={clsx(styles.remove)} />
                 </div>
             )}

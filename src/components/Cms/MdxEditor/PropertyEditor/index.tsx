@@ -28,6 +28,7 @@ const PropertyEditor = (props: Props) => {
                 const valType = value === 'true' || value === 'false' ? 'checkbox' : 'text';
                 return { name: key, value: value, type: valType, removable: true };
             });
+
         return [...knownProps, ...unknownProps];
     }, [values, properties, canExtend]);
 

@@ -266,3 +266,23 @@ export const parseOptions = (
     }
     return options;
 };
+
+export const serializeOptions = (options: ParsedOptions) => {
+    const opts: string[] = [];
+    Object.entries(options).forEach(([key, value]) => {
+        if (typeof value === 'boolean') {
+            if (value) {
+                opts.push(`--${key}`);
+            }
+        } else if (value === 'true' || value === 'false') {
+            if (value === 'true') {
+                opts.push(`--${key}`);
+            }
+        } else {
+            if (value !== undefined) {
+                opts.push(`--${key}=${value}`);
+            }
+        }
+    });
+    return opts.join(' ');
+};

@@ -31,7 +31,7 @@ export class ImageCaptionNode extends ElementNode {
     }
 
     createDOM(config: EditorConfig): ImageCaptionHTMLElementType {
-        const element = document.createElement('div');
+        const element = document.createElement('p');
         element.classList.add(styles.imageCaption);
         return element;
     }

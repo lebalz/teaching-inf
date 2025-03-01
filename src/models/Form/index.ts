@@ -85,7 +85,7 @@ export default class Form<T = string> {
         if (!field) {
             return;
         }
-        if (field.isInitField) {
+        if (field.isInitField && !field.isRemovable) {
             field.resetValue();
         } else {
             this.fields.remove(field);

@@ -46,7 +46,6 @@ const Editor = observer((props: Props) => {
     const [newAttrName, setNewAttrName] = React.useState<string>('');
     const [newAttrValue, setNewAttrValue] = React.useState<string>('');
     const isMobile = useIsMobileView(768);
-    console.log('render form');
     return (
         <Card
             header={title && <h4>{title}</h4>}

@@ -14,8 +14,8 @@ import type {
 
 import { DecoratorNode } from 'lexical';
 import { ImageComponent } from './ImageComponent';
-import { parseOptions } from '@tdev/plugins/helpers';
-import { observer } from 'mobx-react-lite';
+import { camelCased, ParsedOptions, parseOptions, serializeOptions } from '@tdev/plugins/helpers';
+import _ from 'lodash';
 
 /**
  * A serialized representation of an {@link ImageNode}.
@@ -40,6 +40,8 @@ export class ImageNode extends DecoratorNode<React.ReactNode> {
     __src: string;
     /** @internal */
     __width?: number;
+
+    __options: ParsedOptions;
 
     /** @internal */
     static getType(): string {
@@ -68,7 +70,8 @@ export class ImageNode extends DecoratorNode<React.ReactNode> {
     constructor(src: string, altText: string, key?: NodeKey) {
         super(key);
         this.__src = src;
-        this.__width = (parseOptions(altText, true) as any).width;
+        this.__options = parseOptions(altText, true);
+        this.__width = (this.__options as any).width;
     }
 
     /** @internal */
@@ -85,11 +88,24 @@ export class ImageNode extends DecoratorNode<React.ReactNode> {
         this.getWritable().__width = width;
     }
 
+    setOptions(options: { name: string; value: number | string | undefined }[]) {
+        const newOptions: Record<string, string | number> = {};
+        options.forEach((option) => {
+            if (option.name === 'width') {
+                return this.setWidth(option.value as number);
+            }
+            if (!option.value || option.value === 'false') {
+                delete newOptions[camelCased(option.name)];
+                return;
+            }
+            newOptions[camelCased(option.name)] = option.value;
+        });
+        this.getWritable().__options = newOptions;
+    }
+
     getAltText(): string {
-        if (!this.__width) {
-            return '';
-        }
-        return `--width=${this.__width}`;
+        const alt = serializeOptions({ ...this.__options, width: this.__width });
+        return alt;
     }
 
     /** @internal */
