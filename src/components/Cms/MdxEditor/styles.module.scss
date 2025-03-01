@@ -10,11 +10,13 @@
     box-shadow: var(--ifm-global-shadow-md);
     border: 1px solid var(--ifm-color-secondary-darkest);
     border-radius: var(--ifm-global-radius);
+    cursor: text;
 
     .toolbar {
         top: var(--cms-toolbar-top-offset);
         z-index: var(--ifm-z-index-dropdown);
         scrollbar-width: thin;
+        cursor: default;
     }
     // style native details element according to docusaurus theme
     :global(details):not([class]) {
