@@ -11,6 +11,7 @@ import type { BaseSelection, EditorConfig, LexicalNode, NodeKey, SerializedEleme
 
 import { $applyNodeReplacement, $isRangeSelection, ElementNode, Spread } from 'lexical';
 import styles from './styles.module.scss';
+import { $isImageNode, ImageNode } from './ImageNode';
 
 export type SerializedImageFigureNode = Spread<{}, SerializedElementNode>;
 
@@ -18,6 +19,7 @@ type ImageFigureHTMLElementType = HTMLElement;
 
 /** @noInheritDoc */
 export class ImageFigureNode extends ElementNode {
+    __width?: number;
     static getType(): string {
         return 'imageFigure';
     }
@@ -30,13 +32,37 @@ export class ImageFigureNode extends ElementNode {
         super(key);
     }
 
+    imageNode(): ImageNode | null {
+        const imgNode = this.getChildAtIndex(0) as ImageNode;
+        if ($isImageNode(imgNode)) {
+            return imgNode;
+        }
+        return null;
+    }
+
     createDOM(config: EditorConfig): ImageFigureHTMLElementType {
         const element = document.createElement('div');
         element.classList.add(styles.imageFigure);
+        if (this.__width || this.imageNode()?.__width) {
+            const width = this.__width || this.imageNode()?.__width;
+            element.style.setProperty('--cms-img-width', `${width}px`);
+        }
+
         return element;
     }
 
+    /**
+     * the image figure will be updated whenever the children are updated
+     */
     updateDOM(config: EditorConfig): boolean {
+        const imgNode = this.getChildAtIndex(0) as ImageNode;
+        if (!imgNode || !$isImageNode(imgNode)) {
+            return false;
+        }
+        if (this.__width !== imgNode.__width) {
+            this.getWritable().__width = imgNode.__width;
+            return true;
+        }
         return false;
     }
 

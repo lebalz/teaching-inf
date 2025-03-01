@@ -146,7 +146,7 @@ export const ImageComponent = observer((props: ImageEditorProps): React.ReactNod
     }
 
     return (
-        <div className={styles.imageEditor}>
+        <div className={clsx(styles.imageEditor, isResizing && 'resizing')}>
             <div className={styles.imageWrapper} data-editor-block-type="image">
                 <div draggable={draggable}>
                     <img
