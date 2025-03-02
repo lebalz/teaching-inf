@@ -38,10 +38,6 @@ export const CodeDefBoxDirectiveDescriptor: DirectiveDescriptor = {
     },
     Editor: observer(({ mdastNode }) => {
         const updater = useMdastNodeUpdater();
-        const cmsStore = useStore('cmsStore');
-        React.useEffect(() => {
-            cmsStore.addAdmonitionType('def');
-        }, []);
         return (
             <DefBox className={clsx(styles.def)}>
                 <DefHeading className={clsx(styles.header)}>
