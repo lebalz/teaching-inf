@@ -47,6 +47,40 @@ const Input = observer((props: Props) => {
         );
     }
     if (field.isSelect) {
+        if (field.type === 'select') {
+            return (
+                <Select
+                    defaultValue={
+                        field.required ? { label: field.options![0], value: field.options![0] } : undefined
+                    }
+                    isClearable={!field.required}
+                    isSearchable
+                    name={field.name}
+                    options={field.options!.map((option) => ({ label: option, value: option }))}
+                    value={{ label: field.value, value: field.value }}
+                    onChange={(option) => {
+                        field.setValue(option?.value || '');
+                        if (field.saveOnChange) {
+                            props.onSaveNow?.();
+                        }
+                    }}
+                    menuPortalTarget={document.body}
+                    styles={{
+                        menuPortal: (base) => ({ ...base, zIndex: 999 }),
+                        container: (base) => ({ ...base, width: '100%' })
+                    }}
+                />
+            );
+        }
+        let multiOptions: { label: string; value: string }[] = [];
+        try {
+            multiOptions = (JSON.parse(field.value || '[]') as string[]).map((option) => ({
+                label: option,
+                value: option
+            }));
+        } catch (e) {
+            console.log('Error parsing multi select', field.value, e);
+        }
         return (
             <Select
                 defaultValue={
@@ -54,11 +88,12 @@ const Input = observer((props: Props) => {
                 }
                 isClearable={!field.required}
                 isSearchable
+                isMulti
                 name={field.name}
                 options={field.options!.map((option) => ({ label: option, value: option }))}
-                value={{ label: field.value, value: field.value }}
+                value={multiOptions}
                 onChange={(option) => {
-                    field.setValue(option?.value || '');
+                    field.setValue(JSON.stringify(option.map((option) => option.value) || []));
                     if (field.saveOnChange) {
                         props.onSaveNow?.();
                     }

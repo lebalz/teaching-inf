@@ -102,7 +102,11 @@ export default class Field<T = string> {
 
     @computed
     get isSelect() {
-        return this.type === 'select' && this.options && this.options.length > 0;
+        return (
+            (this.type === 'select' || this.type === 'multi-select') &&
+            this.options &&
+            this.options.length > 0
+        );
     }
 
     @computed

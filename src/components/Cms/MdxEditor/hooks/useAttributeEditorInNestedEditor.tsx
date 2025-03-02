@@ -71,7 +71,7 @@ export const useAttributeEditorInNestedEditor = (
                 if (prop.value === '' || !prop.value) {
                     return acc;
                 }
-                if (prop.type === 'expression') {
+                if (prop.type === 'expression' || prop.type === 'multi-select') {
                     acc.push({
                         type: 'mdxJsxAttribute',
                         name: prop.name,
