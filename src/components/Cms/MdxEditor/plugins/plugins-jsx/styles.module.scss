@@ -26,3 +26,14 @@
         justify-content: center;
     }
 }
+.answerCard {
+    display: flex;
+    align-items: center;
+    .answer {
+        flex-grow: 1;
+        --ifm-paragraph-margin-bottom: 0;
+        > div {
+            margin-bottom: 0;
+        }
+    }
+}

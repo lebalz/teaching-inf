@@ -10,15 +10,20 @@ import {
 import React from 'react';
 import {
     mdiApplicationOutline,
+    mdiCardTextOutline,
+    mdiCheckboxOutline,
     mdiDotsVerticalCircleOutline,
     mdiFormatListCheckbox,
+    mdiFormTextbox,
+    mdiInvoiceTextSendOutline,
     mdiMathIntegral,
-    mdiMathIntegralBox
+    mdiMathIntegralBox,
+    mdiTextBox
 } from '@mdi/js';
 import Button from '@tdev-components/shared/Button';
 import Icon from '@mdi/react';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import { $createMathNode } from '../mathPlugin/MathNode';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * A toolbar dropdown button that allows the user to insert admonitions.
@@ -64,6 +69,18 @@ export const InsertJsxElements = () => {
                     {
                         label: <Button icon={mdiMathIntegralBox} text="Math-Block" iconSide="left" />,
                         value: 'Math'
+                    },
+                    {
+                        label: <Button icon={mdiFormTextbox} text="String Answer" iconSide="left" />,
+                        value: 'StringAnswer'
+                    },
+                    {
+                        label: <Button icon={mdiCardTextOutline} text="Text Answer" iconSide="left" />,
+                        value: 'TextAnswer'
+                    },
+                    {
+                        label: <Button icon={mdiCheckboxOutline} text="State Answer" iconSide="left" />,
+                        value: 'StateAnswer'
                     }
                 ]}
                 title="Insert JSX Elements"
@@ -83,6 +100,16 @@ export const InsertJsxElements = () => {
                                         name: 'BrowserWindow',
                                         kind: 'flow',
                                         props: {}
+                                    });
+                                    break;
+                                case 'TextAnswer':
+                                case 'StateAnswer':
+                                case 'StringAnswer':
+                                    const answerType = value.replace('Answer', '').toLowerCase();
+                                    insertJsx({
+                                        name: 'Answer',
+                                        kind: 'flow',
+                                        props: { id: uuidv4(), type: answerType }
                                     });
                                     break;
                                 case 'Math':

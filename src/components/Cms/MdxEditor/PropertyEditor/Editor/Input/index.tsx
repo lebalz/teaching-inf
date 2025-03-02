@@ -44,6 +44,7 @@ const Input = observer((props: Props) => {
             noSpellCheck
             placeholder={field.placeholder}
             type={field.type}
+            options={field.options}
         />
     );
 });

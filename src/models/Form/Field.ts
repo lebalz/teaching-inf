@@ -12,6 +12,7 @@ export interface FormField<T> {
     label?: string;
     resettable?: boolean;
     removable?: boolean;
+    options?: string[];
     sideEffect?: (fields: Form<T>) => void;
     generateNewValue?: () => T;
 }
@@ -31,6 +32,7 @@ export default class Field<T = string> {
     readonly generateNewValue?: () => T;
     readonly isInitField: boolean;
     readonly isRemovable: boolean;
+    readonly options?: string[];
 
     @observable accessor value: T;
 
@@ -48,6 +50,7 @@ export default class Field<T = string> {
         this.label = data.label;
         this.resettable = data.resettable;
         this.isRemovable = data.removable ?? false;
+        this.options = data.options;
         this.sideEffect = data.sideEffect;
         this.generateNewValue = data.generateNewValue;
     }
