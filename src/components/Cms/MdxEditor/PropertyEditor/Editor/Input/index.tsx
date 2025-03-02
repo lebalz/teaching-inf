@@ -2,26 +2,31 @@ import React from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
-import { useStore } from '@tdev-hooks/useStore';
 import CodeEditor from '@tdev-components/shared/CodeEditor';
 import Checkbox from '@tdev-components/shared/Checkbox';
 import TextInput from '@tdev-components/shared/TextInput';
 import Field from '@tdev-models/Form/Field';
 import { action } from 'mobx';
+import Select from 'react-select';
 
 interface Props {
     field: Field<string>;
+    onSaveNow?: () => void;
 }
 
 const Input = observer((props: Props) => {
     const { field } = props;
-    console.log('render', field.name);
     if (field.type === 'expression') {
         return (
             <CodeEditor
                 value={field.value}
                 placeholder={field.placeholder || 'Wert'}
-                onChange={action((val) => field.setValue(val))}
+                onChange={action((val) => {
+                    field.setValue(val);
+                    if (field.saveOnChange) {
+                        props.onSaveNow?.();
+                    }
+                })}
                 className={clsx(styles.codeEditor)}
                 lang={field.lang}
                 hideLineNumbers
@@ -32,13 +37,48 @@ const Input = observer((props: Props) => {
         return (
             <Checkbox
                 checked={typeof field.value === 'boolean' ? field.value : field.value === 'true'}
-                onChange={(checked) => field.setValue(`${checked}`)}
+                onChange={(checked) => {
+                    field.setValue(`${checked}`);
+                    if (field.saveOnChange) {
+                        props.onSaveNow?.();
+                    }
+                }}
+            />
+        );
+    }
+    if (field.isSelect) {
+        return (
+            <Select
+                defaultValue={
+                    field.required ? { label: field.options![0], value: field.options![0] } : undefined
+                }
+                isClearable={!field.required}
+                isSearchable
+                name={field.name}
+                options={field.options!.map((option) => ({ label: option, value: option }))}
+                value={{ label: field.value, value: field.value }}
+                onChange={(option) => {
+                    field.setValue(option?.value || '');
+                    if (field.saveOnChange) {
+                        props.onSaveNow?.();
+                    }
+                }}
+                menuPortalTarget={document.body}
+                styles={{
+                    menuPortal: (base) => ({ ...base, zIndex: 999 }),
+                    container: (base) => ({ ...base, width: '100%' })
+                }}
             />
         );
     }
     return (
         <TextInput
-            onChange={(val) => field.setValue(val)}
+            onChange={(val) => {
+                field.setValue(val);
+                if (field.saveOnChange) {
+                    props.onSaveNow?.();
+                }
+            }}
             value={field.value}
             noAutoFocus
             noSpellCheck
