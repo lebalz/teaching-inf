@@ -12,6 +12,8 @@ export interface FormField<T> {
     label?: string;
     resettable?: boolean;
     removable?: boolean;
+    options?: string[];
+    saveOnChange?: boolean;
     sideEffect?: (fields: Form<T>) => void;
     generateNewValue?: () => T;
 }
@@ -31,6 +33,8 @@ export default class Field<T = string> {
     readonly generateNewValue?: () => T;
     readonly isInitField: boolean;
     readonly isRemovable: boolean;
+    readonly options?: string[];
+    readonly saveOnChange?: boolean;
 
     @observable accessor value: T;
 
@@ -48,6 +52,8 @@ export default class Field<T = string> {
         this.label = data.label;
         this.resettable = data.resettable;
         this.isRemovable = data.removable ?? false;
+        this.options = data.options;
+        this.saveOnChange = data.saveOnChange;
         this.sideEffect = data.sideEffect;
         this.generateNewValue = data.generateNewValue;
     }
@@ -92,6 +98,11 @@ export default class Field<T = string> {
     @computed
     get isCheckbox() {
         return this.type === 'checkbox';
+    }
+
+    @computed
+    get isSelect() {
+        return this.type === 'select' && this.options && this.options.length > 0;
     }
 
     @computed

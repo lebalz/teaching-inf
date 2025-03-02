@@ -13,9 +13,7 @@ import Popup from 'reactjs-popup';
 import RemoveNode from '../../RemoveNode';
 import { observer } from 'mobx-react-lite';
 import AdmonitionTypeSelector from './AdmonitionTypeSelector';
-
-/** @internal */
-export const ADMONITION_TYPES = ['note', 'tip', 'info', 'warning', 'danger'] as const;
+import { ADMONITION_TYPES } from './AdmonitionTypeSelector/admonitionTypes';
 
 /** @internal */
 export type AdmonitionKind = (typeof ADMONITION_TYPES)[number];

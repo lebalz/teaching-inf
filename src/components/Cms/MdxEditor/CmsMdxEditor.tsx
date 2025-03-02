@@ -69,6 +69,7 @@ import { PdfDescriptor } from '@tdev-plugins/remark-pdf/mdx-editor-plugin/PdfDes
 import { Asset } from '@tdev-models/cms/Dir';
 import DraggableBlockNode from './plugins/DraggableBlockPlugin/DraggableBlockNode';
 import { draggableBlockPlugin } from './plugins/DraggableBlockPlugin';
+import JsxDescriptors from './plugins/plugins-jsx/JsxDescriptors';
 
 export interface Props {
     file: FileModel;
@@ -113,13 +114,7 @@ const CmsMdxEditor = observer((props: Props) => {
                     strongPlugin(),
                     mathPlugin(),
                     jsxPlugin({
-                        jsxComponentDescriptors: [
-                            BrowserWindowDescriptor,
-                            DocCardListDescriptor,
-                            DeflistDescriptor,
-                            DdDescriptor,
-                            DtDescriptor
-                        ]
+                        jsxComponentDescriptors: JsxDescriptors
                     }),
                     directivesPlugin({
                         directiveDescriptors: [
