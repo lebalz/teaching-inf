@@ -11,6 +11,7 @@ import _ from 'lodash';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@tdev-hooks/useStore';
+import { ADMONITION_TYPES } from './AdmonitionTypeSelector/admonitionTypes';
 
 /**
  * A toolbar dropdown button that allows the user to insert admonitions.
@@ -26,7 +27,7 @@ export const InsertAdmonition = observer(() => {
     const t = useTranslation();
 
     const items = React.useMemo(() => {
-        return ['details', ...cmsStore.admonitionTypes].sort().map((type) => ({
+        return ['details', 'def', ...ADMONITION_TYPES].sort().map((type) => ({
             value: type,
             label: _.capitalize(type)
         }));

@@ -17,6 +17,7 @@ interface Props {
     noSpellCheck?: boolean;
     noAutoFocus?: boolean;
     required?: boolean;
+    options?: string[];
 }
 
 const TextInput = observer((props: Props) => {

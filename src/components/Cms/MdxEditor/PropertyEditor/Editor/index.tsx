@@ -110,7 +110,12 @@ const Editor = observer((props: Props) => {
 
                                         <td className={clsx(styles.propertyEditorCell)}>
                                             <div className={clsx(styles.content)}>
-                                                <Input field={field} />
+                                                <Input
+                                                    field={field}
+                                                    onSaveNow={() => {
+                                                        props.onChange(form.values);
+                                                    }}
+                                                />
                                                 {field.resettable /** || field.onRecalc */ && (
                                                     <div className={clsx(styles.spacer)} />
                                                 )}
