@@ -19,7 +19,7 @@ export type Response = { state: ApiState; message?: string };
 
 interface Props {
     onDiscard: () => void;
-    onCreateOrUpdate: (path: string, file?: FileStub) => Promise<Response>;
+    onCreateOrUpdate: (path: string, isUpdating: boolean) => Promise<Response>;
     file?: File | BinFile | FileStub;
 }
 
@@ -63,7 +63,7 @@ const AddOrUpdateFile = observer((props: Props) => {
                         spin={apiState === ApiState.SYNCING}
                         onConfirm={() => {
                             setApiState(ApiState.SYNCING);
-                            props.onCreateOrUpdate(name).then((res) => {
+                            props.onCreateOrUpdate(name, isUpdate).then((res) => {
                                 if (res.state === 'error') {
                                     setAlert(res.message || '');
                                     setApiState(ApiState.IDLE);

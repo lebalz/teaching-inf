@@ -51,7 +51,7 @@ const AddFilePopup = observer((props: Props) => {
             overlayStyle={{ background: 'rgba(0,0,0,0.5)' }}
         >
             <AddOrUpdateFile
-                onCreateOrUpdate={(path: string) => {
+                onCreateOrUpdate={(path, isUpdate) => {
                     const absPath = resolvePath(dir.path, path);
                     const isMarkdown = /\.mdx?$/i.test(path);
                     const content = isMarkdown ? `---\npage_id: ${uuidv4()}\n---\n` : '\n';
@@ -66,7 +66,7 @@ const AddFilePopup = observer((props: Props) => {
                         .then((file) => {
                             ref.current?.close();
                             if (file) {
-                                cmsStore.setActiveEntry(file, true);
+                                cmsStore.setActiveEntry(file);
                             }
                             return { state: ApiState.SUCCESS };
                         })
