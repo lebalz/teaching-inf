@@ -13,6 +13,7 @@ import File from '@tdev-models/cms/File';
 import { resolvePath } from '@tdev-models/helpers/resolvePath';
 import { Confirm } from '@tdev-components/shared/Button/Confirm';
 import BinFile from '@tdev-models/cms/BinFile';
+import { useStore } from '@tdev-hooks/useStore';
 
 export type Response = { state: ApiState; message?: string };
 
@@ -24,6 +25,7 @@ interface Props {
 
 const AddOrUpdateFile = observer((props: Props) => {
     const [alert, setAlert] = React.useState('');
+    const cmsStore = useStore('cmsStore');
     const [name, setName] = React.useState(props.file?.name || '');
     const [apiState, setApiState] = React.useState(ApiState.IDLE);
     const isUpdate = !!props.file;
@@ -73,7 +75,8 @@ const AddOrUpdateFile = observer((props: Props) => {
                             !name ||
                             name === props.file?.name ||
                             apiState !== ApiState.IDLE ||
-                            (props.file && props.file.mustBeFetched)
+                            (props.file && props.file.mustBeFetched) ||
+                            !cmsStore.canModifyActiveBranch
                         }
                         color={isUpdate ? 'orange' : 'green'}
                         confirmText={`Wirklich auf dem ${props.file?.branch}-Branch ändern?`}

@@ -32,7 +32,17 @@ const AddFilePopup = observer((props: Props) => {
         <Popup
             trigger={
                 <div className={clsx(styles.addFile, props.className)}>
-                    <Button icon={mdiFilePlus} color="blue" size={0.8} />
+                    <Button
+                        icon={mdiFilePlus}
+                        color="blue"
+                        size={0.8}
+                        disabled={!cmsStore.canModifyActiveBranch}
+                        title={
+                            cmsStore.canModifyActiveBranch
+                                ? undefined
+                                : `Inhalte auf dem ${cmsStore.github?.defaultBranchName}-Branch können nicht direkt modifiziert werden. Branch wechseln!`
+                        }
+                    />
                 </div>
             }
             on="click"

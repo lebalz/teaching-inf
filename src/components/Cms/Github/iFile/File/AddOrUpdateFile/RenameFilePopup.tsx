@@ -37,7 +37,7 @@ const RenameFilePopup = observer((props: Props) => {
                         icon={mdiFileEdit}
                         color="orange"
                         size={props.size || 0.8}
-                        disabled={props.disabled}
+                        disabled={props.disabled || !cmsStore.canModifyActiveBranch}
                     />
                 </div>
             }
