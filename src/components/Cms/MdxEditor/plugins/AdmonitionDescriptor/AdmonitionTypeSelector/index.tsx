@@ -2,9 +2,9 @@ import React from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
-import { useStore } from '@tdev-hooks/useStore';
 import Button from '@tdev-components/shared/Button';
 import _ from 'lodash';
+import { ADMONITION_TYPES } from './admonitionTypes';
 
 interface Props {
     currentName: string;
@@ -12,11 +12,9 @@ interface Props {
 }
 
 const AdmonitionTypeSelector = observer((props: Props) => {
-    const cmsStore = useStore('cmsStore');
-
     return (
         <div className={styles.admonitionList}>
-            {[...cmsStore.admonitionTypes].map((admoType) => (
+            {[...ADMONITION_TYPES].map((admoType) => (
                 <Button
                     key={admoType}
                     className={clsx(styles.userButton)}

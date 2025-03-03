@@ -23,7 +23,9 @@ import imageCompression from 'browser-image-compression';
 import BinFile from '@tdev-models/cms/BinFile';
 import CmsViewStore from './ViewStores/CmsViewStore';
 import iFile from '@tdev-models/cms/iFile';
-const { organizationName, projectName } = siteConfig;
+import type * as Preset from '@docusaurus/preset-classic';
+
+const { organizationName, projectName, presets } = siteConfig;
 if (!organizationName || !projectName) {
     throw new Error('"organizationName" and "projectName" must be set in docusaurus.config.ts');
 }
@@ -36,9 +38,6 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
     @observable.ref accessor viewStore: CmsViewStore;
 
     @observable accessor initialized = false;
-
-    // common admonition types by docusaurus
-    _admonitionTypes = observable.set(['note', 'tip', 'info', 'warning', 'danger']);
 
     constructor(store: RootStore) {
         super();
@@ -84,18 +83,6 @@ export class CmsStore extends iStore<`update-settings` | `load-settings` | `load
                 }
             })
         );
-    }
-
-    @computed
-    get admonitionTypes() {
-        return [...this._admonitionTypes].sort();
-    }
-
-    @action
-    addAdmonitionType(type: string) {
-        if (!this._admonitionTypes.has(type)) {
-            this._admonitionTypes.add(type);
-        }
     }
 
     @action

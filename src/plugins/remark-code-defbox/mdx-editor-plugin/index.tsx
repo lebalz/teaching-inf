@@ -15,7 +15,6 @@ import RemoveNode from '@tdev-components/Cms/MdxEditor/RemoveNode';
 import DefContent from '@tdev-components/CodeDefBox/DefContent';
 import AdmonitionTypeSelector from '@tdev-components/Cms/MdxEditor/plugins/AdmonitionDescriptor/AdmonitionTypeSelector';
 import { observer } from 'mobx-react-lite';
-import { useStore } from '@tdev-hooks/useStore';
 
 /**
  * Pass this descriptor to the `directivesPlugin` `directiveDescriptors` parameter to enable {@link https://docusaurus.io/docs/markdown-features/admonitions | markdown admonitions}.
@@ -38,10 +37,6 @@ export const CodeDefBoxDirectiveDescriptor: DirectiveDescriptor = {
     },
     Editor: observer(({ mdastNode }) => {
         const updater = useMdastNodeUpdater();
-        const cmsStore = useStore('cmsStore');
-        React.useEffect(() => {
-            cmsStore.addAdmonitionType('def');
-        }, []);
         return (
             <DefBox className={clsx(styles.def)}>
                 <DefHeading className={clsx(styles.header)}>
