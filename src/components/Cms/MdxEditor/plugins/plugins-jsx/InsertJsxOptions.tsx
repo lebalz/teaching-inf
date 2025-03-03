@@ -85,12 +85,12 @@ export const InsertJsxElements = () => {
                         value: 'StateAnswer'
                     },
                     {
-                        label: <Button icon={mdiQrcodeScan} text="QR Scanner" iconSide="left" />,
-                        value: 'QrScanner'
+                        label: <Button icon={mdiQrcode} text="QR Code" iconSide="left" />,
+                        value: 'QrGenerator'
                     },
                     {
-                        label: <Button icon={mdiQrcode} text="QR Generator" iconSide="left" />,
-                        value: 'QrGenerator'
+                        label: <Button icon={mdiQrcodeScan} text="QR Scanner" iconSide="left" />,
+                        value: 'QrScanner'
                     }
                 ]}
                 title="Insert JSX Elements"
