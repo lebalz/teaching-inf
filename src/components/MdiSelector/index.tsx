@@ -30,6 +30,7 @@ export default function MdiSelector(): React.ReactNode {
                     value={filter}
                     onChange={(text) => setFilter(text)}
                     placeholder="🔎 Suche"
+                    className={clsx(styles.filter)}
                 />
                 <span className={styles.spacer}></span>
                 <span className={styles.spacer}></span>
