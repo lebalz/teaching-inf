@@ -57,12 +57,12 @@ const File = observer((props: Props) => {
                         onDelete={() => {
                             cmsStore.github?.deleteFile(file);
                         }}
-                        disabled={cmsStore.isOnDefaultBranch}
+                        disabled={!cmsStore.canModifyActiveBranch}
                         text={''}
                         title={
-                            cmsStore.isOnDefaultBranch
-                                ? `Es können keine Dateien im ${cmsStore.github?.defaultBranchName || 'main'}-Branch gelöscht werden.`
-                                : undefined
+                            cmsStore.canModifyActiveBranch
+                                ? undefined
+                                : `Es können keine Dateien im ${cmsStore.github?.defaultBranchName || 'main'}-Branch gelöscht werden.`
                         }
                         size={BUTTON_SIZE}
                     />
@@ -73,7 +73,7 @@ const File = observer((props: Props) => {
                                 spin={file.isSyncing}
                                 color="green"
                                 size={BUTTON_SIZE}
-                                disabled={cmsStore.isOnDefaultBranch}
+                                disabled={!cmsStore.canModifyActiveBranch}
                                 onClick={() => {
                                     file.save();
                                 }}

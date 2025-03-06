@@ -430,7 +430,7 @@ const config: Config = {
               <a 
                 class="badge badge--primary"
                 style="margin-top: 0.5rem;"
-                href="https://github.com/lebalz/teaching-inf/commit/${GIT_COMMIT_SHA}"
+                href="https://github.com/lebalz/teaching-inf/commits/${GIT_COMMIT_SHA}"
               >
                   <svg viewBox="0 0 24 24" role="presentation" style="width: 0.9rem; height: 0.9rem; transform: translateY(15%) rotate(90deg); transform-origin: center center;"><path d="${mdiSourceCommit}" style="fill: currentcolor;"></path></svg> ${GIT_COMMIT_SHA.substring(0, 7)}
               </a>`
