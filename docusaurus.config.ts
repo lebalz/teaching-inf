@@ -3,7 +3,7 @@ import { themes as prismThemes } from 'prism-react-renderer';
 import type { Config, CurrentBundler } from '@docusaurus/types';
 import dynamicRouterPlugin, { Config as DynamicRouteConfig} from './src/plugins/plugin-dynamic-routes';
 import type * as Preset from '@docusaurus/preset-classic';
-import path from 'path';
+import path, { resolve } from 'path';
 
 import strongPlugin, { visitor as captionVisitor } from './src/plugins/remark-strong/plugin';
 import deflistPlugin from './src/plugins/remark-deflist/plugin';
@@ -426,6 +426,9 @@ const config: Config = {
                     type: 'json',
                   }
                 ]
+              },
+              resolve: {
+                fullySpecified: false
               },
               plugins: [
                 new currentBundler.instance.DefinePlugin({
