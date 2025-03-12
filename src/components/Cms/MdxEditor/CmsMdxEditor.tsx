@@ -172,6 +172,7 @@ const CmsMdxEditor = observer((props: Props) => {
                                     <ListsToggle />
                                     <InsertCodeBlock />
                                     <InsertTable />
+                                    <InsertImage />
                                     <CreateLink />
                                     <CodeToggle />
                                     <BlockTypeSelect />
@@ -193,7 +194,6 @@ const CmsMdxEditor = observer((props: Props) => {
                                         ]}
                                     />
                                     <InsertJsxElements />
-                                    <InsertImage />
                                 </DiffSourceToggleWrapper>
                             </>
                         )
