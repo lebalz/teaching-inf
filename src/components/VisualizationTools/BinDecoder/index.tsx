@@ -230,6 +230,10 @@ const BinDecoder = () => {
             } else {
                 bytes = <span>{`0${bin.padStart(7, '0')}`}</span>;
             }
+            if (ord < 0 || ord > 0x10ffff) {
+                window.alert(`Ungültige UTF-8 Sequenz: ${bin}`);
+                return;
+            }
             const char: ProcessedPart = {
                 bin: bin,
                 ord: ord,

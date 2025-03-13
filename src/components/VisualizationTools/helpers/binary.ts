@@ -16,7 +16,10 @@ const fromBin = (bin: string, slice?: number) => {
     }
     try {
         const ord = parseInt(bin, 2);
-        return String.fromCodePoint(ord);
+        if (ord >= 0 && ord <= 0x10ffff) {
+            return String.fromCodePoint(ord);
+        }
+        return '⚠️ Invalid code point';
     } catch {
         return;
     }
