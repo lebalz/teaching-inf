@@ -33,7 +33,7 @@ const TextAreaInput = observer((props: Props) => {
             return;
         }
         if (lineCount > 1) {
-            setRows(lineCount);
+            setRows(Math.max(lineCount, props.minRows || 1));
         } else {
             setRows(Math.max(1, props.minRows || 1));
         }
