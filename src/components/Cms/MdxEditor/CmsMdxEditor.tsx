@@ -67,6 +67,7 @@ import { Asset } from '@tdev-models/cms/Dir';
 import { draggableBlockPlugin } from './plugins/DraggableBlockPlugin';
 import JsxDescriptors from './plugins/plugins-jsx/JsxDescriptors';
 import { extractOptions } from '@tdev-plugins/helpers';
+import { GenericDirectiveDescriptor } from './plugins/CatchAllUnknown/GenericDirectiveDescriptor';
 
 export interface Props {
     file: FileModel;
@@ -114,6 +115,7 @@ const CmsMdxEditor = observer((props: Props) => {
                         jsxComponentDescriptors: JsxDescriptors
                     }),
                     directivesPlugin({
+                        escapeUnknownTextDirectives: true,
                         directiveDescriptors: [
                             AdmonitionDirectiveDescriptor,
                             CodeDefBoxDirectiveDescriptor,
@@ -122,7 +124,9 @@ const CmsMdxEditor = observer((props: Props) => {
                             FlexDirectiveDescriptor,
                             CardsDirectiveDescriptor,
                             ...MediaDescriptors,
-                            PdfDescriptor
+                            PdfDescriptor,
+                            // must be the last descriptor!!
+                            GenericDirectiveDescriptor
                         ]
                     }),
                     thematicBreakPlugin(),
@@ -206,7 +210,6 @@ const CmsMdxEditor = observer((props: Props) => {
                             }
                             const fPath = `${activeEntry.parent.imageDirPath}/${img.name}`;
                             const current = cmsStore.findEntry(activeEntry.branch, fPath);
-                            console.log('uploading image', fPath);
                             return cmsStore
                                 .uploadImage(img, fPath, activeEntry.branch, current?.sha)
                                 .then((file) => {
