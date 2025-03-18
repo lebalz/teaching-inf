@@ -43,6 +43,7 @@ export const useAttributeEditorInNestedEditor = (
     mdastAttributes: (MdxJsxAttribute | MdxJsxExpressionAttribute)[]
 ) => {
     const updateMdastNode = useMdastNodeUpdater();
+    const [componentKey, setComponentKey] = React.useState<number>(Date.now());
     const cProps = React.useMemo(() => {
         const availableNames = [
             ...new Set<string>([
@@ -93,11 +94,11 @@ export const useAttributeEditorInNestedEditor = (
 
                 return acc;
             }, []);
-
+            setComponentKey((prev) => (prev ? prev + 1 : 1));
             updateMdastNode({ attributes: updatedAttributes });
         },
         [mdastAttributes, updateMdastNode, properties]
     );
 
-    return { values: cProps, onUpdate: onUpdate };
+    return { values: cProps, onUpdate: onUpdate, componentKey: componentKey };
 };
