@@ -8,7 +8,10 @@ import Dir from '@tdev-components/Cms/Github/iFile/Dir';
 import Avatar from '@tdev-components/shared/Avatar';
 import { useStore } from '@tdev-hooks/useStore';
 import Button from '@tdev-components/shared/Button';
-import { mdiLogout, mdiLogoutVariant } from '@mdi/js';
+import { mdiAlertDecagram, mdiCheckDecagram, mdiLogout, mdiLogoutVariant } from '@mdi/js';
+import Badge from '@tdev-components/shared/Badge';
+import Icon from '@mdi/react';
+import { SIZE_XS } from '@tdev-components/shared/iconSizes';
 
 interface Props {
     dir?: DirModel;
@@ -16,6 +19,7 @@ interface Props {
     contentClassName?: string;
     showActions?: 'always' | 'hover';
     compact?: boolean;
+    showAvatar?: boolean;
 }
 
 const Directory = observer((props: Props) => {
@@ -34,11 +38,27 @@ const Directory = observer((props: Props) => {
 
     return (
         <div className={clsx(styles.directory, props.className, props.compact && styles.compact)}>
-            {github?.user && (
+            {github?.user && props.showAvatar && (
                 <div className={clsx(styles.ghUser)}>
                     <Avatar
                         imgSrc={github.user.avatar_url}
-                        name={github.user.login}
+                        name={
+                            <span>
+                                {github.user.login}{' '}
+                                <Icon
+                                    path={github.canWrite ? mdiCheckDecagram : mdiAlertDecagram}
+                                    color={
+                                        github.canWrite
+                                            ? 'var(--ifm-color-success)'
+                                            : 'var(--ifm-color-danger)'
+                                    }
+                                    size={SIZE_XS}
+                                    title={
+                                        github.canWrite ? 'Kann Änderungen vornehmen' : 'Keine Schreibrechte'
+                                    }
+                                />
+                            </span>
+                        }
                         size="sm"
                         href={github.user.html_url}
                         className={clsx(styles.avatar)}

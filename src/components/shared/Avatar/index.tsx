@@ -3,7 +3,7 @@ import clsx from 'clsx';
 
 interface Props {
     imgSrc: string;
-    name: string;
+    name: React.ReactNode;
     description?: React.ReactNode;
     size?: 'sm' | 'md' | 'lg';
     alt?: string;

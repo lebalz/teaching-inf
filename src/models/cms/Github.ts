@@ -20,6 +20,8 @@ export type GhPr =
 const PR_PAGE_SIZE = 20;
 type FileEntry = FileStub | BinFile | FileModel | Dir;
 
+const WritePermission = new Set(['admin', 'write']);
+
 class Github {
     readonly store: CmsStore;
 
@@ -35,6 +37,9 @@ class Github {
 
     @observable.ref accessor repo: GhRepo | undefined;
     @observable.ref accessor user: GhTypes['users']['getAuthenticated']['response']['data'] | undefined;
+    @observable.ref accessor permissions:
+        | GhTypes['repos']['getCollaboratorPermissionLevel']['response']['data']
+        | undefined;
 
     apiStates = observable.map<string, ApiState>([], { deep: false });
 
@@ -94,10 +99,17 @@ class Github {
             })
             .then(
                 action((res) => {
-                    console.log(res.data);
+                    if (res.status === 200) {
+                        this.permissions = res.data;
+                    }
                     return res.data.permission;
                 })
             );
+    }
+
+    @computed
+    get canWrite() {
+        return WritePermission.has(this.permissions?.permission || 'none');
     }
 
     @computed

@@ -41,6 +41,7 @@ const CmsLandingPage = observer(() => {
                     contentClassName={clsx(styles.treeContent)}
                     showActions="hover"
                     compact
+                    showAvatar
                 />
             </div>
             <div className={clsx(styles.content)}>
