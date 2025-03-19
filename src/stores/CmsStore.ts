@@ -32,8 +32,8 @@ if (!organizationName || !projectName) {
 
 export class CmsStore extends iStore<'logout' | `update-settings` | `load-settings` | `load-token`> {
     readonly root: RootStore;
-    @observable accessor organizationName: string = organizationName!;
-    @observable accessor projectName: string = projectName!;
+    @observable accessor repoOwner: string = organizationName!;
+    @observable accessor repoName: string = projectName!;
     @observable.ref accessor settings: Settings | undefined;
     @observable.ref accessor partialSettings: PartialSettings | undefined;
     @observable.ref accessor github: Github | undefined;
@@ -85,6 +85,32 @@ export class CmsStore extends iStore<'logout' | `update-settings` | `load-settin
                 }
             })
         );
+    }
+
+    @computed
+    get repoKey() {
+        return `${this.repoOwner}/${this.repoName}`;
+    }
+
+    @action
+    configureRepo(owner: string, name: string) {
+        if (
+            this.repoOwner === owner &&
+            this.repoName === name &&
+            owner === organizationName &&
+            name === projectName
+        ) {
+            return;
+        }
+        if (this.github) {
+            this.github.reset();
+        }
+        if (this.settings) {
+            this.settings.clearLocation();
+        }
+        this.repoOwner = owner;
+        this.repoName = name;
+        this.github?.load();
     }
 
     @action

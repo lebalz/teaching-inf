@@ -8,7 +8,7 @@ import Dir from '@tdev-components/Cms/Github/iFile/Dir';
 import Avatar from '@tdev-components/shared/Avatar';
 import { useStore } from '@tdev-hooks/useStore';
 import Button from '@tdev-components/shared/Button';
-import { mdiAlertDecagram, mdiCheckDecagram, mdiLogout, mdiLogoutVariant } from '@mdi/js';
+import { mdiAlertDecagram, mdiCheckDecagram, mdiLogoutVariant } from '@mdi/js';
 import Badge from '@tdev-components/shared/Badge';
 import Icon from '@mdi/react';
 import { SIZE_XS } from '@tdev-components/shared/iconSizes';
@@ -71,7 +71,7 @@ const Directory = observer((props: Props) => {
                                 }
                                 target="_blank"
                             >
-                                {`${cmsStore.organizationName}/${cmsStore.projectName}`}
+                                {`${cmsStore.repoOwner}/${cmsStore.repoName}`}
                             </a>
                         }
                     />
