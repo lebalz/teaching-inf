@@ -86,13 +86,13 @@ const visitItems = (
             // and visit the current node again
             return [SKIP, idx || 0 + 1];
         }
-        /** flatten images in paragraphs */
-        if (name === DirectiveCard && node.type === 'paragraph') {
+        /** flatten paragraphs */
+        if (node.type === 'paragraph') {
             parent.children.splice(idx || 0, 1, ...(node as Paragraph).children);
             return [SKIP, idx];
         }
         /** process image */
-        if (name === DirectiveCard && node.type === 'image') {
+        if (!config.skipCardImageProcessing && name === DirectiveCard && node.type === 'image') {
             const image = generateImage({
                 type: 'paragraph',
                 children: [node as Image]
@@ -103,11 +103,15 @@ const visitItems = (
             return [SKIP, idx];
         }
         // use the last item as the current item - maybe an image was added directly to the item
-        if (!currentContent) {
+        if (!currentContent && config.itemContent) {
             currentContent = config.itemContent(name);
             currentItem.children.push(currentContent as BlockContent);
         }
-        currentContent.children.push(node as BlockContent);
+        if (config.itemContent) {
+            currentContent!.children.push(node as BlockContent);
+        } else {
+            currentItem.children.push(node as BlockContent);
+        }
         parent.children.splice(idx || 0, 1);
         /** since the current position was removed, visit the current index again */
         return [SKIP, idx];
@@ -115,13 +119,14 @@ const visitItems = (
 };
 
 interface Config {
+    skipCardImageProcessing?: boolean;
     flex: (
         name: ContainerDirectiveName,
         children: RootContent[] | PhrasingContent[],
         options: Options
     ) => MdxJsxFlowElement | Parent;
     flexItem: (name: ContainerDirectiveName, options: Options) => MdxJsxFlowElement | Parent;
-    itemContent: (name: ContainerDirectiveName) => MdxJsxFlowElement | Parent;
+    itemContent?: (name: ContainerDirectiveName) => MdxJsxFlowElement | Parent;
 }
 
 export const transformer = (ast: Root | MdxJsxFlowElement | Parent, config: Config) => {
