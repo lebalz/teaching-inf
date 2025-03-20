@@ -97,7 +97,7 @@ const NetpbmEditor = observer((props: Props) => {
     }, [displayedErrors, displayedWarnings]);
 
     return (
-        <div>
+        <div className={clsx(styles.netpbm)}>
             <div className={clsx(styles.editor, { [styles.hidden]: props.noEditor })}>
                 <div className={styles.textAreaWrapper}>
                     <StateIcons doc={doc} />
@@ -156,7 +156,9 @@ const NetpbmEditor = observer((props: Props) => {
                     )}
                 </div>
             </div>
-            <ImageCanvas width={width} height={height} pixels={pixels} />
+            <div className={clsx(styles.output)}>
+                <ImageCanvas width={width} height={height} pixels={pixels} />
+            </div>
         </div>
     );
 });

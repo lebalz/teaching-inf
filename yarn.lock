@@ -3407,6 +3407,18 @@
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-1.0.0-next.28.tgz#d45e01c4a56f143ee69c54dd6b12eade9e270a73"
   integrity sha512-8LduaNlMZGwdZ6qWrKlfa+2M4gahzFkprZiAt2TF8uS0qQgBizKXpXURqvTJ4WtmupWxaLqjRb2UCTe72mu+Aw==
 
+"@radial-color-picker/react-color-picker@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@radial-color-picker/react-color-picker/-/react-color-picker-4.0.1.tgz#280351f765b83c55a061a4106041ee4c90cae65f"
+  integrity sha512-x/L98DSXK4rtOmd5AMJnSU7IQpqv6t7kM8o5pAMwr8eKg3laq3lsRz1MWOzJxRBbmaGnd+T3/JTtMl4Cg0Pb9g==
+  dependencies:
+    "@radial-color-picker/rotator" "3.0.2"
+
+"@radial-color-picker/rotator@3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@radial-color-picker/rotator/-/rotator-3.0.2.tgz#44289355f9dcf28f58af1a6964d28ef55b3ff518"
+  integrity sha512-JiSVkN/hSMKqIcQz8KaeLvbzA0UrZkKQL2Q8s4MUxehjLcciTSctG75V8trHk0tPkTfglZjLlmg+S5+xO3GBLQ==
+
 "@radix-ui/colors@^3.0.0":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@radix-ui/colors/-/colors-3.0.0.tgz#e8a591a303c44e503bd1212cacf40a09511165e0"

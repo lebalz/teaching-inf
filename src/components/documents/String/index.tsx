@@ -85,8 +85,6 @@ const String = observer((props: Props) => {
             }
         }
     };
-    const style: React.CSSProperties | undefined =
-        props.type === 'color' && doc.text ? { ['--ifm-color-secondary' as any]: doc.text } : undefined;
 
     const StateIcons = () => (
         <span className={clsx(styles.stateIcons, styles[stateIconsPosition])}>
@@ -104,9 +102,9 @@ const String = observer((props: Props) => {
                 doc.hasSolution && styles.withSolution,
                 (props.label || props.children || props.icon) && styles.withLabel,
                 styles[doc.answer],
+                styles[props.type || 'text'],
                 'notranslate'
             )}
-            style={style}
             inline={props.inline}
         >
             <>

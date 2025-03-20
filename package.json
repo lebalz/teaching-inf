@@ -51,6 +51,7 @@
         "@mdx-js/react": "^3.0.0",
         "@mdxeditor/editor": "^3.28.0",
         "@octokit/rest": "^21.1.0",
+        "@radial-color-picker/react-color-picker": "^4.0.1",
         "@types/animejs": "^3.1.4",
         "@yudiel/react-qr-scanner": "2.1.0",
         "ace-builds": "^1.36.2",

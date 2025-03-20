@@ -66,6 +66,17 @@
         }
     }
 
+    &.color {
+        .input {
+            padding: 0;
+        }
+        &.withLabel {
+            .label {
+                color: color-contrast(var(--ifm-color-secondary) vs white, black);
+            }
+        }
+    }
+
     &.correct {
         --ifm-color-secondary: var(--ifm-color-success);
         .label {
