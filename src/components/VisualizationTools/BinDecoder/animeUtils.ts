@@ -1,4 +1,3 @@
-
 import anime from 'animejs';
 
 export const removeAnimations = (animItems: HTMLDivElement[] | null) => {
