@@ -9,8 +9,15 @@ import { useFirstMainDocument } from '@tdev-hooks/useFirstMainDocument';
 import { Source } from '@tdev-models/iDocument';
 import SyncStatus from '@tdev-components/SyncStatus';
 import Icon from '@mdi/react';
-import { mdiAlertCircle, mdiAlertCircleOutline, mdiCheckAll, mdiFlashTriangle } from '@mdi/js';
-import { parse } from './parser/parser';
+import {
+    mdiAlertCircle,
+    mdiAlertCircleOutline,
+    mdiCheckAll,
+    mdiFlashTriangle,
+    mdiFormatTextRotationAngleUp
+} from '@mdi/js';
+import Button from '@tdev-components/shared/Button';
+import { SIZE_S } from '@tdev-components/shared/iconSizes';
 
 const StateIcons = observer(({ doc }: { doc: NetpbmGraphic }) => (
     <span className={clsx(styles.stateIcons)}>
@@ -24,83 +31,25 @@ const StateIcons = observer(({ doc }: { doc: NetpbmGraphic }) => (
 interface Props extends MetaInit {
     id: string;
     noEditor?: boolean;
+    hideWarning?: boolean;
 }
 
 const NetpbmEditor = observer((props: Props) => {
-    const [sanitizedData, setSanitizedData] = React.useState<string>('');
-    const [displayedErrors, setDisplayedErrors] = React.useState<(string | React.ReactElement)[]>([]);
-    const [displayedWarnings, setDisplayedWarnings] = React.useState<(string | React.ReactElement)[]>([]);
-    const [height, setHeight] = React.useState<number>(0);
-    const [width, setWidth] = React.useState<number>(0);
-    const [pixels, setPixels] = React.useState<Uint8ClampedArray>();
-
     const [meta] = React.useState(new ModelMeta(props));
     const doc = useFirstMainDocument(props.id, meta);
 
-    React.useEffect(() => {
-        const result = doc.data.imageData
-            .trim()
-            .split('\n')
-            .filter((line) => !line.trim().startsWith('#')) // Remove comments.
-            .join('\n');
-
-        setSanitizedData(result);
-    }, [doc.data.imageData]);
-
-    const resetImageData = React.useMemo(
-        () => () => {
-            setHeight(0);
-            setWidth(0);
-            setPixels(new Uint8ClampedArray());
-        },
-        []
-    );
-
-    const resetErrorsAndWarnings = React.useMemo(
-        () => () => {
-            setDisplayedErrors([]);
-            setDisplayedWarnings([]);
-        },
-        []
-    );
-
-    const processParserResult = React.useMemo(
-        () => (result: ParserResult) => {
-            const { imageData, errors, warnings } = result;
-            setDisplayedErrors(errors || []);
-            setDisplayedWarnings(warnings || []);
-            if (imageData) {
-                setHeight(imageData.height);
-                setWidth(imageData.width);
-                setPixels(imageData.pixels);
-            }
-        },
-        []
-    );
-
-    const render = () => {
-        resetImageData();
-        resetErrorsAndWarnings();
-        processParserResult(parse(sanitizedData));
-    };
-
-    React.useEffect(() => {
-        render();
-    }, [sanitizedData]);
-
-    const { hasErrorsOrWarnings, hasWarnings, hasErrors } = React.useMemo(() => {
-        return {
-            hasErrorsOrWarnings: displayedErrors.length > 0 || displayedWarnings.length > 0,
-            hasWarnings: displayedWarnings.length > 0,
-            hasErrors: displayedErrors.length > 0
-        };
-    }, [displayedErrors, displayedWarnings]);
-
     return (
-        <div>
+        <div className={clsx(styles.netpbm)}>
             <div className={clsx(styles.editor, { [styles.hidden]: props.noEditor })}>
                 <div className={styles.textAreaWrapper}>
-                    <StateIcons doc={doc} />
+                    {!props.hideWarning && <StateIcons doc={doc} />}
+                    <Button
+                        icon={mdiFormatTextRotationAngleUp}
+                        onClick={() => {
+                            doc.format();
+                        }}
+                        size={SIZE_S}
+                    />
                     <textarea
                         rows={12}
                         className={clsx(styles.editorTextArea)}
@@ -111,23 +60,15 @@ const NetpbmEditor = observer((props: Props) => {
                 </div>
                 <div
                     className={clsx(styles.validationWrapper, 'alert', {
-                        ['alert--secondary']: !hasErrorsOrWarnings,
-                        ['alert--warning']: hasWarnings && !hasErrors,
-                        ['alert--danger']: hasErrors
+                        ['alert--secondary']: !doc.hasErrorsOrWarnings,
+                        ['alert--warning']: doc.hasWarnings && !doc.hasErrors,
+                        ['alert--danger']: doc.hasErrors
                     })}
                 >
-                    {!hasErrorsOrWarnings && (
-                        <>
-                            <span>Keine Fehler gefunden</span>
-                            <span className={styles.iconContainer}>
-                                <Icon path={mdiCheckAll} size={0.8} />
-                            </span>
-                        </>
-                    )}
-                    {hasErrorsOrWarnings && (
+                    {doc.hasErrorsOrWarnings ? (
                         <details>
                             <summary>
-                                {hasErrors && (
+                                {doc.hasErrors && (
                                     <>
                                         <span>Fehler in den Bilddaten</span>
                                         <span className={styles.iconContainer}>
@@ -135,7 +76,7 @@ const NetpbmEditor = observer((props: Props) => {
                                         </span>
                                     </>
                                 )}
-                                {!hasErrors && hasWarnings && (
+                                {!doc.hasErrors && doc.hasWarnings && (
                                     <>
                                         <span>Warnungen anzeigen</span>
                                         <span className={styles.iconContainer}>
@@ -145,18 +86,27 @@ const NetpbmEditor = observer((props: Props) => {
                                 )}
                             </summary>
                             <ul>
-                                {displayedWarnings.map((warnung, index) => (
+                                {doc.warnings.map((warnung, index) => (
                                     <li key={index}>⚠️ {warnung}</li>
                                 ))}
-                                {displayedErrors.map((error, index) => (
+                                {doc.errors.map((error, index) => (
                                     <li key={index}>❌ {error}</li>
                                 ))}
                             </ul>
                         </details>
+                    ) : (
+                        <>
+                            <span>Keine Fehler gefunden</span>
+                            <span className={styles.iconContainer}>
+                                <Icon path={mdiCheckAll} size={0.8} />
+                            </span>
+                        </>
                     )}
                 </div>
             </div>
-            <ImageCanvas width={width} height={height} pixels={pixels} />
+            <div className={clsx(styles.output)}>
+                <ImageCanvas width={doc.width} height={doc.height} pixels={doc.pixels} />
+            </div>
         </div>
     );
 });
