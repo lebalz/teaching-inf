@@ -5,6 +5,7 @@ import DocumentStore from '@tdev-stores/DocumentStore';
 import { TypeMeta } from '@tdev-models/DocumentRoot';
 import { parse } from '@tdev-components/documents/NetpbmEditor/parser/parser';
 import { ParserResult } from '@tdev-components/documents/NetpbmEditor/types';
+import { ApiState } from '@tdev-stores/iStore';
 
 export interface MetaInit {
     readonly?: boolean;
@@ -56,6 +57,7 @@ export class ModelMeta extends TypeMeta<DocumentType.NetpbmGraphic> {
 
 class NetpbmGraphic extends iDocument<DocumentType.NetpbmGraphic> {
     @observable accessor imageData: string;
+    @observable accessor formattingState: ApiState = ApiState.IDLE;
     constructor(props: DocumentProps<DocumentType.NetpbmGraphic>, store: DocumentStore) {
         super(props, store);
         this.imageData = props.data?.imageData || '';
@@ -133,8 +135,8 @@ class NetpbmGraphic extends iDocument<DocumentType.NetpbmGraphic> {
 
     @action
     format() {
+        this.formattingState = ApiState.SYNCING;
         const { maxValue } = this.config;
-        console.log('maxValue', maxValue, this.config);
         if (!maxValue) {
             return;
         }
@@ -152,14 +154,21 @@ class NetpbmGraphic extends iDocument<DocumentType.NetpbmGraphic> {
             }
             return l
                 .split(/\s+/)
+                .filter((v) => !!v)
                 .map((v) => {
                     return v.padStart(sz, ' ');
                 })
-                .join(' ')
-                .trim();
+                .join(' ');
         });
         const formatted = [...lines.slice(0, firstDataLine), ...data].join('\n');
         this.setData({ imageData: formatted }, Source.LOCAL);
+        this.formattingState = ApiState.SUCCESS;
+        setTimeout(
+            action(() => {
+                this.formattingState = ApiState.IDLE;
+            }),
+            1500
+        );
     }
 
     get data(): TypeDataMapping[DocumentType.NetpbmGraphic] {

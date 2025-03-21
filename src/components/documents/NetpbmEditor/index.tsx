@@ -14,10 +14,13 @@ import {
     mdiAlertCircleOutline,
     mdiCheckAll,
     mdiFlashTriangle,
-    mdiFormatTextRotationAngleUp
+    mdiFormatTextRotationAngleUp,
+    mdiTextBoxCheckOutline
 } from '@mdi/js';
 import Button from '@tdev-components/shared/Button';
 import { SIZE_S } from '@tdev-components/shared/iconSizes';
+import TextAreaInput from '@tdev-components/shared/TextAreaInput';
+import { ApiState } from '@tdev-stores/iStore';
 
 const StateIcons = observer(({ doc }: { doc: NetpbmGraphic }) => (
     <span className={clsx(styles.stateIcons)}>
@@ -37,71 +40,127 @@ interface Props extends MetaInit {
 const NetpbmEditor = observer((props: Props) => {
     const [meta] = React.useState(new ModelMeta(props));
     const doc = useFirstMainDocument(props.id, meta);
+    const ref = React.useRef<HTMLTextAreaElement>(null);
+    React.useEffect(() => {
+        if (!ref.current) {
+            return;
+        }
+        const handleWheel = (e: WheelEvent) => {
+            if (e.ctrlKey) {
+                const textarea = e.target as HTMLTextAreaElement;
+                if (!textarea) {
+                    return;
+                }
+                e.preventDefault();
+                const currentSize = parseFloat(window.getComputedStyle(textarea).fontSize);
+                const newSize = e.deltaY < 0 ? currentSize * 1.1 : currentSize * 0.9;
+                textarea.style.fontSize = `${newSize}px`;
+            }
+        };
+
+        ref.current.addEventListener('wheel', handleWheel, { passive: false });
+
+        return () => {
+            ref.current?.removeEventListener('wheel', handleWheel);
+        };
+    }, []);
 
     return (
         <div className={clsx(styles.netpbm)}>
             <div className={clsx(styles.editor, { [styles.hidden]: props.noEditor })}>
                 <div className={styles.textAreaWrapper}>
-                    {!props.hideWarning && <StateIcons doc={doc} />}
-                    <Button
-                        icon={mdiFormatTextRotationAngleUp}
-                        onClick={() => {
-                            doc.format();
-                        }}
-                        size={SIZE_S}
-                    />
                     <textarea
+                        ref={ref}
                         rows={12}
                         className={clsx(styles.editorTextArea)}
                         onChange={(e) => doc.setData({ imageData: e.target.value }, Source.LOCAL)}
                         value={doc.data.imageData}
                         disabled={props.readonly}
+                        onKeyDown={(e) => {
+                            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                                doc.saveNow();
+                                e.preventDefault();
+                                e.stopPropagation();
+                            }
+                        }}
+                        onScroll={(e) => {
+                            console.log(e);
+                        }}
                     />
                 </div>
                 <div
-                    className={clsx(styles.validationWrapper, 'alert', {
+                    className={clsx(styles.footer, 'alert', {
                         ['alert--secondary']: !doc.hasErrorsOrWarnings,
                         ['alert--warning']: doc.hasWarnings && !doc.hasErrors,
                         ['alert--danger']: doc.hasErrors
                     })}
                 >
-                    {doc.hasErrorsOrWarnings ? (
-                        <details>
-                            <summary>
-                                {doc.hasErrors && (
-                                    <>
-                                        <span>Fehler in den Bilddaten</span>
-                                        <span className={styles.iconContainer}>
-                                            <Icon path={mdiAlertCircle} size={0.8} color="red" />
-                                        </span>
-                                    </>
-                                )}
-                                {!doc.hasErrors && doc.hasWarnings && (
-                                    <>
-                                        <span>Warnungen anzeigen</span>
-                                        <span className={styles.iconContainer}>
-                                            <Icon path={mdiAlertCircleOutline} size={0.8} color="orange" />
-                                        </span>
-                                    </>
-                                )}
-                            </summary>
-                            <ul>
-                                {doc.warnings.map((warnung, index) => (
-                                    <li key={index}>⚠️ {warnung}</li>
-                                ))}
-                                {doc.errors.map((error, index) => (
-                                    <li key={index}>❌ {error}</li>
-                                ))}
-                            </ul>
-                        </details>
-                    ) : (
-                        <>
-                            <span>Keine Fehler gefunden</span>
-                            <span className={styles.iconContainer}>
-                                <Icon path={mdiCheckAll} size={0.8} />
-                            </span>
-                        </>
-                    )}
+                    <div className={clsx(styles.validationWrapper)}>
+                        {doc.hasErrorsOrWarnings ? (
+                            <details>
+                                <summary>
+                                    {doc.hasErrors && (
+                                        <>
+                                            <span>Fehler in den Bilddaten</span>
+                                            <span className={styles.iconContainer}>
+                                                <Icon path={mdiAlertCircle} size={0.8} color="red" />
+                                            </span>
+                                        </>
+                                    )}
+                                    {!doc.hasErrors && doc.hasWarnings && (
+                                        <>
+                                            <span>Warnungen anzeigen</span>
+                                            <span className={styles.iconContainer}>
+                                                <Icon
+                                                    path={mdiAlertCircleOutline}
+                                                    size={0.8}
+                                                    color="orange"
+                                                />
+                                            </span>
+                                        </>
+                                    )}
+                                </summary>
+                                <ul>
+                                    {doc.warnings.map((warnung, index) => (
+                                        <li key={index}>⚠️ {warnung}</li>
+                                    ))}
+                                    {doc.errors.map((error, index) => (
+                                        <li key={index}>❌ {error}</li>
+                                    ))}
+                                </ul>
+                            </details>
+                        ) : (
+                            <>
+                                <span>Keine Fehler gefunden</span>
+                                <span className={styles.iconContainer}>
+                                    <Icon path={mdiCheckAll} size={0.8} />
+                                </span>
+                            </>
+                        )}
+                    </div>
+                    <div className={clsx(styles.actions)}>
+                        {!props.hideWarning && <StateIcons doc={doc} />}
+                        <Button
+                            icon={
+                                doc.formattingState === ApiState.SUCCESS
+                                    ? mdiTextBoxCheckOutline
+                                    : mdiFormatTextRotationAngleUp
+                            }
+                            onClick={() => {
+                                doc.format();
+                            }}
+                            spin={doc.formattingState === ApiState.SYNCING}
+                            color={
+                                doc.formattingState === ApiState.SYNCING
+                                    ? 'var(--ifm-color-primary)'
+                                    : doc.formattingState === ApiState.SUCCESS
+                                      ? 'var(--ifm-color-success)'
+                                      : undefined
+                            }
+                            size={SIZE_S}
+                            title="Inhalt Formatieren"
+                        />
+                    </div>
                 </div>
             </div>
             <div className={clsx(styles.output)}>
