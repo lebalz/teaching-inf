@@ -19,7 +19,6 @@ export const ColorBoxes = () => {
         justifyContent: 'center',
         alignItems: 'center',
         fontSize: '1.5em',
-        
         height: "100%"
     };
 
@@ -47,21 +46,21 @@ Die zwei wichtigsten Ansätze, wie diese Aufteilung in verschiedene Kanäle erfo
 
 Das **RGB-Farbmodell** basiert auf der Funktionsweise des menschlichen Auges. Dieses nimmt Farben mit Hilfe von drei Arten von sogenannten **Zäpfchen** wahr, die für Licht unterschiedlicher Wellenlängen empfindlich sind. So werden vom Menschen die Grundfarben Rot, Grün und Blau wahrgenommen.
 
-![Farbwahrnehmung des menschlichen Auges --width=600px](images/color-vision.png)
+![Farbwahrnehmung des menschlichen Auges --width=600px](./images/color-vision.png)
 
 Diese Eigenschaft des Auges wird bei der **additiven Farbdarstellung** ausgenutzt, indem sich überlagernde Lichtquellen in den drei Grundfarben Rot, Grün und Blau verwendet werden. Durch die Regulierung der Helligkeit der einzelnen Lichtquellen können sämtliche Farben erzeugt werden.
 
 Dieses Farbmodell kommt überall dort zum Einsatz, wo Licht verwendet wird, um ein Bild zu erzeugen, insbesondere bei **Bildschirmen** und **Videoprojektoren** («Beamer»). Die Farben auf einem Bildschirm werden erzeugt, indem drei nahe beieinanderliegende Leuchtdioden in den Farben Rot, Grün und Blau in unterschiedlicher Helligkeit leuchten. Ein solches Trio von Leuchtdioden wird **Pixel** genannt.
 
 :::cards
-![Additives Farbmodell --width=100%](images/color-rgb.jpg)
+![Additives Farbmodell --width=100%](./images/color-rgb.jpg)
 ::br
-![Pixel auf einem Bildschirm --width=100%](images/pixels.jpg)
+![Pixel auf einem Bildschirm --width=100%](./images/pixels.jpg)
 :::
 
 Umgekehrt kann man bei einem Bild die Rot-, Grün- und Blauanteile jedes Bildpunkts bestimmen. Man sagt, dass man das Bild in Rot-, Grün- und Blaukanal aufteilt:
 
-![Aufteilung in Rot-, Grün- und Blaukanal](images/color-rgb-channels.png)
+![Aufteilung in Rot-, Grün- und Blaukanal](./images/color-rgb-channels.png)
 
 Im entsprechenden **RGB-Farbsystem** wird eine Farbe definiert, indem die Helligkeit der Rot-, Grün- und Blauanteils durch eine Zahl zwischen 0 und 255 ausgedrückt wird.
 
@@ -105,11 +104,11 @@ circle(100)
 
 Das **CMYK-Farbmodell** basiert auf der Weise, wie Gegenstände farbig erscheinen. Ein Gegenstand wird üblicherweise mit weissem Licht, also Licht verschiedener Wellenlängen (Rot, Grün und Blau) angestrahlt. Beispielsweise erscheint ein gelber Gegenstand deshalb in dieser Farbe, weil er blaues Licht **absorbiert** und rotes und grünes Licht **reflektiert**.
 
-![subtraktives Farbmodell](./images/color-cmy.png)
+![subtraktives Farbmodell](././images/color-cmy.png)
 
 Bei der **subtraktiven Farbdarstellung** werden auf weissem Material die drei Grundfarben *Cyan*, *Magenta* (Fuchsia) und *Yellow* (Gelb) verwendet, welche rotes, grünes bzw. blaues Licht absorbieren. Zusätzlich wird *schwarze Farbe* (Key-Kanal) verwendet, welche alles Licht absorbiert.
 
-![Aufteilung in Cyan-, Magenta-, Yellow- und Key-Kanal](./images/cmyk-channels.png)
+![Aufteilung in Cyan-, Magenta-, Yellow- und Key-Kanal](././images/cmyk-channels.png)
 
 Dieses Farbmodell kommt beim Drucken zum Einsatz.
 
@@ -169,15 +168,17 @@ Die Anzahl Bits oder Bytes, welche **insgesamt** für die Speicherung einer Farb
 ## Aufgaben
 :::aufgabe[Farben mischen]
 <Answer type="state" id="d6beafee-fd6e-487a-9c7a-9a98d888907a" />
-Versuchen Sie, auf [dieser Seite](https://www.w3schools.com/colors/colors_rgb.asp) die folgenden Farben durch verschieben der Rot-, Grün- und Blauanteile (mit der Maus in die Balken klicken und schieben) nachzubauen:
+Versuchen Sie die folgenden Farben durch verschieben der Rot-, Grün- und Blauanteile nachzubauen (mit der Maus auf die Farb-Eingabe klicken):
 
 <ColorBoxes />
 
-Tragen Sie Ihre Ergebnisse (mit Dezimalzahlen, z.B. `R = 15, G = 190, B = 41`), hier ein.
+<String type="color" id="b0eb8903-7402-4308-a6f3-2910b7d6e0bf" label="Farbe 1" />
+<String type="color" id="55c4e346-0366-45ae-bb50-12c2f92c3fa8" label="Farbe 2" />
+<String type="color" id="8e62d812-515d-4810-b5b9-f5228d6b607e" label="Farbe 3" />
 
-<String type="color" id="b0eb8903-7402-4308-a6f3-2910b7d6e0bf" label="Farbe 1" placeholder="Werte für R, G und B" />
-<String type="color" id="55c4e346-0366-45ae-bb50-12c2f92c3fa8" label="Farbe 2" placeholder="Werte für R, G und B" />
-<String type="color" id="8e62d812-515d-4810-b5b9-f5228d6b607e" label="Farbe 3" placeholder="Werte für R, G und B" />
+Halten Sie auch die drei RGB Werte der drei Farben fest:
+
+<Answer type="text" id="f2001fbd-5d7e-4786-9ce1-a364fc0a11eb" placeholder="RGB-Werte für die drei Farben" />
 
 <Solution id="26f44941-0dc0-411e-89d0-918dc7556f97">
 1. R = 210, G = 130, B = 1
@@ -210,7 +211,7 @@ Wir brauchen pro Pixel also nicht mehr nur einen Wert zwischen $0$ und $255$, so
 
 Farbige Rastergrafiken können zum Beiepiel mit dem Portable Pixel Format (PPM) gespeichert werden:
 
-<NetpbmEditor>
+<NetpbmEditor hideWarning>
     ```
     P3
     150 150
@@ -392,7 +393,7 @@ Stellen Sie eine Hypothese für das RGB-Farbmodell auf, wenn jeweils nur ein ein
 Überprüfen Sie ihre These, indem Sie die folgenden Daten mit denjenigen des "normalfarbigen" Katzenbilds vergleichen:
 
 :::details[Rotkanal isoliert]
-    <NetpbmEditor>
+    <NetpbmEditor hideWarning>
     ```
     P3
     150 150
@@ -552,7 +553,7 @@ Stellen Sie eine Hypothese für das RGB-Farbmodell auf, wenn jeweils nur ein ein
 :::
 
 :::details[Grünkanal isoliert]
-    <NetpbmEditor>
+    <NetpbmEditor hideWarning>
     ```
     P3
     150 150
@@ -712,7 +713,7 @@ Stellen Sie eine Hypothese für das RGB-Farbmodell auf, wenn jeweils nur ein ein
 :::
 
 :::details[Blaukanal isoliert]
-    <NetpbmEditor >
+    <NetpbmEditor hideWarning>
     ```
     P3
     150 150
@@ -891,7 +892,7 @@ Man kann aber auch direkt mit einem Texteditor oder durch ein eigenes Programm e
 
 Versuchen Sie nun unten im Editor durch die Eingabe der nötigen Zahlen folgendes Bild herzustellen:
 
-![--width=300px](images/eigene_farbige_pixelgrafik.png)
+![--width=300px](./images/eigene_farbige_pixelgrafik.png)
 
 **Ein einzelnes Quadrat soll dabei aus jeweils 3 x 3 Bildpunkten bestehen.** Es sind also immer drei Zeilen identisch.
 
@@ -915,5 +916,11 @@ P3
 ```
 </Solution>
 ::::
+
+:::aufgabe[⭐ Weitere Rastergrafik]
+Hier eine weitere Zeichnungsfläche, um Ihrer Kreativität beim etwas anderen "Malen mit Zahlen" freien Lauf zu lassen 😆.
+
+<NetpbmEditor id="46d297c9-61e3-458a-8163-46d9df0b21e0" />
+:::
 
 ---

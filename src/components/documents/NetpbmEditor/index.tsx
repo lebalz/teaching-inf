@@ -24,6 +24,7 @@ const StateIcons = observer(({ doc }: { doc: NetpbmGraphic }) => (
 interface Props extends MetaInit {
     id: string;
     noEditor?: boolean;
+    hideWarning?: boolean;
 }
 
 const NetpbmEditor = observer((props: Props) => {
@@ -100,7 +101,7 @@ const NetpbmEditor = observer((props: Props) => {
         <div className={clsx(styles.netpbm)}>
             <div className={clsx(styles.editor, { [styles.hidden]: props.noEditor })}>
                 <div className={styles.textAreaWrapper}>
-                    <StateIcons doc={doc} />
+                    {!props.hideWarning && <StateIcons doc={doc} />}
                     <textarea
                         rows={12}
                         className={clsx(styles.editorTextArea)}
