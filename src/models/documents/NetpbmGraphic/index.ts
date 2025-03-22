@@ -3,8 +3,8 @@ import iDocument, { Source } from '@tdev-models/iDocument';
 import { DocumentType, Document as DocumentProps, TypeDataMapping, Access } from '@tdev-api/document';
 import DocumentStore from '@tdev-stores/DocumentStore';
 import { TypeMeta } from '@tdev-models/DocumentRoot';
-import { parse } from '@tdev-components/documents/NetpbmEditor/parser/parser';
-import { ParserResult } from '@tdev-components/documents/NetpbmEditor/types';
+import { parse } from '@tdev-models/documents/NetpbmGraphic/parser/parser';
+import { ParserResult } from '@tdev-models/documents/NetpbmGraphic/types';
 import { ApiState } from '@tdev-stores/iStore';
 
 export interface MetaInit {

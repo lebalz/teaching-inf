@@ -2,9 +2,8 @@ import { observer } from 'mobx-react-lite';
 import styles from './styles.module.scss';
 import React from 'react';
 import clsx from 'clsx';
-import { ParserResult } from './types';
 import ImageCanvas from './ImageCanvas';
-import NetpbmGraphic, { MetaInit, ModelMeta } from '@tdev-models/documents/NetpbmGrapic';
+import NetpbmGraphic, { MetaInit, ModelMeta } from '@tdev-models/documents/NetpbmGraphic';
 import { useFirstMainDocument } from '@tdev-hooks/useFirstMainDocument';
 import { Source } from '@tdev-models/iDocument';
 import SyncStatus from '@tdev-components/SyncStatus';
@@ -19,7 +18,6 @@ import {
 } from '@mdi/js';
 import Button from '@tdev-components/shared/Button';
 import { SIZE_S } from '@tdev-components/shared/iconSizes';
-import TextAreaInput from '@tdev-components/shared/TextAreaInput';
 import { ApiState } from '@tdev-stores/iStore';
 
 const StateIcons = observer(({ doc }: { doc: NetpbmGraphic }) => (
