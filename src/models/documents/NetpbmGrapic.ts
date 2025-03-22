@@ -137,21 +137,11 @@ class NetpbmGraphic extends iDocument<DocumentType.NetpbmGraphic> {
     format() {
         this.formattingState = ApiState.SYNCING;
         const { maxValue } = this.config;
-        onDone = action(() => {
-            this.formattingState = ApiState.SUCCESS;
-            setTimeout(
-                action(() => {
-                    this.formattingState = ApiState.IDLE;
-                }),
-                1500
-            );
-        });
-        if (!maxValue) {
-            onDone();
-            return;
-        }
-        const sz = `${maxValue}`.length;
-        const lines = this.imageData.split('\n');
+        const sz = `${maxValue || 1}`.length;
+        const lines = this.imageData
+            .split('\n')
+            .map((l) => l.trim())
+            .filter((l) => !!l);
         const firstLineRegex = new RegExp(`^\\s*${maxValue}(?:\\s+|$)`);
         const commentRegex = /^\s*#/;
         const firstDataLine = lines.findIndex((l) => firstLineRegex.test(l));
@@ -170,9 +160,15 @@ class NetpbmGraphic extends iDocument<DocumentType.NetpbmGraphic> {
                 })
                 .join(' ');
         });
-        const formatted = [...lines.slice(0, firstDataLine), ...data].join('\n');
+        const formatted = [...lines.slice(0, firstDataLine), ...data].join('\n').trim();
         this.setData({ imageData: formatted }, Source.LOCAL);
-        onDone();
+        this.formattingState = ApiState.SUCCESS;
+        setTimeout(
+            action(() => {
+                this.formattingState = ApiState.IDLE;
+            }),
+            1500
+        );
     }
 
     get data(): TypeDataMapping[DocumentType.NetpbmGraphic] {

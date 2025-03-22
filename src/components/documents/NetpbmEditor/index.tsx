@@ -83,9 +83,6 @@ const NetpbmEditor = observer((props: Props) => {
                                 e.stopPropagation();
                             }
                         }}
-                        onScroll={(e) => {
-                            console.log(e);
-                        }}
                     />
                 </div>
                 <div
