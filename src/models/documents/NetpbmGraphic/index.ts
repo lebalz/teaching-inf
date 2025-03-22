@@ -145,23 +145,22 @@ class NetpbmGraphic extends iDocument<DocumentType.NetpbmGraphic> {
         const firstLineRegex = new RegExp(`^\\s*${maxValue}(?:\\s+|$)`);
         const commentRegex = /^\s*#/;
         const firstDataLine = lines.findIndex((l) => firstLineRegex.test(l));
-        if (firstDataLine === -1) {
-            return;
+        if (firstDataLine > -1) {
+            const data = lines.slice(firstDataLine).map((l) => {
+                if (commentRegex.test(l)) {
+                    return l.trim();
+                }
+                return l
+                    .split(/\s+/)
+                    .filter((v) => !!v)
+                    .map((v) => {
+                        return v.padStart(sz, ' ');
+                    })
+                    .join(' ');
+            });
+            const formatted = [...lines.slice(0, firstDataLine), ...data].join('\n').trim();
+            this.setData({ imageData: formatted }, Source.LOCAL);
         }
-        const data = lines.slice(firstDataLine).map((l) => {
-            if (commentRegex.test(l)) {
-                return l.trim();
-            }
-            return l
-                .split(/\s+/)
-                .filter((v) => !!v)
-                .map((v) => {
-                    return v.padStart(sz, ' ');
-                })
-                .join(' ');
-        });
-        const formatted = [...lines.slice(0, firstDataLine), ...data].join('\n').trim();
-        this.setData({ imageData: formatted }, Source.LOCAL);
         this.formattingState = ApiState.SUCCESS;
         setTimeout(
             action(() => {
