@@ -137,7 +137,17 @@ class NetpbmGraphic extends iDocument<DocumentType.NetpbmGraphic> {
     format() {
         this.formattingState = ApiState.SYNCING;
         const { maxValue } = this.config;
+        onDone = action(() => {
+            this.formattingState = ApiState.SUCCESS;
+            setTimeout(
+                action(() => {
+                    this.formattingState = ApiState.IDLE;
+                }),
+                1500
+            );
+        });
         if (!maxValue) {
+            onDone();
             return;
         }
         const sz = `${maxValue}`.length;
@@ -162,13 +172,7 @@ class NetpbmGraphic extends iDocument<DocumentType.NetpbmGraphic> {
         });
         const formatted = [...lines.slice(0, firstDataLine), ...data].join('\n');
         this.setData({ imageData: formatted }, Source.LOCAL);
-        this.formattingState = ApiState.SUCCESS;
-        setTimeout(
-            action(() => {
-                this.formattingState = ApiState.IDLE;
-            }),
-            1500
-        );
+        onDone();
     }
 
     get data(): TypeDataMapping[DocumentType.NetpbmGraphic] {
