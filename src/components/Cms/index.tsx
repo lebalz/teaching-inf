@@ -140,7 +140,10 @@ const WithFileToEdit = observer((props: Props) => {
         if (cmsStore.settings) {
             const config = parseLocation(location);
             cmsStore.configureRepo(config.repoOwner, config.repoName);
-            cmsStore.settings.setLocation(config.branch || '', config.fileToEdit || '');
+            cmsStore.settings.setLocation(
+                config.branch || cmsStore.activeBranchName || cmsStore.branchNames[0] || 'main',
+                config.fileToEdit || ''
+            );
         }
     }, [cmsStore, location.pathname, location.search, cmsStore.settings]);
     return <CmsLandingPage />;
