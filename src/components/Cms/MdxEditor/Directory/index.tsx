@@ -8,10 +8,12 @@ import Dir from '@tdev-components/Cms/Github/iFile/Dir';
 import Avatar from '@tdev-components/shared/Avatar';
 import { useStore } from '@tdev-hooks/useStore';
 import Button from '@tdev-components/shared/Button';
-import { mdiAlertDecagram, mdiCheckDecagram, mdiLogoutVariant } from '@mdi/js';
-import Badge from '@tdev-components/shared/Badge';
+import { mdiAccountCircle, mdiAlertDecagram, mdiCheckDecagram, mdiLogoutVariant } from '@mdi/js';
 import Icon from '@mdi/react';
 import { SIZE_XS } from '@tdev-components/shared/iconSizes';
+import AccountOptions from '@tdev-components/Cms/Github/AccountOptions';
+import Popup from 'reactjs-popup';
+import UserAvatar from '@tdev-components/Cms/Github/AccountOptions/UserAvatar';
 
 interface Props {
     dir?: DirModel;
@@ -38,52 +40,7 @@ const Directory = observer((props: Props) => {
 
     return (
         <div className={clsx(styles.directory, props.className, props.compact && styles.compact)}>
-            {github?.user && props.showAvatar && (
-                <div className={clsx(styles.ghUser)}>
-                    <Avatar
-                        imgSrc={github.user.avatar_url}
-                        name={
-                            <span>
-                                {github.user.login}{' '}
-                                <Icon
-                                    path={github.canWrite ? mdiCheckDecagram : mdiAlertDecagram}
-                                    color={
-                                        github.canWrite
-                                            ? 'var(--ifm-color-success)'
-                                            : 'var(--ifm-color-danger)'
-                                    }
-                                    size={SIZE_XS}
-                                    title={
-                                        github.canWrite ? 'Kann Änderungen vornehmen' : 'Keine Schreibrechte'
-                                    }
-                                />
-                            </span>
-                        }
-                        size="sm"
-                        href={github.user.html_url}
-                        className={clsx(styles.avatar)}
-                        description={
-                            <a
-                                href={
-                                    cmsStore.activeBranch?.PR
-                                        ? cmsStore.activeBranch.PR.htmlUrl
-                                        : github.repo?.html_url
-                                }
-                                target="_blank"
-                            >
-                                {`${cmsStore.repoOwner}/${cmsStore.repoName}`}
-                            </a>
-                        }
-                    />
-                    <Button
-                        onClick={() => {
-                            cmsStore.logoutGithub();
-                        }}
-                        icon={mdiLogoutVariant}
-                        title="Logout"
-                    />
-                </div>
-            )}
+            {props.showAvatar && <UserAvatar showOptions />}
             <Card
                 classNames={{
                     body: styles.cardBody,

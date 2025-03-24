@@ -10,14 +10,6 @@
             padding-left: 0;
         }
     }
-    .ghUser {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        .avatar {
-            margin-left: 0.5em;
-        }
-    }
 }
 @media screen and (max-width: 620px) {
     .directory {

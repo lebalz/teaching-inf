@@ -36,6 +36,9 @@ class Github {
     PRs = observable.array<PR>([]);
 
     @observable.ref accessor repo: GhRepo | undefined;
+    @observable.ref accessor repositories:
+        | GhTypes['repos']['listForAuthenticatedUser']['response']['data']
+        | undefined;
     @observable.ref accessor user: GhTypes['users']['getAuthenticated']['response']['data'] | undefined;
     @observable.ref accessor permissions:
         | GhTypes['repos']['getCollaboratorPermissionLevel']['response']['data']
@@ -55,7 +58,12 @@ class Github {
             if (before !== this.store.repoKey) {
                 return;
             }
-            return Promise.all([this.fetchRepo(), this.fetchBranches(), this.fetchPRs()]).catch((err) => {
+            return Promise.all([
+                this.fetchRepo(),
+                this.fetchBranches(),
+                this.fetchPRs(),
+                this.fetchRepositories()
+            ]).catch((err) => {
                 if (/Bad credentials/.test(err.message)) {
                     this.store.clearAccessToken();
                 }
@@ -163,6 +171,19 @@ class Github {
                 action((res) => {
                     const branches = res.data.map((br) => new Branch(br, this));
                     this.branches.replace(branches);
+                })
+            );
+    }
+
+    @action
+    fetchRepositories(max: number = 20) {
+        return this.octokit.repos
+            .listForAuthenticatedUser({ _: Date.now(), type: 'all', per_page: max, sort: 'pushed' })
+            .then(
+                action((res) => {
+                    if (res.status === 200) {
+                        this.repositories = res.data;
+                    }
                 })
             );
     }
