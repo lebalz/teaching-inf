@@ -1,6 +1,6 @@
 import Layout from '@theme/Layout';
 
-import { matchPath, Redirect, useHistory, useLocation } from '@docusaurus/router';
+import { matchPath, Redirect, useLocation } from '@docusaurus/router';
 import type { Location } from 'history';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import { observer } from 'mobx-react-lite';
@@ -19,18 +19,22 @@ import { useLoadedFile } from './MdxEditor/hooks/useLoadedFile';
 import ShowFile from './ShowFile';
 import siteConfig from '@generated/docusaurus.config';
 import { reaction } from 'mobx';
+import { useCmsNavigator } from '@tdev-hooks/useCmsNavigator';
+import { FileNavigation } from '@tdev-stores/CmsStore';
 const { organizationName, projectName } = siteConfig;
 
-const parseLocation = (location: Location) => {
+const parseLocation = (location: Location): FileNavigation => {
     const routeParams =
         matchPath<Pattern>(location.pathname, PATHNAME_PATTERN_WITH_FILE) ??
         matchPath<Pattern>(location.pathname, PATHNAME_PATTERN);
+
+    const searchParams = new URLSearchParams(location.search);
     const fileToEdit = routeParams?.params[0];
     const { repoName, repoOwner } = routeParams?.params ?? {
         repoName: projectName!,
         repoOwner: organizationName!
     };
-    return { fileToEdit, repoName, repoOwner };
+    return { fileToEdit, repoName, repoOwner, branch: searchParams.get('ref') || undefined };
 };
 
 const CmsLandingPage = observer(() => {
@@ -38,68 +42,6 @@ const CmsLandingPage = observer(() => {
     const access = useGithubAccess();
     const { settings, activeEntry, viewStore } = cmsStore;
     const entry = useLoadedFile(activeEntry);
-    const history = useHistory();
-    const historyKeys = React.useRef<string[]>([]);
-    const historyLocation = React.useRef<number>(-1);
-    const skipMobx = React.useRef(false);
-    React.useEffect(() => {
-        const disposer = reaction(
-            () => cmsStore.activeFilePath,
-            (activePath) => {
-                if (activePath !== history.location.pathname) {
-                    if (skipMobx.current) {
-                        skipMobx.current = false;
-                        return;
-                    }
-                    historyKeys.current.splice(historyKeys.current.length + historyLocation.current + 1);
-                    historyLocation.current = -1;
-                    history.push(`/cms/${cmsStore.repoOwner}/${cmsStore.repoName}/${activePath ?? ''}`);
-                }
-            }
-        );
-        return disposer;
-    }, [cmsStore.github, history]);
-    React.useEffect(() => {
-        return history.listen((location) => {
-            let updateFile = true;
-
-            if (
-                historyKeys.current[historyKeys.current.length + historyLocation.current - 1] === location.key
-            ) {
-                historyLocation.current -= 1;
-            } else if (
-                historyLocation.current < -1 &&
-                historyKeys.current[historyKeys.current.length + historyLocation.current + 1] === location.key
-            ) {
-                historyLocation.current += 1;
-            } else {
-                updateFile = false;
-                if (
-                    historyKeys.current.length > 1 &&
-                    Math.abs(historyLocation.current) === historyKeys.current.length
-                ) {
-                    return;
-                }
-                if (location.key) {
-                    historyKeys.current.push(location.key);
-                }
-            }
-            if (updateFile) {
-                try {
-                    const loc = parseLocation(location);
-                    skipMobx.current = true;
-                    if (loc.fileToEdit) {
-                        cmsStore.settings?.setActivePath(loc.fileToEdit, true);
-                    } else {
-                        cmsStore.settings?.setActivePath('', true);
-                    }
-                } catch (e) {
-                    console.error(e);
-                    skipMobx.current = false;
-                }
-            }
-        });
-    }, [history]);
     if (access === 'no-token') {
         return <Redirect to={'/gh-login'} />;
     }
@@ -160,7 +102,7 @@ const CmsLandingPage = observer(() => {
 });
 
 interface Props {
-    initialConfig: { repoOwner: string; repoName: string; fileToEdit?: string };
+    initialConfig: FileNavigation;
 }
 
 const PATHNAME_PATTERN = '/cms/:repoOwner/:repoName' as const;
@@ -173,19 +115,39 @@ interface Pattern {
 
 const WithFileToEdit = observer((props: Props) => {
     const cmsStore = useStore('cmsStore');
+    const navigator = useCmsNavigator();
+    const location = useLocation();
     React.useEffect(() => {
         const { repoName, repoOwner, fileToEdit } = props.initialConfig;
         cmsStore.configureRepo(repoOwner, repoName);
-        if (fileToEdit) {
-            cmsStore.settings?.setActivePath(fileToEdit, true);
-        }
-    }, [props.initialConfig]);
+        cmsStore.settings?.setActivePath(fileToEdit || '', true);
+    }, []);
+    React.useEffect(() => {
+        return reaction(
+            () => cmsStore.requestedNavigation,
+            (requestedNavigation) => {
+                if (requestedNavigation) {
+                    const { fileToEdit, branch } = requestedNavigation;
+                    navigator.openFile(branch, fileToEdit);
+                }
+            }
+        );
+    }, [cmsStore, navigator]);
+    React.useEffect(() => {
+        const config = parseLocation(location);
+        cmsStore.configureRepo(config.repoOwner, config.repoName);
+        cmsStore.settings?.setLocation(config.branch || '', config.fileToEdit || '');
+    }, [cmsStore, location.pathname, location.search]);
     return <CmsLandingPage />;
 });
 
 const Cms = observer(() => {
+    const cmsStore = useStore('cmsStore');
     const location = useLocation();
-    const initialConfig = React.useMemo(() => parseLocation(location), []);
+    const initialConfig = React.useMemo(() => {
+        const config = parseLocation(location);
+        return config;
+    }, [cmsStore.repoOwner, cmsStore.repoName]);
     return (
         <Layout title={`CMS`} description="Github">
             <BrowserOnly fallback={<Loader />}>

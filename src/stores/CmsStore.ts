@@ -30,6 +30,13 @@ if (!organizationName || !projectName) {
     throw new Error('"organizationName" and "projectName" must be set in docusaurus.config.ts');
 }
 
+export interface FileNavigation {
+    repoOwner: string;
+    repoName: string;
+    branch?: string;
+    fileToEdit?: string | null;
+}
+
 export class CmsStore extends iStore<'logout' | `update-settings` | `load-settings` | `load-token`> {
     readonly root: RootStore;
     @observable accessor repoOwner: string = organizationName!;
@@ -40,6 +47,7 @@ export class CmsStore extends iStore<'logout' | `update-settings` | `load-settin
     @observable.ref accessor viewStore: CmsViewStore;
 
     @observable accessor initialized = false;
+    @observable accessor requestedNavigation: FileNavigation | undefined = undefined;
 
     constructor(store: RootStore) {
         super();
@@ -94,12 +102,7 @@ export class CmsStore extends iStore<'logout' | `update-settings` | `load-settin
 
     @action
     configureRepo(owner: string, name: string) {
-        if (
-            this.repoOwner === owner &&
-            this.repoName === name &&
-            owner === organizationName &&
-            name === projectName
-        ) {
+        if (this.repoOwner === owner && this.repoName === name) {
             return;
         }
         if (this.github) {
@@ -178,6 +181,19 @@ export class CmsStore extends iStore<'logout' | `update-settings` | `load-settin
         this.settings = undefined;
     }
 
+    @action
+    triggerNavigateToFile(branch: string, filePath?: string | null) {
+        if (this.activeBranchName === branch && this.activeFilePath === (filePath || '')) {
+            return;
+        }
+        this.requestedNavigation = {
+            repoOwner: this.repoOwner,
+            repoName: this.repoName,
+            branch: branch,
+            fileToEdit: filePath || ''
+        };
+    }
+
     @computed
     get activeBranchName() {
         return this.settings?.activeBranchName || this.github?.defaultBranch?.name;
@@ -244,7 +260,7 @@ export class CmsStore extends iStore<'logout' | `update-settings` | `load-settin
 
     @action
     setBranch(name: string) {
-        this.settings?.setActiveBranchName(name);
+        this.triggerNavigateToFile(name, this.activeFilePath);
     }
 
     @action
@@ -305,7 +321,7 @@ export class CmsStore extends iStore<'logout' | `update-settings` | `load-settin
 
     @action
     setIsEditing(file: FileModel | FileStub, isEditing: boolean) {
-        this.settings?.setLocation(file.branch, isEditing ? file.path : null);
+        this.triggerNavigateToFile(file.branch, isEditing ? file.path : null);
     }
 
     @action
@@ -313,7 +329,7 @@ export class CmsStore extends iStore<'logout' | `update-settings` | `load-settin
         if (reload) {
             this.github?.clearEntries(entry.branch);
         }
-        this.settings?.setActiveEntry(entry);
+        this.triggerNavigateToFile(entry.branch, entry.path);
     }
 
     @computed
