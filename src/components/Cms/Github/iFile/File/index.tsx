@@ -35,11 +35,7 @@ const File = observer((props: Props) => {
                         }
                         props.onSelect(file as FileModel);
                     } else {
-                        if (file.type !== 'bin_file') {
-                            cmsStore.setActiveEntry(file);
-                        } else {
-                            cmsStore.setActiveEntry(file);
-                        }
+                        cmsStore.setActiveEntry(file);
                     }
                 }}
                 className={clsx(styles.fileLink)}

@@ -5,14 +5,7 @@ import { observer } from 'mobx-react-lite';
 import { default as DirModel } from '@tdev-models/cms/Dir';
 import Card from '@tdev-components/shared/Card';
 import Dir from '@tdev-components/Cms/Github/iFile/Dir';
-import Avatar from '@tdev-components/shared/Avatar';
 import { useStore } from '@tdev-hooks/useStore';
-import Button from '@tdev-components/shared/Button';
-import { mdiAccountCircle, mdiAlertDecagram, mdiCheckDecagram, mdiLogoutVariant } from '@mdi/js';
-import Icon from '@mdi/react';
-import { SIZE_XS } from '@tdev-components/shared/iconSizes';
-import AccountOptions from '@tdev-components/Cms/Github/AccountOptions';
-import Popup from 'reactjs-popup';
 import UserAvatar from '@tdev-components/Cms/Github/AccountOptions/UserAvatar';
 
 interface Props {
@@ -26,11 +19,8 @@ interface Props {
 
 const Directory = observer((props: Props) => {
     const { dir } = props;
-    const cmsStore = useStore('cmsStore');
-    const { github } = cmsStore;
     React.useEffect(() => {
         if (dir && !dir.isOpen) {
-            console.log('Open from Directory.tsx');
             dir.setOpen(true);
         }
     }, [dir]);
