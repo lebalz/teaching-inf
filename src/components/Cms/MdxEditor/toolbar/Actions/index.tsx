@@ -90,7 +90,7 @@ const Actions = observer((props: Props) => {
                                 </li>
                                 <li className={clsx(styles.option)}>
                                     <Confirm
-                                        text={`Auf dem ${file.branch}-Branch speichern`}
+                                        text={`Speichern`}
                                         onConfirm={() => {
                                             file.save();
                                         }}
