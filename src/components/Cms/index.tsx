@@ -118,11 +118,13 @@ const WithFileToEdit = observer((props: Props) => {
     const navigator = useCmsNavigator();
     const location = useLocation();
     React.useEffect(() => {
-        const { repoName, repoOwner, fileToEdit } = props.initialConfig;
-        cmsStore.configureRepo(repoOwner, repoName);
-        cmsStore.settings?.setActivePath(fileToEdit || '', true);
-        navigator.openFile(props.initialConfig.branch, fileToEdit);
-    }, []);
+        if (cmsStore.settings) {
+            const { repoName, repoOwner, fileToEdit } = props.initialConfig;
+            cmsStore.configureRepo(repoOwner, repoName);
+            cmsStore.settings?.setActivePath(fileToEdit || '', true);
+            navigator.openFile(props.initialConfig.branch, fileToEdit);
+        }
+    }, [cmsStore.settings]);
     React.useEffect(() => {
         return reaction(
             () => cmsStore.requestedNavigation,
