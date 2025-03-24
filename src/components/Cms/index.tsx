@@ -42,7 +42,6 @@ const CmsLandingPage = observer(() => {
     const access = useGithubAccess();
     const { settings, activeEntry, viewStore } = cmsStore;
     const entry = useLoadedFile(activeEntry);
-    console.log('render cms landing page');
     if (access === 'no-token') {
         return <Redirect to={'/gh-login'} />;
     }
@@ -118,7 +117,6 @@ const WithFileToEdit = observer((props: Props) => {
     const cmsStore = useStore('cmsStore');
     const navigator = useCmsNavigator();
     const location = useLocation();
-    console.log('render with file to edit');
     React.useEffect(() => {
         const { repoName, repoOwner, fileToEdit } = props.initialConfig;
         cmsStore.configureRepo(repoOwner, repoName);
@@ -147,7 +145,6 @@ const WithFileToEdit = observer((props: Props) => {
 const Cms = observer(() => {
     const cmsStore = useStore('cmsStore');
     const location = useLocation();
-    console.log('render cms');
     const initialConfig = React.useMemo(() => {
         const config = parseLocation(location);
         if (!config.branch && !config.fileToEdit) {
