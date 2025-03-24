@@ -118,11 +118,13 @@ const WithFileToEdit = observer((props: Props) => {
     const navigator = useCmsNavigator();
     const location = useLocation();
     React.useEffect(() => {
-        const { repoName, repoOwner, fileToEdit } = props.initialConfig;
-        cmsStore.configureRepo(repoOwner, repoName);
-        cmsStore.settings?.setActivePath(fileToEdit || '', true);
-        navigator.openFile(props.initialConfig.branch, fileToEdit);
-    }, []);
+        if (cmsStore.settings) {
+            const { repoName, repoOwner, fileToEdit } = props.initialConfig;
+            cmsStore.configureRepo(repoOwner, repoName);
+            // cmsStore.settings?.setActivePath(fileToEdit || '', true);
+            navigator.openFile(props.initialConfig.branch, fileToEdit);
+        }
+    }, [cmsStore.settings]);
     React.useEffect(() => {
         return reaction(
             () => cmsStore.requestedNavigation,
@@ -135,10 +137,15 @@ const WithFileToEdit = observer((props: Props) => {
         );
     }, [cmsStore, navigator]);
     React.useEffect(() => {
-        const config = parseLocation(location);
-        cmsStore.configureRepo(config.repoOwner, config.repoName);
-        cmsStore.settings?.setLocation(config.branch || '', config.fileToEdit || '');
-    }, [cmsStore, location.pathname, location.search]);
+        if (cmsStore.settings) {
+            const config = parseLocation(location);
+            cmsStore.configureRepo(config.repoOwner, config.repoName);
+            cmsStore.settings.setLocation(
+                config.branch || cmsStore.activeBranchName || cmsStore.branchNames[0] || 'main',
+                config.fileToEdit || ''
+            );
+        }
+    }, [cmsStore, location.pathname, location.search, cmsStore.settings]);
     return <CmsLandingPage />;
 });
 
