@@ -21,7 +21,6 @@ import {
 import ImageResizer from '../ImageResizer';
 import { $isImageNode, type ImageNode } from '../ImageNode';
 import { observer } from 'mobx-react-lite';
-import { useStore } from '@tdev-hooks/useStore';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
 import { useAssetFile } from '@tdev-components/Cms/MdxEditor/hooks/useAssetFile';
@@ -39,11 +38,13 @@ import { ImageDialog } from '../ImagesDialog';
 import Button from '@tdev-components/shared/Button';
 import { PopupActions } from 'reactjs-popup/dist/types';
 import { SIZE_S } from '@tdev-components/shared/iconSizes';
+import { VoidEmitter } from '@mdxeditor/editor';
 
 export interface ImageEditorProps {
     nodeKey: string;
     src: string;
     options: ParsedOptions;
+    focusEmitter: VoidEmitter;
 }
 
 export const ImageComponent = observer((props: ImageEditorProps): React.ReactNode => {
@@ -142,6 +143,12 @@ export const ImageComponent = observer((props: ImageEditorProps): React.ReactNod
             }
         });
     }, [nodeKey, editor]);
+
+    React.useEffect(() => {
+        props.focusEmitter.subscribe(() => {
+            setSelected(true);
+        });
+    }, [props.focusEmitter, nodeKey]);
 
     const onResizeStart = () => {
         setIsResizing(true);
