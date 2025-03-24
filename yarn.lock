@@ -3068,10 +3068,10 @@
   dependencies:
     "@types/mdx" "^2.0.0"
 
-"@mdxeditor/editor@^3.28.0":
-  version "3.28.0"
-  resolved "https://registry.yarnpkg.com/@mdxeditor/editor/-/editor-3.28.0.tgz#0e406c860e9db928d4f06a146f74bb7ce0ef9f87"
-  integrity sha512-cZqDWb1TFFfYluvAOKSnrV+M+ygHUW+MZN54AQ5u2kBH2RZIEOCxpN+xBX2G2XhCEf+y57J3xQd+0McEYoSd6Q==
+"@mdxeditor/editor@^3.29.1":
+  version "3.29.1"
+  resolved "https://registry.yarnpkg.com/@mdxeditor/editor/-/editor-3.29.1.tgz#196d45a24e43bddf58765ba825d5823ee74f6411"
+  integrity sha512-Pv4J9JveVcvswcyaYs+irsrFmm+NKSuNdF3V0NPx9mWRzb8rzNtqDSK0+H4TeiPp9wroDM66DQCSnrdEM8U5Lw==
   dependencies:
     "@codemirror/lang-markdown" "^6.2.3"
     "@codemirror/language-data" "^6.5.1"

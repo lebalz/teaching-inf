@@ -153,7 +153,8 @@ const CmsMdxEditor = observer((props: Props) => {
                             sh: 'Shell',
                             c: 'C',
                             cpp: 'C++',
-                            ['mdx-code-block']: 'MdxCodeBlock'
+                            ['mdx-code-block']: 'MdxCodeBlock',
+                            ['']: 'Plain Text'
                         },
                         autoLoadLanguageSupport: true
                     }),

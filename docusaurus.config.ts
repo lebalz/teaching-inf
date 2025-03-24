@@ -277,7 +277,7 @@ const config: Config = {
           sidebarPath: './sidebars.ts',
           editUrl: (params) => {
               if (params.version === 'current') {
-                  return `/cms/${params.versionDocsDirPath}/${params.docPath}`
+                  return `/cms/lebalz/teaching-inf/${params.versionDocsDirPath}/${params.docPath}`
               }
           },
           path: 'docs',
@@ -299,7 +299,7 @@ const config: Config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            '/cms/',
+            '/cms/lebalz/teaching-inf/',
           remarkPlugins: REMARK_PLUGINS,
           rehypePlugins: REHYPE_PLUGINS,
           admonitions: {
@@ -317,7 +317,7 @@ const config: Config = {
           remarkPlugins: REMARK_PLUGINS,
           rehypePlugins: REHYPE_PLUGINS,
           beforeDefaultRemarkPlugins: BEFORE_DEFAULT_REMARK_PLUGINS,
-          editUrl: '/cms/'
+          editUrl: `/cms/${ORGANIZATION_NAME}/${PROJECT_NAME}/`
         },
         theme: {
           customCss: [
