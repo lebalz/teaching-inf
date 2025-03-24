@@ -2,8 +2,6 @@ import React from 'react';
 import { observer } from 'mobx-react-lite';
 import _ from 'lodash';
 import File from '@tdev-models/cms/File';
-import BrowserOnly from '@docusaurus/BrowserOnly';
-import Loader from '@tdev-components/Loader';
 import Save from './Save';
 import Popup from 'reactjs-popup';
 import Button from '@tdev-components/shared/Button';

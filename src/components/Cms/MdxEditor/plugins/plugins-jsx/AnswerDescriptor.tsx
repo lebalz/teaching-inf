@@ -40,7 +40,7 @@ const StringProps: GenericPropery[] = [
     { name: 'default', type: 'text', description: 'Standardwert' },
     { name: 'solution', type: 'text', description: 'Lösung' },
     {
-        name: 'sanitier',
+        name: 'sanitizer',
         type: 'expression',
         description: 'Sanitierfunktion die auf die Lösung angewandt wird.',
         placeholder: `(val) => val.toLowerCase().replaceAll(' ', '')`,
