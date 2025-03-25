@@ -68,6 +68,7 @@ import { draggableBlockPlugin } from './plugins/DraggableBlockPlugin';
 import JsxDescriptors from './plugins/plugins-jsx/JsxDescriptors';
 import { extractOptions } from '@tdev-plugins/helpers';
 import { GenericDirectiveDescriptor } from './plugins/CatchAllUnknown/GenericDirectiveDescriptor';
+import { keepImportsPlugin } from './plugins/keepImportsPlugin';
 
 export interface Props {
     file: FileModel;
@@ -111,6 +112,7 @@ const CmsMdxEditor = observer((props: Props) => {
                     quotePlugin(),
                     strongPlugin(),
                     mathPlugin(),
+                    keepImportsPlugin(),
                     jsxPlugin({
                         jsxComponentDescriptors: JsxDescriptors
                     }),

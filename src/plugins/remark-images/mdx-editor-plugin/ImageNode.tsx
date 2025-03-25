@@ -16,6 +16,7 @@ import { DecoratorNode } from 'lexical';
 import { ImageComponent } from './ImageComponent';
 import { camelCased, ParsedOptions, parseOptions, serializeOptions } from '@tdev/plugins/helpers';
 import _ from 'lodash';
+import { voidEmitter } from '@mdxeditor/editor';
 
 /**
  * A serialized representation of an {@link ImageNode}.
@@ -40,6 +41,7 @@ export class ImageNode extends DecoratorNode<React.ReactNode> {
     __src: string;
 
     __options: ParsedOptions;
+    __focusEmitter = voidEmitter();
 
     /** @internal */
     static getType(): string {
@@ -83,7 +85,8 @@ export class ImageNode extends DecoratorNode<React.ReactNode> {
     }
 
     setWidth(width: number | undefined): void {
-        this.getWritable().__options.width = width;
+        this.getWritable().__options = { ...this.getLatest().__options, width: width };
+        this.select();
     }
 
     setOptions(options: { name: string; value: number | string | undefined }[]) {
@@ -96,6 +99,7 @@ export class ImageNode extends DecoratorNode<React.ReactNode> {
             newOptions[camelCased(option.name)] = option.value;
         });
         this.getWritable().__options = newOptions;
+        this.select();
     }
 
     getAltText(): string {
@@ -120,16 +124,21 @@ export class ImageNode extends DecoratorNode<React.ReactNode> {
 
     setSrc(src: string): void {
         this.getWritable().__src = src;
+        this.select();
     }
+
+    select = () => {
+        this.__focusEmitter.publish();
+    };
 
     /** @internal */
     decorate(_parentEditor: LexicalEditor): React.ReactNode {
-        console.log('ImageNode.decorate', this.getKey(), this.__options);
         return (
             <ImageComponent
                 src={this.getSrc()}
                 nodeKey={this.getKey()}
                 options={this.getLatest().__options}
+                focusEmitter={this.__focusEmitter}
             />
         );
     }
