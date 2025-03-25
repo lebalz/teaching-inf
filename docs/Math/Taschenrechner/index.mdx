@@ -22,6 +22,10 @@ Falls Sie an der Oberstufe einen anderen Taschenrechner verwendet haben, lohnt s
 
 ## Übungen
 
+:::note[RUnden auf 3 Nachkommastellen]
+Allen Resultate müssen auf 3 Nachkommastellen gerundet werden.
+:::
+
 ### Grundlegendes
 
 1. Aufgabe
@@ -232,17 +236,19 @@ $\frac{215}{1505}$ soll gekürzt und als Bruch dargestellt werden.
 Wobei die Taste wie folgt einzugeben ist:
 
 <Tabs groupId="tr">
-    <TabItem label="TI-30X IIS" value="30x">
-        [[215]] [[÷]] [[1505]] [[F ◀▶ D]]
+  <TabItem label="TI-30X IIS" value="30x">
+    [[215]] [[÷]] [[1505]] [[F ◀▶ D]]
 
-        Wobei [[F ◀▶ D]] = [[2nd]] [[PRB]]
-    </TabItem>
-    <TabItem label="TI-30 Eco" value="30eco">
-        [[215]] [[÷]] [[1505]] [[F ◀▶ D]]
+    Wobei [[F ◀▶ D]] = [[2nd]] [[PRB]]
+  </TabItem>
 
-        Wobei [[F ◀▶ D]] = [[2nd]] [[:mdi[arrow-left-thin]]]
-    </TabItem>
+  <TabItem label="TI-30 Eco" value="30eco">
+    [[215]] [[÷]] [[1505]] [[F ◀▶ D]]
+
+    Wobei [[F ◀▶ D]] = [[2nd]] [[:mdi[arrow-left-thin]]]
+  </TabItem>
 </Tabs>
+
 :::info[Abkürzung __F ◀▶ D__]
 Die Abkürzung __F ◀▶ D__ steht für die Umwandlung von einem Bruch in eine Dezimalzahl und bei erneuter Anwednung umgekehrt.
 
@@ -282,78 +288,80 @@ Schreiben Sie als **gemeinen Bruch**. Eingabe als `Zähler/Nenner`, bspw. $\frac
 1. Aufgabe
    <Answer label="0.4375" labelWidth="6em" solution="7/16" sanitizer={(s) => s.replaceAll(' ', '')} type="string" id="67d989a2-51a6-449a-a513-075abec35f32" />
 2. Aufgabe
-    $$
-    \frac{708}{3^2\cdot 4 \cdot 7}
-    $$
-    <Answer solution="59/21" type="string" id="afbc7ea1-b6f7-4d0c-a56a-abf40c399a5a" />
-    :::details[Vorgehen und Tipps]
-        ```
-        708 / (9 * 4 * 7) F ◀▶ D
-        ```
-        ergibt `2 ⊔ 17/21`.
-        Zähler: `2 * 21 + 17 = 59`
-        Nenner: `21`
-    :::
+   $$
+   \frac{708}{3^2\cdot 4 \cdot 7}
+   $$
+   <Answer solution="59/21" type="string" id="afbc7ea1-b6f7-4d0c-a56a-abf40c399a5a" />
+   :::details[Vorgehen und Tipps]
+   ```
+   708 / (9 * 4 * 7) F ◀▶ D
+   ```
+
+   ergibt `2 ⊔ 17/21`.
+   Zähler: `2 * 21 + 17 = 59`
+   Nenner: `21`
+   :::
 
 ## Trigonometrische Funktionen
 
-
-
 1. Aufgabe: Wie gross ist der gesuchte Winkel, wenn im rechtwinkligen Dreieck die Ankathete $a=3$ und die Gegenkathete $b=7$ beträgt?
-    <Answer type="string" id="d87e1f03-8e82-461f-87d1-6917042ffd13" solution="66.801" sanitizer={sanitizeNumber()} />
+   <Answer type="string" id="d87e1f03-8e82-461f-87d1-6917042ffd13" solution="66.801" sanitizer={sanitizeNumber()} />
 2. Aufgabe: Schreiben Sie die Lösung als Bruch. (Winkel in Radiant)
-    <Answer type="string" id="9061d982-9887-4264-9e7f-a6a3e2cc1a94" solution="pi/6" checker={(s) => s === 'pi/6' || s === '1/6*pi'} sanitizer={(s) => s.replaceAll(' ', '')}>
+   <Answer type="string" id="9061d982-9887-4264-9e7f-a6a3e2cc1a94" solution="pi/6" checker={(s) => s === 'pi/6' || s === '1/6*pi'} sanitizer={(s) => s.replaceAll(' ', '')}>
+     $$
+     sin(\overgroup{\alpha}) = 0.5 \qquad \overgroup{\alpha}=?
+     $$
+   </Answer>
+   :::details[Vorgehen und Tipps]
+   Den Taschenrechner auf __RAD__ stellen.
 
-    $$
-    sin(\overgroup{\alpha}) = 0.5 \qquad \overgroup{\alpha}=?
-    $$
+   $$
+   sin^{-1}(0.5) = 0.523598776
+   $$
 
-    </Answer>
-    ::::details[Vorgehen und Tipps]
-    Den Taschenrechner auf __RAD__ stellen.
+   Dies ist nicht wirklich eine anschauliche Zahl. Weil wir aber mit `RAD` rechnen und dort eine $360^{\circ}$ Drehung $2\pi$ entsprechen, können wir versuchen, die Zahl als Vielfaches oder als Bruch von $\pi$ darzustellen. Am einfachsten Teilt man die Zahl durch $\pi$ und entscheidet, ob die entstehende Zahl als Bruch geschrieben werden kann.
 
-    $$
-    sin^{-1}(0.5) = 0.523598776
-    $$
+   $$
+   \begin{align*}
+       \frac{0.523598776}{\pi} &= 0.1666\overline{6} = \frac{1}{6} \qquad \qquad | \cdot \pi \\
+       \rightarrow \qquad \frac{1}{6} \cdot \pi &= 0.523598776
+   \end{align*}
+   $$
 
-    Dies ist nicht wirklich eine anschauliche Zahl. Weil wir aber mit `RAD` rechnen und dort eine $360^{\circ}$ Drehung $2\pi$ entsprechen, können wir versuchen, die Zahl als Vielfaches oder als Bruch von $\pi$ darzustellen. Am einfachsten Teilt man die Zahl durch $\pi$ und entscheidet, ob die entstehende Zahl als Bruch geschrieben werden kann.
-
-    $$
-    \begin{align*}
-        \frac{0.523598776}{\pi} &= 0.1666\overline{6} = \frac{1}{6} \qquad \qquad | \cdot \pi \\
-        \rightarrow \qquad \frac{1}{6} \cdot \pi &= 0.523598776
-    \end{align*}
-    $$
-
-    und somit $\frac{\pi}{6}$ (in die Lösung eingeben als `pi / 6`).
-    ::::
+   und somit $\frac{\pi}{6}$ (in die Lösung eingeben als `pi / 6`).
+   :::
 3. Aufgabe: Schreiben Sie die Lösung als Bruch. (Winkel in Radiant)
-    <Answer type="string" id="5953c24c-946f-4988-bac1-7a8b1c47e5a9" solution="pi/4" checker={(s) => s === 'pi/4' || s === '1/4*pi'} sanitizer={(s) => s.replaceAll(' ', '')}>
-
-    $$
-    sin(\overgroup{\alpha}) = \sqrt{0.5} \qquad \overgroup{\alpha}=?
-    $$
-
-    </Answer>
+   <Answer type="string" id="5953c24c-946f-4988-bac1-7a8b1c47e5a9" solution="pi/4" checker={(s) => s === 'pi/4' || s === '1/4*pi'} sanitizer={(s) => s.replaceAll(' ', '')}>
+     $$
+     sin(\overgroup{\alpha}) = \sqrt{0.5} \qquad \overgroup{\alpha}=?
+     $$
+   </Answer>
 
 ## Zwischenresultate abspeichern
-
 
 Auf dem Taschenrechner können Zwischenresultate abgespeichert werden. Dies ist besonders nützlich, wenn ein Resultat mehrmals verwendet wird, oder (nur für den *TI-30X*) falls eine Formel für mehrere Parameter berechnet werden soll.
 
 :::cards
 ![TI-30X IIS --width=100px](./images/tr-30x.avif)
+
 #### Abspeichern
+
 [[STO ▶]] [[A|B|C|D|E]] [[=]]
 
 #### Abrufen
+
 [[MEMVAR]] [[A|B|C|D|E]] [[=]]
+
 ::br
+
 ![TI-30 Eco Rs --width=70px](./images/tr-30-eco-rs.avif)
+
 #### Abspeichern
+
 [[STO]] [[Taste 1|2|3]] (oben links steht dann **M1**, **M2** oder **M3**)
 
 #### Abrufen
+
 [[RCL]] [[Taste 1|2|3]]
 :::
 
@@ -362,6 +370,7 @@ Zwischenresultate dürfen nicht gerundet werden, da sich der Rundungsfehler sons
 :::
 
 ### Übung: Schiefer Wurf
+
 Um herauszufinden, wie weit ein Ball maximal fliegt (ohne Beachtung des Luftwiederstands und ohne Miteinbezug der Abwurfhöhe), kann folgende Formel benutzt werden:
 
 $$
@@ -372,9 +381,9 @@ Wobei $g=9.81$ die Erdanziehungskraft und $v$ die Abwurfgeschwindigkeit des Ball
 
 Wie weit fliegt ein Ball, der im $30^{\circ}$ Winkel mit einer Geschwindigkeit von $50\frac{km}{h}$ geworfen wird? (Zwischenresultat im TR abspeichern).
 
-<Answer type="string" id="5ea8563d-5008-4224-b876-307feef590c9" label="Abwurfgeschwindigkeit in m/s" solution="13.889" sanitizer={sanitizeNumber()}/>
+<Answer type="string" id="5ea8563d-5008-4224-b876-307feef590c9" label="Abwurfgeschwindigkeit in m/s" solution="13.889" sanitizer={sanitizeNumber()} />
 
-<Answer type="string" id="25d38fe4-7836-4cbc-8d27-71e7bb6dda11" label="Maximale Wurfweite?" solution="17.029" sanitizer={sanitizeNumber()}/>
+<Answer type="string" id="25d38fe4-7836-4cbc-8d27-71e7bb6dda11" label="Maximale Wurfweite?" solution="17.029" sanitizer={sanitizeNumber()} />
 
 ### Übung: Kreissegment
 
@@ -385,57 +394,58 @@ Im Formelbuch findet man folgende Formel für Flächenberechnungen im Kreis:
 Berechnen Sie für einen Kreis mit Radius $23\,cm$ die Fläche des Kreissegmentes, wenn der Winkel:
 
 1. $30^{\circ}$ beträgt.
-    <Answer type="string" labelWidth="7em" label="Für 30 °" id="8392365d-e916-44c5-b6fd-395ffca2c4df" solution="6.242" sanitizer={sanitizeNumber(['cm^2'])}/>
-    ::::details[Vorgehen und Tipps]
-    <Tabs groupId="tr">
-        <TabItem label="TI-30X IIS" value="30x">
-            ```
-            23² * (π * 30 / 360 - sin(30) / 2)
-            ```
-        </TabItem>
-        <TabItem label="TI-30 Eco" value="30eco">
-        [[23]] [[²]] [[\*]] [[\(]] [[π]] [[\*]] [[30]] [[÷]] [[360]] [[-]] [[30]] [[sin]] [[÷]] [[2]] [[\)]] [[=]]
-        </TabItem>
-    </Tabs>
-    ::::
+   <Answer type="string" labelWidth="7em" label="Für 30 °" id="8392365d-e916-44c5-b6fd-395ffca2c4df" solution="6.242" sanitizer={sanitizeNumber(['cm^2'])} />
+   :::details[Vorgehen und Tipps]
+   <Tabs groupId="tr">
+     <TabItem label="TI-30X IIS" value="30x">
+       ```
+       23² * (π * 30 / 360 - sin(30) / 2)
+       ```
+     </TabItem>
+
+     <TabItem label="TI-30 Eco" value="30eco">
+       [[23]] [[²]] [[\*]] [[(]] [[π]] [[\*]] [[30]] [[÷]] [[360]] [[-]] [[30]] [[sin]] [[÷]] [[2]] [[)]] [[=]]
+     </TabItem>
+   </Tabs>
+   :::
 2. $35^{\circ}$ beträgt.
-    <Answer type="string" label="Für 35 °" labelWidth="7em" id="afeae21f-ed0c-49d6-8880-f0ad867f4c14" solution="9.863" sanitizer={sanitizeNumber(['cm^2'])}/>
-    ::::details[⚠️ Vorgehen und Tipps]
-    <Tabs groupId="tr">
-        <TabItem label="TI-30X IIS" value="30x">
-            1. Mit [[35]] [[STO ▶]] [[=]] die $35^{\circ}$ als `A` abspeichern.
-            2. Mit 2x[[▲]] die Formel aus der ersten Aufgabe hervorholen und alle $30$  mit `A` ersetzen (löschen kann man mit [[DEL]]).:
+   <Answer type="string" label="Für 35 °" labelWidth="7em" id="afeae21f-ed0c-49d6-8880-f0ad867f4c14" solution="9.863" sanitizer={sanitizeNumber(['cm^2'])} />
+   :::details[⚠️ Vorgehen und Tipps]
+   <Tabs groupId="tr">
+     <TabItem label="TI-30X IIS" value="30x">
+       1. Mit [[35]] [[STO ▶]] [[=]] die $35^{\circ}$ als `A` abspeichern.
+       2. Mit 2x[[▲]] die Formel aus der ersten Aufgabe hervorholen und alle $30$  mit `A` ersetzen (löschen kann man mit [[DEL]]).:
 
-              ```
-              23² * (π * A / 360 - sin(A) / 2)
-              ```
-            3. jetzt sind alle weiteren Aufgaben leicht: die gesuchte Winkelangabe als `A` abspeichern und die Formel ausführen.
+       ```
+       23² * (π * A / 360 - sin(A) / 2)
+       ```
 
-        </TabItem>
-        <TabItem label="TI-30 Eco" value="30eco">
-            Leider gibts keine entsprechende Vereinfachung wie beim TI-30X. Die Formel muss also jedes Mal neu eingegeben werden.
-        </TabItem>
-    </Tabs>
-    ::::
+       3. jetzt sind alle weiteren Aufgaben leicht: die gesuchte Winkelangabe als `A` abspeichern und die Formel ausführen.
+     </TabItem>
+
+     <TabItem label="TI-30 Eco" value="30eco">
+       Leider gibts keine entsprechende Vereinfachung wie beim TI-30X. Die Formel muss also jedes Mal neu eingegeben werden.
+     </TabItem>
+   </Tabs>
+   :::
 3. $40.2^{\circ}$ beträgt.
-    <Answer type="string" label="Für 40.2 °" labelWidth="7em" id="65b94fae-b851-45b4-8b78-83bdf0538a65" solution="14.856" sanitizer={sanitizeNumber(['cm^2'])}/>
+   <Answer type="string" label="Für 40.2 °" labelWidth="7em" id="65b94fae-b851-45b4-8b78-83bdf0538a65" solution="14.856" sanitizer={sanitizeNumber(['cm^2'])} />
 4. $45.1234^{\circ}$ beträgt.
-    <Answer type="string" label="Für 45.1234 °" id="5fd62dae-a447-47a0-b752-c27fc87f9026" solution="20.875" sanitizer={sanitizeNumber(['cm^2'])}/>
-    :::details[Vorgehen und Tipps]
-    <Tabs groupId="tr">
-        <TabItem label="TI-30X IIS" value="30x">
-          So weiter wie bisher - Tipp von Aufgabe 2 beachten.
-        </TabItem>
-        <TabItem label="TI-30 Eco" value="30eco">
-            Damit die Zahl $45.1234$ nicht mehrfach eingegeben werden muss, kann sie auch abgespeichert werden und dann mit [[RCL]] wieder abgerufen werden.
+   <Answer type="string" label="Für 45.1234 °" id="5fd62dae-a447-47a0-b752-c27fc87f9026" solution="20.875" sanitizer={sanitizeNumber(['cm^2'])} />
+   :::details[Vorgehen und Tipps]
+   <Tabs groupId="tr">
+     <TabItem label="TI-30X IIS" value="30x">
+       So weiter wie bisher - Tipp von Aufgabe 2 beachten.
+     </TabItem>
 
-            [[45.1234]] [[STO]] [[1]] (Zahl speichern)
+     <TabItem label="TI-30 Eco" value="30eco">
+       Damit die Zahl $45.1234$ nicht mehrfach eingegeben werden muss, kann sie auch abgespeichert werden und dann mit [[RCL]] wieder abgerufen werden.
 
-            [[23]] [[²]] [[\*]] [[\(]] [[π]] [[\*]] [[RCL]] [[1]] [[÷]] [[360]] [[-]] [[RCL]] [[1]] [[sin]] [[÷]] [[2]] [[\)]] [[=]]
+       [[45.1234]] [[STO]] [[1]] (Zahl speichern)
 
-        </TabItem>
-    </Tabs>
-    :::
+       [[23]] [[²]] [[\*]] [[(]] [[π]] [[\*]] [[RCL]] [[1]] [[÷]] [[360]] [[-]] [[RCL]] [[1]] [[sin]] [[÷]] [[2]] [[)]] [[=]]
+     </TabItem>
+   </Tabs>
+   :::
 5. $55.122333444455555^{\circ}$ beträgt.
-    <Answer type="string" label="Für 55.122333444455555 °" id="9cefc455-414f-4747-bbe8-88e4068a09e8" solution="37.477" sanitizer={sanitizeNumber(['cm^2'])}/>
-
+   <Answer type="string" label="Für 55.122333444455555 °" id="9cefc455-414f-4747-bbe8-88e4068a09e8" solution="37.477" sanitizer={sanitizeNumber(['cm^2'])} />
