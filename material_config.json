@@ -84,7 +84,7 @@
     "pages": [
         {
             "from": "docs/Math/Taschenrechner/",
-            "to": "src/pages/math/01-Taschenrechner",
+            "to": "src/pages/mathematik/taschenrechner",
             "ignore": []
         }
     ]
