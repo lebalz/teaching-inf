@@ -80,5 +80,12 @@
             "ignore": [],
             "open": true
         }
+    ],
+    "pages": [
+        {
+            "from": "docs/Math/Taschenrechner/",
+            "to": "src/pages/math/01-Taschenrechner",
+            "ignore": []
+        }
     ]
 }

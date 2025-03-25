@@ -125,7 +125,7 @@ const main = async () => {
     Object.keys(CONFIG).forEach(async (klass) => {
         const config = CONFIG[klass];
         const gitignore = [];
-        const classDir = `versioned_docs/version-${klass}/`;
+        const classDir = klass === 'pages' ? 'src/pages/' : `versioned_docs/version-${klass}/`;
         const promises = [];
         config.forEach(async (src) => {
             var srcPath = undefined;
@@ -181,6 +181,7 @@ const main = async () => {
                     });
                 }
                 rsync.exclude(['.sync.*', '*.nosync.*']);
+                console.log('SYNC', toPath, srcPath);
                 await ensureSync(rsync, srcPath);
             } else {
                 fs.copyFileSync(srcPath, toPath);
