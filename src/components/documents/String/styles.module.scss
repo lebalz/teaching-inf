@@ -108,4 +108,20 @@
             transform: translateY(-50%);
         }
     }
+
+    &.flexWrap {
+        flex-wrap: wrap;
+        height: unset;
+        justify-content: center;
+        &.withLabel {
+            .input {
+                border-radius: var(--ifm-global-radius);
+                border-top-right-radius: 0;
+                border-bottom-right-radius: 0;
+            }
+            .label {
+                border-radius: var(--ifm-global-radius);
+            }
+        }
+    }
 }

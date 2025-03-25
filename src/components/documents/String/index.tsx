@@ -42,6 +42,35 @@ const ColorMap: { [key in StringAnswer]: string } = {
 
 const InputWrapper = observer(
     (props: { inline?: boolean; className?: string; style?: React.CSSProperties; children: ReactNode }) => {
+        const containerRef = React.useRef<HTMLDivElement>(null);
+        const neededWidth = React.useRef(0);
+        const [wrap, setWrap] = React.useState(false);
+
+        React.useEffect(() => {
+            const checkWrap = () => {
+                const container = containerRef?.current;
+                if (!container?.lastElementChild) {
+                    return;
+                }
+                const parentRect = (
+                    container.lastElementChild as HTMLSpanElement
+                )?.offsetParent?.getBoundingClientRect();
+                const childRect = (container.lastElementChild as HTMLSpanElement)?.getBoundingClientRect();
+                if (!parentRect || !childRect) {
+                    return;
+                }
+                if (childRect.right > parentRect.right && !wrap) {
+                    neededWidth.current = childRect.right - parentRect.right + parentRect.width + 1;
+                    setWrap(true);
+                } else if (wrap && parentRect.width > neededWidth.current) {
+                    setWrap(false);
+                }
+            };
+
+            checkWrap();
+            window.addEventListener('resize', checkWrap);
+            return () => window.removeEventListener('resize', checkWrap);
+        }, [wrap]);
         if (props.inline) {
             return (
                 <span className={clsx(styles.inline, props.className)} style={props.style}>
@@ -50,7 +79,11 @@ const InputWrapper = observer(
             );
         }
         return (
-            <div className={props.className} style={props.style}>
+            <div
+                className={clsx(props.className, wrap && styles.flexWrap)}
+                style={props.style}
+                ref={containerRef}
+            >
                 {props.children}
             </div>
         );
