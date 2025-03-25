@@ -260,3 +260,12 @@ div.no-search {
     --ifm-paragraph-margin-bottom: 0;
     --ifm-list-margin: 0;
 }
+
+.flex-cards > .card > .card__body {
+    h4 {
+        margin-bottom: 0.25em;
+        &:not(:first-child) {
+            margin-top: 0.75em;
+        }
+    }
+}

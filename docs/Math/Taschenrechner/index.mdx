@@ -140,7 +140,7 @@ Falls Sie an der Oberstufe einen anderen Taschenrechner verwendet haben, lohnt s
 ### Platonische Körper
 Es gibt genau $5$ platonische Körper, sog. reguläre Polyeder.
 
-![--width=800px](./images/regulaere-polyeder.png)
+![Formelsammlung Mathematik, A. Wetzel, S. 13 --width=800px](./images/regulaere-polyeder.png)
 
 1. Berechnen Sie die Oberfläche eines Dodekaeders mit der angegebenen Kantenlänge und runden Sie das Ergebnis auf 3 Nachkommastellen genau.
     <Answer label="Oberfläche Dodekaeder mit 25 cm" type="string" id="e68063d0-13fb-40a0-816f-606a1edbc5f2" solution={toFixedNum(3*Math.sqrt(5*(5+2*Math.sqrt(5)))*Math.pow(25, 2), 3)} sanitizer={sanitizeNumber(['^2'])} />
@@ -229,18 +229,18 @@ $\frac{215}{1505}$ soll gekürzt und als Bruch dargestellt werden.
 Wobei die Taste wie folgt einzugeben ist:
 <Tabs groupId="tr">
     <TabItem label="TI-30X IIS" value="30x">
-        [[215]] [[÷]] [[1505]] [[F ⯇⯈ D]]
+        [[215]] [[÷]] [[1505]] [[F ◀▶ D]]
 
-        Wobei [[F ⯇⯈ D]] = [[2nd]] [[PRB]]
+        Wobei [[F ◀▶ D]] = [[2nd]] [[PRB]]
     </TabItem>
     <TabItem label="TI-30 Eco" value="30eco">
-        [[215]] [[÷]] [[1505]] [[F ⯇⯈ D]]
+        [[215]] [[÷]] [[1505]] [[F ◀▶ D]]
 
-        Wobei [[F ⯇⯈ D]] = [[2nd]] [[:mdi[arrow-left-thin]]]
+        Wobei [[F ◀▶ D]] = [[2nd]] [[:mdi[arrow-left-thin]]]
     </TabItem>
 </Tabs>
-:::info[Abkürzung __F ⯇⯈ D__]
-Die Abkürzung __F ⯇⯈ D__ steht für die Umwandlung von einem Bruch in eine Dezimalzahl und bei erneuter Anwednung umgekehrt.
+:::info[Abkürzung __F ◀▶ D__]
+Die Abkürzung __F ◀▶ D__ steht für die Umwandlung von einem Bruch in eine Dezimalzahl und bei erneuter Anwednung umgekehrt.
 
 F
 : Fraction [Bruch]
@@ -281,7 +281,7 @@ Schreiben Sie als **gemeinen Bruch**. Eingabe als `Zähler/Nenner`, bspw. $\frac
     <Answer solution="59/21" type="string" id="afbc7ea1-b6f7-4d0c-a56a-abf40c399a5a" />
     :::details[Vorgehen und Tipps]
         ```
-        708 / (9 * 4 * 7) F ⯇⯈ D
+        708 / (9 * 4 * 7) F ◀▶ D
         ```
         ergibt `2 ⊔ 13/21`.
         Zähler: `2 * 21 + 17 = 55`
@@ -290,8 +290,12 @@ Schreiben Sie als **gemeinen Bruch**. Eingabe als `Zähler/Nenner`, bspw. $\frac
 
 ## Trigonometrische Funktionen
 
-1. Aufgabe
-    <Answer type="string" id="9061d982-9887-4264-9e7f-a6a3e2cc1a94" solution="pi/6" sanitizer={(s) => s.replaceAll(' ', '')}>
+
+
+1. Aufgabe: Wie gross ist der gesuchte Winkel, wenn im rechtwinkligen Dreieck die Ankathete $a=3$ und die Gegenkathete $b=7$ beträgt?
+    <Answer type="string" id="d87e1f03-8e82-461f-87d1-6917042ffd13" solution="66.801" sanitizer={sanitizeNumber()} />
+2. Aufgabe: Schreiben Sie die Lösung als Bruch. (Winkel in Radiant)
+    <Answer type="string" id="9061d982-9887-4264-9e7f-a6a3e2cc1a94" solution="pi/6" checker={(s) => s === 'pi/6' || s === '1/6*pi'} sanitizer={(s) => s.replaceAll(' ', '')}>
 
     $$
     sin(\overgroup{\alpha}) = 0.5 \qquad \overgroup{\alpha}=?
@@ -302,19 +306,22 @@ Schreiben Sie als **gemeinen Bruch**. Eingabe als `Zähler/Nenner`, bspw. $\frac
     Den Taschenrechner auf __RAD__ stellen.
 
     $$
-    sin^{-1}(0.5) &= 0.523598776
+    sin^{-1}(0.5) = 0.523598776
     $$
 
-    Dies ist nicht wirklich eine anhschauliche Zahl. Weil wir aber mit `Rad` rechnen und dort ein Kreis $2\pi$ entspricht, können wir versuchen, die Zahl als Vielfaches oder als Bruch von $\pi$ darzustellen.
+    Dies ist nicht wirklich eine anschauliche Zahl. Weil wir aber mit `RAD` rechnen und dort eine $360^{\circ}$ Drehung $2\pi$ entsprechen, können wir versuchen, die Zahl als Vielfaches oder als Bruch von $\pi$ darzustellen. Am einfachsten Teilt man die Zahl durch $\pi$ und entscheidet, ob die entstehende Zahl als Bruch geschrieben werden kann.
 
     $$
-    \frac{0.523598776}{pi} &= 0.1666\overline{6}
+    \begin{align*}
+        \frac{0.523598776}{\pi} &= 0.1666\overline{6} = \frac{1}{6} \qquad \qquad | \cdot \pi \\
+        \rightarrow \qquad \frac{1}{6} \cdot \pi &= 0.523598776
+    \end{align*}
     $$
 
     und somit $\frac{\pi}{6}$ (in die Lösung eingeben als `pi / 6`).
     ::::
-2. Aufgabe
-    <Answer type="string" id="5953c24c-946f-4988-bac1-7a8b1c47e5a9" solution="pi/8" sanitizer={(s) => s.replaceAll(' ', '')}>
+3. Aufgabe: Schreiben Sie die Lösung als Bruch. (Winkel in Radiant)
+    <Answer type="string" id="5953c24c-946f-4988-bac1-7a8b1c47e5a9" solution="pi/4" checker={(s) => s === 'pi/4' || s === '1/4*pi'} sanitizer={(s) => s.replaceAll(' ', '')}>
 
     $$
     sin(\overgroup{\alpha}) = \sqrt{0.5} \qquad \overgroup{\alpha}=?
@@ -326,4 +333,72 @@ Schreiben Sie als **gemeinen Bruch**. Eingabe als `Zähler/Nenner`, bspw. $\frac
 
 ## Zwischenresultate abspeichern
 
+
+Auf dem Taschenrechner können Zwischenresultate abgespeichert werden. Dies ist besonders nützlich, wenn ein Resultat mehrmals verwendet wird, oder (nur für den *TI-30X*) falls eine Formel für mehrere Parameter berechnet werden soll.
+
+:::cards
+![TI-30X IIS --width=100px](./images/tr-30x.avif)
+#### Abspeichern
+[[STO ▶]] [[A|B|C|D|E]] [[=]]
+
+#### Abrufen
+[[MEMVAR]] [[A|B|C|D|E]] [[=]]
+::br
+![TI-30 Eco Rs --width=70px](./images/tr-30-eco-rs.avif)
+#### Abspeichern
+[[STO]] [[Taste 1|2|3]] (oben links steht dann **M1**, **M2** oder **M3**)
+
+#### Abrufen
+[[RCL]] [[Taste 1|2|3]]
+:::
+
+:::info[Ungerundete Zwischenresultate]
+Zwischenresultate dürfen nicht gerundet werden, da sich der Rundungsfehler sonst im Verlauf der weiteren Rechnung signifikant auf das Endresultat auswirken kann. Zwischenresultate können aber gespeichert werden und damit weitergerechnet werden.
+:::
+
+### Übung: Schiefer Wurf
+Um herauszufinden, wie weit ein Ball maximal fliegt (ohne Beachtung des Luftwiederstands und ohne Miteinbezug der Abwurfhöhe), kann folgende Formel benutzt werden:
+
+$$
+\textbf{Weite} w = \frac{v^2 \cdot sin(2\alpha)}{g}
+$$
+
+Wobei $g=9.81$ die Erdanziehungskraft und $v$ die Abwurfgeschwindigkeit des Balles in $\frac{m}{s}$ ist.
+
+Wie weit fliegt ein Ball, der im $30^{\circ}$ Winkel mit einer Geschwindigkeit von $50\frac{km}{h}$ geworfen wird? (Zwischenresultat im TR abspeichern).
+
+<Answer type="string" id="5ea8563d-5008-4224-b876-307feef590c9" label="Abwurfgeschwindigkeit in m/s" solution="13.889" sanitizer={sanitizeNumber()}/>
+
+<Answer type="string" id="25d38fe4-7836-4cbc-8d27-71e7bb6dda11" label="Maximale Wurfweite?" solution="17.029" sanitizer={sanitizeNumber()}/>
+
+### Übung: Kreissegment
+
+Im Formelbuch findet man folgende Formel für Flächenberechnungen im Kreis:
+
+![Formelsammlung Mathematik, A. Wetzel, S. 9](./images/kreis-formeln.png)
+
+Berechnen Sie für einen Kreis mit Radius $23\,cm$ die Fläche des Kreissegmentes, wenn der Winkel:
+
+1. $30^{\circ}$ beträgt.
+    <Answer type="string" label="Für 30 °" id="8392365d-e916-44c5-b6fd-395ffca2c4df" solution="6.242" sanitizer={sanitizeNumber()}/>
+    ::::details[Vorgehen und Tipps]
+    <Tabs groupId="tr">
+        <TabItem label="TI-30X IIS" value="30x">
+            ```
+            23² * (π * 30 / 360 - sin(30) / 2)
+            ```
+        </TabItem>
+        <TabItem label="TI-30 Eco" value="30eco">
+        [[23]] [[²]] [[\*]] [[\(]] [[π]] [[\*]] [[30]] [[÷]] [[360]] [[-]] [[30]] [[sin]] [[÷]] [[2]] [[\)]] [[=]]
+        </TabItem>
+    </Tabs>
+    ::::
+2. $35^{\circ}$ beträgt.
+    <Answer type="string" label="Für 35 °" id="afeae21f-ed0c-49d6-8880-f0ad867f4c14" solution="9.863" sanitizer={sanitizeNumber()}/>
+3. $40^{\circ}$ beträgt.
+    <Answer type="string" label="Für 40 °" id="65b94fae-b851-45b4-8b78-83bdf0538a65" solution="14.639" sanitizer={sanitizeNumber()}/>
+4. $45^{\circ}$ beträgt.
+    <Answer type="string" label="Für 45 °" id="5fd62dae-a447-47a0-b752-c27fc87f9026" solution="20.708" sanitizer={sanitizeNumber()}/>
+5. $50^{\circ}$ beträgt.
+    <Answer type="string" label="Für 50 °" id="9cefc455-414f-4747-bbe8-88e4068a09e8" solution="28.201" sanitizer={sanitizeNumber()}/>
 
