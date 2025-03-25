@@ -73,6 +73,12 @@
             "to": "versioned_docs/version-28Gj/05-Daten-und-Codes",
             "ignore": [],
             "open": true
+        },
+        {
+            "from": "docs/Math/Taschenrechner/",
+            "to": "versioned_docs/version-28Gj/100-Mathematik/01-Taschenrechner",
+            "ignore": [],
+            "open": true
         }
     ]
 }
