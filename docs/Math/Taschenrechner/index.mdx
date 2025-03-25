@@ -280,7 +280,7 @@ Der Bruch muss also händisch erweitert werden.
 Schreiben Sie als **gemeinen Bruch**. Eingabe als `Zähler/Nenner`, bspw. $\frac{8}{3}$ als `8/3`.
 
 1. Aufgabe
-   <Answer label="0.4375" solution="7/16" sanitizer={(s) => s.replaceAll(' ', '')} type="string" id="67d989a2-51a6-449a-a513-075abec35f32" />
+   <Answer label="0.4375" labelWidth="6em" solution="7/16" sanitizer={(s) => s.replaceAll(' ', '')} type="string" id="67d989a2-51a6-449a-a513-075abec35f32" />
 2. Aufgabe
     $$
     \frac{708}{3^2\cdot 4 \cdot 7}
@@ -385,7 +385,7 @@ Im Formelbuch findet man folgende Formel für Flächenberechnungen im Kreis:
 Berechnen Sie für einen Kreis mit Radius $23\,cm$ die Fläche des Kreissegmentes, wenn der Winkel:
 
 1. $30^{\circ}$ beträgt.
-    <Answer type="string" label="Für 30 °" id="8392365d-e916-44c5-b6fd-395ffca2c4df" solution="6.242" sanitizer={sanitizeNumber()}/>
+    <Answer type="string" labelWidth="7em" label="Für 30 °" id="8392365d-e916-44c5-b6fd-395ffca2c4df" solution="6.242" sanitizer={sanitizeNumber(['cm^2'])}/>
     ::::details[Vorgehen und Tipps]
     <Tabs groupId="tr">
         <TabItem label="TI-30X IIS" value="30x">
@@ -399,11 +399,43 @@ Berechnen Sie für einen Kreis mit Radius $23\,cm$ die Fläche des Kreissegmente
     </Tabs>
     ::::
 2. $35^{\circ}$ beträgt.
-    <Answer type="string" label="Für 35 °" id="afeae21f-ed0c-49d6-8880-f0ad867f4c14" solution="9.863" sanitizer={sanitizeNumber()}/>
-3. $40^{\circ}$ beträgt.
-    <Answer type="string" label="Für 40 °" id="65b94fae-b851-45b4-8b78-83bdf0538a65" solution="14.639" sanitizer={sanitizeNumber()}/>
-4. $45^{\circ}$ beträgt.
-    <Answer type="string" label="Für 45 °" id="5fd62dae-a447-47a0-b752-c27fc87f9026" solution="20.708" sanitizer={sanitizeNumber()}/>
-5. $50^{\circ}$ beträgt.
-    <Answer type="string" label="Für 50 °" id="9cefc455-414f-4747-bbe8-88e4068a09e8" solution="28.201" sanitizer={sanitizeNumber()}/>
+    <Answer type="string" label="Für 35 °" labelWidth="7em" id="afeae21f-ed0c-49d6-8880-f0ad867f4c14" solution="9.863" sanitizer={sanitizeNumber(['cm^2'])}/>
+    ::::details[⚠️ Vorgehen und Tipps]
+    <Tabs groupId="tr">
+        <TabItem label="TI-30X IIS" value="30x">
+            1. Mit [[35]] [[STO ▶]] [[=]] die $35^{\circ}$ als `A` abspeichern.
+            2. Mit 2x[[▲]] die Formel aus der ersten Aufgabe hervorholen und alle $30$  mit `A` ersetzen (löschen kann man mit [[DEL]]).:
+
+              ```
+              23² * (π * A / 360 - sin(A) / 2)
+              ```
+            3. jetzt sind alle weiteren Aufgaben leicht: die gesuchte Winkelangabe als `A` abspeichern und die Formel ausführen.
+
+        </TabItem>
+        <TabItem label="TI-30 Eco" value="30eco">
+            Leider gibts keine entsprechende Vereinfachung wie beim TI-30X. Die Formel muss also jedes Mal neu eingegeben werden.
+        </TabItem>
+    </Tabs>
+    ::::
+3. $40.2^{\circ}$ beträgt.
+    <Answer type="string" label="Für 40.2 °" labelWidth="7em" id="65b94fae-b851-45b4-8b78-83bdf0538a65" solution="14.856" sanitizer={sanitizeNumber(['cm^2'])}/>
+4. $45.1234^{\circ}$ beträgt.
+    <Answer type="string" label="Für 45.1234 °" id="5fd62dae-a447-47a0-b752-c27fc87f9026" solution="20.875" sanitizer={sanitizeNumber(['cm^2'])}/>
+    :::details[Vorgehen und Tipps]
+    <Tabs groupId="tr">
+        <TabItem label="TI-30X IIS" value="30x">
+          So weiter wie bisher - Tipp von Aufgabe 2 beachten.
+        </TabItem>
+        <TabItem label="TI-30 Eco" value="30eco">
+            Damit die Zahl $45.1234$ nicht mehrfach eingegeben werden muss, kann sie auch abgespeichert werden und dann mit [[RCL]] wieder abgerufen werden.
+
+            [[45.1234]] [[STO]] [[1]] (Zahl speichern)
+
+            [[23]] [[²]] [[\*]] [[\(]] [[π]] [[\*]] [[RCL]] [[1]] [[÷]] [[360]] [[-]] [[RCL]] [[1]] [[sin]] [[÷]] [[2]] [[\)]] [[=]]
+
+        </TabItem>
+    </Tabs>
+    :::
+5. $55.122333444455555^{\circ}$ beträgt.
+    <Answer type="string" label="Für 55.122333444455555 °" id="9cefc455-414f-4747-bbe8-88e4068a09e8" solution="37.477" sanitizer={sanitizeNumber(['cm^2'])}/>
 
