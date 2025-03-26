@@ -31,6 +31,7 @@ import Popup from 'reactjs-popup';
 import { SIZE_S } from '@tdev-components/shared/iconSizes';
 import MyAttributes from '../../GenericAttributeEditor/MyAttributes';
 import { action } from 'mobx';
+import scheduleMicrotask from '@tdev-components/util/scheduleMicrotask';
 
 export const COMMON_STATE_CONFIG_EXTENSIONS: Extension[] = [];
 
@@ -243,7 +244,7 @@ export const CodeMirrorEditor = ({ language, nodeKey, code, focusEmitter, meta }
             );
             parentEditor.update(() => {
                 lexicalNode.setMeta(metaString);
-                setTimeout(() => {
+                scheduleMicrotask(() => {
                     parentEditor.update(() => {
                         lexicalNode.getLatest().select();
                     });
@@ -299,7 +300,7 @@ export const CodeMirrorEditor = ({ language, nodeKey, code, focusEmitter, meta }
                                                 onClick={() => {
                                                     parentEditor.update(() => {
                                                         lexicalNode.setLanguage(value);
-                                                        setTimeout(() => {
+                                                        scheduleMicrotask(() => {
                                                             parentEditor.update(() => {
                                                                 lexicalNode.getLatest().select();
                                                             });
