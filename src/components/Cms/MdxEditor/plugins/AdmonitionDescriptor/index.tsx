@@ -1,42 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import React from 'react';
-import {
-    $isDirectiveNode,
-    activeEditor$,
-    createActiveEditorSubscription$,
-    createRootEditorSubscription$,
-    DirectiveDescriptor,
-    NestedLexicalEditor,
-    realmPlugin,
-    rootEditor$,
-    useMdastNodeUpdater
-} from '@mdxeditor/editor';
+import { DirectiveDescriptor } from '@mdxeditor/editor';
 import { ContainerDirective } from 'mdast-util-directive';
-import { BlockContent, Paragraph, PhrasingContent, RootContent } from 'mdast';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
 import Admonition from '@theme/Admonition';
-import { mdiChevronDown } from '@mdi/js';
-import Button from '@tdev-components/shared/Button';
-import Popup from 'reactjs-popup';
-import RemoveNode from '../../RemoveNode';
 import { observer } from 'mobx-react-lite';
-import AdmonitionTypeSelector from './AdmonitionTypeSelector';
 import { ADMONITION_TYPES } from './AdmonitionTypeSelector/admonitionTypes';
-import {
-    $createParagraphNode,
-    $createTextNode,
-    $getRoot,
-    $getSelection,
-    $isElementNode,
-    $isParagraphNode,
-    $isRangeSelection,
-    COMMAND_PRIORITY_LOW,
-    KEY_DOWN_COMMAND,
-    LexicalEditor
-} from 'lexical';
-import scheduleMicrotask from '@tdev-components/util/scheduleMicrotask';
 import AdmonitionBody from './AdmonitionBody';
 import AdmonitionHeader from './AdmonitionHeader';
 

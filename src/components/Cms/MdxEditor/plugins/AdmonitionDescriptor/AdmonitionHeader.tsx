@@ -33,7 +33,8 @@ const HandledKeys = new Set(['ArrowRight', 'ArrowDown', 'ArrowLeft', 'ArrowUp', 
 const AdmonitionHeader = observer((props: Props) => {
     const { mdastNode, lexicalNode, parentEditor } = props;
     const updater = useMdastNodeUpdater();
-    useSelectionHandler(parentEditor, lexicalNode.getKey(), 'header');
+    const ref = React.useRef<HTMLDivElement>(null);
+    useSelectionHandler(parentEditor, lexicalNode.getKey(), 'header', ref);
 
     return (
         <>
@@ -65,7 +66,8 @@ const AdmonitionHeader = observer((props: Props) => {
                     return label?.children || [];
                 }}
                 contentEditableProps={{
-                    className: styles.header
+                    className: styles.header,
+                    ref: ref
                 }}
                 getUpdatedMdastNode={(mdastNode, children) => {
                     const content = mdastNode.children.filter(

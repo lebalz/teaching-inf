@@ -7,10 +7,12 @@ import {
     $isElementNode,
     $isParagraphNode,
     $isRangeSelection,
+    $isTextNode,
     COMMAND_PRIORITY_LOW,
     KEY_DOWN_COMMAND,
     LexicalEditor,
-    LexicalNode
+    LexicalNode,
+    TextNode
 } from 'lexical';
 import { $isDirectiveNode } from '@mdxeditor/editor';
 
@@ -18,12 +20,66 @@ const GO_UP_KEYS = new Set(['ArrowUp', 'Backspace', 'ArrowLeft']);
 const GO_DOWN_KEYS = new Set(['ArrowRight', 'ArrowDown']);
 const HandledKeys = new Set([...GO_DOWN_KEYS, ...GO_UP_KEYS]);
 
-const useSelectionHandler = (editor: LexicalEditor, nodeKey: string, type: 'header' | 'body') => {
+const SKIP = { action: 'skip' } as const;
+type Action =
+    | typeof SKIP
+    | { action: 'insertSpaceAfter'; node: LexicalNode }
+    | { action: 'selectOrCreateNextParagraph' };
+const nextAction = (
+    selectedNode: LexicalNode,
+    selectionFocusOffset: number,
+    eventKey: 'ArrowRight' | 'ArrowDown'
+): Action => {
+    const parents = selectedNode.getParents();
+    const top = parents[parents.length - 1];
+    if (!$isElementNode(top)) {
+        return SKIP;
+    }
+    if (eventKey === 'ArrowRight') {
+        const last = top.getLastDescendant();
+        if (!last || selectedNode.getKey() !== last.getKey()) {
+            return SKIP;
+        }
+        const end = last.getTextContentSize();
+        if (selectionFocusOffset !== end) {
+            return SKIP;
+        }
+        if (!$isTextNode(last) || last.getFormat() > 0) {
+            return {
+                action: 'insertSpaceAfter',
+                node: last
+            };
+        }
+    } else if (eventKey === 'ArrowDown') {
+        const last = top.getLastChild();
+        if (!last || (last.getKey() !== selectedNode.getKey() && !last.isParentOf(selectedNode))) {
+            return SKIP;
+        }
+        const newlineIndex = last.getTextContent().lastIndexOf('\n');
+        if (newlineIndex >= 0 && selectionFocusOffset <= newlineIndex) {
+            return SKIP;
+        }
+    }
+
+    return {
+        action: 'selectOrCreateNextParagraph'
+    };
+};
+
+const useSelectionHandler = (
+    editor: LexicalEditor,
+    nodeKey: string,
+    type: 'header' | 'body',
+    ref?: React.RefObject<HTMLDivElement | null>
+) => {
     React.useEffect(() => {
         return editor.registerCommand<KeyboardEvent>(
             KEY_DOWN_COMMAND,
             (event, activeEditor) => {
                 if (!HandledKeys.has(event.key)) {
+                    return false;
+                }
+                if (activeEditor.getRootElement() !== ref?.current && type !== 'header') {
                     return false;
                 }
                 // const latest = node.getLatest();
@@ -43,10 +99,16 @@ const useSelectionHandler = (editor: LexicalEditor, nodeKey: string, type: 'head
                 if (!elementNode) {
                     return false;
                 }
+                let handled = false;
+                // console.log('handled');
                 switch (event.key) {
                     case 'ArrowRight':
                     case 'ArrowDown':
                         if (type === 'header') {
+                            /** check wheter we need to be focused */
+                            if (activeEditor !== editor) {
+                                return false;
+                            }
                             const last = elementNode.getLastChild();
                             if (event.key === 'ArrowRight') {
                                 if (!last || selectedNode.getKey() !== last.getKey()) {
@@ -61,73 +123,46 @@ const useSelectionHandler = (editor: LexicalEditor, nodeKey: string, type: 'head
                             if (!$isDirectiveNode(nextNode)) {
                                 return false;
                             }
-                            if (nextNode.getKey() === nodeKey) {
-                                console.log('header', selection.focus.offset, nextNode?.getKey(), nodeKey);
-                                nextNode.select();
-                                event.preventDefault();
-                                event.stopPropagation();
-                                return true;
-                                // latest?.selectStart();
+                            if (nextNode.getKey() === nodeKey && $isDirectiveNode(nextNode)) {
+                                ref?.current?.focus();
+                                handled = true;
                             }
-                            /** check wheter we need to be focused */
                         } else {
                             /** potentially create new node below */
-                            const top = selectedNode.getTopLevelElement();
-                            if (!$isElementNode(top)) {
-                                return false;
-                            }
-                            const last = top.getLastDescendant();
-                            if (!last || selectedNode.getKey() !== last.getKey()) {
-                                return false;
-                            }
-                            if (event.key === 'ArrowRight') {
-                                const end = last.getTextContentSize();
-                                if (selection.focus.offset !== end) {
+                            const action = nextAction(selectedNode, selection.focus.offset, event.key);
+                            console.log('action', action);
+                            switch (action.action) {
+                                case 'skip':
                                     return false;
-                                }
-                            }
-                            let handled = false;
-                            editor.update(() => {
-                                const dirNode = $getNodeByKey(nodeKey);
-                                if (!dirNode) {
+                                case 'insertSpaceAfter':
+                                    const text = $createTextNode(' ');
+                                    action.node.insertAfter(text);
+                                    text.selectEnd();
+                                    handled = true;
+                                    break;
+                                case 'selectOrCreateNextParagraph':
+                                    editor.update(() => {
+                                        const dirNode = $getNodeByKey(nodeKey);
+                                        if (!dirNode) {
+                                            return false;
+                                        }
+                                        const next = dirNode.getNextSibling();
+                                        if (next && $isParagraphNode(next)) {
+                                            next.select();
+                                            handled = true;
+                                        } else {
+                                            const newParagraph = $createParagraphNode();
+                                            const text = $createTextNode('');
+                                            newParagraph.append(text);
+                                            dirNode.insertAfter(newParagraph);
+                                            text.select();
+                                            handled = true;
+                                        }
+                                    });
+                                    break;
+                                default:
                                     return false;
-                                }
-                                const next = dirNode.getNextSibling();
-                                if (next && $isParagraphNode(next)) {
-                                    next.select();
-                                    handled = true;
-                                } else {
-                                    const newParagraph = $createParagraphNode();
-                                    const text = $createTextNode('');
-                                    newParagraph.append(text);
-                                    dirNode.insertAfter(newParagraph);
-                                    text.select();
-                                    handled = true;
-                                }
-                            });
-                            if (handled) {
-                                event.preventDefault();
-                                event.stopPropagation();
-                                return true;
                             }
-
-                            // const directive = $isDirectiveNode(elementNode)
-                            //     ? elementNode
-                            //     : elementNode.getParents().find($isDirectiveNode);
-                            // console.log(directive);
-                            // if (event.key === 'ArrowRight') {
-                            //     if (!last || selectedNode.getKey() !== last.getKey()) {
-                            //         return false;
-                            //     }
-                            //     const end = last.getTextContentSize();
-                            //     const next = elementNode.getNextSibling();
-                            //     if (selection.focus.offset === end && !next) {
-                            //         console.log('insert a new one');
-                            //         event.preventDefault();
-                            //         event.stopPropagation();
-                            //         return true;
-                            //     }
-                            // }
                         }
                         break;
                     case 'ArrowLeft':
@@ -135,11 +170,17 @@ const useSelectionHandler = (editor: LexicalEditor, nodeKey: string, type: 'head
                     case 'Backspace':
                         return false;
                 }
+
+                if (handled) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    return true;
+                }
                 return false;
             },
             COMMAND_PRIORITY_LOW
         );
-    }, [editor, nodeKey, type]);
+    }, [editor, nodeKey, type, ref]);
 };
 
 export default useSelectionHandler;
