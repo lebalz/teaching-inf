@@ -8,12 +8,7 @@ import { EditorView, lineNumbers } from '@codemirror/view';
 import { basicLight } from 'cm6-theme-basic-light';
 import { basicSetup } from 'codemirror';
 import { codeBlockLanguages$, codeMirrorAutoLoadLanguageSupport$, codeMirrorExtensions$ } from '.';
-import {
-    CodeBlockEditorProps,
-    readOnly$,
-    useCodeBlockEditorContext,
-    useTranslation
-} from '@mdxeditor/editor';
+import { CodeBlockEditorProps, readOnly$, useCodeBlockEditorContext } from '@mdxeditor/editor';
 import { useCodeMirrorRef } from './useCodeMirrorRef';
 import styles from './styles.module.scss';
 import Card from '@tdev-components/shared/Card';
@@ -139,16 +134,14 @@ const PYTHON_PROPS: GenericPropery[] = [
 
 export const CodeMirrorEditor = ({ language, nodeKey, code, focusEmitter, meta }: CodeBlockEditorProps) => {
     const mappedLang = LANGUAGE_ALIAS_MAP[language] || language;
-    const { parentEditor, lexicalNode } = useCodeBlockEditorContext();
+    const { setCode, parentEditor, lexicalNode } = useCodeBlockEditorContext();
     const [readOnly, codeMirrorExtensions, autoLoadLanguageSupport, codeBlockLanguages] = useCellValues(
         readOnly$,
         codeMirrorExtensions$,
         codeMirrorAutoLoadLanguageSupport$,
         codeBlockLanguages$
     );
-
-    const codeMirrorRef = useCodeMirrorRef(nodeKey, 'codeblock', language, focusEmitter);
-    const { setCode } = useCodeBlockEditorContext();
+    const codeMirrorRef = useCodeMirrorRef('codeblock', language, focusEmitter);
     const editorViewRef = React.useRef<EditorView | null>(null);
     const elRef = React.useRef<HTMLDivElement | null>(null);
 

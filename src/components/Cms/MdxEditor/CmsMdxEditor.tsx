@@ -35,7 +35,7 @@ import {
 import _ from 'lodash';
 import '@mdxeditor/editor/style.css';
 import { default as FileModel } from '@tdev-models/cms/File';
-import { AdmonitionDirectiveDescriptor } from './plugins/AdmonitionDescriptor';
+import { AdmonitionDirectiveDescriptor, handleDirectiveFocusPlugin } from './plugins/AdmonitionDescriptor';
 import { DetailsDirectiveDescriptor } from '@tdev-plugins/remark-details/mdx-editor-plugin';
 import '@mdxeditor/editor/style.css';
 import { InsertAdmonition } from './plugins/AdmonitionDescriptor/InsertAdmonition';
