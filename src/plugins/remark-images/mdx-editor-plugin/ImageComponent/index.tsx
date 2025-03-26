@@ -6,26 +6,17 @@ import React from 'react';
 
 import type { BaseSelection, LexicalEditor } from 'lexical';
 
-import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext.js';
 import { useLexicalNodeSelection } from '@lexical/react/useLexicalNodeSelection.js';
 import { mergeRegister } from '@lexical/utils';
-import {
-    $getNodeByKey,
-    $getSelection,
-    $isNodeSelection,
-    CLICK_COMMAND,
-    COMMAND_PRIORITY_LOW,
-    DRAGSTART_COMMAND,
-    SELECTION_CHANGE_COMMAND
-} from 'lexical';
+import { $getSelection, $isNodeSelection, CLICK_COMMAND, COMMAND_PRIORITY_LOW } from 'lexical';
 import ImageResizer from '../ImageResizer';
-import { $isImageNode, type ImageNode } from '../ImageNode';
+import { type ImageNode } from '../ImageNode';
 import { observer } from 'mobx-react-lite';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
 import { useAssetFile } from '@tdev-components/Cms/MdxEditor/hooks/useAssetFile';
 import Icon from '@mdi/react';
-import { mdiImage, mdiImageEditOutline, mdiLink } from '@mdi/js';
+import { mdiImage, mdiImageEditOutline } from '@mdi/js';
 import Loader from '@tdev-components/Loader';
 import RemoveNode from '@tdev-components/Cms/MdxEditor/RemoveNode';
 import { $isImageFigureNode } from '../ImageFigureNode';
@@ -193,7 +184,7 @@ export const ImageComponent = observer((props: ImageEditorProps): React.ReactNod
                         <img
                             className={clsx(isSelected && styles.focusedImage)}
                             src={gitImg?.type === 'bin_file' && gitImg.isImage ? gitImg.src : src}
-                            width={options.width as string}
+                            width={(options.width as string) || '100%'}
                             ref={imageRef}
                             draggable="false"
                         />

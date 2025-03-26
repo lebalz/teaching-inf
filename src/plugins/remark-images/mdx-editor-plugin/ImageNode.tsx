@@ -87,6 +87,10 @@ export class ImageNode extends DecoratorNode<React.ReactNode> {
         this.getWritable().__options = { ...this.getLatest().__options, width: width };
     }
 
+    getOptions(): Record<string, string | number | boolean | undefined> {
+        return this.getLatest().__options;
+    }
+
     setOptions(options: { name: string; value: number | string | undefined }[]) {
         const newOptions: Record<string, string | number> = {};
         options.forEach((option) => {
