@@ -24,10 +24,13 @@ import {
     MDXEditor,
     MDXEditorMethods,
     quotePlugin,
+    realmPlugin,
     tablePlugin,
     thematicBreakPlugin,
     toolbarPlugin,
-    UndoRedo
+    UndoRedo,
+    ViewMode,
+    viewMode$
 } from '@mdxeditor/editor';
 import _ from 'lodash';
 import '@mdxeditor/editor/style.css';
@@ -69,6 +72,7 @@ import JsxDescriptors from './plugins/plugins-jsx/JsxDescriptors';
 import { extractOptions } from '@tdev-plugins/helpers';
 import { GenericDirectiveDescriptor } from './plugins/CatchAllUnknown/GenericDirectiveDescriptor';
 import { keepImportsPlugin } from './plugins/keepImportsPlugin';
+import useLocalStorage from '@tdev-hooks/useLocalStorage';
 
 export interface Props {
     file: FileModel;
@@ -76,6 +80,17 @@ export interface Props {
 
 const CmsMdxEditor = observer((props: Props) => {
     const cmsStore = useStore('cmsStore');
+    const [_, setViewMode, viewMode] = useLocalStorage<ViewMode>('CmsViewMode', 'rich-text', false, false);
+    const onViewModeChange = React.useCallback(
+        realmPlugin({
+            init(realm) {
+                realm.sub(viewMode$, (mode) => {
+                    setViewMode(mode);
+                });
+            }
+        }),
+        []
+    );
     const [skipUpdateCheck, setSkipUpdateCheck] = React.useState(false);
     const { file } = props;
     const ref = React.useRef<MDXEditorMethods>(null);
@@ -103,6 +118,7 @@ const CmsMdxEditor = observer((props: Props) => {
                 ref={ref}
                 className={clsx(styles.mdxEditor)}
                 plugins={[
+                    onViewModeChange(),
                     headingsPlugin(),
                     mdiCompletePlugin(),
                     frontmatterPlugin(),
@@ -134,7 +150,7 @@ const CmsMdxEditor = observer((props: Props) => {
                     thematicBreakPlugin(),
                     draggableBlockPlugin(),
                     tablePlugin(),
-                    diffSourcePlugin({ diffMarkdown: file._pristine, viewMode: 'rich-text' }),
+                    diffSourcePlugin({ diffMarkdown: file._pristine, viewMode: viewMode }),
                     codeBlockPlugin({ defaultCodeBlockLanguage: 'py' }),
                     codeMirrorPlugin({
                         codeBlockLanguages: {
@@ -226,8 +242,8 @@ const CmsMdxEditor = observer((props: Props) => {
                     markdownShortcutPlugin(),
                     kbdPlugin()
                 ]}
-                onChange={(md, initialMarkdownNormalize) => {
-                    if (initialMarkdownNormalize && !skipUpdateCheck) {
+                onChange={(md, _initialMarkdownNormalize) => {
+                    if (skipUpdateCheck) {
                         return;
                     }
                     file.setContent(md);
