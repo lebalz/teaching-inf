@@ -222,6 +222,7 @@ const CmsMdxEditor = observer((props: Props) => {
                                 </DiffSourceToggleWrapper>
                                 <Button
                                     icon={mdiCodeJson}
+                                    className={styles.showCodeEditorButton}
                                     size={SIZE_S}
                                     onClick={() => file.setPreventMdxEditor(true)}
                                 />
