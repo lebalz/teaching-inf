@@ -41,7 +41,6 @@ export class ImageNode extends DecoratorNode<React.ReactNode> {
     __src: string;
 
     __options: ParsedOptions;
-    __focusEmitter = voidEmitter();
 
     /** @internal */
     static getType(): string {
@@ -86,7 +85,6 @@ export class ImageNode extends DecoratorNode<React.ReactNode> {
 
     setWidth(width: number | undefined): void {
         this.getWritable().__options = { ...this.getLatest().__options, width: width };
-        this.select();
     }
 
     setOptions(options: { name: string; value: number | string | undefined }[]) {
@@ -99,7 +97,6 @@ export class ImageNode extends DecoratorNode<React.ReactNode> {
             newOptions[camelCased(option.name)] = option.value;
         });
         this.getWritable().__options = newOptions;
-        this.select();
     }
 
     getAltText(): string {
@@ -124,12 +121,7 @@ export class ImageNode extends DecoratorNode<React.ReactNode> {
 
     setSrc(src: string): void {
         this.getWritable().__src = src;
-        this.select();
     }
-
-    select = () => {
-        this.__focusEmitter.publish();
-    };
 
     /** @internal */
     decorate(_parentEditor: LexicalEditor): React.ReactNode {
@@ -137,8 +129,9 @@ export class ImageNode extends DecoratorNode<React.ReactNode> {
             <ImageComponent
                 src={this.getSrc()}
                 nodeKey={this.getKey()}
+                imageNode={this}
                 options={this.getLatest().__options}
-                focusEmitter={this.__focusEmitter}
+                editor={_parentEditor}
             />
         );
     }
