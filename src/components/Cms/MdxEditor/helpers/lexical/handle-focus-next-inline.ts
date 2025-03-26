@@ -21,7 +21,8 @@ const handleFocusNextInline = (testNode: (node: LexicalNode | null | undefined) 
                 activeEditor.read(() => {
                     const selection = $getSelection();
                     if ($isRangeSelection(selection)) {
-                        const selectedNode = selection.getNodes()[0];
+                        const nodes = selection.getNodes();
+                        const selectedNode = nodes[nodes.length - 1];
                         if (!selectedNode) {
                             return false;
                         }
@@ -32,8 +33,16 @@ const handleFocusNextInline = (testNode: (node: LexicalNode | null | undefined) 
                         if (!node) {
                             return false;
                         }
+                        const last = node.getLastChild();
+                        if (!last) {
+                            return false;
+                        }
+                        if (selectedNode.getKey() !== last.getKey()) {
+                            return false;
+                        }
+
                         const next = node.getNextSibling();
-                        const end = node.getTextContentSize();
+                        const end = last.getTextContentSize();
                         if (selection.focus.offset === end && !next) {
                             scheduleMicrotask(() => {
                                 activeEditor.update(() => {

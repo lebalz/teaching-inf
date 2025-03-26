@@ -128,7 +128,6 @@ const CmsMdxEditor = observer((props: Props) => {
                     linkPlugin(),
                     linkDialogPlugin(),
                     quotePlugin(),
-                    strongPlugin(),
                     mathPlugin(),
                     keepImportsPlugin(),
                     jsxPlugin({
@@ -248,6 +247,7 @@ const CmsMdxEditor = observer((props: Props) => {
                         }
                     }),
                     markdownShortcutPlugin(),
+                    strongPlugin(),
                     kbdPlugin()
                 ]}
                 onChange={(md, _initialMarkdownNormalize) => {
