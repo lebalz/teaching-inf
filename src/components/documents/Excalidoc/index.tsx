@@ -59,6 +59,7 @@ export const ExcalidocComponent = observer(
             documentId: string;
             onEdit?: (edit: boolean) => void;
             onlyCommitValidChanges?: boolean;
+            zenMode?: boolean;
         }
     ) => {
         const [edit, setEdit] = React.useState(false);
@@ -131,6 +132,7 @@ export const ExcalidocComponent = observer(
                     allowImageInsertion={props.allowImageInsertion}
                     readonly={!edit}
                     onlyCommitValidChanges={props.onlyCommitValidChanges}
+                    zenMode={props.zenMode}
                 />
             </div>
         );

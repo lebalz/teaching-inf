@@ -2,11 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
-import { useStore } from '@tdev-hooks/useStore';
 import CodeEditor from '@tdev-components/shared/CodeEditor';
-import { useDocument } from '@tdev-hooks/useDocument';
-import { DocumentType } from '@tdev-api/document';
-import { ExcalidrawProps } from '@excalidraw/excalidraw/types/types';
 import { ExcalidocComponent, Props } from '..';
 import { useFirstRealMainDocument } from '@tdev-hooks/useFirstRealMainDocument';
 import Loader from '@tdev-components/Loader';
@@ -41,6 +37,7 @@ const ExcalidocWithCodeEditor = observer((props: Props) => {
                     libraryItems={undefined}
                     documentId={doc.id}
                     onlyCommitValidChanges
+                    zenMode={false}
                 />
             </div>
             <div className={clsx(styles.editor, styles.item)}>

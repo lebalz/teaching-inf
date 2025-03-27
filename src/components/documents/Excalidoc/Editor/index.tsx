@@ -21,6 +21,7 @@ export interface Props extends MetaInit {
     allowImageInsertion?: boolean;
     readonly?: boolean;
     onlyCommitValidChanges?: boolean;
+    zenMode?: boolean;
 }
 
 const Editor = observer((props: Props) => {
@@ -119,7 +120,7 @@ const Editor = observer((props: Props) => {
                 files: excalidoc.files,
                 appState: {
                     objectsSnapModeEnabled: true,
-                    zenModeEnabled: !props.libraryItems,
+                    zenModeEnabled: props.zenMode ?? !props.libraryItems,
                     zoom: {
                         value: 1.0 as NormalizedZoomValue // 100 %
                     }
