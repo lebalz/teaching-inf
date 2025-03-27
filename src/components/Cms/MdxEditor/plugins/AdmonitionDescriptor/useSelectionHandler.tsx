@@ -9,6 +9,7 @@ import {
     $isRangeSelection,
     $isTextNode,
     COMMAND_PRIORITY_LOW,
+    ElementNode,
     KEY_DOWN_COMMAND,
     LexicalEditor,
     LexicalNode,
@@ -25,6 +26,7 @@ type Action =
     | typeof SKIP
     | { action: 'insertSpaceAfter'; node: LexicalNode }
     | { action: 'selectOrCreateNextParagraph' };
+
 const nextAction = (
     selectedNode: LexicalNode,
     selectionFocusOffset: number,
@@ -66,23 +68,80 @@ const nextAction = (
     };
 };
 
+const needsFocusNext = (
+    selectedNode: LexicalNode,
+    selectionFocusOffset: number,
+    eventKey: 'ArrowRight' | 'ArrowDown',
+    testNode: (node: LexicalNode | null | undefined) => boolean
+) => {
+    const elementNode =
+        $isElementNode(selectedNode) && !selectedNode.isInline() ? selectedNode : selectedNode.getParent();
+    if (!elementNode) {
+        return false;
+    }
+    const last = elementNode.getLastChild();
+
+    if (eventKey === 'ArrowRight') {
+        if (!last || selectedNode.getKey() !== last.getKey()) {
+            return false;
+        }
+        const end = last.getTextContentSize();
+        if (selectionFocusOffset !== end) {
+            return false;
+        }
+    }
+    const nextNode = elementNode?.getNextSibling();
+    return testNode(nextNode);
+};
+
+const needsFocusPrevious = (
+    selectedNode: LexicalNode,
+    selectionFocusOffset: number,
+    eventKey: 'ArrowLeft' | 'ArrowUp' | 'Backspace',
+    testNode: (node: LexicalNode | null | undefined) => boolean
+) => {
+    const elementNode =
+        $isElementNode(selectedNode) && !selectedNode.isInline() ? selectedNode : selectedNode.getParent();
+    if (!elementNode) {
+        return false;
+    }
+    const first = elementNode.getFirstDescendant();
+
+    if (eventKey === 'ArrowLeft' || eventKey === 'Backspace') {
+        if (!first || selectedNode.getKey() !== first.getKey()) {
+            return false;
+        }
+        if (selectionFocusOffset !== 0) {
+            return false;
+        }
+    }
+    const nextNode = elementNode?.getPreviousSibling();
+    return testNode(nextNode);
+};
+
 const useSelectionHandler = (
     editor: LexicalEditor,
     nodeKey: string,
     type: 'header' | 'body',
-    ref?: React.RefObject<HTMLDivElement | null>
+    ref: React.RefObject<HTMLDivElement | null>
 ) => {
     React.useEffect(() => {
+        if (!ref.current) {
+            return;
+        }
         return editor.registerCommand<KeyboardEvent>(
             KEY_DOWN_COMMAND,
             (event, activeEditor) => {
                 if (!HandledKeys.has(event.key)) {
                     return false;
                 }
-                if (activeEditor.getRootElement() !== ref?.current && type !== 'header') {
+                if (
+                    activeEditor.getRootElement() !== ref?.current &&
+                    ((GO_DOWN_KEYS.has(event.key) && type !== 'header') ||
+                        (GO_UP_KEYS.has(event.key) && type !== 'body'))
+                ) {
                     return false;
                 }
-                // const latest = node.getLatest();
                 const selection = $getSelection();
                 if (!$isRangeSelection(selection)) {
                     return false;
@@ -100,7 +159,6 @@ const useSelectionHandler = (
                     return false;
                 }
                 let handled = false;
-                // console.log('handled');
                 switch (event.key) {
                     case 'ArrowRight':
                     case 'ArrowDown':
@@ -109,28 +167,19 @@ const useSelectionHandler = (
                             if (activeEditor !== editor) {
                                 return false;
                             }
-                            const last = elementNode.getLastChild();
-                            if (event.key === 'ArrowRight') {
-                                if (!last || selectedNode.getKey() !== last.getKey()) {
-                                    return false;
-                                }
-                                const end = last.getTextContentSize();
-                                if (selection.focus.offset !== end) {
-                                    return false;
-                                }
-                            }
-                            const nextNode = elementNode?.getNextSibling();
-                            if (!$isDirectiveNode(nextNode)) {
-                                return false;
-                            }
-                            if (nextNode.getKey() === nodeKey && $isDirectiveNode(nextNode)) {
+                            const needsF = needsFocusNext(
+                                selectedNode,
+                                selection.focus.offset,
+                                event.key,
+                                (n) => $isDirectiveNode(n) && n.getKey() === nodeKey
+                            );
+                            if (needsF) {
                                 ref?.current?.focus();
                                 handled = true;
                             }
                         } else {
                             /** potentially create new node below */
                             const action = nextAction(selectedNode, selection.focus.offset, event.key);
-                            console.log('action', action);
                             switch (action.action) {
                                 case 'skip':
                                     return false;
@@ -168,6 +217,58 @@ const useSelectionHandler = (
                     case 'ArrowLeft':
                     case 'ArrowUp':
                     case 'Backspace':
+                        if (type === 'body') {
+                            /** check wheter we need to be focused */
+                            if (activeEditor !== editor) {
+                                return false;
+                            }
+                            const needsF = needsFocusPrevious(
+                                selectedNode,
+                                selection.focus.offset,
+                                event.key,
+                                (n) => $isDirectiveNode(n) && n.getKey() === nodeKey
+                            );
+                            if (needsF) {
+                                ref?.current?.focus();
+                                handled = true;
+                            }
+                        } else {
+                            /** potentially create new node below */
+                            const action = SKIP; //nextAction(selectedNode, selection.focus.offset, event.key);
+                            // console.log('action', action);
+                            // switch (action.action) {
+                            //     case 'skip':
+                            //         return false;
+                            //     case 'insertSpaceAfter':
+                            //         const text = $createTextNode(' ');
+                            //         action.node.insertAfter(text);
+                            //         text.selectEnd();
+                            //         handled = true;
+                            //         break;
+                            //     case 'selectOrCreateNextParagraph':
+                            //         editor.update(() => {
+                            //             const dirNode = $getNodeByKey(nodeKey);
+                            //             if (!dirNode) {
+                            //                 return false;
+                            //             }
+                            //             const next = dirNode.getNextSibling();
+                            //             if (next && $isParagraphNode(next)) {
+                            //                 next.select();
+                            //                 handled = true;
+                            //             } else {
+                            //                 const newParagraph = $createParagraphNode();
+                            //                 const text = $createTextNode('');
+                            //                 newParagraph.append(text);
+                            //                 dirNode.insertAfter(newParagraph);
+                            //                 text.select();
+                            //                 handled = true;
+                            //             }
+                            //         });
+                            //         break;
+                            //     default:
+                            //         return false;
+                            // }
+                        }
                         return false;
                 }
 
