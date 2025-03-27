@@ -7,178 +7,15 @@ import {
     $isElementNode,
     $isParagraphNode,
     $isRangeSelection,
-    $isTextNode,
     COMMAND_PRIORITY_LOW,
     KEY_DOWN_COMMAND,
-    LexicalEditor,
-    LexicalNode
+    LexicalEditor
 } from 'lexical';
 import { $isDirectiveNode } from '@mdxeditor/editor';
-
-const GO_UP_KEYS = new Set(['ArrowUp', 'Backspace', 'ArrowLeft']);
-const GO_DOWN_KEYS = new Set(['ArrowRight', 'ArrowDown']);
-const HandledKeys = new Set([...GO_DOWN_KEYS, ...GO_UP_KEYS]);
-
-const SKIP = { action: 'skip' } as const;
-type Action =
-    | typeof SKIP
-    | { action: 'insertSpaceAfter'; node: LexicalNode }
-    | { action: 'insertSpaceBefore'; node: LexicalNode }
-    | { action: 'selectOrCreateNextParagraph' }
-    | { action: 'selectOrCreatePreviousParagraph' };
-
-const actionForNext = (
-    selectedNode: LexicalNode,
-    selectionFocusOffset: number,
-    eventKey: 'ArrowRight' | 'ArrowDown'
-): Action => {
-    const parents = selectedNode.getParents();
-    const top = parents[parents.length - 1];
-    if (!$isElementNode(top)) {
-        return SKIP;
-    }
-    if (eventKey === 'ArrowRight') {
-        const last = top.getLastDescendant();
-        if (!last || selectedNode.getKey() !== last.getKey()) {
-            return SKIP;
-        }
-        const end = last.getTextContentSize();
-        if (selectionFocusOffset !== end) {
-            return SKIP;
-        }
-        if (!$isTextNode(last) || last.getFormat() > 0) {
-            return {
-                action: 'insertSpaceAfter',
-                node: last
-            };
-        }
-    } else if (eventKey === 'ArrowDown') {
-        const last = top.getLastChild();
-        if (!last || (last.getKey() !== selectedNode.getKey() && !last.isParentOf(selectedNode))) {
-            return SKIP;
-        }
-        const newlineIndex = last.getTextContent().lastIndexOf('\n');
-        if (newlineIndex >= 0 && selectionFocusOffset <= newlineIndex) {
-            return SKIP;
-        }
-    }
-
-    return {
-        action: 'selectOrCreateNextParagraph'
-    };
-};
-
-const actionForPrevious = (
-    selectedNode: LexicalNode,
-    selectionFocusOffset: number,
-    eventKey: 'ArrowLeft' | 'ArrowUp' | 'Backspace'
-): Action => {
-    if (eventKey === 'Backspace') {
-        return SKIP;
-    }
-    const parents = selectedNode.getParents();
-    const top = parents[parents.length - 1];
-    if (!$isElementNode(top)) {
-        return SKIP;
-    }
-    if (eventKey === 'ArrowLeft') {
-        const first = top.getFirstDescendant();
-        if (!first || selectedNode.getKey() !== first.getKey()) {
-            return SKIP;
-        }
-        if (selectionFocusOffset !== 0) {
-            return SKIP;
-        }
-        if (!$isTextNode(first) || first.getFormat() > 0) {
-            return {
-                action: 'insertSpaceBefore',
-                node: first
-            };
-        }
-    } else if (eventKey === 'ArrowUp') {
-        const first = top.getFirstChild();
-        if (!first || (first.getKey() !== selectedNode.getKey() && !first.isParentOf(selectedNode))) {
-            return SKIP;
-        }
-        const newlineIndex = first.getTextContent().lastIndexOf('\n');
-        if (newlineIndex >= 0 && selectionFocusOffset > newlineIndex) {
-            return SKIP;
-        }
-    }
-
-    return {
-        action: 'selectOrCreatePreviousParagraph'
-    };
-};
-
-const needsFocusNext = (
-    selectedNode: LexicalNode,
-    selectionFocusOffset: number,
-    eventKey: 'ArrowRight' | 'ArrowDown',
-    testNode: (node: LexicalNode | null | undefined) => boolean
-) => {
-    const elementNode =
-        $isElementNode(selectedNode) && !selectedNode.isInline() ? selectedNode : selectedNode.getParent();
-    if (!elementNode) {
-        return false;
-    }
-    const last = elementNode.getLastChild();
-
-    if (eventKey === 'ArrowRight') {
-        if (!last || selectedNode.getKey() !== last.getKey()) {
-            return false;
-        }
-        const end = last.getTextContentSize();
-        if (selectionFocusOffset !== end) {
-            return false;
-        }
-    }
-    const nextNode = elementNode?.getNextSibling();
-    return testNode(nextNode);
-};
-
-const needsFocusPrevious = (
-    selectedNode: LexicalNode,
-    selectionFocusOffset: number,
-    eventKey: 'ArrowLeft' | 'ArrowUp' | 'Backspace',
-    testNode: (node: LexicalNode | null | undefined) => boolean
-) => {
-    const elementNode =
-        $isElementNode(selectedNode) && !selectedNode.isInline() ? selectedNode : selectedNode.getParent();
-    if (!elementNode) {
-        return false;
-    }
-    const first = elementNode.getFirstDescendant();
-
-    if (eventKey === 'ArrowLeft' || eventKey === 'Backspace') {
-        if (!first || selectedNode.getKey() !== first.getKey()) {
-            return false;
-        }
-        if (selectionFocusOffset !== 0) {
-            return false;
-        }
-    }
-    const nextNode = elementNode?.getPreviousSibling();
-    return testNode(nextNode);
-};
-
-const selectEndOf = (div: HTMLDivElement | null) => {
-    if (!div) {
-        return;
-    }
-    const range = document.createRange();
-    const selection = window.getSelection();
-
-    // Set range to end of div
-    range.selectNodeContents(div);
-    range.collapse(false); // false = collapse to end
-
-    // Apply the selection
-    selection?.removeAllRanges();
-    selection?.addRange(range);
-
-    div.focus();
-};
+import { GO_DOWN_KEYS, GO_UP_KEYS, HandledKeys } from '../../helpers/lexical/selectAction';
+import { actionForNext, needsToFocusNext } from '../../helpers/lexical/select-next-helpers';
+import { actionForPrevious, needsToFocusPrevious } from '../../helpers/lexical/select-previous-helpers';
+import { selectEndOfDiv } from '../../helpers/lexical/select-end-of-div';
 
 const useSelectionHandler = (
     editor: LexicalEditor,
@@ -228,7 +65,7 @@ const useSelectionHandler = (
                             if (activeEditor !== editor) {
                                 return false;
                             }
-                            const needsF = needsFocusNext(
+                            const needsF = needsToFocusNext(
                                 selectedNode,
                                 selection.focus.offset,
                                 event.key,
@@ -283,7 +120,7 @@ const useSelectionHandler = (
                             if (activeEditor !== editor) {
                                 return false;
                             }
-                            const needsF = needsFocusPrevious(
+                            const needsF = needsToFocusPrevious(
                                 selectedNode,
                                 selection.focus.offset,
                                 event.key,
@@ -291,7 +128,7 @@ const useSelectionHandler = (
                             );
                             if (needsF) {
                                 if (ref.current) {
-                                    selectEndOf(ref.current);
+                                    selectEndOfDiv(ref.current);
                                 }
                                 handled = true;
                             }

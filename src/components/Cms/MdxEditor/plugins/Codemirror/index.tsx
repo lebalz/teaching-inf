@@ -19,7 +19,6 @@ import {
     KEY_DOWN_COMMAND,
     LexicalEditor
 } from 'lexical';
-import handleFocusNextBlock from '../../helpers/lexical/handle-focus-next-block';
 
 /**
  * The codemirror code block languages.
