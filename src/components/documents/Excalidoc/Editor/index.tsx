@@ -11,7 +11,6 @@ import { reaction } from 'mobx';
 import { useColorMode } from '@docusaurus/theme-common';
 import type { default as ExcalidrawLib } from '@excalidraw/excalidraw';
 import _ from 'lodash';
-import { useFirstRealMainDocument } from '@tdev-hooks/useFirstRealMainDocument';
 import { useDocument } from '@tdev-hooks/useDocument';
 import { DocumentType } from '@tdev-api/document';
 
@@ -21,6 +20,7 @@ export interface Props extends MetaInit {
     libraryItems?: LibraryItems;
     allowImageInsertion?: boolean;
     readonly?: boolean;
+    onlyCommitValidChanges?: boolean;
 }
 
 const Editor = observer((props: Props) => {
@@ -67,6 +67,10 @@ const Editor = observer((props: Props) => {
                         elements,
                         excalidrawAPI.getSceneElementsIncludingDeleted()
                     );
+                    if (props.onlyCommitValidChanges && restoredElements.length !== elements.length) {
+                        excalidrawAPI.setToast({ message: 'Invalide Elemente gefunden', duration: 2000 });
+                        return;
+                    }
                     renderedSceneVersion.current = newVersion;
                     apiSceneVersion.current = newVersion;
                     excalidrawAPI.updateScene({

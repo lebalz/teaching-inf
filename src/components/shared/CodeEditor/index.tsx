@@ -42,6 +42,11 @@ const CodeEditor = (props: Props) => {
             }
         }
     }, [ref, props.value]);
+    React.useEffect(() => {
+        if (ref.current && props.value) {
+            ref.current.editor.selection.clearSelection();
+        }
+    }, [ref]);
     return (
         <div className={clsx(styles.editor, props.className)}>
             <AceEditor
