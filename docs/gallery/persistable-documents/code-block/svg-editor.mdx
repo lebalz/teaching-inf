@@ -1,0 +1,49 @@
+---
+page_id: 35e4b919-7f71-4f47-bfdf-35795c72e61f
+---
+
+import SvgEditor from '@tdev-components/documents/CodeEditor/SvgEditor';
+import BrowserWindow from '@tdev-components/BrowserWindow';
+
+
+# SVG Editor
+
+Der SVG Editor ist eine Komponente, welche auf dem `CodeBlock` aufbaut - es muss also nichts zusätzlich installiert werden.
+
+````md
+<SvgEditor id="0d8ab768-d77a-4070-b8a2-7a6d657362ea" title='Dänemark.svg'>
+    ```svg
+    <svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+        <rect
+            x="50" y="50"
+            width="300" height="200"
+            fill="red"/>
+        <line
+            x1="50" y1="150" x2="350" y2="150"
+            stroke="white" stroke-width="30"/>
+        <line
+            x1="150" y1="50" x2="150" y2="250"
+            stroke="white" stroke-width="30"/> 
+    </svg>
+    ```
+</SvgEditor>
+````
+
+<BrowserWindow>
+    <SvgEditor id="0d8ab768-d77a-4070-b8a2-7a6d657362ea" title='Dänemark.svg'>
+        ```svg
+        <svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+            <rect
+                x="50" y="50"
+                width="300" height="200"
+                fill="red"/>
+            <line
+                x1="50" y1="150" x2="350" y2="150"
+                stroke="white" stroke-width="30"/>
+            <line
+                x1="150" y1="50" x2="150" y2="250"
+                stroke="white" stroke-width="30"/> 
+        </svg>
+        ```
+    </SvgEditor>
+</BrowserWindow>
