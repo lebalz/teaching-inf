@@ -9,13 +9,15 @@ import {
     $isRangeSelection,
     COMMAND_PRIORITY_LOW,
     KEY_DOWN_COMMAND,
-    LexicalEditor
+    LexicalEditor,
+    LexicalNode
 } from 'lexical';
 import { $isDirectiveNode } from '@mdxeditor/editor';
 import { GO_DOWN_KEYS, GO_UP_KEYS, HandledKeys } from '../../helpers/lexical/selectAction';
 import { actionForNext, needsToFocusNext } from '../../helpers/lexical/select-next-helpers';
 import { actionForPrevious, needsToFocusPrevious } from '../../helpers/lexical/select-previous-helpers';
 import { selectEndOfDiv } from '../../helpers/lexical/select-end-of-div';
+import scheduleMicrotask from '@tdev-components/util/scheduleMicrotask';
 
 const useSelectionHandler = (
     editor: LexicalEditor,
@@ -23,6 +25,8 @@ const useSelectionHandler = (
     type: 'header' | 'body',
     ref: React.RefObject<HTMLDivElement | null>
 ) => {
+    const cleanupInsertedParagraph = React.useRef<() => void>(null);
+    const lastKey = React.useRef<string>(null);
     React.useEffect(() => {
         if (!ref.current) {
             return;
@@ -31,8 +35,22 @@ const useSelectionHandler = (
             KEY_DOWN_COMMAND,
             (event, activeEditor) => {
                 if (!HandledKeys.has(event.key)) {
+                    cleanupInsertedParagraph.current = null;
                     return false;
                 }
+                const last = lastKey.current;
+                lastKey.current = event.key;
+                if (cleanupInsertedParagraph.current && lastKey.current === event.key) {
+                    console.log('cleanup');
+                    scheduleMicrotask(() => {
+                        cleanupInsertedParagraph.current?.();
+                        cleanupInsertedParagraph.current = null;
+                    });
+                    event.preventDefault();
+                    event.stopPropagation();
+                    return true;
+                }
+
                 if (
                     activeEditor.getRootElement() !== ref?.current &&
                     ((GO_DOWN_KEYS.has(event.key) && type !== 'header') ||
@@ -103,6 +121,11 @@ const useSelectionHandler = (
                                             newParagraph.append(text);
                                             dirNode.insertAfter(newParagraph);
                                             text.select();
+                                            cleanupInsertedParagraph.current = () => {
+                                                editor.update(() => {
+                                                    newParagraph.remove();
+                                                });
+                                            };
                                             handled = true;
                                         }
                                     });
@@ -158,6 +181,11 @@ const useSelectionHandler = (
                                             dirNode.insertBefore(newParagraph);
                                             newParagraph.select();
                                             handled = true;
+                                            cleanupInsertedParagraph.current = () => {
+                                                editor.update(() => {
+                                                    newParagraph.remove();
+                                                });
+                                            };
                                         }
                                     });
                                     break;
