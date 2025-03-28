@@ -136,6 +136,10 @@ Untersuchen Sie die obige SVG-Grafik die erste Zeile, im Besonderen die __`viewb
 2. Wählen Sie den `viewbox`-Wert so, dass die Lupe :mdi[magnify-scan]{.blue} möglichst die gesamte Zeichnungsfläche (gestricheltes Quadrat) ausfüllt. **Ändern Sie nun** die `width` und `height`-Werte in der ersten Zeile. Was passiert?
     <Answer type="text" id="f2b0d1a4-3c5e-4b8f-9a6c-7d0e2f1a5b8c" />
 3. ⭐ Hier wird ein neues Element `path` verwendet. Das `d` steht für _data_ und beschreibt die einzelnen Wegpunkte des Pfades, der gezeichnet wird soll. Kopieren Sie den **gesamten** `d`-Wert und fügen Sie diesen [hier im Svg-Path-Editor](https://yqnn.github.io/svg-path-editor/) ein. Ändern Sie den Pfad nach belieben ab oder erstellen Sie ihren eigenen Pfad. Kopieren Sie den neuen `d`-Wert und ersetzen Sie den alten in der SVG-Grafik.
+<Solution id="581d4c67-4328-41af-921f-43bbc82d5e8b">
+    1. Die Viewbox beschreibt, welcher Ausschnitt der Bildfläche angezeigt werden soll. Die ersten beiden Werte geben den linken oberen Ecken vor (`x` und `y` Koordinate), die letzten beiden Werte geben die Breite und Höhe des Ausschnittes an. 
+    2. Hier ist eine Viewbox von `0 0 24 24` optimal. Die `width` und `height` angaben ändern nun die Dimension der Viewbox. Der Ausschnitt wird allerdings nicht verändert! Hier passiert also das **Skalieren**.
+</Solution>
 :::
 
 ---
