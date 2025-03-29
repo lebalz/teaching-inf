@@ -1,23 +1,21 @@
 import React from 'react';
 import {
-    $createParagraphNode,
     $createTextNode,
     $getNodeByKey,
     $getSelection,
     $isElementNode,
     $isParagraphNode,
     $isRangeSelection,
-    COMMAND_PRIORITY_LOW,
+    COMMAND_PRIORITY_EDITOR,
     KEY_DOWN_COMMAND,
-    LexicalEditor,
-    LexicalNode
+    LexicalEditor
 } from 'lexical';
 import { $isDirectiveNode } from '@mdxeditor/editor';
 import { GO_DOWN_KEYS, GO_UP_KEYS, HandledKeys } from '../../helpers/lexical/selectAction';
 import { actionForNext, needsToFocusNext } from '../../helpers/lexical/select-next-helpers';
 import { actionForPrevious, needsToFocusPrevious } from '../../helpers/lexical/select-previous-helpers';
 import { selectEndOfDiv } from '../../helpers/lexical/select-end-of-div';
-import scheduleMicrotask from '@tdev-components/util/scheduleMicrotask';
+import { $insertPlaceholderParagraph } from '../focusHandler/emptyParagraphs';
 
 const useSelectionHandler = (
     editor: LexicalEditor,
@@ -25,8 +23,6 @@ const useSelectionHandler = (
     type: 'header' | 'body',
     ref: React.RefObject<HTMLDivElement | null>
 ) => {
-    const cleanupInsertedParagraph = React.useRef<() => void>(null);
-    const lastKey = React.useRef<string>(null);
     React.useEffect(() => {
         if (!ref.current) {
             return;
@@ -35,20 +31,7 @@ const useSelectionHandler = (
             KEY_DOWN_COMMAND,
             (event, activeEditor) => {
                 if (!HandledKeys.has(event.key)) {
-                    cleanupInsertedParagraph.current = null;
                     return false;
-                }
-                const last = lastKey.current;
-                lastKey.current = event.key;
-                if (cleanupInsertedParagraph.current && lastKey.current === event.key) {
-                    console.log('cleanup');
-                    scheduleMicrotask(() => {
-                        cleanupInsertedParagraph.current?.();
-                        cleanupInsertedParagraph.current = null;
-                    });
-                    event.preventDefault();
-                    event.stopPropagation();
-                    return true;
                 }
 
                 if (
@@ -91,6 +74,7 @@ const useSelectionHandler = (
                             );
                             if (needsF) {
                                 ref?.current?.focus();
+                                // cleanupPlaceholderParagraph();
                                 handled = true;
                             }
                         } else {
@@ -116,16 +100,7 @@ const useSelectionHandler = (
                                             next.select();
                                             handled = true;
                                         } else {
-                                            const newParagraph = $createParagraphNode();
-                                            const text = $createTextNode('');
-                                            newParagraph.append(text);
-                                            dirNode.insertAfter(newParagraph);
-                                            text.select();
-                                            cleanupInsertedParagraph.current = () => {
-                                                editor.update(() => {
-                                                    newParagraph.remove();
-                                                });
-                                            };
+                                            $insertPlaceholderParagraph((p) => dirNode.insertAfter(p));
                                             handled = true;
                                         }
                                     });
@@ -153,6 +128,7 @@ const useSelectionHandler = (
                                 if (ref.current) {
                                     selectEndOfDiv(ref.current);
                                 }
+                                // cleanupPlaceholderParagraph();
                                 handled = true;
                             }
                         } else {
@@ -175,17 +151,13 @@ const useSelectionHandler = (
                                         }
                                         const prev = dirNode.getPreviousSibling();
                                         if ($isParagraphNode(prev)) {
-                                            return;
+                                            return false;
                                         } else {
-                                            const newParagraph = $createParagraphNode();
-                                            dirNode.insertBefore(newParagraph);
-                                            newParagraph.select();
+                                            $insertPlaceholderParagraph(
+                                                (p) => dirNode.insertBefore(p),
+                                                false
+                                            );
                                             handled = true;
-                                            cleanupInsertedParagraph.current = () => {
-                                                editor.update(() => {
-                                                    newParagraph.remove();
-                                                });
-                                            };
                                         }
                                     });
                                     break;
@@ -202,7 +174,7 @@ const useSelectionHandler = (
                 }
                 return false;
             },
-            COMMAND_PRIORITY_LOW
+            COMMAND_PRIORITY_EDITOR
         );
     }, [editor, nodeKey, type, ref]);
 };

@@ -4,6 +4,7 @@ import type { EditorView } from '@codemirror/view';
 import React from 'react';
 import { usePublisher } from '@mdxeditor/gurx';
 import { editorInFocus$, useCodeBlockEditorContext, VoidEmitter } from '@mdxeditor/editor';
+import { $insertPlaceholderParagraph } from '../focusHandler/emptyParagraphs';
 
 interface CodeMirrorRef {
     getCodemirror: () => EditorView | undefined;
@@ -34,7 +35,6 @@ export function useCodeMirrorRef(
                     const selectionEnd = state.selection.ranges[0].to;
 
                     if (docLength === selectionEnd) {
-                        // escaping twice
                         parentEditor?.update(() => {
                             const latest = lexicalNode.getLatest();
                             if (!latest) {
@@ -44,11 +44,7 @@ export function useCodeMirrorRef(
                             if (nextSibling) {
                                 latest.selectNext();
                             } else {
-                                const p = $createParagraphNode();
-                                const text = $createTextNode('');
-                                p.append(text);
-                                latest.insertAfter(p);
-                                text.selectStart();
+                                $insertPlaceholderParagraph((p) => latest.insertAfter(p));
                             }
                             codeMirrorRef.current?.getCodemirror()?.contentDOM.blur();
                         });
@@ -69,11 +65,7 @@ export function useCodeMirrorRef(
                             if (prevSibling) {
                                 latest.selectPrevious();
                             } else {
-                                const p = $createParagraphNode();
-                                const text = $createTextNode('');
-                                p.append(text);
-                                latest.insertBefore(p);
-                                text.selectStart();
+                                $insertPlaceholderParagraph((p) => latest.insertBefore(p));
                             }
                             codeMirrorRef.current?.getCodemirror()?.contentDOM.blur();
                         });

@@ -26,7 +26,6 @@ export type AdmonitionKind = (typeof ADMONITION_TYPES)[number];
  * ```
  * @group Directive
  */
-const HandledKeys = new Set(['ArrowRight', 'ArrowDown', 'ArrowLeft', 'ArrowUp', 'Backspace']);
 export const AdmonitionDirectiveDescriptor: DirectiveDescriptor = {
     name: 'admonition',
     attributes: [],

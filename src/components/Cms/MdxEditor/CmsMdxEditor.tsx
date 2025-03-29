@@ -7,6 +7,7 @@ import {
     CodeToggle,
     ConditionalContents,
     CreateLink,
+    createRootEditorSubscription$,
     diffSourcePlugin,
     DiffSourceToggleWrapper,
     directivesPlugin,
@@ -25,6 +26,7 @@ import {
     MDXEditorMethods,
     quotePlugin,
     realmPlugin,
+    rootEditor$,
     tablePlugin,
     thematicBreakPlugin,
     toolbarPlugin,
@@ -35,7 +37,7 @@ import {
 import _ from 'lodash';
 import '@mdxeditor/editor/style.css';
 import { default as FileModel } from '@tdev-models/cms/File';
-import { AdmonitionDirectiveDescriptor, handleDirectiveFocusPlugin } from './plugins/AdmonitionDescriptor';
+import { AdmonitionDirectiveDescriptor } from './plugins/AdmonitionDescriptor';
 import { DetailsDirectiveDescriptor } from '@tdev-plugins/remark-details/mdx-editor-plugin';
 import '@mdxeditor/editor/style.css';
 import { InsertAdmonition } from './plugins/AdmonitionDescriptor/InsertAdmonition';
@@ -75,6 +77,7 @@ import { keepImportsPlugin } from './plugins/keepImportsPlugin';
 import useLocalStorage from '@tdev-hooks/useLocalStorage';
 import { mdiCodeJson, mdiScript } from '@mdi/js';
 import { SIZE_S } from '@tdev-components/shared/iconSizes';
+import { registerKeydownHandler } from './plugins/focusHandler/emptyParagraphs';
 
 export interface Props {
     file: FileModel;
@@ -88,6 +91,16 @@ const CmsMdxEditor = observer((props: Props) => {
             init(realm) {
                 realm.sub(viewMode$, (mode) => {
                     setViewMode(mode);
+                });
+            }
+        }),
+        []
+    );
+    const focusHandler = React.useCallback(
+        realmPlugin({
+            init(realm) {
+                realm.pub(createRootEditorSubscription$, (editor) => {
+                    return registerKeydownHandler(editor);
                 });
             }
         }),
@@ -121,6 +134,7 @@ const CmsMdxEditor = observer((props: Props) => {
                 className={clsx(styles.mdxEditor)}
                 plugins={[
                     onViewModeChange(),
+                    focusHandler(),
                     headingsPlugin(),
                     mdiCompletePlugin(),
                     frontmatterPlugin(),
