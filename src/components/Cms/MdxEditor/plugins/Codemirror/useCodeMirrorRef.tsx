@@ -1,5 +1,4 @@
 // https://github.com/mdx-editor/editor/blob/main/src/plugins/sandpack/useCodeMirrorRef.ts
-import { $createParagraphNode, $createTextNode } from 'lexical';
 import type { EditorView } from '@codemirror/view';
 import React from 'react';
 import { usePublisher } from '@mdxeditor/gurx';
