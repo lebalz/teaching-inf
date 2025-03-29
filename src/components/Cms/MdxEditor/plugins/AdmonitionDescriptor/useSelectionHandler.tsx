@@ -14,7 +14,7 @@ import { GO_DOWN_KEYS, GO_UP_KEYS, HandledKeys } from '../../helpers/lexical/sel
 import { actionForNext, needsToFocusNext } from '../../helpers/lexical/select-next-helpers';
 import { actionForPrevious, needsToFocusPrevious } from '../../helpers/lexical/select-previous-helpers';
 import { selectEndOfDiv } from '../../helpers/lexical/select-end-of-div';
-import { $insertPlaceholderParagraph, $insertPlaceholderText } from '../focusHandler/emptyParagraphs';
+import { $insertPlaceholderParagraph, $insertPlaceholderText } from '../focusHandler/keyDownHandler';
 import scheduleMicrotask from '@tdev-components/util/scheduleMicrotask';
 
 const useSelectionHandler = (

@@ -77,7 +77,7 @@ import { keepImportsPlugin } from './plugins/keepImportsPlugin';
 import useLocalStorage from '@tdev-hooks/useLocalStorage';
 import { mdiCodeJson, mdiScript } from '@mdi/js';
 import { SIZE_S } from '@tdev-components/shared/iconSizes';
-import { registerKeydownHandler } from './plugins/focusHandler/emptyParagraphs';
+import { registerKeydownHandler } from './plugins/focusHandler/keyDownHandler';
 
 export interface Props {
     file: FileModel;

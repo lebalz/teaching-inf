@@ -4,7 +4,7 @@ import type { EditorView } from '@codemirror/view';
 import React from 'react';
 import { usePublisher } from '@mdxeditor/gurx';
 import { editorInFocus$, useCodeBlockEditorContext, VoidEmitter } from '@mdxeditor/editor';
-import { $insertPlaceholderParagraph } from '../focusHandler/emptyParagraphs';
+import { $insertPlaceholderParagraph } from '../focusHandler/keyDownHandler';
 
 interface CodeMirrorRef {
     getCodemirror: () => EditorView | undefined;
