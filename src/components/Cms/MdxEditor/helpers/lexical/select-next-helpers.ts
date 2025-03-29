@@ -55,8 +55,8 @@ export const needsToFocusNext = (
     }
     const last = elementNode.getLastChild();
 
-    if (eventKey === 'ArrowRight') {
-        if (!last || selectedNode.getKey() !== last.getKey()) {
+    if (last && eventKey === 'ArrowRight') {
+        if (selectedNode.getKey() !== last.getKey()) {
             return false;
         }
         const end = last.getTextContentSize();

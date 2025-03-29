@@ -57,8 +57,8 @@ export const needsToFocusPrevious = (
     }
     const first = elementNode.getFirstDescendant();
 
-    if (eventKey === 'ArrowLeft' || eventKey === 'Backspace') {
-        if (!first || selectedNode.getKey() !== first.getKey()) {
+    if (first && (eventKey === 'ArrowLeft' || eventKey === 'Backspace')) {
+        if (selectedNode.getKey() !== first.getKey()) {
             return false;
         }
         if (selectionFocusOffset !== 0) {

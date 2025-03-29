@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-    $createTextNode,
     $getNodeByKey,
     $getSelection,
     $isElementNode,
@@ -15,7 +14,8 @@ import { GO_DOWN_KEYS, GO_UP_KEYS, HandledKeys } from '../../helpers/lexical/sel
 import { actionForNext, needsToFocusNext } from '../../helpers/lexical/select-next-helpers';
 import { actionForPrevious, needsToFocusPrevious } from '../../helpers/lexical/select-previous-helpers';
 import { selectEndOfDiv } from '../../helpers/lexical/select-end-of-div';
-import { $insertPlaceholderParagraph } from '../focusHandler/emptyParagraphs';
+import { $insertPlaceholderParagraph, $insertPlaceholderText } from '../focusHandler/emptyParagraphs';
+import scheduleMicrotask from '@tdev-components/util/scheduleMicrotask';
 
 const useSelectionHandler = (
     editor: LexicalEditor,
@@ -74,7 +74,6 @@ const useSelectionHandler = (
                             );
                             if (needsF) {
                                 ref?.current?.focus();
-                                // cleanupPlaceholderParagraph();
                                 handled = true;
                             }
                         } else {
@@ -84,9 +83,11 @@ const useSelectionHandler = (
                                 case 'skip':
                                     return false;
                                 case 'insertSpaceAfter':
-                                    const text = $createTextNode(' ');
-                                    action.node.insertAfter(text);
-                                    text.selectEnd();
+                                    scheduleMicrotask(() => {
+                                        activeEditor.update(() => {
+                                            $insertPlaceholderText((t) => action.node.insertAfter(t), 'end');
+                                        });
+                                    });
                                     handled = true;
                                     break;
                                 case 'selectOrCreateNextParagraph':
@@ -128,7 +129,6 @@ const useSelectionHandler = (
                                 if (ref.current) {
                                     selectEndOfDiv(ref.current);
                                 }
-                                // cleanupPlaceholderParagraph();
                                 handled = true;
                             }
                         } else {
@@ -138,9 +138,14 @@ const useSelectionHandler = (
                                 case 'skip':
                                     return false;
                                 case 'insertSpaceBefore':
-                                    const text = $createTextNode(' ');
-                                    action.node.insertBefore(text);
-                                    text.selectStart();
+                                    scheduleMicrotask(() => {
+                                        activeEditor.update(() => {
+                                            $insertPlaceholderText(
+                                                (t) => action.node.insertBefore(t),
+                                                'start'
+                                            );
+                                        });
+                                    });
                                     handled = true;
                                     break;
                                 case 'selectOrCreatePreviousParagraph':

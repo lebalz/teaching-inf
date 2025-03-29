@@ -6,11 +6,21 @@ import {
     COMMAND_PRIORITY_EDITOR,
     KEY_DOWN_COMMAND,
     LexicalEditor,
-    ParagraphNode
+    ParagraphNode,
+    TextNode
 } from 'lexical';
 import scheduleMicrotask from '@tdev-components/util/scheduleMicrotask';
 let cleanupInsertedParagraph: (() => void) | null = null;
 const lastKeys: [string, string] = ['null', 'null'];
+const OPPOSITE = {
+    ArrowDown: 'ArrowUp',
+    ArrowUp: 'ArrowDown',
+    ArrowRight: 'ArrowLeft',
+    ArrowLeft: 'ArrowRight'
+};
+const isSameKey = () => {
+    return lastKeys[0] === lastKeys[1] || lastKeys[0] === OPPOSITE[lastKeys[1] as keyof typeof OPPOSITE];
+};
 
 export const registerKeydownHandler = (editor: LexicalEditor) => {
     return editor.registerCommand(
@@ -18,8 +28,11 @@ export const registerKeydownHandler = (editor: LexicalEditor) => {
         (event) => {
             lastKeys[0] = lastKeys[1];
             lastKeys[1] = event.key;
-            if (cleanupInsertedParagraph && lastKeys[0] === lastKeys[1]) {
-                cleanupInsertedParagraph();
+            if (cleanupInsertedParagraph && isSameKey()) {
+                const cleaner = cleanupInsertedParagraph;
+                setTimeout(() => {
+                    cleaner();
+                }, 5);
             }
             cleanupInsertedParagraph = null;
 
@@ -31,7 +44,6 @@ export const registerKeydownHandler = (editor: LexicalEditor) => {
 
 export const $insertPlaceholderParagraph = (insertP: (p: ParagraphNode) => void, withEmptyText = true) => {
     const editor = $getEditor();
-    // console.log('edi', e, editor, e === editor);
     const newParagraph = $createParagraphNode();
     if (withEmptyText) {
         const text = $createTextNode('');
@@ -51,12 +63,21 @@ export const $insertPlaceholderParagraph = (insertP: (p: ParagraphNode) => void,
         });
     };
 };
-
-export const cleanupPlaceholderParagraph = () => {
-    console.log('keys', lastKeys);
-    const isSameKey = lastKeys[0] === lastKeys[1];
-    if (isSameKey && cleanupInsertedParagraph) {
-        cleanupInsertedParagraph();
-        cleanupInsertedParagraph = null;
+export const $insertPlaceholderText = (insertT: (p: TextNode) => void, select: 'start' | 'end') => {
+    const editor = $getEditor();
+    const newText = $createTextNode(' ');
+    insertT(newText);
+    if (select === 'start') {
+        newText.selectStart();
+    } else {
+        newText.selectEnd();
     }
+    cleanupInsertedParagraph = () => {
+        scheduleMicrotask(() => {
+            editor.update(() => {
+                $addUpdateTag('skip-dom-selection');
+                newText.remove();
+            });
+        });
+    };
 };
