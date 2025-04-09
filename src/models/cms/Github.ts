@@ -246,17 +246,23 @@ class Github {
     }
 
     @action
-    saveFileInNewBranchAndCreatePr(file: FileModel, newBranch: string) {
-        this.createNewBranch(newBranch)
+    saveFileInNewBranchAndCreatePr(file: FileModel, newBranch: string, skipCreatePr?: boolean) {
+        return this.createNewBranch(newBranch)
             .then(async () => {
                 await this.createOrUpdateFile(file.path, file.content, newBranch, file.sha);
-                await this.createPR(newBranch, withoutPreviewPRName(newBranch));
+                if (!skipCreatePr) {
+                    await this.createPR(newBranch, withoutPreviewPRName(newBranch));
+                }
                 this.store.triggerNavigateToFile(newBranch, file.path);
+                return true;
             })
             .catch(() => {
-                return this.deleteBranch(newBranch).catch(() => {
-                    console.warn('Failed to delete branch', newBranch);
-                });
+                return this.deleteBranch(newBranch)
+                    .then(() => false)
+                    .catch(() => {
+                        console.warn('Failed to delete branch', newBranch);
+                        return false;
+                    });
             });
     }
 
@@ -322,23 +328,35 @@ class Github {
 
     @action
     mergePR(prNumber: number) {
-        this.octokit.pulls
-            .merge({
-                owner: this.store.repoOwner,
-                repo: this.store.repoName,
-                pull_number: prNumber,
-                merge_method: 'merge', // or "squash" or "rebase"
-                commit_title: `CMS: Merge #${prNumber}`
-            })
-            .then(
-                action((res) => {
-                    const pr = this.store.findPr(prNumber);
-                    if (pr) {
-                        pr.setMerged(true);
-                        pr.sync();
-                    }
+        const pr = this.PRs.find((pr) => pr.number === prNumber);
+        let prepare: Promise<any> = Promise.resolve(undefined);
+        if (pr && !pr.hasPreview) {
+            prepare = pr.setPreview(true);
+        }
+        const branchName = pr?.branchName;
+        prepare.then(() => {
+            this.octokit.pulls
+                .merge({
+                    owner: this.store.repoOwner,
+                    repo: this.store.repoName,
+                    pull_number: prNumber,
+                    merge_method: 'merge', // or "squash" or "rebase"
+                    commit_title: `CMS: Merge #${prNumber}`
                 })
-            );
+                .then(
+                    action((res) => {
+                        const pr = this.store.findPr(prNumber);
+                        if (pr) {
+                            pr.setMerged(true);
+                            pr.sync();
+                        }
+                        const bName = pr?.branchName || branchName;
+                        if (res.data.merged && bName) {
+                            this.deleteBranch(bName);
+                        }
+                    })
+                );
+        });
     }
 
     @action
