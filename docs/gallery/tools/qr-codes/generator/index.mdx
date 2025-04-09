@@ -53,7 +53,7 @@ Da das Icon als SVG eingebettet wird, muss die Grösse als Zahl (in Pixel) und d
 
 ```mdx
 <Generator icon={mdiEarth} text="Hello World" />
-<Generator icon={mdiEarth} iconSize="48" iconColor='#01f0bc' text="Hello World in Cyan" />
+<Generator icon={mdiEarth} iconSize="48" iconColor='#01f0bc' text="Hello World in Cyan" download/>
 ```
 
 <BrowserWindow>
@@ -62,7 +62,7 @@ Da das Icon als SVG eingebettet wird, muss die Grösse als Zahl (in Pixel) und d
 
   ::br
 
-    <Generator icon={mdiEarth} iconSize="48" iconColor="#01f0bc" text="Hello World in Cyan" />
+    <Generator icon={mdiEarth} iconSize="48" iconColor="#01f0bc" text="Hello World in Cyan" download/>
   :::
 </BrowserWindow>
 
@@ -75,12 +75,11 @@ Da das Icon als SVG eingebettet wird, muss die Grösse als Zahl (in Pixel) und d
 : Zeigt den Text unter dem QR Code an.
 : `boolean`
 : Standard: `false`
-
-:::dd
 `isLink`
 : Der Text wird als Link interpretiert und als `<Link>`-Tag dargestellt.
-:::
-
+`linkText`
+: Linktext der anstelle des `text`-Feldes angezeigt werden soll.
+: Standard: die URL im `text` Feld
 `withInput`
 : Zeigt ein Input Feld um den Text zu ändern.
 : `boolean`
@@ -95,8 +94,9 @@ Da das Icon als SVG eingebettet wird, muss die Grösse als Zahl (in Pixel) und d
 `icon`
 : Ein MdiIcon (oder ein SVG-Path), das im QR Code eingebettet wird.
 : `string`
-
-:::dd
+`download`
+: Es wird ein Download-Button angezeigt und der QR-Code kann als `.png` heruntergeladen werden.
+: Standard: `false`
 `iconSize`
 : Die Grösse des Icons.
 : `number` - eine Zahl in Pixel (kann nicht als CSS-Grösse angegeben werden!)
@@ -105,8 +105,6 @@ Da das Icon als SVG eingebettet wird, muss die Grösse als Zahl (in Pixel) und d
 : Die Farbe des Icons.
 : `string` - eine HTML-Farbe (kann nicht als CSS-Variable angegeben werden!)
 : Standard: <span className="badge badge--primary" style={{['--ifm-badge-background-color']: '#306cce'}}>#306cce</span>
-:::
-
 `qrProps`
 : Weitere Props für das `QRCode`-Element.
 : [QRCode.React](https://www.npmjs.com/package/qrcode.react#props)
