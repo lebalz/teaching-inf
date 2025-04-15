@@ -19,7 +19,7 @@ type ImageFigureHTMLElementType = HTMLElement;
 
 /** @noInheritDoc */
 export class ImageFigureNode extends ElementNode {
-    __width?: number;
+    __width?: string;
     static getType(): string {
         return 'imageFigure';
     }
@@ -42,10 +42,15 @@ export class ImageFigureNode extends ElementNode {
 
     createDOM(config: EditorConfig): ImageFigureHTMLElementType {
         const element = document.createElement('div');
-        element.classList.add(styles.imageFigure);
-        if (this.__width || this.imageNode()?.__width) {
-            const width = (this.__width || this.imageNode()?.__width || '').toString();
-            element.style.setProperty('--cms-img-width', /\d$/.test(width) ? `${width}px` : width);
+        element.classList.add(styles.imageFigure, 'lexicalImageFigure');
+        const latest = this.imageNode()?.getLatest();
+        if (this.__width || latest?.__options.width) {
+            const width = (this.__width || latest?.__options.width || '').toString();
+            if (width) {
+                element.style.setProperty('--cms-img-width', /\d$/.test(width) ? `${width}px` : width);
+            } else {
+                // skip and let the child modify it...
+            }
         }
 
         return element;
@@ -59,8 +64,9 @@ export class ImageFigureNode extends ElementNode {
         if (!imgNode || !$isImageNode(imgNode)) {
             return false;
         }
-        if (this.__width !== imgNode.__width) {
-            this.getWritable().__width = imgNode.__width;
+        const latest = this.imageNode()?.getLatest();
+        if (this.__width !== latest?.__options.width) {
+            this.getWritable().__width = latest?.__options.width as string;
             return true;
         }
         return false;

@@ -1,7 +1,6 @@
 import { CmsStore } from '@tdev-stores/CmsStore';
 import { action, computed, IObservableArray, observable } from 'mobx';
 import { Octokit, RestEndpointMethodTypes as GhTypes } from '@octokit/rest';
-import siteConfig from '@generated/docusaurus.config';
 import { FileStubProps, iFile } from './iFile';
 import FileStub from './FileStub';
 import Dir from './Dir';
@@ -11,7 +10,6 @@ import Branch from './Branch';
 import PR from './PR';
 import { convertToBase64, isBinaryFile, withoutPreviewPRName } from './helpers';
 import BinFile from './BinFile';
-const { organizationName, projectName } = siteConfig;
 
 export type GhRepo = GhTypes['repos']['get']['response']['data'];
 export type GhBranch = GhTypes['repos']['listBranches']['response']['data'][number];
@@ -21,6 +19,8 @@ export type GhPr =
 
 const PR_PAGE_SIZE = 20;
 type FileEntry = FileStub | BinFile | FileModel | Dir;
+
+const WritePermission = new Set(['admin', 'write']);
 
 class Github {
     readonly store: CmsStore;
@@ -36,6 +36,13 @@ class Github {
     PRs = observable.array<PR>([]);
 
     @observable.ref accessor repo: GhRepo | undefined;
+    @observable.ref accessor repositories:
+        | GhTypes['repos']['listForAuthenticatedUser']['response']['data']
+        | undefined;
+    @observable.ref accessor user: GhTypes['users']['getAuthenticated']['response']['data'] | undefined;
+    @observable.ref accessor permissions:
+        | GhTypes['repos']['getCollaboratorPermissionLevel']['response']['data']
+        | undefined;
 
     apiStates = observable.map<string, ApiState>([], { deep: false });
 
@@ -46,20 +53,98 @@ class Github {
 
     @action
     load() {
-        return Promise.all([this.fetchRepo(), this.fetchBranches(), this.fetchPRs()]).catch((err) => {
-            if (/Bad credentials/.test(err.message)) {
-                this.store.clearAccessToken();
+        const before = this.store.repoKey;
+        return this.fetchUser().then(() => {
+            if (before !== this.store.repoKey) {
+                return;
             }
+            return Promise.all([
+                this.fetchRepo(),
+                this.fetchBranches(),
+                this.fetchPRs(),
+                this.fetchRepositories()
+            ]).catch((err) => {
+                if (/Bad credentials/.test(err.message)) {
+                    this.store.clearAccessToken();
+                }
+            });
         });
+    }
+
+    /**
+     * reset the current state of the store
+     */
+    @action
+    reset() {
+        this.entries.clear();
+        this.branches.clear();
+        this.PRs.clear();
+        this.repo = undefined;
+        this.user = undefined;
+        this.permissions = undefined;
+        this.apiStates.clear();
     }
 
     @action
     fetchRepo() {
-        return this.octokit.repos.get({ repo: projectName!, owner: organizationName!, _: Date.now() }).then(
+        const before = this.store.repoKey;
+        return this.octokit.repos
+            .get({ repo: this.store.repoName, owner: this.store.repoOwner, _: Date.now() })
+            .then(
+                action((res) => {
+                    if (before !== this.store.repoKey) {
+                        return;
+                    }
+                    this.repo = res.data;
+                    return this.fetchPermissions();
+                })
+            );
+    }
+
+    @action
+    fetchUser() {
+        return this.octokit.users.getAuthenticated().then(
             action((res) => {
-                this.repo = res.data;
+                if (res.status === 200) {
+                    this.user = res.data;
+                } else {
+                    this.user = undefined;
+                }
+                return res.data;
             })
         );
+    }
+
+    @action
+    fetchPermissions() {
+        if (!this.user) {
+            return Promise.resolve('none');
+        }
+
+        const before = this.store.repoKey;
+        return this.octokit.repos
+            .getCollaboratorPermissionLevel({
+                repo: this.store.repoName,
+                owner: this.store.repoOwner,
+                username: this.user.login,
+                _: Date.now()
+            })
+            .then(
+                action((res) => {
+                    if (before !== this.store.repoKey) {
+                        return 'none';
+                    }
+                    if (res.status === 200) {
+                        this.permissions = res.data;
+                    }
+                    return res.data.permission;
+                })
+            );
+    }
+
+    @computed
+    get canWrite() {
+        return WritePermission.has(this.permissions?.permission || 'none');
     }
 
     @computed
@@ -81,11 +166,24 @@ class Github {
     @action
     fetchBranches() {
         return this.octokit.repos
-            .listBranches({ repo: projectName!, owner: organizationName!, _: Date.now() })
+            .listBranches({ repo: this.store.repoName, owner: this.store.repoOwner, _: Date.now() })
             .then(
                 action((res) => {
                     const branches = res.data.map((br) => new Branch(br, this));
                     this.branches.replace(branches);
+                })
+            );
+    }
+
+    @action
+    fetchRepositories(max: number = 20) {
+        return this.octokit.repos
+            .listForAuthenticatedUser({ _: Date.now(), type: 'all', per_page: max, sort: 'pushed' })
+            .then(
+                action((res) => {
+                    if (res.status === 200) {
+                        this.repositories = res.data;
+                    }
                 })
             );
     }
@@ -97,10 +195,11 @@ class Github {
 
     @action
     fetchPRs(page?: number) {
+        const before = this.store.repoKey;
         return this.octokit.pulls
             .list({
-                repo: projectName!,
-                owner: organizationName!,
+                repo: this.store.repoName,
+                owner: this.store.repoOwner,
                 state: 'open',
                 per_page: PR_PAGE_SIZE,
                 sort: 'created',
@@ -110,6 +209,9 @@ class Github {
             })
             .then(
                 action((res) => {
+                    if (before !== this.store.repoKey) {
+                        return;
+                    }
                     const prs = res.data.map((pr) => new PR(pr, this));
                     const newPRs = new Set(prs.map((pr) => pr.number));
                     this.PRs.replace([...this.PRs.filter((pr) => !newPRs.has(pr.number)), ...prs]);
@@ -119,15 +221,19 @@ class Github {
 
     @action
     fetchPrState(number: number) {
+        const before = this.store.repoKey;
         return this.octokit.pulls
             .get({
-                repo: projectName!,
-                owner: organizationName!,
+                repo: this.store.repoName,
+                owner: this.store.repoOwner,
                 pull_number: number,
                 _: Date.now() // disable cache
             })
             .then(
                 action((res) => {
+                    if (before !== this.store.repoKey) {
+                        return;
+                    }
                     return res.data;
                 })
             );
@@ -140,17 +246,23 @@ class Github {
     }
 
     @action
-    saveFileInNewBranchAndCreatePr(file: FileModel, newBranch: string) {
-        this.createNewBranch(newBranch)
+    saveFileInNewBranchAndCreatePr(file: FileModel, newBranch: string, skipCreatePr?: boolean) {
+        return this.createNewBranch(newBranch)
             .then(async () => {
                 await this.createOrUpdateFile(file.path, file.content, newBranch, file.sha);
-                await this.createPR(newBranch, withoutPreviewPRName(newBranch));
-                this.store.settings?.setLocation(newBranch, file.path);
+                if (!skipCreatePr) {
+                    await this.createPR(newBranch, withoutPreviewPRName(newBranch));
+                }
+                this.store.triggerNavigateToFile(newBranch, file.path);
+                return true;
             })
             .catch(() => {
-                return this.deleteBranch(newBranch).catch(() => {
-                    console.warn('Failed to delete branch', newBranch);
-                });
+                return this.deleteBranch(newBranch)
+                    .then(() => false)
+                    .catch(() => {
+                        console.warn('Failed to delete branch', newBranch);
+                        return false;
+                    });
             });
     }
 
@@ -164,8 +276,8 @@ class Github {
             .withApiState(() => {
                 return this.octokit.repos
                     .deleteFile({
-                        owner: organizationName!,
-                        repo: projectName!,
+                        owner: this.store.repoOwner,
+                        repo: this.store.repoName,
                         message: `Delete ${file.path}`,
                         path: file.path,
                         sha: file.sha,
@@ -191,8 +303,8 @@ class Github {
         // octokit has no "rebase" action, so do a merge
         return this.octokit.repos
             .merge({
-                owner: organizationName!,
-                repo: projectName!,
+                owner: this.store.repoOwner,
+                repo: this.store.repoName,
                 base: to,
                 head: branch,
                 commit_message: `Merge ${branch} into ${to}`
@@ -216,23 +328,35 @@ class Github {
 
     @action
     mergePR(prNumber: number) {
-        this.octokit.pulls
-            .merge({
-                owner: organizationName!,
-                repo: projectName!,
-                pull_number: prNumber,
-                merge_method: 'merge', // or "squash" or "rebase"
-                commit_title: `CMS: Merge #${prNumber}`
-            })
-            .then(
-                action((res) => {
-                    const pr = this.store.findPr(prNumber);
-                    if (pr) {
-                        pr.setMerged(true);
-                        pr.sync();
-                    }
+        const pr = this.PRs.find((pr) => pr.number === prNumber);
+        let prepare: Promise<any> = Promise.resolve(undefined);
+        if (pr && !pr.hasPreview) {
+            prepare = pr.setPreview(true);
+        }
+        const branchName = pr?.branchName;
+        prepare.then(() => {
+            this.octokit.pulls
+                .merge({
+                    owner: this.store.repoOwner,
+                    repo: this.store.repoName,
+                    pull_number: prNumber,
+                    merge_method: 'merge', // or "squash" or "rebase"
+                    commit_title: `CMS: Merge #${prNumber}`
                 })
-            );
+                .then(
+                    action((res) => {
+                        const pr = this.store.findPr(prNumber);
+                        if (pr) {
+                            pr.setMerged(true);
+                            pr.sync();
+                        }
+                        const bName = pr?.branchName || branchName;
+                        if (res.data.merged && bName) {
+                            this.deleteBranch(bName);
+                        }
+                    })
+                );
+        });
     }
 
     @action
@@ -252,8 +376,8 @@ class Github {
     deleteBranch(name: string) {
         return this.octokit.git
             .deleteRef({
-                owner: organizationName!,
-                repo: projectName!,
+                owner: this.store.repoOwner,
+                repo: this.store.repoName,
                 ref: `heads/${name}`
             })
             .then(
@@ -273,8 +397,8 @@ class Github {
     closePr(prNumber: number) {
         return this.octokit.pulls
             .update({
-                owner: organizationName!,
-                repo: projectName!,
+                owner: this.store.repoOwner,
+                repo: this.store.repoName,
                 pull_number: prNumber,
                 state: 'closed'
             })
@@ -301,8 +425,8 @@ class Github {
         }
         return this.octokit.pulls
             .update({
-                owner: organizationName!,
-                repo: projectName!,
+                owner: this.store.repoOwner,
+                repo: this.store.repoName,
                 pull_number: prNumber,
                 ...patch
             })
@@ -325,8 +449,8 @@ class Github {
 
         return this.octokit.git
             .createRef({
-                owner: organizationName!,
-                repo: projectName!,
+                owner: this.store.repoOwner,
+                repo: this.store.repoName,
                 ref: `refs/heads/${name}`,
                 sha: this.defaultBranch.sha
             })
@@ -355,8 +479,8 @@ class Github {
         }
         return this.octokit.pulls
             .create({
-                owner: organizationName!,
-                repo: projectName!,
+                owner: this.store.repoOwner,
+                repo: this.store.repoName,
                 title: title,
                 head: branch,
                 base: this.defaultBranchName, // or whatever base branch
@@ -383,8 +507,8 @@ class Github {
         return this.octokit.repos
             .compareCommitsWithBasehead({
                 basehead: `${toBranch}...${from.name}`,
-                owner: organizationName!,
-                repo: projectName!,
+                owner: this.store.repoOwner,
+                repo: this.store.repoName,
                 _: Date.now() // disable cache
             })
             .then((res) => res.data);
@@ -423,8 +547,8 @@ class Github {
             .then((base64Content) => {
                 // const base64Content = btoa(String.fromCharCode(...binContent));
                 return this.octokit!.repos.createOrUpdateFileContents({
-                    owner: organizationName!,
-                    repo: projectName!,
+                    owner: this.store.repoOwner,
+                    repo: this.store.repoName,
                     path: path, // File path in repo
                     message: commitMessage || (sha ? `Update: ${path}` : `Create ${path}`),
                     content: base64Content,
@@ -464,6 +588,8 @@ class Github {
         if (file.dir) {
             return Promise.resolve();
         }
+
+        const before = this.store.repoKey;
         const path = file.path;
         const branch = file.branch;
         const parts = path.split('/').slice(0, -1);
@@ -478,6 +604,9 @@ class Github {
         }
         return Promise.all(promises).then(
             action(() => {
+                if (before !== this.store.repoKey) {
+                    return;
+                }
                 if (file.dir) {
                     let curr: Dir | undefined = file.dir;
                     while (curr) {
@@ -497,10 +626,10 @@ class Github {
             {
                 path: '/',
                 git_url: null,
-                html_url: `https://github.com/${organizationName!}/${projectName!}/tree/${branch}`,
+                html_url: `https://github.com/${this.store.repoOwner}/${this.store.repoName}/tree/${branch}`,
                 name: '/',
                 sha: this.store.findBranch(branch)?.sha || '',
-                url: `https://api.github.com/repos/${organizationName!}/${projectName!}/contents?ref=${branch}`
+                url: `https://api.github.com/repos/${this.store.repoOwner}/${this.store.repoName}/contents?ref=${branch}`
             },
             this.store
         );
@@ -510,16 +639,20 @@ class Github {
 
     @action
     fetchDirectory(branch: string, path: string = '', force: boolean = false) {
+        const before = this.store.repoKey;
         return this.octokit.repos
             .getContent({
-                owner: organizationName!,
-                repo: projectName!,
+                owner: this.store.repoOwner,
+                repo: this.store.repoName,
                 path: path,
                 ref: branch,
                 _: Date.now() // disable cache
             })
             .then(
                 action((res) => {
+                    if (before !== this.store.repoKey) {
+                        return [];
+                    }
                     const dir = this.store.findEntry(branch, path) as Dir | undefined;
                     this._handleDirectoryResponse(res.data, branch, true, force);
                     if (dir) {
@@ -536,6 +669,7 @@ class Github {
         editAfterFetch: boolean = false
     ): Promise<FileModel | BinFile | FileEntry[] | undefined> {
         const { branch, path } = file;
+        const before = this.store.repoKey;
         if (path === '/') {
             if (file.type === 'file_stub') {
                 this._rmFileEntry(file as FileStub);
@@ -550,14 +684,17 @@ class Github {
             .withApiState(() => {
                 return this.octokit.repos
                     .getContent({
-                        owner: organizationName!,
-                        repo: projectName!,
+                        owner: this.store.repoOwner,
+                        repo: this.store.repoName,
                         path: path,
                         ref: branch,
                         _: Date.now() // disable cache
                     })
                     .then(
                         action((res) => {
+                            if (before !== this.store.repoKey) {
+                                return undefined;
+                            }
                             const { data } = res || {};
                             if (!data || !('type' in data) || data.type !== 'file') {
                                 // we loaded a directory...
@@ -603,12 +740,14 @@ class Github {
             console.log('Already fetching', file.path, file.branch);
             return Promise.resolve(undefined);
         }
+
+        const before = this.store.repoKey;
         return file
             .withApiState(() => {
                 return this.octokit.git
                     .getBlob({
-                        owner: organizationName!,
-                        repo: projectName!,
+                        owner: this.store.repoOwner,
+                        repo: this.store.repoName,
                         path: file.path,
                         ref: file.branch,
                         file_sha: file.sha,
@@ -620,6 +759,9 @@ class Github {
                     })
                     .then(
                         action((binData) => {
+                            if (before !== this.store.repoKey) {
+                                return undefined;
+                            }
                             const nFile = Github.NewFileModel(file.props, binData, this.store) as
                                 | FileModel
                                 | BinFile;

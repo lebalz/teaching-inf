@@ -1,8 +1,9 @@
 import { CmsStore } from '@tdev-stores/CmsStore';
-import { action, computed, observable, when } from 'mobx';
+import { action, computed, observable } from 'mobx';
 import iEntry, { iEntryProps } from './iEntry';
 import { mdiFolder, mdiFolderOpen, mdiLoading } from '@mdi/js';
 import { ApiState } from '@tdev-stores/iStore';
+import { FileType } from './FileStub';
 
 interface DirProps extends iEntryProps {}
 
@@ -50,6 +51,26 @@ class Dir extends iEntry {
     @action
     setIsFetched(fetched: boolean) {
         this.isFetched = fetched;
+    }
+
+    @computed
+    get enrties() {
+        if (!this.path) {
+            return [];
+        }
+        return this.store.github?.entries.get(this.branch)?.filter((e) => e.parentPath === this.path);
+    }
+
+    @computed
+    get indexFile(): FileType | undefined {
+        return this.enrties?.find((d) => d.isFile() && /(index\.)|(README\.mdx?)/gi.test(d.name)) as
+            | FileType
+            | undefined;
+    }
+
+    @computed
+    get hasIndexFile() {
+        return !!this.indexFile;
     }
 
     /**
