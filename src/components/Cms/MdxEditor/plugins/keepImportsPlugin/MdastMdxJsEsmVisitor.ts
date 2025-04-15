@@ -11,7 +11,9 @@ export const MdastMdxJsEsmVisitor: MdastImportVisitor<MdxjsEsm> = {
         if (lexicalParent?.getType() !== 'root' || mdastParent?.type !== 'root') {
             return;
         }
-        actions.addAndStepInto($createMetaDataNode({ importDeclarations: metaData.importDeclarations }));
+        actions.addAndStepInto(
+            $createMetaDataNode({ importDeclarations: (metaData || {}).importDeclarations })
+        );
     },
     priority: 1
 };
