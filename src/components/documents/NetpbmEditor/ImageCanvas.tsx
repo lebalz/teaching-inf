@@ -11,7 +11,19 @@ interface Props {
 const ImageCanvas = ({ width, height, pixels }: Props) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
-    const scale = 50;
+    const nPixels = width * height;
+    const scale =
+        nPixels < 400
+            ? 50
+            : nPixels < 1600
+              ? 25
+              : nPixels < 6400
+                ? 10
+                : nPixels < 14400
+                  ? 5
+                  : nPixels < 84800
+                    ? 2
+                    : 1;
     const offsetX = 0;
     const offsetY = 0;
 
