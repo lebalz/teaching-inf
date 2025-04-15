@@ -118,7 +118,9 @@ export const ExcalidocComponent = observer(
                     )}
                     {edit && (
                         <Button
-                            onClick={() => onEdit(false)}
+                            onClick={() => {
+                                onEdit(false);
+                            }}
                             icon={mdiClose}
                             color="red"
                             title="Bearbeitung beenden"
@@ -131,8 +133,6 @@ export const ExcalidocComponent = observer(
                     libraryItems={props.libraryItems}
                     allowImageInsertion={props.allowImageInsertion}
                     readonly={!edit}
-                    onlyCommitValidChanges={props.onlyCommitValidChanges}
-                    zenMode={props.zenMode}
                 />
             </div>
         );

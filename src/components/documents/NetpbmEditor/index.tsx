@@ -159,7 +159,14 @@ const NetpbmEditor = observer((props: Props) => {
                 </div>
             </div>
             <div className={clsx(styles.output)}>
-                <ImageCanvas width={doc.width} height={doc.height} pixels={doc.pixels} />
+                <ImageCanvas
+                    width={doc.width}
+                    height={doc.height}
+                    pixels={doc.pixels}
+                    extension={doc.fileExtension}
+                    format={doc.config.format}
+                    actionsClassName={styles.downloadButton}
+                />
             </div>
         </div>
     );

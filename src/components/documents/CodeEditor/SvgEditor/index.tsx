@@ -2,11 +2,8 @@ import React from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
-import { useStore } from '@tdev-hooks/useStore';
 import { ScriptMeta } from '@tdev-models/documents/Script';
 import { MetaProps } from '@tdev/theme/CodeBlock';
-import { useFirstRealMainDocument } from '@tdev-hooks/useFirstRealMainDocument';
-import Loader from '@tdev-components/Loader';
 import PermissionsPanel from '@tdev-components/PermissionsPanel';
 import { useFirstMainDocument } from '@tdev-hooks/useFirstMainDocument';
 import CodeEditorComponent from '..';
@@ -71,8 +68,6 @@ const SvgEditor = observer((props: Props) => {
                     )}
                 >
                     <div className={clsx(styles.svgResult)} dangerouslySetInnerHTML={{ __html: doc?.code }} />
-                    {/* <div className={clsx(styles.svgResult)}>
-                    </div> */}
                 </ErrorBoundary>
             </Card>
         </div>

@@ -119,6 +119,20 @@ class NetpbmGraphic extends iDocument<DocumentType.NetpbmGraphic> {
     }
 
     @computed
+    get fileExtension() {
+        switch (this.config.format) {
+            case 'P1':
+                return 'pbm';
+            case 'P2':
+                return 'pgm';
+            case 'P3':
+                return 'ppm';
+            default:
+                return 'pbm';
+        }
+    }
+
+    @computed
     get width() {
         return this.config.width;
     }

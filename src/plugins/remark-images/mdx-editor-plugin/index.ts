@@ -2,11 +2,11 @@
  * By Mdx Editor, @url https://github.com/mdx-editor/editor/tree/main/src/plugins/image
  */
 
-import { $insertNodeToNearestRoot } from '@lexical/utils';
 import { Cell, Signal, withLatestFrom } from '@mdxeditor/gurx';
 import {
     $createParagraphNode,
     $getSelection,
+    $isElementNode,
     $isParagraphNode,
     $isRangeSelection,
     COMMAND_PRIORITY_EDITOR,
@@ -40,6 +40,8 @@ import { $createImageFigureNode, ImageFigureNode } from './ImageFigureNode';
 import { fromMarkdown } from 'mdast-util-from-markdown';
 import { directiveFromMarkdown } from 'mdast-util-directive';
 import { directive } from 'micromark-extension-directive';
+import scheduleMicrotask from '@tdev-components/util/scheduleMicrotask';
+import { $isHeadingNode } from '@lexical/rich-text';
 export * from './ImageNode';
 
 export interface ImageCaption extends Parent {
@@ -103,11 +105,23 @@ const internalInsertImage$ = Signal<SrcImageParameters>((r) => {
         if (!theEditor) {
             return;
         }
-        theEditor?.focus(
+        theEditor.focus(
             () => {
-                theEditor.getEditorState().read(() => {
+                theEditor.read(() => {
                     const selection = $getSelection();
                     if ($isRangeSelection(selection)) {
+                        const nodes = selection.getNodes();
+                        console.log('nodes', nodes[0]?.getTextContent());
+                        const selectedNode = nodes[0];
+                        if (!selectedNode) {
+                            return;
+                        }
+                        let currentNode = selectedNode;
+                        let parent = selectedNode.getParent();
+                        while (($isElementNode(parent) && parent.isInline()) || $isHeadingNode(parent)) {
+                            currentNode = parent;
+                            parent = currentNode.getParent();
+                        }
                         theEditor.update(() => {
                             const imageFigure = $createImageFigureNode();
                             const imageNode = $createImageNode({
@@ -117,7 +131,11 @@ const internalInsertImage$ = Signal<SrcImageParameters>((r) => {
                             const imageCaption = $createImageCaptionNode();
                             imageCaption.append($createParagraphNode());
                             imageFigure.append(imageNode, imageCaption);
-                            $insertNodeToNearestRoot(imageFigure);
+                            if ($isParagraphNode(currentNode.getParent())) {
+                                currentNode.getParent()!.insertAfter(imageFigure);
+                            } else {
+                                currentNode.insertAfter(imageFigure);
+                            }
                         });
                     }
                 });
@@ -230,13 +248,13 @@ const keyHandler = (editor: LexicalEditor) => {
                                 const figure = caption.getParent();
                                 const nextSibling = figure?.getNextSibling();
                                 if ($isParagraphNode(nextSibling)) {
-                                    setTimeout(() => {
+                                    scheduleMicrotask(() => {
                                         activeEditor.update(() => {
                                             nextSibling.selectStart();
                                         });
-                                    }, 0);
+                                    });
                                 } else {
-                                    setTimeout(() => {
+                                    scheduleMicrotask(() => {
                                         activeEditor.update(
                                             () => {
                                                 const newParagraph = $createParagraphNode();
@@ -245,7 +263,7 @@ const keyHandler = (editor: LexicalEditor) => {
                                             },
                                             { discrete: true }
                                         );
-                                    }, 0);
+                                    });
                                 }
                                 break;
                             case 'ArrowLeft':
@@ -256,7 +274,7 @@ const keyHandler = (editor: LexicalEditor) => {
                                 ) {
                                     const figure = caption.getParent();
                                     const previousSibling = figure?.getPreviousSibling();
-                                    setTimeout(() => {
+                                    scheduleMicrotask(() => {
                                         activeEditor.update(
                                             () => {
                                                 if ($isParagraphNode(previousSibling)) {
@@ -269,7 +287,7 @@ const keyHandler = (editor: LexicalEditor) => {
                                             },
                                             { discrete: true }
                                         );
-                                    }, 0);
+                                    });
                                     shouldPrevent = true;
                                 }
                         }
