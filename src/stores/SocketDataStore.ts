@@ -93,7 +93,7 @@ export class SocketDataStore extends iStore<'ping'> {
         const ws_url = BACKEND_URL;
         this.socket = io(ws_url, {
             withCredentials: true,
-            transports: ['websocket']
+            transports: ['websocket', 'webtransport']
         });
         this._socketConfig();
         this.socket.connect();
@@ -109,6 +109,10 @@ export class SocketDataStore extends iStore<'ping'> {
              */
             api.defaults.headers.common['x-metadata-socketid'] = this.socket!.id;
             this.setLiveState(true);
+        });
+        this.socket.io.on('reconnect_error', (err) => {
+            // disable current reconnection loop
+            this.socket?.io?.reconnection(false);
         });
 
         this.socket.on('disconnect', () => {
