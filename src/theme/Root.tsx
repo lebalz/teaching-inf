@@ -188,16 +188,20 @@ function Root({ children }: { children: React.ReactNode }) {
         if (!SENTRY_DSN) {
             return;
         }
-        import('@sentry/react').then((Sentry) => {
-            if (Sentry) {
-                Sentry.init({
-                    dsn: SENTRY_DSN
-                    // integrations: [Sentry.browserTracingIntegration()],
-                    // tracesSampleRate: 1.0, //  Capture 100% of the transactions
-                    // tracePropagationTargets: ['localhost', /^https:\/\/yourserver\.io\/api/]
-                });
-            }
-        });
+        import('@sentry/react')
+            .then((Sentry) => {
+                if (Sentry) {
+                    Sentry.init({
+                        dsn: SENTRY_DSN
+                        // integrations: [Sentry.browserTracingIntegration()],
+                        // tracesSampleRate: 1.0, //  Capture 100% of the transactions
+                        // tracePropagationTargets: ['localhost', /^https:\/\/yourserver\.io\/api/]
+                    });
+                }
+            })
+            .catch(() => {
+                console.error('Sentry failed to load');
+            });
     }, [SENTRY_DSN]);
 
     return (
