@@ -30,6 +30,10 @@ jobs:
           APP_URL: ${{ secrets.APP_URL }}
           BACKEND_URL: ${{ secrets.BACKEND_URL }}
           UMAMI_ID: ${{ secrets.UMAMI_ID }}
+          SENTRY_PROJECT: ${{ env.SENTRY_PROJECT }}
+          SENTRY_ORG: ${{ env.SENTRY_ORG }}
+          SENTRY_DSN: ${{ env.SENTRY_DSN }}
+          SENTRY_AUTH_TOKEN: ${{ env.SENTRY_AUTH_TOKEN }}
         run: |
             git submodule update --init --recursive
             yarn install
