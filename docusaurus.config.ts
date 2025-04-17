@@ -28,6 +28,7 @@ import { v4 as uuidv4 } from 'uuid';
 import matter from 'gray-matter';
 import { promises as fs } from 'fs';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
+import { sentryWebpackPlugin } from '@sentry/webpack-plugin';
 
 const BUILD_LOCATION = __dirname;
 const GIT_COMMIT_SHA = process.env.GITHUB_SHA || Math.random().toString(36).substring(7);
@@ -179,7 +180,8 @@ const config: Config = {
     TENANT_ID: process.env.TENANT_ID,
     /** The application id uri generated in https://portal.azure.com */
     API_URI: process.env.API_URI,
-    GIT_COMMIT_SHA: GIT_COMMIT_SHA
+    GIT_COMMIT_SHA: GIT_COMMIT_SHA,
+    SENTRY_DSN: process.env.SENTRY_DSN
   },
   future: {
     experimental_faster: {
@@ -489,6 +491,32 @@ const config: Config = {
               }
             }
           }
+        }
+      }
+    },
+    () => {
+      const SENTRY_AUTH_TOKEN = process.env.SENTRY_AUTH_TOKEN;
+      const SENTRY_ORG = process.env.SENTRY_ORG;
+      const SENTRY_PROJECT = process.env.SENTRY_PROJECT;
+      if (!SENTRY_AUTH_TOKEN || !SENTRY_ORG || !SENTRY_PROJECT) {
+        console.warn(
+          'Sentry is not configured. Please set SENTRY_AUTH_TOKEN, SENTRY_ORG and SENTRY_PROJECT in your environment variables.'
+        );
+        return {name: 'sentry-configuration'};
+      }
+      return {
+        name: 'sentry-configuration',
+        configureWebpack(config, isServer, utils, content) {
+            return {
+              devtool: 'source-map',
+              plugins: [
+                sentryWebpackPlugin({
+                  authToken: SENTRY_AUTH_TOKEN,
+                  org: SENTRY_ORG,
+                  project: SENTRY_PROJECT
+                })
+              ],
+            };
         }
       }
     },
