@@ -192,9 +192,9 @@ function Root({ children }: { children: React.ReactNode }) {
             .then((Sentry) => {
                 if (Sentry) {
                     Sentry.init({
-                        dsn: SENTRY_DSN
-                        // integrations: [Sentry.browserTracingIntegration()],
-                        // tracesSampleRate: 1.0, //  Capture 100% of the transactions
+                        dsn: SENTRY_DSN,
+                        integrations: [Sentry.browserTracingIntegration()],
+                        tracesSampleRate: 0.1 //  Capture 100% of the transactions
                         // tracePropagationTargets: ['localhost', /^https:\/\/yourserver\.io\/api/]
                     });
                 }
