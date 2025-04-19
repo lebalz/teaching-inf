@@ -9,7 +9,8 @@ import {
     update as apiUpdate,
     addUser as apiAddUser,
     removeUser as apiRemoveUser,
-    destroy as apiDestroy
+    destroy as apiDestroy,
+    setAdminRole as apiSetAdminRole
 } from '../api/studentGroup';
 import User from '../models/User';
 
@@ -104,6 +105,21 @@ export class StudentGroupStore extends iStore<`members-${string}`> {
             return apiRemoveUser(studentGroup.id, user.id, signal.signal).then(
                 action(({ data }) => {
                     studentGroup.userIds.delete(user.id);
+                    return studentGroup;
+                })
+            );
+        });
+    }
+    @action
+    setAdminRole(studentGroup: StudentGroup, user: User, isAdmin: boolean) {
+        return this.withAbortController(`members-admin-${studentGroup.id}-${user.id}`, async (signal) => {
+            return apiSetAdminRole(studentGroup.id, user.id, isAdmin, signal.signal).then(
+                action(({ data }) => {
+                    if (isAdmin) {
+                        studentGroup.adminIds.add(user.id);
+                    } else {
+                        studentGroup.adminIds.delete(user.id);
+                    }
                     return studentGroup;
                 })
             );
