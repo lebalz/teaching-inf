@@ -36,16 +36,18 @@ export default class User {
     get hasElevatedAccess() {
         return this.accessLevel > 0;
     }
+    @computed
+    get isAdmin() {
+        return this.role === Role.ADMIN;
+    }
 
     @computed
     get isStudent() {
-        return STUDENT_USERNAME_PATTERN
-            ? new RegExp(STUDENT_USERNAME_PATTERN, 'i').test(this.email)
-            : !this.hasElevatedAccess;
+        return this.role === Role.STUDENT;
     }
 
     get isTeacher() {
-        return !this.isStudent;
+        return this.role === Role.TEACHER;
     }
 
     @computed

@@ -47,11 +47,13 @@ export class StudentGroupStore extends iStore<`members-${string}`> {
     @action
     create(name: string, description: string, parentId?: string) {
         return this.withAbortController(`create-${name}`, async (signal) => {
-            return apiCreate({ name, description, parentId }, signal.signal).then(({ data }) => {
-                const group = new StudentGroup(data, this);
-                this.studentGroups.push(group);
-                return group;
-            });
+            return apiCreate({ name, description, parentId }, signal.signal).then(
+                action(({ data }) => {
+                    const group = new StudentGroup(data, this);
+                    this.studentGroups.push(group);
+                    return group;
+                })
+            );
         });
     }
 
@@ -78,10 +80,12 @@ export class StudentGroupStore extends iStore<`members-${string}`> {
     @action
     destroy(studentGroup: StudentGroup) {
         return this.withAbortController(`destroy-${studentGroup.id}`, async (signal) => {
-            return apiDestroy(studentGroup.id, signal.signal).then(({ data }) => {
-                this.studentGroups.remove(studentGroup);
-                return studentGroup;
-            });
+            return apiDestroy(studentGroup.id, signal.signal).then(
+                action(({ data }) => {
+                    this.studentGroups.remove(studentGroup);
+                    return studentGroup;
+                })
+            );
         });
     }
 

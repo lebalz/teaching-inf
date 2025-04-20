@@ -7,9 +7,7 @@ import Button from '@tdev-components/shared/Button';
 import {
     mdiAccountKey,
     mdiAccountKeyOutline,
-    mdiAccountMinus,
     mdiAccountOff,
-    mdiAccountOffOutline,
     mdiAccountReactivateOutline,
     mdiCircleEditOutline,
     mdiCloseCircleOutline,
@@ -32,11 +30,11 @@ interface Props {
 
 const StudentGroup = observer((props: Props) => {
     const [removedIds, setRemovedIds] = React.useState<string[]>([]);
-    const [editing, setEditing] = React.useState(false);
+    const ref = React.useRef<HTMLInputElement>(null);
     const userStore = useStore('userStore');
     const groupStore = useStore('studentGroupStore');
     const group = props.studentGroup;
-    const isAdmin = group.isAdmin;
+    const isAdmin = group.isGroupAdmin;
     React.useEffect(() => {
         const timeout = setTimeout(() => {
             setRemovedIds([]);
@@ -47,7 +45,7 @@ const StudentGroup = observer((props: Props) => {
         <div className={clsx(styles.studentGroup, props.className, 'card')}>
             <div className={clsx('card__header', styles.header)}>
                 <h3>
-                    {isAdmin && editing ? (
+                    {isAdmin && group.isEditing ? (
                         <input
                             type="text"
                             placeholder="Titel..."
@@ -55,6 +53,11 @@ const StudentGroup = observer((props: Props) => {
                             className={clsx(styles.textInput)}
                             onChange={(e) => {
                                 group.setName(e.target.value);
+                            }}
+                            autoFocus
+                            tabIndex={1}
+                            onFocus={(inp) => {
+                                inp.target.select();
                             }}
                         />
                     ) : (
@@ -69,12 +72,12 @@ const StudentGroup = observer((props: Props) => {
                             color={'green'}
                         />
                         <div>
-                            {editing ? (
+                            {group.isEditing ? (
                                 <>
                                     <Button
                                         onClick={() => {
                                             group.reset();
-                                            setEditing(false);
+                                            group.setEditing(false);
                                         }}
                                         icon={mdiCloseCircleOutline}
                                         color="black"
@@ -83,26 +86,26 @@ const StudentGroup = observer((props: Props) => {
                                     <Button
                                         onClick={() => {
                                             group.save();
-                                            setEditing(false);
+                                            group.setEditing(false);
                                         }}
                                         icon={mdiContentSave}
                                         color="green"
                                         title="Speichern"
                                     />
-                                    <Button
-                                        onClick={() => {
+                                    <Confirm
+                                        onConfirm={() => {
                                             groupStore.destroy(group);
                                         }}
                                         icon={mdiTrashCanOutline}
                                         color="red"
                                         title="Löschen"
+                                        confirmText="Wirklich löschen?"
                                     />
                                 </>
                             ) : (
                                 <Button
                                     onClick={() => {
-                                        setEditing(!editing);
-                                        setEditing(true);
+                                        group.setEditing(true);
                                     }}
                                     icon={mdiCircleEditOutline}
                                     color="orange"
@@ -117,7 +120,7 @@ const StudentGroup = observer((props: Props) => {
                 <DefinitionList>
                     <dt>Beschreibung</dt>
                     <dd>
-                        {isAdmin && editing ? (
+                        {isAdmin && group.isEditing ? (
                             <textarea
                                 placeholder="Beschreibung..."
                                 value={group.description}
@@ -125,6 +128,7 @@ const StudentGroup = observer((props: Props) => {
                                 onChange={(e) => {
                                     group.setDescription(e.target.value);
                                 }}
+                                tabIndex={2}
                             />
                         ) : (
                             group.description || '-'
@@ -138,9 +142,10 @@ const StudentGroup = observer((props: Props) => {
                     <dd>{group.fUpdatedAt}</dd>
                     <dt>Obergruppe</dt>
                     <dd>
-                        {isAdmin && editing ? (
+                        {isAdmin && group.isEditing ? (
                             <>
                                 <select
+                                    tabIndex={3}
                                     value={group.parentId || ''}
                                     onChange={(e) => {
                                         group.setParentId(e.target.value || null);
@@ -181,6 +186,7 @@ const StudentGroup = observer((props: Props) => {
                                                     color="red"
                                                     size={SIZE_S}
                                                     title="Admin-Rolle zurückziehen"
+                                                    disabled={group.adminIds.size === 1}
                                                     confirmText="Adminrecht entziehen?"
                                                     onConfirm={() => {
                                                         group.setAdminRole(admin, false);

@@ -7,6 +7,8 @@ import Button from '@tdev-components/shared/Button';
 import { mdiPlusCircleOutline } from '@mdi/js';
 import StudentGroup from '@tdev-components/StudentGroup';
 import _ from 'lodash';
+import scheduleMicrotask from '@tdev-components/util/scheduleMicrotask';
+import { action } from 'mobx';
 
 const StudentGroupPanel = observer(() => {
     const userStore = useStore('userStore');
@@ -19,7 +21,11 @@ const StudentGroupPanel = observer(() => {
         <div>
             <Button
                 onClick={() => {
-                    groupStore.create('Neue Lerngruppe', 'Beschreibung');
+                    groupStore.create('', '').then(
+                        action((group) => {
+                            group?.setEditing(true);
+                        })
+                    );
                 }}
                 icon={mdiPlusCircleOutline}
                 color="primary"
@@ -28,7 +34,7 @@ const StudentGroupPanel = observer(() => {
             <div className={clsx(styles.studentGroups)}>
                 {_.orderBy(
                     groupStore.studentGroups.filter((g) => !g.parentId),
-                    ['name', 'createdAt'],
+                    ['_pristine.name', 'createdAt'],
                     ['asc', 'desc']
                 ).map((group) => (
                     <StudentGroup key={group.id} studentGroup={group} className={clsx(styles.studentGroup)} />

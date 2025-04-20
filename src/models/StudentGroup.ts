@@ -16,6 +16,7 @@ class StudentGroup {
     adminIds = observable.set<string>([]);
 
     @observable accessor parentId: string | null;
+    @observable accessor isEditing: boolean = false;
 
     readonly _pristine: { name: string; description: string };
 
@@ -73,6 +74,11 @@ class StudentGroup {
     }
 
     @action
+    setEditing(isEditing: boolean) {
+        this.isEditing = isEditing;
+    }
+
+    @action
     setDescription(description: string) {
         this.description = description;
     }
@@ -93,17 +99,17 @@ class StudentGroup {
     }
 
     @computed
-    get isAdmin() {
+    get isGroupAdmin() {
         const { current } = this.store.root.userStore;
-        if (!current) {
+        if (!current || !current.hasElevatedAccess) {
             return false;
         }
-        return current.hasElevatedAccess || this.adminIds.has(current.id);
+        return current.isAdmin || this.adminIds.has(current.id);
     }
 
     @action
     setAdminRole(user: User, isAdmin: boolean) {
-        if (!this.isAdmin) {
+        if (!this.isGroupAdmin) {
             return;
         }
         return this.store.setAdminRole(this, user, isAdmin);
