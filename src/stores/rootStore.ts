@@ -52,7 +52,7 @@ export class RootStore {
                 this.userStore.load();
                 this.studentGroupStore.load();
                 this.cmsStore.initialize();
-                if (user.isAdmin) {
+                if (user.hasElevatedAccess) {
                     this.adminStore.load();
                 }
             }

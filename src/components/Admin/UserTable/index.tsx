@@ -13,7 +13,7 @@ const SIZE_S = 0.6;
 
 type SortColumn =
     | 'email'
-    | 'isAdmin'
+    | 'accessLevel'
     | 'firstName'
     | 'lastName'
     | 'createdAt'
@@ -113,9 +113,9 @@ const UserTable = observer((props: Props) => {
                                 <Button
                                     size={SIZE_S}
                                     iconSide="left"
-                                    icon={sortColumn === 'isAdmin' && icon}
-                                    text={'Admin?'}
-                                    onClick={() => setSortColumn('isAdmin')}
+                                    icon={sortColumn === 'accessLevel' && icon}
+                                    text={'Berechtigung'}
+                                    onClick={() => setSortColumn('accessLevel')}
                                 />
                             </th>
                             <th>

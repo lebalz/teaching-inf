@@ -12,7 +12,7 @@ const StudentGroupPanel = observer(() => {
     const userStore = useStore('userStore');
     const groupStore = useStore('studentGroupStore');
     const current = userStore.current;
-    if (!current?.isAdmin) {
+    if (!current?.hasElevatedAccess) {
         return null;
     }
     return (

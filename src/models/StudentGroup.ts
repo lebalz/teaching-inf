@@ -98,7 +98,7 @@ class StudentGroup {
         if (!current) {
             return false;
         }
-        return current.isAdmin || this.adminIds.has(current.id);
+        return current.hasElevatedAccess || this.adminIds.has(current.id);
     }
 
     @action

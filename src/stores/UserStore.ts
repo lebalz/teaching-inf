@@ -1,5 +1,5 @@
 import { action, computed, observable } from 'mobx';
-import { User as UserProps, all as apiAll, currentUser, update as apiUpdate } from '@tdev-api/user';
+import { User as UserProps, all as apiAll, currentUser, update as apiUpdate, Role } from '@tdev-api/user';
 import { RootStore } from '@tdev-stores/rootStore';
 import User from '@tdev-models/User';
 import _ from 'lodash';
@@ -96,7 +96,7 @@ export class UserStore extends iStore<`update-${string}`> {
 
     @computed
     get viewedUserId() {
-        if (!this.current?.isAdmin) {
+        if (!this.current?.hasElevatedAccess) {
             return this.current?.id;
         }
         return this._viewedUserId || this.current?.id || this.root.sessionStore.userId;
@@ -109,7 +109,7 @@ export class UserStore extends iStore<`update-${string}`> {
 
     @action
     switchUser(userId: string | undefined) {
-        if (!this.current?.isAdmin || this._viewedUserId === userId) {
+        if (!this.current?.hasElevatedAccess || this._viewedUserId === userId) {
             return;
         }
         /**
@@ -156,7 +156,7 @@ export class UserStore extends iStore<`update-${string}`> {
                 const currentUser = this.addToStore(res.data);
                 if (currentUser) {
                     Storage.set('SessionStore', {
-                        user: { ...currentUser.props, isAdmin: false }
+                        user: { ...currentUser.props, role: Role.STUDENT }
                     });
                 }
                 return currentUser;

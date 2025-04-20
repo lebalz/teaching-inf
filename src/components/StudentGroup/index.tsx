@@ -164,7 +164,7 @@ const StudentGroup = observer((props: Props) => {
                     <dt>Anzahl Schüler:innen</dt>
                     <dd>
                         <span className={clsx('badge badge--primary')}>
-                            {group.students.filter((u) => !u.isAdmin).length}
+                            {group.students.filter((u) => !u.hasElevatedAccess).length}
                         </span>
                     </dd>
                     <dt>Admins</dt>

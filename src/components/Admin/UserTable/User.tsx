@@ -8,6 +8,7 @@ import CopyBadge from '@tdev-components/shared/CopyBadge';
 import { formatDateTime } from '@tdev-models/helpers/date';
 import Icon from '@mdi/react';
 import { mdiCircle } from '@mdi/js';
+import { Role, RoleNames } from '@tdev-api/user';
 
 interface Props {
     user: UserModel;
@@ -32,25 +33,20 @@ const UserTableRow = observer((props: Props) => {
             <td>{user.email}</td>
             <td>
                 <div className={clsx(styles.role, 'button-group')}>
-                    {['Admin', 'User'].map((role, idx) => (
+                    {Object.values(Role).map((role, idx) => (
                         <button
                             key={idx}
                             className={clsx(
                                 'button',
                                 'button--sm',
-                                user.isAdmin
-                                    ? role === 'Admin'
-                                        ? 'button--primary'
-                                        : 'button--secondary'
-                                    : role === 'User'
-                                      ? 'button--primary'
-                                      : 'button--secondary'
+                                role === user.role ? 'button--primary' : 'button--secondary'
                             )}
                             onClick={() => {
-                                user.setAdmin(role === 'Admin');
+                                user.setRole(role);
                             }}
+                            disabled={user.id === user.store.current?.id}
                         >
-                            {role}
+                            {RoleNames[role]}
                         </button>
                     ))}
                 </div>

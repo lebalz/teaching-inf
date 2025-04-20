@@ -18,7 +18,7 @@ const AccountSwitcher = observer(() => {
 
     const klass = location.pathname.split('/')[1];
 
-    if (!isBrowser || !userStore.current?.isAdmin) {
+    if (!isBrowser || !userStore.current?.hasElevatedAccess) {
         return null;
     }
     return (
