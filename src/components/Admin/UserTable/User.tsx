@@ -8,7 +8,8 @@ import CopyBadge from '@tdev-components/shared/CopyBadge';
 import { formatDateTime } from '@tdev-models/helpers/date';
 import Icon from '@mdi/react';
 import { mdiCircle } from '@mdi/js';
-import { Role, RoleNames } from '@tdev-api/user';
+import { Role, RoleAccessLevel, RoleNames } from '@tdev-api/user';
+import { useStore } from '@tdev-hooks/useStore';
 
 interface Props {
     user: UserModel;
@@ -16,6 +17,11 @@ interface Props {
 
 const UserTableRow = observer((props: Props) => {
     const { user } = props;
+    const userStore = useStore('userStore');
+    const { current } = userStore;
+    if (!current) {
+        return null;
+    }
     return (
         <tr className={clsx(styles.user)}>
             <td>
@@ -44,7 +50,7 @@ const UserTableRow = observer((props: Props) => {
                             onClick={() => {
                                 user.setRole(role);
                             }}
-                            disabled={user.id === user.store.current?.id}
+                            disabled={user.id === current.id || current.accessLevel < RoleAccessLevel[role]}
                         >
                             {RoleNames[role]}
                         </button>
