@@ -10,7 +10,8 @@ import {
     addUser as apiAddUser,
     removeUser as apiRemoveUser,
     destroy as apiDestroy,
-    setAdminRole as apiSetAdminRole
+    setAdminRole as apiSetAdminRole,
+    PartialStudentGroup
 } from '../api/studentGroup';
 import User from '../models/User';
 
@@ -64,6 +65,35 @@ export class StudentGroupStore extends iStore<`members-${string}`> {
             this.studentGroups.remove(old);
         }
         this.studentGroups.push(studentGroup);
+    }
+
+    @action
+    removeFromStore(studentGroup?: StudentGroup): StudentGroup | undefined {
+        /**
+         * Removes the model to the store
+         */
+        if (studentGroup && this.studentGroups.remove(studentGroup)) {
+            return studentGroup;
+        }
+    }
+    @action
+    handleUpdate(data: PartialStudentGroup) {
+        const model = this.find(data.id);
+        if (model && model.id) {
+            (['name', 'description', 'parentId'] as ('name' | 'description' | 'parentId')[]).forEach(
+                action((key) => {
+                    if (data[key] !== undefined && data[key] !== model[key]) {
+                        model[key] = data[key]!;
+                    }
+                })
+            );
+            if (Array.isArray(data.userIds)) {
+                model.userIds.replace(data.userIds);
+            }
+            if (Array.isArray(data.adminIds)) {
+                model.adminIds.replace(data.adminIds);
+            }
+        }
     }
 
     @action
