@@ -31,7 +31,6 @@ interface Props {
 
 const StudentGroup = observer((props: Props) => {
     const [removedIds, setRemovedIds] = React.useState<string[]>([]);
-    const ref = React.useRef<HTMLInputElement>(null);
     const userStore = useStore('userStore');
     const groupStore = useStore('studentGroupStore');
     const group = props.studentGroup;

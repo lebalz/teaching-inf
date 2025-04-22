@@ -41,9 +41,9 @@ export class UserStore extends iStore<`update-${string}`> {
     }
 
     /**
-     * returns all users that are managed/administrated by the current user
-     * - through a group membership the current user is admin member of
-     * - when the current user is an admin
+     * returns all users that are managed/administrated by the current user, either:
+     * - when the current user is an admin, or
+     * - through a group admin-membership
      */
     @computed
     get managedUsers() {
