@@ -40,6 +40,28 @@ export class UserStore extends iStore<`update-${string}`> {
         }
     }
 
+    /**
+     * returns all users that are managed/administrated by the current user
+     * - through a group membership the current user is admin member of
+     * - when the current user is an admin
+     */
+    @computed
+    get managedUsers() {
+        if (!this.current) {
+            return [];
+        }
+        if (!this.current.hasElevatedAccess) {
+            return [this.current];
+        }
+        if (this.current.isAdmin) {
+            return this.users;
+        }
+        return _.uniqBy(
+            this.root.studentGroupStore.studentGroups.flatMap((g) => [...g.students, ...g.admins]),
+            'id'
+        );
+    }
+
     find = computedFn(
         function <T>(this: UserStore, id?: string): User | undefined {
             if (!id) {
