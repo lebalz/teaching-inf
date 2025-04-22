@@ -57,7 +57,12 @@ export class UserStore extends iStore<`update-${string}`> {
             return this.users;
         }
         return _.uniqBy(
-            this.root.studentGroupStore.studentGroups.flatMap((g) => [...g.students, ...g.admins]),
+            [
+                this.current,
+                ...this.root.studentGroupStore.studentGroups
+                    .filter((s) => s.isGroupAdmin)
+                    .flatMap((g) => [...g.students, ...g.admins])
+            ],
             'id'
         );
     }
