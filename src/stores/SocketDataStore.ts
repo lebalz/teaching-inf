@@ -214,8 +214,7 @@ export class SocketDataStore extends iStore<'ping'> {
                 break;
             case RecordType.StudentGroup:
                 const studentGroup = record as PartialStudentGroup;
-                if (Array.isArray(studentGroup.userIds)) {
-                }
+                this.root.studentGroupStore.handleUpdate(studentGroup);
                 break;
             default:
                 console.log('changedRecord', type, record);
@@ -245,6 +244,10 @@ export class SocketDataStore extends iStore<'ping'> {
                 break;
             case RecordType.StudentGroup:
                 const currentGroup = this.root.studentGroupStore.find(id);
+                if (this.root.userStore.current?.isAdmin && currentGroup?.userIds?.size) {
+                    /** admins always display all groups with some members, no matter what */
+                    return;
+                }
                 this.root.studentGroupStore.removeFromStore(currentGroup);
                 this.leaveRoom(id);
                 break;

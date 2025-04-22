@@ -79,14 +79,19 @@ export class StudentGroupStore extends iStore<`members-${string}`> {
     @action
     handleUpdate(data: PartialStudentGroup) {
         const model = this.find(data.id);
+        if (!model) {
+            return;
+        }
+        const needsReplace = (['name', 'description'] as ('name' | 'description')[]).some(
+            (key) => data[key] !== undefined && data[key] !== model[key]
+        );
+        if (needsReplace) {
+            return this.addToStore(new StudentGroup({ adminIds: [], userIds: [], ...data }, this));
+        }
         if (model && model.id) {
-            (['name', 'description', 'parentId'] as ('name' | 'description' | 'parentId')[]).forEach(
-                action((key) => {
-                    if (data[key] !== undefined && data[key] !== model[key]) {
-                        model[key] = data[key]!;
-                    }
-                })
-            );
+            if (data.parentId !== undefined && data.parentId !== model.parentId) {
+                model.setParentId(data.parentId);
+            }
             if (Array.isArray(data.userIds)) {
                 model.userIds.replace(data.userIds);
             }
