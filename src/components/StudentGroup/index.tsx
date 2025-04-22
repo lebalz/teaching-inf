@@ -7,9 +7,10 @@ import Button from '@tdev-components/shared/Button';
 import {
     mdiAccountKey,
     mdiAccountKeyOutline,
-    mdiAccountOff,
     mdiAccountReactivateOutline,
     mdiCircleEditOutline,
+    mdiClose,
+    mdiCloseBox,
     mdiCloseCircleOutline,
     mdiContentSave,
     mdiFileExcelOutline,
@@ -202,7 +203,8 @@ const StudentGroup = observer((props: Props) => {
                                                     size={SIZE_S}
                                                     confirmText="Admin aus Gruppe entfernen?"
                                                     confirmColor="red"
-                                                    icon={mdiAccountOff}
+                                                    icon={mdiClose}
+                                                    confirmIcon={mdiCloseBox}
                                                     title={
                                                         group.admins.length === 1
                                                             ? 'Eine Gruppe ohne Admins ist nicht zulässig'
@@ -245,7 +247,7 @@ const StudentGroup = observer((props: Props) => {
                                                         ]);
                                                     }}
                                                     size={SIZE_S}
-                                                    icon={mdiAccountOff}
+                                                    icon={mdiClose}
                                                     color="red"
                                                     title="Entfernen"
                                                 />
