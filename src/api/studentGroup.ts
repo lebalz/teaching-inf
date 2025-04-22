@@ -14,11 +14,6 @@ export interface StudentGroup {
     updatedAt: string;
 }
 
-export type PartialStudentGroup = Omit<StudentGroup, 'userIds' | 'adminIds'> & {
-    userIds?: string[];
-    adminIds?: string[];
-};
-
 export function all(signal: AbortSignal): AxiosPromise<StudentGroup[]> {
     return api.get(`/studentGroups`, { signal });
 }

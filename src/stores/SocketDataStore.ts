@@ -21,7 +21,7 @@ import { GroupPermission, UserPermission } from '@tdev-api/permission';
 import { Document, DocumentType } from '../api/document';
 import { NoneAccess } from '@tdev-models/helpers/accessPolicy';
 import { CmsSettings } from '@tdev-api/cms';
-import { PartialStudentGroup, StudentGroup as ApiStudentGroup } from '@tdev-api/studentGroup';
+import { StudentGroup as ApiStudentGroup } from '@tdev-api/studentGroup';
 import StudentGroup from '@tdev-models/StudentGroup';
 
 type TypedSocket = Socket<ServerToClientEvents, ClientToServerEvents>;
@@ -213,7 +213,7 @@ export class SocketDataStore extends iStore<'ping'> {
                 this.root.cmsStore.handleSettingsChange(record as CmsSettings);
                 break;
             case RecordType.StudentGroup:
-                const studentGroup = record as PartialStudentGroup;
+                const studentGroup = record as ApiStudentGroup;
                 this.root.studentGroupStore.handleUpdate(studentGroup);
                 break;
             default:

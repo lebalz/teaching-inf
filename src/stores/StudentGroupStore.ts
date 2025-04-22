@@ -11,7 +11,7 @@ import {
     removeUser as apiRemoveUser,
     destroy as apiDestroy,
     setAdminRole as apiSetAdminRole,
-    PartialStudentGroup
+    StudentGroup as ApiStudentGroup
 } from '../api/studentGroup';
 import User from '../models/User';
 
@@ -77,7 +77,7 @@ export class StudentGroupStore extends iStore<`members-${string}`> {
         }
     }
     @action
-    handleUpdate(data: PartialStudentGroup) {
+    handleUpdate(data: ApiStudentGroup) {
         const model = this.find(data.id);
         if (!model) {
             return;
@@ -86,7 +86,7 @@ export class StudentGroupStore extends iStore<`members-${string}`> {
             (key) => data[key] !== undefined && data[key] !== model[key]
         );
         if (needsReplace) {
-            return this.addToStore(new StudentGroup({ adminIds: [], userIds: [], ...data }, this));
+            return this.addToStore(new StudentGroup(data, this));
         }
         if (model && model.id) {
             if (data.parentId !== undefined && data.parentId !== model.parentId) {

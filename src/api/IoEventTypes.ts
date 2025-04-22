@@ -4,7 +4,7 @@ import { rootStore } from '../stores/rootStore';
 import { GroupPermission, UserPermission } from '../api/permission';
 import { DocumentRootUpdate } from '../api/documentRoot';
 import { CmsSettings } from './cms';
-import { PartialStudentGroup, StudentGroup } from './studentGroup';
+import { StudentGroup } from './studentGroup';
 
 export enum IoEvent {
     NEW_RECORD = 'NEW_RECORD',
@@ -31,7 +31,7 @@ type TypeRecordMap = {
     [RecordType.GroupPermission]: GroupPermission;
     [RecordType.DocumentRoot]: DocumentRootUpdate;
     [RecordType.CmsSettings]: CmsSettings;
-    [RecordType.StudentGroup]: PartialStudentGroup;
+    [RecordType.StudentGroup]: StudentGroup;
 };
 
 export interface NewRecord<T extends RecordType> {
