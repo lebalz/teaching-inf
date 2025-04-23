@@ -7,6 +7,8 @@ import BrowserWindow from '@tdev-components/BrowserWindow';
 
 # Steps
 
+Formatierung für Anleitungen im Schritt-für-Schritt-Stil.
+
 ```md
 import Steps from '@tdev-components/Steps';
 
@@ -47,18 +49,4 @@ import Steps from '@tdev-components/Steps';
 
 :::info[Code]
 - `src/components/Steps`
-:::
-
-:::info[`docusaurus.config.ts`]
-Kommentare werden über das CSS-`::after` Attribut hinzugefügt, was zu Konflikten mit dem `Steps`-Plugin führt, da dieses die `<li>`-Elemente enebfalls über das `::after`-Attribut annotiert.
-
-Deshalb sollten Kommentare für die `Steps`-Komponente deaktiviert werden.
-```ts title="docusaurus.config.ts"
-[
-   commentPlugin,
-   {
-      commentableJsxFlowElements: ['Steps', /*...*/],
-   }
-],
-```
 :::
