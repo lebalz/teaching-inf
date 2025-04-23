@@ -1,4 +1,4 @@
-import { action, observable } from 'mobx';
+import { action, computed, observable } from 'mobx';
 import { RootStore } from '@tdev-stores/rootStore';
 import { computedFn } from 'mobx-utils';
 import StudentGroup from '@tdev-models/StudentGroup';
@@ -33,6 +33,17 @@ export class StudentGroupStore extends iStore<`members-${string}`> {
         },
         { keepAlive: true }
     );
+
+    @computed
+    get managedStudentGroups() {
+        if (!this.root.userStore.current) {
+            return [];
+        }
+        if (this.root.userStore.current.isAdmin) {
+            return this.studentGroups;
+        }
+        return this.studentGroups.filter((group) => group.isGroupAdmin);
+    }
 
     findByName = computedFn(
         function (this: StudentGroupStore, name?: string): StudentGroup | undefined {

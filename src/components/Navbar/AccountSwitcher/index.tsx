@@ -60,8 +60,8 @@ const AccountSwitcher = observer(() => {
                     <div className={clsx('card__body', styles.body)}>
                         <div className={styles.userList}>
                             {_.orderBy(
-                                userStore.managedUsers.filter((g) =>
-                                    g.studentGroups.some((g) => g.name === klass)
+                                userStore.managedUsers.filter((u) =>
+                                    u.studentGroups.some((g) => g.name === klass)
                                 ),
                                 ['firstName']
                             ).map((user) => (

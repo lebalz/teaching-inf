@@ -33,7 +33,7 @@ const StudentGroupPanel = observer(() => {
             />
             <div className={clsx(styles.studentGroups)}>
                 {_.orderBy(
-                    groupStore.studentGroups.filter((g) => !g.parentId),
+                    groupStore.managedStudentGroups.filter((g) => !g.parentId),
                     ['_pristine.name', 'createdAt'],
                     ['asc', 'desc']
                 ).map((group) => (

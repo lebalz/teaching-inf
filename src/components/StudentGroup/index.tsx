@@ -152,7 +152,7 @@ const StudentGroup = observer((props: Props) => {
                                     }}
                                 >
                                     <option value="">Keine</option>
-                                    {groupStore.studentGroups
+                                    {groupStore.managedStudentGroups
                                         .filter((g) => g.id !== group.id)
                                         .map((g) => (
                                             <option key={g.id} value={g.id}>
