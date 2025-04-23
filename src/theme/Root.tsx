@@ -10,7 +10,12 @@ import { setupMsalAxios, setupNoAuthAxios } from '@tdev-api/base';
 import { useStore } from '@tdev-hooks/useStore';
 import { runInAction } from 'mobx';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-const { NO_AUTH, TEST_USERNAME } = siteConfig.customFields as { TEST_USERNAME?: string; NO_AUTH?: boolean };
+import scheduleMicrotask from '@tdev-components/util/scheduleMicrotask';
+const { NO_AUTH, TEST_USERNAME, SENTRY_DSN } = siteConfig.customFields as {
+    TEST_USERNAME?: string;
+    NO_AUTH?: boolean;
+    SENTRY_DSN?: string;
+};
 export const msalInstance = new PublicClientApplication(msalConfig);
 
 if (NO_AUTH) {
@@ -135,10 +140,10 @@ const MsalAccount = observer(() => {
                  * 3. load authorized entities
                  */
                 setupMsalAxios();
-                setTimeout(() => {
+                scheduleMicrotask(() => {
                     rootStore.sessionStore.setAccount(active);
                     rootStore.load();
-                }, 0);
+                });
             }
         }
     }, [sessionStore?.authMethod, accounts, inProgress, instance, isAuthenticated]);
@@ -178,6 +183,26 @@ function Root({ children }: { children: React.ReactNode }) {
          */
         (window as any).store = rootStore;
     }, [rootStore]);
+    React.useEffect(() => {
+        // load sentry
+        if (!SENTRY_DSN) {
+            return;
+        }
+        import('@sentry/react')
+            .then((Sentry) => {
+                if (Sentry) {
+                    Sentry.init({
+                        dsn: SENTRY_DSN
+                        // integrations: [Sentry.browserTracingIntegration()],
+                        // tracesSampleRate: 1.0, //  Capture 100% of the transactions
+                        // tracePropagationTargets: ['localhost', /^https:\/\/yourserver\.io\/api/]
+                    });
+                }
+            })
+            .catch(() => {
+                console.error('Sentry failed to load');
+            });
+    }, [SENTRY_DSN]);
 
     return (
         <>

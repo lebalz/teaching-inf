@@ -20,6 +20,7 @@ import { DocumentRoot, DocumentRootUpdate } from '@tdev-api/documentRoot';
 import { GroupPermission, UserPermission } from '@tdev-api/permission';
 import { Document, DocumentType } from '../api/document';
 import { NoneAccess } from '@tdev-models/helpers/accessPolicy';
+import { CmsSettings } from '@tdev-api/cms';
 
 type TypedSocket = Socket<ServerToClientEvents, ClientToServerEvents>;
 /**
@@ -92,7 +93,7 @@ export class SocketDataStore extends iStore<'ping'> {
         const ws_url = BACKEND_URL;
         this.socket = io(ws_url, {
             withCredentials: true,
-            transports: ['websocket']
+            transports: ['websocket', 'webtransport']
         });
         this._socketConfig();
         this.socket.connect();
@@ -108,6 +109,10 @@ export class SocketDataStore extends iStore<'ping'> {
              */
             api.defaults.headers.common['x-metadata-socketid'] = this.socket!.id;
             this.setLiveState(true);
+        });
+        this.socket.io.on('reconnect_error', (err) => {
+            // disable current reconnection loop
+            this.socket?.io?.reconnection(false);
         });
 
         this.socket.on('disconnect', () => {
@@ -144,6 +149,10 @@ export class SocketDataStore extends iStore<'ping'> {
                 if (RecordsToCreate.has(doc.type) || doc.parentId) {
                     this.root.documentStore.addToStore(doc);
                 }
+                break;
+            case RecordType.CmsSettings:
+                const settings = record as CmsSettings;
+                this.root.cmsStore.handleSettingsChange(settings);
                 break;
             case RecordType.DocumentRoot:
                 const docRoot = record as DocumentRoot;
@@ -187,6 +196,9 @@ export class SocketDataStore extends iStore<'ping'> {
                 break;
             case RecordType.Document:
                 this.root.documentStore.addToStore(record as Document<DocumentType>);
+                break;
+            case RecordType.CmsSettings:
+                this.root.cmsStore.handleSettingsChange(record as CmsSettings);
                 break;
             default:
                 console.log('changedRecord', type, record);

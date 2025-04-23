@@ -51,8 +51,8 @@ export default function Figure(props: Props): React.ReactNode {
         }
     }, [ref]);
     return (
-        <figure className={clsx(styles.figure, 'figure')} style={opts} ref={ref}>
+        <span className={clsx(styles.figure, 'figure')} style={opts} ref={ref}>
             {props.children}
-        </figure>
+        </span>
     );
 }

@@ -5,7 +5,7 @@ import dynamicRouterPlugin, { Config as DynamicRouteConfig} from './src/plugins/
 import type * as Preset from '@docusaurus/preset-classic';
 import path, { resolve } from 'path';
 
-import strongPlugin, { visitor as captionVisitor } from './src/plugins/remark-strong/plugin';
+import strongPlugin, { transformer as captionVisitor } from './src/plugins/remark-strong/plugin';
 import deflistPlugin from './src/plugins/remark-deflist/plugin';
 import mdiPlugin from './src/plugins/remark-mdi/plugin';
 import kbdPlugin from './src/plugins/remark-kbd/plugin';
@@ -26,6 +26,7 @@ import { v4 as uuidv4 } from 'uuid';
 import matter from 'gray-matter';
 import { promises as fs } from 'fs';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
+import { sentryWebpackPlugin } from '@sentry/webpack-plugin';
 
 const BUILD_LOCATION = __dirname;
 const GIT_COMMIT_SHA = process.env.GITHUB_SHA || Math.random().toString(36).substring(7);
@@ -48,7 +49,14 @@ const BEFORE_DEFAULT_REMARK_PLUGINS = [
         figure: 'Figure'
       },
       captionVisitors: [
-        (ast, caption) => captionVisitor(ast, caption, { className: 'boxed' })
+        (ast, caption) => captionVisitor(ast, caption, (children) => {
+                    return {
+                        type: 'mdxJsxTextElement',
+                        name: 'strong',
+                        attributes: [{ type: 'mdxJsxAttribute', name: 'className', value: 'boxed' }],
+                        children: children
+                    };
+                })
       ] satisfies CaptionVisitor[]
     }
   ],
@@ -115,6 +123,8 @@ const getCopyPlugin = (
   return CopyWebpackPlugin;
 }
 
+const ORGANIZATION_NAME = 'gbsl-informatik';
+const PROJECT_NAME = 'teaching-dev';
 
 const config: Config = {
   title: 'Teaching-Dev',
@@ -129,8 +139,8 @@ const config: Config = {
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'gbsl-informatik', // Usually your GitHub org/user name.
-  projectName: 'teaching-dev', // Usually your repo name.
+  organizationName: ORGANIZATION_NAME, // Usually your GitHub org/user name.
+  projectName: PROJECT_NAME, // Usually your repo name.
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -155,7 +165,8 @@ const config: Config = {
     TENANT_ID: process.env.TENANT_ID,
     /** The application id uri generated in https://portal.azure.com */
     API_URI: process.env.API_URI,
-    GIT_COMMIT_SHA: GIT_COMMIT_SHA
+    GIT_COMMIT_SHA: GIT_COMMIT_SHA,
+    SENTRY_DSN: process.env.SENTRY_DSN
   },
   future: {
     experimental_faster: {
@@ -249,7 +260,7 @@ const config: Config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/GBSL-Informatik/teaching-dev/edit/main/',
+            `/cms/${ORGANIZATION_NAME}/${PROJECT_NAME}/`,
           remarkPlugins: REMARK_PLUGINS,
           rehypePlugins: REHYPE_PLUGINS,
           beforeDefaultRemarkPlugins: BEFORE_DEFAULT_REMARK_PLUGINS,
@@ -259,7 +270,7 @@ const config: Config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/GBSL-Informatik/teaching-dev/edit/main/',
+            `/cms/${ORGANIZATION_NAME}/${PROJECT_NAME}/`,
             remarkPlugins: REMARK_PLUGINS,
             rehypePlugins: REHYPE_PLUGINS,
           beforeDefaultRemarkPlugins: BEFORE_DEFAULT_REMARK_PLUGINS,
@@ -268,6 +279,7 @@ const config: Config = {
           remarkPlugins: REMARK_PLUGINS,
           rehypePlugins: REHYPE_PLUGINS,
           beforeDefaultRemarkPlugins: BEFORE_DEFAULT_REMARK_PLUGINS,
+          editUrl: `/cms/${ORGANIZATION_NAME}/${PROJECT_NAME}/`
         },
         theme: {
           customCss: './src/css/custom.scss',
@@ -292,6 +304,11 @@ const config: Config = {
           position: 'left',
         },
         { to: '/blog', label: 'Blog', position: 'left' },
+        {
+          to: '/cms',
+          label: 'CMS',
+          position: 'left',
+        },
         {
           href: 'https://github.com/GBSL-Informatik/teaching-dev',
           label: 'GitHub',
@@ -334,7 +351,7 @@ const config: Config = {
         },
       ],
       copyright: `Copyright © ${new Date().getFullYear()} Teaching Dev. Built with Docusaurus. <br />
-      <a class="badge badge--primary" href="https://github.com/GBSL-Informatik/teaching-dev/commit/${GIT_COMMIT_SHA}">
+      <a class="badge badge--primary" href="https://github.com/GBSL-Informatik/teaching-dev/commits/${GIT_COMMIT_SHA}">
             ᚶ ${GIT_COMMIT_SHA.substring(0, 7)}
       </a>
       `,
@@ -354,6 +371,10 @@ const config: Config = {
           {
             path: '/rooms/',
             component: '@tdev-components/Rooms',
+          },
+          {
+            path: '/cms/',
+            component: '@tdev-components/Cms',
           }
         ]
       } satisfies DynamicRouteConfig
@@ -378,10 +399,37 @@ const config: Config = {
                 '@tdev-models': path.resolve(__dirname, './src/models'),
                 '@tdev-stores': path.resolve(__dirname, './src/stores'),
                 '@tdev-api': path.resolve(__dirname, './src/api'),
+                '@tdev-plugins': path.resolve(__dirname, './src/plugins'),
                 '@tdev': path.resolve(__dirname, './src'),
               }
             }
           }
+        }
+      }
+    },
+    () => {
+      const SENTRY_AUTH_TOKEN = process.env.SENTRY_AUTH_TOKEN;
+      const SENTRY_ORG = process.env.SENTRY_ORG;
+      const SENTRY_PROJECT = process.env.SENTRY_PROJECT;
+      if (!SENTRY_AUTH_TOKEN || !SENTRY_ORG || !SENTRY_PROJECT) {
+        console.warn(
+          'Sentry is not configured. Please set SENTRY_AUTH_TOKEN, SENTRY_ORG and SENTRY_PROJECT in your environment variables.'
+        );
+        return {name: 'sentry-configuration'};
+      }
+      return {
+        name: 'sentry-configuration',
+        configureWebpack(config, isServer, utils, content) {
+            return {
+              devtool: 'source-map',
+              plugins: [
+                sentryWebpackPlugin({
+                  authToken: SENTRY_AUTH_TOKEN,
+                  org: SENTRY_ORG,
+                  project: SENTRY_PROJECT
+                })
+              ],
+            };
         }
       }
     },
