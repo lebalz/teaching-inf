@@ -32,7 +32,7 @@ export function setAdminRole(
     isAdmin: boolean,
     signal: AbortSignal
 ): AxiosPromise<StudentGroup> {
-    return api.post(`/studentGroups/${id}/${userId}`, { isAdmin: isAdmin }, { signal });
+    return api.post(`/studentGroups/${id}/admins/${userId}`, { isAdmin: isAdmin }, { signal });
 }
 
 export function update(
