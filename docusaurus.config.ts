@@ -477,9 +477,9 @@ const config: Config = {
               },
               resolve: {
                 fallback: {
-                  'roughjs/bin/math': require.resolve('roughjs/bin/math.js'),
-                  'roughjs/bin/rough': require.resolve('roughjs/bin/rough.js'),
-                  'roughjs/bin/generator': require.resolve('roughjs/bin/generator.js')
+                  'roughjs/bin/math': path.resolve(__dirname, './node_modules/roughjs/bin/math.js'),
+                  'roughjs/bin/rough': path.resolve(__dirname, './node_modules/roughjs/bin/rough.js'),
+                  'roughjs/bin/generator': path.resolve(__dirname, './node_modules/roughjs/bin/generator.js')
                 }
               },
               plugins: [

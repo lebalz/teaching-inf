@@ -81,7 +81,6 @@ const ScannerComponent = (props: { Lib: typeof QrScannerLib } & Props) => {
                     }}
                     allowMultiple={false}
                     components={{
-                        audio: false,
                         torch: true,
                         finder: true,
                         zoom: true,

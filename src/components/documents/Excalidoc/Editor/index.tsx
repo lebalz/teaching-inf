@@ -13,7 +13,7 @@ import type * as ExcalidrawLib from '@excalidraw/excalidraw';
 import _ from 'lodash';
 import { useDocument } from '@tdev-hooks/useDocument';
 import { DocumentType } from '@tdev-api/document';
-
+import '@excalidraw/excalidraw/index.css';
 export interface Props extends MetaInit {
     Lib: typeof ExcalidrawLib;
     documentId: string;
