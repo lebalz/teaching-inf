@@ -8,8 +8,8 @@ export enum Role {
 }
 
 export const RoleNames: { [key in Role]: string } = {
-    [Role.STUDENT]: 'Schüler',
-    [Role.TEACHER]: 'Lehrer',
+    [Role.STUDENT]: 'SuS',
+    [Role.TEACHER]: 'LP',
     [Role.ADMIN]: 'Admin'
 };
 

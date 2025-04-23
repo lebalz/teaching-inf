@@ -50,7 +50,11 @@ const UserTableRow = observer((props: Props) => {
                             onClick={() => {
                                 user.setRole(role);
                             }}
-                            disabled={user.id === current.id || current.accessLevel < RoleAccessLevel[role]}
+                            disabled={
+                                user.id === current.id ||
+                                current.accessLevel < RoleAccessLevel[role] ||
+                                user.accessLevel > current.accessLevel
+                            }
                         >
                             {RoleNames[role]}
                         </button>
