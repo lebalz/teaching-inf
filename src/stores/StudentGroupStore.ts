@@ -154,6 +154,7 @@ export class StudentGroupStore extends iStore<`members-${string}`> {
         return this.withAbortController(`members-rm-${studentGroup.id}-${user.id}`, async (signal) => {
             return apiRemoveUser(studentGroup.id, user.id, signal.signal).then(
                 action(({ data }) => {
+                    studentGroup.adminIds.delete(user.id);
                     studentGroup.userIds.delete(user.id);
                     return studentGroup;
                 })
