@@ -3,7 +3,7 @@ import { themes as prismThemes } from 'prism-react-renderer';
 import type { Config, CurrentBundler } from '@docusaurus/types';
 import dynamicRouterPlugin, { Config as DynamicRouteConfig} from './src/plugins/plugin-dynamic-routes';
 import type * as Preset from '@docusaurus/preset-classic';
-import path, { resolve } from 'path';
+import path from 'path';
 
 import strongPlugin, { transformer as captionVisitor } from './src/plugins/remark-strong/plugin';
 import deflistPlugin from './src/plugins/remark-deflist/plugin';
@@ -196,9 +196,9 @@ const config: Config = {
             },
             transform: {
               ...defaultOptions.jsc.transform,
-              decoratorVersion: '2022-03'
+              decoratorVersion: '2022-03',              
             }
-          }
+          },
         },
       }
     },
@@ -473,10 +473,14 @@ const config: Config = {
                     test: /\.excalidrawlib$/,
                     type: 'json',
                   }
-                ]
+                ],
               },
               resolve: {
-                fullySpecified: false
+                fallback: {
+                  'roughjs/bin/math': require.resolve('roughjs/bin/math.js'),
+                  'roughjs/bin/rough': require.resolve('roughjs/bin/rough.js'),
+                  'roughjs/bin/generator': require.resolve('roughjs/bin/generator.js')
+                }
               },
               plugins: [
                 new currentBundler.instance.DefinePlugin({

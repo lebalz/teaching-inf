@@ -110,7 +110,7 @@ const Editor = observer((props: Props) => {
         };
     }, [excalidrawAPI]);
 
-    if (!excalidoc || !Lib) {
+    if (!excalidoc || !Lib || !Lib.MainMenu) {
         return null;
     }
     return (
