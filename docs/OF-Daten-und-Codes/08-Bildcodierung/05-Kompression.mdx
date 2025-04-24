@@ -53,6 +53,13 @@ Das folgende Foto hat im Original eine Auflösung von `6016x4016` Pixel mit eine
 ::::
 
 
-## verlustfreie und verlustbehaftete Komprimierung
+## Verlustfreie und verlustbehaftete Komprimierung
 
-Beide Bildformate komprimieren die Bilder - allerdings geht bei `JPEG` Information verloren und kann **nicht wiederhergestellt** werden. Es handelt sich also um eine verlusbehaftete Komprimierung. `PNG` verwendet im Unterschied dazu eine verlustfreie Komprimierung, was sich durch eine unveränderte Qualität abzeichnet, jedoch auch im deutlich höheren Speicherbedarf äussert.
+Beide Bildformate komprimieren die Bilder - allerdings geht bei `JPEG` Information verloren und kann **nicht wiederhergestellt** werden. Es handelt sich also um eine verlusbehaftete Komprimierung. `PNG` verwendet im Unterschied dazu eine verlustfreie Komprimierung, was sich durch eine unveränderte Qualität abzeichnet, sich jedoch auch im deutlich höheren Speicherbedarf äussert.
+
+::::warning[Verlustbehaftete Komprimierung]
+Ein einmal mit Verlust komprimiertes Bild kann nicht mehr in die ursprüngliche Qualität zurückversetzt werden. Das Bild ist also **irreversibel** verändert worden.
+:::tip
+Die verlustbehaftete Komprimierung ist jedoch nicht grundsätzlich schlecht. Oftmals ist der Unterschied zwischen dem Original und dem komprimierten Bild nicht sichtbar und die Bildgrösse kann dadurch um ein vielfaches reduziert werden.
+:::
+::::
