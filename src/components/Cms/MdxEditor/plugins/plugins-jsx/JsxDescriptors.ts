@@ -5,6 +5,7 @@ import { DdDescriptor, DeflistDescriptor, DtDescriptor } from './DeflistDescript
 import DocCardListDescriptor from './DocCardListDescriptor';
 import GeneratorDescriptor from './QrDescriptors/GeneratorDescriptor';
 import ScannerDescriptor from './QrDescriptors/ScannerDescriptor';
+import StepsDescriptor from './StepsDescriptor';
 
 const JsxDescriptors = [
     BrowserWindowDescriptor,
@@ -15,7 +16,8 @@ const JsxDescriptors = [
     AnswerDescriptor,
     ScannerDescriptor,
     GeneratorDescriptor,
-    GenericJsxDescriptor
+    GenericJsxDescriptor,
+    StepsDescriptor
 ];
 
 export default JsxDescriptors;
