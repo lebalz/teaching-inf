@@ -26,6 +26,7 @@ interface Props extends MetaInit {
     hideApiState?: boolean;
     inline?: boolean;
     fullWidth?: boolean;
+    unit?: React.ReactNode;
 }
 
 const IconMap: { [key in StringAnswer]: string } = {
@@ -39,6 +40,10 @@ const ColorMap: { [key in StringAnswer]: string } = {
     [StringAnswer.Correct]: 'green',
     [StringAnswer.Wrong]: 'red'
 };
+
+const Unit = ({ children }: { children: React.ReactNode }) => (
+    <span className={clsx(styles.unit)}>{children}</span>
+);
 
 const InputWrapper = observer(
     (props: { inline?: boolean; className?: string; style?: React.CSSProperties; children: ReactNode }) => {
@@ -134,6 +139,7 @@ const String = observer((props: Props) => {
                 styles.string,
                 doc.hasSolution && styles.withSolution,
                 (props.label || props.children || props.icon) && styles.withLabel,
+                props.unit && styles.withUnit,
                 styles[doc.answer],
                 styles[props.type || 'text'],
                 'notranslate'
@@ -176,6 +182,7 @@ const String = observer((props: Props) => {
                     />
                     {stateIconsPosition === 'inside' && <StateIcons />}
                 </span>
+                {props.unit && <Unit>{props.unit}</Unit>}
                 {doc.hasSolution && (
                     <Button
                         onClick={() => doc.checkAnswer()}
