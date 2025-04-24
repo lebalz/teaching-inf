@@ -214,6 +214,9 @@ const config: Config = {
   markdown: {
     parseFrontMatter: async (params) => {
       const result = await params.defaultParseFrontMatter(params);
+      if (process.env.NODE_ENV === 'production') {
+        return result;
+      }
       /**
        * don't edit blogs frontmatter
        */
