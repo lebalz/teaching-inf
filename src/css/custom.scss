@@ -240,6 +240,14 @@ div.no-search {
     }
 }
 
+.center {
+    table {
+        margin-left: auto;
+        margin-right: auto;
+        display: table;
+    }
+}
+
 .no-header,
 .no-table-header {
     overflow-x: auto;
