@@ -15,6 +15,7 @@ import Loader from '@tdev-components/Loader';
 import DefinitionList from '@tdev-components/DefinitionList';
 import Icon from '@mdi/react';
 import UserTable from '@tdev-components/Admin/UserTable';
+import ReloadRequest from '@tdev-components/Admin/NavigationRequest/ReloadRequest';
 const { NO_AUTH } = siteConfig.customFields as { TEST_USERNAME?: string; NO_AUTH?: boolean };
 
 const LeftAlign = (text: String) => {
@@ -47,7 +48,7 @@ const UserPage = observer(() => {
         <Layout>
             <main className={clsx(styles.main)}>
                 <h2>User</h2>
-                <DefinitionList>
+                <DefinitionList className={clsx(styles.userInfo)}>
                     <dt>Eingeloggt als</dt>
                     <dd>
                         {viewedUser?.firstName} {viewedUser?.lastName}
@@ -78,7 +79,7 @@ const UserPage = observer(() => {
                                 return (
                                     <React.Fragment key={group.id}>
                                         <dt className={clsx(styles.studentGroup)}>{group.name}</dt>
-                                        <dd>
+                                        <dd className={clsx(styles.reloadAction)}>
                                             <span
                                                 className={clsx(
                                                     styles.connectedClients,
@@ -88,6 +89,7 @@ const UserPage = observer(() => {
                                             >
                                                 {socketStore.connectedClients.get(group.id)}
                                             </span>
+                                            <ReloadRequest roomIds={[group.id]} />
                                         </dd>
                                     </React.Fragment>
                                 );

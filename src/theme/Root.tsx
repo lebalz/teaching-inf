@@ -8,7 +8,7 @@ import siteConfig from '@generated/docusaurus.config';
 import { AccountInfo, EventType, InteractionStatus, PublicClientApplication } from '@azure/msal-browser';
 import { setupMsalAxios, setupNoAuthAxios } from '@tdev-api/base';
 import { useStore } from '@tdev-hooks/useStore';
-import { runInAction } from 'mobx';
+import { reaction, runInAction } from 'mobx';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import scheduleMicrotask from '@tdev-components/util/scheduleMicrotask';
 const { NO_AUTH, TEST_USERNAME, SENTRY_DSN } = siteConfig.customFields as {
@@ -155,6 +155,32 @@ const MsalAccount = observer(() => {
     );
 });
 
+const RemoteNavigationHandler = observer(() => {
+    const socketStore = useStore('socketStore');
+    React.useEffect(() => {
+        if (socketStore) {
+            const disposer = reaction(
+                () => socketStore.navigationRequest,
+                (navRequest) => {
+                    if (!navRequest) {
+                        return;
+                    }
+                    console.log('Remote navigation request', navRequest);
+                    switch (navRequest.type) {
+                        case 'reload':
+                            window.location.reload();
+                            break;
+                        case 'target':
+                            break;
+                    }
+                }
+            );
+            return disposer;
+        }
+    }, [socketStore]);
+    return null;
+});
+
 // Default implementation, that you can customize
 function Root({ children }: { children: React.ReactNode }) {
     React.useEffect(() => {
@@ -215,6 +241,7 @@ function Root({ children }: { children: React.ReactNode }) {
             </Head>
             <StoresProvider value={rootStore}>
                 <MsalWrapper>{children}</MsalWrapper>
+                <RemoteNavigationHandler />
             </StoresProvider>
         </>
     );

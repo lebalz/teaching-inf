@@ -11,6 +11,8 @@ import {
     DeletedRecord,
     IoClientEvent,
     IoEvent,
+    NavigationAction,
+    NavigationRequest,
     NewRecord,
     RecordType,
     ServerToClientEvents
@@ -44,6 +46,8 @@ export class SocketDataStore extends iStore<'ping'> {
     @observable accessor isLive: boolean = false;
 
     @observable accessor isConfigured = false;
+
+    @observable.ref accessor navigationRequest: NavigationAction | undefined = undefined;
 
     connectedClients = observable.map<string, number>();
 
@@ -135,6 +139,12 @@ export class SocketDataStore extends iStore<'ping'> {
         this.socket.on(IoEvent.CHANGED_RECORD, this.updateRecord.bind(this));
         this.socket.on(IoEvent.DELETED_RECORD, this.deleteRecord.bind(this));
         this.socket.on(IoEvent.CONNECTED_CLIENTS, this.updateConnectedClients.bind(this));
+        this.socket.on(
+            IoEvent.REQUEST_NAVIGATION,
+            action((data: NavigationAction) => {
+                this.navigationRequest = data;
+            })
+        );
     }
 
     @action
@@ -320,6 +330,16 @@ export class SocketDataStore extends iStore<'ping'> {
     leaveRoom(roomId: string) {
         this.socket?.emit(IoClientEvent.LEAVE_ROOM, roomId, (left: boolean) => {
             console.log('left room', left ? '✅' : '❌', roomId);
+        });
+    }
+
+    @action
+    requestNavigation(roomIds: string[], userIds: string[], action: NavigationAction) {
+        if (!this.root.userStore.current?.hasElevatedAccess) {
+            return;
+        }
+        this.socket?.emit(IoClientEvent.REQUEST_NAVIGATION, { roomIds, userIds, action }, () => {
+            console.log('navigation request sent', roomIds, userIds, action);
         });
     }
 

@@ -3,6 +3,13 @@
     --ifm-tabs-padding-vertical: 0.2em;
     --ifm-tabs-padding-horizontal: 0.6em;
     margin: 2em;
+    .userInfo {
+        > dd.reloadAction {
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+        }
+    }
     .studentGroup {
         font-weight: normal;
         font-style: italic;
