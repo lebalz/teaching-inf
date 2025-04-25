@@ -4,6 +4,7 @@ import { rootStore } from '../stores/rootStore';
 import { GroupPermission, UserPermission } from '../api/permission';
 import { DocumentRootUpdate } from '../api/documentRoot';
 import { CmsSettings } from './cms';
+import { StudentGroup } from './studentGroup';
 
 export enum IoEvent {
     NEW_RECORD = 'NEW_RECORD',
@@ -19,6 +20,7 @@ export enum RecordType {
     UserPermission = 'UserPermission',
     GroupPermission = 'GroupPermission',
     DocumentRoot = 'DocumentRoot',
+    StudentGroup = 'StudentGroup',
     CmsSettings = 'CmsSettings'
 }
 
@@ -29,6 +31,7 @@ type TypeRecordMap = {
     [RecordType.GroupPermission]: GroupPermission;
     [RecordType.DocumentRoot]: DocumentRootUpdate;
     [RecordType.CmsSettings]: CmsSettings;
+    [RecordType.StudentGroup]: StudentGroup;
 };
 
 export interface NewRecord<T extends RecordType> {
@@ -105,8 +108,8 @@ export type ServerToClientEvents = {
 };
 
 export interface ClientToServerEvents {
-    [IoClientEvent.JOIN_ROOM]: (roomId: string, callback: () => void) => void;
-    [IoClientEvent.LEAVE_ROOM]: (roomId: string, callback: () => void) => void;
+    [IoClientEvent.JOIN_ROOM]: (roomId: string, callback: (joined: boolean) => void) => void;
+    [IoClientEvent.LEAVE_ROOM]: (roomId: string, callback: (left: boolean) => void) => void;
 }
 
 export const RecordStoreMap: { [key in RecordType]: keyof typeof rootStore } = {
@@ -115,5 +118,6 @@ export const RecordStoreMap: { [key in RecordType]: keyof typeof rootStore } = {
     UserPermission: 'permissionStore',
     GroupPermission: 'permissionStore',
     DocumentRoot: 'documentRootStore',
-    CmsSettings: 'cmsStore'
+    CmsSettings: 'cmsStore',
+    StudentGroup: 'studentGroupStore'
 } as const;

@@ -219,7 +219,7 @@ class DocumentStore extends iStore<`delete-${string}`> {
         if (model.isDirty) {
             const { id } = model;
             const hasAdminAccess =
-                !!this.root.userStore.current?.isAdmin &&
+                !!this.root.userStore.current?.hasElevatedAccess &&
                 (model.authorId === this.root.userStore.current.id ||
                     ADMIN_EDITABLE_DOCUMENTS.includes(model.type));
             if (!model.canEdit && !hasAdminAccess) {
@@ -262,7 +262,7 @@ class DocumentStore extends iStore<`delete-${string}`> {
         if (!rootDoc || rootDoc.isDummy) {
             return Promise.resolve(undefined);
         }
-        const hasAccess = RWAccess.has(rootDoc.permission) || this.root.userStore.current?.isAdmin;
+        const hasAccess = RWAccess.has(rootDoc.permission) || this.root.userStore.current?.hasElevatedAccess;
         if (!hasAccess) {
             return Promise.resolve(undefined);
         }
@@ -302,7 +302,7 @@ class DocumentStore extends iStore<`delete-${string}`> {
 
     @action
     apiLoadDocumentsFrom(rootIds: string[]) {
-        if (!this.root.userStore.current?.isAdmin) {
+        if (!this.root.userStore.current?.hasElevatedAccess) {
             return Promise.resolve([]);
         }
         return this.withAbortController(`load-docs-${rootIds.join('::')}`, (sig) => {

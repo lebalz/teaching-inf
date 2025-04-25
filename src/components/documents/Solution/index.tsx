@@ -34,17 +34,17 @@ const Solution = observer((props: Props) => {
     return (
         <div className={clsx(styles.wrapper, props.standalone && styles.standalone)}>
             {!NoneAccess.has(props.access) &&
-            (!NoneAccess.has(docRoot.permission) || userStore.current?.isAdmin) ? (
+            (!NoneAccess.has(docRoot.permission) || userStore.current?.hasElevatedAccess) ? (
                 <Details
                     summary={
                         <summary>
                             <div className={styles.summary}>
                                 {props.title || 'Lösung'}
                                 <div style={{ flex: '1 1 0' }} />
-                                {userStore.current?.isAdmin && (
+                                {userStore.current?.hasElevatedAccess && (
                                     <PermissionsPanel documentRootId={docRoot.id} />
                                 )}
-                                {userStore.current?.isAdmin && (
+                                {userStore.current?.hasElevatedAccess && (
                                     <AccessBadge
                                         access={
                                             userStore.viewedUserId
