@@ -127,11 +127,27 @@ Es könnten ca. $\frac{37.76}{4} \approx 9.5$ Stunden Film mehr abgespeichert we
   Ihr neues iPhone hat $256$ GB Speicherplatz.
 
   1. Wie viele Lochkarten sind nötig, um den gesamten Speicherplatz des iPhones als Hollerith-Lochkarten abzuspeichern?
-      <String label="Anzahl Lochkarten" solution="3200000000000" type="number" id="baf72a29-9548-4217-99f0-c58728d0c8df" />
+      <String label="Anzahl Lochkarten" solution="3200000000" type="number" id="baf72a29-9548-4217-99f0-c58728d0c8df" />
   2. Wenn nun alle Lochkarten auf denselben Stapel gelegt werden: wie hoch wird dieser Turm? 
-      <String label="Höhe des Turms" solution="544000" type="number" unit="km" id="80567cb1-52ea-4a75-9283-a2802e76e76e" />
-  3. Der Mond ist durchschnittlich $384'400$ km von der Erde entfernt. Wie oft kann die Distanz Erde-Mond mit dem Lochkarten-Turm überbrückt werden? (Ergebnis auf zwei Dezimalstellen runden)
-      <String solution="1.42" unit="mal zum Mond" type="number" id="4755fd92-c343-4bca-a20b-811797dfaf80" />
+      <String label="Höhe des Turms" solution="544" type="number" unit="km" id="80567cb1-52ea-4a75-9283-a2802e76e76e" />
+  3. Vom Gymnasium Biel-Seeland zum Bundeshaus in Bern ist die Luftlinie $26$ km lang. Wie oft kann diese Strecke mit dem Lochkarten-Turm überbrückt werden? (Ergebnis auf ganze Zahlen runden)
+      <String solution="21" unit="mal nach Bern" type="number" id="4755fd92-c343-4bca-a20b-811797dfaf80" />
+
+<Solution id="c95f0357-79b8-4c1c-96fe-5aee143b2ee4">
+
+1. $256 GB$ zu Anzahl Lochkarten:
+    - $256 GB = 256 \cdot 10^9 B$
+    - $1$ Lochkarte hat $80$ Bytes
+    - $\frac{256 \cdot 10^9 B}{80 B} = 3'200'000'000$ Lochkarten
+2. Höhe des Turms:
+    - $1$ Lochkarte hat eine Höhe von $0.17$ mm
+    - $3'200'000'000$ Lochkarten haben eine Höhe von $3'200'000'000 \cdot 0.17 mm = 544 km$
+3. Strecke vom Gymnasium Biel-Seeland zum Bundeshaus in Bern:
+    - $1$ Strecke = $26$ km
+    - $\frac{544 km}{26 km} \approx 20.92$ mal
+    - $\rightarrow$ also ca. $21$ mal. Die Stapel nebeneinander gelegt würde also einen fast $4$ m breite Strasse ergeben ($18.7 cm \cdot 21$).
+
+</Solution>
 ::::
 
 
