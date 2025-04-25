@@ -95,7 +95,7 @@ const UserPage = observer(() => {
                         </>
                     )}
                 </DefinitionList>
-                {userStore.current?.isAdmin && (
+                {userStore.current?.hasElevatedAccess && (
                     <div>
                         <h2>User Tabelle</h2>
                         <div className={clsx(styles.userTable)}>
@@ -110,7 +110,7 @@ const UserPage = observer(() => {
                 )}
                 <h2>Account</h2>
                 <DefinitionList>
-                    {current?.isAdmin && (
+                    {current?.hasElevatedAccess && (
                         <>
                             <dt>Admin</dt>
                             <dd>

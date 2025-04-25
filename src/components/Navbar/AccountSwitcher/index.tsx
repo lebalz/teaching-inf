@@ -18,7 +18,7 @@ const AccountSwitcher = observer(() => {
 
     const klass = location.pathname.split('/')[1];
 
-    if (!isBrowser || !userStore.current?.isAdmin) {
+    if (!isBrowser || !userStore.current?.hasElevatedAccess) {
         return null;
     }
     return (
@@ -60,7 +60,9 @@ const AccountSwitcher = observer(() => {
                     <div className={clsx('card__body', styles.body)}>
                         <div className={styles.userList}>
                             {_.orderBy(
-                                userStore.users.filter((g) => g.studentGroups.some((g) => g.name === klass)),
+                                userStore.managedUsers.filter((u) =>
+                                    u.studentGroups.some((g) => g.name === klass)
+                                ),
                                 ['firstName']
                             ).map((user) => (
                                 <Button
@@ -78,7 +80,9 @@ const AccountSwitcher = observer(() => {
                                 </Button>
                             ))}
                             {_.orderBy(
-                                userStore.users.filter((g) => !g.studentGroups.some((g) => g.name === klass)),
+                                userStore.managedUsers.filter(
+                                    (g) => !g.studentGroups.some((g) => g.name === klass)
+                                ),
                                 ['firstName']
                             ).map((user) => (
                                 <Button

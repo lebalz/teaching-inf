@@ -77,7 +77,7 @@ const CmsImporter = observer((props: Props) => {
     const closeTooltip = () => {
         (ref.current as any)?.close();
     };
-    if (!userStore.current?.isAdmin || userStore.isUserSwitched) {
+    if (!userStore.current?.hasElevatedAccess || userStore.isUserSwitched) {
         return null;
     }
     return (

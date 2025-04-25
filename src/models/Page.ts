@@ -98,7 +98,7 @@ export default class Page {
             return this.primaryStudentGroup.children;
         }
         return _.orderBy(
-            this.store.root.studentGroupStore.studentGroups.filter((sg) => !!sg.parentId),
+            this.store.root.studentGroupStore.managedStudentGroups.filter((sg) => !!sg.parentId),
             ['name'],
             ['asc']
         );

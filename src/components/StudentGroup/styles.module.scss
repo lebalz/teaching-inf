@@ -30,7 +30,6 @@
             flex-wrap: wrap;
             flex-direction: row;
             padding-left: 0;
-            gap: 0.5em;
             .listItem {
                 flex-basis: 10em;
                 flex-grow: 1;
@@ -46,9 +45,6 @@
                 }
                 .actions {
                     display: flex;
-                    button {
-                        margin-left: 1rem;
-                    }
                 }
             }
         }
