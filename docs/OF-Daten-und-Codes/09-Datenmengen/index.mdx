@@ -85,8 +85,8 @@ Auch heute kann man sich nicht immer sicher sein, ob die Angabe «1 TB» ein Ter
 #### Historische Einheiten
 
 - <String label="7 kiB = " unit="B" solution="7168" type="number" inline inputWidth="8em" id="db7d3e43-4f37-40da-83a2-0f2d2af21582" />
-- <String label="128 MiB = " unit="MB" solution="134" type="number" sanitizer={(val) => val.slice('.')[0]} inline inputWidth="8em" id="300e802b-8182-4670-902e-179bf52b144a" />
-- <String label="128 MB = " unit="MiB" solution="122" type="number" sanitizer={(val) => val.slice('.')[0]} inline inputWidth="8em" id="7bacaad3-2bd6-4a68-9b08-581da0f08e0d" />
+- <String label="128 MiB = " unit="MB" solution="134" type="number" sanitizer={(val) => val.split('.')[0]} inline inputWidth="8em" id="300e802b-8182-4670-902e-179bf52b144a" />
+- <String label="128 MB = " unit="MiB" solution="122" type="number" sanitizer={(val) => val.split('.')[0]} inline inputWidth="8em" id="7bacaad3-2bd6-4a68-9b08-581da0f08e0d" />
 
 Sie kaufen sich einen neuen USB-Stick mit $512$ GB Speicherplatz. Sie sind sich unsicher, ob das nun $512$ GB oder $512$ GiB sind.
 
