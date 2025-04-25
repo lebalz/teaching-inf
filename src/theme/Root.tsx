@@ -11,6 +11,7 @@ import { useStore } from '@tdev-hooks/useStore';
 import { reaction, runInAction } from 'mobx';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import scheduleMicrotask from '@tdev-components/util/scheduleMicrotask';
+import { useHistory } from '@docusaurus/router';
 const { NO_AUTH, TEST_USERNAME, SENTRY_DSN } = siteConfig.customFields as {
     TEST_USERNAME?: string;
     NO_AUTH?: boolean;
@@ -157,8 +158,10 @@ const MsalAccount = observer(() => {
 
 const RemoteNavigationHandler = observer(() => {
     const socketStore = useStore('socketStore');
+    const history = useHistory();
     React.useEffect(() => {
         if (socketStore) {
+            console.log('RemoteNavigationHandler');
             const disposer = reaction(
                 () => socketStore.navigationRequest,
                 (navRequest) => {
@@ -171,13 +174,16 @@ const RemoteNavigationHandler = observer(() => {
                             window.location.reload();
                             break;
                         case 'target':
+                            if (navRequest.target) {
+                                history.push(navRequest.target);
+                            }
                             break;
                     }
                 }
             );
             return disposer;
         }
-    }, [socketStore]);
+    }, [socketStore, history]);
     return null;
 });
 
