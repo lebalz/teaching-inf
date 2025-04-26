@@ -49,25 +49,27 @@ const UserPage = observer(() => {
             <main className={clsx(styles.main)}>
                 <h2>User</h2>
                 <DefinitionList className={clsx(styles.userInfo)}>
-                    <dt>Eingeloggt als</dt>
+                    <dt>{userStore.isUserSwitched ? 'Ansicht für' : 'Eingeloggt als'}</dt>
                     <dd>
                         {viewedUser?.firstName} {viewedUser?.lastName}
                     </dd>
                     <dt>Email</dt>
                     <dd>{viewedUser?.email}</dd>
-                    <dt>Mit dem Server Verbunden?</dt>
-                    <dd>
-                        <Icon
-                            path={mdiCircle}
-                            size={0.7}
-                            color={
-                                socketStore.isLive ? 'var(--ifm-color-success)' : 'var(--ifm-color-danger)'
-                            }
-                        />{' '}
-                        {socketStore.isLive ? 'Ja' : 'Nein'}
-                    </dd>
-                    {viewedUser && (
+                    {viewedUser && !userStore.isUserSwitched && (
                         <>
+                            <dt>Mit dem Server Verbunden?</dt>
+                            <dd>
+                                <Icon
+                                    path={mdiCircle}
+                                    size={0.7}
+                                    color={
+                                        socketStore.isLive
+                                            ? 'var(--ifm-color-success)'
+                                            : 'var(--ifm-color-danger)'
+                                    }
+                                />{' '}
+                                {socketStore.isLive ? 'Ja' : 'Nein'}
+                            </dd>
                             <dt>Aktuell Online</dt>
                             <dd>
                                 <span className={clsx(styles.connectedClients, 'badge', 'badge--primary')}>

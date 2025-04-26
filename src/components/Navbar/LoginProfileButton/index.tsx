@@ -21,7 +21,7 @@ const LoginProfileButton = observer(() => {
     const sessionStore = useStore('sessionStore');
     const socketStore = useStore('socketStore');
 
-    if (!isBrowser || !(sessionStore.isLoggedIn || NO_AUTH) || userStore.isUserSwitched) {
+    if (!isBrowser || !(sessionStore.isLoggedIn || NO_AUTH)) {
         return <LoginButton />;
     }
     return (
@@ -34,12 +34,14 @@ const LoginProfileButton = observer(() => {
                 href="/user"
                 title="Persönlicher Bereich"
             />
-            <Icon
-                path={mdiCircle}
-                size={0.3}
-                color={socketStore.isLive ? 'var(--ifm-color-success)' : 'var(--ifm-color-danger)'}
-                className={clsx(styles.liveIndicator)}
-            />
+            {!userStore.isUserSwitched && (
+                <Icon
+                    path={mdiCircle}
+                    size={0.3}
+                    color={socketStore.isLive ? 'var(--ifm-color-success)' : 'var(--ifm-color-danger)'}
+                    className={clsx(styles.liveIndicator)}
+                />
+            )}
         </div>
     );
 });
