@@ -34,14 +34,20 @@ const LoginProfileButton = observer(() => {
                 href="/user"
                 title="Persönlicher Bereich"
             />
-            {!userStore.isUserSwitched && (
-                <Icon
-                    path={mdiCircle}
-                    size={0.3}
-                    color={socketStore.isLive ? 'var(--ifm-color-success)' : 'var(--ifm-color-danger)'}
-                    className={clsx(styles.liveIndicator)}
-                />
-            )}
+            <Icon
+                path={mdiCircle}
+                size={0.3}
+                color={
+                    (
+                        userStore.isUserSwitched
+                            ? (socketStore.connectedClients.get(userStore.viewedUser?.id || ' ') || 1) - 1 > 0
+                            : socketStore.isLive
+                    )
+                        ? 'var(--ifm-color-success)'
+                        : 'var(--ifm-color-danger)'
+                }
+                className={clsx(styles.liveIndicator)}
+            />
         </div>
     );
 });

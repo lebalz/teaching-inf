@@ -44,6 +44,7 @@ const UserPage = observer(() => {
     if (!NO_AUTH && !(sessionStore.isLoggedIn || isAuthenticated)) {
         return <Redirect to={'/login'} />;
     }
+    const connectedClients = socketStore.connectedClients.get(viewedUser?.id || ' ');
     return (
         <Layout>
             <main className={clsx(styles.main)}>
@@ -55,27 +56,31 @@ const UserPage = observer(() => {
                     </dd>
                     <dt>Email</dt>
                     <dd>{viewedUser?.email}</dd>
-                    {viewedUser && !userStore.isUserSwitched && (
+                    <dt>Ist mein Gerät mit dem Server Verbunden?</dt>
+                    <dd>
+                        <Icon
+                            path={mdiCircle}
+                            size={0.7}
+                            color={
+                                socketStore.isLive ? 'var(--ifm-color-success)' : 'var(--ifm-color-danger)'
+                            }
+                        />{' '}
+                        {socketStore.isLive ? 'Ja' : 'Nein'}
+                    </dd>
+                    {viewedUser && (
                         <>
-                            <dt>Mit dem Server Verbunden?</dt>
-                            <dd>
-                                <Icon
-                                    path={mdiCircle}
-                                    size={0.7}
-                                    color={
-                                        socketStore.isLive
-                                            ? 'var(--ifm-color-success)'
-                                            : 'var(--ifm-color-danger)'
-                                    }
-                                />{' '}
-                                {socketStore.isLive ? 'Ja' : 'Nein'}
-                            </dd>
                             <dt>Aktuell Online</dt>
                             <dd>
                                 <span className={clsx(styles.connectedClients, 'badge', 'badge--primary')}>
-                                    {socketStore.connectedClients.get(viewedUser.id)}
+                                    {userStore.isUserSwitched
+                                        ? (connectedClients || 1) - 1
+                                        : connectedClients}
                                 </span>
                             </dd>
+                        </>
+                    )}
+                    {viewedUser && !userStore.isUserSwitched && (
+                        <>
                             <dt>In Gruppen</dt>
                             {groupStore.studentGroups.map((group) => {
                                 return (

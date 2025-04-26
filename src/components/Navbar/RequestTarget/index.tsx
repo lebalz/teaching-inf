@@ -73,7 +73,7 @@ const ReguestTarget = observer(() => {
                                             });
                                         }}
                                     >
-                                        {group.name}
+                                        {group.name} ({(socketStore.connectedClients.get(group.id) || 1) - 1})
                                     </Button>
                                 </div>
                             );
