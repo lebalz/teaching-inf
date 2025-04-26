@@ -7,6 +7,7 @@ import {
     mdiAccountCircleOutline,
     mdiAccountSwitch,
     mdiHomeAccount,
+    mdiLaptop,
     mdiShieldAccount,
     mdiTarget,
     mdiTargetAccount
@@ -36,7 +37,7 @@ const ReguestTarget = observer(() => {
             trigger={
                 <div className={styles.accountSwitcher}>
                     <Button
-                        icon={mdiTarget}
+                        icon={mdiLaptop}
                         size={0.8}
                         className={clsx(styles.navTarget)}
                         iconSide="left"
@@ -52,7 +53,7 @@ const ReguestTarget = observer(() => {
         >
             <div className={clsx(styles.wrapper, 'card')}>
                 <div className={clsx('card__header', styles.header)}>
-                    <h4>Zur Seite wechseln</h4>
+                    <h4>Diese Seite anzeigen für:</h4>
                 </div>
                 <div className={clsx('card__body', styles.body)}>
                     <div className={clsx(styles.groups)}>
@@ -60,7 +61,7 @@ const ReguestTarget = observer(() => {
                             return (
                                 <div key={group.id} className={clsx(styles.group)}>
                                     <Button
-                                        icon={mdiTargetAccount}
+                                        icon={mdiTarget}
                                         size={0.8}
                                         className={clsx(styles.accountSwitcherButton)}
                                         color="primary"

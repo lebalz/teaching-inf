@@ -21,7 +21,7 @@ const LoginProfileButton = observer(() => {
     const sessionStore = useStore('sessionStore');
     const socketStore = useStore('socketStore');
 
-    if (!isBrowser || !(sessionStore.isLoggedIn || NO_AUTH)) {
+    if (!isBrowser || !(sessionStore.isLoggedIn || NO_AUTH) || userStore.isUserSwitched) {
         return <LoginButton />;
     }
     return (
