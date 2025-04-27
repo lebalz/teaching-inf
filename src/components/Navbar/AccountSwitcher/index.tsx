@@ -55,7 +55,7 @@ const AccountSwitcher = observer(() => {
             >
                 <div className={clsx(styles.wrapper, 'card')}>
                     <div className={clsx('card__header', styles.header)}>
-                        <h4>Inhalte anzeigen für</h4>
+                        <h4>User wechseln</h4>
                     </div>
                     <div className={clsx('card__body', styles.body)}>
                         <div className={styles.userList}>

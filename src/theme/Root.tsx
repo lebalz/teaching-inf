@@ -8,9 +8,10 @@ import siteConfig from '@generated/docusaurus.config';
 import { AccountInfo, EventType, InteractionStatus, PublicClientApplication } from '@azure/msal-browser';
 import { setupMsalAxios, setupNoAuthAxios } from '@tdev-api/base';
 import { useStore } from '@tdev-hooks/useStore';
-import { runInAction } from 'mobx';
+import { reaction, runInAction } from 'mobx';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import scheduleMicrotask from '@tdev-components/util/scheduleMicrotask';
+import { useHistory } from '@docusaurus/router';
 const { NO_AUTH, TEST_USERNAME, SENTRY_DSN } = siteConfig.customFields as {
     TEST_USERNAME?: string;
     NO_AUTH?: boolean;
@@ -155,6 +156,36 @@ const MsalAccount = observer(() => {
     );
 });
 
+const RemoteNavigationHandler = observer(() => {
+    const socketStore = useStore('socketStore');
+    const history = useHistory();
+    React.useEffect(() => {
+        if (socketStore) {
+            console.log('RemoteNavigationHandler');
+            const disposer = reaction(
+                () => socketStore.actionRequest,
+                (navRequest) => {
+                    if (!navRequest) {
+                        return;
+                    }
+                    switch (navRequest.type) {
+                        case 'nav-reload':
+                            window.location.reload();
+                            break;
+                        case 'nav-target':
+                            if (navRequest.target) {
+                                history.push(navRequest.target);
+                            }
+                            break;
+                    }
+                }
+            );
+            return disposer;
+        }
+    }, [socketStore, history]);
+    return null;
+});
+
 // Default implementation, that you can customize
 function Root({ children }: { children: React.ReactNode }) {
     React.useEffect(() => {
@@ -215,6 +246,7 @@ function Root({ children }: { children: React.ReactNode }) {
             </Head>
             <StoresProvider value={rootStore}>
                 <MsalWrapper>{children}</MsalWrapper>
+                <RemoteNavigationHandler />
             </StoresProvider>
         </>
     );
