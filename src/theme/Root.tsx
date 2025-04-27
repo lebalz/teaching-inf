@@ -168,12 +168,11 @@ const RemoteNavigationHandler = observer(() => {
                     if (!navRequest) {
                         return;
                     }
-                    console.log('Remote navigation request', navRequest);
                     switch (navRequest.type) {
-                        case 'reload':
+                        case 'nav-reload':
                             window.location.reload();
                             break;
-                        case 'target':
+                        case 'nav-target':
                             if (navRequest.target) {
                                 history.push(navRequest.target);
                             }
