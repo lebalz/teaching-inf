@@ -1,0 +1,8 @@
+{
+    "scripts": {
+        "dokku": {
+            "predeploy": "yarn install && yarn run build"
+        }
+    }
+}
+https: //github.com/heroku/heroku-buildpack-nodejs.git#v290
