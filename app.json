@@ -1,7 +1,0 @@
-{
-    "scripts": {
-        "dokku": {
-            "predeploy": "yarn install && yarn run build"
-        }
-    }
-}
