@@ -15,6 +15,7 @@ import Loader from '@tdev-components/Loader';
 import DefinitionList from '@tdev-components/DefinitionList';
 import Icon from '@mdi/react';
 import UserTable from '@tdev-components/Admin/UserTable';
+import NavReloadRequest from '@tdev-components/Admin/ActionRequest/NavReloadRequest';
 const { NO_AUTH } = siteConfig.customFields as { TEST_USERNAME?: string; NO_AUTH?: boolean };
 
 const LeftAlign = (text: String) => {
@@ -43,18 +44,19 @@ const UserPage = observer(() => {
     if (!NO_AUTH && !(sessionStore.isLoggedIn || isAuthenticated)) {
         return <Redirect to={'/login'} />;
     }
+    const connectedClients = socketStore.connectedClients.get(viewedUser?.id || ' ');
     return (
         <Layout>
             <main className={clsx(styles.main)}>
                 <h2>User</h2>
-                <DefinitionList>
-                    <dt>Eingeloggt als</dt>
+                <DefinitionList className={clsx(styles.userInfo)}>
+                    <dt>{userStore.isUserSwitched ? 'Ansicht für' : 'Eingeloggt als'}</dt>
                     <dd>
                         {viewedUser?.firstName} {viewedUser?.lastName}
                     </dd>
                     <dt>Email</dt>
                     <dd>{viewedUser?.email}</dd>
-                    <dt>Mit dem Server Verbunden?</dt>
+                    <dt>Ist mein Gerät mit dem Server Verbunden?</dt>
                     <dd>
                         <Icon
                             path={mdiCircle}
@@ -70,15 +72,21 @@ const UserPage = observer(() => {
                             <dt>Aktuell Online</dt>
                             <dd>
                                 <span className={clsx(styles.connectedClients, 'badge', 'badge--primary')}>
-                                    {socketStore.connectedClients.get(viewedUser.id)}
+                                    {userStore.isUserSwitched
+                                        ? (connectedClients || 1) - 1
+                                        : connectedClients}
                                 </span>
                             </dd>
+                        </>
+                    )}
+                    {viewedUser && !userStore.isUserSwitched && (
+                        <>
                             <dt>In Gruppen</dt>
                             {groupStore.studentGroups.map((group) => {
                                 return (
                                     <React.Fragment key={group.id}>
                                         <dt className={clsx(styles.studentGroup)}>{group.name}</dt>
-                                        <dd>
+                                        <dd className={clsx(styles.reloadAction)}>
                                             <span
                                                 className={clsx(
                                                     styles.connectedClients,
@@ -88,6 +96,7 @@ const UserPage = observer(() => {
                                             >
                                                 {socketStore.connectedClients.get(group.id)}
                                             </span>
+                                            <NavReloadRequest roomIds={[group.id]} />
                                         </dd>
                                     </React.Fragment>
                                 );

@@ -361,6 +361,10 @@ const config: Config = {
           position: 'right'
         },
         {
+          type: 'custom-requestTarget',
+          position: 'right'
+        },
+        {
           type: 'custom-loginProfileButton',
           position: 'right'
         },
