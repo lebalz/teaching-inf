@@ -163,7 +163,7 @@ const RemoteNavigationHandler = observer(() => {
         if (socketStore) {
             console.log('RemoteNavigationHandler');
             const disposer = reaction(
-                () => socketStore.navigationRequest,
+                () => socketStore.actionRequest,
                 (navRequest) => {
                     if (!navRequest) {
                         return;

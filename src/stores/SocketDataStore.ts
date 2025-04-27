@@ -4,6 +4,7 @@ import { action, observable, reaction } from 'mobx';
 import { checkLogin as pingApi, default as api } from '@tdev-api/base';
 import iStore from '@tdev-stores/iStore';
 import {
+    Action,
     ChangedDocument,
     ChangedRecord,
     ClientToServerEvents,
@@ -11,8 +12,6 @@ import {
     DeletedRecord,
     IoClientEvent,
     IoEvent,
-    NavigationAction,
-    NavigationRequest,
     NewRecord,
     RecordType,
     ServerToClientEvents
@@ -47,7 +46,7 @@ export class SocketDataStore extends iStore<'ping'> {
 
     @observable accessor isConfigured = false;
 
-    @observable.ref accessor navigationRequest: NavigationAction | undefined = undefined;
+    @observable.ref accessor actionRequest: Action['action'] | undefined = undefined;
 
     connectedClients = observable.map<string, number>();
 
@@ -140,9 +139,9 @@ export class SocketDataStore extends iStore<'ping'> {
         this.socket.on(IoEvent.DELETED_RECORD, this.deleteRecord.bind(this));
         this.socket.on(IoEvent.CONNECTED_CLIENTS, this.updateConnectedClients.bind(this));
         this.socket.on(
-            IoEvent.REQUEST_NAVIGATION,
-            action((data: NavigationAction) => {
-                this.navigationRequest = data;
+            IoEvent.ACTION,
+            action((data: Action['action']) => {
+                this.actionRequest = data;
             })
         );
     }
@@ -334,12 +333,14 @@ export class SocketDataStore extends iStore<'ping'> {
     }
 
     @action
-    requestNavigation(roomIds: string[], userIds: string[], action: NavigationAction) {
+    requestNavigation(roomIds: string[], userIds: string[], action: Action['action']) {
         if (!this.root.userStore.current?.hasElevatedAccess) {
-            return;
+            return Promise.resolve(false);
         }
-        this.socket?.emit(IoClientEvent.REQUEST_NAVIGATION, { roomIds, userIds, action }, () => {
-            console.log('navigation request sent', roomIds, userIds, action);
+        return new Promise((resolve) => {
+            this.socket?.emit(IoClientEvent.ACTION, { roomIds, userIds, action }, (ok) => {
+                resolve(ok);
+            });
         });
     }
 

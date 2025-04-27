@@ -15,7 +15,7 @@ import Loader from '@tdev-components/Loader';
 import DefinitionList from '@tdev-components/DefinitionList';
 import Icon from '@mdi/react';
 import UserTable from '@tdev-components/Admin/UserTable';
-import ReloadRequest from '@tdev-components/Admin/NavigationRequest/ReloadRequest';
+import NavReloadRequest from '@tdev-components/Admin/ActionRequest/NavReloadRequest';
 const { NO_AUTH } = siteConfig.customFields as { TEST_USERNAME?: string; NO_AUTH?: boolean };
 
 const LeftAlign = (text: String) => {
@@ -96,7 +96,7 @@ const UserPage = observer(() => {
                                             >
                                                 {socketStore.connectedClients.get(group.id)}
                                             </span>
-                                            <ReloadRequest roomIds={[group.id]} />
+                                            <NavReloadRequest roomIds={[group.id]} />
                                         </dd>
                                     </React.Fragment>
                                 );

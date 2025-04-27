@@ -4,17 +4,18 @@ import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@tdev-hooks/useStore';
 import { Confirm } from '@tdev-components/shared/Button/Confirm';
-import { mdiReloadAlert, mdiWebRefresh } from '@mdi/js';
+import { mdiLoading, mdiReloadAlert, mdiWebRefresh } from '@mdi/js';
 
 interface Props {
     roomIds?: string[];
     userIds?: string[];
 }
 
-const ReloadRequest = observer((props: Props) => {
+const NavReloadRequest = observer((props: Props) => {
     const userStore = useStore('userStore');
     const studentGroupStore = useStore('studentGroupStore');
     const socketStore = useStore('socketStore');
+    const [isLoading, setIsLoading] = React.useState(false);
     if (!userStore.current?.hasElevatedAccess) {
         return null;
     }
@@ -32,15 +33,21 @@ const ReloadRequest = observer((props: Props) => {
             text="Neu laden"
             title="Clients neu laden"
             confirmText="Clients neu laden?"
-            icon={mdiWebRefresh}
+            icon={isLoading ? mdiLoading : mdiWebRefresh}
             iconSide="left"
             confirmIcon={mdiReloadAlert}
             color="primary"
+            spin={isLoading}
             onConfirm={() => {
-                socketStore.requestNavigation(props.roomIds || [], props.userIds || [], { type: 'reload' });
+                setIsLoading(true);
+                socketStore
+                    .requestNavigation(props.roomIds || [], props.userIds || [], { type: 'nav-reload' })
+                    .finally(() => {
+                        setIsLoading(false);
+                    });
             }}
         />
     );
 });
 
-export default ReloadRequest;
+export default NavReloadRequest;

@@ -19,6 +19,7 @@ import Popup from 'reactjs-popup';
 import _ from 'lodash';
 import { useLocation } from '@docusaurus/router';
 import { Confirm } from '@tdev-components/shared/Button/Confirm';
+import NavSetTargetRequest from '@tdev-components/Admin/ActionRequest/NavSetTargetRequest';
 
 const ReguestTarget = observer(() => {
     const isBrowser = useIsBrowser();
@@ -58,25 +59,7 @@ const ReguestTarget = observer(() => {
                 <div className={clsx('card__body', styles.body)}>
                     <div className={clsx(styles.groups)}>
                         {studentGroupStore.managedStudentGroups.map((group) => {
-                            return (
-                                <div key={group.id} className={clsx(styles.group)}>
-                                    <Button
-                                        icon={mdiTarget}
-                                        size={0.8}
-                                        className={clsx(styles.accountSwitcherButton)}
-                                        color="primary"
-                                        title={`Seite für ${group.name} anzeigen`}
-                                        onClick={() => {
-                                            socketStore.requestNavigation([group.id], [], {
-                                                type: 'target',
-                                                target: location.pathname
-                                            });
-                                        }}
-                                    >
-                                        {group.name} ({(socketStore.connectedClients.get(group.id) || 1) - 1})
-                                    </Button>
-                                </div>
-                            );
+                            return <NavSetTargetRequest key={group.id} studentGroup={group} />;
                         })}
                     </div>
                 </div>
