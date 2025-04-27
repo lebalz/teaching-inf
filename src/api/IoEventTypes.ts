@@ -99,10 +99,12 @@ interface ActionNavigationTarget {
     target: string;
 }
 
-export type ActionNavigation = ActionNavigationReload | ActionNavigationTarget;
+// actions can be extended client side - the server only delegates the action, but the
+// content of the action is never checked by the server
+export type Actions = ActionNavigationReload | ActionNavigationTarget;
 
-export interface Action {
-    action: ActionNavigation;
+export interface Action<T = Actions> {
+    action: T;
     roomIds: string[];
     userIds: string[];
 }
