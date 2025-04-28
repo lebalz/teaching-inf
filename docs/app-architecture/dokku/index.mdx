@@ -1,0 +1,83 @@
+---
+page_id: 323ff390-40d6-4bd5-ac6c-7a05f3515526
+---
+import Steps from '@tdev-components/Steps';
+
+
+# Dokku Deploy
+
+
+[Docusaurus](https://docusaurus.io/) ist ein statischer Website-Generator, der auf React basiert.
+Standardmässig wird die generierte Seite über kostenlose CDNs gehosted (Github Pages, Netlify, CLoudflare...). Der Nachteil ist, dass die Inhalte frei zugänglich sind und somit nur lizensierte oder freie Inhalte publiziert werden dürfen. Dies erfordert viel Aufwand und ist im Schulkontext nicht immer möglich.
+
+Durch das Hosten auf einem eigenen Server kann mit bspw. `http-auth` der Zugriff auf die Seite eingeschränkt werden.
+
+## Installation
+
+<Steps>
+1. Eine neue App auf dem Server erstellen
+    ```bash title="root@dokku"
+    dokku apps:create hfr-teaching-website
+    dokku config:set hfr-teaching-website NGINX_ROOT=build
+    # specify the domain configured in e.g. Cloudflare
+    dokku domains:add hfr-teaching-website hfr.gbsl.website
+    # remove default global domain
+    dokku domains:remove hfr-teaching-website hfr-teaching-website.gbsl.website
+    # add further configs directly to the ENV
+    nano /home/dokku/hfr-teaching-website/ENV
+    ```
+    Vor der ersten Veröffentlichung sollte die Umgebungsvariablen wie folgt gesetzt sein
+
+    ```bash title="/home/dokku/hfr-teaching-website/ENV"
+    API_URI="api://xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+    APP_URL="https://hfr.gbsl.website"
+    BACKEND_URL="https://xxx-api.gbsl.website"
+    CLIENT_ID="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+    TENANT_ID="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+    NGINX_ROOT="build"
+    ```
+2. Auf dem Laptop
+
+    ```bash title="hfr@laptop"
+    git remote add dokku dokku@<dokku-ip>:hfr-teaching-website
+    git push dokku
+    ```
+
+    Die statische Webseite wird nun automatisch erzeugt und veröffentlicht.
+
+    :::details[Hintergründe]
+    Die Webseite verwendet zwei Buildpacks - die URLs und Versionen sind in der `.buildpacks`-Datei definiert.
+
+    Im `app.json` ist spezifiziert, wie die App gebuildet wird (`yarn install && yarn run build`). Zusätzliche Schritte könnten dort definiert werden.
+
+    Die Date `.static` ist für das zweite Buildpack `buildpack-nginx` notwendig - ohne diese (leere) Datei wird die Seite nicht veröffentlicht.
+    :::
+
+3. SSL-Zertifikat erstellen
+
+    Sobald die Seite erstmalig veröffentlicht wurde, muss einmalig ein SSL-Zertifikat erstellt werden. Dies geschieht mit dem Befehl
+
+    ```bash title="root@dokku"
+    dokku letsencrypt:enable hfr-teaching-website
+    ```
+4. [http-auth](https://github.com/dokku/dokku-http-auth) aktivieren
+
+    Um die Seite zu schützen, kann HTTP-Auth aktiviert werden. Dies geschieht mit dem Befehl
+
+    ```bash title="root@dokku"
+    dokku auth:enable hfr-teaching-website <username> <password>
+    ```
+
+    Es lassen sich auch weitere Zugänge anlegen:
+    ```bash title="root@dokku"
+    dokku http-auth:add-user hfr-teaching-website <username> <password>
+    ```
+
+    Und wieder entfernen:
+    ```bash title="root@dokku"
+    dokku http-auth:remove-user hfr-teaching-website <username>
+    ```
+
+5. (Optional) eine [Github-Action](https://dokku.com/docs/deployment/continuous-integration/github-actions/) erstellen, welche die Seite automatisch veröffentlicht, sobald ein Commit auf `main` gepusht wird.
+
+</Steps>
