@@ -64,6 +64,7 @@ export class RootStore {
         /**
          * could be probably ignored since the page gets reloaded on logout?
          */
+        console.log('cleanup data stores');
         this.userStore.cleanup();
         this.socketStore.cleanup();
         this.studentGroupStore.cleanup();
