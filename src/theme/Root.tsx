@@ -161,7 +161,6 @@ const RemoteNavigationHandler = observer(() => {
     const history = useHistory();
     React.useEffect(() => {
         if (socketStore) {
-            console.log('RemoteNavigationHandler');
             const disposer = reaction(
                 () => socketStore.actionRequest,
                 (navRequest) => {
@@ -194,6 +193,13 @@ function Root({ children }: { children: React.ReactNode }) {
         }
         rootStore.sessionStore.setupStorageSync();
         if (window) {
+            if ((window as any).store && (window as any).store !== rootStore) {
+                try {
+                    (window as any).store.cleanup();
+                } catch (e) {
+                    console.error('Failed to cleanup the store', e);
+                }
+            }
             (window as any).store = rootStore;
         }
         return () => {
