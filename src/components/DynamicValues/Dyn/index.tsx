@@ -6,7 +6,7 @@ import { useStore } from '@tdev-hooks/useStore';
 import { templateReplacer } from '../templateReplacer';
 
 interface BaseProps {
-    as?: 'code';
+    as?: 'code' | 'boxed';
 }
 interface NameProps extends BaseProps {
     name: string;
@@ -23,7 +23,6 @@ const Dyn = observer((props: Props) => {
     if (!current) {
         return null;
     }
-    console.log(props);
     const value =
         'name' in props
             ? current.dynamicValues.get(props.name) || `<${props.name}>`
@@ -34,6 +33,8 @@ const Dyn = observer((props: Props) => {
     switch (props.as) {
         case 'code':
             return <code>{value}</code>;
+        case 'boxed':
+            return <strong className="boxed">{value}</strong>;
     }
 
     return value;

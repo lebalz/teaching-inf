@@ -11,6 +11,7 @@ import { SIZE_S } from '@tdev-components/shared/iconSizes';
 interface Props {
     name: string;
     defaultValue?: string;
+    label?: string;
 }
 
 const DynamicInput = observer((props: Props) => {
@@ -25,24 +26,28 @@ const DynamicInput = observer((props: Props) => {
         return null;
     }
     const value = current.dynamicValues.get(props.name);
-
+    const needsReset = props.defaultValue && value !== props.defaultValue;
     return (
         <div className={clsx(styles.dynamicInput)}>
             <TextInput
+                noAutoFocus
                 value={value ?? props.defaultValue ?? ''}
                 onChange={(val) => {
                     current.setDynamicValue(props.name, val);
                 }}
                 defaultValue={props.defaultValue}
-                label={props.name}
+                label={props.label || props.name}
+                labelClassName={clsx(styles.label)}
+                className={clsx(styles.input)}
             />
-            {props.defaultValue && value !== props.defaultValue && (
+            {needsReset && (
                 <Button
                     className={clsx(styles.resetButton)}
                     icon={mdiRestore}
                     onClick={() => {
                         current.setDynamicValue(props.name, props.defaultValue);
                     }}
+                    color="secondary"
                     size={SIZE_S}
                     title="Zurücksetzen"
                 />
