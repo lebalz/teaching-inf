@@ -16,12 +16,12 @@ Durch das Hosten auf einem eigenen Server kann mit bspw. `http-auth` der Zugriff
 
 <Steps>
   1. Eine neue App __<Val name="app" />__ auf dem Server erstellen
-      <DynamicInput name="app" defaultValue='info-teaching-website' />
-      <DynamicInput name="domain" defaultValue='info.gbsl.website' />
-      <DynamicInput name="API_URI" defaultValue='api://xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx' />
-      <DynamicInput name="BACKEND_URL" defaultValue='https://xxx-api.gbsl.website' />
-      <DynamicInput name="CLIENT_ID" defaultValue='xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx' />
-      <DynamicInput name="TENANT_ID" defaultValue='xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx' />
+      <DynamicInput name="app" default='info-teaching-website' />
+      <DynamicInput name="domain" default='info.gbsl.website' />
+      <DynamicInput name="API_URI" default='api://xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx' />
+      <DynamicInput name="BACKEND_URL" default='https://xxx-api.gbsl.website' />
+      <DynamicInput name="CLIENT_ID" default='xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx' />
+      <DynamicInput name="TENANT_ID" default='xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx' />
       <TemplateCode>
          ```bash title="root@dokku"
          dokku apps:create {{app}}

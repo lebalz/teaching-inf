@@ -10,7 +10,7 @@ import { SIZE_S } from '@tdev-components/shared/iconSizes';
 
 interface Props {
     name: string;
-    defaultValue?: string;
+    default?: string;
     label?: string;
     placeholder?: string;
     last?: boolean;
@@ -21,23 +21,23 @@ const DynamicInput = observer((props: Props) => {
     const { current } = pageStore;
     React.useEffect(() => {
         if (current && !current.dynamicValues.has(props.name)) {
-            current.setDynamicValue(props.name, props.defaultValue);
+            current.setDynamicValue(props.name, props.default);
         }
-    }, [props.defaultValue, props.name, current]);
+    }, [props.default, props.name, current]);
     if (!current) {
         return null;
     }
     const value = current.dynamicValues.get(props.name);
-    const needsReset = props.defaultValue && value !== props.defaultValue;
+    const needsReset = props.default && value !== props.default;
     return (
         <div className={clsx(styles.dynamicInput, props.last && styles.last)}>
             <TextInput
                 noAutoFocus
-                value={value ?? props.defaultValue ?? ''}
+                value={value ?? props.default ?? ''}
                 onChange={(val) => {
                     current.setDynamicValue(props.name, val);
                 }}
-                defaultValue={props.defaultValue}
+                defaultValue={props.default}
                 label={props.label || props.name}
                 labelClassName={clsx(styles.label)}
                 className={clsx(styles.input)}
@@ -48,7 +48,7 @@ const DynamicInput = observer((props: Props) => {
                     className={clsx(styles.resetButton)}
                     icon={mdiRestore}
                     onClick={() => {
-                        current.setDynamicValue(props.name, props.defaultValue);
+                        current.setDynamicValue(props.name, props.default);
                     }}
                     color="secondary"
                     size={SIZE_S}
