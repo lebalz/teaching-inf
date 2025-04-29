@@ -1,5 +1,5 @@
-import Dyn from './Dyn';
+import Val from './Val';
 import DynamicInput from './Input';
 import TemplateCode from './TemplateCode';
 
-export { Dyn, DynamicInput, TemplateCode };
+export { Val, DynamicInput, TemplateCode };

@@ -17,7 +17,7 @@ interface ChildProps extends BaseProps {
 
 type Props = NameProps | ChildProps;
 
-const Dyn = observer((props: Props) => {
+const Val = observer((props: Props) => {
     const pageStore = useStore('pageStore');
     const { current } = pageStore;
     if (!current) {
@@ -40,4 +40,4 @@ const Dyn = observer((props: Props) => {
     return value;
 });
 
-export default Dyn;
+export default Val;

@@ -3,9 +3,9 @@
     grid-template-columns: minmax(8em, auto) 2fr auto;
     grid-template-areas: 'label input reset';
     position: relative;
-    margin-bottom: 0.15em;
-    &:last-of-type {
-        margin-bottom: 1em;
+    margin-bottom: 1em;
+    &:has(+ .dynamicInput) {
+        margin-bottom: 0.15em;
     }
     .label {
         grid-area: label;
@@ -37,7 +37,6 @@
         grid-template-areas:
             'label . reset'
             'input input input';
-        gap: 0;
         .label {
             margin-bottom: 0;
             border-bottom-left-radius: 0;
@@ -49,7 +48,7 @@
             font-size: 80%;
         }
         .input {
-            margin-bottom: 0.5em;
+            margin-bottom: 0;
             border-bottom-left-radius: var(--ifm-global-radius);
             border-left-width: 1px;
         }

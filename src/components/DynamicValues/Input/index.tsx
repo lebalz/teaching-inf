@@ -12,6 +12,8 @@ interface Props {
     name: string;
     defaultValue?: string;
     label?: string;
+    placeholder?: string;
+    last?: boolean;
 }
 
 const DynamicInput = observer((props: Props) => {
@@ -28,7 +30,7 @@ const DynamicInput = observer((props: Props) => {
     const value = current.dynamicValues.get(props.name);
     const needsReset = props.defaultValue && value !== props.defaultValue;
     return (
-        <div className={clsx(styles.dynamicInput)}>
+        <div className={clsx(styles.dynamicInput, props.last && styles.last)}>
             <TextInput
                 noAutoFocus
                 value={value ?? props.defaultValue ?? ''}
@@ -39,6 +41,7 @@ const DynamicInput = observer((props: Props) => {
                 label={props.label || props.name}
                 labelClassName={clsx(styles.label)}
                 className={clsx(styles.input)}
+                placeholder={props.placeholder}
             />
             {needsReset && (
                 <Button

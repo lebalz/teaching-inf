@@ -3,7 +3,7 @@ page_id: 323ff390-40d6-4bd5-ac6c-7a05f3515526
 ---
 
 import Steps from '@tdev-components/Steps'
-import { Dyn, TemplateCode, DynamicInput } from '@tdev-components/DynamicValues';
+import { Val, TemplateCode, DynamicInput } from '@tdev-components/DynamicValues';
 
 # Dokku Deploy
 
@@ -15,14 +15,13 @@ Durch das Hosten auf einem eigenen Server kann mit bspw. `http-auth` der Zugriff
 ## Installation
 
 <Steps>
-  1. Eine neue App __<Dyn name="app" />__ auf dem Server erstellen
+  1. Eine neue App __<Val name="app" />__ auf dem Server erstellen
       <DynamicInput name="app" defaultValue='info-teaching-website' />
       <DynamicInput name="domain" defaultValue='info.gbsl.website' />
       <DynamicInput name="API_URI" defaultValue='api://xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx' />
       <DynamicInput name="BACKEND_URL" defaultValue='https://xxx-api.gbsl.website' />
       <DynamicInput name="CLIENT_ID" defaultValue='xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx' />
       <DynamicInput name="TENANT_ID" defaultValue='xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx' />
-      <br />
       <TemplateCode>
          ```bash title="root@dokku"
          dokku apps:create {{app}}
@@ -40,7 +39,7 @@ Durch das Hosten auf einem eigenen Server kann mit bspw. `http-auth` der Zugriff
          dokku config:set --no-restart TENANT_ID={{TENANT_ID}}
          ```
       </TemplateCode>
-      :::details[Alternativ: direkt über <Dyn as="code">`/home/dokku/{{app}}/ENV`</Dyn>]
+      :::details[Alternativ: direkt über <Val as="code">`/home/dokku/{{app}}/ENV`</Val>]
       <TemplateCode>
          ```bash title="/home/dokku/{{app}}/ENV"
          API_URI="{{API_URI}}"
