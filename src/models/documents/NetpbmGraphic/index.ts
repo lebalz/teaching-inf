@@ -6,12 +6,26 @@ import { TypeMeta } from '@tdev-models/DocumentRoot';
 import { parse } from '@tdev-models/documents/NetpbmGraphic/parser/parser';
 import { ParserResult } from '@tdev-models/documents/NetpbmGraphic/types';
 import { ApiState } from '@tdev-stores/iStore';
+import { extractCodeBlockProps } from '@tdev/theme/CodeBlock/extractCodeBlockProps';
 
 export interface MetaInit {
     readonly?: boolean;
     default?: string;
     children?: React.ReactNode;
 }
+
+const getInitialCode = (props: Partial<MetaInit>) => {
+    if (props.children) {
+        if (typeof props.children === 'string') {
+            return props.children; // inline-text
+        }
+        const codeBlock = extractCodeBlockProps(props.children);
+        if (typeof codeBlock.children === 'string') {
+            return codeBlock.children; // code-block
+        }
+    }
+    return props.default || '';
+};
 
 export class ModelMeta extends TypeMeta<DocumentType.NetpbmGraphic> {
     readonly type = DocumentType.NetpbmGraphic;
@@ -36,16 +50,8 @@ export class ModelMeta extends TypeMeta<DocumentType.NetpbmGraphic> {
          *   ```
          * </NetpbmGraphic>
          */
-        const childData: string | undefined = props.children
-            ? typeof props.children === 'string'
-                ? props.children // inline-text
-                : Array.isArray(props.children) // expectation: the relevant data is provided
-                  ? //    code-block     >    it's first child contains the text
-                    props.children[0]?.props?.children?.props?.children
-                  : undefined
-            : undefined;
         this.readonly = props.readonly;
-        this.default = childData || props.default;
+        this.default = getInitialCode(props);
     }
 
     get defaultData(): TypeDataMapping[DocumentType.NetpbmGraphic] {
