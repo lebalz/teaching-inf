@@ -26,6 +26,11 @@ export const CodeEditor = observer((props: Props) => {
     const id = props.slim ? undefined : props.id;
     const [meta] = React.useState(new ScriptMeta(props));
     const script = useFirstMainDocument(id, meta);
+    React.useEffect(() => {
+        if (script) {
+            script.setCode(props.code);
+        }
+    }, [script, props.code]);
     if (!ExecutionEnvironment.canUseDOM || !script) {
         return <CodeBlock language={props.lang}>{props.code}</CodeBlock>;
     }

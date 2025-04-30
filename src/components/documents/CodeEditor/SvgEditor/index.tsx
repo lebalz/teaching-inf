@@ -12,6 +12,7 @@ import ErrorBoundary from '@docusaurus/ErrorBoundary';
 import CodeBlock from '@theme/CodeBlock';
 import Card from '@tdev-components/shared/Card';
 import Button from '@tdev-components/shared/Button';
+import { extractCodeBlockProps } from '@tdev/theme/CodeBlock/extractCodeBlockProps';
 
 export interface Props extends Omit<MetaProps, 'live_jsx' | 'live_py' | 'title'> {
     title?: string;
@@ -22,15 +23,16 @@ export interface Props extends Omit<MetaProps, 'live_jsx' | 'live_py' | 'title'>
 }
 
 const getInitialCode = (props: Props) => {
-    const childData: string | undefined = props.children
-        ? typeof props.children === 'string'
-            ? props.children // inline-text
-            : Array.isArray(props.children) // expectation: the relevant data is provided
-              ? //    code-block     >    it's first child contains the text
-                props.children[0]?.props?.children?.props?.children
-              : undefined
-        : undefined;
-    return childData || props.code || '';
+    if (props.children) {
+        if (typeof props.children === 'string') {
+            return props.children; // inline-text
+        }
+        const codeBlock = extractCodeBlockProps(props.children);
+        if (codeBlock && typeof codeBlock.children === 'string') {
+            return codeBlock.children; // code-block
+        }
+    }
+    return props.code || '';
 };
 
 const SvgEditor = observer((props: Props) => {

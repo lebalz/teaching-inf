@@ -41,6 +41,9 @@
 }
 
 html[data-theme='dark'] {
+    --ifm-global-shadow-lw: 0 1px 2px 0 rgba(0, 119, 110, 0.1);
+    --ifm-global-shadow-md: 0 4px 12px rgba(0, 119, 110, 0.1);
+    --ifm-global-shadow-tl: 0 8px 16px 0 rgba(0, 119, 110, 0.08), 0 2px 4px 0 rgba(0, 119, 110, 0.05);
     --ifm-link-color: #677dc3;
     --ifm-color-primary: #4d5c8d;
     --ifm-color-primary-dark: #45537f;
