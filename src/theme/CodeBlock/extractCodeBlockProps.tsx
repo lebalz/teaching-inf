@@ -3,6 +3,15 @@ import { type Props as CodeBlockProps } from '@theme/CodeBlock';
 
 const MDX_CODE = 'MDXCode' as const;
 const MDX_PRE = 'MDXPre' as const;
+const COMPILED_CODE = 'code' as const;
+const COMPILED_PRE = 'pre' as const;
+
+const isCode = (node: { type: { name: string } }) => {
+    return node.type.name === MDX_CODE || node.type.name === COMPILED_CODE;
+};
+const isPre = (node: { type: { name: string } }) => {
+    return node.type.name === MDX_PRE || node.type.name === COMPILED_PRE;
+};
 
 function isReactElementWithNamedType(
     node: any
@@ -22,20 +31,20 @@ export const extractCodeBlockProps = (from: React.ReactNode, depth: number = 0):
         if (!isReactElementWithNamedType(child)) {
             continue;
         }
-        if (child.type.name === MDX_CODE) {
+        if (isCode(child)) {
             /**
              * this indicates that we found an inline code block...
              */
             return child.props as CodeBlockProps;
         }
-        if (child.type.name === MDX_PRE) {
+        if (isPre(child)) {
             /**
              * this is a Docusaurus MDXPre component
              * @see https://github.com/facebook/docusaurus/blob/main/packages/docusaurus-theme-classic/src/theme/MDXComponents/Pre.tsx
              * --> MDXPre is a wrapper around the CodeBlock component
              */
             const innerChild = child.props?.children;
-            if (isReactElementWithNamedType(innerChild) && innerChild.type.name === MDX_CODE) {
+            if (isReactElementWithNamedType(innerChild) && isCode(innerChild)) {
                 return innerChild.props as CodeBlockProps;
             }
         }
