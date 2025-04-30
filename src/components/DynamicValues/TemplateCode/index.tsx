@@ -17,7 +17,7 @@ const TemplateCode = observer((props: Props) => {
     }
     const childProps = extractCodeBlockProps(props.children);
     if (!childProps) {
-        return <code>{props.children}</code>;
+        return <>{props.children}</>;
     }
     if (typeof childProps.children !== 'string') {
         return <CodeBlock {...childProps} />;
