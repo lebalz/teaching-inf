@@ -1,6 +1,4 @@
 import React from 'react';
-import clsx from 'clsx';
-import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@tdev-hooks/useStore';
 import { templateReplacer } from '../templateReplacer';
@@ -27,7 +25,7 @@ const Val = observer((props: Props) => {
     let value = '';
     if ('children' in props) {
         const codeProps = extractCodeBlockProps(props.children);
-        if (typeof codeProps.children !== 'string') {
+        if (!codeProps || typeof codeProps.children !== 'string') {
             return <code>{props.children}</code>;
         }
         value = templateReplacer(codeProps.children, pageStore.current?.dynamicValues);

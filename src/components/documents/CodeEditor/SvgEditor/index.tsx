@@ -28,7 +28,7 @@ const getInitialCode = (props: Props) => {
             return props.children; // inline-text
         }
         const codeBlock = extractCodeBlockProps(props.children);
-        if (typeof codeBlock.children === 'string') {
+        if (codeBlock && typeof codeBlock.children === 'string') {
             return codeBlock.children; // code-block
         }
     }

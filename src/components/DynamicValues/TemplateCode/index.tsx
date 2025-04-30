@@ -1,9 +1,7 @@
 import React from 'react';
-import clsx from 'clsx';
-import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@tdev-hooks/useStore';
-import CodeBlock, { type Props as CodeBlockProps } from '@theme/CodeBlock';
+import CodeBlock from '@theme/CodeBlock';
 import { templateReplacer } from '../templateReplacer';
 import { extractCodeBlockProps } from '@tdev/theme/CodeBlock/extractCodeBlockProps';
 
@@ -18,6 +16,9 @@ const TemplateCode = observer((props: Props) => {
         return null;
     }
     const childProps = extractCodeBlockProps(props.children);
+    if (!childProps) {
+        return <code>{props.children}</code>;
+    }
     if (typeof childProps.children !== 'string') {
         return <CodeBlock {...childProps} />;
     }
