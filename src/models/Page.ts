@@ -17,10 +17,21 @@ export default class Page {
     @observable.ref accessor _activeStudentGroup: StudentGroup | undefined = undefined;
     documentRootIds: ObservableSet<string>;
 
+    dynamicValues = observable.map<string, string>();
+
     constructor(id: string, store: PageStore) {
         this.id = id;
         this.store = store;
         this.documentRootIds = observable.set<string>([id]);
+    }
+
+    @action
+    setDynamicValue(key: string, value?: string) {
+        if (value === undefined) {
+            this.dynamicValues.delete(key);
+            return;
+        }
+        this.dynamicValues.set(key, value);
     }
 
     @action

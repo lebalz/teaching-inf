@@ -55,7 +55,7 @@
     width: 100%;
     padding: 10px;
     margin-bottom: 15px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--ifm-color-gray-500);
     border-radius: 4px;
     font-size: 16px;
     box-shadow: var(--ifm-global-shadow-md);
@@ -73,7 +73,7 @@
     width: 100%;
     padding: 10px;
     margin-bottom: 15px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--ifm-color-gray-500);
     border-radius: 4px;
     font-size: 16px;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
