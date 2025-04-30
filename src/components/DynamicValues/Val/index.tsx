@@ -4,6 +4,7 @@ import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@tdev-hooks/useStore';
 import { templateReplacer } from '../templateReplacer';
+import { extractCodeBlockProps } from '@tdev/theme/CodeBlock/extractCodeBlockProps';
 
 interface BaseProps {
     as?: 'code' | 'boxed';
@@ -23,13 +24,16 @@ const Val = observer((props: Props) => {
     if (!current) {
         return null;
     }
-    const value =
-        'name' in props
-            ? current.dynamicValues.get(props.name) || `<${props.name}>`
-            : templateReplacer(
-                  (Array.isArray(props.children) ? props.children[0] : props.children)?.props?.children,
-                  current.dynamicValues
-              );
+    let value = '';
+    if ('children' in props) {
+        const codeProps = extractCodeBlockProps(props.children);
+        if (typeof codeProps.children !== 'string') {
+            return <code>{props.children}</code>;
+        }
+        value = templateReplacer(codeProps.children, pageStore.current?.dynamicValues);
+    } else if ('name' in props) {
+        value = current.dynamicValues.get(props.name) || `<${props.name}>`;
+    }
     switch (props.as) {
         case 'code':
             return <code>{value}</code>;

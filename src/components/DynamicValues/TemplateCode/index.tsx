@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite';
 import { useStore } from '@tdev-hooks/useStore';
 import CodeBlock, { type Props as CodeBlockProps } from '@theme/CodeBlock';
 import { templateReplacer } from '../templateReplacer';
+import { extractCodeBlockProps } from '@tdev/theme/CodeBlock/extractCodeBlockProps';
 
 interface Props {
     children: React.ReactNode;
@@ -16,13 +17,13 @@ const TemplateCode = observer((props: Props) => {
     if (!current) {
         return null;
     }
-    // the default way of docusaurus to transform md code blocks to it's
-    // CodeBlock Component...
-    const childProps = (Array.isArray(props.children) ? props.children[0] : props.children)?.props?.children
-        ?.props;
+    const childProps = extractCodeBlockProps(props.children);
+    if (typeof childProps.children !== 'string') {
+        return <CodeBlock {...childProps} />;
+    }
 
-    const code = templateReplacer(childProps.children as string, pageStore.current?.dynamicValues);
-    const metastring = templateReplacer(childProps.metastring as string, pageStore.current?.dynamicValues);
+    const code = templateReplacer(childProps.children, pageStore.current?.dynamicValues);
+    const metastring = templateReplacer(childProps.metastring, pageStore.current?.dynamicValues);
 
     return (
         <CodeBlock {...childProps} metastring={metastring}>
