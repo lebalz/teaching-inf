@@ -141,7 +141,7 @@ const main = async () => {
                     if (src.to) {
                         toPath = src.to;
                     } else {
-                        toPath = `${classDir}${relative2Doc(src)}`;
+                        toPath = `${classDir}${relative2Doc(srcPath)}`;
                     }
                     ignore.push(...(src.ignore || []));
                     break;
