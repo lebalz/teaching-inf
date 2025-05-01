@@ -63,9 +63,8 @@ const MsalWrapper = observer(({ children }: { children: React.ReactNode }) => {
             runInAction(() => {
                 sessionStore.authMethod = 'msal';
             });
-            console.log(Storage.get('SessionStore'));
+
             if (!(Storage.get('SessionStore') as any)?.user) {
-                console.log('No user found in session store, setting default test user');
                 Storage.set('SessionStore', { user: { email: defaultTestUsername } });
             }
 

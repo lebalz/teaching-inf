@@ -174,15 +174,14 @@ const UserPage = observer(() => {
                         <>
                             <dt>Test-User wechseln</dt>
                             <dd>
-                                <select defaultValue={(sessionStore.account as any)?.email} onChange={(e) => {
+                                <select value={(sessionStore.account as any)?.username} onChange={(e) => {
                                     const username = e.target.value;
                                     sessionStore.setAccount(({ username: username } as any));
                                     Storage.set('SessionStore', {
                                         user: { email: username }
                                     });
-                                    const sig = new AbortController();
-                                    logout(sig.signal)
-                                    // window.location.reload();
+                                    logout(new AbortController().signal)
+                                    window.location.reload();
                                 }}>
                                     {testUsernames.map((username) => {
                                         return (
