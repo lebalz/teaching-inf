@@ -209,7 +209,7 @@ export class CmsStore extends iStore<'logout' | `update-settings` | `load-settin
 
     @computed
     get canModifyActiveBranch() {
-        if (this.root.userStore.current?.isAdmin) {
+        if (this.root.userStore.current?.hasElevatedAccess) {
             return true;
         }
         return !this.isOnDefaultBranch;

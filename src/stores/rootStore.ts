@@ -52,7 +52,7 @@ export class RootStore {
                 this.userStore.load();
                 this.studentGroupStore.load();
                 this.cmsStore.initialize();
-                if (user.isAdmin) {
+                if (user.hasElevatedAccess) {
                     this.adminStore.load();
                 }
             }
@@ -64,6 +64,7 @@ export class RootStore {
         /**
          * could be probably ignored since the page gets reloaded on logout?
          */
+        console.log('cleanup data stores');
         this.userStore.cleanup();
         this.socketStore.cleanup();
         this.studentGroupStore.cleanup();
