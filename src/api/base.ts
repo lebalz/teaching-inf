@@ -4,7 +4,7 @@ import { InteractionRequiredAuthError } from '@azure/msal-browser';
 import { msalInstance } from '../theme/Root';
 import siteConfig from '@generated/docusaurus.config';
 import Storage from '@tdev-stores/utils/Storage';
-const { TEST_USERNAMES } = siteConfig.customFields as { TEST_USERNAMES?: string };
+const { NO_AUTH } = siteConfig.customFields as { NO_AUTH?: boolean };
 
 export namespace Api {
     export const BASE_API_URL = eventsApiUrl();
@@ -41,7 +41,7 @@ export const setupMsalAxios = () => {
     api.interceptors.request.clear();
     api.interceptors.request.use(
         async (config: InternalAxiosRequestConfig) => {
-            if (process.env.NODE_ENV !== 'production' && TEST_USERNAMES) {
+            if (process.env.NODE_ENV !== 'production' && NO_AUTH) {
                 return config;
             }
             // This will only return a non-null value if you have logic somewhere else that calls the setActiveAccount API
@@ -99,7 +99,9 @@ export const setupNoAuthAxios = () => {
     api.interceptors.request.clear();
     api.interceptors.request.use(
         async (config: InternalAxiosRequestConfig) => {
-            config.headers['Authorization'] = JSON.stringify({ email: (Storage.get('SessionStore') as any)?.user?.email });
+            config.headers['Authorization'] = JSON.stringify({
+                email: (Storage.get('SessionStore') as any)?.user?.email
+            });
             return config;
         },
         (error) => {
