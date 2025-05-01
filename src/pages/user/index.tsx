@@ -16,7 +16,9 @@ import DefinitionList from '@tdev-components/DefinitionList';
 import Icon from '@mdi/react';
 import UserTable from '@tdev-components/Admin/UserTable';
 import NavReloadRequest from '@tdev-components/Admin/ActionRequest/NavReloadRequest';
-const { NO_AUTH } = siteConfig.customFields as { TEST_USERNAME?: string; NO_AUTH?: boolean };
+import Storage from '@tdev-stores/utils/Storage';
+const { NO_AUTH, TEST_USERNAMES } = siteConfig.customFields as { NO_AUTH?: boolean, TEST_USERNAMES?: string };
+import { logout } from '@tdev-api/user';
 
 const LeftAlign = (text: String) => {
     return text
@@ -26,6 +28,8 @@ const LeftAlign = (text: String) => {
         })
         .join('\n');
 };
+
+const testUsernames = TEST_USERNAMES?.split(';') || []; // TODO: Duplicate from Root.tsx.
 
 const UserPage = observer(() => {
     const sessionStore = useStore('sessionStore');
@@ -166,6 +170,33 @@ const UserPage = observer(() => {
                             iconSide="left"
                         />
                     </dd>
+                    {NO_AUTH && (
+                        <>
+                            <dt>Test-User wechseln</dt>
+                            <dd>
+                                <select defaultValue={(sessionStore.account as any)?.email} onChange={(e) => {
+                                    const username = e.target.value;
+                                    sessionStore.setAccount(({ username: username } as any));
+                                    Storage.set('SessionStore', {
+                                        user: { email: username }
+                                    });
+                                    const sig = new AbortController();
+                                    logout(sig.signal)
+                                    // window.location.reload();
+                                }}>
+                                    {testUsernames.map((username) => {
+                                        return (
+                                            <option
+                                                key={username}
+                                                value={username}>
+                                                {username}
+                                            </option>
+                                        );
+                                    })}
+                                </select>
+                            </dd>
+                        </>
+                    )}
                     <dt>Ausloggen</dt>
                     <dd>
                         <Button
