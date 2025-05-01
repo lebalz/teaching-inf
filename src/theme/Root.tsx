@@ -13,7 +13,7 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import scheduleMicrotask from '@tdev-components/util/scheduleMicrotask';
 import { useHistory } from '@docusaurus/router';
 import Storage from '@tdev-stores/utils/Storage';
-const { NO_AUTH, SENTRY_DSN } = siteConfig.customFields as {
+const { NO_AUTH, TEST_USERNAMES, SENTRY_DSN } = siteConfig.customFields as {
     TEST_USERNAMES: string;
     NO_AUTH?: boolean;
     SENTRY_DSN?: string;
@@ -64,7 +64,7 @@ const MsalWrapper = observer(({ children }: { children: React.ReactNode }) => {
             });
 
             if (!(Storage.get('SessionStore') as any)?.user) {
-                Storage.set('SessionStore', { user: { email: currentTestUsername } });
+                Storage.set('SessionStore', { user: { email: TEST_USERNAMES[0] } });
             }
 
             scheduleMicrotask(() => {
