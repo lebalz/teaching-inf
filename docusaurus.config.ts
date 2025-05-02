@@ -125,6 +125,8 @@ const getCopyPlugin = (
 
 const ORGANIZATION_NAME = 'gbsl-informatik';
 const PROJECT_NAME = 'teaching-dev';
+const TEST_USERNAMES = (process.env.TEST_USERNAMES?.split(';') || []).map((u) => u.trim()).filter(u => !!u);
+
 
 const config: Config = {
   title: 'Teaching-Dev',
@@ -147,10 +149,10 @@ const config: Config = {
 
   customFields: {
     /** Use Testuser in local dev: set TEST_USERNAME to the test users email adress*/
-    TEST_USERNAMES: (process.env.TEST_USERNAMES?.split(';') || []).map((u) => u.trim()).filter(u => !!u),
+    TEST_USERNAMES: TEST_USERNAMES,
     /** User.ts#isStudent returns `true` for users matching this pattern. If unset, it returns `true` for all non-admin users. */
     STUDENT_USERNAME_PATTERN: process.env.STUDENT_USERNAME_PATTERN,
-    NO_AUTH: process.env.NODE_ENV !== 'production' && (process.env.TEST_USERNAMES?.length || 0) > 0,
+    NO_AUTH: process.env.NODE_ENV !== 'production' && TEST_USERNAMES.length > 0,
     /** The Domain Name where the api is running */
     APP_URL: process.env.NETLIFY
       ? process.env.CONTEXT === 'production' 
