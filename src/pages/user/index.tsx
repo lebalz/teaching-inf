@@ -16,7 +16,14 @@ import DefinitionList from '@tdev-components/DefinitionList';
 import Icon from '@mdi/react';
 import UserTable from '@tdev-components/Admin/UserTable';
 import NavReloadRequest from '@tdev-components/Admin/ActionRequest/NavReloadRequest';
-const { NO_AUTH } = siteConfig.customFields as { TEST_USERNAME?: string; NO_AUTH?: boolean };
+import Storage from '@tdev-stores/utils/Storage';
+import { logout } from '@tdev-api/user';
+import SelectInput from '@tdev-components/shared/SelectInput';
+
+const { NO_AUTH, TEST_USERNAMES } = siteConfig.customFields as {
+    NO_AUTH?: boolean;
+    TEST_USERNAMES: string[];
+};
 
 const LeftAlign = (text: String) => {
     return text
@@ -166,6 +173,26 @@ const UserPage = observer(() => {
                             iconSide="left"
                         />
                     </dd>
+                    {NO_AUTH && (
+                        <>
+                            <dt>Test-User wechseln</dt>
+                            <dd>
+                                <SelectInput
+                                    options={TEST_USERNAMES}
+                                    onChange={(username) => {
+                                        sessionStore.setAccount({ username: username } as any);
+                                        Storage.set('SessionStore', {
+                                            user: { email: username }
+                                        });
+                                        logout(new AbortController().signal);
+                                        window.location.reload();
+                                    }}
+                                    value={(sessionStore.account as any)?.username}
+                                    placeholder=".env TEST_USERNAMES"
+                                />
+                            </dd>
+                        </>
+                    )}
                     <dt>Ausloggen</dt>
                     <dd>
                         <Button
