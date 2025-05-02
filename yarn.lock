@@ -158,7 +158,7 @@
     "@jridgewell/gen-mapping" "^0.3.5"
     "@jridgewell/trace-mapping" "^0.3.24"
 
-"@azure/msal-browser@^3.20.0":
+"@azure/msal-browser@^v3.28.0":
   version "3.28.1"
   resolved "https://registry.yarnpkg.com/@azure/msal-browser/-/msal-browser-3.28.1.tgz#9132fc8807bfcc2b1c3b3c3b9a85d4df41457148"
   integrity sha512-OHHEWMB5+Zrix8yKvLVzU3rKDFvh7SOzAzXfICD7YgUXLxfHpTPX2pzOotrri1kskwhHqIj4a5LvhZlIqE7C7g==
@@ -170,7 +170,7 @@
   resolved "https://registry.yarnpkg.com/@azure/msal-common/-/msal-common-14.16.0.tgz#f3470fcaec788dbe50859952cd499340bda23d7a"
   integrity sha512-1KOZj9IpcDSwpNiQNjt0jDYZpQvNZay7QAEi/5DLubay40iGYtLzya/jbjRPLyOTZhEKyL1MzPuw2HqBCjceYA==
 
-"@azure/msal-react@^2.0.22":
+"@azure/msal-react@^2.2.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@azure/msal-react/-/msal-react-2.2.0.tgz#c8928e0f33bf7a88827a1c9488b62a4bd4c92e34"
   integrity sha512-2V+9JXeXyyjYNF92y5u0tU4el9px/V1+vkRuN+DtoxyiMHCtYQpJoaFdGWArh43zhz5aqQqiGW/iajPDSu3QsQ==

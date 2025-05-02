@@ -18,8 +18,8 @@
         "test": "vitest --coverage"
     },
     "dependencies": {
-        "@azure/msal-browser": "^3.20.0",
-        "@azure/msal-react": "^2.0.22",
+        "@azure/msal-browser": "^v3.28.0",
+        "@azure/msal-react": "^2.2.0",
         "@docusaurus/core": "^3.7.0",
         "@docusaurus/faster": "^3.7.0",
         "@docusaurus/preset-classic": "^3.7.0",
