@@ -14,13 +14,13 @@ import scheduleMicrotask from '@tdev-components/util/scheduleMicrotask';
 import { useHistory } from '@docusaurus/router';
 import Storage from '@tdev-stores/utils/Storage';
 const { NO_AUTH, TEST_USERNAMES, SENTRY_DSN } = siteConfig.customFields as {
-    TEST_USERNAMES: string;
+    TEST_USERNAMES: string[];
     NO_AUTH?: boolean;
     SENTRY_DSN?: string;
 };
 export const msalInstance = new PublicClientApplication(msalConfig);
 
-const currentTestUsername = (Storage.get('SessionStore') as any)?.user.email;
+const currentTestUsername = Storage.get('SessionStore', { user: { email: TEST_USERNAMES[0] } })?.user?.email;
 
 if (NO_AUTH) {
     const n = (currentTestUsername?.length || 0) >= 32 ? 0 : 32 - (currentTestUsername?.length || 0);
@@ -49,8 +49,8 @@ if (NO_AUTH) {
 const MsalWrapper = observer(({ children }: { children: React.ReactNode }) => {
     const sessionStore = useStore('sessionStore');
     React.useEffect(() => {
-        if (NO_AUTH && process.env.NODE_ENV !== 'production') {
-            setupNoAuthAxios();
+        if (NO_AUTH && process.env.NODE_ENV !== 'production' && currentTestUsername) {
+            setupNoAuthAxios(currentTestUsername);
         }
     }, []);
     React.useEffect(() => {
@@ -58,18 +58,14 @@ const MsalWrapper = observer(({ children }: { children: React.ReactNode }) => {
          * DEV MODE
          * - no auth
          */
-        if (NO_AUTH && !sessionStore?.isLoggedIn) {
+        if (NO_AUTH && !sessionStore?.isLoggedIn && currentTestUsername) {
             runInAction(() => {
                 sessionStore.authMethod = 'msal';
             });
 
-            if (!(Storage.get('SessionStore') as any)?.user) {
-                Storage.set('SessionStore', { user: { email: TEST_USERNAMES[0] } });
-            }
-
             scheduleMicrotask(() => {
                 rootStore.sessionStore.setAccount({
-                    username: (Storage.get('SessionStore') as any).user.email
+                    username: currentTestUsername
                 } as any);
             });
 

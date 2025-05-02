@@ -17,11 +17,13 @@ import Icon from '@mdi/react';
 import UserTable from '@tdev-components/Admin/UserTable';
 import NavReloadRequest from '@tdev-components/Admin/ActionRequest/NavReloadRequest';
 import Storage from '@tdev-stores/utils/Storage';
+import { logout } from '@tdev-api/user';
+import SelectInput from '@tdev-components/shared/SelectInput';
+
 const { NO_AUTH, TEST_USERNAMES } = siteConfig.customFields as {
     NO_AUTH?: boolean;
     TEST_USERNAMES: string[];
 };
-import { logout } from '@tdev-api/user';
 
 const LeftAlign = (text: String) => {
     return text
@@ -175,10 +177,9 @@ const UserPage = observer(() => {
                         <>
                             <dt>Test-User wechseln</dt>
                             <dd>
-                                <select
-                                    value={(sessionStore.account as any)?.username}
-                                    onChange={(e) => {
-                                        const username = e.target.value;
+                                <SelectInput
+                                    options={TEST_USERNAMES}
+                                    onChange={(username) => {
                                         sessionStore.setAccount({ username: username } as any);
                                         Storage.set('SessionStore', {
                                             user: { email: username }
@@ -186,15 +187,9 @@ const UserPage = observer(() => {
                                         logout(new AbortController().signal);
                                         window.location.reload();
                                     }}
-                                >
-                                    {TEST_USERNAMES.map((username) => {
-                                        return (
-                                            <option key={username} value={username}>
-                                                {username}
-                                            </option>
-                                        );
-                                    })}
-                                </select>
+                                    value={(sessionStore.account as any)?.username}
+                                    placeholder=".env TEST_USERNAMES"
+                                />
                             </dd>
                         </>
                     )}

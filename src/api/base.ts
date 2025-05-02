@@ -91,7 +91,7 @@ export const setupMsalAxios = () => {
     );
 };
 
-export const setupNoAuthAxios = () => {
+export const setupNoAuthAxios = (userEmail: string) => {
     if (process.env.NODE_ENV === 'production') {
         return;
     }
@@ -100,7 +100,7 @@ export const setupNoAuthAxios = () => {
     api.interceptors.request.use(
         async (config: InternalAxiosRequestConfig) => {
             config.headers['Authorization'] = JSON.stringify({
-                email: (Storage.get('SessionStore') as any)?.user?.email
+                email: userEmail
             });
             return config;
         },
