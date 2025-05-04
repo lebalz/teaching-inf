@@ -171,7 +171,6 @@ export default class OfflineApi {
             case 'checklogin':
                 return resolveResponse({ user: OfflineUser } as unknown as T, 200, 'ok');
             case 'documents':
-                console.log('id', id, query.has('ids'), query.has('rids'));
                 if (id) {
                     if (documents.has(id)) {
                         return resolveResponse(documents.get(id) as unknown as T);
@@ -187,7 +186,6 @@ export default class OfflineApi {
                 }
                 if (query.has('rids')) {
                     const rids = query.getAll('rids');
-                    console.log('rids', rids);
                     const filteredDocuments = rids
                         .flatMap((id) => documentsBy(id))
                         .filter((doc) => doc !== undefined);

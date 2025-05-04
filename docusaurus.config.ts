@@ -30,6 +30,7 @@ import { sentryWebpackPlugin } from '@sentry/webpack-plugin';
 
 const BUILD_LOCATION = __dirname;
 const GIT_COMMIT_SHA = process.env.GITHUB_SHA || Math.random().toString(36).substring(7);
+const OFFLINE_API = process.env.OFFLINE_API === 'false' ? false : !!process.env.OFFLINE_API || process.env.CODESPACES === 'true';
 
 const BEFORE_DEFAULT_REMARK_PLUGINS = [
   flexCardsPlugin,
@@ -150,10 +151,10 @@ const config: Config = {
   customFields: {
     /** Use Testuser in local dev: set TEST_USERNAME to the test users email adress*/
     TEST_USERNAMES: TEST_USERNAMES,
-    OFFLINE_API: !!process.env.OFFLINE_API,
+    OFFLINE_API: OFFLINE_API,
     /** User.ts#isStudent returns `true` for users matching this pattern. If unset, it returns `true` for all non-admin users. */
     STUDENT_USERNAME_PATTERN: process.env.STUDENT_USERNAME_PATTERN,
-    NO_AUTH: (process.env.NODE_ENV !== 'production' || process.env.OFFLINE_API) && TEST_USERNAMES.length > 0,
+    NO_AUTH: (process.env.NODE_ENV !== 'production' || OFFLINE_API) && TEST_USERNAMES.length > 0,
     /** The Domain Name where the api is running */
     APP_URL: process.env.NETLIFY
       ? process.env.CONTEXT === 'production' 
