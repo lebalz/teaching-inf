@@ -27,7 +27,7 @@ export const CodeEditor = observer((props: Props) => {
     const [meta] = React.useState(new ScriptMeta(props));
     const script = useFirstMainDocument(id, meta);
     React.useEffect(() => {
-        if (script) {
+        if (script && script.meta?.slim) {
             script.setCode(props.code);
         }
     }, [script, props.code]);

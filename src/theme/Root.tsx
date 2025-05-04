@@ -12,15 +12,18 @@ import { reaction, runInAction } from 'mobx';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import scheduleMicrotask from '@tdev-components/util/scheduleMicrotask';
 import { useHistory } from '@docusaurus/router';
-const { NO_AUTH, TEST_USERNAME, SENTRY_DSN } = siteConfig.customFields as {
-    TEST_USERNAME?: string;
+import Storage from '@tdev-stores/utils/Storage';
+const { NO_AUTH, TEST_USERNAMES, SENTRY_DSN } = siteConfig.customFields as {
+    TEST_USERNAMES: string[];
     NO_AUTH?: boolean;
     SENTRY_DSN?: string;
 };
 export const msalInstance = new PublicClientApplication(msalConfig);
 
+const currentTestUsername = Storage.get('SessionStore', { user: { email: TEST_USERNAMES[0] } })?.user?.email;
+
 if (NO_AUTH) {
-    const n = (TEST_USERNAME?.length || 0) >= 40 ? 0 : 40 - (TEST_USERNAME?.length || 0);
+    const n = (currentTestUsername?.length || 0) >= 32 ? 0 : 32 - (currentTestUsername?.length || 0);
     console.log(
         [
             '',
@@ -34,9 +37,9 @@ if (NO_AUTH) {
             '│  |_| \\_|\\___/  /_/    \\_\\__,_|\\__|_| |_|                 │',
             '│                                                          │',
             '│                                                          │',
-            `│   TEST_USERNAME: ${TEST_USERNAME + ' '.repeat(n)}│`,
+            `│   Current test username: ${currentTestUsername + ' '.repeat(n)}│`,
             '│                                                          │',
-            '│   --> enable authentication by removing "TEST_USERNAME"  │',
+            '│  --> enable authentication by removing "TEST_USERNAMES"  │',
             '│       from the environment (or the .env file)            │',
             '└──────────────────────────────────────────────────────────┘'
         ].join('\n')
@@ -46,8 +49,8 @@ if (NO_AUTH) {
 const MsalWrapper = observer(({ children }: { children: ReactNode }) => {
     const sessionStore = useStore('sessionStore');
     React.useEffect(() => {
-        if (NO_AUTH && process.env.NODE_ENV !== 'production' && TEST_USERNAME) {
-            setupNoAuthAxios();
+        if (NO_AUTH && process.env.NODE_ENV !== 'production' && currentTestUsername) {
+            setupNoAuthAxios(currentTestUsername);
         }
     }, []);
     React.useEffect(() => {
@@ -55,11 +58,17 @@ const MsalWrapper = observer(({ children }: { children: ReactNode }) => {
          * DEV MODE
          * - no auth
          */
-        if (NO_AUTH && !sessionStore?.isLoggedIn) {
+        if (NO_AUTH && !sessionStore?.isLoggedIn && currentTestUsername) {
             runInAction(() => {
                 sessionStore.authMethod = 'msal';
             });
-            rootStore.sessionStore.setAccount({ username: TEST_USERNAME } as any);
+
+            scheduleMicrotask(() => {
+                rootStore.sessionStore.setAccount({
+                    username: currentTestUsername
+                } as any);
+            });
+
             rootStore.load();
             return;
         }
