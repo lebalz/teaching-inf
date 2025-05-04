@@ -7,10 +7,11 @@ import { GroupPermission, Permissions, UserPermission } from './permission';
 import { StudentGroup } from './studentGroup';
 
 const TIME_NOW = new Date().toISOString();
+const LOG_REQUESTS = false;
 
 let OfflineUser: User = {
     id: 'c23c0238-4aeb-457f-9a2c-3d2d5d8931c0',
-    email: 'offlien.user@tdev.ch',
+    email: 'offline.user@tdev.ch',
     firstName: 'Offline',
     lastName: 'User',
     role: Role.ADMIN,
@@ -76,6 +77,24 @@ const upsertStudentGroupRecord = (data: Partial<StudentGroup>, _id?: string): St
     } as StudentGroup;
 };
 
+const log = (method: string, url: string, data?: any) => {
+    if (LOG_REQUESTS) {
+        console.log(`[${method}]: ${url}`, data);
+    }
+};
+
+const urlParts = (urlPath: string) => {
+    const [path, urlQuery] = urlPath.split('?');
+    const query = new URLSearchParams(urlQuery);
+    const [_, model, id, ...parts] = path!.split('/');
+    return {
+        query,
+        model,
+        id,
+        parts
+    };
+};
+
 export default class OfflineApi {
     interceptors = {
         request: {
@@ -92,22 +111,19 @@ export default class OfflineApi {
     }
     // Method to handle POST requests
     async post<T = any>(url: string, data: T, ...config: any): AxiosPromise<T> {
-        const [_, domain, id, ...parts] = url.split(/[\/\?]/);
-        const query = new URLSearchParams(url.split('?')[1]);
-        console.log('[post]', domain, id, parts, data);
-        switch (domain) {
+        const { model, id } = urlParts(url);
+        log('post', url, data);
+        switch (model) {
             case 'admin':
                 return resolveResponse(data as unknown as T);
             case 'cms':
                 return resolveResponse({} as unknown as T);
             case 'documents':
-                if (query.has('uniqueMain')) {
-                    const id = (data as Partial<Document<any>>).documentRootId!;
-                    const document = upsertDocumentRecord(data as Partial<Document<any>>, id);
+                const rootId = (data as Partial<Document<any>>).documentRootId;
+                const document = upsertDocumentRecord(data as Partial<Document<any>>, rootId);
 
-                    documents.set(document.id, document);
-                    return resolveResponse(document as unknown as T);
-                }
+                documents.set(document.id, document);
+                return resolveResponse(document as unknown as T);
             case 'documentRoots':
                 return resolveResponse({
                     access: Access.RW_DocumentRoot,
@@ -140,10 +156,10 @@ export default class OfflineApi {
 
     // Method to handle GET requests
     async get<T = any>(url: string, ...config: any): AxiosPromise<T | null> {
-        const [_, domain, id, ...parts] = url.split(/[\/\?]/);
-        const query = new URLSearchParams(url.split('?')[1]);
-        console.log('[get]', domain, id, parts);
-        switch (domain) {
+        const { model, id, query, parts } = urlParts(url);
+
+        log('get', url);
+        switch (model) {
             case 'user':
                 return resolveResponse(OfflineUser as unknown as T);
             case 'users':
@@ -155,6 +171,7 @@ export default class OfflineApi {
             case 'checklogin':
                 return resolveResponse({ user: OfflineUser } as unknown as T, 200, 'ok');
             case 'documents':
+                console.log('id', id, query.has('ids'), query.has('rids'));
                 if (id) {
                     if (documents.has(id)) {
                         return resolveResponse(documents.get(id) as unknown as T);
@@ -165,6 +182,14 @@ export default class OfflineApi {
                     const ids = query.getAll('ids');
                     const filteredDocuments = ids
                         .map((id) => documents.get(id))
+                        .filter((doc) => doc !== undefined);
+                    return resolveResponse(filteredDocuments as unknown as T);
+                }
+                if (query.has('rids')) {
+                    const rids = query.getAll('rids');
+                    console.log('rids', rids);
+                    const filteredDocuments = rids
+                        .flatMap((id) => documentsBy(id))
                         .filter((doc) => doc !== undefined);
                     return resolveResponse(filteredDocuments as unknown as T);
                 }
@@ -212,9 +237,9 @@ export default class OfflineApi {
 
     // Method to handle PUT requests
     async put<T = any>(url: string, data: Partial<T>, ...config: any): AxiosPromise<T | null> {
-        const [_, domain, id, ...parts] = url.split(/[\/\?]/);
-        console.log('[put]', domain, id, parts, data);
-        switch (domain) {
+        const { model, id, parts } = urlParts(url);
+        log('put', url, data);
+        switch (model) {
             case 'documents':
                 if (documents.has(id)) {
                     const document = documents.get(id)!;
@@ -247,6 +272,7 @@ export default class OfflineApi {
     }
 
     async delete<T = any>(url: string, ...config: any): AxiosPromise<T | null> {
+        log('delete', url);
         return rejectResponse({} as T, 400, 'Not implemented');
     }
 }
