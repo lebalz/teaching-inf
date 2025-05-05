@@ -1,4 +1,5 @@
 require('dotenv').config();
+import getSiteConfig from './siteConfig';
 import { themes as prismThemes } from 'prism-react-renderer';
 import type { Config, CurrentBundler } from '@docusaurus/types';
 import dynamicRouterPlugin, { Config as DynamicRouteConfig} from './src/plugins/plugin-dynamic-routes';
@@ -28,10 +29,13 @@ import { promises as fs } from 'fs';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import { sentryWebpackPlugin } from '@sentry/webpack-plugin';
 
+const siteConfig = getSiteConfig();
+
 const BUILD_LOCATION = __dirname;
 const GIT_COMMIT_SHA = process.env.GITHUB_SHA || Math.random().toString(36).substring(7);
+const TITLE = siteConfig.title ?? 'Teaching-Dev';
 
-const BEFORE_DEFAULT_REMARK_PLUGINS = [
+const BEFORE_DEFAULT_REMARK_PLUGINS = siteConfig.beforeDefaultRemarkPlugins ?? [
   flexCardsPlugin,
   [
     deflistPlugin,
@@ -64,7 +68,7 @@ const BEFORE_DEFAULT_REMARK_PLUGINS = [
   defboxPlugin
 ];
 
-const REMARK_PLUGINS = [
+const REMARK_PLUGINS = siteConfig.remarkPlugins ?? [
   [strongPlugin, { className: 'boxed' }],
   [
     mdiPlugin,
@@ -107,9 +111,9 @@ const REMARK_PLUGINS = [
       }
   ]
 ];
-const REHYPE_PLUGINS = [
+const REHYPE_PLUGINS = siteConfig.rehypePlugins ?? [
   rehypeKatex
-]
+];
 
 const pdfjsDistPath = path.dirname(require.resolve('pdfjs-dist/package.json'));
 const cMapsDir = path.join(pdfjsDistPath, 'cmaps');
@@ -123,21 +127,20 @@ const getCopyPlugin = (
   return CopyWebpackPlugin;
 }
 
-const ORGANIZATION_NAME = 'gbsl-informatik';
-const PROJECT_NAME = 'teaching-dev';
+const ORGANIZATION_NAME = siteConfig.gitHub?.orgName ?? 'gbsl-informatik';
+const PROJECT_NAME = siteConfig.gitHub?.projectName ?? 'teaching-dev';
 const TEST_USERNAMES = (process.env.TEST_USERNAMES?.split(';') || []).map((u) => u.trim()).filter(u => !!u);
 
-
 const config: Config = {
-  title: 'Teaching-Dev',
-  tagline: 'Dogfooding Teaching Features',
-  favicon: 'img/favicon.ico',
+  title: TITLE,
+  tagline: siteConfig.tagline ?? 'Dogfooding Teaching Features',
+  favicon: siteConfig.favicon ?? 'img/favicon.ico',
 
   // Set the production url of your site here
-  url: 'https://teaching-dev.gbsl.website',
+  url: siteConfig.url ?? 'https://teaching-dev.gbsl.website',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/',
+  baseUrl: siteConfig.baseUrl ?? '/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
@@ -210,8 +213,8 @@ const config: Config = {
   // useful metadata like html lang. For example, if your site is Chinese, you
   // may want to replace "en" with "zh-Hans".
   i18n: {
-    defaultLocale: 'de',
-    locales: ['de'],
+    defaultLocale: siteConfig.defaultLocale ?? 'de',
+    locales: siteConfig.locales ?? ['de'],
   },
   markdown: {
     parseFrontMatter: async (params) => {
@@ -284,7 +287,7 @@ const config: Config = {
           editUrl: `/cms/${ORGANIZATION_NAME}/${PROJECT_NAME}/`
         },
         theme: {
-          customCss: './src/css/custom.scss',
+          customCss: siteConfig.siteStyles ? ['./src/css/custom.scss', ...siteConfig.siteStyles] : './src/css/custom.scss',
         },
       } satisfies Preset.Options,
     ],
@@ -292,12 +295,12 @@ const config: Config = {
 
   themeConfig: {
     // Replace with your project's social card
-    image: 'img/social-card.jpg',
+    image: siteConfig.socialCard ?? 'img/social-card.jpg',
     navbar: {
-      title: 'Teaching Dev',
+      title: TITLE,
       logo: {
-        alt: 'Teaching Dev Logo',
-        src: 'img/logo.svg',
+        alt: `${TITLE} Logo`,
+        src: siteConfig.logo ?? 'img/logo.svg',
       },
       items: [
         {
@@ -511,5 +514,14 @@ const config: Config = {
     },
   ],
 };
+
+const transformers = siteConfig.transformers ?? {};
+Object.keys(transformers ?? {}).forEach((key: string) => {
+  const transformer = transformers[key];
+  // TODO: Ensure key (foo.bar.baz) in config object.
+  const current = undefined; // TODO: Traverse config object to that key; get current value or undefined if unavailable.
+  const transformed = transformer(current);
+  // TODO: Traverse config object to that key and replace it with the transformed value.
+});
 
 export default config;
