@@ -1,4 +1,5 @@
-import { PluginOptions } from "@docusaurus/types";
+import { NavbarItem } from '@docusaurus/theme-common';
+import { PluginOptions } from '@docusaurus/types';
 
 export interface SiteConfig {
     title: string; // The title of the site.
@@ -11,15 +12,16 @@ export interface SiteConfig {
     socialCard: string; // The path to the social card image (relative to /static).
     defaultLocale: string; // The default locale of the site.
     locales: string[]; // The locales supported by the site.
+    navbarItems: NavbarItem[];
     beforeDefaultRemarkPlugins: PluginOptions[]; // List of plugins to be loaded before the default remark plugins.
     remarkPlugins: PluginOptions[]; // List of remark plugins to be loaded.
     rehypePlugins: PluginOptions[]; // List of rehype plugins to be loaded.
     gitHub: {
         orgName: string; // The name of the GitHub user / organization.
         projectName: string; // The name of the GitHub project.
-    }
-    siteStores: {[key: string]: iStore} // Made available under useStore('siteStore').myKey (TODO: Can we include a type here and have some sort of type map?)
-    transformers: {[key: string]: (current: T) => T};
+    };
+    siteStores: { [key: string]: iStore }; // Made available under useStore('siteStore').myKey (TODO: Can we include a type here and have some sort of type map?)
+    transformers: { [key: string]: (current: T) => T };
 }
 
 export type SiteConfigProvider = () => Partial<SiteConfig>;

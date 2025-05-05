@@ -2,7 +2,7 @@ require('dotenv').config();
 import getSiteConfig from './siteConfig';
 import { themes as prismThemes } from 'prism-react-renderer';
 import type { Config, CurrentBundler } from '@docusaurus/types';
-import dynamicRouterPlugin, { Config as DynamicRouteConfig} from './src/plugins/plugin-dynamic-routes';
+import dynamicRouterPlugin, { Config as DynamicRouteConfig } from './src/plugins/plugin-dynamic-routes';
 import type * as Preset from '@docusaurus/preset-classic';
 import path from 'path';
 
@@ -28,6 +28,7 @@ import matter from 'gray-matter';
 import { promises as fs } from 'fs';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import { sentryWebpackPlugin } from '@sentry/webpack-plugin';
+import { accountSwitcher, blog, cms, gallery, gitHub, loginProfileButton, requestTarget, taskStateOverview } from './src/framework/navbarItems';
 
 const siteConfig = getSiteConfig();
 
@@ -47,20 +48,20 @@ const BEFORE_DEFAULT_REMARK_PLUGINS = siteConfig.beforeDefaultRemarkPlugins ?? [
   ],
   [
     imagePlugin,
-    { 
-      tagNames: { 
-        sourceRef: 'SourceRef', 
+    {
+      tagNames: {
+        sourceRef: 'SourceRef',
         figure: 'Figure'
       },
       captionVisitors: [
         (ast, caption) => captionVisitor(ast, caption, (children) => {
-                    return {
-                        type: 'mdxJsxTextElement',
-                        name: 'strong',
-                        attributes: [{ type: 'mdxJsxAttribute', name: 'className', value: 'boxed' }],
-                        children: children
-                    };
-                })
+          return {
+            type: 'mdxJsxTextElement',
+            name: 'strong',
+            attributes: [{ type: 'mdxJsxAttribute', name: 'className', value: 'boxed' }],
+            children: children
+          };
+        })
       ] satisfies CaptionVisitor[]
     }
   ],
@@ -104,11 +105,11 @@ const REMARK_PLUGINS = siteConfig.remarkPlugins ?? [
     }
   ],
   [
-      linkAnnotationPlugin,
-      {
-          prefix: '👉',
-          postfix: null
-      }
+    linkAnnotationPlugin,
+    {
+      prefix: '👉',
+      postfix: null
+    }
   ]
 ];
 const REHYPE_PLUGINS = siteConfig.rehypePlugins ?? [
@@ -158,8 +159,8 @@ const config: Config = {
     NO_AUTH: process.env.NODE_ENV !== 'production' && TEST_USERNAMES.length > 0,
     /** The Domain Name where the api is running */
     APP_URL: process.env.NETLIFY
-      ? process.env.CONTEXT === 'production' 
-        ? process.env.URL 
+      ? process.env.CONTEXT === 'production'
+        ? process.env.URL
         : process.env.DEPLOY_PRIME_URL
       : process.env.APP_URL || 'http://localhost:3000',
     /** The Domain Name of this app */
@@ -179,7 +180,7 @@ const config: Config = {
        * no config options for swcJsLoader so far. 
        * Instead configure it over the jsLoader in the next step 
        */
-      swcJsLoader: false, 
+      swcJsLoader: false,
       swcJsMinimizer: true,
       swcHtmlMinimizer: true,
       lightningCssMinimizer: true,
@@ -189,7 +190,7 @@ const config: Config = {
   },
   webpack: {
     jsLoader: (isServer) => {
-      const defaultOptions = require("@docusaurus/faster").getSwcLoaderOptions({isServer});
+      const defaultOptions = require("@docusaurus/faster").getSwcLoaderOptions({ isServer });
       return {
         loader: 'builtin:swc-loader', // (only works with Rspack)
         options: {
@@ -276,8 +277,8 @@ const config: Config = {
           // Remove this to remove the "edit this page" links.
           editUrl:
             `/cms/${ORGANIZATION_NAME}/${PROJECT_NAME}/`,
-            remarkPlugins: REMARK_PLUGINS,
-            rehypePlugins: REHYPE_PLUGINS,
+          remarkPlugins: REMARK_PLUGINS,
+          rehypePlugins: REHYPE_PLUGINS,
           beforeDefaultRemarkPlugins: BEFORE_DEFAULT_REMARK_PLUGINS,
         },
         pages: {
@@ -302,39 +303,15 @@ const config: Config = {
         alt: `${TITLE} Logo`,
         src: siteConfig.logo ?? 'img/logo.svg',
       },
-      items: [
-        {
-          to: '/docs/gallery',
-          label: 'Galerie',
-          position: 'left',
-        },
-        { to: '/blog', label: 'Blog', position: 'left' },
-        {
-          to: '/cms',
-          label: 'CMS',
-          position: 'left',
-        },
-        {
-          href: 'https://github.com/GBSL-Informatik/teaching-dev',
-          label: 'GitHub',
-          position: 'right',
-        },
-        {
-          type: 'custom-taskStateOverview',
-          position: 'left'
-        },
-        {
-          type: 'custom-accountSwitcher',
-          position: 'right'
-        },
-        {
-          type: 'custom-requestTarget',
-          position: 'right'
-        },
-        {
-          type: 'custom-loginProfileButton',
-          position: 'right'
-        },
+      items: siteConfig.navbarItems ?? [
+        gallery,
+        blog,
+        cms,
+        gitHub,
+        taskStateOverview,
+        accountSwitcher,
+        requestTarget,
+        loginProfileButton,
       ],
     },
     footer: {
@@ -371,7 +348,7 @@ const config: Config = {
       additionalLanguages: ['bash', 'typescript', 'json', 'python'],
     },
   } satisfies Preset.ThemeConfig,
-  plugins: [
+  plugins: [ // TODO: Factor out to config. Consider splitting into required and optional plugins. Consider exposing each plugin as a constant.
     'docusaurus-plugin-sass',
     [
       dynamicRouterPlugin,
@@ -424,79 +401,79 @@ const config: Config = {
         console.warn(
           'Sentry is not configured. Please set SENTRY_AUTH_TOKEN, SENTRY_ORG and SENTRY_PROJECT in your environment variables.'
         );
-        return {name: 'sentry-configuration'};
+        return { name: 'sentry-configuration' };
       }
       return {
         name: 'sentry-configuration',
         configureWebpack(config, isServer, utils, content) {
-            return {
-              devtool: 'source-map',
-              plugins: [
-                sentryWebpackPlugin({
-                  authToken: SENTRY_AUTH_TOKEN,
-                  org: SENTRY_ORG,
-                  project: SENTRY_PROJECT
-                })
-              ],
-            };
+          return {
+            devtool: 'source-map',
+            plugins: [
+              sentryWebpackPlugin({
+                authToken: SENTRY_AUTH_TOKEN,
+                org: SENTRY_ORG,
+                project: SENTRY_PROJECT
+              })
+            ],
+          };
         }
       }
     },
     () => {
       return {
         name: 'pdfjs-copy-dependencies',
-        configureWebpack(config, isServer, {currentBundler}) {
+        configureWebpack(config, isServer, { currentBundler }) {
           const Plugin = getCopyPlugin(currentBundler);
-            return {
-                resolve: {
-                  alias: {
-                    canvas: false
+          return {
+            resolve: {
+              alias: {
+                canvas: false
+              }
+            },
+            plugins: [
+              new Plugin({
+                patterns: [
+                  {
+                    from: cMapsDir,
+                    to: 'cmaps/'
                   }
-                },
-                plugins: [
-                  new Plugin({
-                    patterns: [
-                      {
-                        from: cMapsDir,
-                        to: 'cmaps/'
-                      }
-                    ]
-                  })
                 ]
-            };
+              })
+            ]
+          };
         }
       }
     },
     () => {
       return {
-          name: 'excalidraw-config',
-          configureWebpack(config, isServer, {currentBundler}) {
-            return {
-              module: {
-                rules: [
-                  {
-                    test: /\.excalidraw$/,
-                    type: 'json',
-                  },
-                  {
-                    test: /\.excalidrawlib$/,
-                    type: 'json',
-                  }
-                ]
-              },
-              plugins: [
-                new currentBundler.instance.DefinePlugin({
-                  'process.env.IS_PREACT': JSON.stringify('false')
-                }),
+        name: 'excalidraw-config',
+        configureWebpack(config, isServer, { currentBundler }) {
+          return {
+            module: {
+              rules: [
+                {
+                  test: /\.excalidraw$/,
+                  type: 'json',
+                },
+                {
+                  test: /\.excalidrawlib$/,
+                  type: 'json',
+                }
               ]
-            }
+            },
+            plugins: [
+              new currentBundler.instance.DefinePlugin({
+                'process.env.IS_PREACT': JSON.stringify('false')
+              }),
+            ]
           }
+        }
       }
     }
   ],
   themes: [
     [
-      themeCodeEditor, 
+      themeCodeEditor,
       {
         brythonSrc: 'https://cdn.jsdelivr.net/npm/brython@3.13.0/brython.min.js',
         brythonStdlibSrc: 'https://cdn.jsdelivr.net/npm/brython@3.13.0/brython_stdlib.js',
