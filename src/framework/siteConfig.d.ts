@@ -1,4 +1,4 @@
-import { NavbarItem } from '@docusaurus/theme-common';
+import { FooterLinkItem, NavbarItem } from '@docusaurus/theme-common';
 import { PluginOptions } from '@docusaurus/types';
 
 export interface SiteConfig {
@@ -13,6 +13,14 @@ export interface SiteConfig {
     defaultLocale: string; // The default locale of the site.
     locales: string[]; // The locales supported by the site.
     navbarItems: NavbarItem[];
+    footer: {
+        style: 'dark' | 'light'; // The style of the footer.
+        links: {
+            title: string; // The title of the link group.
+            items: FooterLinkItem[] // The items in the link group.
+        }[];
+        copyright: string; // The copyright text to be displayed in the footer.
+    }
     beforeDefaultRemarkPlugins: PluginOptions[]; // List of plugins to be loaded before the default remark plugins.
     remarkPlugins: PluginOptions[]; // List of remark plugins to be loaded.
     rehypePlugins: PluginOptions[]; // List of rehype plugins to be loaded.

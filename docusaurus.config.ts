@@ -295,7 +295,6 @@ const config: Config = {
   ],
 
   themeConfig: {
-    // Replace with your project's social card
     image: siteConfig.socialCard ?? 'img/social-card.jpg',
     navbar: {
       title: TITLE,
@@ -315,8 +314,8 @@ const config: Config = {
       ],
     },
     footer: {
-      style: 'dark',
-      links: [
+      style: siteConfig.footer?.style ?? 'dark',
+      links: siteConfig.footer?.links ?? [
         {
           title: 'Docs',
           items: [
@@ -336,7 +335,7 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Teaching Dev. Built with Docusaurus. <br />
+      copyright: siteConfig.footer?.copyright ?? `Copyright © ${new Date().getFullYear()} Teaching Dev. Built with Docusaurus. <br />
       <a class="badge badge--primary" href="https://github.com/GBSL-Informatik/teaching-dev/commits/${GIT_COMMIT_SHA}">
             ᚶ ${GIT_COMMIT_SHA.substring(0, 7)}
       </a>
@@ -348,7 +347,7 @@ const config: Config = {
       additionalLanguages: ['bash', 'typescript', 'json', 'python'],
     },
   } satisfies Preset.ThemeConfig,
-  plugins: [ // TODO: Factor out to config. Consider splitting into required and optional plugins. Consider exposing each plugin as a constant.
+  plugins: [ // TODO: Factor out to siteConfig. Consider splitting into required and optional plugins. Consider exposing each plugin as a constant.
     'docusaurus-plugin-sass',
     [
       dynamicRouterPlugin,
