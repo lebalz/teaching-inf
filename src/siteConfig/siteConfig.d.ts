@@ -1,5 +1,6 @@
 import { FooterLinkItem, NavbarItem } from '@docusaurus/theme-common';
 import { PluginOptions } from '@docusaurus/types';
+import { ConfigTransformer } from './transformers';
 
 export interface SiteConfig {
     title: string; // The title of the site.
@@ -29,7 +30,7 @@ export interface SiteConfig {
         projectName: string; // The name of the GitHub project.
     };
     siteStores: { [key: string]: iStore }; // Made available under useStore('siteStore').myKey (TODO: Can we include a type here and have some sort of type map?)
-    transformers: { [key: string]: (current: T) => T };
+    transformers: ConfigTransformer;
 }
 
 export type SiteConfigProvider = () => Partial<SiteConfig>;
@@ -37,7 +38,5 @@ export type SiteConfigProvider = () => Partial<SiteConfig>;
 /*
 TOOD:
 - Stores
-- Implement transformers
 - Plugins: Consider splitting into required and optional plugins. Consider exposing each plugin as a constant.
-- Migrator
 */

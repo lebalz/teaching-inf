@@ -29,6 +29,7 @@ import { promises as fs } from 'fs';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import { sentryWebpackPlugin } from '@sentry/webpack-plugin';
 import { accountSwitcher, blog, cms, gallery, gitHub, loginProfileButton, requestTarget, taskStateOverview } from './src/siteConfig/navbarItems';
+import { applyTransformers } from './src/siteConfig/transformers';
 
 const siteConfig = getSiteConfig();
 
@@ -132,7 +133,7 @@ const ORGANIZATION_NAME = siteConfig.gitHub?.orgName ?? 'gbsl-informatik';
 const PROJECT_NAME = siteConfig.gitHub?.projectName ?? 'teaching-dev';
 const TEST_USERNAMES = (process.env.TEST_USERNAMES?.split(';') || []).map((u) => u.trim()).filter(u => !!u);
 
-const config: Config = {
+const config: Config = applyTransformers({
   title: TITLE,
   tagline: siteConfig.tagline ?? 'Dogfooding Teaching Features',
   favicon: siteConfig.favicon ?? 'img/favicon.ico',
@@ -489,15 +490,6 @@ const config: Config = {
       crossorigin: 'anonymous',
     },
   ],
-};
-
-const transformers = siteConfig.transformers ?? {};
-Object.keys(transformers ?? {}).forEach((key: string) => {
-  const transformer = transformers[key];
-  // TODO: Ensure key (foo.bar.baz) in config object.
-  const current = undefined; // TODO: Traverse config object to that key; get current value or undefined if unavailable.
-  const transformed = transformer(current);
-  // TODO: Traverse config object to that key and replace it with the transformed value.
-});
+}, siteConfig.transformers ?? {});
 
 export default config;
