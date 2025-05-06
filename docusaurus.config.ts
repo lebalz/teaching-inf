@@ -24,7 +24,7 @@ import themeCodeEditor from './src/plugins/theme-code-editor'
 import enumerateAnswersPlugin from './src/plugins/remark-enumerate-components/plugin';
 import { v4 as uuidv4 } from 'uuid';
 import matter from 'gray-matter';
-import { promises as fs } from 'fs';
+import { promises as fs, existsSync } from 'fs';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import { sentryWebpackPlugin } from '@sentry/webpack-plugin';
 
@@ -396,18 +396,24 @@ const config: Config = {
     () => {
       return {
         name: 'alias-configuration',
+        getThemePath() {
+          const siteSrcPath = path.resolve(__dirname, './site-src');
+          return siteSrcPath;
+        },
         configureWebpack(config, isServer, utils, content) {
           return {
             resolve: {
               alias: {
-                '@tdev-components': path.resolve(__dirname, './src/components'),
-                '@tdev-hooks': path.resolve(__dirname, './src/hooks'),
-                '@tdev-models': path.resolve(__dirname, './src/models'),
-                '@tdev-stores': path.resolve(__dirname, './src/stores'),
-                '@tdev-api': path.resolve(__dirname, './src/api'),
-                '@tdev-plugins': path.resolve(__dirname, './src/plugins'),
-                '@tdev': path.resolve(__dirname, './src'),
-              }
+                '@tdev-components': [path.resolve(__dirname, './site-src/components'), path.resolve(__dirname, './src/components')],
+                '@tdev-hooks': [path.resolve(__dirname, './site-src/hooks'), path.resolve(__dirname, './src/hooks')],
+                '@tdev-models': [path.resolve(__dirname, './site-src/models'), path.resolve(__dirname, './src/models')],
+                '@tdev-stores': [path.resolve(__dirname, './site-src/stores'), path.resolve(__dirname, './src/stores')],
+                '@tdev-api': [path.resolve(__dirname, './site-src/api'), path.resolve(__dirname, './src/api')],
+                '@tdev-plugins': [path.resolve(__dirname, './site-src/plugins'), path.resolve(__dirname, './src/plugins')],
+                '@tdev': [path.resolve(__dirname, './site-src'), path.resolve(__dirname, './src')],
+                /** original tdev source */
+                '@tdev-original': [path.resolve(__dirname, './src')],
+              },
             }
           }
         }

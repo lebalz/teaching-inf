@@ -9,13 +9,14 @@
         "target": "esnext",
         "strict": true,
         "paths": {
-            "@tdev-components/*": ["src/components/*"],
-            "@tdev-hooks/*": ["src/hooks/*"],
-            "@tdev-models/*": ["src/models/*"],
-            "@tdev-stores/*": ["src/stores/*"],
-            "@tdev-plugins/*": ["src/plugins/*"],
-            "@tdev-api/*": ["src/api/*"],
-            "@tdev/*": ["src/*"],
+            "@tdev-components/*": ["site-src/components/*", "src/components/*"],
+            "@tdev-hooks/*": ["site-src/hooks/*", "src/hooks/*"],
+            "@tdev-models/*": ["site-src/models/*", "src/models/*"],
+            "@tdev-stores/*": ["site-src/stores/*", "src/stores/*"],
+            "@tdev-plugins/*": ["site-src/plugins/*", "src/plugins/*"],
+            "@tdev-api/*": ["site-src/api/*", "src/api/*"],
+            "@tdev/*": ["site-src/*", "src/*"],
+            "@tdev-original/*": ["src/*"],
             "@site/*": ["./*"]
         }
     },
