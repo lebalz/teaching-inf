@@ -28,7 +28,7 @@ import matter from 'gray-matter';
 import { promises as fs } from 'fs';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import { sentryWebpackPlugin } from '@sentry/webpack-plugin';
-import { accountSwitcher, blog, cms, gallery, gitHub, loginProfileButton, requestTarget, taskStateOverview } from './src/framework/navbarItems';
+import { accountSwitcher, blog, cms, gallery, gitHub, loginProfileButton, requestTarget, taskStateOverview } from './src/siteConfig/navbarItems';
 
 const siteConfig = getSiteConfig();
 
@@ -347,7 +347,7 @@ const config: Config = {
       additionalLanguages: ['bash', 'typescript', 'json', 'python'],
     },
   } satisfies Preset.ThemeConfig,
-  plugins: [ // TODO: Factor out to siteConfig. Consider splitting into required and optional plugins. Consider exposing each plugin as a constant.
+  plugins: [
     'docusaurus-plugin-sass',
     [
       dynamicRouterPlugin,

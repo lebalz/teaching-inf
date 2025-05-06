@@ -36,7 +36,8 @@ export type SiteConfigProvider = () => Partial<SiteConfig>;
 
 /*
 TOOD:
-- Navbar items
-- Footer items
-- Stores ()
+- Stores
+- Implement transformers
+- Plugins: Consider splitting into required and optional plugins. Consider exposing each plugin as a constant.
+- Migrator
 */
