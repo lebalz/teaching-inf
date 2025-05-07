@@ -198,9 +198,9 @@ const config: Config = {
             },
             transform: {
               ...defaultOptions.jsc.transform,
-              decoratorVersion: '2022-03'
+              decoratorVersion: '2022-03',              
             }
-          }
+          },
         },
       }
     },
@@ -216,6 +216,9 @@ const config: Config = {
   markdown: {
     parseFrontMatter: async (params) => {
       const result = await params.defaultParseFrontMatter(params);
+      if (process.env.NODE_ENV === 'production') {
+        return result;
+      }
       /**
        * don't edit blogs frontmatter
        */
@@ -479,7 +482,14 @@ const config: Config = {
                     test: /\.excalidrawlib$/,
                     type: 'json',
                   }
-                ]
+                ],
+              },
+              resolve: {
+                fallback: {
+                  'roughjs/bin/math': path.resolve(__dirname, './node_modules/roughjs/bin/math.js'),
+                  'roughjs/bin/rough': path.resolve(__dirname, './node_modules/roughjs/bin/rough.js'),
+                  'roughjs/bin/generator': path.resolve(__dirname, './node_modules/roughjs/bin/generator.js')
+                }
               },
               plugins: [
                 new currentBundler.instance.DefinePlugin({
