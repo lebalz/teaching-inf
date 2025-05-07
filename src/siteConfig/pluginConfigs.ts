@@ -16,6 +16,8 @@ const getCopyPlugin = (currentBundler: CurrentBundler): typeof CopyWebpackPlugin
     return CopyWebpackPlugin;
 };
 
+// TODO: Consider bundling default / recommended plugins.
+
 export const sassPluginConfig: PluginConfig = 'docusaurus-plugin-sass';
 
 export const dynamicRouterPluginConfig: PluginConfig = [
