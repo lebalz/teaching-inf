@@ -4,91 +4,91 @@ import { ConfigTransformer } from './transformers';
 
 export interface SiteConfig {
     /** The title of the site. */
-    title: string;
+    title?: string;
 
     /** The tagline of the site. */
-    tagline: string;
+    tagline?: string;
 
     /** The base URL of the site. */
-    url: string;
+    url?: string;
 
     /** The `/<baseUrl>/` pathname under which your site is served. For GitHub pages deployment, it is often `/<projectName>/.` */
-    baseUrl: string;
+    baseUrl?: string;
 
     /** Paths to CSS files to be included in the site. Loaded in order, after custom.scss. */
-    siteStyles: string[];
+    siteStyles?: string[];
 
     /** The path to the favicon of the site (relative to /static). */
-    favicon: string;
+    favicon?: string;
 
     /** The path to the logo of the site (relative to /static). */
-    logo: string;
+    logo?: string;
 
     /** The path to the social card image (relative to /static). */
-    socialCard: string;
+    socialCard?: string;
 
     /** The default locale of the site. */
-    defaultLocale: string;
+    defaultLocale?: string;
 
     /** The locales supported by the site. */
-    locales: string[];
+    locales?: string[];
 
     /** Items to show in the navbar. */
-    navbarItems: NavbarItem[];
+    navbarItems?: NavbarItem[];
 
     /** Footer configuration */
-    footer: {
+    footer?: {
         /** The style of the footer. */
-        style: 'dark' | 'light';
+        style?: 'dark' | 'light';
 
         /** Links to show in the navbar. */
-        links: {
+        links?: {
             /** The title of the link group. */
-            title: string;
+            title?: string;
 
             /** The items in the link group. */
-            items: FooterLinkItem[];
+            items?: FooterLinkItem[];
         }[];
 
         /** The copyright text to be displayed in the footer. */
-        copyright: string;
+        copyright?: string;
     };
 
     /** Prism theme configuration. */
-    prism: {
+    prism?: {
         /** The default (light) Prism theme to use. */
-        theme: PrismTheme;
+        theme?: PrismTheme;
 
         /** The dark Prism theme to be used. */
-        darkTheme: PrismTheme;
+        darkTheme?: PrismTheme;
 
         /** Additional languages for code syntax hightlighting. */
-        additionalLanguages: string[]; //
+        additionalLanguages?: string[]; //
     };
 
     /** List of plugins to be loaded before the default remark plugins. */
-    beforeDefaultRemarkPlugins: PluginOptions[];
+    beforeDefaultRemarkPlugins?: PluginOptions[];
 
     /** List of remark plugins to be loaded. */
-    remarkPlugins: PluginOptions[];
+    remarkPlugins?: PluginOptions[];
 
     /** List of rehype plugins to be loaded. */
-    rehypePlugins: PluginOptions[];
+    rehypePlugins?: PluginOptions[];
 
     /** List of Docusaurus plugins to be loaded. */
-    plugins: PluginOptions[];
+    plugins?: PluginOptions[];
 
     /** GitHub coordinates for your project. */
-    gitHub: {
+    gitHub?: {
         /** The name of the GitHub user / organization. */
-        orgName: string;
+        orgName?: string;
 
         /** The name of the GitHub project. */
-        projectName: string;
+        projectName?: string;
     };
 
     /** Transformer functions for the Docusaurus config object. */
-    transformers: ConfigTransformer;
+    transformers?: ConfigTransformer;
 }
 
-export type SiteConfigProvider = () => Partial<SiteConfig>;
+export type SiteConfigProvider = () => SiteConfig;
