@@ -155,18 +155,18 @@ export const excalidrawPluginConfig: PluginConfig = () => {
     };
 };
 
-export const socketIoNoDepWarningsPluginConfig: PluginConfig =     () => {
+export const socketIoNoDepWarningsPluginConfig: PluginConfig = () => {
     return {
-      name: 'socketio-no-dep-warnings',
-      configureWebpack(config, isServer, {currentBundler}) {
-        return {
-          plugins: [
-            new currentBundler.instance.DefinePlugin({
-              'process.env.WS_NO_BUFFER_UTIL': JSON.stringify('true'),
-              'process.env.WS_NO_UTF_8_VALIDATE': JSON.stringify('true')
-            }),
-          ]
+        name: 'socketio-no-dep-warnings',
+        configureWebpack(config, isServer, { currentBundler }) {
+            return {
+                plugins: [
+                    new currentBundler.instance.DefinePlugin({
+                        'process.env.WS_NO_BUFFER_UTIL': JSON.stringify('true'),
+                        'process.env.WS_NO_UTF_8_VALIDATE': JSON.stringify('true')
+                    })
+                ]
+            };
         }
-      }
-    }
-  };
+    };
+};
