@@ -107,7 +107,9 @@ export default class OfflineApi {
         }
     };
     constructor() {
-        console.log('OfflineApi: created');
+        if (LOG_REQUESTS) {
+            console.log('OfflineApi: created');
+        }
     }
     // Method to handle POST requests
     async post<T = any>(url: string, data: T, ...config: any): AxiosPromise<T> {
