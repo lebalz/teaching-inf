@@ -65,7 +65,7 @@ Das Ziel dieser Umwandlung ist es, eine für einen bestimmten Zweck optimierte D
 ![](images/dna_transcription.png)
 #### Genetischer Code
 ::br
-<QrCode />
+<QrCodeComponent />
 #### QR-Code
 ::br{justify=space-between}
 ![--width=100%](images/isbn.png)
@@ -76,21 +76,19 @@ Das Ziel dieser Umwandlung ist es, eine für einen bestimmten Zweck optimierte D
 :::
 
 
-```mdx-code-block
 import { mdiHome, mdiCompass } from '@mdi/js';
-import Generator from '@tdev-components/shared/QR-Code/Generator';
+import QrCode from '@tdev-components/shared/QrCode';
 import { useStore } from '@tdev-hooks/useStore';
 import { observer } from 'mobx-react-lite';
 
-export const QrCode = () => {
+export const QrCodeComponent = () => {
     const userStore = useStore('userStore');
     const user = userStore.viewedUser;
     return (
-        <Generator withInput size="30em" text={user?.name || 'Hallo Welt'} />
+        <QrCode withInput size="30em" text={user?.name || 'Hallo Welt'} />
     )
 
 }
-```
 
 
 
