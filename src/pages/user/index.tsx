@@ -19,9 +19,12 @@ import NavReloadRequest from '@tdev-components/Admin/ActionRequest/NavReloadRequ
 import Storage from '@tdev-stores/utils/Storage';
 import { logout } from '@tdev-api/user';
 import SelectInput from '@tdev-components/shared/SelectInput';
+import useIsBrowser from '@docusaurus/useIsBrowser';
+import { useIsLive } from '@tdev-hooks/useIsLive';
 
-const { NO_AUTH, TEST_USERNAMES } = siteConfig.customFields as {
+const { NO_AUTH, OFFLINE_API, TEST_USERNAMES } = siteConfig.customFields as {
     NO_AUTH?: boolean;
+    OFFLINE_API?: boolean;
     TEST_USERNAMES: string[];
 };
 
@@ -35,13 +38,18 @@ const LeftAlign = (text: String) => {
 };
 
 const UserPage = observer(() => {
+    const isBrowser = useIsBrowser();
     const sessionStore = useStore('sessionStore');
     const userStore = useStore('userStore');
     const socketStore = useStore('socketStore');
     const groupStore = useStore('studentGroupStore');
     const isAuthenticated = useIsAuthenticated();
     const { inProgress } = useMsal();
+    const isLive = useIsLive();
     const { viewedUser, current } = userStore;
+    if (OFFLINE_API && !isBrowser) {
+        return <Loader />;
+    }
     if (
         !NO_AUTH &&
         ((sessionStore.currentUserId && !sessionStore.isLoggedIn) || inProgress !== InteractionStatus.None)
@@ -68,11 +76,9 @@ const UserPage = observer(() => {
                         <Icon
                             path={mdiCircle}
                             size={0.7}
-                            color={
-                                socketStore.isLive ? 'var(--ifm-color-success)' : 'var(--ifm-color-danger)'
-                            }
+                            color={isLive ? 'var(--ifm-color-success)' : 'var(--ifm-color-danger)'}
                         />{' '}
-                        {socketStore.isLive ? 'Ja' : 'Nein'}
+                        {isLive ? 'Ja' : 'Nein'}
                     </dd>
                     {viewedUser && (
                         <>
