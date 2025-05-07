@@ -15,8 +15,6 @@ const AccountSwitcher = observer(() => {
     const isBrowser = useIsBrowser();
     const userStore = useStore('userStore');
     const location = useLocation();
-
-    const klass = location.pathname.split('/')[1];
     React.useEffect(() => {
         if (userStore._viewedUserId) {
             userStore.switchUser(userStore.current?.id);
@@ -26,6 +24,7 @@ const AccountSwitcher = observer(() => {
     if (!isBrowser || !userStore.current?.hasElevatedAccess) {
         return null;
     }
+    const klass = location.pathname.split('/')[1];
     return (
         <>
             {userStore.isUserSwitched && (
