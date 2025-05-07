@@ -1,9 +1,9 @@
 import { Config } from '@docusaurus/types';
 
-export type ConfigTransformer<T> = (current: T) => T;
+export type ConfigTransformer<T, U> = (current: T) => U;
 
 export interface ConfigTransformers {
-    [key: string]: ConfigTransformer<any>;
+    [key: string]: ConfigTransformer<any, any>;
 }
 
 const splitKey = (key: string): string[] => {
