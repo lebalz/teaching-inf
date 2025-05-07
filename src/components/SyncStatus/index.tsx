@@ -2,7 +2,7 @@ import * as React from 'react';
 import { observer } from 'mobx-react-lite';
 import { ApiState } from '@tdev-stores/iStore';
 import Icon from '@mdi/react';
-import { mdiCloudCheckVariantOutline, mdiCloseCircle, mdiSync } from '@mdi/js';
+import { mdiContentSaveCheckOutline, mdiContentSaveOffOutline, mdiSync } from '@mdi/js';
 import useIsBrowser from '@docusaurus/useIsBrowser';
 
 interface Props {
@@ -23,7 +23,7 @@ const SyncStatus = observer((props: Props) => {
                 <Icon
                     path={mdiSync}
                     spin={-2}
-                    color="var(--sync-status-syncinc-color)"
+                    color="var(--tdev-sync-status-syncinc-color)"
                     size={size}
                     className={props.className}
                 />
@@ -31,8 +31,8 @@ const SyncStatus = observer((props: Props) => {
         case ApiState.SUCCESS:
             return (
                 <Icon
-                    path={mdiCloudCheckVariantOutline}
-                    color="var(--sync-status-success-color)"
+                    path={mdiContentSaveCheckOutline}
+                    color="var(--tdev-sync-status-success-color)"
                     size={size}
                     className={props.className}
                 />
@@ -40,8 +40,8 @@ const SyncStatus = observer((props: Props) => {
         case ApiState.ERROR:
             return (
                 <Icon
-                    path={mdiCloseCircle}
-                    color="var(--sync-status-error-color)"
+                    path={mdiContentSaveOffOutline}
+                    color="var(--tdev-sync-status-error-color)"
                     size={size}
                     className={props.className}
                 />
