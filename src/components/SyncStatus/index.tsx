@@ -23,7 +23,7 @@ const SyncStatus = observer((props: Props) => {
                 <Icon
                     path={mdiSync}
                     spin={-2}
-                    color="var(--ifm-color-secondary)"
+                    color="var(--sync-status-syncinc-color)"
                     size={size}
                     className={props.className}
                 />
@@ -32,7 +32,7 @@ const SyncStatus = observer((props: Props) => {
             return (
                 <Icon
                     path={mdiCloudCheckVariantOutline}
-                    color="var(--ifm-color-primary)"
+                    color="var(--sync-status-success-color)"
                     size={size}
                     className={props.className}
                 />
@@ -41,7 +41,7 @@ const SyncStatus = observer((props: Props) => {
             return (
                 <Icon
                     path={mdiCloseCircle}
-                    color="var(--ifm-color-danger)"
+                    color="var(--sync-status-error-color)"
                     size={size}
                     className={props.className}
                 />
