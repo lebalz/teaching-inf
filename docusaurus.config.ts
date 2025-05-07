@@ -1,11 +1,8 @@
 require('dotenv').config();
 import getSiteConfig from './siteConfig';
 import { themes as prismThemes } from 'prism-react-renderer';
-import type { Config, CurrentBundler } from '@docusaurus/types';
-import dynamicRouterPlugin, { Config as DynamicRouteConfig } from './src/plugins/plugin-dynamic-routes';
+import type { Config, } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
-import path from 'path';
-
 import strongPlugin, { transformer as captionVisitor } from './src/plugins/remark-strong/plugin';
 import deflistPlugin from './src/plugins/remark-deflist/plugin';
 import mdiPlugin from './src/plugins/remark-mdi/plugin';
@@ -26,10 +23,17 @@ import enumerateAnswersPlugin from './src/plugins/remark-enumerate-components/pl
 import { v4 as uuidv4 } from 'uuid';
 import matter from 'gray-matter';
 import { promises as fs } from 'fs';
-import CopyWebpackPlugin from 'copy-webpack-plugin';
-import { sentryWebpackPlugin } from '@sentry/webpack-plugin';
 import { accountSwitcher, blog, cms, gallery, gitHub, loginProfileButton, requestTarget, taskStateOverview } from './src/siteConfig/navbarItems';
 import { applyTransformers } from './src/siteConfig/transformers';
+import {
+  sassPluginConfig,
+  dynamicRouterPluginConfig,
+  rsDoctorPluginConfig,
+  aliasConfigurationPluginConfig,
+  sentryPluginConfig,
+  pdfjsCopyDependenciesPluginConfig,
+  excalidrawPluginConfig,
+} from './src/siteConfig/pluginConfigs';
 
 const siteConfig = getSiteConfig();
 
@@ -117,18 +121,6 @@ const REMARK_PLUGINS = siteConfig.remarkPlugins ?? [
 const REHYPE_PLUGINS = siteConfig.rehypePlugins ?? [
   rehypeKatex
 ];
-
-const pdfjsDistPath = path.dirname(require.resolve('pdfjs-dist/package.json'));
-const cMapsDir = path.join(pdfjsDistPath, 'cmaps');
-const getCopyPlugin = (
-  currentBundler: CurrentBundler
-): typeof CopyWebpackPlugin => {
-  if (currentBundler.name === 'rspack') {
-    // @ts-expect-error: this exists only in Rspack
-    return currentBundler.instance.CopyRspackPlugin;
-  }
-  return CopyWebpackPlugin;
-}
 
 const ORGANIZATION_NAME = siteConfig.gitHub?.orgName ?? 'gbsl-informatik';
 const PROJECT_NAME = siteConfig.gitHub?.projectName ?? 'teaching-dev';
@@ -354,134 +346,13 @@ const config: Config = applyTransformers({
     },
   } satisfies Preset.ThemeConfig,
   plugins: [
-    'docusaurus-plugin-sass',
-    [
-      dynamicRouterPlugin,
-      {
-        routes: [
-          {
-            path: '/rooms/',
-            component: '@tdev-components/Rooms',
-          },
-          {
-            path: '/cms/',
-            component: '@tdev-components/Cms',
-          }
-        ]
-      } satisfies DynamicRouteConfig
-    ],
-    process.env.RSDOCTOR === 'true' && [
-      'rsdoctor',
-      {
-        rsdoctorOptions: {
-          /* Options */
-        },
-      },
-    ],
-    () => {
-      return {
-        name: 'alias-configuration',
-        configureWebpack(config, isServer, utils, content) {
-          return {
-            resolve: {
-              alias: {
-                '@tdev-components': path.resolve(__dirname, './src/components'),
-                '@tdev-hooks': path.resolve(__dirname, './src/hooks'),
-                '@tdev-models': path.resolve(__dirname, './src/models'),
-                '@tdev-stores': path.resolve(__dirname, './src/stores'),
-                '@tdev-api': path.resolve(__dirname, './src/api'),
-                '@tdev-plugins': path.resolve(__dirname, './src/plugins'),
-                '@tdev': path.resolve(__dirname, './src'),
-              }
-            }
-          }
-        }
-      }
-    },
-    () => {
-      const SENTRY_AUTH_TOKEN = process.env.SENTRY_AUTH_TOKEN;
-      const SENTRY_ORG = process.env.SENTRY_ORG;
-      const SENTRY_PROJECT = process.env.SENTRY_PROJECT;
-      if (!SENTRY_AUTH_TOKEN || !SENTRY_ORG || !SENTRY_PROJECT) {
-        console.warn(
-          'Sentry is not configured. Please set SENTRY_AUTH_TOKEN, SENTRY_ORG and SENTRY_PROJECT in your environment variables.'
-        );
-        return { name: 'sentry-configuration' };
-      }
-      return {
-        name: 'sentry-configuration',
-        configureWebpack(config, isServer, utils, content) {
-          return {
-            devtool: 'source-map',
-            plugins: [
-              sentryWebpackPlugin({
-                authToken: SENTRY_AUTH_TOKEN,
-                org: SENTRY_ORG,
-                project: SENTRY_PROJECT
-              })
-            ],
-          };
-        }
-      }
-    },
-    () => {
-      return {
-        name: 'pdfjs-copy-dependencies',
-        configureWebpack(config, isServer, { currentBundler }) {
-          const Plugin = getCopyPlugin(currentBundler);
-          return {
-            resolve: {
-              alias: {
-                canvas: false
-              }
-            },
-            plugins: [
-              new Plugin({
-                patterns: [
-                  {
-                    from: cMapsDir,
-                    to: 'cmaps/'
-                  }
-                ]
-              })
-            ]
-          };
-        }
-      }
-    },
-    () => {
-      return {
-        name: 'excalidraw-config',
-        configureWebpack(config, isServer, { currentBundler }) {
-          return {
-            module: {
-              rules: [
-                {
-                  test: /\.excalidraw$/,
-                  type: 'json',
-                },
-                {
-                  test: /\.excalidrawlib$/,
-                  type: 'json',
-                }
-              ],
-            },
-            resolve: {
-              fallback: {
-                'roughjs/bin/math': path.resolve(__dirname, './node_modules/roughjs/bin/math.js'),
-                'roughjs/bin/rough': path.resolve(__dirname, './node_modules/roughjs/bin/rough.js'),
-                'roughjs/bin/generator': path.resolve(__dirname, './node_modules/roughjs/bin/generator.js')
-              }
-            },
-            plugins: [
-              new currentBundler.instance.DefinePlugin({
-                'process.env.IS_PREACT': JSON.stringify('false')
-              }),
-            ]
-          }
-        }
-      }
-    }
+    sassPluginConfig,
+    dynamicRouterPluginConfig,
+    rsDoctorPluginConfig,
+    aliasConfigurationPluginConfig,
+    sentryPluginConfig,
+    pdfjsCopyDependenciesPluginConfig,
+    excalidrawPluginConfig,
   ],
   themes: [
     [
