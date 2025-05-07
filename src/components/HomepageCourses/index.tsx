@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import Link from '@docusaurus/Link';
 import siteConfig from '@generated/docusaurus.config';
 import { useStore } from '@site/src/hooks/useStore';
+import useIsBrowser from '@docusaurus/useIsBrowser';
 const { DOCS_ONLY } = siteConfig.customFields as { DOCS_ONLY?: boolean };
 
 interface Klass {
@@ -79,6 +80,7 @@ const CourseComponent = ({ course }: { course: Course }) => {
 
 export default function HomepageCourses() {
     const userStore = useStore('userStore');
+    const isBrowser = useIsBrowser();
     return (
         <section className={styles.features}>
             <div className="container">
@@ -88,11 +90,14 @@ export default function HomepageCourses() {
                     ))}
                 </div>
                 <div className="row">
-                    {(DOCS_ONLY || process.env.NODE_ENV === 'development' || userStore.current?.isAdmin) && (
-                        <CourseComponent
-                            course={{ title: 'All Docs', classes: [{ label: 'Docs', uri: '/home' }] }}
-                        />
-                    )}
+                    {isBrowser &&
+                        (DOCS_ONLY ||
+                            process.env.NODE_ENV === 'development' ||
+                            userStore.current?.isAdmin) && (
+                            <CourseComponent
+                                course={{ title: 'All Docs', classes: [{ label: 'Docs', uri: '/home' }] }}
+                            />
+                        )}
                 </div>
             </div>
         </section>
