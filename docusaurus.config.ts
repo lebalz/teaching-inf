@@ -33,6 +33,7 @@ import {
   sentryPluginConfig,
   pdfjsCopyDependenciesPluginConfig,
   excalidrawPluginConfig,
+  socketIoNoDepWarningsPluginConfig,
 } from './src/siteConfig/pluginConfigs';
 
 const siteConfig = getSiteConfig();
@@ -353,6 +354,7 @@ const config: Config = applyTransformers({
     sentryPluginConfig,
     pdfjsCopyDependenciesPluginConfig,
     excalidrawPluginConfig,
+    socketIoNoDepWarningsPluginConfig,
   ],
   themes: [
     [
