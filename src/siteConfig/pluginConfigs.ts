@@ -140,10 +140,7 @@ export const excalidrawPluginConfig: PluginConfig = () => {
                     fallback: {
                         'roughjs/bin/math': path.resolve(cwd, './node_modules/roughjs/bin/math.js'),
                         'roughjs/bin/rough': path.resolve(cwd, './node_modules/roughjs/bin/rough.js'),
-                        'roughjs/bin/generator': path.resolve(
-                            cwd,
-                            './node_modules/roughjs/bin/generator.js'
-                        )
+                        'roughjs/bin/generator': path.resolve(cwd, './node_modules/roughjs/bin/generator.js')
                     }
                 },
                 plugins: [
