@@ -15,14 +15,14 @@ export interface Props {
 }
 const Graphics = observer((props: Props) => {
     const script = useDocument<DocumentType.Script>();
-    const nodeRef = React.useRef<HTMLElement>(null);
+    const nodeRef = React.useRef<HTMLDivElement>(null);
     return (
         <Draggable
             onStop={checkForButtonClick}
             positionOffset={{ x: '15%', y: '25%' }}
-            nodeRef={nodeRef as any}
+            nodeRef={nodeRef as React.RefObject<HTMLDivElement>}
         >
-            <div className={styles.brythonGraphicsResult} ref={nodeRef as any}>
+            <div className={styles.brythonGraphicsResult} ref={nodeRef}>
                 <div className={styles.brythonGraphicsResultHead}>
                     <span>Output</span>
                     <span className={styles.spacer}></span>

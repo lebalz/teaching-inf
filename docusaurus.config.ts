@@ -32,6 +32,7 @@ import { sentryWebpackPlugin } from '@sentry/webpack-plugin';
 
 const BUILD_LOCATION = __dirname;
 const GIT_COMMIT_SHA = process.env.GITHUB_SHA || Math.random().toString(36).substring(7);
+const OFFLINE_API = process.env.OFFLINE_API === 'false' ? false : !!process.env.OFFLINE_API || process.env.CODESPACES === 'true';
 const BASE_URL = '/';
 
 const BEFORE_DEFAULT_REMARK_PLUGINS = [
@@ -165,9 +166,10 @@ const config: Config = {
   customFields: {
     /** Use Testuser in local dev: set TEST_USERNAME to the test users email adress*/
     TEST_USERNAMES: TEST_USERNAMES,
+    OFFLINE_API: OFFLINE_API,
     /** User.ts#isStudent returns `true` for users matching this pattern. If unset, it returns `true` for all non-admin users. */
     STUDENT_USERNAME_PATTERN: process.env.STUDENT_USERNAME_PATTERN,
-    NO_AUTH: process.env.NODE_ENV !== 'production' && TEST_USERNAMES.length > 0,
+    NO_AUTH: (process.env.NODE_ENV !== 'production' || OFFLINE_API) && TEST_USERNAMES.length > 0,
     /** The Domain Name where the api is running */
     APP_URL: process.env.NETLIFY
       ? process.env.CONTEXT === 'production' 
@@ -213,9 +215,9 @@ const config: Config = {
             },
             transform: {
               ...defaultOptions.jsc.transform,
-              decoratorVersion: '2022-03'
+              decoratorVersion: '2022-03',              
             }
-          }
+          },
         },
       }
     },
@@ -231,6 +233,9 @@ const config: Config = {
   markdown: {
     parseFrontMatter: async (params) => {
       const result = await params.defaultParseFrontMatter(params);
+      if (process.env.NODE_ENV === 'production') {
+        return result;
+      }
       /**
        * don't edit blogs frontmatter
        */
@@ -566,7 +571,14 @@ const config: Config = {
                     test: /\.excalidrawlib$/,
                     type: 'json',
                   }
-                ]
+                ],
+              },
+              resolve: {
+                fallback: {
+                  'roughjs/bin/math': path.resolve(__dirname, './node_modules/roughjs/bin/math.js'),
+                  'roughjs/bin/rough': path.resolve(__dirname, './node_modules/roughjs/bin/rough.js'),
+                  'roughjs/bin/generator': path.resolve(__dirname, './node_modules/roughjs/bin/generator.js')
+                }
               },
               plugins: [
                 new currentBundler.instance.DefinePlugin({

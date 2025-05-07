@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import { CmsTextContext, useFirstCmsTextDocumentIfExists } from '@tdev-components/documents/CmsText/shared';
-import React, { type ReactNode } from 'react';
+import React from 'react';
 import { Props as DefaultCmsProps, EmptyContent } from '..';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
@@ -8,9 +8,11 @@ import CmsActions from '../CmsActions';
 import { CmsTextEntries } from '../WithCmsText';
 import { useStore } from '@tdev-hooks/useStore';
 import Link from '@docusaurus/Link';
+import DivSpanWrapper from '@tdev-components/shared/DivSpanWrapper';
 
 interface Props extends DefaultCmsProps {
-    children?: ReactNode;
+    children?: React.ReactNode;
+    inline?: boolean;
 }
 
 const CmsLink = observer((props: Props) => {
@@ -21,17 +23,28 @@ const CmsLink = observer((props: Props) => {
     const cmsText = useFirstCmsTextDocumentIfExists(documentRootId);
     const actionEntries =
         showActions && documentRootId ? ({ [documentRootId]: documentRootId } as CmsTextEntries) : undefined;
+
     if (!cmsText || (!cmsText.canDisplay && !userStore.isUserSwitched)) {
         return actionEntries ? (
-            <CmsActions entries={actionEntries} className={clsx(styles.codeBlock)} mode="code" />
+            <CmsActions
+                entries={actionEntries}
+                className={clsx(styles.codeBlock)}
+                mode="code"
+                inline={props.inline}
+            />
         ) : null;
     }
     if (actionEntries) {
         return (
-            <div className={clsx(styles.container)}>
-                <CmsActions entries={actionEntries} className={clsx(styles.codeBlock)} mode="code" />
+            <DivSpanWrapper inline={props.inline} className={clsx(styles.container)}>
+                <CmsActions
+                    entries={actionEntries}
+                    className={clsx(styles.codeBlock)}
+                    mode="code"
+                    inline={props.inline}
+                />
                 <Link to={cmsText.text}>{props.children || cmsText.text}</Link>
-            </div>
+            </DivSpanWrapper>
         );
     }
 
