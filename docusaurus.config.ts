@@ -647,7 +647,7 @@ const config: Config = {
     {
       tagName: 'meta',
       attributes: {
-        httpEquiv: 'Content-Security-Policy',
+        ['http-equiv']: 'Content-Security-Policy',
         content: `default-src 'self' *.${API_DOMAIN}; connect-src 'self' *.${API_DOMAIN} *.ingest.sentry.io;`
       }
     }
