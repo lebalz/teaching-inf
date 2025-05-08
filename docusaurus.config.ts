@@ -142,6 +142,8 @@ if (!process.env.DOCS_ONLY) {
   });
 }
 const TEST_USERNAMES = (process.env.TEST_USERNAMES?.split(';') || []).map((u) => u.trim()).filter(u => !!u);
+const API_URI = process.env.BACKEND_URL || 'http://localhost:3002';
+const API_DOMAIN = new URL('http://bla.blu.gbsl.website:3000').host.split('.').slice(-2).join('.');
 
 
 const config: Config = {
@@ -177,7 +179,7 @@ const config: Config = {
         : process.env.DEPLOY_PRIME_URL
       : process.env.APP_URL || 'http://localhost:3000',
     /** The Domain Name of this app */
-    BACKEND_URL: process.env.BACKEND_URL || 'http://localhost:3002',
+    BACKEND_URL: API_URI,
     /** The application id generated in https://portal.azure.com */
     CLIENT_ID: process.env.CLIENT_ID,
     /** Tenant / Verzeichnis-ID (Mandant) */
@@ -641,6 +643,15 @@ const config: Config = {
       defer: true
     }
   ],
+  headTags: process.env.NODE_ENV === 'production' ?  [
+    {
+      tagName: 'meta',
+      attributes: {
+        httpEquiv: 'Content-Security-Policy',
+        content: `default-src 'self' *.${API_DOMAIN}; connect-src 'self' *.${API_DOMAIN} *.ingest.sentry.io;`
+      }
+    }
+  ] : [],
   stylesheets: [
     {
       href: 'https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css',
