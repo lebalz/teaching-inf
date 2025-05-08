@@ -49,40 +49,39 @@ export const aliasConfigurationPluginConfig: PluginConfig = () => {
     return {
         name: 'alias-configuration',
         getThemePath() {
-            const siteSrcPath = path.resolve(__dirname, './site-src');
+            const cwd = process.cwd();
+            const siteSrcPath = path.resolve(cwd, './site-src');
             return siteSrcPath;
         },
         configureWebpack(config, isServer, utils, content) {
+            const cwd = process.cwd();
             return {
                 resolve: {
                     alias: {
                         '@tdev-components': [
-                            path.resolve(__dirname, './site-src/components'),
-                            path.resolve(__dirname, './src/components')
+                            path.resolve(cwd, './site-src/components'),
+                            path.resolve(cwd, './src/components')
                         ],
                         '@tdev-hooks': [
-                            path.resolve(__dirname, './site-src/hooks'),
-                            path.resolve(__dirname, './src/hooks')
+                            path.resolve(cwd, './site-src/hooks'),
+                            path.resolve(cwd, './src/hooks')
                         ],
                         '@tdev-models': [
-                            path.resolve(__dirname, './site-src/models'),
-                            path.resolve(__dirname, './src/models')
+                            path.resolve(cwd, './site-src/models'),
+                            path.resolve(cwd, './src/models')
                         ],
                         '@tdev-stores': [
-                            path.resolve(__dirname, './site-src/stores'),
-                            path.resolve(__dirname, './src/stores')
+                            path.resolve(cwd, './site-src/stores'),
+                            path.resolve(cwd, './src/stores')
                         ],
-                        '@tdev-api': [
-                            path.resolve(__dirname, './site-src/api'),
-                            path.resolve(__dirname, './src/api')
-                        ],
+                        '@tdev-api': [path.resolve(cwd, './site-src/api'), path.resolve(cwd, './src/api')],
                         '@tdev-plugins': [
-                            path.resolve(__dirname, './site-src/plugins'),
-                            path.resolve(__dirname, './src/plugins')
+                            path.resolve(cwd, './site-src/plugins'),
+                            path.resolve(cwd, './src/plugins')
                         ],
-                        '@tdev': [path.resolve(__dirname, './site-src'), path.resolve(__dirname, './src')],
+                        '@tdev': [path.resolve(cwd, './site-src'), path.resolve(cwd, './src')],
                         /** original tdev source */
-                        '@tdev-original': [path.resolve(__dirname, './src')]
+                        '@tdev-original': [path.resolve(cwd, './src')]
                     }
                 }
             };
