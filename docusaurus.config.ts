@@ -143,7 +143,7 @@ if (!process.env.DOCS_ONLY) {
 }
 const TEST_USERNAMES = (process.env.TEST_USERNAMES?.split(';') || []).map((u) => u.trim()).filter(u => !!u);
 const API_URI = process.env.BACKEND_URL || 'http://localhost:3002';
-const API_DOMAIN = new URL('http://bla.blu.gbsl.website:3000').hostname.split('.').slice(-2).join('.');
+const API_DOMAIN = new URL(API_URI).hostname.split('.').slice(-2).join('.');
 
 
 const config: Config = {
