@@ -34,6 +34,12 @@
             "from": "docs/OF-Daten-und-Codes/",
             "to": "versioned_docs/version-28Gb/05-Daten-und-Codes",
             "ignore": [],
+            "open": false
+        },
+        {
+            "from": "docs/OF-BigData-KI/",
+            "to": "versioned_docs/version-28Gb/06-BigData-KI",
+            "ignore": [],
             "open": true
         }
     ],
@@ -72,11 +78,17 @@
             "from": "docs/OF-Daten-und-Codes/",
             "to": "versioned_docs/version-28Gj/05-Daten-und-Codes",
             "ignore": [],
-            "open": true
+            "open": false
         },
         {
             "from": "docs/Math/Taschenrechner/",
             "to": "versioned_docs/version-28Gj/100-Mathematik/01-Taschenrechner",
+            "ignore": [],
+            "open": false
+        },
+        {
+            "from": "docs/OF-BigData-KI/",
+            "to": "versioned_docs/version-28Gj/06-BigData-KI",
             "ignore": [],
             "open": true
         }
