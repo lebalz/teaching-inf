@@ -48,18 +48,41 @@ export const rsDoctorPluginConfig: PluginConfig = process.env.RSDOCTOR === 'true
 export const aliasConfigurationPluginConfig: PluginConfig = () => {
     return {
         name: 'alias-configuration',
+        getThemePath() {
+            const siteSrcPath = path.resolve(__dirname, './site-src');
+            return siteSrcPath;
+        },
         configureWebpack(config, isServer, utils, content) {
-            const cwd = process.cwd();
             return {
                 resolve: {
                     alias: {
-                        '@tdev-components': path.resolve(cwd, './src/components'),
-                        '@tdev-hooks': path.resolve(cwd, './src/hooks'),
-                        '@tdev-models': path.resolve(cwd, './src/models'),
-                        '@tdev-stores': path.resolve(cwd, './src/stores'),
-                        '@tdev-api': path.resolve(cwd, './src/api'),
-                        '@tdev-plugins': path.resolve(cwd, './src/plugins'),
-                        '@tdev': path.resolve(cwd, './src')
+                        '@tdev-components': [
+                            path.resolve(__dirname, './site-src/components'),
+                            path.resolve(__dirname, './src/components')
+                        ],
+                        '@tdev-hooks': [
+                            path.resolve(__dirname, './site-src/hooks'),
+                            path.resolve(__dirname, './src/hooks')
+                        ],
+                        '@tdev-models': [
+                            path.resolve(__dirname, './site-src/models'),
+                            path.resolve(__dirname, './src/models')
+                        ],
+                        '@tdev-stores': [
+                            path.resolve(__dirname, './site-src/stores'),
+                            path.resolve(__dirname, './src/stores')
+                        ],
+                        '@tdev-api': [
+                            path.resolve(__dirname, './site-src/api'),
+                            path.resolve(__dirname, './src/api')
+                        ],
+                        '@tdev-plugins': [
+                            path.resolve(__dirname, './site-src/plugins'),
+                            path.resolve(__dirname, './src/plugins')
+                        ],
+                        '@tdev': [path.resolve(__dirname, './site-src'), path.resolve(__dirname, './src')],
+                        /** original tdev source */
+                        '@tdev-original': [path.resolve(__dirname, './src')]
                     }
                 }
             };
