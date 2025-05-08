@@ -143,7 +143,6 @@ if (!process.env.DOCS_ONLY) {
 }
 const TEST_USERNAMES = (process.env.TEST_USERNAMES?.split(';') || []).map((u) => u.trim()).filter(u => !!u);
 const API_URI = process.env.BACKEND_URL || 'http://localhost:3002';
-const API_DOMAIN = new URL(API_URI).hostname.split('.').slice(-2).join('.');
 
 
 const config: Config = {
@@ -643,15 +642,6 @@ const config: Config = {
       defer: true
     }
   ],
-  headTags: process.env.NODE_ENV === 'production' ?  [
-    {
-      tagName: 'meta',
-      attributes: {
-        ['http-equiv']: 'Content-Security-Policy',
-        content: `default-src 'self' *.${API_DOMAIN}; connect-src 'self' *.${API_DOMAIN} *.ingest.sentry.io;`
-      }
-    }
-  ] : [],
   stylesheets: [
     {
       href: 'https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css',
