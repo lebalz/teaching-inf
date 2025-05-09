@@ -6,7 +6,7 @@ import { sentryWebpackPlugin } from '@sentry/webpack-plugin';
 
 const pdfjsDistPath = path.dirname(require.resolve('pdfjs-dist/package.json'));
 
-const cMapsDir = path.join(pdfjsDistPath, 'cmaps');
+const pdfjs_cMapsDir = path.join(pdfjsDistPath, 'cmaps');
 
 const getCopyPlugin = (currentBundler: CurrentBundler): typeof CopyWebpackPlugin => {
     if (currentBundler.name === 'rspack') {
@@ -131,7 +131,7 @@ export const pdfjsCopyDependenciesPluginConfig: PluginConfig = () => {
                     new Plugin({
                         patterns: [
                             {
-                                from: cMapsDir,
+                                from: pdfjs_cMapsDir,
                                 to: 'cmaps/'
                             }
                         ]
