@@ -269,6 +269,9 @@ const config: Config = applyTransformers({
           remarkPlugins: REMARK_PLUGINS,
           rehypePlugins: REHYPE_PLUGINS,
           beforeDefaultRemarkPlugins: BEFORE_DEFAULT_REMARK_PLUGINS,
+          lastVersion: siteConfig.docs?.lastVersion,
+          routeBasePath: siteConfig.docs?.routeBasePath,
+          versions: siteConfig.docs?.versions,
         },
         blog: {
           showReadingTime: true,

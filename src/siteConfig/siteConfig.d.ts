@@ -74,6 +74,18 @@ export interface SiteConfig {
         searchPagePath?: string,
     }
 
+    /** Configuration for the docs plugin. */
+    docs?: {
+        /** What version to use as 'latest'. */
+        lastVersion?: string;
+
+        /** The base path for docs-related routes. */
+        routeBasePath: string;
+
+        /** Docs versioning config. */
+        versions?: { [versionName: string]: VersionOptions; };
+    }
+
     /** List of plugins to be loaded before the default remark plugins. */
     beforeDefaultRemarkPlugins?: PluginOptions[];
 
