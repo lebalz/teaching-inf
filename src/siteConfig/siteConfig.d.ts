@@ -66,6 +66,14 @@ export interface SiteConfig {
         additionalLanguages?: string[]; //
     };
 
+    /** Algolia search configuration. See here for more information: https://docusaurus.io/docs/search#connecting-algolia */
+    algolia?: {
+        appId: string,
+        apiKey: string,
+        indexName: string,
+        searchPagePath?: string,
+    }
+
     /** List of plugins to be loaded before the default remark plugins. */
     beforeDefaultRemarkPlugins?: PluginOptions[];
 
