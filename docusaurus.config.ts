@@ -47,9 +47,6 @@ const TITLE = siteConfig.title ?? 'Teaching-Dev';
 const DOCS_PATH = useTdevContentPath(siteConfig, 'docs');
 const BLOG_PATH = useTdevContentPath(siteConfig, 'blog');
 
-console.log('DOCS_PATH', DOCS_PATH);
-console.log('BLOG_PATH', BLOG_PATH);
-
 const BEFORE_DEFAULT_REMARK_PLUGINS = siteConfig.beforeDefaultRemarkPlugins ?? [
   flexCardsPlugin,
   [

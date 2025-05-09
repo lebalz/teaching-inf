@@ -26,7 +26,9 @@ export const useTdevContentPath = (siteConfig: SiteConfig, type: 'blog' | 'docs'
     const entries = getDirContent(path.join(CWD, type));
     if (config && Array.isArray(config.exclude) && config.exclude.includes(`${DEFAULT_TDEV_NAME}/**`)) {
         if (entries.length === 0 || entries[0] === DEFAULT_TDEV_NAME) {
-            createFileSync(path.join(CWD, type, DEFAULT_FILE_NAME[type]));
+            const fPath = path.join(CWD, type, DEFAULT_FILE_NAME[type]);
+            console.log('Creating default tdev file', fPath);
+            createFileSync(fPath);
         }
         return type;
     }
