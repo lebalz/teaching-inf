@@ -262,7 +262,6 @@ const config: Config = applyTransformers({
       {
         docs: {
           sidebarPath: './sidebars.ts',
-          // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
             `/cms/${ORGANIZATION_NAME}/${PROJECT_NAME}/`,
@@ -275,7 +274,6 @@ const config: Config = applyTransformers({
         },
         blog: {
           showReadingTime: true,
-          // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
             `/cms/${ORGANIZATION_NAME}/${PROJECT_NAME}/`,

@@ -68,11 +68,11 @@ export interface SiteConfig {
 
     /** Algolia search configuration. See here for more information: https://docusaurus.io/docs/search#connecting-algolia */
     algolia?: {
-        appId: string,
-        apiKey: string,
-        indexName: string,
-        searchPagePath?: string,
-    }
+        appId: string;
+        apiKey: string;
+        indexName: string;
+        searchPagePath?: string;
+    };
 
     /** Configuration for the docs plugin. */
     docs?: {
@@ -83,8 +83,8 @@ export interface SiteConfig {
         routeBasePath: string;
 
         /** Docs versioning config. */
-        versions?: { [versionName: string]: VersionOptions; };
-    }
+        versions?: { [versionName: string]: VersionOptions };
+    };
 
     /** List of plugins to be loaded before the default remark plugins. */
     beforeDefaultRemarkPlugins?: PluginOptions[];
