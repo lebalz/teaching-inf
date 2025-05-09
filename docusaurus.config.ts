@@ -52,8 +52,8 @@ const config: Config = applyTransformers({
   organizationName: ORGANIZATION_NAME, // Usually your GitHub org/user name.
   projectName: PROJECT_NAME, // Usually your repo name.
 
-  onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
+  onBrokenLinks: siteConfig.onBrokenLinks ?? 'throw',
+  onBrokenMarkdownLinks: siteConfig.onBrokenMarkdownLinks ?? 'warn',
 
   customFields: {
     /** Use Testuser in local dev: set TEST_USERNAME to the test users email adress*/

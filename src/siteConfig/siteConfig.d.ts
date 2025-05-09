@@ -33,6 +33,12 @@ export interface SiteConfig {
     /** The locales supported by the site. */
     locales?: string[];
 
+    /** The behavior for broken links. */
+    onBrokenLinks?: 'throw' | 'ignore' | 'log' | 'warn';
+
+    /** The behavior for markdown broken links. */
+    onBrokenMarkdownLinks: 'throw' | 'ignore' | 'log' | 'warn';
+
     /** Items to show in the navbar. */
     navbarItems?: NavbarItem[];
 
