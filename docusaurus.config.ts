@@ -9,7 +9,6 @@ import mdiPlugin from './src/plugins/remark-mdi/plugin';
 import kbdPlugin from './src/plugins/remark-kbd/plugin';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
-import { mdiSourceCommit } from '@mdi/js';
 import defboxPlugin from './src/plugins/remark-code-defbox/plugin';
 import flexCardsPlugin from './src/plugins/remark-flex-cards/plugin';
 import imagePlugin, { CaptionVisitor } from './src/plugins/remark-images/plugin';
@@ -23,7 +22,7 @@ import themeCodeEditor from './src/plugins/theme-code-editor'
 import enumerateAnswersPlugin from './src/plugins/remark-enumerate-components/plugin';
 import { v4 as uuidv4 } from 'uuid';
 import matter from 'gray-matter';
-import { promises as fs, readdirSync } from 'fs';
+import { promises as fs } from 'fs';
 import { accountSwitcher, blog, cms, gallery, gitHub, loginProfileButton, requestTarget, taskStateOverview } from './src/siteConfig/navbarItems';
 import { applyTransformers } from './src/siteConfig/transformers';
 import {
@@ -36,7 +35,7 @@ import {
   excalidrawPluginConfig,
   socketIoNoDepWarningsPluginConfig,
 } from './src/siteConfig/pluginConfigs';
-import { useTdevContentPath } from './src/siteConfig/helpers';
+import path from 'path';
 
 const siteConfig = getSiteConfig();
 
@@ -44,9 +43,6 @@ const BUILD_LOCATION = __dirname;
 const GIT_COMMIT_SHA = process.env.GITHUB_SHA || Math.random().toString(36).substring(7);
 const OFFLINE_API = process.env.OFFLINE_API === 'false' ? false : !!process.env.OFFLINE_API || process.env.CODESPACES === 'true';
 const TITLE = siteConfig.title ?? 'Teaching-Dev';
-
-const DOCS_PATH = useTdevContentPath(siteConfig, 'docs');
-const BLOG_PATH = useTdevContentPath(siteConfig, 'blog');
 
 const BEFORE_DEFAULT_REMARK_PLUGINS = siteConfig.beforeDefaultRemarkPlugins ?? [
   flexCardsPlugin,
@@ -131,7 +127,6 @@ const REHYPE_PLUGINS = siteConfig.rehypePlugins ?? [
 const ORGANIZATION_NAME = siteConfig.gitHub?.orgName ?? 'gbsl-informatik';
 const PROJECT_NAME = siteConfig.gitHub?.projectName ?? 'teaching-dev';
 const TEST_USERNAMES = (process.env.TEST_USERNAMES?.split(';') || []).map((u) => u.trim()).filter(u => !!u);
-const API_URI = process.env.BACKEND_URL || 'http://localhost:3002';
 
 const config: Config = applyTransformers({
   title: TITLE,
@@ -146,8 +141,8 @@ const config: Config = applyTransformers({
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'lebalz', // Usually your GitHub org/user name.
-  projectName: 'teaching-inf', // Usually your repo name.
+  organizationName: ORGANIZATION_NAME, // Usually your GitHub org/user name.
+  projectName: PROJECT_NAME, // Usually your repo name.
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -166,7 +161,7 @@ const config: Config = applyTransformers({
         : process.env.DEPLOY_PRIME_URL
       : process.env.APP_URL || 'http://localhost:3000',
     /** The Domain Name of this app */
-    BACKEND_URL: API_URI,
+    BACKEND_URL: process.env.BACKEND_URL || 'http://localhost:3002',
     /** The application id generated in https://portal.azure.com */
     CLIENT_ID: process.env.CLIENT_ID,
     /** Tenant / Verzeichnis-ID (Mandant) */
@@ -271,20 +266,17 @@ const config: Config = applyTransformers({
     [
       'classic',
       {
-        docs: DOCS_PATH ? {
+        docs: {
           sidebarPath: './sidebars.ts',
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          path: DOCS_PATH,
           editUrl:
             `/cms/${ORGANIZATION_NAME}/${PROJECT_NAME}/`,
           remarkPlugins: REMARK_PLUGINS,
           rehypePlugins: REHYPE_PLUGINS,
           beforeDefaultRemarkPlugins: BEFORE_DEFAULT_REMARK_PLUGINS,
-          ...(siteConfig.docs || {})
-        } : false,
-        blog: BLOG_PATH ? {
-          path: BLOG_PATH,
+        },
+        blog: {
           showReadingTime: true,
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
@@ -293,15 +285,12 @@ const config: Config = applyTransformers({
           remarkPlugins: REMARK_PLUGINS,
           rehypePlugins: REHYPE_PLUGINS,
           beforeDefaultRemarkPlugins: BEFORE_DEFAULT_REMARK_PLUGINS,
-          ...(siteConfig.blog || {})
-        } : false,
+        },
         pages: {
-          id: 'website-pages',
-          path: 'website/pages',
           remarkPlugins: REMARK_PLUGINS,
           rehypePlugins: REHYPE_PLUGINS,
           beforeDefaultRemarkPlugins: BEFORE_DEFAULT_REMARK_PLUGINS,
-          editUrl: '/cms/lebalz/teaching-inf/'
+          editUrl: `/cms/${ORGANIZATION_NAME}/${PROJECT_NAME}/`
         },
         theme: {
           customCss: siteConfig.siteStyles ? ['./src/css/custom.scss', ...siteConfig.siteStyles] : './src/css/custom.scss',
@@ -362,12 +351,6 @@ const config: Config = applyTransformers({
       darkTheme: prismThemes.dracula,
       additionalLanguages: ['bash', 'typescript', 'json', 'python'],
     },
-    algolia: {
-      appId: 'P2ENEETR74',
-      apiKey: 'e5251468d5a81bb7569048e52f735999',
-      indexName: 'inf-gbsl',
-      searchPagePath: 'search',
-    }
   } satisfies Preset.ThemeConfig,
   plugins: [
     sassPluginConfig,
@@ -378,17 +361,6 @@ const config: Config = applyTransformers({
     pdfjsCopyDependenciesPluginConfig,
     excalidrawPluginConfig,
     socketIoNoDepWarningsPluginConfig,
-    [
-      '@docusaurus/plugin-content-pages',
-      {
-        id: 'tdev-pages',
-        path: 'src/pages',
-        remarkPlugins: REMARK_PLUGINS,
-        rehypePlugins: REHYPE_PLUGINS,
-        beforeDefaultRemarkPlugins: BEFORE_DEFAULT_REMARK_PLUGINS,
-        editUrl: `/cms/${ORGANIZATION_NAME}/${PROJECT_NAME}/`
-      },
-    ]
   ],
   themes: [
     [
@@ -399,15 +371,6 @@ const config: Config = applyTransformers({
         libDir: '/bry-libs/'
       }
     ]
-  ],
-  scripts: [
-    {
-      src: 'https://umami.gbsl.website/tell-me.js',
-      ['data-website-id']: process.env.UMAMI_ID,
-      ['data-domains']: 'inf.gbsl.website',
-      async: true,
-      defer: true
-    }
   ],
   stylesheets: [
     {
