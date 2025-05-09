@@ -40,11 +40,12 @@ export interface SiteConfig {
 
     /**
      * the config of the blog plugin. It will be merged with the default options in docusaurus.config.ts
-     * @example ignore the tdev blog posts
+     * @example ignore the tdev docs (gallery etc.)
      * ```ts
      * blog: {
      *      exclude: ['tdev/**']
      * }
+     * ```
      */
     blog?: BlogPluginOptions | false;
     /** The config of the docs plugin. It will be merged with the default options in docusaurus.config.ts
@@ -53,7 +54,7 @@ export interface SiteConfig {
      * docs: {
      *      exclude: ['tdev/**']
      * }
-     *
+     * ```
      */
     docs?: DocsPluginOptions | false;
     /** Footer configuration */
