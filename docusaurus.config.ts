@@ -281,6 +281,8 @@ const config: Config = applyTransformers({
           beforeDefaultRemarkPlugins: BEFORE_DEFAULT_REMARK_PLUGINS,
         },
         pages: {
+          id: 'website-pages',
+          path: 'website/pages',
           remarkPlugins: REMARK_PLUGINS,
           rehypePlugins: REHYPE_PLUGINS,
           beforeDefaultRemarkPlugins: BEFORE_DEFAULT_REMARK_PLUGINS,
@@ -355,6 +357,17 @@ const config: Config = applyTransformers({
     pdfjsCopyDependenciesPluginConfig,
     excalidrawPluginConfig,
     socketIoNoDepWarningsPluginConfig,
+    [
+      '@docusaurus/plugin-content-pages',
+      {
+        id: 'tdev-pages',
+        path: 'src/pages',
+        remarkPlugins: REMARK_PLUGINS,
+        rehypePlugins: REHYPE_PLUGINS,
+        beforeDefaultRemarkPlugins: BEFORE_DEFAULT_REMARK_PLUGINS,
+        editUrl: `/cms/${ORGANIZATION_NAME}/${PROJECT_NAME}/`
+      },
+    ]
   ],
   themes: [
     [

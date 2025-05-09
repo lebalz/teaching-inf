@@ -9,13 +9,13 @@
         "target": "esnext",
         "strict": true,
         "paths": {
-            "@tdev-components/*": ["site-src/components/*", "src/components/*"],
-            "@tdev-hooks/*": ["site-src/hooks/*", "src/hooks/*"],
-            "@tdev-models/*": ["site-src/models/*", "src/models/*"],
-            "@tdev-stores/*": ["site-src/stores/*", "src/stores/*"],
-            "@tdev-plugins/*": ["site-src/plugins/*", "src/plugins/*"],
-            "@tdev-api/*": ["site-src/api/*", "src/api/*"],
-            "@tdev/*": ["site-src/*", "src/*"],
+            "@tdev-components/*": ["website/components/*", "src/components/*"],
+            "@tdev-hooks/*": ["website/hooks/*", "src/hooks/*"],
+            "@tdev-models/*": ["website/models/*", "src/models/*"],
+            "@tdev-stores/*": ["website/stores/*", "src/stores/*"],
+            "@tdev-plugins/*": ["website/plugins/*", "src/plugins/*"],
+            "@tdev-api/*": ["website/api/*", "src/api/*"],
+            "@src/*": ["website/*", "src/*"],
             "@tdev-original/*": ["src/*"],
             "@site/*": ["./*"]
         }

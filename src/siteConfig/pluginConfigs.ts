@@ -50,7 +50,7 @@ export const aliasConfigurationPluginConfig: PluginConfig = () => {
         name: 'alias-configuration',
         getThemePath() {
             const cwd = process.cwd();
-            const siteSrcPath = path.resolve(cwd, './site-src');
+            const siteSrcPath = path.resolve(cwd, './website');
             return siteSrcPath;
         },
         configureWebpack(config, isServer, utils, content) {
@@ -59,27 +59,27 @@ export const aliasConfigurationPluginConfig: PluginConfig = () => {
                 resolve: {
                     alias: {
                         '@tdev-components': [
-                            path.resolve(cwd, './site-src/components'),
+                            path.resolve(cwd, './website/components'),
                             path.resolve(cwd, './src/components')
                         ],
                         '@tdev-hooks': [
-                            path.resolve(cwd, './site-src/hooks'),
+                            path.resolve(cwd, './website/hooks'),
                             path.resolve(cwd, './src/hooks')
                         ],
                         '@tdev-models': [
-                            path.resolve(cwd, './site-src/models'),
+                            path.resolve(cwd, './website/models'),
                             path.resolve(cwd, './src/models')
                         ],
                         '@tdev-stores': [
-                            path.resolve(cwd, './site-src/stores'),
+                            path.resolve(cwd, './website/stores'),
                             path.resolve(cwd, './src/stores')
                         ],
-                        '@tdev-api': [path.resolve(cwd, './site-src/api'), path.resolve(cwd, './src/api')],
+                        '@tdev-api': [path.resolve(cwd, './website/api'), path.resolve(cwd, './src/api')],
                         '@tdev-plugins': [
-                            path.resolve(cwd, './site-src/plugins'),
+                            path.resolve(cwd, './website/plugins'),
                             path.resolve(cwd, './src/plugins')
                         ],
-                        '@tdev': [path.resolve(cwd, './site-src'), path.resolve(cwd, './src')],
+                        '@tdev': [path.resolve(cwd, './website'), path.resolve(cwd, './src')],
                         /** original tdev source */
                         '@tdev-original': [path.resolve(cwd, './src')]
                     }
