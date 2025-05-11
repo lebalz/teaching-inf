@@ -209,7 +209,6 @@ const config: Config = applyTransformers({
       } satisfies Preset.Options,
     ],
   ],
-
   themeConfig: {
     image: siteConfig.socialCard ?? 'img/social-card.jpg',
     navbar: {
@@ -262,7 +261,7 @@ const config: Config = applyTransformers({
       darkTheme: prismThemes.dracula,
       additionalLanguages: ['bash', 'typescript', 'json', 'python'],
     },
-    algolia: siteConfig.algolia ?? undefined,
+    ...(siteConfig.themeConfig || {}),
   } satisfies Preset.ThemeConfig,
   plugins: [
     sassPluginConfig,
