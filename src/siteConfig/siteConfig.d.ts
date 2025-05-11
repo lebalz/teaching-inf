@@ -103,18 +103,6 @@ export interface SiteConfig {
         searchPagePath?: string;
     };
 
-    /** Configuration for the docs plugin. */
-    docs?: {
-        /** What version to use as 'latest'. */
-        lastVersion?: string;
-
-        /** The base path for docs-related routes. */
-        routeBasePath: string;
-
-        /** Docs versioning config. */
-        versions?: { [versionName: string]: VersionOptions };
-    };
-
     /** List of plugins to be loaded before the default remark plugins. */
     beforeDefaultRemarkPlugins?: PluginOptions[];
 
@@ -127,6 +115,10 @@ export interface SiteConfig {
     /** List of Docusaurus plugins to be loaded. */
     plugins?: PluginOptions[];
 
+    /**
+     * An array of scripts to load. The values can be either strings or plain objects of attribute-value maps.
+     * The `<script>` tags will be inserted in the HTML `<head>`.
+     */
     scripts?: _DeepPartialArray<
         | string
         | {
