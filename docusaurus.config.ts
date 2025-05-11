@@ -20,6 +20,7 @@ import {
   socketIoNoDepWarningsPluginConfig,
 } from './src/siteConfig/pluginConfigs';
 import { useTdevContentPath } from './src/siteConfig/helpers';
+import path from 'path';
 import { recommendedBeforeDefaultRemarkPlugins, recommendedRehypePlugins, recommendedRemarkPlugins } from './src/siteConfig/markdownPluginConfigs';
 
 const siteConfig = getSiteConfig();
@@ -130,6 +131,14 @@ const config: Config = applyTransformers({
     parseFrontMatter: async (params) => {
       const result = await params.defaultParseFrontMatter(params);
       if (process.env.NODE_ENV === 'production') {
+        return result;
+      }
+      /**
+       * don't add frontmatter to partials
+       */
+      const fileName = path.basename(params.filePath);
+      if (fileName.startsWith('_')) {
+        // it is a partial, don't add frontmatter
         return result;
       }
       /**
