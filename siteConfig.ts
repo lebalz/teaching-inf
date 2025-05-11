@@ -18,6 +18,12 @@ import {
 import { SiteConfigProvider } from './src/siteConfig/siteConfig';
 const GIT_COMMIT_SHA = process.env.GITHUB_SHA || Math.random().toString(36).substring(7);
 const CWD = process.cwd();
+const ADMONITION_CONFIG = {
+    admonitions: {
+        keywords: ['aufgabe', 'finding'],
+        extendDefaults: true
+    }
+};
 const getSiteConfig: SiteConfigProvider = () => {
     return {
         title: 'Informatik',
@@ -117,6 +123,26 @@ const getSiteConfig: SiteConfigProvider = () => {
                               <svg viewBox="0 0 24 24" role="presentation" style="width: 0.9rem; height: 0.9rem; transform: translateY(15%) rotate(90deg); transform-origin: center center;"><path d="${mdiSourceCommit}" style="fill: currentcolor;"></path></svg> ${GIT_COMMIT_SHA.substring(0, 7)}
                           </a>`
         },
+        themeConfig: {
+            algolia: {
+                appId: 'Z6FIZQ5MSD',
+                apiKey: '7152c9a398beb4325de68df4f6a62acd',
+                indexName: 'gbsl-silasberger',
+                searchPagePath: 'search'
+            }
+        },
+        scripts: [
+            {
+                src: 'https://umami.gbsl.website/tell-me.js',
+                ['data-website-id']: process.env.UMAMI_ID,
+                ['data-domains']: 'inf.gbsl.website',
+                async: true,
+                defer: true
+            }
+        ],
+        docs: ADMONITION_CONFIG,
+        blog: ADMONITION_CONFIG,
+        pages: ADMONITION_CONFIG,
         transformers: {
             plugins: (plugins: PluginConfig[]) => {
                 return [
@@ -139,65 +165,6 @@ const getSiteConfig: SiteConfigProvider = () => {
                         };
                     }
                 ] satisfies PluginConfig[];
-            },
-            'themeConfig.algolia': () => ({
-                // TODO: Suggest algolia config field.
-                appId: 'Z6FIZQ5MSD',
-                apiKey: '7152c9a398beb4325de68df4f6a62acd',
-                indexName: 'gbsl-silasberger',
-                searchPagePath: 'search'
-            }),
-            scripts: () => {
-                return [
-                    {
-                        src: 'https://umami.gbsl.website/tell-me.js',
-                        ['data-website-id']: process.env.UMAMI_ID,
-                        ['data-domains']: 'inf.gbsl.website',
-                        async: true,
-                        defer: true
-                    }
-                ] satisfies Config['scripts'];
-            },
-            presets: (presets: PresetConfig[]) => {
-                const config = presets.find(
-                    (preset) => Array.isArray(preset) && preset[0] === 'classic'
-                ) as PresetConfigDefined;
-                const untouchedPresets = presets.filter((p) => p !== config);
-                const classicPreset = config[1] as {
-                    docs: DocsOptions;
-                    blog: BlogOptions;
-                    pages: PageOptions;
-                };
-                return [
-                    ...untouchedPresets,
-                    [
-                        config[0],
-                        {
-                            ...classicPreset,
-                            docs: {
-                                ...classicPreset.docs,
-                                admonitions: {
-                                    keywords: ['aufgabe', 'finding'],
-                                    extendDefaults: true
-                                }
-                            },
-                            blog: {
-                                ...classicPreset.blog,
-                                admonitions: {
-                                    keywords: ['aufgabe', 'finding'],
-                                    extendDefaults: true
-                                }
-                            },
-                            pages: {
-                                ...classicPreset.pages,
-                                admonitions: {
-                                    keywords: ['aufgabe', 'finding'],
-                                    extendDefaults: true
-                                }
-                            }
-                        }
-                    ]
-                ];
             }
         }
     };
