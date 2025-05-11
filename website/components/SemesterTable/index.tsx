@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
-import { WEEK_DAYS } from '../../helpers/time';
+import { WEEK_DAYS } from '@tdev/helpers/time';
 import * as MDI from '@mdi/js';
 import Icon from '@mdi/react';
 import _ from 'lodash';

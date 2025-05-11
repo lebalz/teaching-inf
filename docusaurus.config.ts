@@ -1,168 +1,64 @@
 require('dotenv').config();
+import getSiteConfig from './siteConfig';
 import { themes as prismThemes } from 'prism-react-renderer';
-import type { Config, CurrentBundler } from '@docusaurus/types';
-import dynamicRouterPlugin, { Config as DynamicRouteConfig} from './src/plugins/plugin-dynamic-routes';
-import type { VersionOptions } from '@docusaurus/plugin-content-docs';
+import type { Config, } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
-import path from 'path';
-
-import strongPlugin, { transformer as captionVisitor } from './src/plugins/remark-strong/plugin';
-import deflistPlugin from './src/plugins/remark-deflist/plugin';
-import mdiPlugin from './src/plugins/remark-mdi/plugin';
-import kbdPlugin from './src/plugins/remark-kbd/plugin';
-import remarkMath from 'remark-math';
-import rehypeKatex from 'rehype-katex';
-import { mdiSourceCommit } from '@mdi/js';
-import defboxPlugin from './src/plugins/remark-code-defbox/plugin';
-import flexCardsPlugin from './src/plugins/remark-flex-cards/plugin';
-import imagePlugin, { CaptionVisitor } from './src/plugins/remark-images/plugin';
-import linkAnnotationPlugin from './src/plugins/remark-link-annotation/plugin';
-import mediaPlugin from './src/plugins/remark-media/plugin';
-import detailsPlugin from './src/plugins/remark-details/plugin';
-import pagePlugin from './src/plugins/remark-page/plugin';
-import pdfPlugin from './src/plugins/remark-pdf/plugin';
-import commentPlugin from './src/plugins/remark-comments/plugin';
 import themeCodeEditor from './src/plugins/theme-code-editor'
-import enumerateAnswersPlugin from './src/plugins/remark-enumerate-components/plugin';
 import { v4 as uuidv4 } from 'uuid';
 import matter from 'gray-matter';
 import { promises as fs } from 'fs';
-import CopyWebpackPlugin from 'copy-webpack-plugin';
-import { sentryWebpackPlugin } from '@sentry/webpack-plugin';
+import { accountSwitcher, blog, cms, gallery, gitHub, loginProfileButton, requestTarget, taskStateOverview } from './src/siteConfig/navbarItems';
+import { applyTransformers } from './src/siteConfig/transformers';
+import {
+  sassPluginConfig,
+  dynamicRouterPluginConfig,
+  rsDoctorPluginConfig,
+  aliasConfigurationPluginConfig,
+  sentryPluginConfig,
+  pdfjsCopyDependenciesPluginConfig,
+  excalidrawPluginConfig,
+  socketIoNoDepWarningsPluginConfig,
+} from './src/siteConfig/pluginConfigs';
+import { useTdevContentPath } from './src/siteConfig/helpers';
+import path from 'path';
+import { recommendedBeforeDefaultRemarkPlugins, recommendedRehypePlugins, recommendedRemarkPlugins } from './src/siteConfig/markdownPluginConfigs';
+
+const siteConfig = getSiteConfig();
 
 const BUILD_LOCATION = __dirname;
 const GIT_COMMIT_SHA = process.env.GITHUB_SHA || Math.random().toString(36).substring(7);
 const OFFLINE_API = process.env.OFFLINE_API === 'false' ? false : !!process.env.OFFLINE_API || process.env.CODESPACES === 'true';
-const BASE_URL = '/';
+const TITLE = siteConfig.title ?? 'Teaching-Dev';
 
-const BEFORE_DEFAULT_REMARK_PLUGINS = [
-  flexCardsPlugin,
-  [
-    deflistPlugin,
-    {
-      tagNames: {
-        dl: 'Dl',
-      },
-    }
-  ],
-  [
-    imagePlugin,
-    { 
-      tagNames: { 
-        sourceRef: 'SourceRef', 
-        figure: 'Figure'
-      },
-      captionVisitors: [
-        (ast, caption) => captionVisitor(ast, caption, (children) => {
-                    return {
-                        type: 'mdxJsxTextElement',
-                        name: 'strong',
-                        attributes: [{ type: 'mdxJsxAttribute', name: 'className', value: 'boxed' }],
-                        children: children
-                    };
-                })
-      ] satisfies CaptionVisitor[]
-    }
-  ],
-  detailsPlugin,
-  defboxPlugin
-];
+const DOCS_PATH = useTdevContentPath(siteConfig, 'docs');
+const BLOG_PATH = useTdevContentPath(siteConfig, 'blog');
 
-const REMARK_PLUGINS = [
-  [strongPlugin, { className: 'boxed' }],
-  [
-    mdiPlugin,
-    {
-      colorMapping: {
-        green: 'var(--ifm-color-success)',
-        red: 'var(--ifm-color-danger)',
-        orange: 'var(--ifm-color-warning)',
-        yellow: '#edcb5a',
-        blue: '#3578e5',
-        cyan: '#01f0bc'
-      },
-      defaultSize: '1.25em'
-    }
-  ],
-  mediaPlugin,
-  kbdPlugin,
-  remarkMath,
-  [
-    enumerateAnswersPlugin,
-    {
-      componentsToEnumerate: ['Answer', 'TaskState', 'SelfCheckTaskState'],
-    }
-  ],
-  pdfPlugin,
-  pagePlugin,
-  [
-    commentPlugin,
-    {
-      commentableJsxFlowElements: ['dd', 'DefHeading', 'figcaption', 'String'],
-      ignoreJsxFlowElements: ['summary', 'dt'],
-      ignoreCodeBlocksWithMeta: /live_py/
-    }
-  ],
-  [
-      linkAnnotationPlugin,
-      {
-          prefix: '👉',
-          postfix: null
-      }
-  ]
-];
-const REHYPE_PLUGINS = [
-  rehypeKatex
-]
+const BEFORE_DEFAULT_REMARK_PLUGINS = siteConfig.beforeDefaultRemarkPlugins ?? recommendedBeforeDefaultRemarkPlugins;
+const REMARK_PLUGINS = siteConfig.remarkPlugins ?? recommendedRemarkPlugins;
+const REHYPE_PLUGINS = siteConfig.rehypePlugins ?? recommendedRehypePlugins;
 
-const pdfjsDistPath = path.dirname(require.resolve('pdfjs-dist/package.json'));
-const cMapsDir = path.join(pdfjsDistPath, 'cmaps');
-const getCopyPlugin = (
-  currentBundler: CurrentBundler
-): typeof CopyWebpackPlugin => {
-  if (currentBundler.name === 'rspack') {
-    // @ts-expect-error: this exists only in Rspack
-    return currentBundler.instance.CopyRspackPlugin;
-  }
-  return CopyWebpackPlugin;
-}
-
-const VERSIONS: { [version: string]: VersionOptions } = {
-  current: {
-      label: 'Material',
-      banner: 'none'
-  }
-};
-if (!process.env.DOCS_ONLY) {
-  ['28Gb', '28Gj'].forEach(version => {
-      VERSIONS[version] = {
-          label: version,
-          banner: 'none'
-      }
-  });
-}
+const ORGANIZATION_NAME = siteConfig.gitHub?.orgName ?? 'gbsl-informatik';
+const PROJECT_NAME = siteConfig.gitHub?.projectName ?? 'teaching-dev';
 const TEST_USERNAMES = (process.env.TEST_USERNAMES?.split(';') || []).map((u) => u.trim()).filter(u => !!u);
-const API_URI = process.env.BACKEND_URL || 'http://localhost:3002';
 
-
-const config: Config = {
-  title: 'Informatik',
-  tagline: 'Gymnasium Biel-Seeland',
-  favicon: 'img/favicon.ico',
+const config: Config = applyTransformers({
+  title: TITLE,
+  tagline: siteConfig.tagline ?? 'Dogfooding Teaching Features',
+  favicon: siteConfig.favicon ?? 'img/favicon.ico',
 
   // Set the production url of your site here
-  url: 'https://inf.gbsl.website',
+  url: siteConfig.url ?? 'https://teaching-dev.gbsl.website',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/',
+  baseUrl: siteConfig.baseUrl ?? '/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'lebalz', // Usually your GitHub org/user name.
-  projectName: 'teaching-inf', // Usually your repo name.
+  organizationName: ORGANIZATION_NAME, // Usually your GitHub org/user name.
+  projectName: PROJECT_NAME, // Usually your repo name.
 
-  onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
+  onBrokenLinks: siteConfig.onBrokenLinks ?? 'throw',
+  onBrokenMarkdownLinks: siteConfig.onBrokenMarkdownLinks ?? 'warn',
 
   customFields: {
     /** Use Testuser in local dev: set TEST_USERNAME to the test users email adress*/
@@ -173,12 +69,12 @@ const config: Config = {
     NO_AUTH: (process.env.NODE_ENV !== 'production' || OFFLINE_API) && TEST_USERNAMES.length > 0,
     /** The Domain Name where the api is running */
     APP_URL: process.env.NETLIFY
-      ? process.env.CONTEXT === 'production' 
-        ? process.env.URL 
+      ? process.env.CONTEXT === 'production'
+        ? process.env.URL
         : process.env.DEPLOY_PRIME_URL
       : process.env.APP_URL || 'http://localhost:3000',
     /** The Domain Name of this app */
-    BACKEND_URL: API_URI,
+    BACKEND_URL: process.env.BACKEND_URL || 'http://localhost:3002',
     /** The application id generated in https://portal.azure.com */
     CLIENT_ID: process.env.CLIENT_ID,
     /** Tenant / Verzeichnis-ID (Mandant) */
@@ -194,7 +90,7 @@ const config: Config = {
        * no config options for swcJsLoader so far. 
        * Instead configure it over the jsLoader in the next step 
        */
-      swcJsLoader: false, 
+      swcJsLoader: false,
       swcJsMinimizer: true,
       swcHtmlMinimizer: true,
       lightningCssMinimizer: true,
@@ -204,7 +100,7 @@ const config: Config = {
   },
   webpack: {
     jsLoader: (isServer) => {
-      const defaultOptions = require("@docusaurus/faster").getSwcLoaderOptions({isServer});
+      const defaultOptions = require("@docusaurus/faster").getSwcLoaderOptions({ isServer });
       return {
         loader: 'builtin:swc-loader', // (only works with Rspack)
         options: {
@@ -216,7 +112,7 @@ const config: Config = {
             },
             transform: {
               ...defaultOptions.jsc.transform,
-              decoratorVersion: '2022-03',              
+              decoratorVersion: '2022-03',
             }
           },
         },
@@ -228,8 +124,8 @@ const config: Config = {
   // useful metadata like html lang. For example, if your site is Chinese, you
   // may want to replace "en" with "zh-Hans".
   i18n: {
-    defaultLocale: 'de',
-    locales: ['de'],
+    defaultLocale: siteConfig.defaultLocale ?? 'de',
+    locales: siteConfig.locales ?? ['de'],
   },
   markdown: {
     parseFrontMatter: async (params) => {
@@ -238,14 +134,17 @@ const config: Config = {
         return result;
       }
       /**
-       * don't edit blogs frontmatter
+       * don't add frontmatter to partials
        */
-      if (params.filePath.startsWith(`${BUILD_LOCATION}/blog/`)) {
-        return result;
-      }
       const fileName = path.basename(params.filePath);
       if (fileName.startsWith('_')) {
         // it is a partial, don't add frontmatter
+        return result;
+      }
+      /**
+       * don't edit blogs frontmatter
+       */
+      if (params.filePath.startsWith(`${BUILD_LOCATION}/blog/`)) {
         return result;
       }
       if (process.env.NODE_ENV !== 'production') {
@@ -283,364 +182,128 @@ const config: Config = {
     [
       'classic',
       {
-        docs: {
+        docs: DOCS_PATH ? {
           sidebarPath: './sidebars.ts',
-          editUrl: (params) => {
-              if (params.version === 'current') {
-                  return `/cms/lebalz/teaching-inf/${params.versionDocsDirPath}/${params.docPath}`
-              }
-          },
-          path: 'docs',
-          includeCurrentVersion: true,
-          lastVersion: 'current',
-          showLastUpdateTime: true,
-          routeBasePath: '/',
-          admonitions: {
-              keywords: ['aufgabe', 'finding'],
-              extendDefaults: true,
-          },
-          versions: VERSIONS,
+          // Remove this to remove the "edit this page" links.
+          path: DOCS_PATH,
+          editUrl:
+            `/cms/${ORGANIZATION_NAME}/${PROJECT_NAME}/`,
           remarkPlugins: REMARK_PLUGINS,
           rehypePlugins: REHYPE_PLUGINS,
           beforeDefaultRemarkPlugins: BEFORE_DEFAULT_REMARK_PLUGINS,
-        },
-        blog: {
+          ...(siteConfig.docs || {})
+        } : false,
+        blog: BLOG_PATH ? {
+          path: BLOG_PATH,
           showReadingTime: true,
-          // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            '/cms/lebalz/teaching-inf/',
+            `/cms/${ORGANIZATION_NAME}/${PROJECT_NAME}/`,
           remarkPlugins: REMARK_PLUGINS,
           rehypePlugins: REHYPE_PLUGINS,
-          admonitions: {
-            keywords: ['aufgabe', 'finding'],
-            extendDefaults: true,
-          },
-          postsPerPage: 15,
           beforeDefaultRemarkPlugins: BEFORE_DEFAULT_REMARK_PLUGINS,
-        },
+          ...(siteConfig.blog || {})
+        } : false,
         pages: {
-          admonitions: {
-              keywords: ['aufgabe', 'finding'],
-              extendDefaults: true,
-          },
+          id: 'website-pages',
+          path: 'website/pages',
           remarkPlugins: REMARK_PLUGINS,
           rehypePlugins: REHYPE_PLUGINS,
           beforeDefaultRemarkPlugins: BEFORE_DEFAULT_REMARK_PLUGINS,
-          editUrl: '/cms/lebalz/teaching-inf/'
+          editUrl: `/cms/${ORGANIZATION_NAME}/${PROJECT_NAME}/`,
+          ...(siteConfig.pages || {})
         },
         theme: {
-          customCss: [
-            './src/css/custom.scss',
-             require.resolve('./node_modules/react-image-gallery/styles/css/image-gallery.css')
-          ]
+          customCss: siteConfig.siteStyles ? ['./src/css/custom.scss', ...siteConfig.siteStyles] : './src/css/custom.scss',
         },
       } satisfies Preset.Options,
     ],
   ],
-
   themeConfig: {
-    // Replace with your project's social card
-    image: 'img/social-card.png',
-    docs: {
-      sidebar: {
-        hideable: true
-      }
-    },
+    image: siteConfig.socialCard ?? 'img/social-card.jpg',
     navbar: {
-      title: 'Informatik',
+      title: TITLE,
       logo: {
-        alt: 'Teaching Inf Logo',
-        src: 'img/logo.png',
+        alt: `${TITLE} Logo`,
+        src: siteConfig.logo ?? 'img/logo.svg',
       },
-      items: [
-        {
-            to: 'playground',
-            position: 'left',
-            label: 'Playground'
-        },
-        { to: '/blog', label: 'Blog', position: 'left' },
-        {
-          type: 'custom-taskStateOverview',
-          position: 'left'
-        },
-        {
-          type: 'custom-accountSwitcher',
-          position: 'right'
-        },
-        {
-          type: 'custom-requestTarget',
-          position: 'right'
-        },
-        {
-          type: 'custom-loginProfileButton',
-          position: 'right'
-        },
+      items: siteConfig.navbarItems ?? [
+        gallery,
+        blog,
+        cms,
+        gitHub,
+        taskStateOverview,
+        accountSwitcher,
+        requestTarget,
+        loginProfileButton,
       ],
     },
     footer: {
-      style: 'dark',
-      links: [
-          {
-              title: 'Tools',
-              items: [
-                  {
-                      label: 'VS Code',
-                      to: 'https://code.visualstudio.com/'
-                  },
-                  {
-                      label: 'Python',
-                      to: 'https://www.python.org/'
-                  }
-              ]
-          },
-          {
-              title: 'Links',
-              items: [
-                  // {
-                  //     label: 'Troubleshooting Office 365',
-                  //     to: '/troubleshooting',
-                  // },
-                  {
-                      label: 'Jupyterhub',
-                      to: 'https://jupyter.gbsl.website',
-                  }
-              ],
-          },
-          {
-              title: 'Gymnasium',
-              items: [
-                  {
-                      label: 'Passwort Zurücksetzen',
-                      to: 'https://password.edubern.ch/'
-                  },
-                  {
-                      label: 'Office 365',
-                      to: 'https://office.com',
-                  },
-                  {
-                      label: 'GBSL',
-                      to: 'https://gbsl.ch',
-                  },
-                  {
-                      label: 'Intranet',
-                      to: 'https://erzbe.sharepoint.com/sites/GYMB/gbsl'
-                  },
-                  {
-                      label: 'Stundenplan',
-                      to: 'https://mese.webuntis.com/WebUntis/?school=gym_Biel-Bienne#/basic/main',
-                  },
-              ],
-          }
+      style: siteConfig.footer?.style ?? 'dark',
+      links: siteConfig.footer?.links ?? [
+        {
+          title: 'Docs',
+          items: [
+            {
+              label: 'Galerie',
+              to: '/docs/gallery',
+            },
+          ],
+        },
+        {
+          title: 'More',
+          items: [
+            {
+              label: 'Blog',
+              to: '/blog',
+            },
+          ],
+        },
       ],
-      copyright: `<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.de">
-                <div style="display: flex; flex-direction: column; align-items: center;">
-                  <img style="height: 1.6em" src="${BASE_URL}img/by-nc-sa.eu.svg" alt="CC-BY-NC-SA">
-                  <div>
-                    Text und Bilder von Balthasar Hofer, Ausnahmen sind gekennzeichnet. 
-                  </div>
-                </div>
-              </a>
-              <a 
-                class="badge badge--primary"
-                style="margin-top: 0.5rem;"
-                href="https://github.com/lebalz/teaching-inf/commits/${GIT_COMMIT_SHA}"
-              >
-                  <svg viewBox="0 0 24 24" role="presentation" style="width: 0.9rem; height: 0.9rem; transform: translateY(15%) rotate(90deg); transform-origin: center center;"><path d="${mdiSourceCommit}" style="fill: currentcolor;"></path></svg> ${GIT_COMMIT_SHA.substring(0, 7)}
-              </a>`
+      copyright: siteConfig.footer?.copyright ?? `Copyright © ${new Date().getFullYear()} Teaching Dev. Built with Docusaurus. <br />
+      <a class="badge badge--primary" href="https://github.com/GBSL-Informatik/teaching-dev/commits/${GIT_COMMIT_SHA}">
+            ᚶ ${GIT_COMMIT_SHA.substring(0, 7)}
+      </a>
+      `,
     },
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
       additionalLanguages: ['bash', 'typescript', 'json', 'python'],
     },
-    algolia: {
-      appId: 'P2ENEETR74',
-      apiKey: 'e5251468d5a81bb7569048e52f735999',
-      indexName: 'inf-gbsl',
-      searchPagePath: 'search',
-    }
+    ...(siteConfig.themeConfig || {}),
   } satisfies Preset.ThemeConfig,
   plugins: [
-    'docusaurus-plugin-sass',
+    sassPluginConfig,
+    dynamicRouterPluginConfig,
+    rsDoctorPluginConfig,
+    aliasConfigurationPluginConfig,
+    sentryPluginConfig,
+    pdfjsCopyDependenciesPluginConfig,
+    excalidrawPluginConfig,
+    socketIoNoDepWarningsPluginConfig,
     [
-      dynamicRouterPlugin,
+      '@docusaurus/plugin-content-pages',
       {
-        routes: [
-          {
-            path: '/rooms/',
-            component: '@tdev-components/Rooms',
-          },
-          {
-            path: '/cms/',
-            component: '@tdev-components/Cms',
-          }
-        ]
-      } satisfies DynamicRouteConfig
-    ],
-    process.env.RSDOCTOR === 'true' && [
-      'rsdoctor',
-      {
-        rsdoctorOptions: {
-          /* Options */
-        },
+        id: 'tdev-pages',
+        path: 'src/pages',
+        remarkPlugins: REMARK_PLUGINS,
+        rehypePlugins: REHYPE_PLUGINS,
+        beforeDefaultRemarkPlugins: BEFORE_DEFAULT_REMARK_PLUGINS,
+        editUrl: `/cms/${ORGANIZATION_NAME}/${PROJECT_NAME}/`,
+          ...(siteConfig.pages || {})
       },
-    ],
-    () => {
-      return {
-        name: 'alias-configuration',
-        configureWebpack(config, isServer, utils, content) {
-          return {
-            resolve: {
-              alias: {
-                '@tdev-components': path.resolve(__dirname, './src/components'),
-                '@tdev-hooks': path.resolve(__dirname, './src/hooks'),
-                '@tdev-models': path.resolve(__dirname, './src/models'),
-                '@tdev-stores': path.resolve(__dirname, './src/stores'),
-                '@tdev-api': path.resolve(__dirname, './src/api'),
-                '@tdev-plugins': path.resolve(__dirname, './src/plugins'),
-                '@tdev': path.resolve(__dirname, './src'),
-              }
-            }
-          }
-        }
-      }
-    },
-    () => {
-      const SENTRY_AUTH_TOKEN = process.env.SENTRY_AUTH_TOKEN;
-      const SENTRY_ORG = process.env.SENTRY_ORG;
-      const SENTRY_PROJECT = process.env.SENTRY_PROJECT;
-      if (!SENTRY_AUTH_TOKEN || !SENTRY_ORG || !SENTRY_PROJECT) {
-        console.warn(
-          'Sentry is not configured. Please set SENTRY_AUTH_TOKEN, SENTRY_ORG and SENTRY_PROJECT in your environment variables.'
-        );
-        return {name: 'sentry-configuration'};
-      }
-      return {
-        name: 'sentry-configuration',
-        configureWebpack(config, isServer, utils, content) {
-            return {
-              devtool: 'source-map',
-              plugins: [
-                sentryWebpackPlugin({
-                  authToken: SENTRY_AUTH_TOKEN,
-                  org: SENTRY_ORG,
-                  project: SENTRY_PROJECT
-                })
-              ],
-            };
-        }
-      }
-    },
-    () => {
-      return {
-        name: 'pdfjs-copy-dependencies',
-        configureWebpack(config, isServer, {currentBundler}) {
-          const Plugin = getCopyPlugin(currentBundler);
-            return {
-                resolve: {
-                  alias: {
-                    canvas: false
-                  }
-                },
-                plugins: [
-                  new Plugin({
-                    patterns: [
-                      {
-                        from: cMapsDir,
-                        to: 'cmaps/'
-                      }
-                    ]
-                  })
-                ]
-            };
-        }
-      }
-    },
-    () => {
-      return {
-          name: 'excalidraw-config',
-          configureWebpack(config, isServer, {currentBundler}) {
-            return {
-              module: {
-                rules: [
-                  {
-                    test: /\.excalidraw$/,
-                    type: 'json',
-                  },
-                  {
-                    test: /\.excalidrawlib$/,
-                    type: 'json',
-                  }
-                ],
-              },
-              resolve: {
-                fallback: {
-                  'roughjs/bin/math': path.resolve(__dirname, './node_modules/roughjs/bin/math.js'),
-                  'roughjs/bin/rough': path.resolve(__dirname, './node_modules/roughjs/bin/rough.js'),
-                  'roughjs/bin/generator': path.resolve(__dirname, './node_modules/roughjs/bin/generator.js')
-                }
-              },
-              plugins: [
-                new currentBundler.instance.DefinePlugin({
-                  'process.env.IS_PREACT': JSON.stringify('false')
-                }),
-              ]
-            }
-          }
-      }
-    },
-    () => {
-      return {
-          name: 'yaml-loader-config',
-          configureWebpack(config, isServer, {currentBundler}) {
-            return {
-              module: {
-                rules: [
-                  {
-                    test: /\.ya?ml$/,
-                    use: 'yaml-loader'
-                  }
-                ]
-              }
-            }
-          }
-      }
-    },
-    () => {
-      return {
-        name: 'socketio-no-dep-warnings',
-        configureWebpack(config, isServer, {currentBundler}) {
-          return {
-            plugins: [
-              new currentBundler.instance.DefinePlugin({
-                'process.env.WS_NO_BUFFER_UTIL': JSON.stringify('true'),
-                'process.env.WS_NO_UTF_8_VALIDATE': JSON.stringify('true')
-              }),
-            ]
-          }
-        }
-      }
-    },
+    ]
   ],
   themes: [
     [
-      themeCodeEditor, 
+      themeCodeEditor,
       {
         brythonSrc: 'https://cdn.jsdelivr.net/npm/brython@3.13.0/brython.min.js',
         brythonStdlibSrc: 'https://cdn.jsdelivr.net/npm/brython@3.13.0/brython_stdlib.js',
         libDir: '/bry-libs/'
       }
     ]
-  ],
-  scripts: [
-    {
-      src: 'https://umami.gbsl.website/tell-me.js',
-      ['data-website-id']: process.env.UMAMI_ID,
-      ['data-domains']: 'inf.gbsl.website',
-      async: true,
-      defer: true
-    }
   ],
   stylesheets: [
     {
@@ -651,6 +314,7 @@ const config: Config = {
       crossorigin: 'anonymous',
     },
   ],
-};
+  scripts: siteConfig.scripts,
+}, siteConfig.transformers ?? {});
 
 export default config;

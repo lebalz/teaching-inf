@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import Layout from '@theme/Layout';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import styles from './index.module.scss';
-import HomepageCourses from '../components/HomepageCourses';
+import HomepageCourses from '@tdev-components/HomepageCourses';
 import ImageGallery from 'react-image-gallery';
 import { Content } from '@theme/BlogPostPage';
 

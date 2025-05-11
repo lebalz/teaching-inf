@@ -1,11 +1,9 @@
 import React from 'react';
 import Layout from '@theme/Layout';
-import siteConfig from '@generated/docusaurus.config';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
 import Icon from '@mdi/react';
 import { mdiCircleSmall, mdiPlus } from '@mdi/js';
-const { NO_AUTH } = siteConfig.customFields as { NO_AUTH?: boolean };
 
 interface VectorInputProps {
     value: [string, string, string];
