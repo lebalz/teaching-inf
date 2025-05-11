@@ -39,7 +39,7 @@ export interface SiteConfig {
     onBrokenLinks?: 'throw' | 'ignore' | 'log' | 'warn';
 
     /** The behavior for markdown broken links. */
-    onBrokenMarkdownLinks: 'throw' | 'ignore' | 'log' | 'warn';
+    onBrokenMarkdownLinks?: 'throw' | 'ignore' | 'log' | 'warn';
 
     /** Items to show in the navbar. */
     navbarItems?: NavbarItem[];
@@ -54,6 +54,7 @@ export interface SiteConfig {
      * ```
      */
     blog?: BlogPluginOptions | false;
+
     /** The config of the docs plugin. It will be merged with the default options in docusaurus.config.ts
      * @example ignore the tdev blog posts
      * ```ts
@@ -63,6 +64,7 @@ export interface SiteConfig {
      * ```
      */
     docs?: DocsPluginOptions | false;
+    
     /** Footer configuration */
     footer?: {
         /** The style of the footer. */
