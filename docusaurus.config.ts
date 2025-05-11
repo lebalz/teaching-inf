@@ -304,6 +304,7 @@ const config: Config = applyTransformers({
       crossorigin: 'anonymous',
     },
   ],
+  scripts: siteConfig.scripts,
 }, siteConfig.transformers ?? {});
 
 export default config;

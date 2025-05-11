@@ -64,7 +64,7 @@ export interface SiteConfig {
      * ```
      */
     docs?: DocsPluginOptions | false;
-    
+
     /** Footer configuration */
     footer?: {
         /** The style of the footer. */
@@ -126,6 +126,14 @@ export interface SiteConfig {
 
     /** List of Docusaurus plugins to be loaded. */
     plugins?: PluginOptions[];
+
+    scripts?: _DeepPartialArray<
+        | string
+        | {
+              [key: string]: string | boolean | undefined;
+              src: string;
+          }
+    >;
 
     /** GitHub coordinates for your project. */
     gitHub?: {
