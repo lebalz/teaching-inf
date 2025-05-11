@@ -15,7 +15,7 @@
             "@tdev-stores/*": ["website/stores/*", "src/stores/*"],
             "@tdev-plugins/*": ["website/plugins/*", "src/plugins/*"],
             "@tdev-api/*": ["website/api/*", "src/api/*"],
-            "@src/*": ["website/*", "src/*"],
+            "@tdev/*": ["website/*", "src/*"],
             "@tdev-original/*": ["src/*"],
             "@site/*": ["./*"]
         }
