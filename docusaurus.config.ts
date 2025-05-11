@@ -210,7 +210,8 @@ const config: Config = applyTransformers({
           remarkPlugins: REMARK_PLUGINS,
           rehypePlugins: REHYPE_PLUGINS,
           beforeDefaultRemarkPlugins: BEFORE_DEFAULT_REMARK_PLUGINS,
-          editUrl: `/cms/${ORGANIZATION_NAME}/${PROJECT_NAME}/`
+          editUrl: `/cms/${ORGANIZATION_NAME}/${PROJECT_NAME}/`,
+          ...(siteConfig.pages || {})
         },
         theme: {
           customCss: siteConfig.siteStyles ? ['./src/css/custom.scss', ...siteConfig.siteStyles] : './src/css/custom.scss',
@@ -289,7 +290,8 @@ const config: Config = applyTransformers({
         remarkPlugins: REMARK_PLUGINS,
         rehypePlugins: REHYPE_PLUGINS,
         beforeDefaultRemarkPlugins: BEFORE_DEFAULT_REMARK_PLUGINS,
-        editUrl: `/cms/${ORGANIZATION_NAME}/${PROJECT_NAME}/`
+        editUrl: `/cms/${ORGANIZATION_NAME}/${PROJECT_NAME}/`,
+          ...(siteConfig.pages || {})
       },
     ]
   ],
