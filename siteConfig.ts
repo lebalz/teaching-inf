@@ -30,7 +30,8 @@ const getSiteConfig: SiteConfigProvider = () => {
         siteStyles: [
             require.resolve(
                 path.resolve(CWD, 'node_modules/react-image-gallery/styles/css/image-gallery.css')
-            )
+            ),
+            'website/css/custom.scss'
         ],
         socialCard: 'img/social-card.png',
         logo: 'img/logo.png',

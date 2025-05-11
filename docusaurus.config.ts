@@ -22,7 +22,7 @@ import themeCodeEditor from './src/plugins/theme-code-editor'
 import enumerateAnswersPlugin from './src/plugins/remark-enumerate-components/plugin';
 import { v4 as uuidv4 } from 'uuid';
 import matter from 'gray-matter';
-import { promises as fs } from 'fs';
+import { promises as fs, readdirSync } from 'fs';
 import { accountSwitcher, blog, cms, gallery, gitHub, loginProfileButton, requestTarget, taskStateOverview } from './src/siteConfig/navbarItems';
 import { applyTransformers } from './src/siteConfig/transformers';
 import {
@@ -35,6 +35,7 @@ import {
   excalidrawPluginConfig,
   socketIoNoDepWarningsPluginConfig,
 } from './src/siteConfig/pluginConfigs';
+import { useTdevContentPath } from './src/siteConfig/helpers';
 import path from 'path';
 
 const siteConfig = getSiteConfig();
@@ -43,6 +44,9 @@ const BUILD_LOCATION = __dirname;
 const GIT_COMMIT_SHA = process.env.GITHUB_SHA || Math.random().toString(36).substring(7);
 const OFFLINE_API = process.env.OFFLINE_API === 'false' ? false : !!process.env.OFFLINE_API || process.env.CODESPACES === 'true';
 const TITLE = siteConfig.title ?? 'Teaching-Dev';
+
+const DOCS_PATH = useTdevContentPath(siteConfig, 'docs');
+const BLOG_PATH = useTdevContentPath(siteConfig, 'blog');
 
 const BEFORE_DEFAULT_REMARK_PLUGINS = siteConfig.beforeDefaultRemarkPlugins ?? [
   flexCardsPlugin,
@@ -220,15 +224,15 @@ const config: Config = applyTransformers({
       if (process.env.NODE_ENV === 'production') {
         return result;
       }
+      const fileName = path.basename(params.filePath);
+      if (fileName.startsWith('_')) {
+        // it is a partial, don't add frontmatter
+        return result;
+      }
       /**
        * don't edit blogs frontmatter
        */
       if (params.filePath.startsWith(`${BUILD_LOCATION}/blog/`)) {
-        return result;
-      }
-      const fileName = path.basename(params.filePath);
-      if (fileName.startsWith('_')) {
-        // it is a partial, don't add frontmatter
         return result;
       }
       if (process.env.NODE_ENV !== 'production') {
@@ -266,17 +270,20 @@ const config: Config = applyTransformers({
     [
       'classic',
       {
-        docs: {
+        docs: DOCS_PATH ? {
           sidebarPath: './sidebars.ts',
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
+          path: DOCS_PATH,
           editUrl:
             `/cms/${ORGANIZATION_NAME}/${PROJECT_NAME}/`,
           remarkPlugins: REMARK_PLUGINS,
           rehypePlugins: REHYPE_PLUGINS,
           beforeDefaultRemarkPlugins: BEFORE_DEFAULT_REMARK_PLUGINS,
-        },
-        blog: {
+          ...(siteConfig.docs || {})
+        } : false,
+        blog: BLOG_PATH ? {
+          path: BLOG_PATH,
           showReadingTime: true,
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
@@ -285,8 +292,11 @@ const config: Config = applyTransformers({
           remarkPlugins: REMARK_PLUGINS,
           rehypePlugins: REHYPE_PLUGINS,
           beforeDefaultRemarkPlugins: BEFORE_DEFAULT_REMARK_PLUGINS,
-        },
+          ...(siteConfig.blog || {})
+        } : false,
         pages: {
+          id: 'website-pages',
+          path: 'website/pages',
           remarkPlugins: REMARK_PLUGINS,
           rehypePlugins: REHYPE_PLUGINS,
           beforeDefaultRemarkPlugins: BEFORE_DEFAULT_REMARK_PLUGINS,
@@ -361,6 +371,17 @@ const config: Config = applyTransformers({
     pdfjsCopyDependenciesPluginConfig,
     excalidrawPluginConfig,
     socketIoNoDepWarningsPluginConfig,
+    [
+      '@docusaurus/plugin-content-pages',
+      {
+        id: 'tdev-pages',
+        path: 'src/pages',
+        remarkPlugins: REMARK_PLUGINS,
+        rehypePlugins: REHYPE_PLUGINS,
+        beforeDefaultRemarkPlugins: BEFORE_DEFAULT_REMARK_PLUGINS,
+        editUrl: `/cms/${ORGANIZATION_NAME}/${PROJECT_NAME}/`
+      },
+    ]
   ],
   themes: [
     [

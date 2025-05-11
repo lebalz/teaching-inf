@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import * as React from 'react';
 import styles from './styles.module.scss';
-import CopyBadge from '../../shared/CopyBadge';
+import CopyBadge from '@tdev-components/shared/CopyBadge';
 
 interface Props {
     values: number[];
