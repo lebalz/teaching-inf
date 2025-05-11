@@ -4,7 +4,7 @@
 import { Config, PluginConfig, PresetConfig, PresetConfigDefined } from '@docusaurus/types';
 import { mdiSourceCommit } from '@mdi/js';
 import path from 'path';
-import { Options as DocsOptions } from '@docusaurus/plugin-content-docs';
+import { Options as DocsOptions, VersionOptions } from '@docusaurus/plugin-content-docs';
 import { Options as BlogOptions } from '@docusaurus/plugin-content-blog';
 import { Options as PageOptions } from '@docusaurus/plugin-content-pages';
 
@@ -24,6 +24,20 @@ const ADMONITION_CONFIG = {
         extendDefaults: true
     }
 };
+const VERSIONS: { [version: string]: VersionOptions } = {
+    current: {
+        label: 'Material',
+        banner: 'none'
+    }
+};
+if (!process.env.DOCS_ONLY) {
+    ['28Gb', '28Gj'].forEach((version) => {
+        VERSIONS[version] = {
+            label: version,
+            banner: 'none'
+        };
+    });
+}
 const getSiteConfig: SiteConfigProvider = () => {
     return {
         title: 'Informatik',
@@ -140,8 +154,16 @@ const getSiteConfig: SiteConfigProvider = () => {
                 defer: true
             }
         ],
-        docs: ADMONITION_CONFIG,
-        blog: ADMONITION_CONFIG,
+        docs: {
+            ...ADMONITION_CONFIG,
+            versions: VERSIONS,
+            lastVersion: 'current',
+            routeBasePath: '/',
+            exclude: ['tdev/**'],
+            showLastUpdateTime: true,
+            includeCurrentVersion: true
+        },
+        blog: { ...ADMONITION_CONFIG, exclude: ['tdev/**'] },
         pages: ADMONITION_CONFIG,
         transformers: {
             plugins: (plugins: PluginConfig[]) => {
