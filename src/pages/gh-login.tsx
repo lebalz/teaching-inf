@@ -12,14 +12,14 @@ import { Redirect } from '@docusaurus/router';
 import Card from '@tdev-components/shared/Card';
 import LoginProfileButton from '@tdev-components/Navbar/LoginProfileButton';
 import Loader from '@tdev-components/Loader';
-const { APP_URL, GITHUB_OAUTH_CLIENT_ID } = siteConfig.customFields as {
+const { APP_URL, GH_OAUTH_CLIENT_ID } = siteConfig.customFields as {
     APP_URL?: string;
-    GITHUB_OAUTH_CLIENT_ID?: string;
+    GH_OAUTH_CLIENT_ID?: string;
 };
 
 const callback = `${APP_URL || 'http://localhost:3000'}/gh-callback`;
 const LOGIN_URL =
-    `https://github.com/login/oauth/authorize?client_id=${GITHUB_OAUTH_CLIENT_ID}&scope=repo&redirect_uri=${encodeURIComponent(callback)}` as const;
+    `https://github.com/login/oauth/authorize?client_id=${GH_OAUTH_CLIENT_ID}&scope=repo&redirect_uri=${encodeURIComponent(callback)}` as const;
 
 function HomepageHeader() {
     const { siteConfig } = useDocusaurusContext();

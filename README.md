@@ -8,7 +8,7 @@ This website is built using [Docusaurus](https://docusaurus.io/), a modern stati
 ## ENV
 
 | Variable                   | For         | Default                             | Example                          | Description                                                                                                                                                        |
-| :------------------------- | :---------- | :---------------------------------- | :------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|:---------------------------|:------------|:------------------------------------|:---------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `APP_URL`                  | Production  | `http://localhost:3000`             |                                  | Domain of the hosted app                                                                                                                                           |
 | `BACKEND_URL`              | Production  | `http://localhost:3002`             |                                  | Url of the API Endpoint                                                                                                                                            |
 | `CLIENT_ID`                | Production  |                                     |                                  | Azure ID: Client ID                                                                                                                                                |
@@ -21,7 +21,7 @@ This website is built using [Docusaurus](https://docusaurus.io/), a modern stati
 | `SENTRY_AUTH_TOKEN`        | Production  |                                     |                                  | Sentry Auth Token for error tracking                                                                                                                               |
 | `SENTRY_ORG`               | Production  |                                     |                                  | Sentry Org for error tracking                                                                                                                                      |
 | `SENTRY_PROJECT`           | Production  |                                     |                                  | Sentry Project for error tracking                                                                                                                                  |
-| `GITHUB_OAUTH_CLIENT_ID`   | Production  |                                     |                                  | Client ID for the GitHub OAuth app used for CMS auth                                                                                                               |
+| `GH_OAUTH_CLIENT_ID`       | Production  |                                     |                                  | Client ID for the GitHub OAuth app used for CMS auth                                                                                                               |
 
 \* To change users, clear LocalStorage to delete the API key created upon first authentication.<br />
 
