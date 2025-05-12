@@ -5,14 +5,14 @@ import { PluginConfig } from '@docusaurus/types';
 import { mdiSourceCommit } from '@mdi/js';
 import path from 'path';
 import { VersionOptions } from '@docusaurus/plugin-content-docs';
-import { SiteConfigProvider } from '@tdev/siteConfig/siteConfig';
+import type { SiteConfigProvider } from '@tdev/siteConfig/siteConfig';
 import {
     accountSwitcher,
     blog,
     loginProfileButton,
     requestTarget,
     taskStateOverview
-} from '@tdev/siteConfig/navbarItems';
+} from './src/siteConfig/navbarItems';
 
 const GIT_COMMIT_SHA = process.env.GITHUB_SHA || Math.random().toString(36).substring(7);
 const CWD = process.cwd();
