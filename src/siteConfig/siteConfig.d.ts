@@ -129,6 +129,9 @@ export interface SiteConfig {
 
         /** The name of the GitHub project. */
         projectName?: string;
+
+        /** The GitHub OAuth client ID for this app. */
+        oauthClientId: string;
     };
 
     /** Transformer functions for the Docusaurus config object. */

@@ -38,6 +38,7 @@ const REHYPE_PLUGINS = siteConfig.rehypePlugins ?? recommendedRehypePlugins;
 
 const ORGANIZATION_NAME = siteConfig.gitHub?.orgName ?? 'gbsl-informatik';
 const PROJECT_NAME = siteConfig.gitHub?.projectName ?? 'teaching-dev';
+const GITHUB_OAUTH_CLIENT_ID = siteConfig.gitHub?.oauthClientId ?? 'Iv23ligDNwu0p1z92UTe';
 const TEST_USERNAMES = (process.env.TEST_USERNAMES?.split(';') || []).map((u) => u.trim()).filter(u => !!u);
 
 const config: Config = applyTransformers({
@@ -81,7 +82,8 @@ const config: Config = applyTransformers({
     /** The application id uri generated in https://portal.azure.com */
     API_URI: process.env.API_URI,
     GIT_COMMIT_SHA: GIT_COMMIT_SHA,
-    SENTRY_DSN: process.env.SENTRY_DSN
+    SENTRY_DSN: process.env.SENTRY_DSN,
+    GITHUB_OAUTH_CLIENT_ID: GITHUB_OAUTH_CLIENT_ID,
   },
   future: {
     experimental_faster: {
