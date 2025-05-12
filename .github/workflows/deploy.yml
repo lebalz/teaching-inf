@@ -34,6 +34,7 @@ jobs:
           SENTRY_ORG: ${{ vars.SENTRY_ORG }}
           SENTRY_DSN: ${{ vars.SENTRY_DSN }}
           SENTRY_AUTH_TOKEN: ${{ vars.SENTRY_AUTH_TOKEN }}
+          GH_OAUTH_CLIENT_ID: ${{ vars.GH_OAUTH_CLIENT_ID}}
         run: |
             git submodule update --init --recursive
             yarn install

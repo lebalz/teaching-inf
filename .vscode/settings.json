@@ -14,5 +14,26 @@
     "[json]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    "materialdesigniconsIntellisense.matchers": [
+        {
+            "match": ":?\\bmdi-{param}\\b",
+            "insert": "mdi-{param}",
+            "displayName": "kebab-case (web font)",
+            "name": "kebabCase",
+            "insertSuffix": ":"
+        },
+        {
+            "match": "\\bmdi{pascal}\\b",
+            "insert": "mdi{pascal}",
+            "displayName": "camelCase (js)",
+            "name": "camelCase"
+        },
+        {
+            "match": ":mdi\\[{param}\\]",
+            "insert": "mdi\\[{param}\\]",
+            "displayName": "md directive (web font)",
+            "name": "mdDirective"
+        }
+    ]
 }

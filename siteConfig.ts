@@ -1,21 +1,19 @@
 // This file is never changed by teaching-dev.
 // Use it to override or extend your app configuration.
 
-import { Config, PluginConfig, PresetConfig, PresetConfigDefined } from '@docusaurus/types';
+import { PluginConfig } from '@docusaurus/types';
 import { mdiSourceCommit } from '@mdi/js';
 import path from 'path';
-import { Options as DocsOptions, VersionOptions } from '@docusaurus/plugin-content-docs';
-import { Options as BlogOptions } from '@docusaurus/plugin-content-blog';
-import { Options as PageOptions } from '@docusaurus/plugin-content-pages';
-
+import { VersionOptions } from '@docusaurus/plugin-content-docs';
+import { SiteConfigProvider } from '@tdev/siteConfig/siteConfig';
 import {
     accountSwitcher,
     blog,
     loginProfileButton,
     requestTarget,
     taskStateOverview
-} from './src/siteConfig/navbarItems';
-import { SiteConfigProvider } from './src/siteConfig/siteConfig';
+} from '@tdev/siteConfig/navbarItems';
+
 const GIT_COMMIT_SHA = process.env.GITHUB_SHA || Math.random().toString(36).substring(7);
 const CWD = process.cwd();
 const ADMONITION_CONFIG = {
