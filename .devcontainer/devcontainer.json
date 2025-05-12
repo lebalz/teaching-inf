@@ -1,0 +1,32 @@
+{
+  "name": "React TypeScript Development",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:22",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "pomdtr.excalidraw-editor",
+        "zhuangtongfa.Material-theme",
+        "mhutchie.git-graph",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "unifiedjs.vscode-mdx",
+        "motivesoft.vscode-uuid-generator",
+        "lukas-tr.materialdesignicons-intellisense"
+      ],
+      "settings": {
+        "extensions.ignoreRecommendations": true
+      }
+    }
+  },
+  "remoteEnv": {
+    "OFFLINE_API": "true"
+  },
+  "postCreateCommand": "yarn install",
+  "postStartCommand": "yarn run start",
+  "forwardPorts": [3000],
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "22.12"
+    }
+  }
+}
