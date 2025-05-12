@@ -38,7 +38,7 @@ const REHYPE_PLUGINS = siteConfig.rehypePlugins ?? recommendedRehypePlugins;
 
 const ORGANIZATION_NAME = siteConfig.gitHub?.orgName ?? 'gbsl-informatik';
 const PROJECT_NAME = siteConfig.gitHub?.projectName ?? 'teaching-dev';
-const GITHUB_OAUTH_CLIENT_ID = siteConfig.gitHub?.oauthClientId ?? 'Iv23ligDNwu0p1z92UTe';
+const GITHUB_OAUTH_CLIENT_ID = process.env.GITHUB_OAUTH_CLIENT_ID;
 const TEST_USERNAMES = (process.env.TEST_USERNAMES?.split(';') || []).map((u) => u.trim()).filter(u => !!u);
 
 const config: Config = applyTransformers({

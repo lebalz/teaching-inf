@@ -14,7 +14,7 @@ import LoginProfileButton from '@tdev-components/Navbar/LoginProfileButton';
 import Loader from '@tdev-components/Loader';
 const { APP_URL, GITHUB_OAUTH_CLIENT_ID } = siteConfig.customFields as {
     APP_URL?: string;
-    GITHUB_OAUTH_CLIENT_ID: string;
+    GITHUB_OAUTH_CLIENT_ID?: string;
 };
 
 const callback = `${APP_URL || 'http://localhost:3000'}/gh-callback`;
