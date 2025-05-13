@@ -43,7 +43,7 @@ const getSiteConfig: SiteConfigProvider = () => {
         url: 'https://inf.gbsl.website',
         gitHub: {
             orgName: 'lebalz',
-            repoName: 'teaching-inf'
+            projectName: 'teaching-inf'
         },
         siteStyles: [
             require.resolve(
