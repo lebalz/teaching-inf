@@ -1,5 +1,5 @@
 import { visit } from 'unist-util-visit';
-import type { MdxJsxAttribute, MdxJsxTextElement } from 'mdast-util-mdx';
+import type { MdxJsxTextElement } from 'mdast-util-mdx';
 import { remark } from 'remark';
 import remarkMdx from 'remark-mdx';
 import remarkDirective from 'remark-directive';
