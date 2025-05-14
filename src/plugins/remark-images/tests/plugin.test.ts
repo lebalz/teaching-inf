@@ -94,6 +94,24 @@ describe('#image', () => {
         "
       `);
     });
+
+    it('uses img-title when present', async () => {
+        const input = `# Heading
+
+          ![Foo Bar](https://example.com/image.png "Caption --width=200px")
+      `;
+        const result = await process(input);
+        expect(result).toMatchInlineSnapshot(`
+        "# Heading
+
+        <span className="figure" options={{"width":"200px"}}>
+          ![Foo Bar](https://example.com/image.png)
+
+          <span className="caption"><span style={{"flexGrow":1}} />Caption<span style={{"flexGrow":1}} /></span>
+        </span>
+        "
+      `);
+    });
     it('sets width with --max-width=', async () => {
         const input = `# Heading
 
