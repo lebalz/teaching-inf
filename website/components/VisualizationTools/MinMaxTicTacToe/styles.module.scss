@@ -1,0 +1,494 @@
+.app {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+
+.info {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    text-align: left;
+
+    .aiExplanation {
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px solid #ddd;
+    }
+}
+
+.gameContainer {
+    display: flex;
+    gap: 30px;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    @media (max-width: 1000px) {
+        flex-direction: column;
+    }
+}
+
+.gamePlay {
+    flex: 1;
+    min-width: 320px;
+}
+.labeled {
+    // display: flex;
+    // flex-direction: column;
+    display: inline-block;
+    margin: 0 auto;
+    .labeledRows {
+        display: flex;
+        .board {
+            display: flex;
+            flex-direction: column;
+            border: 2px solid #333;
+            width: 300px;
+            height: 300px;
+            .row {
+                display: flex;
+                flex: 1;
+            }
+        }
+        .labelCol {
+            display: flex;
+            flex-direction: column;
+            flex-basis: 1.5em;
+            align-items: center;
+            justify-content: space-around;
+        }
+    }
+    .labelRow {
+        display: flex;
+        padding-left: 1.5em;
+        align-items: center;
+        justify-content: space-around;
+    }
+}
+
+.cell {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: bold;
+    cursor: pointer;
+    border: 1px solid #777;
+    background-color: white;
+
+    &:disabled {
+        cursor: default;
+    }
+
+    &.highlight {
+        background-color: rgba(255, 255, 0, 0.3);
+    }
+}
+
+.status {
+    margin: 20px 0;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.controls {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.reset {
+    padding: 10px 15px;
+    font-size: 1rem;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #45a049;
+    }
+}
+
+.aiMoveButton {
+    padding: 10px 15px;
+    font-size: 1rem;
+    background-color: #2196f3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+
+    &:hover:not(:disabled) {
+        background-color: #0b7dda;
+    }
+
+    &:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+    }
+
+    &.aiThinking {
+        background-color: #2196f3;
+        opacity: 0.7;
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            width: 12px;
+            height: 12px;
+            margin-top: -6px;
+            border-radius: 50%;
+            border: 2px solid white;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+        }
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+}
+
+.autoPlayToggle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5px;
+
+    label {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+
+        input {
+            margin-right: 8px;
+        }
+    }
+}
+
+.visualizationContainer,
+.visualizationPlaceholder {
+    flex: 2;
+    overflow: auto;
+    max-height: 800px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+}
+
+.visualizationPlaceholder {
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px;
+
+    h3 {
+        color: #666;
+        margin-bottom: 15px;
+    }
+
+    p {
+        color: #888;
+        max-width: 80%;
+        text-align: center;
+        margin: 5px 0;
+    }
+}
+
+.visualization {
+    .visualizationHeader {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+
+        h2 {
+            margin: 0;
+        }
+    }
+
+    .backButton {
+        background-color: #4a6da7;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 5px 10px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #3a5d97;
+        }
+    }
+
+    .pathDescription {
+        background-color: #f8f8f8;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 15px;
+        text-align: left;
+        font-style: italic;
+    }
+
+    .scoreExplanation {
+        background-color: #f0f8ff;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        text-align: left;
+
+        h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        ul {
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+    }
+
+    .bestMoveInfo {
+        background-color: #e6ffe6;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        border-left: 4px solid #4caf50;
+        text-align: left;
+
+        h3 {
+            margin-top: 0;
+            margin-bottom: 5px;
+            color: #2e7d32;
+        }
+
+        .optimalMarker {
+            color: #e4a408;
+            font-weight: bold;
+        }
+
+        .bestMoveExplanation {
+            margin-top: 5px;
+            font-style: italic;
+        }
+    }
+
+    .moveOptions {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+
+        .moveOption {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            background-color: #f9f9f9;
+
+            &.optimalMove {
+                border: 2px solid #4caf50;
+                background-color: rgba(144, 238, 144, 0.2);
+            }
+
+            .moveHeader {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 10px;
+                font-weight: bold;
+                flex-wrap: wrap;
+
+                .moveScore {
+                    color: #555;
+                    font-size: 0.9rem;
+                }
+
+                .optimalMarker {
+                    color: #e4a408;
+                    margin-left: 5px;
+                    font-weight: bold;
+                }
+            }
+
+            .board {
+                width: 180px;
+                height: 180px;
+                margin: 10px auto;
+            }
+
+            .cell {
+                font-size: 1.5rem;
+            }
+
+            .moveStatus {
+                margin-top: 10px;
+
+                .gameEndStatus {
+                    background-color: #f0f0f0;
+                    padding: 5px 10px;
+                    border-radius: 3px;
+                    font-weight: bold;
+                }
+
+                .exploreButton {
+                    background-color: #007bff;
+                    color: white;
+                    border: none;
+                    border-radius: 5px;
+                    padding: 5px 10px;
+                    cursor: pointer;
+
+                    &:hover:not(:disabled) {
+                        background-color: #0069d9;
+                    }
+
+                    &:disabled {
+                        background-color: #cccccc;
+                        cursor: not-allowed;
+                    }
+                }
+            }
+        }
+    }
+
+    .noMoves {
+        background-color: #f8f8f8;
+        padding: 20px;
+        border-radius: 5px;
+    }
+}
+[data-theme='dark'] {
+    .app {
+        background-color: #121212;
+        color: #e0e0e0;
+    }
+
+    .info {
+        background-color: #1e1e1e;
+        border-color: #333;
+
+        .aiExplanation {
+            border-top-color: #444;
+        }
+    }
+
+    .cell {
+        background-color: #2c2c2c;
+        border-color: #555;
+        color: #e0e0e0;
+
+        &.highlight {
+            background-color: rgba(255, 255, 0, 0.15);
+        }
+    }
+
+    .reset {
+        background-color: #388e3c;
+        &:hover {
+            background-color: #2e7d32;
+        }
+    }
+
+    .aiMoveButton {
+        background-color: #1976d2;
+        &:hover:not(:disabled) {
+            background-color: #1565c0;
+        }
+        &:disabled {
+            background-color: #424242;
+            color: #757575;
+        }
+    }
+
+    .visualizationPlaceholder {
+        background-color: #1e1e1e;
+        h3 {
+            color: #b0b0b0;
+        }
+        p {
+            color: #909090;
+        }
+    }
+
+    .visualization {
+        .backButton {
+            background-color: #3a5d97;
+            &:hover {
+                background-color: #304d80;
+            }
+        }
+
+        .pathDescription {
+            background-color: #1a1a1a;
+        }
+
+        .scoreExplanation {
+            background-color: #1a2733;
+        }
+
+        .bestMoveInfo {
+            background-color: #1a2e1a;
+            border-left-color: #388e3c;
+
+            h3 {
+                color: #4caf50;
+            }
+        }
+
+        .moveOptions {
+            .moveOption {
+                border-color: #444;
+                background-color: #1e1e1e;
+
+                &.optimalMove {
+                    border-color: #388e3c;
+                    background-color: rgba(76, 175, 80, 0.1);
+                }
+
+                .moveHeader {
+                    .moveScore {
+                        color: #b0b0b0;
+                    }
+                    .optimalMarker {
+                        color: #ffc107;
+                    }
+                }
+
+                .moveStatus {
+                    .gameEndStatus {
+                        background-color: #333;
+                    }
+                    .exploreButton {
+                        background-color: #0d47a1;
+                        &:hover:not(:disabled) {
+                            background-color: #0a3880;
+                        }
+                        &:disabled {
+                            background-color: #424242;
+                            color: #757575;
+                        }
+                    }
+                }
+            }
+        }
+
+        .noMoves {
+            background-color: #1a1a1a;
+        }
+    }
+}

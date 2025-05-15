@@ -1,0 +1,153 @@
+---
+page_id: bb564ade-9a3c-4e44-a558-efbb48889793
+---
+
+import MinMaxTicTacToe from '@tdev-components/VisualizationTools/MinMaxTicTacToe';
+
+# Künstliche Intelligenz
+
+Ersetzten Computer Menschen? Was künstliche «Intelligenz» tatsächlich kann.
+
+Künstliche Intelligenz (__KI__ resp. artificial intelligence, __AI__) ist ein Teilgebiet der Informatik, welcher sich mit der Automatisierung intelligenten Verhaltens und dem maschinellen Lernen befasst. Der Begriff ist insofern nicht eindeutig, als es bereits an einer genauen Definition von «Intelligenz» mangelt.
+
+## «Intelligenz»
+
+
+<MinMaxTicTacToe />
+
+:::aufgabe[MinMax TicTacToe]
+<Answer type="state" id="7ac120d6-12a8-4a86-b185-7d0864c7682a" />
+
+Spielen Sie einige Runden Tic-Tac-Toe gegen die KI. Versuchen Sie mithilfe der angezeigten Zug-Analyse der KI zu verstehen, wie sie funktioniert.
+
+Welche Strategie verfolgt die KI? Braucht es dazu Intelligenz? Halten Sie Ihre Antwort fest:
+
+<Answer type="text" id="db8148f8-98e5-4637-9a44-84fb17820b26" />
+
+<Solution id="714aa4b9-cb1e-4923-a39a-09662f0b3723">
+Die KI spielt perfekt, indem sie alle möglichen Züge berechnet und den besten auswählt - sie "denkt" nicht wirklich, sondern berechnet nur mathematische Werte für jeden möglichen Zug.
+</Solution>
+:::
+
+
+Ist ein Computerprogramm intelligent, wenn es jedes Sudoku lösen oder die besten menschlichen Spieler:innen im Schach schlagen kann? Oft stellt sich bei genauerer Betrachtung heraus, dass es für die Lösung solcher Probleme wie Tic-Tac-Toe, Sudoku, Schach oder Dame nicht wirklich eine Intelligenz des Computers braucht, sondern *effiziente* algorithmische Lösungen.
+
+Mit *effizient* ist dabei gemeint, dass das Computerprogramm systematisch vorgeht: Es probiert wie beim Tic-Tac-Toe zielgerichtet verschiedene Möglichkeiten aus und wählt dann den besten Zug. Bei Schach berechnet es Millionen möglicher Zugfolgen und bewertet diese nach festgelegten Kriterien. Solch klassische Herangehensweisen werden oft mit der Abkürzung __GOFAI__ (*good old-fashioned AI*) bezeichnet und erfordern, dass die Programmierer:in die eigene Intelligenz einsetzt, um einen algorithmischen Lösungsweg für das gegebenen Problem in Programmcode umzusetzen.
+
+Weil Computer unfehlbar logisch und dazu so extrem schnell arbeiten, übertreffen sie auf diese Weise oft menschliche Fähigkeiten - zumindest bei Problemen, die sich für eine logische Formulierung anbieten. Aber macht sie das nun wirklich «intelligent»? Und was ist mit Problemen, deren Kombinationsmöglichkeiten auch die Möglichkeiten eines Computers übersteigen, oder die sich nicht für eine logische Formulierung anbieten - beispielsweise das Spiel [Montagsmaler](https://de.wikipedia.org/wiki/Die_Montagsmaler), bei dem man Begriffe zeichnen und erraten muss? Hier stösst die klassische Programmierung schnell an ihre Grenzen.
+
+:::aufgabe[Montagsmaler]
+<Answer type="state" id="7ec96d0c-a461-44c7-9872-8258c46f8000" />
+Bei diesem Spiel geht es darum, möglichst schnell zu erkennen, welchen Gegenstand jemand gerade zeichnet. Beim Google-Projekt [Quick, Draw!](https://quickdraw.withgoogle.com/) versucht eine KI herauszufinden, was Sie gemalen haben.
+
+1. Probieren Sie [Quick, Draw!](https://quickdraw.withgoogle.com/) aus! Wie viele Zeichnungen erkennt die KI richtig?
+2. Offensichtlich steckt hier keine GOFAI dahinter, sondern ein gänzlich anderer Ansatz! Schauen Sie sich dazu folgendes Video an und halten Sie drei Fragen fest, die Sie sich stellen:
+
+::youtube[https://www.youtube.com/embed/X8v1GWzZYJ4]
+
+<Answer type="text" id="ae2b471a-b2c5-4ea5-b20c-8d51291063c9" />
+:::
+
+## Maschinelles Lernen
+
+In den letzten Jahren wird der dem obigen Beispiel zugrundeliegende Ansatz der AI zunehmend prominenter und erfolgreicher. Im Kern geht es darum, dass der Programmcode gar nicht versucht, die Lösung des Problems zu formulieren. Stattdessen wird per Programmcode ein lernendes System spezifiziert, das in der Folge anhand der Verarbeitung von sehr vielen Beispielen selbst eine funktionierende Lösung finden soll.
+
+:::note[Maschinelles Lernen]
+
+![--width=400px](https://oinf.ch/wp-content/uploads/Maschinelles-Lernen.png)
+
+> Maschinelles Lernen ist ein Oberbegriff für die «künstliche» Generierung von Wissen aus Erfahrung: Ein künstliches System lernt aus Beispielen und kann diese nach Beendigung der Lernphase verallgemeinern. Das heisst, es werden nicht einfach die Beispiele auswendig gelernt, sondern es «erkennt» Muster und Gesetzmässigkeiten in den Lerndaten. So kann das System auch unbekannte Daten beurteilen (Lerntransfer).[^1]
+:::
+
+#### Analogie
+
+Sie - bzw. Ihr Gehirn - können anhand von rein visuellen Informationen recht zuverlässig beurteilen, ob ein Ihnen unbekanntes Gesicht zu einer männlichen oder weiblichen Person gehört. Dabei hat Ihnen sicher nie jemand beigebracht, wie genau man eine solche Unterscheidung trifft. Stattdessen haben Sie ein gewisses Mass an Erfahrung mit Aussehen und Geschlecht von bekannten Personen und können diese kaum explizit zu formulierenden Erfahrungen verallgemeinern, d.h. auf neue Gesichter transferieren. Sie haben anhand der Beispiele *implizites Wissen* über die Gesetzmässigkeiten weiblicher und männlicher Gesichter erworben und können damit neue Beispiele als «ähnlich» klassifizieren.
+
+**Maschinelles Lernen** (__ML__) ist ein Teilgebiet der Künstlichen Intelligenz, das sich insbesondere auf die Mustererkennung fokussiert. Typische Einsatzgebiete sind u.a. die **Klassifizierung** oder **Vorhersage** von Daten, auch im Zusammenhang mit Datamining. Dabei werden zwei verschiedene Ansätze verfolgt:
+
+Symbolisches __ML__
+: Arbeitet mit klaren, menschenverständlichen Regeln und Symbolen
+: Der Computer lernt durch logische Operationen mit konkreten Symbolen wie Wörtern oder mathematischen Zeichen.
+: **Beispiel**: Ein Entscheidungsbaum, der Pilze anhand klarer Regeln als essbar oder giftig klassifiziert
+: :mdi[arrow-right] "Wenn rot mit weissen Punkten, dann giftig"
+
+Subsymbolisches __ML__
+: Arbeitet mit abstrakten, verteilten Darstellungen ohne direkte Interpretierbarkeit
+: Der Computer lernt durch Anpassung von Zahlenwerten in komplexen Netzwerken
+: **Beispiel**: Ein künstliches neuronales Netzwerk, das Handschriften erkennt, indem es Millionen von Pixelmustern analysiert, ohne dass ein Mensch nachvollziehen kann, welche genauen Merkmale es verwendet.
+
+:::aufgabe[Notizen zum Vortrag]
+Halten Sie hier Ihre Notizen zum Vortrag über maschinelles Lernen fest. Was sind die wichtigsten Punkte, die Sie mitnehmen möchten? Was hat Sie überrascht? Was möchten Sie vertiefen?
+
+<Answer type="text" id="a9e4fead-c40a-471d-b513-c38fdc134c7e" />
+:::
+
+:::aufgabe[Neuronale Netze testen]
+<Answer type="state" id="c9639fbe-b781-4b2b-8001-736227b33c1c" />
+
+Testen Sie die Ziffern- und Handschriftenerkennung mit einem neuronalen Netz.
+
+KNN mit 2 Schichten
+: Ein sog. Fully-Connected Neural Network
+: [Ausprobieren](https://adamharley.com/nn_vis/mlp/2d.html)
+KNN mit Faltungen
+: Ein sog. Convolutional Neural Network
+: [Ausprobieren](https://adamharley.com/nn_vis/cnn/3d.html)
+
+<Answer type="text" id="f3a7cfe5-04b1-4641-bf16-e5cbb7bc0b8f" />
+:::
+
+## Künstliche Neuronale Netze
+
+Der Ansatz der subsymbolischen Datenverarbeitung mit künstlichen neuronalen Netzen (__KNN__) ist keineswegs neu. Jedoch wurde erst ab etwa 2015 die Rechenleistung von Computern ausreichend, um bislang ungelöste Probleme wie das Go-Spiel zu bewältigen.
+
+Aufsehen erregte das Programm [AlphaGo](https://deepmind.com/research/alphago/), das 2016 den weltbesten Menschen im chinesischen Spiel "Go" besiegte. Inzwischen wird es von seinem Nachfolger [AlphaGoZero](https://deepmind.com/blog/alphago-zero-learning-scratch/) um ein Vielfaches übertroffen.
+
+Diese bahnbrechenden Erfolge sind u.a. deswegen so faszinierend, weil diese Systeme eigenständig Lösungen finden, die sogar über die Qualität der besten menschlichen Lösungen hinausgehen können. Gleichzeitig ergibt sich die seltsame Situation, dass niemand - auch nicht die Programmierer:innen des Systems - die in den Verbindungsgewichten des Netzwerks eingebettete Lösung vollständig verstehen kann.
+
+:::tip[GO]
+Das Spiel "Go" ist ein äusserst komplexes Spiel, das durch seine deutlich höhere Anzahl möglicher Spielzüge und strategischer Tiefe als wesentlich schwieriger zu meistern gilt als etwa Schach und sich daher besonders gut als Herausforderung für Machbarkeitsstudien von Computern und KI's eignet
+:::
+
+### Funktionsweise
+Die Funktionsweise von KNN's ist im Kern bei allen gängigen Varianten gleich, da sie alle nach dem Prinzip der vernetzten Informationsverarbeitung arbeiten.
+
+In jedem KNN finden sich folgende Gemeinsamkeiten:
+
+- Neuronen als Recheneinheiten, die Signale empfangen und weiterleiten
+- Gewichtete Verbindungen zwischen diesen Neuronen
+- Aktivierungsfunktionen, die bestimmen, wann ein Neuron "feuert" (daher eine Ausgabe an die nächste Schicht sendet)
+- Lernverfahren, die die Gewichte schrittweise anpassen
+- Schichtenaufbau (Input, versteckte Schichten, Output)
+
+Ob Bilderkennungsnetzwerke (Convolutional Neural Network, __CNN__), Sprachmodelle (Large Language Model __LLM__) oder klassische mehrschichtige Netze - alle verwenden diese Grundprinzipien, um aus Beispielen zu lernen und Muster zu erkennen. 
+
+Der Hauptunterschied liegt in ihrer Struktur und Spezialisierung für bestimmte Aufgaben.
+
+:::finding[Beispiele für bekannte KNN's]
+Stell dir vor, du sollst in einer Menschenmenge deinen Freund finden:
+
+Klassisches KNN
+: Du vergleichst jeden Menschen komplett mit deinem Freund - Grösse, Haarfarbe, Kleidung, alles auf einmal. Das ist wie wenn du versuchst, einen Menschen als Ganzes zu erkennen. Du gehst methodisch vor und misst die Ähnlichkeit zu jedem Individuum, um eine Entscheidung zu treffen.
+Convolutional Neural Network (CNN)
+: Du nimmst ein Fernglas mit, das speziell die wichtigsten Merkmale deines Freundes hervorhebt - Gesichtszüge, Frisur, ungewöhnliche Accessoires. Diese spezifische Fokussierung erlaubt es dir, schneller und effektiver zu arbeiten. Selbst wenn die Umgebung sich ändert, bleibt dein Erkennungsprozess robust, da du die relevanten Details im Fokus hast.
+Large Language Model (LLM)
+: Du hast eine umfangreiche Kenntnis deines Freundes, kennst seine Gewohnheiten, seinen Lieblingsort in der Menge und selbst seine typischen Bewegungen. Du könntest sogar seine plötzlich veränderte Frisur ignorieren, denn du erkennst ihn an seiner Art, sich zu bewegen oder an seiner Stimme in einem Gespräch - du verstehst die "Geschichte" deines Freundes in diesem Kontext.
+:::
+
+Dass wir in einem sehr schnelllebigen und spannenden Zeitalter leben, zeigt sich, wenn wir die Fortschritte in den letzten 8 Jahren betrachten. Schauen Sie sich folgendes Video an:
+
+Der aktuelle (Ende 2017) Stand der Forschung wird in diesem Talk zusammengefasst:
+
+::youtube[https://www.youtube.com/embed/8cmx7V4oIR8]
+
+:::aufgabe[Was hat sich verändert?]
+<Answer type="state" id="1477f830-3a59-41a1-97ed-f62ad7b39706" />
+
+Picken Sie sich ein Beispiel aus dem Video heraus und recherchieren Sie, was sich seit 2017 verändert hat. Halten Sie Ihre Ergebnisse hier fest:
+
+<Answer type="text" id="120a2cf7-5c3c-44ff-8297-cb3a90342f98" />
+
+:::
+
+[^1]: Quelle: [Wikipedia, Maschinelles Lernen](https://de.wikipedia.org/wiki/Maschinelles_Lernen)
