@@ -1,0 +1,4 @@
+teachingDevPath: ~/repos/teaching-dev
+expectedBranch: main
+controlledElements:
+watch:
