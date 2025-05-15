@@ -1,4 +1,4 @@
-export interface ControlledElementConfig {
+export interface TrackedElementConfig {
     src: string;
     dst: string;
     ignore?: string[];
@@ -6,8 +6,8 @@ export interface ControlledElementConfig {
 }
 
 export interface Config {
-    teachingDevPath: string;
-    expectedBranch: string;
-    controlledElements: ControlledElementConfig[];
-    watch: string[];
+    tdevPath: string;
+    expectedTdevBranch: string;
+    trackedElements: TrackedElementConfig[];
+    watchedElements: string[];
 }

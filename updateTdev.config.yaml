@@ -1,4 +1,4 @@
-teachingDevPath: ~/repos/teaching-dev
-expectedBranch: main
-controlledElements:
-watch:
+tdevPath: ../teaching-dev
+expectedTdevBranch: main
+trackedElements:
+watchedElements:
