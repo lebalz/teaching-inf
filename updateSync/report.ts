@@ -15,7 +15,7 @@ export class ReportBuilder {
 
     write() {
         if (!this.buffer) {
-            console.log('Nothing to report, no log file created.');
+            console.log('✔️ Nothing to report, no log file created.');
             return;
         }
 

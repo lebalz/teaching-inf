@@ -5,6 +5,8 @@ trackedElements:
       dst: docusaurus.config.ts
     - src: src/
       dst: src
+    - src: updateSync/
+      dst: updateSync
     - src: tsconfig.json
       dst: tsconfig.json
     - src: .prettierrc
