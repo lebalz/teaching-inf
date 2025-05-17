@@ -25,7 +25,7 @@ async function pullTeachingDev() {
         process.exit(1);
     }
 
-    console.log(`🕊️ Performing branch check...`);
+    console.log(`🕊️   Performing branch check...`);
 
     process.chdir(teachingDevPath);
 
@@ -88,7 +88,7 @@ async function getLastSyncedCommit(): Promise<string | undefined> {
     const syncMarkerPath = path.join(rootPath, SYNC_MARKER_FILENAME);
 
     if (!fs.existsSync(syncMarkerPath)) {
-        console.log("⚠️  No tdev update marker yet, can't analyze potential changes to non-tracked files.");
+        console.log("⚠️   No tdev update marker yet, can't analyze potential changes to non-tracked files.");
         return;
     }
 
