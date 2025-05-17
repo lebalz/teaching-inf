@@ -76,11 +76,11 @@ export const calculateDependenciesDiff = (
         reportBuilder.appendLine('\n⚠️  The following additional packages should be installed:');
         depsDiff.installable.length > 0 &&
             reportBuilder.appendLine(
-                `- yarn add ${depsDiff.installable.map((entry) => `${entry.packageName}@${entry.version}`).join(' ')}`
+                `yarn add ${depsDiff.installable.map((entry) => `${entry.packageName}@${entry.version}`).join(' ')}`
             );
         devDepsDiff.installable.length > 0 &&
             reportBuilder.appendLine(
-                `- yarn add -D ${devDepsDiff.installable.map((entry) => `${entry.packageName}@${entry.version}`).join(' ')}`
+                `yarn add -D ${devDepsDiff.installable.map((entry) => `${entry.packageName}@${entry.version}`).join(' ')}`
             );
     }
 
