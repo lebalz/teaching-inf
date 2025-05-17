@@ -5,6 +5,8 @@ import { observer } from 'mobx-react-lite';
 import { default as StudentGroupModel } from '@tdev-models/StudentGroup';
 import Button from '@tdev-components/shared/Button';
 import {
+    mdiAccountArrowLeft,
+    mdiAccountCancel,
     mdiAccountKey,
     mdiAccountKeyOutline,
     mdiAccountReactivateOutline,
@@ -221,7 +223,30 @@ const StudentGroup = observer((props: Props) => {
 
                     <dt>Gruppe</dt>
                     <dd className={clsx(styles.ddGroup)}>
-                        {isAdmin && <AddUserPopup studentGroup={group} />}
+                        <div className={clsx(styles.userManagementButtons)}>
+                            {isAdmin && <AddUserPopup studentGroup={group} />}
+                            <Button
+                                className={clsx('button--block')}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                }}
+                                icon={mdiAccountArrowLeft}
+                                color="blue"
+                                text="Importieren"
+                                iconSide="left"
+                                />
+                            <Button
+                                className={clsx('button--block')}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                }}
+                                icon={mdiAccountCancel}
+                                color="red"
+                                text="Alle entfernen"
+                                iconSide="left"
+                                />
+                        </div>
+                        
                         <div className={styles.listContainer}>
                             <ul className={clsx(styles.students, styles.list)}>
                                 {group.students.map((student, idx) => (
