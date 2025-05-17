@@ -226,16 +226,18 @@ const StudentGroup = observer((props: Props) => {
                         <div className={clsx(styles.userManagementButtons)}>
                             {isAdmin && <AddUserPopup studentGroup={group} />}
                             {isAdmin && <ImportFromGroupPopup studentGroup={group} />}
-                            <Button
+                            {isAdmin && <Button
                                 className={clsx('button--block')}
                                 onClick={(e) => {
                                     e.preventDefault();
+                                    //  TODOD: Add confirm + undo.
+                                    group.students.forEach((student) => group.removeStudent(student));
                                 }}
                                 icon={mdiAccountCancel}
                                 color="red"
                                 text="Alle entfernen"
                                 iconSide="left"
-                            />
+                            />}
                         </div>
 
                         <div className={styles.listContainer}>
