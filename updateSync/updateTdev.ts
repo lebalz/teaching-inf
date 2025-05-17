@@ -9,7 +9,7 @@ import micromatch from 'micromatch';
 import { calculateDependenciesDiff as determineDependenciesDiff } from './dependencyCheck';
 import { ReportBuilder } from './report';
 
-const SYNC_MARKER_FILENAME = '.upstreamSync';
+const SYNC_MARKER_FILENAME = '.updateTdev';
 const CONFIG_FILENAME = 'updateTdev.config.yaml';
 
 const exec = promisify(execCallback);
@@ -17,7 +17,7 @@ const exec = promisify(execCallback);
 const rootPath = process.cwd();
 const config = yaml.load(fs.readFileSync(path.resolve(rootPath, CONFIG_FILENAME), 'utf8')) as Config;
 const teachingDevPath = path.resolve(expandTilde(config.tdevPath.trim()));
-const reportDirPath = path.join(rootPath, 'build', 'upstreamSync');
+const reportDirPath = path.join(rootPath, 'build', 'updateTdev');
 
 async function pullTeachingDev() {
     if (!fs.existsSync(teachingDevPath)) {
@@ -64,7 +64,7 @@ function createRsyncCommand({ src, dst, ignore, protect }: TrackedElementConfig)
                 --prune-empty-dirs`;
 }
 
-async function sync() {
+async function syncTrackedFiles() {
     for (const element of config.trackedElements) {
         const rsyncCommand = createRsyncCommand(element);
 
@@ -88,15 +88,15 @@ async function getLastSyncedCommit(): Promise<string | undefined> {
     const syncMarkerPath = path.join(rootPath, SYNC_MARKER_FILENAME);
 
     if (!fs.existsSync(syncMarkerPath)) {
-        console.log("⚠️ No upstream sync marker yet, can't analyze potential changes to non-tracked files.");
+        console.log("⚠️ No tdev update marker yet, can't analyze potential changes to non-tracked files.");
         return;
     }
 
-    const upstreamSyncContent = fs.readFileSync(syncMarkerPath, 'utf8');
-    const match = upstreamSyncContent.match(/CURRENT_COMMIT=(\w+)/);
+    const syncMarkerFileContent = fs.readFileSync(syncMarkerPath, 'utf8');
+    const match = syncMarkerFileContent.match(/CURRENT_COMMIT=(\w+)/);
 
     if (!match) {
-        throw new Error('Could not find CURRENT_COMMIT in .upstreamSync');
+        throw new Error(`Could not find CURRENT_COMMIT in ${SYNC_MARKER_FILENAME}`);
     }
 
     return match[1];
@@ -147,20 +147,20 @@ async function updateSyncMarker(): Promise<void> {
 async function updateTdev(): Promise<void> {
     try {
         await pullTeachingDev();
-        await sync();
+        await syncTrackedFiles();
 
         const lastSyncedCommit = await getLastSyncedCommit();
-        const logFilename = await createReportFilename(lastSyncedCommit);
-        const summaryBuilder = new ReportBuilder(reportDirPath, logFilename);
+        const reportFilename = await createReportFilename(lastSyncedCommit);
+        const reportBuilder = new ReportBuilder(reportDirPath, reportFilename);
         if (!!lastSyncedCommit) {
-            await determineNonTrackedFileChanges(lastSyncedCommit, summaryBuilder);
+            await determineNonTrackedFileChanges(lastSyncedCommit, reportBuilder);
         }
 
-        determineDependenciesDiff(rootPath, teachingDevPath, summaryBuilder);
+        determineDependenciesDiff(rootPath, teachingDevPath, reportBuilder);
 
         await updateSyncMarker();
 
-        summaryBuilder.write();
+        reportBuilder.write();
         console.log('✅  Done.');
     } catch (error) {
         console.error('An unexpected error occurred:', error);
