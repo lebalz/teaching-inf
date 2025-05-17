@@ -38,7 +38,7 @@ async function pullTeachingDev() {
     }
 
     console.log(`✅  Branch check passed; teaching-dev is on '${config.expectedTdevBranch}' as expected.`);
-    console.log('🚜 Performing git pull...');
+    console.log('🚜  Performing git pull...');
 
     try {
         await exec('git pull');
@@ -88,7 +88,7 @@ async function getLastSyncedCommit(): Promise<string | undefined> {
     const syncMarkerPath = path.join(rootPath, SYNC_MARKER_FILENAME);
 
     if (!fs.existsSync(syncMarkerPath)) {
-        console.log("⚠️ No tdev update marker yet, can't analyze potential changes to non-tracked files.");
+        console.log("⚠️  No tdev update marker yet, can't analyze potential changes to non-tracked files.");
         return;
     }
 
