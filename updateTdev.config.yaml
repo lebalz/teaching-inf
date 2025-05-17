@@ -15,8 +15,6 @@ trackedElements:
       dst: .prettierignore
     - src: vitest.config.ts
       dst: vitest.config.ts
-    - src: docs/tdev/
-      dst: docs/00-Gallery
     - src: static/bry-libs/
       dst: static/bry-libs
 watchedElements:
