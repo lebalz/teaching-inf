@@ -12,6 +12,7 @@ interface Props {
     studentGroup: StudentGroupModel;
 }
 
+// TODO: Consider adding a second option (tab) to import form a list instead (i.e. email column in class excel file).
 const AddUserPopup = observer((props: Props) => {
     const studentGroupStore = useStore('studentGroupStore');
     const [searchFilter, setSearchFilter] = React.useState('');
