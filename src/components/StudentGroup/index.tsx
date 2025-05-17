@@ -33,6 +33,8 @@ interface Props {
 
 const StudentGroup = observer((props: Props) => {
     const [removedIds, setRemovedIds] = React.useState<string[]>([]);
+    const [bulkRemovedIds, setBulkRemovedIds] = React.useState<string[]>([]);
+    const [importedIds, setImportedIds] = React.useState<string[]>([]);
     const userStore = useStore('userStore');
     const groupStore = useStore('studentGroupStore');
     const group = props.studentGroup;
@@ -231,7 +233,7 @@ const StudentGroup = observer((props: Props) => {
                                     className={clsx('button--block')}
                                     onClick={(e) => {
                                         e.preventDefault();
-                                        //  TODOD: Add confirm + undo.
+                                        setBulkRemovedIds(group.students.map((student) => student.id));
                                         group.students.forEach((student) => group.removeStudent(student));
                                     }}
                                     icon={mdiAccountCancel}
@@ -308,6 +310,41 @@ const StudentGroup = observer((props: Props) => {
                                 />
                             </div>
                         ))}
+                        {
+                            /* TODO: Refactor duplication from above. */ bulkRemovedIds?.length > 0 && (
+                                <div
+                                    className={clsx('alert alert--warning', styles.removeAlert)}
+                                    role="alert"
+                                    key={'removedAll'}
+                                >
+                                    <button
+                                        aria-label="Close"
+                                        className={clsx('clean-btn close')}
+                                        type="button"
+                                        onClick={() => setBulkRemovedIds([])}
+                                    >
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    Alle Mitglieder entfernt.
+                                    <Button
+                                        onClick={() => {
+                                            bulkRemovedIds.forEach((removedId) => {
+                                                const user = userStore.find(removedId);
+                                                if (user) {
+                                                    group.addStudent(user);
+                                                }
+                                            });
+                                            setBulkRemovedIds([]);
+                                        }}
+                                        icon={mdiAccountReactivateOutline}
+                                        text="Rückgängig"
+                                        className={clsx('button--block')}
+                                        iconSide="left"
+                                        color="primary"
+                                    />
+                                </div>
+                            )
+                        }
                     </dd>
                 </DefinitionList>
                 {group.children.length > 0 && (
