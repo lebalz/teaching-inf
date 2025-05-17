@@ -25,6 +25,7 @@ import Details from '@theme/Details';
 import { exportAsExcelSpreadsheet } from '@tdev-components/StudentGroup/excelExport';
 import { SIZE_S } from '@tdev-components/shared/iconSizes';
 import { Confirm } from '@tdev-components/shared/Button/Confirm';
+import ImportFromGroupPopup from './ImportFromGroupPopup';
 
 interface Props {
     studentGroup: StudentGroupModel;
@@ -221,20 +222,11 @@ const StudentGroup = observer((props: Props) => {
                         </div>
                     </dd>
 
-                    <dt>Gruppe</dt>
+                    <dt>Mitglieder</dt>
                     <dd className={clsx(styles.ddGroup)}>
                         <div className={clsx(styles.userManagementButtons)}>
                             {isAdmin && <AddUserPopup studentGroup={group} />}
-                            <Button
-                                className={clsx('button--block')}
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                }}
-                                icon={mdiAccountArrowLeft}
-                                color="blue"
-                                text="Importieren"
-                                iconSide="left"
-                                />
+                            {isAdmin && <ImportFromGroupPopup studentGroup={group} />}
                             <Button
                                 className={clsx('button--block')}
                                 onClick={(e) => {
@@ -244,9 +236,9 @@ const StudentGroup = observer((props: Props) => {
                                 color="red"
                                 text="Alle entfernen"
                                 iconSide="left"
-                                />
+                            />
                         </div>
-                        
+
                         <div className={styles.listContainer}>
                             <ul className={clsx(styles.students, styles.list)}>
                                 {group.students.map((student, idx) => (
