@@ -16,6 +16,7 @@ export class ReportBuilder {
     write() {
         if (!this.buffer) {
             console.log('Nothing to report, no log file created.');
+            return;
         }
 
         fs.mkdirSync(this.reportDirPath, { recursive: true });
