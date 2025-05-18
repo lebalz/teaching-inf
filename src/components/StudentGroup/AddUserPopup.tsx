@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
-import StudentGroup, { default as StudentGroupModel } from '@tdev-models/StudentGroup';
+import { default as StudentGroupModel } from '@tdev-models/StudentGroup';
 import Button from '../shared/Button';
 import { mdiAccountArrowLeft, mdiAccountPlus } from '@mdi/js';
 import Popup from 'reactjs-popup';
@@ -17,7 +17,7 @@ import { PopupActions } from 'reactjs-popup/dist/types';
 
 interface Props {
     studentGroup: StudentGroupModel;
-    onImported: (ids: string[], fromGroup?: StudentGroup) => void;
+    onImported: (ids: string[], fromGroup?: StudentGroupModel) => void;
 }
 
 type PropsInternal = Props & {
