@@ -228,12 +228,13 @@ const StudentGroup = observer((props: Props) => {
                             {isAdmin && (
                                 <AddUserPopup
                                     studentGroup={group}
-                                    onImported={(ids: string[], fromGroup: StudentGroupModel) => {
+                                    onImported={(ids: string[], fromGroup?: StudentGroupModel) => {
                                         setImported({
                                             ids: [...(imported?.ids || []), ...ids],
-                                            fromGroups: imported?.fromGroups.includes(fromGroup)
-                                                ? imported.fromGroups
-                                                : [...(imported?.fromGroups || []), fromGroup]
+                                            fromGroups:
+                                                !fromGroup || imported?.fromGroups.includes(fromGroup)
+                                                    ? imported?.fromGroups || []
+                                                    : [...(imported?.fromGroups || []), fromGroup]
                                         });
                                     }}
                                 />
@@ -310,10 +311,18 @@ const StudentGroup = observer((props: Props) => {
                             <Undo
                                 message={
                                     <span>
-                                        {imported.ids.length} Mitglieder aus Gruppe(n){' '}
-                                        <strong>
-                                            {imported.fromGroups.map((group) => group.name).join(', ')}
-                                        </strong>{' '}
+                                        {imported.ids.length} Mitglieder{' '}
+                                        {imported.fromGroups?.length > 0 && (
+                                            <>
+                                                aus Gruppe(n){' '}
+                                                <strong>
+                                                    {' '}
+                                                    {imported.fromGroups
+                                                        .map((group) => group.name)
+                                                        .join(', ')}
+                                                </strong>
+                                            </>
+                                        )}{' '}
                                         importiert.
                                     </span>
                                 }

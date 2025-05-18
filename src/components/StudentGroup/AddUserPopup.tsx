@@ -16,7 +16,7 @@ import Admonition from '@theme/Admonition';
 
 interface Props {
     studentGroup: StudentGroupModel;
-    onImported: (ids: string[], fromGroup: StudentGroup) => void;
+    onImported: (ids: string[], fromGroup?: StudentGroup) => void;
 }
 
 const AddIndividualUsersPopup = observer((props: Props) => {
@@ -148,7 +148,7 @@ const ImportFromGroupPopup = observer((props: Props) => {
 
 const ImportFromListPopup = observer((props: Props) => {
     const userStore = useStore('userStore');
-    const [idsToImport, setIdsToImport] = React.useState<Set<string>>(new Set());
+    const [usersToImport, setUsersToImport] = React.useState<Set<User>>(new Set());
     const [invalidEntries, setInvalidEntries] = React.useState<string[]>([]);
     const [numDuplicatesSkipped, setNumDuplicatesSkipped] = React.useState<number>(0);
 
@@ -159,18 +159,21 @@ const ImportFromListPopup = observer((props: Props) => {
             </div>
             <div className={clsx(styles.importFromList)}>
                 <Button
-                    text={`${idsToImport.size} Mitglied(er) hinzufügen`}
+                    text={`${usersToImport.size} Mitglied(er) hinzufügen`}
                     icon={mdiAccountArrowLeft}
                     iconSide="left"
                     color="green"
-                    disabled={idsToImport.size === 0 || invalidEntries.length > 0}
-                    onClick={() => {}}
+                    disabled={usersToImport.size === 0 || invalidEntries.length > 0}
+                    onClick={() => {
+                        usersToImport.forEach((user) => props.studentGroup.addStudent(user));
+                        props.onImported(Array.from(usersToImport).map((user) => user.id));
+                    }}
                 />
                 <TextAreaInput
                     onChange={debounce((val) => {
                         const newInvalidEntries: string[] = [];
                         let duplicatesSkipped = 0;
-                        const ids = val
+                        const users = val
                             .split('\n')
                             .filter((emailOrId: string) => !!emailOrId)
                             .map((line: string) => {
@@ -194,10 +197,9 @@ const ImportFromListPopup = observer((props: Props) => {
                                     return false;
                                 }
                                 return true;
-                            })
-                            .map((user: User) => user.id) as string[];
+                            }) as User[];
 
-                        setIdsToImport(new Set(ids));
+                        setUsersToImport(new Set(users));
                         setInvalidEntries(newInvalidEntries);
                         setNumDuplicatesSkipped(duplicatesSkipped);
                     }, 300)}
