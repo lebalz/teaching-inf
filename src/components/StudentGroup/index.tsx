@@ -17,14 +17,13 @@ import {
     mdiTrashCanOutline
 } from '@mdi/js';
 import { useStore } from '@tdev-hooks/useStore';
-import AddUserPopup from './AddUserPopup';
 import DefinitionList from '../DefinitionList';
 import Details from '@theme/Details';
 import { exportAsExcelSpreadsheet } from '@tdev-components/StudentGroup/excelExport';
 import { SIZE_S } from '@tdev-components/shared/iconSizes';
 import { Confirm } from '@tdev-components/shared/Button/Confirm';
-import ImportPopup from './ImportPopup';
 import Undo from './Undo';
+import AddUserPopup from './AddUserPopup';
 
 interface Props {
     studentGroup: StudentGroupModel;
@@ -226,9 +225,8 @@ const StudentGroup = observer((props: Props) => {
                     <dt>Mitglieder</dt>
                     <dd className={clsx(styles.ddGroup)}>
                         <div className={clsx(styles.userManagementButtons)}>
-                            {isAdmin && <AddUserPopup studentGroup={group} />}
                             {isAdmin && (
-                                <ImportPopup
+                                <AddUserPopup
                                     studentGroup={group}
                                     onImported={(ids: string[], fromGroup: StudentGroupModel) => {
                                         setImported({
