@@ -7,7 +7,7 @@ import themeCodeEditor from './src/plugins/theme-code-editor'
 import { v4 as uuidv4 } from 'uuid';
 import matter from 'gray-matter';
 import { promises as fs } from 'fs';
-import { accountSwitcher, blog, cms, gallery, gitHub, loginProfileButton, requestTarget, taskStateOverview } from './src/siteConfig/navbarItems';
+import { accountSwitcher, blog, cms, gallery, gitHub, loginProfileButton, personalSpaceOverlay, requestTarget, taskStateOverview } from './src/siteConfig/navbarItems';
 import { applyTransformers } from './src/siteConfig/transformers';
 import {
   sassPluginConfig,
@@ -237,6 +237,7 @@ const config: Config = applyTransformers({
         taskStateOverview,
         accountSwitcher,
         requestTarget,
+        personalSpaceOverlay,
         loginProfileButton,
       ],
     },

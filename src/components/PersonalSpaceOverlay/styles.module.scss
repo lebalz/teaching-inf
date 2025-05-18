@@ -1,0 +1,13 @@
+.container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .closeButton {
+        position: absolute;
+        right: -3em;
+        top: -2em;
+        scale: 120%;
+    }
+}
