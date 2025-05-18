@@ -227,7 +227,9 @@ const StudentGroup = observer((props: Props) => {
                     <dd className={clsx(styles.ddGroup)}>
                         <div className={clsx(styles.userManagementButtons)}>
                             {isAdmin && <AddUserPopup studentGroup={group} />}
-                            {isAdmin && <ImportFromGroupPopup studentGroup={group} />}
+                            {isAdmin && (
+                                <ImportFromGroupPopup studentGroup={group} setImportedIds={setImportedIds} />
+                            )}
                             {isAdmin && (
                                 <Button
                                     className={clsx('button--block')}
@@ -315,7 +317,7 @@ const StudentGroup = observer((props: Props) => {
                                 <div
                                     className={clsx('alert alert--warning', styles.removeAlert)}
                                     role="alert"
-                                    key={'removedAll'}
+                                    key={'bulkRemoved'}
                                 >
                                     <button
                                         aria-label="Close"
@@ -335,6 +337,42 @@ const StudentGroup = observer((props: Props) => {
                                                 }
                                             });
                                             setBulkRemovedIds([]);
+                                        }}
+                                        icon={mdiAccountReactivateOutline}
+                                        text="Rückgängig"
+                                        className={clsx('button--block')}
+                                        iconSide="left"
+                                        color="primary"
+                                    />
+                                </div>
+                            )
+                        }
+                        {
+                            /* TODO: Refactor duplication from above. */ importedIds?.length > 0 && (
+                                <div
+                                    className={clsx('alert alert--warning', styles.removeAlert)}
+                                    role="alert"
+                                    key={'imported'}
+                                >
+                                    <button
+                                        aria-label="Close"
+                                        className={clsx('clean-btn close')}
+                                        type="button"
+                                        onClick={() => setImportedIds([])}
+                                    >
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    {importedIds.length} Schüler:innen importiert.{' '}
+                                    {/* TODO: Gruppennamen anzeigen. */}
+                                    <Button
+                                        onClick={() => {
+                                            importedIds.forEach((removedId) => {
+                                                const user = userStore.find(removedId);
+                                                if (user) {
+                                                    props.studentGroup.removeStudent(user);
+                                                }
+                                            });
+                                            setImportedIds([]);
                                         }}
                                         icon={mdiAccountReactivateOutline}
                                         text="Rückgängig"

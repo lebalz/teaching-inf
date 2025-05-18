@@ -10,17 +10,17 @@ import { useStore } from '@tdev-hooks/useStore';
 
 interface Props {
     studentGroup: StudentGroupModel;
+    setImportedIds: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 // TODO: Consider adding a second option (tab) to import form a list instead (i.e. email column in class excel file).
-const AddUserPopup = observer((props: Props) => {
+const ImportFromGroupPopup = observer((props: Props) => {
     const studentGroupStore = useStore('studentGroupStore');
     const [searchFilter, setSearchFilter] = React.useState('');
     const [searchRegex, setSearchRegex] = React.useState(new RegExp(searchFilter, 'i'));
     React.useEffect(() => {
         setSearchRegex(new RegExp(searchFilter, 'i'));
     }, [searchFilter]);
-    const group = props.studentGroup;
     return (
         <Popup
             trigger={
@@ -73,10 +73,16 @@ const AddUserPopup = observer((props: Props) => {
                                         <div className={styles.actions}>
                                             <Button
                                                 onClick={() => {
-                                                    group.students.forEach((student) =>
+                                                    const studentsToImport = group.students.filter(
+                                                        (student) =>
+                                                            !props.studentGroup.students.includes(student)
+                                                    );
+                                                    studentsToImport.forEach((student) =>
                                                         props.studentGroup.addStudent(student)
                                                     );
-                                                    // TODO: Maybe add confirmation or undo?
+                                                    props.setImportedIds(
+                                                        studentsToImport.map((student) => student.id)
+                                                    );
                                                 }}
                                                 disabled={group.userIds.has(group.id)}
                                                 icon={mdiAccountArrowLeft}
@@ -93,4 +99,4 @@ const AddUserPopup = observer((props: Props) => {
     );
 });
 
-export default AddUserPopup;
+export default ImportFromGroupPopup;
