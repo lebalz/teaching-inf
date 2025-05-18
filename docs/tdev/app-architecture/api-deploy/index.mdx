@@ -1,0 +1,139 @@
+---
+page_id: 560cfd4d-4464-42ff-a121-a3d116ea1994
+---
+
+import Steps from '@tdev-components/Steps'
+import { Val, TemplateCode, DynamicInput } from '@tdev-components/DynamicValues';
+import _ from 'lodash';
+import { generateRandomBase64 } from './seecureToken';
+
+# API Aufsetzen
+
+## Installation auf Dokku Server
+
+<Steps>
+  1. Eine neue App __<Val name="app" />__ auf dem Server erstellen
+      <DynamicInput name="app" default='inf-teaching-api' />
+      <DynamicInput name="domain" default='teaching-api.gbsl.website' />
+      <DynamicInput name="APP_NAME" derived default={(page) => _.camelCase((page.dynamicValues.get('app') || 'inf-teaching-api'))} />
+      <DynamicInput name="API_URI" default='api://xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx' />
+      <DynamicInput name="ALLOWED_ORIGINS" default='gbsl.website' />
+      <DynamicInput name="ALLOW_SUBDOMAINS" default='true' />
+      <DynamicInput name="SESSION_SECRET" monospace default={generateRandomBase64()} onRecalculate={() => generateRandomBase64()} />
+      <DynamicInput name="MSAL_CLIENT_ID" monospace default='xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx' />
+      <DynamicInput name="MSAL_TENANT_ID" monospace default='xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx' />
+      <TemplateCode>
+        ```bash title="root@dokku"
+        dokku apps:create {{app}}
+        dokku domains:add {{app}} {{domain}}
+
+        dokku postgres:create {{app}}
+        dokku postgres:link {{app}} {{app}}
+
+        dokku config:set {{app}} MSAL_CLIENT_ID="{{MSAL_CLIENT_ID}}"
+        # wird für den Cookie-Name auf dem Client gebraucht
+        dokku config:set {{app}} APP_NAME="{{APP_NAME}}"
+        dokku config:set {{app}} ALLOWED_ORIGINS="{{ALLOWED_ORIGINS}}"
+
+        dokku config:set {{app}} MSAL_TENANT_ID="{{MSAL_TENANT_ID}}"
+        dokku config:set {{app}} SESSION_SECRET="{{SESSION_SECRET}}"
+
+        dokku nginx:set {{app}} client-max-body-size 5m
+
+        dokku nginx:set {{app}} x-forwarded-proto-value '$http_x_forwarded_proto'
+        dokku nginx:set {{app}} x-forwarded-for-value '$http_x_forwarded_for'
+        dokku nginx:set {{app}} x-forwarded-port-value '$http_x_forwarded_port'
+         ```
+      </TemplateCode>
+      :::details[Alternativ: direkt über <Val as="code">`/home/dokku/{{app}}/ENV`</Val>]
+      <TemplateCode>
+         ```bash title="/home/dokku/{{app}}/ENV"
+         APP_NAME="{{APP_NAME}}"
+         ALLOWED_ORIGINS="{{ALLOWED_ORIGINS}}"
+         SESSION_SECRET="{{SESSION_SECRET}}"
+         MSAL_CLIENT_ID="{{MSAL_CLIENT_ID}}"
+         MSAL_TENANT_ID="{{MSAL_TENANT_ID}}"
+         ```
+      </TemplateCode>
+      :::
+  3. Optionale Umgebungsvariablen setzen:
+        :::info[CORS: Zugriff von Subdomains]
+        Erlaube jegliche Subdomains von <Val name="ALLOWED_ORIGINS" />:
+
+        <DynamicInput name="ALLOW_SUBDOMAINS" default="false" />
+        <TemplateCode>
+
+        ```bash title="/home/dokku/{{app}}/ENV"
+        dokku config:set {{app}} ALLOW_SUBDOMAINS="{{ALLOW_SUBDOMAINS}}"
+        ```
+        </TemplateCode>
+        :::
+        :::info[Deploy Preview mit Netlify]
+        Ermöglicht den Zugriff von Deploy-Previews von Netlify Deploy-Previews mit der Domain
+
+        <Val as="code">`https://deploy-preview-\d+--{{NETLIFY_PROJECT_NAME}}.netlify.app`</Val>
+
+        auf die API. Dies ist notwendig, um die API in Netlify-Deploy-Previews zu verwenden.
+
+        <DynamicInput name="NETLIFY_PROJECT_NAME" default={(page) => page.dynamicValues.get('app')}/>
+        <TemplateCode>
+
+        ```bash title="/home/dokku/{{app}}/ENV"
+        dokku config:set {{app}} ALLOW_SUBDOMAINS="{{ALLOW_SUBDOMAINS}}"
+        ```
+        </TemplateCode>
+        :::
+        :::info[Github-Integration fürs CMS]
+        <DynamicInput name="GITHUB_CLIENT_ID" />
+        <DynamicInput name="GITHUB_CLIENT_SECRET" />
+        <DynamicInput name="GITHUB_REDIRECT_URI" />
+        <TemplateCode>
+
+        ```bash title="/home/dokku/{{app}}/ENV"
+        dokku config:set {{app}} GITHUB_CLIENT_ID="{{GITHUB_CLIENT_ID}}"
+        dokku config:set {{app}} GITHUB_CLIENT_SECRET="{{GITHUB_CLIENT_SECRET}}"
+        dokku config:set {{app}} GITHUB_REDIRECT_URI="{{GITHUB_REDIRECT_URI}}"
+        ```
+        </TemplateCode>
+        :::
+        :::info[Sentry Anbindung für Fehler-Reporting]
+        <DynamicInput name="SENTRY_AUTH_TOKEN" />
+        <DynamicInput name="SENTRY_DSN" />
+        <DynamicInput name="SENTRY_ORG" />
+        <DynamicInput name="SENTRY_PROJECT" />
+        <TemplateCode>
+
+        ```bash title="/home/dokku/{{app}}/ENV"
+        dokku config:set {{app}} SENTRY_AUTH_TOKEN="{{SENTRY_AUTH_TOKEN}}"
+        dokku config:set {{app}} SENTRY_DSN="{{SENTRY_DSN}}"
+        dokku config:set {{app}} SENTRY_ORG="{{SENTRY_ORG}}"
+        dokku config:set {{app}} SENTRY_PROJECT="{{SENTRY_PROJECT}}"
+        ```
+        </TemplateCode>
+        :::
+        :::info[LMS: Standard-Gruppe für Inhalts-Moderation]
+        Diese Gruppe wird beim Erstellen einer neuen Document-Root standardmässig mit `RW`-Berechtigungen hinzugefügt.
+        <DynamicInput name="ADMIN_USER_GROUP_ID" />
+        <TemplateCode>
+
+        ```bash title="/home/dokku/{{app}}/ENV"
+        dokku config:set {{app}} ADMIN_USER_GROUP_ID="{{ADMIN_USER_GROUP_ID}}"
+        ```
+        </TemplateCode>
+        :::
+  3. Auf dem Laptop
+      <DynamicInput name="dokku-ip" />
+      <TemplateCode>
+         ```bash title="@laptop"
+         git remote add dokku dokku@{{dokku-ip}}:{{app}}
+         git push dokku
+         ```
+      </TemplateCode>
+  3. SSL-Zertifikat erstellen
+     Sobald die Seite erstmalig veröffentlicht wurde, muss einmalig ein SSL-Zertifikat erstellt werden. Dies geschieht mit dem Befehl
+      <TemplateCode>
+      ```bash title="root@dokku"
+      dokku letsencrypt:enable {{app}}
+      ```
+      </TemplateCode>
+</Steps>
