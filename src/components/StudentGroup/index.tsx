@@ -231,16 +231,16 @@ const StudentGroup = observer((props: Props) => {
                                 <ImportFromGroupPopup studentGroup={group} setImportedIds={setImportedIds} />
                             )}
                             {isAdmin && (
-                                <Button
+                                <Confirm
                                     className={clsx('button--block')}
-                                    onClick={(e) => {
-                                        e.preventDefault();
+                                    onConfirm={() => {
                                         setBulkRemovedIds(group.students.map((student) => student.id));
                                         group.students.forEach((student) => group.removeStudent(student));
                                     }}
                                     icon={mdiAccountCancel}
                                     color="red"
                                     text="Alle entfernen"
+                                    confirmText="Sicher?"
                                     iconSide="left"
                                 />
                             )}
