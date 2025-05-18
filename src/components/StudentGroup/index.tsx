@@ -33,7 +33,10 @@ interface Props {
 const StudentGroup = observer((props: Props) => {
     const [removedIds, setRemovedIds] = React.useState<string[]>([]);
     const [bulkRemovedIds, setBulkRemovedIds] = React.useState<string[]>([]);
-    const [imported, setImported] = React.useState<{ ids: string[]; fromGroups: StudentGroupModel[] }>();
+    const [imported, setImported] = React.useState<{
+        ids: string[];
+        fromGroups: StudentGroupModel[] | undefined;
+    }>();
     const userStore = useStore('userStore');
     const groupStore = useStore('studentGroupStore');
     const group = props.studentGroup;
@@ -229,12 +232,18 @@ const StudentGroup = observer((props: Props) => {
                                 <AddUserPopup
                                     studentGroup={group}
                                     onImported={(ids: string[], fromGroup?: StudentGroupModel) => {
+                                        let fromGroups: StudentGroupModel[] | undefined;
+                                        if (!fromGroup) {
+                                            fromGroups = undefined;
+                                        } else {
+                                            fromGroups = imported?.fromGroups?.includes(fromGroup)
+                                                ? imported?.fromGroups || []
+                                                : [...(imported?.fromGroups || []), fromGroup];
+                                        }
+
                                         setImported({
                                             ids: [...(imported?.ids || []), ...ids],
-                                            fromGroups:
-                                                !fromGroup || imported?.fromGroups.includes(fromGroup)
-                                                    ? imported?.fromGroups || []
-                                                    : [...(imported?.fromGroups || []), fromGroup]
+                                            fromGroups: fromGroups
                                         });
                                     }}
                                 />
@@ -249,7 +258,7 @@ const StudentGroup = observer((props: Props) => {
                                     icon={mdiAccountCancel}
                                     color="red"
                                     text="Alle entfernen"
-                                    confirmText="Sicher?"
+                                    confirmText="Alle entfernen?"
                                     iconSide="left"
                                 />
                             )}
@@ -312,13 +321,13 @@ const StudentGroup = observer((props: Props) => {
                                 message={
                                     <span>
                                         {imported.ids.length} Mitglieder{' '}
-                                        {imported.fromGroups?.length > 0 && (
+                                        {(imported.fromGroups?.length || 0) > 0 && (
                                             <>
                                                 aus Gruppe(n){' '}
                                                 <strong>
                                                     {' '}
-                                                    {imported.fromGroups
-                                                        .map((group) => group.name)
+                                                    {imported
+                                                        .fromGroups!.map((group) => group.name)
                                                         .join(', ')}
                                                 </strong>
                                             </>
