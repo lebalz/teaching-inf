@@ -23,7 +23,7 @@ import Details from '@theme/Details';
 import { exportAsExcelSpreadsheet } from '@tdev-components/StudentGroup/excelExport';
 import { SIZE_S } from '@tdev-components/shared/iconSizes';
 import { Confirm } from '@tdev-components/shared/Button/Confirm';
-import ImportFromGroupPopup from './ImportFromGroupPopup';
+import ImportPopup from './ImportPopup';
 import Undo from './Undo';
 
 interface Props {
@@ -228,7 +228,7 @@ const StudentGroup = observer((props: Props) => {
                         <div className={clsx(styles.userManagementButtons)}>
                             {isAdmin && <AddUserPopup studentGroup={group} />}
                             {isAdmin && (
-                                <ImportFromGroupPopup
+                                <ImportPopup
                                     studentGroup={group}
                                     onImported={(ids: string[], fromGroup: StudentGroupModel) => {
                                         setImported({
