@@ -12,6 +12,7 @@ import TabItem from '@theme/TabItem';
 import TextAreaInput from '@tdev-components/shared/TextAreaInput';
 import { debounce } from 'lodash';
 import User from '@tdev-models/User';
+import Admonition from '@theme/Admonition';
 
 interface Props {
     studentGroup: StudentGroupModel;
@@ -149,6 +150,7 @@ const ImportFromListPopup = observer((props: Props) => {
     const userStore = useStore('userStore');
     const [idsToImport, setIdsToImport] = React.useState<Set<string>>(new Set());
     const [invalidEntries, setInvalidEntries] = React.useState<string[]>([]);
+    const [numDuplicatesSkipped, setNumDuplicatesSkipped] = React.useState<number>(0);
 
     return (
         <>
@@ -161,11 +163,13 @@ const ImportFromListPopup = observer((props: Props) => {
                     icon={mdiAccountArrowLeft}
                     iconSide="left"
                     color="green"
-                    disabled={idsToImport.size === 0}
+                    disabled={idsToImport.size === 0 || invalidEntries.length > 0}
                     onClick={() => {}}
                 />
                 <TextAreaInput
                     onChange={debounce((val) => {
+                        const newInvalidEntries: string[] = [];
+                        let duplicatesSkipped = 0;
                         const ids = val
                             .split('\n')
                             .filter((emailOrId: string) => !!emailOrId)
@@ -175,21 +179,48 @@ const ImportFromListPopup = observer((props: Props) => {
                                     : userStore.find(line);
 
                                 if (!user) {
-                                    setInvalidEntries([...invalidEntries, line]);
+                                    newInvalidEntries.push(line);
                                     return undefined;
                                 }
 
                                 return user;
                             })
-                            .filter((user: User) => !!user && !props.studentGroup.students.includes(user))
+                            .filter((user: User) => {
+                                if (!user) {
+                                    return false;
+                                }
+                                if (props.studentGroup.students.includes(user)) {
+                                    duplicatesSkipped++;
+                                    return false;
+                                }
+                                return true;
+                            })
                             .map((user: User) => user.id) as string[];
 
                         setIdsToImport(new Set(ids));
+                        setInvalidEntries(newInvalidEntries);
+                        setNumDuplicatesSkipped(duplicatesSkipped);
                     }, 300)}
                     className={clsx(styles.textArea)}
                     placeholder="Eine ID oder E-Mail pro Zeile"
                     monospace
                 />
+                {invalidEntries.length > 0 && (
+                    <Admonition type="warning" title="Ungültige Einträge">
+                        <ul>
+                            {invalidEntries.map((entry) => (
+                                <li>{entry}</li>
+                            ))}
+                        </ul>
+                    </Admonition>
+                )}
+
+                {numDuplicatesSkipped > 0 && (
+                    <Admonition type="info" title="Duplikate">
+                        {numDuplicatesSkipped} Benutzer:innen sind bereits Mitglied dieser Gruppe und werden
+                        ignoriert.
+                    </Admonition>
+                )}
             </div>
         </>
     );
