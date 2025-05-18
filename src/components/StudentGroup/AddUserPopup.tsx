@@ -147,7 +147,7 @@ const ImportFromGroupPopup = observer((props: Props) => {
 
 const ImportFromListPopup = observer((props: Props) => {
     const userStore = useStore('userStore');
-    const [idsToImport, setIdsToImport] = React.useState<string[]>([]);
+    const [idsToImport, setIdsToImport] = React.useState<Set<string>>(new Set());
     const [invalidEntries, setInvalidEntries] = React.useState<string[]>([]);
 
     return (
@@ -157,11 +157,11 @@ const ImportFromListPopup = observer((props: Props) => {
             </div>
             <div className={clsx(styles.importFromList)}>
                 <Button
-                    text={`${idsToImport.length} Mitglied(er) hinzufügen`}
+                    text={`${idsToImport.size} Mitglied(er) hinzufügen`}
                     icon={mdiAccountArrowLeft}
                     iconSide="left"
                     color="green"
-                    disabled={idsToImport.length === 0}
+                    disabled={idsToImport.size === 0}
                     onClick={() => {}}
                 />
                 <TextAreaInput
@@ -184,7 +184,7 @@ const ImportFromListPopup = observer((props: Props) => {
                             .filter((user: User) => !!user && !props.studentGroup.students.includes(user))
                             .map((user: User) => user.id) as string[];
 
-                        setIdsToImport(ids);
+                        setIdsToImport(new Set(ids));
                     }, 300)}
                     className={clsx(styles.textArea)}
                     placeholder="Eine ID oder E-Mail pro Zeile"
