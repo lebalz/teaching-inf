@@ -34,7 +34,7 @@ interface Props {
 const StudentGroup = observer((props: Props) => {
     const [removedIds, setRemovedIds] = React.useState<string[]>([]);
     const [bulkRemovedIds, setBulkRemovedIds] = React.useState<string[]>([]);
-    const [imported, setImported] = React.useState<{ ids: string[]; fromGroup: StudentGroupModel }>();
+    const [imported, setImported] = React.useState<{ ids: string[]; fromGroups: StudentGroupModel[] }>();
     const userStore = useStore('userStore');
     const groupStore = useStore('studentGroupStore');
     const group = props.studentGroup;
@@ -231,7 +231,12 @@ const StudentGroup = observer((props: Props) => {
                                 <ImportFromGroupPopup
                                     studentGroup={group}
                                     onImported={(ids: string[], fromGroup: StudentGroupModel) => {
-                                        setImported({ ids, fromGroup });
+                                        setImported({
+                                            ids: [...(imported?.ids || []), ...ids],
+                                            fromGroups: imported?.fromGroups.includes(fromGroup)
+                                                ? imported.fromGroups
+                                                : [...(imported?.fromGroups || []), fromGroup]
+                                        });
                                     }}
                                 />
                             )}
@@ -307,8 +312,11 @@ const StudentGroup = observer((props: Props) => {
                             <Undo
                                 message={
                                     <span>
-                                        {imported.ids.length} Schüler:innen aus der Gruppe{' '}
-                                        <strong>{imported.fromGroup.name}</strong> importiert.
+                                        {imported.ids.length} Schüler:innen aus Gruppe(n){' '}
+                                        <strong>
+                                            {imported.fromGroups.map((group) => group.name).join(', ')}
+                                        </strong>{' '}
+                                        importiert.
                                     </span>
                                 }
                                 onUndo={() => {
