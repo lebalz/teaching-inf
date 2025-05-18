@@ -255,7 +255,7 @@ const AddUserPopup = observer((props: Props) => {
                 </div>
             }
             on="click"
-            overlayStyle={{ background: 'rgba(133, 133, 133, 0.9)' }} // Darker background
+            overlayStyle={{ background: 'rgba(0,0,0,0.5)', maxWidth: '100vw' }}
             closeOnDocumentClick
             closeOnEscape
             modal
