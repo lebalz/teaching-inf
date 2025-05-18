@@ -8,7 +8,6 @@ import {
     mdiAccountCancel,
     mdiAccountKey,
     mdiAccountKeyOutline,
-    mdiAccountReactivateOutline,
     mdiCircleEditOutline,
     mdiClose,
     mdiCloseBox,
@@ -35,7 +34,7 @@ interface Props {
 const StudentGroup = observer((props: Props) => {
     const [removedIds, setRemovedIds] = React.useState<string[]>([]);
     const [bulkRemovedIds, setBulkRemovedIds] = React.useState<string[]>([]);
-    const [importedIds, setImportedIds] = React.useState<string[]>([]);
+    const [imported, setImported] = React.useState<{ ids: string[]; fromGroup: StudentGroupModel }>();
     const userStore = useStore('userStore');
     const groupStore = useStore('studentGroupStore');
     const group = props.studentGroup;
@@ -229,7 +228,12 @@ const StudentGroup = observer((props: Props) => {
                         <div className={clsx(styles.userManagementButtons)}>
                             {isAdmin && <AddUserPopup studentGroup={group} />}
                             {isAdmin && (
-                                <ImportFromGroupPopup studentGroup={group} setImportedIds={setImportedIds} />
+                                <ImportFromGroupPopup
+                                    studentGroup={group}
+                                    onImported={(ids: string[], fromGroup: StudentGroupModel) => {
+                                        setImported({ ids, fromGroup });
+                                    }}
+                                />
                             )}
                             {isAdmin && (
                                 <Confirm
@@ -299,19 +303,24 @@ const StudentGroup = observer((props: Props) => {
                                 onClose={() => setRemovedIds(removedIds.filter((id) => id !== removedId))}
                             />
                         ))}
-                        {importedIds?.length > 0 && (
+                        {imported && (
                             <Undo
-                                message={`${importedIds.length} Schüler:innen importiert.`}
+                                message={
+                                    <span>
+                                        {imported.ids.length} Schüler:innen aus der Gruppe{' '}
+                                        <strong>{imported.fromGroup.name}</strong> importiert.
+                                    </span>
+                                }
                                 onUndo={() => {
-                                    importedIds.forEach((removedId) => {
+                                    imported.ids.forEach((removedId) => {
                                         const user = userStore.find(removedId);
                                         if (user) {
                                             props.studentGroup.removeStudent(user);
                                         }
                                     });
-                                    setImportedIds([]);
+                                    setImported(undefined);
                                 }}
-                                onClose={() => setImportedIds([])}
+                                onClose={() => setImported(undefined)}
                             />
                         )}
                         {bulkRemovedIds?.length > 0 && (

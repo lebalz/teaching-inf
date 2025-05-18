@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
-import { default as StudentGroupModel } from '@tdev-models/StudentGroup';
+import StudentGroup, { default as StudentGroupModel } from '@tdev-models/StudentGroup';
 import Button from '../shared/Button';
 import { mdiAccountArrowLeft, mdiAccountPlus } from '@mdi/js';
 import Popup from 'reactjs-popup';
@@ -10,7 +10,7 @@ import { useStore } from '@tdev-hooks/useStore';
 
 interface Props {
     studentGroup: StudentGroupModel;
-    setImportedIds: React.Dispatch<React.SetStateAction<string[]>>;
+    onImported: (ids: string[], fromGroup: StudentGroup) => void;
 }
 
 // TODO: Consider adding a second option (tab) to import form a list instead (i.e. email column in class excel file).
@@ -80,8 +80,9 @@ const ImportFromGroupPopup = observer((props: Props) => {
                                                     studentsToImport.forEach((student) =>
                                                         props.studentGroup.addStudent(student)
                                                     );
-                                                    props.setImportedIds(
-                                                        studentsToImport.map((student) => student.id)
+                                                    props.onImported(
+                                                        studentsToImport.map((student) => student.id),
+                                                        group
                                                     );
                                                 }}
                                                 disabled={group.userIds.has(group.id)}
