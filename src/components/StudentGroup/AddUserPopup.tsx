@@ -13,13 +13,18 @@ import TextAreaInput from '@tdev-components/shared/TextAreaInput';
 import { debounce } from 'lodash';
 import User from '@tdev-models/User';
 import Admonition from '@theme/Admonition';
+import { PopupActions } from 'reactjs-popup/dist/types';
 
 interface Props {
     studentGroup: StudentGroupModel;
     onImported: (ids: string[], fromGroup?: StudentGroup) => void;
 }
 
-const AddIndividualUsersPopup = observer((props: Props) => {
+type PropsInternal = Props & {
+    popupRef: React.RefObject<PopupActions | null>;
+};
+
+const AddIndividualUsersPopup = observer((props: PropsInternal) => {
     const userStore = useStore('userStore');
     const [searchFilter, setSearchFilter] = React.useState('');
     const [searchRegex, setSearchRegex] = React.useState(new RegExp(searchFilter, 'i'));
@@ -78,7 +83,7 @@ const AddIndividualUsersPopup = observer((props: Props) => {
     );
 });
 
-const ImportFromGroupPopup = observer((props: Props) => {
+const ImportFromGroupPopup = observer((props: PropsInternal) => {
     const studentGroupStore = useStore('studentGroupStore');
     const [searchFilter, setSearchFilter] = React.useState('');
     const [searchRegex, setSearchRegex] = React.useState(new RegExp(searchFilter, 'i'));
@@ -146,7 +151,7 @@ const ImportFromGroupPopup = observer((props: Props) => {
     );
 });
 
-const ImportFromListPopup = observer((props: Props) => {
+const ImportFromListPopup = observer((props: PropsInternal) => {
     const userStore = useStore('userStore');
     const [usersToImport, setUsersToImport] = React.useState<Set<User>>(new Set());
     const [invalidEntries, setInvalidEntries] = React.useState<string[]>([]);
@@ -167,6 +172,7 @@ const ImportFromListPopup = observer((props: Props) => {
                     onClick={() => {
                         usersToImport.forEach((user) => props.studentGroup.addStudent(user));
                         props.onImported(Array.from(usersToImport).map((user) => user.id));
+                        props.popupRef.current?.close();
                     }}
                 />
                 <TextAreaInput
@@ -229,6 +235,8 @@ const ImportFromListPopup = observer((props: Props) => {
 });
 
 const AddUserPopup = observer((props: Props) => {
+    const popupRef = React.useRef<PopupActions>(null);
+
     return (
         <Popup
             trigger={
@@ -248,17 +256,18 @@ const AddUserPopup = observer((props: Props) => {
             on="click"
             closeOnDocumentClick
             closeOnEscape
+            ref={popupRef}
         >
             <div className={clsx(styles.wrapper, 'card')}>
                 <Tabs>
                     <TabItem value="add" label="Benutzer:in hinzufügen">
-                        <AddIndividualUsersPopup {...props} />
+                        <AddIndividualUsersPopup {...props} popupRef={popupRef} />
                     </TabItem>
                     <TabItem value="fromGroup" label="Aus Gruppe">
-                        <ImportFromGroupPopup {...props} />
+                        <ImportFromGroupPopup {...props} popupRef={popupRef} />
                     </TabItem>
                     <TabItem value="fromList" label="Aus Liste">
-                        <ImportFromListPopup {...props} />
+                        <ImportFromListPopup {...props} popupRef={popupRef} />
                     </TabItem>
                 </Tabs>
             </div>
