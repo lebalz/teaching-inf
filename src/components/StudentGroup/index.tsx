@@ -312,7 +312,7 @@ const StudentGroup = observer((props: Props) => {
                             <Undo
                                 message={
                                     <span>
-                                        {imported.ids.length} Schüler:innen aus Gruppe(n){' '}
+                                        {imported.ids.length} Mitglieder aus Gruppe(n){' '}
                                         <strong>
                                             {imported.fromGroups.map((group) => group.name).join(', ')}
                                         </strong>{' '}

@@ -4,7 +4,7 @@ import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
 import StudentGroup, { default as StudentGroupModel } from '@tdev-models/StudentGroup';
 import Button from '../shared/Button';
-import { mdiAccountArrowLeft, mdiAccountPlus } from '@mdi/js';
+import { mdiAccountArrowLeft } from '@mdi/js';
 import Popup from 'reactjs-popup';
 import { useStore } from '@tdev-hooks/useStore';
 import Tabs from '@theme/Tabs';
@@ -112,15 +112,13 @@ const ImportFromGroupPopup = observer((props: Props) => {
                             <h3>Aus Liste importieren</h3>
                         </div>
                         <div className={clsx(styles.importFromList)}>
-                            <Button 
+                            <Button
                                 text={`${idsToImportFromList.length} Mitglieder importieren`}
                                 icon={mdiAccountArrowLeft}
                                 iconSide="left"
                                 color="blue"
                                 disabled={idsToImportFromList.length === 0}
-                                onClick={() => {
-                                    
-                                }}
+                                onClick={() => {}}
                             />
                             <TextAreaInput
                                 onChange={(val) => {
@@ -130,18 +128,19 @@ const ImportFromGroupPopup = observer((props: Props) => {
                                         .map((line) => {
                                             if (line.includes('@')) {
                                                 // We assume that this is an email. Try to find the corresponding user ID.
-                                                return userStore.users.find((user) => user.email === line)?.id;
+                                                return userStore.users.find((user) => user.email === line)
+                                                    ?.id;
                                             }
                                             return line; // We assume that it's an ID.
                                         })
-                                        .filter((id) => !!id && userStore.find(id)) as string[]
+                                        .filter((id) => !!id && userStore.find(id)) as string[];
 
                                     setIdsToImportFromList(ids);
                                 }}
                                 className={clsx(styles.textArea)}
                                 placeholder="Eine ID oder E-Mail pro Zeile"
                                 monospace
-                        />
+                            />
                         </div>
                     </TabItem>
                 </Tabs>
