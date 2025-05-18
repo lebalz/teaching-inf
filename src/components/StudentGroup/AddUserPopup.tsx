@@ -4,7 +4,7 @@ import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
 import { default as StudentGroupModel } from '@tdev-models/StudentGroup';
 import Button from '../shared/Button';
-import { mdiAccountArrowLeft, mdiAccountPlus } from '@mdi/js';
+import { mdiAccountArrowLeft, mdiAccountMultiple, mdiAccountPlus } from '@mdi/js';
 import Popup from 'reactjs-popup';
 import { useStore } from '@tdev-hooks/useStore';
 import Tabs from '@theme/Tabs';
@@ -14,6 +14,7 @@ import { debounce } from 'lodash';
 import User from '@tdev-models/User';
 import Admonition from '@theme/Admonition';
 import { PopupActions } from 'reactjs-popup/dist/types';
+import Icon from '@mdi/react';
 
 interface Props {
     studentGroup: StudentGroupModel;
@@ -254,11 +255,17 @@ const AddUserPopup = observer((props: Props) => {
                 </div>
             }
             on="click"
+            overlayStyle={{ background: 'rgba(133, 133, 133, 0.9)' }} // Darker background
             closeOnDocumentClick
             closeOnEscape
+            modal
             ref={popupRef}
         >
             <div className={clsx(styles.wrapper, 'card')}>
+                <div className={clsx(styles.addUserCardTitle)}>
+                    <Icon path={mdiAccountMultiple} size="1.4em" />
+                    <h2>{props.studentGroup.name}</h2>
+                </div>
                 <Tabs>
                     <TabItem value="add" label="Benutzer:in hinzufügen">
                         <AddIndividualUsersPopup {...props} popupRef={popupRef} />
