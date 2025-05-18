@@ -6,6 +6,8 @@ import Button from '@tdev-components/shared/Button';
 import Directory from '@tdev-components/documents/FileSystem/Directory';
 import React from 'react';
 import { PopupActions } from 'reactjs-popup/dist/types';
+import siteConfig from '@generated/docusaurus.config';
+const { PERSNAL_SPACE_DOC_ROOT_ID } = siteConfig.customFields as { PERSNAL_SPACE_DOC_ROOT_ID: string };
 
 const PersonalSpaceOverlay = () => {
     const popupRef = React.useRef<PopupActions>(null);
@@ -39,7 +41,7 @@ const PersonalSpaceOverlay = () => {
                     color="red"
                     onClick={() => popupRef.current?.close()}
                 />
-                <Directory id="61c3cb82-f8ef-43e0-a103-e650f63953a2" name="Persönlicher Bereich" />
+                <Directory id={PERSNAL_SPACE_DOC_ROOT_ID} name="Persönlicher Bereich" />
             </div>
         </Popup>
     );

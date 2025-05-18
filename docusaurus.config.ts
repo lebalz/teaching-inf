@@ -85,6 +85,7 @@ const config: Config = applyTransformers({
     GIT_COMMIT_SHA: GIT_COMMIT_SHA,
     SENTRY_DSN: process.env.SENTRY_DSN,
     GH_OAUTH_CLIENT_ID: GH_OAUTH_CLIENT_ID,
+    PERSNAL_SPACE_DOC_ROOT_ID: process.env.PERSNAL_SPACE_DOC_ROOT_ID || '2686fc4e-10e7-4288-bf41-e6175e489b8e'
   },
   future: {
     experimental_faster: {
