@@ -25,6 +25,7 @@ import { exportAsExcelSpreadsheet } from '@tdev-components/StudentGroup/excelExp
 import { SIZE_S } from '@tdev-components/shared/iconSizes';
 import { Confirm } from '@tdev-components/shared/Button/Confirm';
 import ImportFromGroupPopup from './ImportFromGroupPopup';
+import Undo from './Undo';
 
 interface Props {
     studentGroup: StudentGroupModel;
@@ -281,108 +282,53 @@ const StudentGroup = observer((props: Props) => {
                             </ul>
                         </div>
                         {removedIds.map((removedId) => (
-                            <div
-                                className={clsx('alert alert--warning', styles.removeAlert)}
-                                role="alert"
-                                key={removedId}
-                            >
-                                <button
-                                    aria-label="Close"
-                                    className={clsx('clean-btn close')}
-                                    type="button"
-                                    onClick={() => setRemovedIds(removedIds.filter((id) => id !== removedId))}
-                                >
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                                Benutzer:in <strong>{userStore.find(removedId)?.nameShort}</strong> wurde
-                                entfernt.
-                                <Button
-                                    onClick={() => {
+                            <Undo
+                                message={
+                                    <span>
+                                        Benutzer:in <strong>{userStore.find(removedId)?.nameShort}</strong>{' '}
+                                        wurde entfernt.
+                                    </span>
+                                }
+                                onUndo={() => {
+                                    const user = userStore.find(removedId);
+                                    if (user) {
+                                        group.addStudent(user);
+                                    }
+                                    setRemovedIds(removedIds.filter((id) => id !== removedId));
+                                }}
+                                onClose={() => setRemovedIds(removedIds.filter((id) => id !== removedId))}
+                            />
+                        ))}
+                        {importedIds?.length > 0 && (
+                            <Undo
+                                message={`${importedIds.length} Schüler:innen importiert.`}
+                                onUndo={() => {
+                                    importedIds.forEach((removedId) => {
+                                        const user = userStore.find(removedId);
+                                        if (user) {
+                                            props.studentGroup.removeStudent(user);
+                                        }
+                                    });
+                                    setImportedIds([]);
+                                }}
+                                onClose={() => setImportedIds([])}
+                            />
+                        )}
+                        {bulkRemovedIds?.length > 0 && (
+                            <Undo
+                                message="Alle Mitglieder entfernt."
+                                onUndo={() => {
+                                    bulkRemovedIds.forEach((removedId) => {
                                         const user = userStore.find(removedId);
                                         if (user) {
                                             group.addStudent(user);
                                         }
-                                        setRemovedIds(removedIds.filter((id) => id !== removedId));
-                                    }}
-                                    icon={mdiAccountReactivateOutline}
-                                    text="Rückgängig"
-                                    className={clsx('button--block')}
-                                    iconSide="left"
-                                    color="primary"
-                                />
-                            </div>
-                        ))}
-                        {
-                            /* TODO: Refactor duplication from above. */ bulkRemovedIds?.length > 0 && (
-                                <div
-                                    className={clsx('alert alert--warning', styles.removeAlert)}
-                                    role="alert"
-                                    key={'bulkRemoved'}
-                                >
-                                    <button
-                                        aria-label="Close"
-                                        className={clsx('clean-btn close')}
-                                        type="button"
-                                        onClick={() => setBulkRemovedIds([])}
-                                    >
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                    Alle Mitglieder entfernt.
-                                    <Button
-                                        onClick={() => {
-                                            bulkRemovedIds.forEach((removedId) => {
-                                                const user = userStore.find(removedId);
-                                                if (user) {
-                                                    group.addStudent(user);
-                                                }
-                                            });
-                                            setBulkRemovedIds([]);
-                                        }}
-                                        icon={mdiAccountReactivateOutline}
-                                        text="Rückgängig"
-                                        className={clsx('button--block')}
-                                        iconSide="left"
-                                        color="primary"
-                                    />
-                                </div>
-                            )
-                        }
-                        {
-                            /* TODO: Refactor duplication from above. */ importedIds?.length > 0 && (
-                                <div
-                                    className={clsx('alert alert--warning', styles.removeAlert)}
-                                    role="alert"
-                                    key={'imported'}
-                                >
-                                    <button
-                                        aria-label="Close"
-                                        className={clsx('clean-btn close')}
-                                        type="button"
-                                        onClick={() => setImportedIds([])}
-                                    >
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                    {importedIds.length} Schüler:innen importiert.{' '}
-                                    {/* TODO: Gruppennamen anzeigen. */}
-                                    <Button
-                                        onClick={() => {
-                                            importedIds.forEach((removedId) => {
-                                                const user = userStore.find(removedId);
-                                                if (user) {
-                                                    props.studentGroup.removeStudent(user);
-                                                }
-                                            });
-                                            setImportedIds([]);
-                                        }}
-                                        icon={mdiAccountReactivateOutline}
-                                        text="Rückgängig"
-                                        className={clsx('button--block')}
-                                        iconSide="left"
-                                        color="primary"
-                                    />
-                                </div>
-                            )
-                        }
+                                    });
+                                    setBulkRemovedIds([]);
+                                }}
+                                onClose={() => setBulkRemovedIds([])}
+                            />
+                        )}
                     </dd>
                 </DefinitionList>
                 {group.children.length > 0 && (
