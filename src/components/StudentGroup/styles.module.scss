@@ -100,3 +100,16 @@
     flex-direction: row;
     gap: 0.5em;
 }
+
+.importFromList {
+    padding: 1em;
+
+    .textArea {
+        margin-top: 0.5em;
+        white-space: nowrap;
+        overflow-x: auto;
+        overflow-y: scroll;
+        min-width: 400px;
+        max-height: 500px;
+    }
+}
