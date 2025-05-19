@@ -3,6 +3,11 @@
     max-height: 80vh;
 }
 
+.tabs {
+    --ifm-tabs-padding-vertical: 0.15em;
+    --ifm-tabs-padding-horizontal: 0.6em;
+}
+
 .addUserCardTitle {
     display: flex;
     flex-direction: row;

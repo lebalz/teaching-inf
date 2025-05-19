@@ -45,8 +45,8 @@ const AddUserPopup = observer((props: AddMembersPopupProps) => {
                     <Icon path={mdiAccountMultiple} size="1.4em" />
                     <h2>{props.studentGroup.name}</h2>
                 </div>
-                <Tabs>
-                    <TabItem value="add" label="Benutzer:in hinzufügen">
+                <Tabs className={clsx(styles.tabs)}>
+                    <TabItem value="add" label="Individuell">
                         <AddUser {...props} popupRef={popupRef} />
                     </TabItem>
                     <TabItem value="fromGroup" label="Aus Gruppe">
