@@ -15,13 +15,14 @@ const PersonalSpaceOverlay = () => {
     return (
         <Popup
             trigger={
-                <div>
+                <div className={styles.buttonWrapper}>
                     <Button
-                        className={clsx('button--block')}
+                        className={clsx('button--block', styles.button)}
                         onClick={(e) => {
                             e.preventDefault();
                         }}
                         icon={mdiFolderHomeOutline}
+                        size={0.8}
                         color="blue"
                         iconSide="left"
                     />
