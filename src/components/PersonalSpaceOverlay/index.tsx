@@ -34,13 +34,7 @@ const PersonalSpaceOverlay = () => {
             ref={popupRef}
             closeOnEscape
         >
-            <div className={clsx(styles.container)}>
-                <Button
-                    icon={mdiCloseCircleOutline}
-                    className={clsx(styles.closeButton)}
-                    color="red"
-                    onClick={() => popupRef.current?.close()}
-                />
+            <div className={clsx(styles.container)} onClick={() => popupRef.current?.close()}>
                 <Directory id={PERSNAL_SPACE_DOC_ROOT_ID} name="Persönlicher Bereich" />
             </div>
         </Popup>

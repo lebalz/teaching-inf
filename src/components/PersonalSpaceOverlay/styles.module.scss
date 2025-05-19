@@ -3,11 +3,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-
-    .closeButton {
-        position: absolute;
-        right: -3em;
-        top: -2em;
-        scale: 120%;
-    }
+    width: 100vw;
+    height: 80vh;
+    // padding: 15em 0;
+    overflow: scroll;
 }
