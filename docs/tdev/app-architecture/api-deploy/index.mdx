@@ -5,7 +5,7 @@ page_id: 560cfd4d-4464-42ff-a121-a3d116ea1994
 import Steps from '@tdev-components/Steps'
 import { Val, TemplateCode, DynamicInput } from '@tdev-components/DynamicValues';
 import _ from 'lodash';
-import { generateRandomBase64 } from './seecureToken';
+import { generateRandomBase64 } from './secureToken';
 
 # API Aufsetzen
 
@@ -19,7 +19,7 @@ import { generateRandomBase64 } from './seecureToken';
       <DynamicInput name="API_URI" default='api://xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx' />
       <DynamicInput name="ALLOWED_ORIGINS" default='gbsl.website' />
       <DynamicInput name="ALLOW_SUBDOMAINS" default='true' />
-      <DynamicInput name="SESSION_SECRET" monospace default={generateRandomBase64()} onRecalculate={() => generateRandomBase64()} />
+      <DynamicInput name="SESSION_SECRET" monospace placeholder='$(openssl rand -base64 32)' onRecalculate={() => generateRandomBase64()} />
       <DynamicInput name="MSAL_CLIENT_ID" monospace default='xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx' />
       <DynamicInput name="MSAL_TENANT_ID" monospace default='xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx' />
       <TemplateCode>
