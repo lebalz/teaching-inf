@@ -38,7 +38,11 @@ import { generateRandomBase64 } from './secureToken';
         dokku config:set {{app}} MSAL_TENANT_ID="{{MSAL_TENANT_ID}}"
         dokku config:set {{app}} SESSION_SECRET="{{SESSION_SECRET}}"
 
-        dokku nginx:set {{app}} client-max-body-size 5m
+        # allow file-uploads up to 5mb 
+        mkdir /home/dokku/{{app}}/nginx.conf.d/
+        echo 'client_max_body_size 5m;' > /home/dokku/{{app}}/nginx.conf.d/upload.conf
+        chown dokku:dokku /home/dokku/{{app}}/nginx.conf.d/upload.conf
+        service nginx reload
 
         dokku nginx:set {{app}} x-forwarded-proto-value '$http_x_forwarded_proto'
         dokku nginx:set {{app}} x-forwarded-for-value '$http_x_forwarded_for'
