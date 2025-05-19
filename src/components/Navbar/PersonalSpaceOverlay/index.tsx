@@ -22,7 +22,7 @@ const PersonalSpaceOverlay = () => {
                             e.preventDefault();
                         }}
                         icon={mdiFolderHomeOutline}
-                        size={0.8}
+                        size={0.95}
                         color="blue"
                         iconSide="left"
                     />
