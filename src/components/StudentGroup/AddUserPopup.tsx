@@ -218,7 +218,7 @@ const ImportFromListPopup = observer((props: PropsInternal) => {
                     <Admonition type="warning" title="Ungültige Einträge">
                         <ul>
                             {invalidEntries.map((entry) => (
-                                <li>{entry}</li>
+                                <li key={entry}>{entry}</li>
                             ))}
                         </ul>
                     </Admonition>
