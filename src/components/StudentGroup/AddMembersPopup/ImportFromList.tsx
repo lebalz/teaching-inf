@@ -76,8 +76,8 @@ const ImportFromList = observer((props: _AddMembersPopupPropsInternal) => {
                 {invalidEntries.length > 0 && (
                     <Admonition type="warning" title="Ungültige Einträge">
                         <ul>
-                            {invalidEntries.map((entry) => (
-                                <li key={entry}>{entry}</li>
+                            {invalidEntries.map((entry, index) => (
+                                <li key={index}>{entry}</li>
                             ))}
                         </ul>
                     </Admonition>
