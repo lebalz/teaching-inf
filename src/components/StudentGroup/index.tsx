@@ -23,7 +23,7 @@ import { exportAsExcelSpreadsheet } from '@tdev-components/StudentGroup/excelExp
 import { SIZE_S } from '@tdev-components/shared/iconSizes';
 import { Confirm } from '@tdev-components/shared/Button/Confirm';
 import Undo from './Undo';
-import AddUserPopup from './AddUserPopup';
+import AddUserPopup from './AddMembersPopup';
 
 interface Props {
     studentGroup: StudentGroupModel;
