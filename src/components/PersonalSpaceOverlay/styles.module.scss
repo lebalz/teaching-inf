@@ -1,4 +1,4 @@
-.overlay {
+.personalSpaceOverlay {
     position: relative;
     display: flex;
     justify-content: center;
@@ -6,10 +6,11 @@
     width: 100vw;
     height: 100vh;
 
-    // padding: 15em 0;
-
     .content {
+        position: relative;
+        border-radius: 0.5em;
         overflow: scroll;
         height: 80vh;
+        width: 80vw;
     }
 }

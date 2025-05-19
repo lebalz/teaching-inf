@@ -30,11 +30,11 @@ const PersonalSpaceOverlay = () => {
             on="click"
             modal
             closeOnDocumentClick={false}
-            overlayStyle={{ background: 'rgba(0,0,0,0.5)', maxWidth: '100vw' }}
+            overlayStyle={{ background: 'rgba(0,0,0,0.5)', width: '100vw' }}
             ref={popupRef}
             closeOnEscape
         >
-            <div className={clsx(styles.overlay)} onClick={() => popupRef.current?.close()}>
+            <div className={clsx(styles.personalSpaceOverlay)} onClick={() => popupRef.current?.close()}>
                 <div className={clsx(styles.content)}>
                     <Directory id={PERSNAL_SPACE_DOC_ROOT_ID} name="Persönlicher Bereich" />
                 </div>
