@@ -34,8 +34,10 @@ const PersonalSpaceOverlay = () => {
             ref={popupRef}
             closeOnEscape
         >
-            <div className={clsx(styles.container)} onClick={() => popupRef.current?.close()}>
-                <Directory id={PERSNAL_SPACE_DOC_ROOT_ID} name="Persönlicher Bereich" />
+            <div className={clsx(styles.overlay)} onClick={() => popupRef.current?.close()}>
+                <div className={clsx(styles.content)}>
+                    <Directory id={PERSNAL_SPACE_DOC_ROOT_ID} name="Persönlicher Bereich" />
+                </div>
             </div>
         </Popup>
     );
