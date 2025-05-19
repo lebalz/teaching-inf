@@ -71,6 +71,7 @@
 }
 .textarea {
     width: 100%;
+    min-width: 18em;
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid var(--ifm-color-gray-500);
