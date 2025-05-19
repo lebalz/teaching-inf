@@ -19,7 +19,7 @@ import { generateRandomBase64 } from './secureToken';
       <DynamicInput name="API_URI" default='api://xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx' />
       <DynamicInput name="ALLOWED_ORIGINS" default='gbsl.website' />
       <DynamicInput name="ALLOW_SUBDOMAINS" default='true' />
-      <DynamicInput name="SESSION_SECRET" monospace placeholder='$(openssl rand -base64 32)' onRecalculate={() => generateRandomBase64()} />
+      <DynamicInput name="SESSION_SECRET" monospace default='$(openssl rand -base64 32)' onRecalculate={() => generateRandomBase64()} />
       <DynamicInput name="MSAL_CLIENT_ID" monospace default='xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx' />
       <DynamicInput name="MSAL_TENANT_ID" monospace default='xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx' />
       <TemplateCode>
@@ -136,4 +136,48 @@ import { generateRandomBase64 } from './secureToken';
       dokku letsencrypt:enable {{app}}
       ```
       </TemplateCode>
+   4. Backups einrichten
+      Dokku ermöglicht das unkomplizierte Backupen von Datenbanken auf S3 Speicher.
+      <DynamicInput name="s3-bucket-name" placeholder='fs-informatik' />
+      <DynamicInput name="s3-access-key-id" />
+      <DynamicInput name="s3-secret-access-key" />
+      <DynamicInput name="s3-endpoint-url" placeholder='https://92bdb68939987bdbf6207ccde70891de.eu.r2.cloudflarestorage.com' />
+      <DynamicInput name="s3-encryption-key" onRecalculate={() => generateRandomBase64()} default="$(openssl rand -base64 32)"/>
+      
+      <TemplateCode>
+      ```bash
+      # dokku postgres:backup-auth {{app}} <s3-access-key-id> <s3-secret-access-key> <s3-default-region> <s3-signature-version> <s3-endpoint-url> 
+      dokku postgres:backup-auth {{app}} {{s3-access-key-id}} {{s3-secret-access-key}} auto s3v4 {{s3-endpoint-url}}
+      dokku postgres:backup {{app}} {{s3-bucket-name}}
+      dokku postgres:backup-set-encryption {{app}} {{s3-encryption-key}}
+      dokku postgres:backup-schedule {{app}} "0 3 * * *" {{s3-bucket-name}} # daily backup at 3am
+      ```
+      </TemplateCode>
+      :::danger[Speichern des Encryption Key's]
+      Werden die Backups verschlüsselt, muss der Schlüssel zwingend sicher verwahrt werden, damit die Backups dann auch wieder entschlüsselt werden können!
+      <TemplateCode>
+      ```bash
+      {{s3-encryption-key}}
+      ```
+      </TemplateCode>
+      :::
+      :::details[Backup wiederherstellen]
+      1. Das Backup herunterladen, z.B. <Val as="code">`postgres-{{app}}-2025-05-19-02-00-02.tgz.gpg`</Val>
+      2. Das Backup entschlüsseln:
+         <TemplateCode>
+         ```bash
+         gpg --decrypt postgres-{{app}}-2025-05-19-02-00-02.tgz.gpg > backup.tgz
+         ```
+         </TemplateCode>
+      3. Entpacken:
+         ```bash
+         tar -xf backup.tgz
+         ```
+      4. Backup wiederherstellen:
+         <TemplateCode>
+         ```bash
+         dokku postgres:import {{app}} < backup/export
+         ```
+         </TemplateCode>
+      :::
 </Steps>
