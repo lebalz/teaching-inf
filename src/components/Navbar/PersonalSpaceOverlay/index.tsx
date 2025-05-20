@@ -1,7 +1,7 @@
 import styles from './styles.module.scss';
 import Popup from 'reactjs-popup';
 import clsx from 'clsx';
-import { mdiCloseCircleOutline, mdiFolderHomeOutline } from '@mdi/js';
+import { mdiFolderHomeOutline } from '@mdi/js';
 import Button from '@tdev-components/shared/Button';
 import Directory from '@tdev-components/documents/FileSystem/Directory';
 import React from 'react';
