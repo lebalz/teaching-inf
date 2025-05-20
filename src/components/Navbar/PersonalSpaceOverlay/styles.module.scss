@@ -4,14 +4,13 @@
     justify-content: center;
     align-items: center;
     width: 100vw;
-    height: 100vh;
+    height: 80vh;
 
     .content {
-        position: relative;
         border-radius: 0.5em;
         overflow: auto;
-        height: 80vh;
         width: 80vw;
+        height: 80vh;
     }
 }
 
