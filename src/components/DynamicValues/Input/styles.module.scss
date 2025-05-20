@@ -16,6 +16,7 @@
         border-bottom-left-radius: var(--ifm-global-radius);
         border-right-width: 0;
         padding-right: 0.5em;
+        padding-left: 0.5em;
         line-height: 1.9;
         text-align: right;
         &.derived {
@@ -33,11 +34,9 @@
             font-family: var(--ifm-font-family-monospace);
         }
     }
-    .resetButton {
+    .action {
         grid-area: action;
-    }
-    .recalculateButton {
-        grid-area: action;
+        display: flex;
     }
 }
 

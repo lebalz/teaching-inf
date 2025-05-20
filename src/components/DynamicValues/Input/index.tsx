@@ -61,30 +61,32 @@ const DynamicInput = observer((props: Props) => {
                 className={clsx(styles.input, props.monospace && styles.monospace)}
                 placeholder={props.placeholder}
             />
-            {needsReset && !props.onRecalculate && (
-                <Button
-                    className={clsx(styles.resetButton)}
-                    icon={mdiRestore}
-                    onClick={() => {
-                        current.setDynamicValue(props.name, defaultValue);
-                    }}
-                    color="secondary"
-                    size={SIZE_S}
-                    title="Zurücksetzen"
-                />
-            )}
-            {props.onRecalculate && (
-                <Button
-                    className={clsx(styles.recalculateButton)}
-                    icon={mdiSync}
-                    onClick={() => {
-                        current.setDynamicValue(props.name, props.onRecalculate!(current));
-                    }}
-                    color="secondary"
-                    size={SIZE_S}
-                    title="Neu berechnen"
-                />
-            )}
+            <div className={clsx(styles.action)}>
+                {needsReset && (
+                    <Button
+                        className={clsx(styles.resetButton)}
+                        icon={mdiRestore}
+                        onClick={() => {
+                            current.setDynamicValue(props.name, defaultValue);
+                        }}
+                        color="secondary"
+                        size={SIZE_S}
+                        title="Zurücksetzen"
+                    />
+                )}
+                {props.onRecalculate && (
+                    <Button
+                        className={clsx(styles.recalculateButton)}
+                        icon={mdiSync}
+                        onClick={() => {
+                            current.setDynamicValue(props.name, props.onRecalculate!(current));
+                        }}
+                        color="secondary"
+                        size={SIZE_S}
+                        title="Neu berechnen"
+                    />
+                )}
+            </div>
         </div>
     );
 });
