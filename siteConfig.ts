@@ -159,7 +159,8 @@ const getSiteConfig: SiteConfigProvider = () => {
             routeBasePath: '/',
             exclude: ['tdev/**'],
             showLastUpdateTime: true,
-            includeCurrentVersion: true
+            includeCurrentVersion: true,
+            hideable: true
         },
         blog: { ...ADMONITION_CONFIG, exclude: ['tdev/**'] },
         pages: ADMONITION_CONFIG,
