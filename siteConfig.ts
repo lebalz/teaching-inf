@@ -160,7 +160,7 @@ const getSiteConfig: SiteConfigProvider = () => {
             exclude: ['tdev/**'],
             showLastUpdateTime: true,
             includeCurrentVersion: true,
-            hideable: true
+            sidebarCollapsible: true
         },
         blog: { ...ADMONITION_CONFIG, exclude: ['tdev/**'] },
         pages: ADMONITION_CONFIG,
