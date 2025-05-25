@@ -1,0 +1,20 @@
+{
+    "name": "@tdev/remark-pdf",
+    "version": "1.0.0",
+    "main": "lib/index.js",
+    "types": "lib/remark-pdf.d.ts",
+    "scripts": {
+        "build": "tsc",
+        "test": "vitest --coverage",
+        "dev": "tsc --watch"
+    },
+    "dependencies": {
+        "react-pdf": "^9.2.1"
+    },
+    "devDependencies": {
+        "vitest": "^2.0.5"
+    },
+    "peerDependencies": {
+        "@tdev/core": "1.0.0"
+    }
+}

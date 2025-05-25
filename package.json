@@ -1,6 +1,10 @@
 {
-    "name": "teaching-dev",
-    "version": "0.0.0",
+    "name": "@tdev/core",
+    "workspaces": [
+        "plugins/*",
+        "."
+    ],
+    "version": "1.0.0",
     "private": true,
     "scripts": {
         "docusaurus": "docusaurus",
@@ -72,7 +76,6 @@
         "react-dom": "^19.1.0",
         "react-draggable": "^4.4.6",
         "react-katex": "^3.0.1",
-        "react-pdf": "^9.2.1",
         "react-quilljs": "^2.0.5",
         "react-select": "^5.10.1",
         "reactjs-popup": "^2.0.6",
