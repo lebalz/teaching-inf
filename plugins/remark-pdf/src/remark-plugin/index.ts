@@ -1,7 +1,7 @@
 import { visit } from 'unist-util-visit';
 import type { Plugin, Transformer } from 'unified';
 import type { MdxJsxFlowElement, MdxjsEsm } from 'mdast-util-mdx';
-import { requireDefaultMdastNode, toJsxAttribute, transformAttributes } from '@tdev-plugins/helpers';
+import { requireDefaultMdastNode, toJsxAttribute, transformAttributes } from '@tdev/core/src/plugins/helpers';
 import { Root, Text } from 'mdast';
 import path from 'path';
 
