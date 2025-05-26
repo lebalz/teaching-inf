@@ -12,7 +12,9 @@
         "react-pdf": "^9.2.1"
     },
     "devDependencies": {
-        "vitest": "^2.0.5"
+        "vitest": "^2.0.5",
+        "@docusaurus/module-type-aliases": "*",
+        "@docusaurus/core": "*"
     },
     "peerDependencies": {
         "@tdev/core": "1.0.0"

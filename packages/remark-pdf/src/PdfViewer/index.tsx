@@ -1,7 +1,7 @@
 import useIsBrowser from '@docusaurus/useIsBrowser';
 import { observer } from 'mobx-react-lite';
 import * as React from 'react';
-import type { default as PdfViewerType, Props } from './PdfViewer';
+import type { default as PdfViewerType, Props } from '@tdev/remark-pdf/src/PdfViewer/PdfViewer';
 import Loader from '@tdev-components/Loader';
 
 /**
