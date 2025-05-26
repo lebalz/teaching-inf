@@ -16,7 +16,7 @@ const alignLeft = (content: string) => {
         .join('\n');
 };
 const process = async (content: string, fileName?: string, config?: { dotFileRootDir: string }) => {
-    const { default: plugin } = (await import('../plugin')) as any;
+    const { default: plugin } = (await import('../remark-plugin')) as any;
     const file = new VFile({
         value: alignLeft(content),
         history: [fileName ? path.join(__dirname, fileName) : __filename]

@@ -31,7 +31,6 @@
         "@docusaurus/theme-classic": "^3.7.0",
         "@docusaurus/theme-common": "^3.7.0",
         "@excalidraw/excalidraw": "^0.18.0",
-        "@hpcc-js/wasm-graphviz": "^1.7.0",
         "@lexical/clipboard": "^0.27.1",
         "@lexical/link": "^0.27.1",
         "@lexical/list": "^0.27.1",

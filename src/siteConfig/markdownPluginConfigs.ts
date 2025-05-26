@@ -11,8 +11,8 @@ import linkAnnotationPlugin from '../plugins/remark-link-annotation/plugin';
 import mediaPlugin from '../plugins/remark-media/plugin';
 import detailsPlugin from '../plugins/remark-details/plugin';
 import pagePlugin from '../plugins/remark-page/plugin';
-import graphvizPlugin from '../plugins/remark-graphviz/plugin';
-import pdfPlugin from '../../packages/remark-pdf/src/remark-plugin/index';
+import graphvizPlugin from '@tdev/remark-graphviz/src/remark-plugin';
+import pdfPlugin from '@tdev/remark-pdf/src/remark-plugin';
 import commentPlugin from '../plugins/remark-comments/plugin';
 import enumerateAnswersPlugin from '../plugins/remark-enumerate-components/plugin';
 
