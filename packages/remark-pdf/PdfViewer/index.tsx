@@ -1,7 +1,7 @@
 import useIsBrowser from '@docusaurus/useIsBrowser';
 import { observer } from 'mobx-react-lite';
 import * as React from 'react';
-import type { default as PdfViewerType } from '@tdev/remark-pdf/src/PdfViewer/PdfViewer';
+import type { default as PdfViewerType } from '@tdev/remark-pdf/PdfViewer/PdfViewer';
 import Loader from '@tdev-components/Loader';
 
 /**
@@ -16,7 +16,7 @@ export const PdfViewer = observer((props: React.ComponentProps<typeof PdfViewerT
     const [pdfViewer, setPdfViewer] = React.useState<{ default: typeof PdfViewerType }>();
     const isBrowser = useIsBrowser();
     React.useEffect(() => {
-        import('@tdev/remark-pdf/src/PdfViewer/PdfViewer').then((pdfViewer) => {
+        import('@tdev/remark-pdf/PdfViewer/PdfViewer').then((pdfViewer) => {
             setPdfViewer(pdfViewer);
         });
     }, []);

@@ -7,7 +7,7 @@ import path from 'path';
 
 const IMPORT_PDF_REACT_NODE: MdxjsEsm = {
     type: 'mdxjsEsm',
-    value: "import PdfViewer from '@tdev/remark-pdf/src/PdfViewer';",
+    value: "import PdfViewer from '@tdev/remark-pdf/PdfViewer';",
     data: {
         estree: {
             type: 'Program',
@@ -26,8 +26,8 @@ const IMPORT_PDF_REACT_NODE: MdxjsEsm = {
                     attributes: [],
                     source: {
                         type: 'Literal',
-                        value: '@tdev/remark-pdf/src/PdfViewer',
-                        raw: "'@tdev/remark-pdf/src/PdfViewer'"
+                        value: '@tdev/remark-pdf/PdfViewer',
+                        raw: "'@tdev/remark-pdf/PdfViewer'"
                     }
                 }
             ],

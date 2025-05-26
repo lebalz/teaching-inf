@@ -1,6 +1,6 @@
 import { remark } from 'remark';
 import remarkMdx from 'remark-mdx';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterAll, afterEach, describe, expect, it } from 'vitest';
 import { fileURLToPath } from 'url';
 import { VFile } from 'vfile';
 import path from 'path';
@@ -34,6 +34,12 @@ describe('#graphviz', () => {
     afterEach(async () => {
         const dotDir = path.join(__dirname, 'images');
         await fs.rm(dotDir, { recursive: true, force: true });
+    });
+    afterAll(async () => {
+        const dotDir = path.join(__dirname, 'images');
+        await fs.rm(dotDir, { recursive: true, force: true });
+        const imgDir = path.join(__dirname, 'img');
+        await fs.rm(imgDir, { recursive: true, force: true });
     });
     it("does nothing if there's no defbox", async () => {
         const input = `# Heading

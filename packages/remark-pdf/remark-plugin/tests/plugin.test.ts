@@ -32,7 +32,7 @@ describe('#pdf', () => {
         `;
         const result = await process(input);
         expect(result).toMatchInlineSnapshot(`
-          "import PdfViewer from '@tdev/remark-pdf/src/PdfViewer';
+          "import PdfViewer from '@tdev/remark-pdf/PdfViewer';
 
           # Details element example
 
@@ -47,7 +47,7 @@ describe('#pdf', () => {
         `;
         const result = await process(input);
         expect(result).toMatchInlineSnapshot(`
-          "import PdfViewer from '@tdev/remark-pdf/src/PdfViewer';
+          "import PdfViewer from '@tdev/remark-pdf/PdfViewer';
 
           # Details element example
 
