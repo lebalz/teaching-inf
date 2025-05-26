@@ -1,13 +1,8 @@
 {
     "name": "@tdev/remark-pdf",
     "version": "1.0.0",
-    "main": "lib/index.js",
-    "types": "lib/remark-pdf.d.ts",
-    "scripts": {
-        "build": "tsc",
-        "test": "vitest --coverage",
-        "dev": "tsc --watch"
-    },
+    "main": "src/index.ts",
+    "types": "src/index.ts",
     "dependencies": {
         "react-pdf": "^9.2.1"
     },
