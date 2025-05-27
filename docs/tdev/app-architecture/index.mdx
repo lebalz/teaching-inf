@@ -5,9 +5,60 @@ import DocCardList from '@theme/DocCardList';
 
 # App-Architektur
 
-
-
 <DocCardList />
+
+## Erweiterbarkeit
+
+Teaching-Dev ist so konzipiert, dass es leicht erweiterbar ist. Die Architektur ermöglicht es, neue Funktionen hinzuzufügen, ohne die bestehende Funktionalität zu beeinträchtigen. Dies wird durch die Verwendung zum Einen von Webpack Aliases und zum anderen durch die Verwendung von Yarn Workspaces erreicht.
+
+Die grundsätzliche Ordnerstruktur von Teaching-Dev ist wie folgt aufgebaut:
+
+```
+teaching-dev/
+├── packages/
+│   ├── remark-pdf/
+│   │    ├── package.json
+│   │    └── index.ts
+│   └── ...
+├── src/
+│   ├── api/
+│   ├── components/
+│   ├── hooks/
+│   ├── pages/
+│   ├── plugins/
+│   ├── stores/
+│   └── static/
+└── website/
+    └── static/
+```
+
+### Webpack Aliases
+
+Mit Webpack Aliases können Ordner angegeben werden, in welchen die zu importierenden Module gesucht werden:
+
+```json
+{
+    "@tdev-components/*": ["website/components/*", "src/components/*"],
+    "@tdev-hooks/*": ["website/hooks/*", "src/hooks/*"],
+    "@tdev-models/*": ["website/models/*", "src/models/*"],
+    "@tdev-stores/*": ["website/stores/*", "src/stores/*"],
+    "@tdev-plugins/*": ["website/plugins/*", "src/plugins/*"],
+    "@tdev-api/*": ["website/api/*", "src/api/*"],
+    "@tdev/*": ["website/*", "src/*", "packages/*"],
+    "@tdev-original/*": ["src/*"],
+    "@site/*": ["./*"]
+}
+```
+
+Teaching-Dev implementiert so eine Art "Fallback"-Mechanismus, der es ermöglicht, dass Komponenten, Hooks, Stores und Plugins in mehreren Ordnern gesucht werden. Zuerst wird im `website`-Ordner gesucht, dann im `src`-Ordner und zuletzt in den `packages`.
+
+Dadurch kann die Website-Entwicklung von der Entwicklung der Kernfunktionen getrennt werden. Solange keine Änderungen im `src`-Ordner und- oder im `packages`-Ordner vorgenommen werden, kann die Website unabhängig von der Kernentwicklung weiterentwickelt werden und stets die neuste Version von Teaching-Dev verwenden.
+
+### Yarn Workspaces
+Mit Yarn Workspaces ist es möglich, Bibliotheken für eigene Erweiterungen zu verwenden, ohne diese im `package.json` von Teaching-Dev zu definieren. Dies ermöglicht
+- einfaches Synchronisieren mit Teaching-Dev
+- einfaches übernehmen von Funktionen, die eine andere Teaching-Dev-Instanz entwickelt hat
+- einfache Entwicklung von Teaching-Dev Erweiterungen, indem die Abhängigkeiten in der `package.json` des jeweiligen Pakets definiert werden können.
 
 ## Debug
 
