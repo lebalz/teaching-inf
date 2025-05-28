@@ -74,6 +74,9 @@ export const aliasConfigurationPluginConfig: PluginConfig = () => {
                         /** original tdev source */
                         '@tdev-original': [path.resolve(cwd, './src')]
                     }
+                },
+                optimization: {
+                    concatenateModules: false
                 }
             };
         }
