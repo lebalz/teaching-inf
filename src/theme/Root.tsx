@@ -249,13 +249,17 @@ function Root({ children }: { children: React.ReactNode }) {
                 // rootStore.socketStore.disconnect();
             } else {
                 /**
-                 * make sure to reconnect the socket
+                 * make sure to reconnect the socket when the user returns to the page
+                 * The delay is added to avoid reconnecting too quickly
                  */
-                if (rootStore.socketStore.isLive && rootStore.socketStore.socket?.disconnected) {
-                    rootStore.socketStore.reconnect();
-                } else {
-                    rootStore.socketStore.connect();
-                }
+                const timeoutId = setTimeout(() => {
+                    if (rootStore.socketStore.isLive && rootStore.socketStore.socket?.disconnected) {
+                        rootStore.socketStore.reconnect();
+                    } else {
+                        rootStore.socketStore.connect();
+                    }
+                }, 3000);
+                return () => clearTimeout(timeoutId);
             }
         };
 
