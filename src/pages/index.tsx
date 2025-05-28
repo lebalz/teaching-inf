@@ -1,69 +1,42 @@
-import React from 'react';
 import clsx from 'clsx';
-import Layout from '@theme/Layout';
+import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-import styles from './index.module.scss';
-import HomepageCourses from '@tdev-components/HomepageCourses';
-import ImageGallery from 'react-image-gallery';
-import { Content } from '@theme/BlogPostPage';
+import Layout from '@theme/Layout';
+import HomepageFeatures from '@tdev-components/HomepageFeatures';
+import Heading from '@theme/Heading';
+
+import styles from './index.module.css';
 
 function HomepageHeader() {
     const { siteConfig } = useDocusaurusContext();
     return (
-        <header className={clsx('hero hero--primary index-page', styles.heroBanner)}>
-            <div className="container index-page-title">
-                <h1 className="hero__title">{siteConfig.title}</h1>
+        <header className={clsx('hero hero--primary', styles.heroBanner)}>
+            <div className="container">
+                <Heading as="h1" className="hero__title">
+                    {siteConfig.title}
+                </Heading>
                 <p className="hero__subtitle">{siteConfig.tagline}</p>
+                <div className={styles.buttons}>
+                    <Link className="button button--secondary button--lg" to="/docs/gallery">
+                        Komponentengalerie 🖼️
+                    </Link>
+                </div>
             </div>
         </header>
     );
 }
-interface Props {
-    readonly recentPosts: readonly { readonly content: Content }[];
-}
 
-export default function Home({ recentPosts }: Props): React.ReactNode {
-    const images = [
-        {
-            original: './img/index/artificial-intelligence.jpg'
-        },
-        {
-            original: './img/index/robot-hand.jpg'
-        },
-        {
-            original: './img/index/security.jpg'
-        },
-        {
-            original: './img/index/network.jpg'
-        },
-        {
-            original: './img/index/computer.jpg'
-        }
-    ];
-
+export default function Home(): React.ReactNode {
+    const { siteConfig } = useDocusaurusContext();
     return (
-        <div className={clsx('no-search')}>
-            <Layout>
-                <HomepageHeader />
-                <main>
-                    <div className={clsx(styles.galleryWrapper)}>
-                        <ImageGallery
-                            items={images}
-                            infinite
-                            lazyLoad
-                            showNav={false}
-                            showThumbnails={false}
-                            showFullscreenButton={false}
-                            showPlayButton={false}
-                            showBullets
-                            slideDuration={2000}
-                            slideInterval={8000}
-                            autoPlay
-                        />
-                    </div>
-                    <HomepageCourses />
-                </main>
-            </Layout>
-        </div>
+        <Layout
+            title={`Hello from ${siteConfig.title}`}
+            description="Description will go into a meta tag in <head />"
+        >
+            <HomepageHeader />
+            <main>
+                <HomepageFeatures />
+            </main>
+        </Layout>
     );
 }
