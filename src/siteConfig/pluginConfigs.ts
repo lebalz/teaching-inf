@@ -69,10 +69,10 @@ export const aliasConfigurationPluginConfig: PluginConfig = () => {
                         '@tdev': [
                             path.resolve(cwd, './website'),
                             path.resolve(cwd, './src'),
-                            path.resolve(cwd, './packages')
+                            path.resolve(cwd, './packages/tdev')
                         ],
                         /** original tdev source */
-                        '@tdev-original': [path.resolve(cwd, './src')]
+                        '@tdev-original': [path.resolve(cwd, './src'), path.resolve(cwd, './packages/tdev')]
                     }
                 },
                 optimization: {

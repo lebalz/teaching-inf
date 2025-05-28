@@ -1,7 +1,7 @@
 {
     "name": "@tdev/core",
     "workspaces": [
-        "packages/*",
+        "packages/**",
         "."
     ],
     "version": "1.0.0",
