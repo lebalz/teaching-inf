@@ -239,6 +239,34 @@ function Root({ children }: { children: React.ReactNode }) {
             });
     }, [SENTRY_DSN]);
 
+    React.useEffect(() => {
+        const handleVisibilityChange = () => {
+            if (document.hidden) {
+                /**
+                 * eventuall we could disconnect the socket
+                 * or at least indicate to admins that the user has left the page (e.g. for exams)
+                 */
+                // rootStore.socketStore.disconnect();
+            } else {
+                /**
+                 * make sure to reconnect the socket when the user returns to the page
+                 * The delay is added to avoid reconnecting too quickly
+                 */
+                const timeoutId = setTimeout(() => {
+                    if (rootStore.socketStore.isLive && rootStore.socketStore.socket?.disconnected) {
+                        rootStore.socketStore.reconnect();
+                    } else {
+                        rootStore.socketStore.connect();
+                    }
+                }, 3000);
+                return () => clearTimeout(timeoutId);
+            }
+        };
+
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+    }, [rootStore]);
+
     return (
         <>
             <Head>
