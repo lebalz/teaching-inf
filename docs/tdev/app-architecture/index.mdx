@@ -64,6 +64,64 @@ Mit Yarn Workspaces ist es möglich, Bibliotheken für eigene Erweiterungen zu v
 - einfaches übernehmen von Funktionen, die eine andere Teaching-Dev-Instanz entwickelt hat
 - einfache Entwicklung von Teaching-Dev Erweiterungen, indem die Abhängigkeiten in der `package.json` des jeweiligen Pakets definiert werden können.
 
+### Eigene Tools hinzufügen
+
+Im Unterricht entstehen teils auf die Schnelle eigene Visualisierungen, Tools oder Erweiterungen, die jenach Anwendung auch eigene Abhängigkeiten (Bibliotheken) benötigen. Damit solche Tools ohne viel Aufwand selber geschrieben und aber auch von anderen Lehrpersonen einfach übernommen weren können, können solche Tools als Package angelegt werden.
+
+```
+packages/
+├── tdev/
+|   ├── /* nicht verändern, diese Packages werden von tdev bereitgestellt */
+├── hfr
+│   ├── huffman-tree
+│   │    ├── package.json
+│   │    ├── index.tsx
+│   │    └── styles.module.scss
+│   ...
+├── brr
+│   ├── netpbm-editor
+│   │    ├── package.json
+│   │    ├── index.tsx
+│   │    └── styles.module.scss
+│   ...
+```
+
+Die Namen (und das Scoping) der Pakete ist grundsätzlich frei wählbar. TDev verwendet die Konvention, dass die Pakete mit dem Kürzel der Lehrperson beginnen, die das Paket erstellt hat. So kann das Paket einfach von anderen Lehrpersonen übernommen werden, ohne dass es zu Namenskonflikten kommt.
+
+```json title="packages/hfr/huffman-tree/package.json"
+{
+    "name": "@hfr/huffman-tree",
+    "version": "0.1.0",
+    "main": "index.tsx",
+    "types": "index.d.ts",
+    "private": true,
+    "dependencies": {
+        "d3": "^7.9.0"
+    },
+    "devDependencies": {
+        "vitest": "*",
+        "@docusaurus/module-type-aliases": "*",
+        "@docusaurus/core": "*"
+    },
+    "peerDependencies": {
+        "@tdev/core": "*"
+    }
+}
+```
+
+Dann kann die Visualisierung direkt verwendet werden:
+
+```md
+import HuffmanTree from '@hfr/huffman-tree';
+
+<HuffmanTree />
+```
+
+:::note[Hinweis]
+TDev stellt grundsätzlich keine eigenen Visualisierungstools zur Verfügung, stellt aber die Infrastruktur bereit, um eigene Tools zu erstellen. Diese können dann von anderen Lehrpersonen übernommen und weiterentwickelt werden.
+:::
+
+
 ## Debug
 
 Im Projekt ist [@docusaurus/plugin-rsdoctor](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-rsdoctor) als dev dependency installiert. Dieses Plugin hilft bei der Analyse von Performance-Problemen und kann beim Aufsuchen von kritischen (langsamen) Code-Teilen helfen.
