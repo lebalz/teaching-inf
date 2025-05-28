@@ -45,7 +45,7 @@ const encodeText = (text: string, tree?: HuffmanNode): string => {
         .join(' ');
 };
 
-const HuffmanTreeVisualizer: React.FC = () => {
+const HuffmanTree: React.FC = () => {
     const [text, setText] = useState<string>('Huffman');
     const [encoded, setEncoded] = useState<string>('');
     const svgRef = useRef<SVGSVGElement>(null);
@@ -334,4 +334,4 @@ const HuffmanTreeVisualizer: React.FC = () => {
     );
 };
 
-export default HuffmanTreeVisualizer;
+export default HuffmanTree;
