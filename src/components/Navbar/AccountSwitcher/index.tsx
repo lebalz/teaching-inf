@@ -24,8 +24,7 @@ interface SwitchToUserButtonProps {
     isInCurrentClass?: boolean;
 }
 
-const SwitchToUserButton = observer(({user, isInCurrentClass}: SwitchToUserButtonProps) => {
-
+const SwitchToUserButton = observer(({ user, isInCurrentClass }: SwitchToUserButtonProps) => {
     const userStore = useStore('userStore');
     const socketStore = useStore('socketStore');
 
@@ -115,11 +114,7 @@ const AccountSwitcher = observer(() => {
                                 ),
                                 ['firstName']
                             ).map((user) => (
-                                <SwitchToUserButton
-                                    key={user.id}
-                                    user={user}
-                                    isInCurrentClass={true}
-                                />
+                                <SwitchToUserButton key={user.id} user={user} isInCurrentClass={true} />
                             ))}
                             {_.orderBy(
                                 userStore.managedUsers.filter(
@@ -127,11 +122,7 @@ const AccountSwitcher = observer(() => {
                                 ),
                                 ['firstName']
                             ).map((user) => (
-                                <SwitchToUserButton
-                                    key={user.id}
-                                    user={user}
-                                    isInCurrentClass={false}
-                                />
+                                <SwitchToUserButton key={user.id} user={user} isInCurrentClass={false} />
                             ))}
                         </div>
                     </div>
