@@ -77,7 +77,12 @@ const AccountSwitcher = observer(() => {
                                         path={mdiCircle}
                                         size={0.3}
                                         color={
-                                            (socketStore.connectedClients.get(user.id) || 0) >= 1
+                                            (
+                                                userStore.isUserSwitched &&
+                                                userStore.viewedUser?.id == user.id
+                                                    ? (socketStore.connectedClients.get(user.id) || 0) >= 2
+                                                    : (socketStore.connectedClients.get(user.id) || 0) >= 1
+                                            )
                                                 ? 'var(--ifm-color-success)'
                                                 : 'var(--ifm-color-danger)'
                                         }
