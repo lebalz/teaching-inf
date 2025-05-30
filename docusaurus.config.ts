@@ -15,13 +15,13 @@ import {
   rsDoctorPluginConfig,
   aliasConfigurationPluginConfig,
   sentryPluginConfig,
-  pdfjsCopyDependenciesPluginConfig,
-  excalidrawPluginConfig,
   socketIoNoDepWarningsPluginConfig,
 } from './src/siteConfig/pluginConfigs';
 import { useTdevContentPath } from './src/siteConfig/helpers';
 import path from 'path';
 import { recommendedBeforeDefaultRemarkPlugins, recommendedRehypePlugins, recommendedRemarkPlugins } from './src/siteConfig/markdownPluginConfigs';
+import { remarkPdfPluginConfig } from '@tdev/remark-pdf';
+import { excalidrawPluginConfig } from '@tdev/excalidoc';
 
 const siteConfig = getSiteConfig();
 
@@ -286,7 +286,7 @@ const config: Config = applyTransformers({
     rsDoctorPluginConfig,
     aliasConfigurationPluginConfig,
     sentryPluginConfig,
-    pdfjsCopyDependenciesPluginConfig,
+    remarkPdfPluginConfig,
     excalidrawPluginConfig,
     socketIoNoDepWarningsPluginConfig,
     [
