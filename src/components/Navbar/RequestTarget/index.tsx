@@ -47,27 +47,16 @@ const RequestTarget = observer(() => {
                 </div>
                 <div className={clsx('card__body', styles.body)}>
                     <div className={clsx(styles.groups)}>
-                        {_.sortBy(
-                            studentGroupStore.managedStudentGroups.filter((group) => group.name === klass),
-                            ['name']
+                        {_.orderBy(
+                            studentGroupStore.managedStudentGroups,
+                            [(group) => group.name === klass, 'name'],
+                            ['desc', 'asc']
                         ).map((group) => {
                             return (
                                 <NavSetTargetRequest
                                     key={group.id}
                                     studentGroup={group}
-                                    isActiveClass={true}
-                                />
-                            );
-                        })}
-                        {_.sortBy(
-                            studentGroupStore.managedStudentGroups.filter((group) => group.name !== klass),
-                            ['name']
-                        ).map((group) => {
-                            return (
-                                <NavSetTargetRequest
-                                    key={group.id}
-                                    studentGroup={group}
-                                    isActiveClass={false}
+                                    isActiveClass={group.name === klass}
                                 />
                             );
                         })}
