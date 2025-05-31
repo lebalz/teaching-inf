@@ -45,7 +45,6 @@ const SwitchToUserButton = observer(({ user, isInCurrentClass }: SwitchToUserBut
                 className={clsx(styles.liveIndicator)}
             />
             <Button
-                key={user.id}
                 icon={user.isStudent ? mdiAccountCircleOutline : mdiShieldAccount}
                 size={0.8}
                 className={clsx(styles.userButton)}
