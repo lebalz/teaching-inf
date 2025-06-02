@@ -18,6 +18,9 @@ interface Props {
     noAutoFocus?: boolean;
     required?: boolean;
     options?: string[];
+    step?: string | number | undefined;
+    min?: string | number | undefined;
+    max?: string | number | undefined;
 }
 
 const TextInput = observer((props: Props) => {
@@ -55,6 +58,9 @@ const TextInput = observer((props: Props) => {
                 autoFocus={!props.noAutoFocus}
                 autoComplete="off"
                 autoCorrect="off"
+                step={props.step}
+                min={props.min}
+                max={props.max}
             />
         </>
     );
