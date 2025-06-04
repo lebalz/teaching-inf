@@ -33,6 +33,21 @@ export const ButtonColors: { [key in Color]: string } = {
     info: 'button--info',
     black: 'button--primary'
 };
+export const IfmColors: { [key in Color]: string } = {
+    primary: '--ifm-color-primary',
+    secondary: '--ifm-color-secondary',
+    blue: '--ifm-color-blue',
+    green: '--ifm-color-success',
+    success: '--ifm-color-success',
+    red: '--ifm-color-danger',
+    danger: '--ifm-color-danger',
+    orange: '--ifm-color-warning',
+    warning: '--ifm-color-warning',
+    gray: '--ifm-color-secondary',
+    lightBlue: '--ifm-color-info',
+    info: '--ifm-color-info',
+    black: '--ifm-color-black'
+} as const;
 
 export const getColorClass = (color: Color | string | undefined, defaultColor?: Color) => {
     return Colors[color as Color] || Colors[defaultColor as Color];

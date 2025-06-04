@@ -13,7 +13,7 @@ interface Props {
     labelClassName?: string;
     value?: string;
     type?: HTMLInputTypeAttribute;
-    label?: string;
+    label?: React.ReactNode;
     noSpellCheck?: boolean;
     noAutoFocus?: boolean;
     required?: boolean;
