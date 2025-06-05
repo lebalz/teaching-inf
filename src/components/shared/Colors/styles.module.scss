@@ -39,10 +39,14 @@
     --button-separator-color: var(--ifm-color-secondary);
 }
 
-.secondary,
+.secondary {
+    --ifm-badge-background-color: var(--ifm-color-secondary);
+    color: var(--ifm-color-black);
+}
+
 .grey,
 .gray {
-    --ifm-badge-background-color: var(--ifm-color-secondary);
+    --ifm-badge-background-color: var(--ifm-color-gray-600);
     color: var(--ifm-color-black);
 }
 
