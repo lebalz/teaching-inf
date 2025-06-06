@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import { observer } from 'mobx-react-lite';
-import { GenericValue as GenericValueType } from '@tdev-components/shared/JsTableViewer/toJsSchema';
+import { GenericValue as GenericValueType } from '@tdev-components/shared/JsObject/toJsSchema';
 import { IfmColors } from '@tdev-components/shared/Colors';
 import Badge from '@tdev-components/shared/Badge';
 

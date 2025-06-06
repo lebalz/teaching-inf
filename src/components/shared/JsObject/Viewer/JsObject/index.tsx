@@ -1,15 +1,15 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import JsType from '@tdev-components/shared/JsTableViewer/JsType';
-import { JsObject as JsObjectType } from '@tdev-components/shared/JsTableViewer/toJsSchema';
-import JsSchemaViewer from '@tdev-components/shared/JsTableViewer/JsSchemaViewer';
+import JsType from '@tdev-components/shared/JsObject/Viewer/JsType';
+import { JsObject as JsObjectType } from '@tdev-components/shared/JsObject/toJsSchema';
+import JsSchemaViewer from '@tdev-components/shared/JsObject/Viewer/JsSchemaViewer';
 import Button from '@tdev-components/shared/Button';
 import { mdiChevronDown, mdiChevronRight, mdiDotsHorizontal } from '@mdi/js';
 import Icon from '@mdi/react';
 import { SIZE_XS } from '@tdev-components/shared/iconSizes';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
-import { CollapseAtContext } from '@tdev-components/shared/JsTableViewer';
+import { CollapseAtContext } from '@tdev-components/shared/JsObject/Viewer';
 
 interface Props {
     js: JsObjectType;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import { JsValue } from '@tdev-components/shared/JsTableViewer/toJsSchema';
-import JsTypeSwitcher from '@tdev-components/shared/JsTableViewer/JsType/Switcher';
+import { JsValue } from '@tdev-components/shared/JsObject/toJsSchema';
+import JsTypeSwitcher from '@tdev-components/shared/JsObject/Viewer/JsType/Switcher';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
 

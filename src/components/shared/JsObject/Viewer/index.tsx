@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import { JsTypes, toJsSchema } from '@tdev-components/shared/JsTableViewer/toJsSchema';
-import JsSchemaViewer from '@tdev-components/shared/JsTableViewer/JsSchemaViewer';
+import { JsTypes, toJsSchema } from '@tdev-components/shared/JsObject/toJsSchema';
+import JsSchemaViewer from '@tdev-components/shared/JsObject/Viewer/JsSchemaViewer';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
 
@@ -14,7 +14,7 @@ export interface Props {
 
 export const CollapseAtContext = React.createContext<number | undefined>(undefined);
 
-const JsTableViewer = observer((props: Props) => {
+const JsObjectViewer = observer((props: Props) => {
     const jsSchema = React.useMemo(() => {
         return toJsSchema(props.js);
     }, [props.js]);
@@ -27,4 +27,4 @@ const JsTableViewer = observer((props: Props) => {
     );
 });
 
-export default JsTableViewer;
+export default JsObjectViewer;

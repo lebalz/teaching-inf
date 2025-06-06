@@ -2,11 +2,11 @@
 page_id: 0dfffd0e-39d9-4559-92f9-cb41477c1240
 ---
 
-import JsTableViewer from '@tdev-components/shared/JsTableViewer';
+import JsObjectViewer from '@tdev-components/shared/JsObject/Viewer';
 import BrowserWindow from '@tdev-components/BrowserWindow';
 
 
-# JS Table Viewer
+# JS Object Viewer
 
 Um ein JavaScript Objekt oder Array visuell ansprechend darzustellen, kann der `JsTableViewer` verwendet werden. Dieser Viewer ist besonders nützlich, um komplexe Datenstrukturen in einer tabellarischen Form darzustellen.
 
@@ -45,9 +45,9 @@ export const data = {
 };
 
 ```tsx
-import JsTableViewer from '@tdev-components/shared/JsTableViewer';
+import JsObjectViewer from '@tdev-components/shared/JsObject/Viewer';
 
-<JsTableViewer
+<JsObjectViewer
   js={{
     name: "John Doe",
     age: 30,
@@ -85,7 +85,7 @@ import JsTableViewer from '@tdev-components/shared/JsTableViewer';
 ```
 
 <BrowserWindow>
-    <JsTableViewer
+    <JsObjectViewer
         js={data}
     />
 </BrowserWindow>
@@ -98,9 +98,9 @@ import JsTableViewer from '@tdev-components/shared/JsTableViewer';
 : default: `3`, daher in der dritten Ebene werden Objekte und Arrays zusammengeklappt.
 
 ```ts
-import JsTableViewer from '@tdev-components/shared/JsTableViewer';
+import JsObjectViewer from '@tdev-components/shared/JsObject/Viewer';
 
-<JsTableViewer
+<JsObjectViewer
   js={{
     name: "John Doe",
     // ...
@@ -110,7 +110,7 @@ import JsTableViewer from '@tdev-components/shared/JsTableViewer';
 ```
 
 <BrowserWindow>
-    <JsTableViewer
+    <JsObjectViewer
         js={data}
         collapseAt={1}
     />

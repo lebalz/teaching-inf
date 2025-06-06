@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import { JsFunction } from '@tdev-components/shared/JsTableViewer/toJsSchema';
-import JsType from '@tdev-components/shared/JsTableViewer/JsType';
+import { JsFunction } from '@tdev-components/shared/JsObject/toJsSchema';
+import JsType from '@tdev-components/shared/JsObject/Viewer/JsType';
 import CodeBlock from '@theme/CodeBlock';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
