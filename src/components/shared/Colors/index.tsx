@@ -57,6 +57,7 @@ export const getButtonColorClass = (color: Color | string | undefined, defaultCo
     return clsx(
         ButtonColors[color as Color] || ButtonColors[defaultColor as Color],
         color === 'blue' && styles.buttonBlue,
-        color === 'black' && styles.buttonBlack
+        color === 'black' && styles.buttonBlack,
+        color === 'gray' && styles.buttonGray
     );
 };

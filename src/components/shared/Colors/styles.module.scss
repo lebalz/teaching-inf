@@ -69,6 +69,9 @@
         --baseTextContrast: var(--ifm-color-white);
     }
 }
+.buttonGray {
+    --ifm-button-border-color: var(--ifm-color-gray-500);
+}
 .buttonPrimary {
     color: var(--ifm-color-primary);
     --ifm-badge-background-color: var(--ifm-color-primary);
@@ -80,5 +83,8 @@
             --ifm-button-color: var(--ifm-color-black);
             --baseTextContrast: var(--ifm-color-black);
         }
+    }
+    .buttonGray {
+        --ifm-button-border-color: var(--ifm-color-secondary);
     }
 }
