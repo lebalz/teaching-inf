@@ -1,0 +1,40 @@
+---
+page_id: cec0fdb3-bb9f-409d-b0e9-98cc0c90c529
+sidebar_label: Mathematik
+---
+
+import WithCmsText from '@tdev-components/documents/CmsText/WithCmsText';
+import CmsText from '@tdev-components/documents/CmsText';
+import DefinitionList from '@tdev-components/DefinitionList';
+import { useStore } from '@tdev-hooks/useStore';
+
+export const Name = () => {
+    const userStore = useStore('userStore');
+    const user = userStore.viewedUser;
+    return user?.name ?? '???'
+
+}
+
+# Mathematik 28Gj
+
+## Tests
+
+Testübersicht für <Name />
+
+### Gleichungssysteme
+
+<WithCmsText 
+    entries={{
+        punkte: '9b02e3aa-f6fb-4db2-b061-669233df9629',
+        note: '5bc6e22e-11f1-4747-bd23-b2134bd590a3'
+    }}
+>
+    <DefinitionList>
+        <dt>Name</dt>
+        <dd></dd>
+        <dt>Punkte</dt>
+        <dd><CmsText name="punkte" /> / 16</dd>
+        <dt>Note</dt>
+        <dd><CmsText name="note" /></dd>
+    </DefinitionList>
+</WithCmsText>
