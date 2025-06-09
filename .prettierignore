@@ -8,6 +8,7 @@ coverage
 .drone.yml
 
 docs
+versioned_docs
 
 *.md
 
