@@ -21,6 +21,7 @@ interface Props {
     step?: string | number | undefined;
     min?: string | number | undefined;
     max?: string | number | undefined;
+    readOnly?: boolean;
 }
 
 const TextInput = observer((props: Props) => {
@@ -41,6 +42,7 @@ const TextInput = observer((props: Props) => {
                 value={props.value ?? text}
                 className={clsx(props.className, styles.textInput)}
                 required={props.required}
+                disabled={props.readOnly}
                 onChange={(e) => {
                     if (props.value === undefined) {
                         setText(e.target.value);
