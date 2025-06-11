@@ -137,9 +137,9 @@ const getSiteConfig: SiteConfigProvider = () => {
         },
         themeConfig: {
             algolia: {
-                appId: 'Z6FIZQ5MSD',
-                apiKey: '7152c9a398beb4325de68df4f6a62acd',
-                indexName: 'gbsl-silasberger',
+                appId: 'P2ENEETR74',
+                apiKey: 'e5251468d5a81bb7569048e52f735999',
+                indexName: 'inf-gbsl',
                 searchPagePath: 'search'
             }
         },
