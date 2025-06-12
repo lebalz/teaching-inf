@@ -11,9 +11,11 @@ import { mdiChatQuestionOutline, mdiMinusCircle, mdiPlusCircle } from '@mdi/js';
 import Icon from '@mdi/react';
 import { SIZE_M } from '@tdev-components/shared/iconSizes';
 import { IfmColors } from '@tdev-components/shared/Colors';
+import { Translation } from '@tdev-components/shared/WithTranslations';
 
 interface Props {
     aiTemplateId: string;
+    translations?: Translation;
 }
 
 const AiPrompt = observer((props: Props) => {
@@ -32,7 +34,6 @@ const AiPrompt = observer((props: Props) => {
                 className={styles.promptInput}
                 onChange={(text) => setValue(text)}
                 minRows={2}
-                label="Eingabe"
             />
             <Button
                 text="Prompt!"
@@ -47,10 +48,7 @@ const AiPrompt = observer((props: Props) => {
                 <AiRequest
                     key={aiRequest.id}
                     aiRequest={aiRequest as AiRequestModel}
-                    translations={{
-                        bad: () => <Icon size={SIZE_M} path={mdiMinusCircle} color={IfmColors.red} />,
-                        good: () => <Icon size={SIZE_M} path={mdiPlusCircle} color={IfmColors.green} />
-                    }}
+                    translations={props.translations}
                 />
             ))}
         </div>

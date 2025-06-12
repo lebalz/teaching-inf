@@ -3,10 +3,11 @@ page_id: 2bd06215-d04d-4c78-8e8b-cf4f4009491d
 ---
 import Steps from '@tdev-components/Steps';
 import TaskState from '@tdev-components/documents/TaskState';
+import Prompt from '@tdev-components/Ai/AiRequest/Prompt';
 
 # Gut Prompten
 
-:::aufgabe[Prompten]
+::::aufgabe[Prompten]
 
 Kapitel
 : [Besser als Blabla](https://erzbe-my.sharepoint.com/:b:/g/personal/balthasar_hofer_gbsl_ch/EeEzo8pP6VdMiPbsQIYuT7YBVMyl08I40zB6hTG-hBqahw?e=tls4lY)
@@ -39,5 +40,17 @@ irgendwie stimmen»? Diese Art des Denkens nennt sich «lazy thinking». Wie gro
 4. <TaskState inline id="2cb2fa38-f7e5-4632-932d-591ea91426e6"/> Lesen Sie Seite 62. aus dem Kapitel "Kombinationsprofi". Was nehmen Sie daraus für Ihre Projektarbeit mit?
     <Answer type="text" id="ad872484-659d-4be8-81f2-136fa1922c1c" />
 
+5. <TaskState inline id="72f62d74-7f32-473a-9c64-89d40c3fa53f" /> Für Ihr Kapitel haben Sie ein Proposal geschrieben. Kopieren Sie den gesamten Text und geben Sie ihn in die spezialisierte Rückmelde-KI ein. Lesesn Sie die Rückmeldung aufmerksam durch und adressieren Sie die Hinweise in Ihrem Text (sofern diese sinnvoll sind 😉 gesunder Menschenverstand auch hier anwenden!)
+    :::danger[Anzahl Anfragen ist begrenzt!]
+    Pro Person sind nur 3 Anfragen an die Feedback-KI möglich. Wenn Sie diese aufgebraucht haben, können Sie keine weiteren Anfragen mehr stellen. Bitte nutzen Sie die Anfragen also mit Bedacht und formulieren Sie Ihre Fragen so präzise wie möglich.
+    :::
+
+    **Feedback-KI**
+
+    <Prompt aiTemplateId='7c841454-145b-429d-9dd8-d4a16b88b2f5' />
+
+
 
 </Steps>
+
+::::
