@@ -3,19 +3,60 @@ page_id: 7c874061-5773-4b07-abd0-cd5630403e10
 ---
 import CmsLink from '@tdev-components/documents/CmsText/Link';
 import Steps from '@tdev-components/Steps';
+import TaskState from '@tdev-components/documents/TaskState';
+import PermissionsPanel from '@tdev-components/PermissionsPanel'
+import BrowserWindow from '@tdev-components/BrowserWindow'
+import { observer } from 'mobx-react-lite';
+import { useStore } from '@tdev-hooks/useStore';
+
+export const NotenLabel = observer(() => {
+    const docRootStore = useStore('documentRootStore');
+    const userStore = useStore('userStore');
+    const documentRoot = docRootStore.find('5f64b284-1eb3-46a9-9176-efea2ffa6391');
+    const defaultText = 'Meine Note soll zählt.*';
+    if (!documentRoot) {
+        return defaultText;
+    }
+    const { firstMainDocument } = documentRoot;
+    if (!firstMainDocument) {
+        return defaultText;
+    }
+    if (firstMainDocument.taskState === 'unset') {
+        return <span>Die Note für <i>{userStore.viewedUser.name}</i> <b>zählt nicht!*</b></span>;
+    }
+    return <span>Die Note für <i>{userStore.viewedUser.name}</i> <b>zählt 0.5.*</b></span>;
+});
 
 # Projekt
 
 :::info[Rahmenbedingungen]
 Benotung
-: Die Note zählt ganz ($1$)
+: Die Note zählt halb ($0.5$)
 Verfügbare Zeit
-: 4 Doppellektionen
+: 3 Doppellektionen
 Abgabe
 : Die Abgabe erfolgt direkt über [students-wiki.gbsl.website](https://students-wiki.gbsl.website/)
 Datum
 : 20.06.2025, 22:00 Uhr
 :::
+
+::::info[Projektabgabe]
+Die Abgabe erfolgt über [students-wiki.gbsl.website](https://students-wiki.gbsl.website/).
+1. Stellen Sie sicher, dass Sie bei Ihrer Abgabe als **Autor:in** eingetragen sind.
+2. Teilen Sie das Kapitel direkt aus ihrem **persönlichen** Bereich mit B. Hofer, indem Sie auf __Teilen__ klicken:
+    <BrowserWindow bodyStyle={{ padding: 0, lineHeight: 0}}>
+        ::video[./images/Abgabe-Projekt.mp4]{borderRadius=4px}
+    </BrowserWindow>
+3. Geben Sie hier an, ob die Note zählt oder nicht - ab 22:00 Uhr am 20.6.2025 kann die Gewichtung nicht mehr geändert werden.
+
+    <TaskState states={['checked', 'unset']} id="5f64b284-1eb3-46a9-9176-efea2ffa6391" inline /> <NotenLabel />
+    <PermissionsPanel documentRootId="5f64b284-1eb3-46a9-9176-efea2ffa6391"/>
+
+    :::danger[\* Abgabe ist obligatorisch]
+    Die Abgabe ist obligatorisch. Wird keine Abgabe gemacht oder sind die formalen Mindest-Anforderungen nicht erfüllt (bspw. Abgabe eines leeren Dokuments oder es fehlen Quellenangaben oder Unterkapitel fehlen oder Quizz-Fragen nicht vorhanden oder kein Bild, oder Inhalt passt nicht zur abgegebenen Proposal), so wird eine halb zählende **Note 2.0** vergeben.
+    :::
+
+::::
 
 ## Projektbeschreibung
 
