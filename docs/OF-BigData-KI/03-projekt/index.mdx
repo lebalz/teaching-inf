@@ -9,6 +9,8 @@ import BrowserWindow from '@tdev-components/BrowserWindow'
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@tdev-hooks/useStore';
 
+# Projekt
+
 export const NotenLabel = observer(() => {
     const docRootStore = useStore('documentRootStore');
     const userStore = useStore('userStore');
@@ -27,7 +29,6 @@ export const NotenLabel = observer(() => {
     return <span>Die Note für <i>{userStore.viewedUser.name}</i> <b>zählt 0.5.*</b></span>;
 });
 
-# Projekt
 
 :::info[Rahmenbedingungen]
 Benotung
