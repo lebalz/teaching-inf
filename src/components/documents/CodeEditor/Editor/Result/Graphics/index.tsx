@@ -1,4 +1,4 @@
-import React, { type ReactNode } from 'react';
+import * as React from 'react';
 import styles from './styles.module.scss';
 import { DOM_ELEMENT_IDS } from '@tdev-components/documents/CodeEditor/constants';
 import Draggable from 'react-draggable';

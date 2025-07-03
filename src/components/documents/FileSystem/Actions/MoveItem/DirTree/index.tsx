@@ -13,7 +13,7 @@ import Button from '@tdev-components/shared/Button';
 import Directory from '@tdev-models/documents/FileSystem/Directory';
 import { observer } from 'mobx-react-lite';
 import clsx from 'clsx';
-import React, { type ReactNode } from 'react';
+import React from 'react';
 import { Document, DocumentType } from '@tdev-api/document';
 import Icon, { Stack } from '@mdi/react';
 import { getNumericCircleIcon } from '@tdev-components/shared/numberIcons';
@@ -24,7 +24,7 @@ interface DirProps {
     dir: Directory;
     fileType: DocumentType;
     moveTo: (dir: Directory) => void;
-    children?: ReactNode;
+    children?: React.ReactNode;
 }
 
 const DirTree = observer((props: DirProps) => {

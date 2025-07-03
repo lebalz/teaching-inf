@@ -1,4 +1,4 @@
-import React, { type ReactNode } from 'react';
+import React from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
@@ -8,7 +8,7 @@ import { mdiEmoticonSadOutline } from '@mdi/js';
 interface Props {
     size?: number;
     header?: string;
-    children?: ReactNode;
+    children?: React.ReactNode;
 }
 
 const NoAccess = observer((props: Props) => {

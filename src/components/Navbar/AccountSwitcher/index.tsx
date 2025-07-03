@@ -63,14 +63,10 @@ const SwitchToUserButton = observer(({ user, isInCurrentClass }: SwitchToUserBut
 const AccountSwitcher = observer(() => {
     const isBrowser = useIsBrowser();
     const userStore = useStore('userStore');
+    const sessionStore = useStore('sessionStore');
     const location = useLocation();
-    React.useEffect(() => {
-        if (userStore._viewedUserId) {
-            userStore.switchUser(userStore.current?.id);
-        }
-    }, [location.pathname]);
 
-    if (!isBrowser || !userStore.current?.hasElevatedAccess) {
+    if (!isBrowser || !userStore.current?.hasElevatedAccess || sessionStore.apiMode !== 'api') {
         return null;
     }
     const klass = location.pathname.split('/')[1];

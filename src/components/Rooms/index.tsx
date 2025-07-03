@@ -9,7 +9,7 @@ import Icon from '@mdi/react';
 import { mdiAccountAlert, mdiEmoticonSad } from '@mdi/js';
 import { useStore } from '@tdev-hooks/useStore';
 import styles from './styles.module.scss';
-import React, { type ReactNode } from 'react';
+import React from 'react';
 import { DocumentType, DynamicDocumentRoot, RoomType } from '@tdev-api/document';
 import { ModelMeta as RootsMeta } from '@tdev-models/documents/DynamicDocumentRoots';
 import { default as DynamicDocumentRootMeta } from '@tdev-models/documents/DynamicDocumentRoot';

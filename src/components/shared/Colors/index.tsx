@@ -33,11 +33,14 @@ export const ButtonColors: { [key in Color]: string } = {
     info: 'button--info',
     black: 'button--primary'
 };
-export const IfmColors: { [key in Color]: string } = {
+
+export const IfmColors = {
     primary: 'var(--ifm-color-primary)',
+    primaryDarker: 'var(--ifm-color-primary-darker)',
     secondary: 'var(--ifm-color-secondary)',
     blue: 'var(--ifm-color-blue)',
     green: 'var(--ifm-color-success)',
+    lightGreen: 'var(--ifm-color-success-lightest)',
     success: 'var(--ifm-color-success)',
     red: 'var(--ifm-color-danger)',
     danger: 'var(--ifm-color-danger)',
@@ -47,7 +50,7 @@ export const IfmColors: { [key in Color]: string } = {
     lightBlue: 'var(--ifm-color-info)',
     info: 'var(--ifm-color-info)',
     black: 'var(--ifm-color-black)'
-} as const;
+};
 
 export const getColorClass = (color: Color | string | undefined, defaultColor?: Color) => {
     return Colors[color as Color] || Colors[defaultColor as Color];

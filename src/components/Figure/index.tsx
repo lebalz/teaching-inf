@@ -1,4 +1,4 @@
-import React, { type ReactNode } from 'react';
+import React from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
 
@@ -11,7 +11,7 @@ const defaultUnit = (value: string | number, unit: string = 'px') => {
 };
 
 interface Props {
-    children?: ReactNode;
+    children?: React.ReactNode;
     options?: React.CSSProperties;
 }
 
@@ -35,9 +35,6 @@ export default function Figure(props: Props): React.ReactNode {
             opts.maxWidth = `min(90vw, ${defaultUnit(opts.width)}, 100%)`;
             opts.width = defaultUnit(opts.width);
             // delete opts.width;
-        }
-        if ((opts.maxWidth || opts.minWidth) && !opts.width) {
-            opts.width = '100%';
         }
     }
     React.useEffect(() => {
