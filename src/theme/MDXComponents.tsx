@@ -2,8 +2,6 @@
 // Import the original mapper
 import MDXComponents from '@theme-original/MDXComponents';
 import DefinitionList from '@tdev-components/DefinitionList';
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 import DefBox from '@tdev-components/CodeDefBox';
 import DefHeading from '@tdev-components/CodeDefBox/DefHeading';
 import DefContent from '@tdev-components/CodeDefBox/DefContent';
@@ -18,8 +16,6 @@ export default {
     // Re-use the default mapping
     ...MDXComponents,
     Dl: DefinitionList,
-    Tabs: Tabs,
-    TabItem: TabItem,
     DefBox: DefBox,
     DefHeading: DefHeading,
     DefContent: DefContent,

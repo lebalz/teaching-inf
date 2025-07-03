@@ -83,7 +83,7 @@ class String extends iDocument<DocumentType.String> {
         }
         if (this.text === this.meta.defaultData.text) {
             this.answer = StringAnswer.Unchecked;
-        } else if (this.meta.checker(this.meta.sanitizer(this.text || ''))) {
+        } else if (this.meta.checker(this.meta.sanitizer(this.text))) {
             this.answer = StringAnswer.Correct;
         } else {
             this.answer = StringAnswer.Wrong;
