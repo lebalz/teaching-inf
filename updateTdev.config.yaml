@@ -5,6 +5,14 @@ trackedElements:
       dst: docusaurus.config.ts
     - src: src/
       dst: src
+      ignore:
+          - src/components/Ai
+          - src/models/Ai
+          - src/pages/index.tsx
+          - src/pages/__index.tsx
+          - src/pages/.gitignore
+          - src/stores/AiStore.ts
+          - src/theme/DocItem/Footer
     - src: packages/tdev/
       dst: packages/tdev
     - src: updateSync/
