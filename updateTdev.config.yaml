@@ -17,8 +17,6 @@ trackedElements:
       dst: packages/tdev
     - src: updateSync/
       dst: updateSync
-    - src: tsconfig.json
-      dst: tsconfig.json
     - src: .prettierrc
       dst: .prettierrc
     - src: vitest.config.ts
@@ -28,3 +26,4 @@ watchedElements:
     - package.json
     - .env.example
     - static/bry-libs/
+    - tsconfig.json
