@@ -6,13 +6,13 @@ trackedElements:
     - src: src/
       dst: src
       ignore:
-          - src/components/Ai/
-          - src/models/Ai/
-          - src/pages/index.tsx
-          - src/pages/__index.tsx
-          - src/pages/.gitignore
-          - src/stores/AiStore.ts
-          - src/theme/DocItem/Footer/
+          - components/Ai/**
+          - models/Ai/**
+          - pages/index.tsx
+          - pages/__index.tsx
+          - pages/.gitignore
+          - stores/AiStore.ts
+          - theme/**
     - src: packages/tdev/
       dst: packages/tdev
     - src: updateSync/
