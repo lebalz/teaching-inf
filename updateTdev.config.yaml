@@ -1,23 +1,29 @@
-tdevPath: ../teaching-dev
+tdevPath: ../../gbsl-informatik/teaching-dev
 expectedTdevBranch: main
 trackedElements:
     - src: docusaurus.config.ts
       dst: docusaurus.config.ts
     - src: src/
       dst: src
+      ignore:
+          - components/Ai/**
+          - models/Ai/**
+          - pages/index.tsx
+          - pages/__index.tsx
+          - pages/.gitignore
+          - stores/AiStore.ts
+          - theme/**
+    - src: packages/tdev/
+      dst: packages/tdev
     - src: updateSync/
       dst: updateSync
-    - src: tsconfig.json
-      dst: tsconfig.json
     - src: .prettierrc
       dst: .prettierrc
-    - src: .prettierignore
-      dst: .prettierignore
     - src: vitest.config.ts
       dst: vitest.config.ts
-    - src: static/bry-libs/
-      dst: static/bry-libs
 watchedElements:
     - .babel.config.js
     - package.json
     - .env.example
+    - static/bry-libs/
+    - tsconfig.json

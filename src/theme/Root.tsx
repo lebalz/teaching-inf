@@ -1,4 +1,4 @@
-import React, { type ReactNode } from 'react';
+import React from 'react';
 import { MsalProvider, useIsAuthenticated, useMsal } from '@azure/msal-react';
 import { StoresProvider, rootStore } from '@tdev-stores/rootStore';
 import { observer } from 'mobx-react-lite';
@@ -18,7 +18,7 @@ const { NO_AUTH, OFFLINE_API, TEST_USER, SENTRY_DSN } = siteConfig.customFields 
     TEST_USER?: string;
     NO_AUTH?: boolean;
     SENTRY_DSN?: string;
-    OFFLINE_API?: boolean;
+    OFFLINE_API?: boolean | 'memory' | 'indexedDB';
 };
 export const msalInstance = new PublicClientApplication(msalConfig);
 
@@ -28,13 +28,13 @@ const currentTestUsername = Storage.get('SessionStore', {
 
 if (NO_AUTH) {
     if (OFFLINE_API) {
-        console.log(offlineApiMessage());
+        console.log(offlineApiMessage(OFFLINE_API ?? 'memory'));
     } else {
         console.log(noAuthMessage(currentTestUsername));
     }
 }
 
-const MsalWrapper = observer(({ children }: { children: ReactNode }) => {
+const MsalWrapper = observer(({ children }: { children: React.ReactNode }) => {
     const sessionStore = useStore('sessionStore');
     React.useEffect(() => {
         if (NO_AUTH && process.env.NODE_ENV !== 'production' && currentTestUsername) {
@@ -229,9 +229,9 @@ function Root({ children }: { children: React.ReactNode }) {
             .then((Sentry) => {
                 if (Sentry) {
                     Sentry.init({
-                        dsn: SENTRY_DSN,
-                        integrations: [Sentry.browserTracingIntegration()],
-                        tracesSampleRate: 0.1 //  Capture 100% of the transactions
+                        dsn: SENTRY_DSN
+                        // integrations: [Sentry.browserTracingIntegration()],
+                        // tracesSampleRate: 1.0, //  Capture 100% of the transactions
                         // tracePropagationTargets: ['localhost', /^https:\/\/yourserver\.io\/api/]
                     });
                 }

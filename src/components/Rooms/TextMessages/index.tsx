@@ -1,8 +1,8 @@
 import clsx from 'clsx';
-import React, { type ReactNode } from 'react';
 
 import { observer } from 'mobx-react-lite';
 import styles from './styles.module.scss';
+import React from 'react';
 import PermissionsPanel from '@tdev-components/PermissionsPanel';
 import { DocumentType, DynamicDocumentRoot } from '@tdev-api/document';
 import DocumentRoot from '@tdev-models/DocumentRoot';

@@ -1,4 +1,4 @@
-import React, { useRef, type ComponentProps, type ReactElement, type ReactNode } from 'react';
+import React, { useRef, type ComponentProps, type ReactElement } from 'react';
 import clsx from 'clsx';
 import useIsBrowser from '@docusaurus/useIsBrowser';
 

@@ -24,8 +24,7 @@ export interface Props extends Omit<MetaProps, 'live_jsx' | 'live_py'> {
 
 export const CodeEditor = observer((props: Props) => {
     const id = props.slim ? undefined : props.id;
-    const [meta] = React.useState(new ScriptMeta(props));
-    const script = useFirstMainDocument(id, meta);
+    const script = useFirstMainDocument(id, new ScriptMeta(props));
     React.useEffect(() => {
         if (script && script.meta?.slim) {
             script.setCode(props.code);

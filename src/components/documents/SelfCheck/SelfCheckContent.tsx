@@ -1,4 +1,4 @@
-import React, { type ReactNode } from 'react';
+import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { TaskMeta } from '@tdev-models/documents/TaskState';
 import { useFirstMainDocument } from '@tdev-hooks/useFirstMainDocument';
@@ -11,7 +11,7 @@ interface StateDependentProps {
     visibleFrom?: SelfCheckStateType;
     visibleTo?: SelfCheckStateType;
     alwaysVisibleForTeacher?: boolean;
-    children?: ReactNode;
+    children?: React.ReactNode;
 }
 
 function stateIndex(state: SelfCheckStateType) {

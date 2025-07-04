@@ -1,4 +1,4 @@
-import React, { type ReactNode } from 'react';
+import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { MetaInit } from '@tdev-models/documents/TaskState';
 import { SelfCheckStateType } from '@tdev-components/documents/SelfCheck/models';

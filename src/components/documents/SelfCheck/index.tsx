@@ -1,10 +1,9 @@
 import { SelfCheckContext } from '@tdev-components/documents/SelfCheck/shared';
-import React, { type ReactNode } from 'react';
 
 interface Props {
     solutionId: string;
     taskStateId: string;
-    children?: ReactNode;
+    children?: React.ReactNode;
 }
 
 const SelfCheck = ({ solutionId, taskStateId, children }: Props) => {
