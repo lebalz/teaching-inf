@@ -11,7 +11,8 @@ import {
     blog,
     loginProfileButton,
     requestTarget,
-    taskStateOverview
+    taskStateOverview,
+    devModeAccessLocalFS
 } from './src/siteConfig/navbarItems';
 
 const GIT_COMMIT_SHA = process.env.GITHUB_SHA || Math.random().toString(36).substring(7);
@@ -61,6 +62,7 @@ const getSiteConfig: SiteConfigProvider = () => {
             },
             blog,
             taskStateOverview,
+            devModeAccessLocalFS,
             accountSwitcher,
             requestTarget,
             loginProfileButton
