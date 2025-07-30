@@ -11,7 +11,6 @@ import { PageStore } from '@tdev-stores/PageStore';
 import { AdminStore } from '@tdev-stores/AdminStore';
 import { CmsStore } from '@tdev-stores/CmsStore';
 import SiteStore from '@tdev-stores/SiteStore';
-import { AiStore } from '@tdev-stores/AiStore';
 
 export class RootStore {
     documentRootStore: DocumentRootStore;
@@ -25,7 +24,6 @@ export class RootStore {
     adminStore: AdminStore;
     cmsStore: CmsStore;
     siteStore: SiteStore;
-    aiStore: AiStore;
 
     // @observable accessor initialized = false;
     constructor() {
@@ -40,7 +38,6 @@ export class RootStore {
         this.adminStore = new AdminStore(this);
         this.cmsStore = new CmsStore(this);
         this.siteStore = new SiteStore(this);
-        this.aiStore = new AiStore(this);
 
         if (this.sessionStore.isLoggedIn) {
             this.load();
@@ -58,7 +55,6 @@ export class RootStore {
                 this.userStore.load();
                 this.studentGroupStore.load();
                 this.cmsStore.initialize();
-                this.aiStore.load();
                 if (user.hasElevatedAccess) {
                     this.adminStore.load();
                 }
