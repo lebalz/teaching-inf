@@ -95,13 +95,16 @@ export default function Home({ recentPosts }: Props): React.ReactNode {
                 <HomepageHeader />
                 <main>
                     <div className={clsx(styles.galleryWrapper)}>
-                        {videosToShow.map((vid) => {
+                        {videosToShow.map((vid, idx) => {
                             return (
                                 <VideoWallpaper
                                     key={vid.src}
                                     src={vid.src}
                                     bib={vid.bib}
-                                    className={clsx(videosToShow.length === 1 ? styles.single : undefined)}
+                                    className={clsx(
+                                        videosToShow.length === 1 ? styles.single : undefined,
+                                        idx > 1 && idx === videosToShow.length - 1 ? styles.last : undefined
+                                    )}
                                 />
                             );
                         })}

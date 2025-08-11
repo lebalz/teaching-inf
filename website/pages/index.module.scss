@@ -58,6 +58,12 @@
                 opacity: 1;
             }
         }
+        &.last {
+            .bib {
+                left: 5px;
+                right: unset;
+            }
+        }
         .videoWallpaper {
             height: max(20vh, 230px);
             margin-left: -1px;
