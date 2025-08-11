@@ -70,7 +70,7 @@ export default function Home({ recentPosts }: Props): React.ReactNode {
         { src: require('./images/compsci-5.mp4').default, bib: bib5 },
         { src: require('./images/compsci-6.mp4').default, bib: bib6 }
     ]);
-    const isMobile = useIsMobileView(450);
+    const isMobile = useIsMobileView(400);
     const isTablet = useIsMobileView(750);
     const isLaptop = useIsMobileView(900);
     const isDesktop = useIsMobileView(1800);
