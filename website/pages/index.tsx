@@ -30,7 +30,15 @@ interface Props {
     readonly recentPosts: readonly { readonly content: Content }[];
 }
 
-const VideoWallpaper = ({ src, bib }: { src: string; bib: { author?: string } }) => {
+const VideoWallpaper = ({
+    src,
+    bib,
+    className
+}: {
+    src: string;
+    bib: { author?: string };
+    className?: string;
+}) => {
     const videoRef = useRef<HTMLVideoElement>(null);
     React.useEffect(() => {
         if (videoRef.current) {
@@ -41,7 +49,7 @@ const VideoWallpaper = ({ src, bib }: { src: string; bib: { author?: string } })
         }
     }, [src]);
     return (
-        <div className={clsx(styles.container)}>
+        <div className={clsx(styles.container, className)}>
             <video
                 ref={videoRef}
                 preload="metadata"
@@ -70,25 +78,33 @@ export default function Home({ recentPosts }: Props): React.ReactNode {
         { src: require('./images/compsci-5.mp4').default, bib: bib5 },
         { src: require('./images/compsci-6.mp4').default, bib: bib6 }
     ]);
-    const isMobile = useIsMobileView(400);
+    const isMobile = useIsMobileView(450);
     const isTablet = useIsMobileView(750);
     const isLaptop = useIsMobileView(900);
     const isDesktop = useIsMobileView(1730);
     const isWide = useIsMobileView(2300);
+    const videosToShow = React.useMemo(() => {
+        return _.shuffle(videos.current).slice(
+            0,
+            isMobile ? 1 : isTablet ? 2 : isLaptop ? 3 : isDesktop ? 4 : isWide ? 5 : 6
+        );
+    }, [isMobile, isTablet, isLaptop, isDesktop, isWide]);
     return (
         <div className={clsx('no-search')}>
             <Layout>
                 <HomepageHeader />
                 <main>
                     <div className={clsx(styles.galleryWrapper)}>
-                        {_.shuffle(videos.current)
-                            .slice(
-                                0,
-                                isMobile ? 1 : isTablet ? 2 : isLaptop ? 3 : isDesktop ? 4 : isWide ? 5 : 6
-                            )
-                            .map((vid) => {
-                                return <VideoWallpaper key={vid.src} src={vid.src} bib={vid.bib} />;
-                            })}
+                        {videosToShow.map((vid) => {
+                            return (
+                                <VideoWallpaper
+                                    key={vid.src}
+                                    src={vid.src}
+                                    bib={vid.bib}
+                                    className={clsx(videosToShow.length === 1 ? styles.single : undefined)}
+                                />
+                            );
+                        })}
                     </div>
                     <HomepageCourses />
                 </main>

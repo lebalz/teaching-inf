@@ -59,8 +59,15 @@
             }
         }
         .videoWallpaper {
-            height: 20vh;
+            height: max(20vh, 230px);
             margin-left: -1px;
+        }
+        &.single {
+            .videoWallpaper {
+                width: calc(100vw + 0px);
+                height: unset;
+                margin-left: 0;
+            }
         }
     }
 }
