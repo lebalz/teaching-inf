@@ -1,0 +1,23 @@
+---
+sidebar_position: 0.1
+sidebar_label: 29Gj
+page_id: e2693106-4bdd-4c1c-b5a6-8d5e8fc897bf
+---
+
+import SemesterTable from '@tdev-components/SemesterTable';
+import { SortTimeTableByDate } from '@tdev/helpers/time';
+import hs2025 from './29Gj_HS2025.yaml';
+
+import Directory from '@tdev-components/documents/FileSystem/Directory';
+
+# 29Gj Informatik
+
+<Directory name="Notizen" id="1a6a7d02-0172-4310-9a83-a9c3c889c8a9" />
+
+<SemesterTable
+    header={['Datum', 'Thema', 'Inhalt']}
+    compact
+    selectable
+    rows={hs2025}
+    order={SortTimeTableByDate()}
+/>

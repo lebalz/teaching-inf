@@ -22,7 +22,15 @@ const CourseList: Course[] = [];
 if (!DOCS_ONLY) {
     CourseList.push({
         title: 'Gym 1',
+        classes: ['29Ga', '29Gj']
+    });
+    CourseList.push({
+        title: 'Gym 2',
         classes: ['28Gb', '28Gj']
+    });
+    CourseList.push({
+        title: 'WMS',
+        classes: ['28Wa']
     });
     CourseList.push({
         title: 'Ehemalige',

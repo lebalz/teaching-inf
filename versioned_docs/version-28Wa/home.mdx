@@ -1,0 +1,23 @@
+---
+sidebar_position: 0.1
+sidebar_label: 28Wa
+page_id: 58fc028b-c168-4f01-9c1f-c8297ce4c7f4
+---
+
+import SemesterTable from '@tdev-components/SemesterTable';
+import { SortTimeTableByDate } from '@tdev/helpers/time';
+import hs2025 from './28Wa_HS2025.yaml';
+
+import Directory from '@tdev-components/documents/FileSystem/Directory';
+
+# 28Wa Wirtschaftsinformatik
+
+<Directory name="Notizen" id="c16be62a-9f4c-49b1-98f5-b2372bec1c9b" />
+
+<SemesterTable
+    header={['Datum', 'Thema', 'Inhalt']}
+    compact
+    selectable
+    rows={hs2025}
+    order={SortTimeTableByDate()}
+/>

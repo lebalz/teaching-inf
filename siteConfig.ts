@@ -30,7 +30,7 @@ const VERSIONS: { [version: string]: VersionOptions } = {
     }
 };
 if (!process.env.DOCS_ONLY) {
-    ['28Gb', '28Gj'].forEach((version) => {
+    ['28Gb', '28Gj', '28Wa', '29Ga', '29Gj'].forEach((version) => {
         VERSIONS[version] = {
             label: version,
             banner: 'none'
