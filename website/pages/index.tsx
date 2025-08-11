@@ -73,7 +73,7 @@ export default function Home({ recentPosts }: Props): React.ReactNode {
     const isMobile = useIsMobileView(400);
     const isTablet = useIsMobileView(750);
     const isLaptop = useIsMobileView(900);
-    const isDesktop = useIsMobileView(1800);
+    const isDesktop = useIsMobileView(1730);
     const isWide = useIsMobileView(2300);
     return (
         <div className={clsx('no-search')}>
