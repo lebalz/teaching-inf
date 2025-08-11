@@ -13,38 +13,41 @@ const DAYS = {
 };
 // 30.6.2022 Notenschluss
 const EVENTS = {
-    [38]: { desc: 'Kennenlernwoche GYM1', type: 'holiday' },
-    [39]: { desc: 'Herbstferien', type: 'holiday' },
-    [40]: { desc: 'Herbstferien', type: 'holiday' },
-    [41]: { desc: 'Herbstferien', type: 'holiday' },
-    [52]: { desc: 'Winterferien', type: 'holiday' },
-    [1]: { desc: 'Winterferien', type: 'holiday' },
+    [40]: { desc: 'Kennenlernwoche GYM1', type: 'holiday', icon: 'mdiWalletTravel' },
+    [41]: { desc: 'Herbstferien', details: '🏝️🏖️🏖️😎', type: 'holiday' },
+    [42]: { desc: 'Herbstferien', details: '🏝️🏖️🏖️😎', type: 'holiday' },
+    [52]: { desc: 'Winterferien', details: '🏂❄️⛷️🎄🧑‍🎄', icon: 'mdiPineTreeVariantOutline', type: 'holiday' },
+    [1]: { desc: 'Winterferien', details: '🏂❄️⛷️🎄🧑‍🎄', icon: 'mdiPineTreeVariantOutline', type: 'holiday' },
     [7]: { desc: 'Sportwoche', type: 'holiday' }
 };
 const CLASS_EVENTS = {
-    ['28Gb-HK']: {
-        [49]: { desc: 'Kantonaler Fachschaftstag', type: 'holiday', date: '03.12.2024' },
-        [6]: { desc: 'Programmieren 1', details: 'Test', type: 'test', date: '04.02.2025' }
-        // [2]: { desc: 'Biber', details: 'Wettbewerb', type: 'event', date: '17.01.2025' },
+    ['29Ga-HK']: {
+        [6]: { desc: 'Programmieren 1', details: 'Test', type: 'test', date: '04.02.2026' }
     },
-    ['28Gj-HK']: {
-        [49]: { desc: 'Kantonaler Fachschaftstag', type: 'holiday', date: '03.12.2024' },
-        [6]: { desc: 'Programmieren 1', details: 'Test', type: 'test', date: '04.02.2025' }
+    ['29Gj-HK']: {
+        [6]: { desc: 'Programmieren 1', details: 'Test', type: 'test', date: '04.02.2026' }
     },
-    ['28Gb']: {
-        [45]: { desc: 'Informatik Biber', details: 'Wettbewerb', type: 'event', date: '8.11.2024' },
-        [6]: { desc: 'Programmieren 1', details: 'Test', type: 'test', date: '04.02.2025' }
+    ['29Ga']: {
+        [46]: { desc: 'Informatik Biber', details: 'Wettbewerb', type: 'event', date: '11.11.2025' },
+        [6]: { desc: 'Programmieren 1', details: 'Test', type: 'test', date: '04.02.2026' }
     },
-    ['28Gj']: {
-        [45]: { desc: 'Informatik Biber', details: 'Wettbewerb', type: 'event', date: '7.11.2024' },
-        [6]: { desc: 'Programmieren 1', details: 'Test', type: 'test', date: '04.02.2025' }
+    ['29Gj']: {
+        [46]: { desc: 'Informatik Biber', details: 'Wettbewerb', type: 'event', date: '12.11.2025' },
+        [49]: {
+            desc: 'Kantonaler Fachschaftstag',
+            details: 'Auftrag Studienwahl',
+            type: 'holiday',
+            icon: 'mdiSleep',
+            date: '02.12.2025'
+        },
+        [6]: { desc: 'Programmieren 1', details: 'Test', type: 'test', date: '04.02.2026' }
     }
 };
 
 SCHOOL_EVENTS = {
-    [42]: { desc: 'Beginn BYOD-Tests', type: 'test', date: '14.10.2024' },
-    [5]: { desc: 'Beginn Semester 2', type: 'event', date: '03.02.2025' },
-    [4]: { desc: 'Notenschluss', type: 'event', date: '23.01.2025' }
+    [42]: { desc: 'Beginn BYOD-Tests', type: 'test', date: '14.10.2025' },
+    [5]: { desc: 'Notenschluss', type: 'event', date: '22.01.2026', icon: 'mdiFlagCheckered' },
+    [6]: { desc: 'Beginn Semester 2', type: 'event', date: '02.02.2026', icon: 'mdiRun' }
     // [51]: [
     //     { desc: 'Weihnachtskonzert', type: 'holiday', date: '20.12.2024' }
     // ],
@@ -52,12 +55,12 @@ SCHOOL_EVENTS = {
 };
 
 const CLASS_DAY = {
-    ['28Gb']: 'fr',
-    ['28Gj']: 'do',
-    ['28Gb-HK']: 'di',
-    ['28Gj-HK']: 'di'
+    ['29Ga']: 'di',
+    ['29Gj']: 'mi',
+    ['29Ga-HK']: 'mi',
+    ['29Gj-HK']: 'mi'
 };
-const YEAR = 2024;
+const YEAR = 2025;
 const SEMESTER = 'HS';
 
 const SCHEDULE_GYM1_HS = [
@@ -258,10 +261,10 @@ const SCHEDULE_GYM2_26_FS = [
 ];
 
 const CLASS_SCHEDULE_MAP = {
-    ['28Gb']: SCHEDULE_GYM1_HS,
-    ['28Gj']: SCHEDULE_GYM1_HS,
-    ['28Gb-HK']: prepareHK(SCHEDULE_GYM1_PRAKTIKUM, ['A', 'B']),
-    ['28Gj-HK']: prepareHK(SCHEDULE_GYM1_PRAKTIKUM, ['A', 'B'])
+    ['29Ga']: SCHEDULE_GYM1_HS,
+    ['29Gj']: SCHEDULE_GYM1_HS,
+    ['29Ga-HK']: prepareHK(SCHEDULE_GYM1_PRAKTIKUM, ['A', 'B']),
+    ['29Gj-HK']: prepareHK(SCHEDULE_GYM1_PRAKTIKUM, ['A', 'B'])
 };
 
 Object.keys(CLASS_SCHEDULE_MAP).forEach((klasse) => {
@@ -271,7 +274,6 @@ Object.keys(CLASS_SCHEDULE_MAP).forEach((klasse) => {
     const SCHEDULE = CLASS_SCHEDULE_MAP[klasse];
     const colSize = SCHEDULE[0].length + 1;
     Array(
-        33,
         34,
         35,
         36,
@@ -296,7 +298,8 @@ Object.keys(CLASS_SCHEDULE_MAP).forEach((klasse) => {
         3,
         4,
         5,
-        6
+        6,
+        7
     ).forEach((weekNr) => {
         const date = moment()
             .year(YEAR + (weekNr < 30 ? 1 : 0))
@@ -306,17 +309,20 @@ Object.keys(CLASS_SCHEDULE_MAP).forEach((klasse) => {
         if (EVENTS[date]) {
             cells.push({
                 cells: [date, EVENTS[date].desc, EVENTS[date].details || ''],
-                type: EVENTS[date].type
+                type: EVENTS[date].type,
+                icon: EVENTS[date].icon
             });
         } else if (EVENTS[weekNr]) {
             cells.push({
                 cells: [date, EVENTS[weekNr].desc, EVENTS[weekNr].details || ''],
-                type: EVENTS[weekNr].type
+                type: EVENTS[weekNr].type,
+                icon: EVENTS[weekNr].icon
             });
         } else if (CLASS_EVENTS[klasse][date]) {
             cells.push({
                 cells: [date, CLASS_EVENTS[klasse][date].desc, CLASS_EVENTS[klasse][date].details || ''],
-                type: CLASS_EVENTS[klasse][date].type
+                type: CLASS_EVENTS[klasse][date].type,
+                icon: CLASS_EVENTS[klasse][date].icon
             });
         } else if (CLASS_EVENTS[klasse][weekNr]) {
             cells.push({
@@ -325,7 +331,8 @@ Object.keys(CLASS_SCHEDULE_MAP).forEach((klasse) => {
                     CLASS_EVENTS[klasse][weekNr].desc,
                     CLASS_EVENTS[klasse][weekNr].details || ''
                 ],
-                type: CLASS_EVENTS[klasse][weekNr].type
+                type: CLASS_EVENTS[klasse][weekNr].type,
+                icon: CLASS_EVENTS[klasse][weekNr].icon
             });
         } else if (SCHEDULE[subjectNr]) {
             const isTest = /test/gi.test(SCHEDULE[subjectNr].join(' '));
@@ -338,7 +345,11 @@ Object.keys(CLASS_SCHEDULE_MAP).forEach((klasse) => {
         if (SCHOOL_EVENTS[weekNr]) {
             if (Array.isArray(SCHOOL_EVENTS[weekNr])) {
                 SCHOOL_EVENTS[weekNr].forEach((event) => {
-                    cells.push({ cells: [event.date, event.desc, event.details || ''], type: event.type });
+                    cells.push({
+                        cells: [event.date, event.desc, event.details || ''],
+                        type: event.type,
+                        icon: event.icon
+                    });
                 });
             } else {
                 cells.push({
@@ -347,7 +358,8 @@ Object.keys(CLASS_SCHEDULE_MAP).forEach((klasse) => {
                         SCHOOL_EVENTS[weekNr].desc,
                         SCHOOL_EVENTS[weekNr].details || ''
                     ],
-                    type: SCHOOL_EVENTS[weekNr].type
+                    type: SCHOOL_EVENTS[weekNr].type,
+                    icon: SCHOOL_EVENTS[weekNr].icon
                 });
             }
         }
@@ -365,27 +377,19 @@ Object.keys(CLASS_SCHEDULE_MAP).forEach((klasse) => {
         const dateB = moment(b.cells[0], 'DD.MM.YYYY');
         return dateA.diff(dateB);
     });
-    const prettyJson = JSON.stringify(
-        sortedByDate,
-        function (k, v) {
-            if (v instanceof Array && !first) {
-                return JSON.stringify(v);
-            }
-            first = false;
-            return v;
-        },
-        4
-    )
-        .replace(/"\[/g, '[')
-        .replace(/\]"/g, ']')
-        .replace(/\\"/g, '"')
-        .replace(/""/g, '""')
-        .replace(/","/g, '", "');
+    const yamlCells = sortedByDate.map((row) => {
+        const cellType = row.type ? `\n  type: ${row.type}` : '';
+        const icon = row.icon ? `\n  icon: ${row.icon}` : '';
+        return `- cells:
+    - ${row.cells[0] ?? ''}
+    - ${row.cells[1] ?? ''}
+    - ${row.cells[2] ?? ''}${cellType}${icon}`;
+    });
     console.log(`Writing ${klasse}_${SEMESTER}${YEAR}.json`);
     // console.log(prettyJson)
     fs.writeFileSync(
-        `versioned_docs/version-${klass}/${klasse}_${SEMESTER}${YEAR}.json`,
-        prettyJson + '\n',
+        `versioned_docs/version-${klass}/${klasse}_${SEMESTER}${YEAR}.yaml`,
+        yamlCells.join('\n') + '\n',
         'utf-8'
     );
     // fs.writeFileSync(`./bin/${klasse}_${SEMESTER}${YEAR}.json`, prettyJson, 'utf8');

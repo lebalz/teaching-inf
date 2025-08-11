@@ -1,0 +1,90 @@
+- cells:
+    - 19.08.2025
+- cells:
+    - 26.08.2025
+- cells:
+    - 02.09.2025
+- cells:
+    - 09.09.2025
+- cells:
+    - 16.09.2025
+- cells:
+    - 23.09.2025
+- cells:
+    - 30.09.2025
+  type: holiday
+  icon: mdiWalletTravel
+- cells:
+    - 07.10.2025
+    - Herbstferien
+    - 🏝️🏖️🏖️😎
+  type: holiday
+- cells:
+    - 14.10.2025
+    - Herbstferien
+    - 🏝️🏖️🏖️😎
+  type: holiday
+- cells:
+    - 21.10.2025
+- cells:
+    - 28.10.2025
+- cells:
+    - 04.11.2025
+- cells:
+    - 11.11.2025
+    - Informatik Biber
+    - Wettbewerb
+  type: event
+- cells:
+    - 18.11.2025
+  type: test
+- cells:
+    - 25.11.2025
+- cells:
+    - 02.12.2025
+- cells:
+    - 09.12.2025
+- cells:
+    - 16.12.2025
+- cells:
+    - 23.12.2025
+    - Winterferien
+    - 🏂❄️⛷️🎄🧑‍🎄
+  type: holiday
+  icon: mdiPineTreeVariantOutline
+- cells:
+    - 30.12.2025
+    - Winterferien
+    - 🏂❄️⛷️🎄🧑‍🎄
+  type: holiday
+  icon: mdiPineTreeVariantOutline
+- cells:
+    - 06.01.2026
+- cells:
+    - 13.01.2026
+- cells:
+    - 20.01.2026
+- cells:
+    - 22.01.2026
+    - Notenschluss
+    - 
+  type: event
+  icon: mdiFlagCheckered
+- cells:
+    - 27.01.2026
+- cells:
+    - 02.02.2026
+    - Beginn Semester 2
+    - 
+  type: event
+  icon: mdiRun
+- cells:
+    - 04.02.2026
+    - Programmieren 1
+    - Test
+  type: test
+- cells:
+    - 10.02.2026
+    - Sportwoche
+    - 
+  type: holiday
