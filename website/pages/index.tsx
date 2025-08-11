@@ -14,6 +14,9 @@ import bib3 from './images/compsci-3.json';
 import bib4 from './images/compsci-4.json';
 import bib5 from './images/compsci-5.json';
 import bib6 from './images/compsci-6.json';
+import Button from '@tdev-components/shared/Button';
+import { mdiShuffleVariant } from '@mdi/js';
+import { SIZE_M, SIZE_S } from '@tdev-components/shared/iconSizes';
 
 function HomepageHeader() {
     const { siteConfig } = useDocusaurusContext();
@@ -78,17 +81,20 @@ export default function Home({ recentPosts }: Props): React.ReactNode {
         { src: require('./images/compsci-5.mp4').default, bib: bib5 },
         { src: require('./images/compsci-6.mp4').default, bib: bib6 }
     ]);
+    const [isShuffling, setIsShuffling] = React.useState(false);
+    const [shuffleCounter, setShuffleCounter] = React.useState(0);
     const isMobile = useIsMobileView(450);
     const isTablet = useIsMobileView(750);
     const isLaptop = useIsMobileView(900);
     const isDesktop = useIsMobileView(1730);
     const isWide = useIsMobileView(2300);
     const videosToShow = React.useMemo(() => {
+        console.log('Shuffle counter:', shuffleCounter);
         return _.shuffle(videos.current).slice(
             0,
             isMobile ? 1 : isTablet ? 2 : isLaptop ? 3 : isDesktop ? 4 : isWide ? 5 : 6
         );
-    }, [isMobile, isTablet, isLaptop, isDesktop, isWide]);
+    }, [isMobile, isTablet, isLaptop, isDesktop, isWide, shuffleCounter]);
     return (
         <div className={clsx('no-search')}>
             <Layout>
@@ -108,6 +114,25 @@ export default function Home({ recentPosts }: Props): React.ReactNode {
                                 />
                             );
                         })}
+                    </div>
+                    <div className={clsx(styles.shuffle)}>
+                        <Button
+                            icon={mdiShuffleVariant}
+                            title="Videos neu sortieren"
+                            onClick={() => {
+                                if (isShuffling) {
+                                    return;
+                                }
+                                setIsShuffling(true);
+                                setTimeout(() => {
+                                    setIsShuffling(false);
+                                    setShuffleCounter((prev) => prev + 1);
+                                }, 1500);
+                            }}
+                            color={isShuffling ? 'warning' : undefined}
+                            className={clsx(styles.shuffleBtn, isShuffling ? styles.animate : undefined)}
+                            size={SIZE_M}
+                        />
                     </div>
                     <HomepageCourses />
                 </main>

@@ -77,6 +77,34 @@
         }
     }
 }
+
+.shuffle {
+    display: flex;
+    justify-content: flex-end;
+    @keyframes moveToCenterScaleAndSpin {
+        0% {
+            transform: translateX(0) translateY(0) scale(1) rotate(0deg); /* Start at original position and scale */
+        }
+        20% {
+            /*  Adjust the translateX value based on the width of the div.
+            This example assumes the parent container is the screen width
+            and the div's width is "width: 100px", so it should move half
+            the difference between the screen width and its own width 
+            minus an additional 100px to center it without calculation.*/
+
+            transform: translateX(-25vw) translateY(10vh) scale(3) rotate(360deg); /* Mid way translation and scale and rotation */
+        }
+
+        100% {
+            transform: translateX(-80vw) translateY(-20vh) scale(7) rotate(1720deg); /* End at center, double size and full spin */
+        }
+    }
+    .shuffleBtn {
+        &.animate {
+            animation: moveToCenterScaleAndSpin 1.5s linear forwards;
+        }
+    }
+}
 :global(#__docusaurus) {
     :global(main) {
         margin: 0;
