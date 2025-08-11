@@ -62,6 +62,7 @@ export default function Home({ recentPosts }: Props): React.ReactNode {
     const isTablet = useIsMobileView(750);
     const isLaptop = useIsMobileView(900);
     const isDesktop = useIsMobileView(1800);
+    const isWide = useIsMobileView(2300);
     return (
         <div className={clsx('no-search')}>
             <Layout>
@@ -69,7 +70,10 @@ export default function Home({ recentPosts }: Props): React.ReactNode {
                 <main>
                     <div className={clsx(styles.galleryWrapper)}>
                         {_.shuffle(videos.current)
-                            .slice(0, isMobile ? 1 : isTablet ? 2 : isLaptop ? 3 : isDesktop ? 4 : 5)
+                            .slice(
+                                0,
+                                isMobile ? 1 : isTablet ? 2 : isLaptop ? 3 : isDesktop ? 4 : isWide ? 5 : 6
+                            )
                             .map((src) => {
                                 return <VideoWallpaper key={src} src={src} />;
                             })}
