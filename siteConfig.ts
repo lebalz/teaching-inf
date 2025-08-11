@@ -46,12 +46,7 @@ const getSiteConfig: SiteConfigProvider = () => {
             orgName: 'lebalz',
             projectName: 'teaching-inf'
         },
-        siteStyles: [
-            require.resolve(
-                path.resolve(CWD, 'node_modules/react-image-gallery/styles/css/image-gallery.css')
-            ),
-            'website/css/custom.scss'
-        ],
+        siteStyles: ['website/css/custom.scss'],
         socialCard: 'img/social-card.png',
         logo: 'img/logo.png',
         navbarItems: [
