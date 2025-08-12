@@ -20,7 +20,7 @@ const GIT_COMMIT_SHA = process.env.GITHUB_SHA || Math.random().toString(36).subs
 const CWD = process.cwd();
 const ADMONITION_CONFIG = {
     admonitions: {
-        keywords: ['aufgabe', 'finding'],
+        keywords: ['aufgabe', 'finding', 'insight', 'definition'],
         extendDefaults: true
     }
 };

@@ -12,7 +12,10 @@ import SourceRef from '@tdev-components/Figure/SourceRef';
 import Answer from '@tdev-components/Answer';
 import Solution from '@tdev-components/documents/Solution';
 import MdxComment from '@tdev-components/documents/MdxComment';
+import TaskState from '@tdev-components/documents/TaskState';
+import QuillV2 from '@tdev-components/documents/QuillV2';
 import MdxPage from '@tdev-components/MdxPage';
+import String from '@tdev-components/documents/String';
 
 export default {
     // Re-use the default mapping
@@ -24,9 +27,12 @@ export default {
     DefHeading: DefHeading,
     DefContent: DefContent,
     Figure: Figure,
+    String: String,
     SourceRef: SourceRef,
     Answer: Answer,
+    QuillV2: QuillV2,
     Solution: Solution,
+    TaskState: TaskState,
     MdxPage: MdxPage,
     MdxComment: MdxComment
 };
