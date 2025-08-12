@@ -81,6 +81,7 @@ export default function Home({ recentPosts }: Props): React.ReactNode {
         { src: require('./images/compsci-5.mp4').default, bib: bib5 },
         { src: require('./images/compsci-6.mp4').default, bib: bib6 }
     ]);
+    const videoOrder = React.useRef([0, 1, 2, 3, 4, 5]);
     const [isShuffling, setIsShuffling] = React.useState(false);
     const [shuffleCounter, setShuffleCounter] = React.useState(0);
     const isMobile = useIsMobileView(450);
@@ -89,11 +90,15 @@ export default function Home({ recentPosts }: Props): React.ReactNode {
     const isDesktop = useIsMobileView(1730);
     const isWide = useIsMobileView(2300);
     const videosToShow = React.useMemo(() => {
-        console.log('Shuffle counter:', shuffleCounter);
-        return _.shuffle(videos.current).slice(
-            0,
-            isMobile ? 1 : isTablet ? 2 : isLaptop ? 3 : isDesktop ? 4 : isWide ? 5 : 6
-        );
+        const first = videoOrder.current[0];
+        while (first === videoOrder.current[0]) {
+            videoOrder.current = _.shuffle(videoOrder.current);
+        }
+        return videoOrder.current
+            .map((idx) => {
+                return videos.current[idx];
+            })
+            .slice(0, isMobile ? 1 : isTablet ? 2 : isLaptop ? 3 : isDesktop ? 4 : isWide ? 5 : 6);
     }, [isMobile, isTablet, isLaptop, isDesktop, isWide, shuffleCounter]);
     return (
         <div className={clsx('no-search')}>
