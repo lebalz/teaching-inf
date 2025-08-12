@@ -12,7 +12,8 @@ import {
     loginProfileButton,
     requestTarget,
     taskStateOverview,
-    devModeAccessLocalFS
+    devModeAccessLocalFS,
+    personalSpaceOverlay
 } from './src/siteConfig/navbarItems';
 
 const GIT_COMMIT_SHA = process.env.GITHUB_SHA || Math.random().toString(36).substring(7);
@@ -49,17 +50,14 @@ const getSiteConfig: SiteConfigProvider = () => {
         siteStyles: ['website/css/custom.scss'],
         socialCard: 'img/social-card.png',
         logo: 'img/logo.png',
+        personalSpaceDocRootId: 'e1097f86-c945-4c06-81cd-bb52c8811cb8',
         navbarItems: [
-            {
-                to: 'playground',
-                position: 'left',
-                label: 'Playground'
-            },
             blog,
             taskStateOverview,
             devModeAccessLocalFS,
             accountSwitcher,
             requestTarget,
+            personalSpaceOverlay,
             loginProfileButton
         ],
         footer: {
