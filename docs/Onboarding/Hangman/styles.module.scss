@@ -18,70 +18,62 @@
     width: 200px;
     height: 200px;
     margin-bottom: 30px;
+    .part {
+      position: absolute;
+      background-color: #333;
+    }
     
     .base {
-      position: absolute;
       bottom: 0;
       left: 20px;
       width: 100px;
       height: 4px;
-      background-color: #333;
     }
     
     .pole {
-      position: absolute;
       bottom: 0;
       left: 30px;
       width: 4px;
       height: 180px;
-      background-color: #333;
     }
     
     .top {
-      position: absolute;
       top: 20px;
       left: 30px;
       width: 80px;
       height: 4px;
-      background-color: var(--ifm-background-color);
     }
     
     .rope {
-      position: absolute;
       top: 20px;
       left: 110px;
       width: 4px;
       height: 20px;
-      background-color: var(--ifm-background-color);
     }
     
     .head {
-      position: absolute;
       top: 40px;
       left: 100px;
       width: 24px;
       height: 24px;
       border-radius: 50%;
-      border: 4px solid var(--ifm-background-color);
     }
     
     .body {
-      position: absolute;
       top: 68px;
       left: 112px;
       width: 4px;
       height: 60px;
-      background-color: var(--ifm-background-color);
     }
     
     .arms {
       &:before, &:after {
         content: '';
+        background-color: #333;
         position: absolute;
         top: 80px;
         width: 30px;
         height: 4px;
-        background-color: var(--ifm-background-color);
       }
       
       &:before {
@@ -90,19 +82,19 @@
       }
       
       &:after {
-        left: 112px;
+        left: 115px;
         transform: rotate(-30deg);
       }
     }
     
     .legs {
       &:before, &:after {
-        content: '';
         position: absolute;
-        top: 128px;
+        background-color: #333;
+        content: '';
+        top: 132px;
         width: 30px;
         height: 4px;
-        background-color: var(--ifm-background-color);
       }
       
       &:before {
@@ -111,7 +103,7 @@
       }
       
       &:after {
-        left: 112px;
+        left: 115px;
         transform: rotate(30deg);
       }
     }

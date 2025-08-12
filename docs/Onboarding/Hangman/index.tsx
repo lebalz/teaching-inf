@@ -77,28 +77,28 @@ const Hangman = ({ words, showSolution, label }: Props) => {
         return (
             <div className={styles.hangmanDrawing}>
                 {/* Base */}
-                <div className={styles.base}></div>
+                <div className={clsx(styles.base, styles.part)}></div>
 
                 {/* Pole */}
-                {wrongGuesses > 0 && <div className={styles.pole}></div>}
+                {wrongGuesses > 0 && <div className={clsx(styles.pole, styles.part)}></div>}
 
                 {/* Top */}
-                {wrongGuesses > 1 && <div className={styles.top}></div>}
+                {wrongGuesses > 1 && <div className={clsx(styles.top, styles.part)}></div>}
 
                 {/* Rope */}
-                {wrongGuesses > 2 && <div className={styles.rope}></div>}
+                {wrongGuesses > 2 && <div className={clsx(styles.rope, styles.part)}></div>}
 
                 {/* Head */}
-                {wrongGuesses > 3 && <div className={styles.head}></div>}
+                {wrongGuesses > 3 && <div className={clsx(styles.head, styles.part)}></div>}
 
                 {/* Body */}
-                {wrongGuesses > 4 && <div className={styles.body}></div>}
+                {wrongGuesses > 4 && <div className={clsx(styles.body, styles.part)}></div>}
 
                 {/* Arms and Legs */}
                 {wrongGuesses > 5 && (
                     <>
-                        <div className={styles.arms}></div>
-                        <div className={styles.legs}></div>
+                        <div className={clsx(styles.arms, styles.part)}></div>
+                        <div className={clsx(styles.legs, styles.part)}></div>
                     </>
                 )}
             </div>
