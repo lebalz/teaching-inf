@@ -8,7 +8,7 @@
 
 - zeichnen Sie auf ein Papier einen zusammenhängenden Pfad (max. 20 Segmente)
 - tauschen Sie die Zeichnungen
-- Versuchen Sie, die Zeichnung mit einer Turtle zu reproduzieren (5') (im Playground)
+- Versuchen Sie, die Zeichnung mit einer Turtle zu reproduzieren (5') (im Persönlicher Bereich)
 
 ![](images/zeichnen.jpg)<!-- .element: class="full" -->
 
