@@ -11,16 +11,22 @@ const DAYS = {
     sa: 'Saturday',
     so: 'Sunday'
 };
-// 30.6.2022 Notenschluss
+
 const EVENTS = {
-    [40]: { desc: 'Kennenlernwoche GYM1', type: 'holiday', icon: 'mdiWalletTravel' },
+    [40]: {
+        desc: 'Umwelt- und Sozialwoche' /*'Kennenlernwoche GYM1'*/,
+        type: 'holiday',
+        icon: 'mdiWalletTravel'
+    },
     [41]: { desc: 'Herbstferien', details: '🏝️🏖️🏖️😎', type: 'holiday' },
     [42]: { desc: 'Herbstferien', details: '🏝️🏖️🏖️😎', type: 'holiday' },
     [52]: { desc: 'Winterferien', details: '🏂❄️⛷️🎄🧑‍🎄', icon: 'mdiPineTreeVariantOutline', type: 'holiday' },
     [1]: { desc: 'Winterferien', details: '🏂❄️⛷️🎄🧑‍🎄', icon: 'mdiPineTreeVariantOutline', type: 'holiday' },
-    [7]: { desc: 'Sportwoche', type: 'holiday' }
+    [7]: { desc: 'Sportwoche', type: 'holiday', icon: 'mdiWeatherSnowyHeavy' }
 };
 const CLASS_EVENTS = {
+    ['28Gb']: {},
+    ['28Gj']: {},
     ['29Ga-HK']: {
         [6]: { desc: 'Programmieren 1', details: 'Test', type: 'test', date: '04.02.2026' }
     },
@@ -45,7 +51,7 @@ const CLASS_EVENTS = {
 };
 
 SCHOOL_EVENTS = {
-    [42]: { desc: 'Beginn BYOD-Tests', type: 'test', date: '14.10.2025' },
+    // [42]: { desc: 'Beginn BYOD-Tests', type: 'test', date: '14.10.2025' },
     [5]: { desc: 'Notenschluss', type: 'event', date: '22.01.2026', icon: 'mdiFlagCheckered' },
     [6]: { desc: 'Beginn Semester 2', type: 'event', date: '02.02.2026', icon: 'mdiRun' }
     // [51]: [
@@ -58,7 +64,9 @@ const CLASS_DAY = {
     ['29Ga']: 'di',
     ['29Gj']: 'mi',
     ['29Ga-HK']: 'mi',
-    ['29Gj-HK']: 'mi'
+    ['29Gj-HK']: 'mi',
+    ['28Gj']: 'fr',
+    ['28Gb']: 'fr'
 };
 const YEAR = 2025;
 const SEMESTER = 'HS';
@@ -260,11 +268,39 @@ const SCHEDULE_GYM2_26_FS = [
     ['Abschluss Informatik', '']
 ];
 
+const SCHEDULE_GYM2_28_HS = [
+    ['Kryptologie', 'Antike Verschlüsselungsverfahren'],
+    ['Kryptologie', 'Symmetrische Verschlüsselung'],
+    ['Kryptologie', 'Symmetrische Verschlüsselung'],
+    ['Kryptologie', 'Asymmetrische Verschlüsselung'],
+    ['Kryptologie', 'Hashfunktion'],
+    ['Kryptologie', 'Digitale Signaturen'],
+    ['Kryptologie', 'Wiederholung'],
+    ['Kryptologie', 'Test'],
+    ['Programmieren 2', 'Wiederholung, Einstieg MicroBit'],
+    ['Programmieren 2', 'Datenstrukturen, Listen, MicroBit'],
+    ['Programmieren 2', 'Robotik'],
+    ['Programmieren 2', 'Robotik'],
+    ['Programmieren 2', 'Robotik'],
+    ['Programmieren 2', '"Wettbewerb: Robotik"', 'test'],
+    ['Programmieren 2', 'Game of Life'],
+    ['Computer', 'Logische Schaltungen 1'],
+    ['Computer', 'Logische Schaltungen 2'],
+    ['Computer', 'Halbaddierer'],
+    ['Computer', 'Volladdierer, Speichern'],
+    ['Netzwerke', 'Einstieg'],
+    ['Netzwerke', 'Routing']
+];
+
+// const CLASS_SCHEDULE_MAP = {
+//     ['29Ga']: SCHEDULE_GYM1_HS,
+//     ['29Gj']: SCHEDULE_GYM1_HS,
+//     ['29Ga-HK']: prepareHK(SCHEDULE_GYM1_PRAKTIKUM, ['A', 'B']),
+//     ['29Gj-HK']: prepareHK(SCHEDULE_GYM1_PRAKTIKUM, ['A', 'B'])
+// };
 const CLASS_SCHEDULE_MAP = {
-    ['29Ga']: SCHEDULE_GYM1_HS,
-    ['29Gj']: SCHEDULE_GYM1_HS,
-    ['29Ga-HK']: prepareHK(SCHEDULE_GYM1_PRAKTIKUM, ['A', 'B']),
-    ['29Gj-HK']: prepareHK(SCHEDULE_GYM1_PRAKTIKUM, ['A', 'B'])
+    ['28Gb']: SCHEDULE_GYM2_28_HS,
+    ['28Gj']: SCHEDULE_GYM2_28_HS
 };
 
 Object.keys(CLASS_SCHEDULE_MAP).forEach((klasse) => {

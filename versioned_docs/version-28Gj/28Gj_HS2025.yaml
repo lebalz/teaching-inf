@@ -1,0 +1,128 @@
+- cells:
+    - 22.08.2025
+    - Kryptologie
+    - Antike Verschlüsselungsverfahren
+- cells:
+    - 29.08.2025
+    - Kryptologie
+    - Symmetrische Verschlüsselung
+- cells:
+    - 05.09.2025
+    - Kryptologie
+    - Symmetrische Verschlüsselung
+- cells:
+    - 12.09.2025
+    - Kryptologie
+    - Asymmetrische Verschlüsselung
+- cells:
+    - 19.09.2025
+    - Kryptologie
+    - Hashfunktion
+- cells:
+    - 26.09.2025
+    - Kryptologie
+    - Digitale Signaturen
+- cells:
+    - 03.10.2025
+    - Umwelt- und Sozialwoche
+    - 
+  type: holiday
+  icon: mdiWalletTravel
+- cells:
+    - 10.10.2025
+    - Herbstferien
+    - 🏝️🏖️🏖️😎
+  type: holiday
+- cells:
+    - 17.10.2025
+    - Herbstferien
+    - 🏝️🏖️🏖️😎
+  type: holiday
+- cells:
+    - 24.10.2025
+    - Kryptologie
+    - Wiederholung
+- cells:
+    - 31.10.2025
+    - Kryptologie
+    - Test
+  type: test
+- cells:
+    - 07.11.2025
+    - Programmieren 2
+    - Wiederholung, Einstieg MicroBit
+- cells:
+    - 14.11.2025
+    - Programmieren 2
+    - Datenstrukturen, Listen, MicroBit
+- cells:
+    - 21.11.2025
+    - Programmieren 2
+    - Robotik
+- cells:
+    - 28.11.2025
+    - Programmieren 2
+    - Robotik
+- cells:
+    - 05.12.2025
+    - Programmieren 2
+    - Robotik
+- cells:
+    - 12.12.2025
+    - Programmieren 2
+    - "Wettbewerb: Robotik"
+  type: test
+- cells:
+    - 19.12.2025
+    - Programmieren 2
+    - Game of Life
+- cells:
+    - 26.12.2025
+    - Winterferien
+    - 🏂❄️⛷️🎄🧑‍🎄
+  type: holiday
+  icon: mdiPineTreeVariantOutline
+- cells:
+    - 02.01.2026
+    - Winterferien
+    - 🏂❄️⛷️🎄🧑‍🎄
+  type: holiday
+  icon: mdiPineTreeVariantOutline
+- cells:
+    - 09.01.2026
+    - Computer
+    - Logische Schaltungen 1
+- cells:
+    - 16.01.2026
+    - Computer
+    - Logische Schaltungen 2
+- cells:
+    - 22.01.2026
+    - Notenschluss
+    - 
+  type: event
+  icon: mdiFlagCheckered
+- cells:
+    - 23.01.2026
+    - Computer
+    - Halbaddierer
+- cells:
+    - 30.01.2026
+    - Computer
+    - Volladdierer, Speichern
+- cells:
+    - 02.02.2026
+    - Beginn Semester 2
+    - 
+  type: event
+  icon: mdiRun
+- cells:
+    - 06.02.2026
+    - Netzwerke
+    - Einstieg
+- cells:
+    - 13.02.2026
+    - Sportwoche
+    - 
+  type: holiday
+  icon: mdiWeatherSnowyHeavy
