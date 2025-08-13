@@ -93,11 +93,17 @@
             "open": true
         }
     ],
-    "28Wa": [],
+    "28Wa": [
+        {
+            "from": "docs/Onboarding/",
+            "to": "versioned_docs/version-28Wa/01-Onboarding",
+            "ignore": []
+        }
+    ],
     "29Ga": [
         {
             "from": "docs/Onboarding/",
-            "to": "versioned_docs/version-28Gb/01-Onboarding",
+            "to": "versioned_docs/version-29Ga/01-Onboarding",
             "ignore": [],
             "open": false
         }
@@ -105,7 +111,7 @@
     "29Gj": [
         {
             "from": "docs/Onboarding/",
-            "to": "versioned_docs/version-28Gb/01-Onboarding",
+            "to": "versioned_docs/version-29Gj/01-Onboarding",
             "ignore": [],
             "open": false
         }

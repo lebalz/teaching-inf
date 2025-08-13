@@ -1,27 +1,27 @@
 - cells:
       - 18.08.2025
-      - PowerPoint
-      - Diagnosetest
+      - Einstieg
+      - Onboarding Webseite, Semesterprogramm, Digitale Dokumente
 - cells:
       - 26.08.2025
-      - PowerPoint
-      - Diagnosetest
+      - HTML
+      - Einführung in HTML, Struktur von HTML-Dokumenten
 - cells:
       - 02.09.2025
-      - PowerPoint Test
-      - Test ECDL PP Advanced, Gruppe 1
+      - HTML
+      - Einführung in HTML, Struktur von HTML-Dokumenten
 - cells:
       - 09.09.2025
-      - PowerPoint Test
-      - Test ECDL PP Advanced, Gruppe 2
+      - HTML
+      - Einführung in HTML, Struktur von HTML-Dokumenten
 - cells:
       - 16.09.2025
-      - Word Advanced
-      - Kapitel 1+2, Formatvorlagen, Suchen/Ersetzen
+      - HTML
+      - Einführung in HTML, Struktur von HTML-Dokumenten
 - cells:
       - 23.09.2025
-      - Word Advanced
-      - Kapitel 1+2, Formatvorlagen, Suchen/Ersetzen
+      - HTML
+      - Untersuchen von Webseiten, Verändern von Webseiten
 - cells:
       - 30.09.2025
       - Sonderwoche
@@ -40,12 +40,12 @@
   type: holiday
 - cells:
       - 21.10.2025
-      - Word Advanced
-      - Kapitel 3+4, Gliederung
+      - CSS
+      - Einführung in CSS, Tag-Selektoren und -Eigenschaften
 - cells:
       - 28.10.2025
-      - Word Advanced
-      - Kapitel 3+4, Gliederung, Verweise
+      - CSS
+      - Einführung in CSS, Klassen-Selektoren und -Eigenschaften
 - cells:
       - 04.11.2025
       - Intensivwoche Technik und Umwelt
@@ -54,16 +54,16 @@
   icon: mdiMathCompass
 - cells:
       - 11.11.2025
-      - Word Advanced
-      - Kapitel 5+6, Verzeichnisse
+      - CSS & HTML
+      - Wiederholung
 - cells:
       - 18.11.2025
-      - Word Advanced
-      - Kapitel 5+6, Layout optimieren
+      - Test CSS & HTML
+      - Schriftliche Prüfung
+  type: test
 - cells:
       - 25.11.2025
-      - Word Advanced
-      - Kapitel 7+8, Tabellen gestalten und optimieren
+      - Style Frameworks
 - cells:
       - 02.12.2025
       - Kantonaler Fachschaftstag
@@ -72,16 +72,15 @@
   type: holiday
 - cells:
       - 09.12.2025
-      - Word Advanced
-      - Kapitel 7+8, Tabellen gestalten und optimieren
+      - Style Frameworks
 - cells:
       - 16.12.2025
-      - Word Advanced
-      - Kapitel 7+8, Tabellen gestalten und optimieren
+      - Style Frameworks
+      - Arbeiten am Projekt
 - cells:
       - 23.12.2025
-      - Word Advanced, Test in 2 Gruppen
-      - Gruppe 1
+      - Style Frameworks
+      - Arbeiten am Projekt
 - cells:
       - 30.12.2025
       - Winterferien
@@ -96,12 +95,15 @@
   icon: mdiPineTreeVariantOutline
 - cells:
       - 13.01.2026
-      - Word Advanced, Test in 2 Gruppen
-      - Gruppe 2 + Nachtest PP Advanced
+      - Arbeiten am Projekt
+- cells:
+      - 15.01.2026
+      - Abgabe Projekt
+      - "bis 22:00 Uhr"
+  type: test
 - cells:
       - 20.01.2026
-      - Word Advanced
-      - Kapitel 9+10, Formulare
+      - Deploy Prozess
 - cells:
       - 22.01.2026
       - Notenschluss
