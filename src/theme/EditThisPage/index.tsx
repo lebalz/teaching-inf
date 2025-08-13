@@ -10,6 +10,7 @@ import { mdiGithub, mdiInfinity, mdiMicrosoftVisualStudioCode } from '@mdi/js';
 import clsx from 'clsx';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@tdev-hooks/useStore';
+import { useLocation } from '@docusaurus/router';
 const { organizationName, projectName } = siteConfig;
 const GH_EDIT_URL = `https://github.com/${organizationName}/${projectName}/edit/main/`;
 const GH_DEV_EDIT_URL = `https://github.dev/${organizationName}/${projectName}/blob/main/`;
@@ -17,7 +18,9 @@ const CMS_EDIT_URL = `/cms/${organizationName}/${projectName}/`;
 
 const EditThisPage = observer(({ editUrl }: Props): ReactNode => {
     const userStore = useStore('userStore');
-    if (!editUrl || !userStore.current?.hasElevatedAccess) {
+    const location = useLocation();
+    const search = new URLSearchParams(location.search);
+    if (!editUrl || (!userStore.current?.hasElevatedAccess && !search.has('edit'))) {
         return null;
     }
     return (
