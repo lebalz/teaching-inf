@@ -66,7 +66,7 @@ const VideoWallpaper = ({
                 <source src={src} type="video/mp4" />
             </video>
             <div className={clsx(styles.bib)}>
-                <SourceRef bib={bib} />
+                <SourceRef bib={bib} className={clsx(styles.sourceRef)} />
             </div>
         </div>
     );

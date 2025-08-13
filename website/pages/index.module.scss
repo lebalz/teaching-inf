@@ -46,6 +46,10 @@
     .container {
         position: relative;
         .bib {
+            .sourceRef {
+                font-size: 10.5px;
+                // padding: 0px 4px 0.09px 4px;
+            }
             position: absolute;
             bottom: 10px;
             right: 5px;
