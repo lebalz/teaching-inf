@@ -8,13 +8,16 @@ import type { Props } from '@theme/EditThisPage';
 import Icon from '@mdi/react';
 import { mdiGithub, mdiInfinity, mdiMicrosoftVisualStudioCode } from '@mdi/js';
 import clsx from 'clsx';
-const { url, organizationName, projectName } = siteConfig;
+import { observer } from 'mobx-react-lite';
+import { useStore } from '@tdev-hooks/useStore';
+const { organizationName, projectName } = siteConfig;
 const GH_EDIT_URL = `https://github.com/${organizationName}/${projectName}/edit/main/`;
 const GH_DEV_EDIT_URL = `https://github.dev/${organizationName}/${projectName}/blob/main/`;
 const CMS_EDIT_URL = `/cms/${organizationName}/${projectName}/`;
 
-const EditThisPage = ({ editUrl }: Props): ReactNode => {
-    if (!editUrl) {
+const EditThisPage = observer(({ editUrl }: Props): ReactNode => {
+    const userStore = useStore('userStore');
+    if (!editUrl || !userStore.current?.hasElevatedAccess) {
         return null;
     }
     return (
@@ -42,6 +45,6 @@ const EditThisPage = ({ editUrl }: Props): ReactNode => {
             </Link>
         </div>
     );
-};
+});
 
 export default EditThisPage;

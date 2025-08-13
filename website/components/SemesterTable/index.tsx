@@ -145,8 +145,8 @@ const Row = (props: RowProps): React.ReactNode => {
             className={clsx(rowProps.className, isCurrentWeek && styles.currentWeek)}
             style={{ background: color }}
         >
-            {cellProps.map((props) => (
-                <Cell {...props} />
+            {cellProps.map((props, idx) => (
+                <Cell {...props} key={idx} />
             ))}
         </tr>
     );
