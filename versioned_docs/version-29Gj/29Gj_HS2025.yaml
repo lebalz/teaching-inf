@@ -1,15 +1,28 @@
 - cells:
     - 20.08.2025
+    - Einstieg
+    - Inf-Webseite, BYOD
 - cells:
     - 27.08.2025
+    - ICT
+    - BYOD Basics
 - cells:
     - 03.09.2025
+    - ICT
+    - BYOD Basics
 - cells:
     - 10.09.2025
+    - ICT
+    - BYOD Basics
 - cells:
     - 17.09.2025
+    - ICT
+    - BYOD Basics
 - cells:
     - 24.09.2025
+    - Test Schriftlich
+    - Kurztest schriftlich zu den BYOD Basics
+  type: test
 - cells:
     - 01.10.2025
     - Kennenlernwoche GYM1
@@ -22,41 +35,52 @@
     - 🏝️🏖️🏖️😎
   type: holiday
 - cells:
-    - 14.10.2025
-    - Beginn BYOD-Tests
-    - 
-  type: test
-- cells:
     - 15.10.2025
     - Herbstferien
     - 🏝️🏖️🏖️😎
   type: holiday
 - cells:
     - 22.10.2025
+    - Test Praktisch
+    - Kurztest praktisch zu den BYOD Basics
+  type: test
 - cells:
     - 29.10.2025
+    - Test Praktisch
+    - Kurztest praktisch zu den BYOD Basics
+  type: test
 - cells:
     - 05.11.2025
+    - Test Praktisch
+    - Kurztest praktisch zu den BYOD Basics / Vorbereitung "Informatik Biber"
+  type: test
 - cells:
     - 12.11.2025
+    - Test Praktisch
+    - Kurztest praktisch zu den BYOD Basics / Vorbereitung "Informatik Biber"
+  type: test
+- cells:
+    - 19.11.2025
     - Informatik Biber
     - Wettbewerb
   type: event
 - cells:
-    - 19.11.2025
+    - 26.11.2025
+    - Programmieren 1
+    - Übungs- und Fragestunde
+- cells:
+    - 03.12.2025
+    - Programmieren 1
+    - Kurztest Programmieren, Variablen, Ein- & Ausgabe
   type: test
 - cells:
-    - 26.11.2025
-- cells:
-    - 02.12.2025
-    - Kantonaler Fachschaftstag
-    - Auftrag Studienwahl
-  type: holiday
-  icon: mdiSleep
-- cells:
     - 10.12.2025
+    - Programmieren 1
+    -
 - cells:
     - 17.12.2025
+    - Programmieren 1
+    - 🎄Programmieren
 - cells:
     - 24.12.2025
     - Winterferien
@@ -71,10 +95,16 @@
   icon: mdiPineTreeVariantOutline
 - cells:
     - 07.01.2026
+    - Digitale Dokumente
+    - Struktur von Dokumenten
 - cells:
     - 14.01.2026
+    - Digitale Dokumente
+    - Word Grundlagen
 - cells:
     - 21.01.2026
+    - Digitale Dokumente
+    - Formatvorlagen in Word
 - cells:
     - 22.01.2026
     - Notenschluss
@@ -83,6 +113,8 @@
   icon: mdiFlagCheckered
 - cells:
     - 28.01.2026
+    - Digitale Dokumente
+    - Formatvorlagen in Word
 - cells:
     - 02.02.2026
     - Beginn Semester 2
@@ -99,3 +131,4 @@
     - Sportwoche
     - 
   type: holiday
+  icon: mdiWeatherSnowyHeavy

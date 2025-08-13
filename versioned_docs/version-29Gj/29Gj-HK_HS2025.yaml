@@ -2,44 +2,48 @@
     - 20.08.2025
     - A
     - Programmieren 1
+    - Algorithmen & RoboZZle
 - cells:
     - 27.08.2025
     - B
     - Programmieren 1
+    - Algorithmen & RoboZZle
 - cells:
     - 03.09.2025
     - A
     - Programmieren 1
+    - Algorithmen & Einstieg Turtlegrafik
 - cells:
     - 10.09.2025
     - B
     - Programmieren 1
+    - Algorithmen & Einstieg Turtlegrafik
 - cells:
     - 17.09.2025
     - A
     - Programmieren 1
+    - Wiederholte Ausführung
 - cells:
     - 24.09.2025
     - B
     - Programmieren 1
+    - Wiederholte Ausführung
 - cells:
     - 01.10.2025
+    - 
     - Kennenlernwoche GYM1
     - 
   type: holiday
   icon: mdiWalletTravel
 - cells:
     - 08.10.2025
+    - 
     - Herbstferien
     - 🏝️🏖️🏖️😎
   type: holiday
 - cells:
-    - 14.10.2025
-    - Beginn BYOD-Tests
-    - 
-  type: test
-- cells:
     - 15.10.2025
+    - 
     - Herbstferien
     - 🏝️🏖️🏖️😎
   type: holiday
@@ -47,48 +51,57 @@
     - 22.10.2025
     - A
     - Programmieren 1
+    - Unterprogramme und Fehler
 - cells:
     - 29.10.2025
     - B
     - Programmieren 1
+    - Unterprogramme und Fehler
 - cells:
     - 05.11.2025
     - A
     - Programmieren 1
+    - Parameter
 - cells:
     - 12.11.2025
     - B
     - Programmieren 1
+    - Parameter
 - cells:
     - 19.11.2025
     - A
     - Programmieren 1
-  type: test
+    - Variablen, Eingabe & Ausgabe
 - cells:
     - 26.11.2025
     - B
     - Programmieren 1
-  type: test
+    - Variablen, Eingabe & Ausgabe
 - cells:
     - 03.12.2025
     - A
     - Programmieren 1
+    - Verzweigungen
 - cells:
     - 10.12.2025
     - B
     - Programmieren 1
+    - Verzweigungen
 - cells:
     - 17.12.2025
     - A
     - Programmieren 1
+    - Listen
 - cells:
     - 24.12.2025
+    - 
     - Winterferien
     - 🏂❄️⛷️🎄🧑‍🎄
   type: holiday
   icon: mdiPineTreeVariantOutline
 - cells:
     - 31.12.2025
+    - 
     - Winterferien
     - 🏂❄️⛷️🎄🧑‍🎄
   type: holiday
@@ -97,16 +110,20 @@
     - 07.01.2026
     - B
     - Programmieren 1
+    - Listen
 - cells:
     - 14.01.2026
     - A
     - Programmieren 1
+    - Listen
 - cells:
     - 21.01.2026
     - B
     - Programmieren 1
+    - Listen
 - cells:
     - 22.01.2026
+    - 
     - Notenschluss
     - 
   type: event
@@ -115,19 +132,24 @@
     - 28.01.2026
     - A
     - Programmieren 1
+    - Abschluss
 - cells:
     - 02.02.2026
+    - 
     - Beginn Semester 2
     - 
   type: event
   icon: mdiRun
 - cells:
     - 04.02.2026
+    - 
     - Programmieren 1
     - Test
   type: test
 - cells:
     - 11.02.2026
+    - 
     - Sportwoche
     - 
   type: holiday
+  icon: mdiWeatherSnowyHeavy

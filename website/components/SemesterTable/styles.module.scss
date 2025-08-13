@@ -1,32 +1,6 @@
 /* stylelint-disable docusaurus/copyright-header */
 
-html[data-theme='dark'] {
-    table.ofi-table {
-        > tbody {
-            > tr {
-                &.holiday {
-                    background: #3a537a;
-                }
-                &.event {
-                    --table-background-color: var(--ifm-color-success-lightest);
-                    color: black;
-                }
-
-                &.test {
-                    --table-background-color: var(--ifm-color-warning-lightest);
-                    color: black;
-                }
-            }
-        }
-        &.selectable > tbody > tr:hover {
-            &.holiday {
-                background: #6881aa;
-            }
-        }
-    }
-}
-
-table.ofi-table {
+table.semesterTable {
     width: 100%;
     > thead > tr {
         background-color: var(--ifm-table-head-background);
@@ -131,6 +105,32 @@ table.ofi-table {
         td,
         th {
             padding: 16px;
+        }
+    }
+}
+
+html[data-theme='dark'] {
+    table.semesterTable {
+        > tbody {
+            > tr {
+                &.holiday {
+                    background: #3a537a;
+                }
+                &.event {
+                    --table-background-color: var(--ifm-color-success-lightest);
+                    color: black;
+                }
+
+                &.test {
+                    --table-background-color: var(--ifm-color-warning-lightest);
+                    color: black;
+                }
+            }
+        }
+        &.selectable > tbody > tr:hover {
+            &.holiday {
+                background: #6881aa;
+            }
         }
     }
 }

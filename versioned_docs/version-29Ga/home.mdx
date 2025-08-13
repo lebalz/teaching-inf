@@ -7,6 +7,7 @@ page_id: 8a11fd04-c933-4529-b979-22b53caebfc5
 import SemesterTable from '@tdev-components/SemesterTable';
 import { SortTimeTableByDate } from '@tdev/helpers/time';
 import hs2025 from './29Ga_HS2025.yaml';
+import hk2025 from './29Ga-HK_HS2025.yaml';
 
 import Directory from '@tdev-components/documents/FileSystem/Directory';
 
@@ -14,10 +15,23 @@ import Directory from '@tdev-components/documents/FileSystem/Directory';
 
 <Directory name="Notizen" id="1470c3ba-c16d-428a-bb69-d702d8475177" />
 
-<SemesterTable
-    header={['Datum', 'Thema', 'Inhalt']}
-    compact
-    selectable
-    rows={hs2025}
-    order={SortTimeTableByDate()}
-/>
+<Tabs>
+    <TabItem label="Einzellektion" value="gym1-hs-theorie">
+        <SemesterTable
+            header={['Datum', 'Thema', 'Inhalt']}
+            compact
+            selectable
+            rows={hs2025}
+            order={SortTimeTableByDate()}
+        />
+    </TabItem>
+    <TabItem label="Praktikum" value="gym1-hs-praktikum">
+        <SemesterTable
+            header={['Datum', 'Halbklasse', 'Thema', 'Inhalt']}
+            compact
+            selectable
+            rows={hk2025}
+            order={SortTimeTableByDate()}
+        />
+    </TabItem>
+</Tabs>

@@ -14,7 +14,7 @@ const DAYS = {
 
 const EVENTS = {
     [40]: {
-        desc: 'Umwelt- und Sozialwoche' /*'Kennenlernwoche GYM1'*/,
+        desc: /*'Umwelt- und Sozialwoche'*/ 'Kennenlernwoche GYM1',
         type: 'holiday',
         icon: 'mdiWalletTravel'
     },
@@ -34,18 +34,18 @@ const CLASS_EVENTS = {
         [6]: { desc: 'Programmieren 1', details: 'Test', type: 'test', date: '04.02.2026' }
     },
     ['29Ga']: {
-        [46]: { desc: 'Informatik Biber', details: 'Wettbewerb', type: 'event', date: '11.11.2025' },
-        [6]: { desc: 'Programmieren 1', details: 'Test', type: 'test', date: '04.02.2026' }
-    },
-    ['29Gj']: {
-        [46]: { desc: 'Informatik Biber', details: 'Wettbewerb', type: 'event', date: '12.11.2025' },
+        [47]: { desc: 'Informatik Biber', details: 'Wettbewerb', type: 'event', date: '18.11.2025' },
+        [6]: { desc: 'Programmieren 1', details: 'Test', type: 'test', date: '04.02.2026' },
         [49]: {
             desc: 'Kantonaler Fachschaftstag',
             details: 'Auftrag Studienwahl',
             type: 'holiday',
             icon: 'mdiSleep',
             date: '02.12.2025'
-        },
+        }
+    },
+    ['29Gj']: {
+        [47]: { desc: 'Informatik Biber', details: 'Wettbewerb', type: 'event', date: '19.11.2025' },
         [6]: { desc: 'Programmieren 1', details: 'Test', type: 'test', date: '04.02.2026' }
     }
 };
@@ -57,7 +57,6 @@ SCHOOL_EVENTS = {
     // [51]: [
     //     { desc: 'Weihnachtskonzert', type: 'holiday', date: '20.12.2024' }
     // ],
-    // [4]: { desc: 'Notenschluss', type: 'event', date: '23.01.2025' }
 };
 
 const CLASS_DAY = {
@@ -71,6 +70,25 @@ const CLASS_DAY = {
 const YEAR = 2025;
 const SEMESTER = 'HS';
 
+const SCHEDULE_GYM1_29_HS = [
+    ['Einstieg', 'Inf-Webseite, BYOD'],
+    ['ICT', 'BYOD Basics'],
+    ['ICT', 'BYOD Basics'],
+    ['ICT', 'BYOD Basics'],
+    ['ICT', 'BYOD Basics'],
+    ['Test Schriftlich', 'Kurztest schriftlich zu den BYOD Basics'],
+    ['Test Praktisch', 'Kurztest praktisch zu den BYOD Basics'],
+    ['Test Praktisch', 'Kurztest praktisch zu den BYOD Basics'],
+    ['Test Praktisch', 'Kurztest praktisch zu den BYOD Basics / Vorbereitung "Informatik Biber"'],
+    ['Test Praktisch', 'Kurztest praktisch zu den BYOD Basics / Vorbereitung "Informatik Biber"'],
+    ['Programmieren 1', 'Übungs- und Fragestunde'],
+    ['Programmieren 1', 'Kurztest Programmieren, Variablen, Ein- & Ausgabe'],
+    ['Programmieren 1', '🎄Programmieren'],
+    ['Digitale Dokumente', 'Struktur von Dokumenten'],
+    ['Digitale Dokumente', 'Word Grundlagen'],
+    ['Digitale Dokumente', 'Formatvorlagen in Word'],
+    ['Digitale Dokumente', 'Formatvorlagen in Word']
+];
 const SCHEDULE_GYM1_HS = [
     ['Einstieg', 'Informatik, BYOD'],
     ['ICT', 'BYOD Basics'],
@@ -97,11 +115,11 @@ const SCHEDULE_GYM1_PRAKTIKUM = [
     ['Programmieren 1', 'Wiederholte Ausführung'],
     ['Programmieren 1', 'Unterprogramme und Fehler'],
     ['Programmieren 1', 'Parameter'],
-    ['Programmieren 1', 'Kurztest Programmieren, Variablen, Ein- & Ausgabe'],
     ['Programmieren 1', 'Variablen, Eingabe & Ausgabe'],
     ['Programmieren 1', 'Verzweigungen'],
-    ['Programmieren 1', 'Robotik Micro:Bit 🤖'],
-    ['Programmieren 1', 'Robotik Micro:Bit 🤖']
+    ['Programmieren 1', 'Listen'],
+    ['Programmieren 1', 'Listen'],
+    ['Programmieren 1', 'Abschluss']
 ];
 const SCHEDULE_EF_HS1 = [
     ['Programmieren', 'Infrastruktur, Installation, Git, Markdown, Python Grundlagen'],
@@ -293,8 +311,8 @@ const SCHEDULE_GYM2_28_HS = [
 ];
 
 // const CLASS_SCHEDULE_MAP = {
-//     ['29Ga']: SCHEDULE_GYM1_HS,
-//     ['29Gj']: SCHEDULE_GYM1_HS,
+//     ['29Ga']: SCHEDULE_GYM1_29_HS,
+//     ['29Gj']: SCHEDULE_GYM1_29_HS,
 //     ['29Ga-HK']: prepareHK(SCHEDULE_GYM1_PRAKTIKUM, ['A', 'B']),
 //     ['29Gj-HK']: prepareHK(SCHEDULE_GYM1_PRAKTIKUM, ['A', 'B'])
 // };
@@ -402,12 +420,15 @@ Object.keys(CLASS_SCHEDULE_MAP).forEach((klasse) => {
     });
     cells.forEach((row, idx) => {
         while (row.cells.length < colSize) {
-            row.cells.push('');
+            if (colSize === 4 && row.type) {
+                row.cells.splice(1, 0, '');
+            } else {
+                row.cells.push('');
+            }
         }
     });
 
     let first = true;
-    console.log(cells);
     const sortedByDate = cells.sort((a, b) => {
         const dateA = moment(a.cells[0], 'DD.MM.YYYY');
         const dateB = moment(b.cells[0], 'DD.MM.YYYY');
@@ -416,10 +437,11 @@ Object.keys(CLASS_SCHEDULE_MAP).forEach((klasse) => {
     const yamlCells = sortedByDate.map((row) => {
         const cellType = row.type ? `\n  type: ${row.type}` : '';
         const icon = row.icon ? `\n  icon: ${row.icon}` : '';
+        const col4 = row.cells[3] !== undefined ? `\n    - ${row.cells[3]}` : '';
         return `- cells:
     - ${row.cells[0] ?? ''}
     - ${row.cells[1] ?? ''}
-    - ${row.cells[2] ?? ''}${cellType}${icon}`;
+    - ${row.cells[2] ?? ''}${col4}${cellType}${icon}`;
     });
     console.log(`Writing ${klasse}_${SEMESTER}${YEAR}.json`);
     // console.log(prettyJson)
