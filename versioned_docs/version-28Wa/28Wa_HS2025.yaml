@@ -1,15 +1,27 @@
 - cells:
       - 18.08.2025
+      - PowerPoint
+      - Diagnosetest
 - cells:
       - 26.08.2025
+      - PowerPoint
+      - Diagnosetest
 - cells:
       - 02.09.2025
+      - PowerPoint Test
+      - Test ECDL PP Advanced, Gruppe 1
 - cells:
       - 09.09.2025
+      - PowerPoint Test
+      - Test ECDL PP Advanced, Gruppe 2
 - cells:
       - 16.09.2025
+      - Word Advanced
+      - Kapitel 1+2, Formatvorlagen, Suchen/Ersetzen
 - cells:
       - 23.09.2025
+      - Word Advanced
+      - Kapitel 1+2, Formatvorlagen, Suchen/Ersetzen
 - cells:
       - 30.09.2025
       - Sonderwoche
@@ -28,8 +40,12 @@
   type: holiday
 - cells:
       - 21.10.2025
+      - Word Advanced
+      - Kapitel 3+4, Gliederung
 - cells:
       - 28.10.2025
+      - Word Advanced
+      - Kapitel 3+4, Gliederung, Verweise
 - cells:
       - 04.11.2025
       - Intensivwoche Technik und Umwelt
@@ -38,10 +54,16 @@
   icon: mdiMathCompass
 - cells:
       - 11.11.2025
+      - Word Advanced
+      - Kapitel 5+6, Verzeichnisse
 - cells:
       - 18.11.2025
+      - Word Advanced
+      - Kapitel 5+6, Layout optimieren
 - cells:
       - 25.11.2025
+      - Word Advanced
+      - Kapitel 7+8, Tabellen gestalten und optimieren
 - cells:
       - 02.12.2025
       - Kantonaler Fachschaftstag
@@ -50,10 +72,16 @@
   type: holiday
 - cells:
       - 09.12.2025
+      - Word Advanced
+      - Kapitel 7+8, Tabellen gestalten und optimieren
 - cells:
       - 16.12.2025
+      - Word Advanced
+      - Kapitel 7+8, Tabellen gestalten und optimieren
 - cells:
       - 23.12.2025
+      - Word Advanced, Test in 2 Gruppen
+      - Gruppe 1
 - cells:
       - 30.12.2025
       - Winterferien
@@ -68,8 +96,12 @@
   icon: mdiPineTreeVariantOutline
 - cells:
       - 13.01.2026
+      - Word Advanced, Test in 2 Gruppen
+      - Gruppe 2 + Nachtest PP Advanced
 - cells:
       - 20.01.2026
+      - Word Advanced
+      - Kapitel 9+10, Formulare
 - cells:
       - 22.01.2026
       - Notenschluss
