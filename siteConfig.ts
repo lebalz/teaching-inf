@@ -4,8 +4,9 @@
 import { PluginConfig } from '@docusaurus/types';
 import { mdiSourceCommit } from '@mdi/js';
 import path from 'path';
-import { VersionOptions } from '@docusaurus/plugin-content-docs';
+import { EditUrlFunction, VersionOptions } from '@docusaurus/plugin-content-docs';
 import type { SiteConfigProvider } from '@tdev/siteConfig/siteConfig';
+import matrialConfig from './material_config.json';
 import {
     accountSwitcher,
     blog,
@@ -15,6 +16,34 @@ import {
     devModeAccessLocalFS,
     personalSpaceOverlay
 } from './src/siteConfig/navbarItems';
+
+const getEditUrl = (props: Parameters<EditUrlFunction>[0]) => {
+    const { version, docPath, versionDocsDirPath } = props;
+    const joinPath = (parts: string[]) => `${versionDocsDirPath}/${parts.join('/')}`;
+    if (version === 'current') {
+        return joinPath([docPath]);
+    }
+    if (!(version in matrialConfig)) {
+        return joinPath([docPath]);
+    }
+    const config = matrialConfig[version as keyof typeof matrialConfig] as {
+        from: string;
+        to: string;
+        ignore: string[];
+    }[];
+    const parts = docPath.split('/');
+    const getSourceFilePath = (absParts: string[], relParts: string[]) => {
+        if (absParts.length === 0) {
+            return joinPath(relParts);
+        }
+        const item = config.find(({ to }) => to === joinPath(absParts));
+        if (item && !item.ignore.find((pattern) => relParts.join('/').startsWith(pattern))) {
+            return path.join(item.from, ...relParts);
+        }
+        return getSourceFilePath(absParts.slice(0, -1), [absParts[absParts.length - 1], ...relParts]);
+    };
+    return getSourceFilePath(parts, []);
+};
 
 const GIT_COMMIT_SHA = process.env.GITHUB_SHA || Math.random().toString(36).substring(7);
 const CWD = process.cwd();
@@ -155,7 +184,10 @@ const getSiteConfig: SiteConfigProvider = () => {
             exclude: ['tdev/**'],
             showLastUpdateTime: true,
             includeCurrentVersion: true,
-            sidebarCollapsible: true
+            sidebarCollapsible: true,
+            editUrl: (fConfig) => {
+                return getEditUrl(fConfig);
+            }
         },
         blog: { ...ADMONITION_CONFIG, exclude: ['tdev/**'] },
         pages: ADMONITION_CONFIG,
