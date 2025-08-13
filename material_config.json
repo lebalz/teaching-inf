@@ -40,7 +40,7 @@
             "from": "docs/OF-BigData-KI/",
             "to": "versioned_docs/version-28Gb/06-BigData-KI",
             "ignore": [],
-            "open": true
+            "open": false
         }
     ],
     "28Gj": [
@@ -90,7 +90,7 @@
             "from": "docs/OF-BigData-KI/",
             "to": "versioned_docs/version-28Gj/06-BigData-KI",
             "ignore": [],
-            "open": true
+            "open": false
         }
     ],
     "28Wa": [
