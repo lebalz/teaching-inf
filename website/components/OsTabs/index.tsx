@@ -10,7 +10,7 @@ interface Props {
 const OS_MAP: { [key in OsType]: string } = {
     mac: 'macOS',
     osx: 'macOS',
-    win: 'Windows',
+    win: 'Windows 11',
     win10: 'Windows 10',
     win11: 'Windows 11'
 };

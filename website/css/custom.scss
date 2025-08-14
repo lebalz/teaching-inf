@@ -29,6 +29,20 @@
             color: rgb(197, 197, 197);
         }
     }
+    .table-of-contents__link:hover,
+    .table-of-contents__link:hover code,
+    .table-of-contents__link--active,
+    .table-of-contents__link--active code {
+        color: var(--ifm-link-color);
+    }
+    section.footnotes {
+        border-top: 1px solid var(--ifm-color-primary-lightest);
+        margin-top: 5rem;
+        padding-top: 1em;
+        #footnote-label {
+            display: none;
+        }
+    }
 }
 
 html[data-theme='dark'] {
@@ -129,5 +143,11 @@ div.no-search {
         &:not(:first-child) {
             margin-top: 0.75em;
         }
+    }
+}
+
+.compactDeflist {
+    [class^='definitionList_'] {
+        grid-template-columns: minmax(3em, auto) minmax(10em, 2fr);
     }
 }
