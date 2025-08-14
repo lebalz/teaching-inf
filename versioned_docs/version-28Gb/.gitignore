@@ -1,4 +1,5 @@
 01-BYOD/*
+!01-BYOD/_category_.yml
 02-Programmieren-1/*
 !02-Programmieren-1/02-Turtlegrafik/_category_.json
 03-Word/*

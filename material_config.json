@@ -3,7 +3,7 @@
         {
             "from": "docs/OF-BYOD-Basics/",
             "to": "versioned_docs/version-28Gb/01-BYOD",
-            "ignore": [],
+            "ignore": ["_category_.yml"],
             "open": false
         },
         {
@@ -47,7 +47,7 @@
         {
             "from": "docs/OF-BYOD-Basics/",
             "to": "versioned_docs/version-28Gj/01-BYOD",
-            "ignore": [],
+            "ignore": ["_category_.yml"],
             "open": false
         },
         {
@@ -108,9 +108,9 @@
             "open": false
         },
         {
-            "from": "docs/OF-BYOD-Basics-25/",
+            "from": "docs/OF-BYOD-Basics-29/",
             "to": "versioned_docs/version-29Ga/02-BYOD",
-            "ignore": ["_category_.yml"]]
+            "ignore": ["_category_.yml"]
         },
         {
             "from": "docs/OF-Programmieren-1/",
@@ -126,7 +126,7 @@
             "open": false
         },
         {
-            "from": "docs/OF-BYOD-Basics-25/",
+            "from": "docs/OF-BYOD-Basics-29/",
             "to": "versioned_docs/version-29Gj/02-BYOD",
             "ignore": ["_category_.yml"]
         },
