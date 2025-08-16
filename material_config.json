@@ -141,6 +141,11 @@
             "from": "docs/Math/Taschenrechner/",
             "to": "src/pages/mathematik/taschenrechner",
             "ignore": []
+        },
+        {
+            "from": "docs/OF-Programmieren-1/06-Gruefnisch/index.mdx",
+            "to": "src/pages/gruefnisch.mdx",
+            "ignore": []
         }
     ]
 }
