@@ -146,6 +146,11 @@
             "from": "docs/OF-Programmieren-1/06-Gruefnisch/index.mdx",
             "to": "src/pages/gruefnisch.mdx",
             "ignore": []
+        },
+        {
+            "from": "docs/OF-Kryptologie/05-Kryptoanalyse/03-Kerckhoffs-Prinzip.mdx",
+            "to": "src/pages/kryptologie/kerckhoffs-prinzip.mdx",
+            "ignore": []
         }
     ]
 }
