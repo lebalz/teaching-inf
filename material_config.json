@@ -9,25 +9,25 @@
         {
             "from": "docs/OF-Word/",
             "to": "versioned_docs/version-28Gb/03-Word",
-            "ignore": [],
+            "ignore": ["_category_.yml"],
             "open": false
         },
         {
             "from": "docs/OF-Websites/",
             "to": "versioned_docs/version-28Gb/04-Webseiten",
-            "ignore": [],
+            "ignore": ["_category_.yml"],
             "open": false
         },
         {
             "from": "docs/OF-Daten-und-Codes/",
             "to": "versioned_docs/version-28Gb/05-Daten-und-Codes",
-            "ignore": [],
+            "ignore": ["_category_.yml"],
             "open": false
         },
         {
             "from": "docs/OF-BigData-KI/",
             "to": "versioned_docs/version-28Gb/06-BigData-KI",
-            "ignore": [],
+            "ignore": ["_category_.yml"],
             "open": false
         },
         {
@@ -39,7 +39,8 @@
                 "06-Symmetrisch",
                 "07-Krypto-Family.mdx",
                 "08-Asymmetrisch",
-                "09-Hashing"
+                "09-Hashing",
+                "_category_.yml"
             ],
             "open": true
         }
@@ -54,19 +55,19 @@
         {
             "from": "docs/OF-Word/",
             "to": "versioned_docs/version-28Gj/03-Word",
-            "ignore": [],
+            "ignore": ["_category_.yml"],
             "open": false
         },
         {
             "from": "docs/OF-Websites/",
             "to": "versioned_docs/version-28Gj/04-Webseiten",
-            "ignore": [],
+            "ignore": ["_category_.yml"],
             "open": false
         },
         {
             "from": "docs/OF-Daten-und-Codes/",
             "to": "versioned_docs/version-28Gj/05-Daten-und-Codes",
-            "ignore": [],
+            "ignore": ["_category_.yml"],
             "open": false
         },
         {
@@ -78,7 +79,7 @@
         {
             "from": "docs/OF-BigData-KI/",
             "to": "versioned_docs/version-28Gj/06-BigData-KI",
-            "ignore": [],
+            "ignore": ["_category_.yml"],
             "open": false
         },
         {
@@ -90,7 +91,8 @@
                 "06-Symmetrisch",
                 "07-Krypto-Family.mdx",
                 "08-Asymmetrisch",
-                "09-Hashing"
+                "09-Hashing",
+                "_category_.yml"
             ],
             "open": true
         }
@@ -99,7 +101,7 @@
         {
             "from": "docs/Onboarding/",
             "to": "versioned_docs/version-28Wa/01-Onboarding",
-            "ignore": [],
+            "ignore": ["_category_.yml"],
             "open": false
         }
     ],
@@ -127,7 +129,8 @@
                 "07-Repefragen",
                 "10-mistakes.mdx",
                 "30-Tests.mdx",
-                "20-Test"
+                "20-Test",
+                "_category_.yml"
             ],
             "open": true
         }
@@ -156,7 +159,8 @@
                 "07-Repefragen",
                 "10-mistakes.mdx",
                 "30-Tests.mdx",
-                "20-Test"
+                "20-Test",
+                "_category_.yml"
             ],
             "open": true
         }

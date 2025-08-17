@@ -7,6 +7,7 @@ import Text2Bin from '@tdev-components/VisualizationTools/Text2Bin'
 import Restricted from '@tdev-components/documents/Restricted';
 import QuillV2 from '@tdev-components/documents/QuillV2';
 import ProgressState from '@tdev-components/documents/ProgressState';
+import RandomCatImage from './RandomCatImage'
 
 # Textdokumente
 
@@ -55,10 +56,10 @@ Dies ist für einen Computer einfach: Jeder Buchstabe, jedes Zeichen und jedes B
 
 <Bin2Text />
 
-### Formatierung und Darstellung
+## Formatierung und Darstellung
 Schwieriger wird es bei Formatierungen! Da nur Einsen und Nullen gespeichert werden, muss auch die Formatierung in dieser Form gespeichert werden.
 
-::::::aufgabe[Text formatieren]
+:::aufgabe[Text formatieren]
 <Answer type="state" id="102be25c-18a0-4b5b-805e-54cd406686f3" />
 
 <ProgressState id="e383ca48-5a47-41ba-bb6c-8d241dcabdc5" keepPreviousStepsOpen>
@@ -86,16 +87,22 @@ Schwieriger wird es bei Formatierungen! Da nur Einsen und Nullen gespeichert wer
     ```
     </Restricted>
 2. Das Textdokument weist neben dem Textinhalt auch eine bestimmte Darstellung auf. Diese Darstellung muss ebenfalls in der Binär-Form gespeichert werden, um sie später wiederherstellen zu können! Wie könnten Sie diese Darstellungsinformationen möglichst präzise und eindeutig erfassen? Fügen Sie diese Zusatzinformationen zur Darstellung hinzu:
-    <QuillV2 toolbar={{code: true}} id="294265e6-09e7-480f-9e9c-12dfb80c0f40" />
+    <QuillV2 hideToolbar monospace id="e0c8e9e0-cec6-4fc4-b2ee-ee068339b275" />
 3. Übersetzen Sie den Text in die Binär-Form mit dem obigen Tool.
-    <QuillV2 toolbar={{code: true}} id="90df530d-aeac-47a2-9841-350d764bc646" />
+    <QuillV2 hideToolbar monospace id="90df530d-aeac-47a2-9841-350d764bc646" />
 4. Senden Sie den Binär-Code an Ihre Pultnachbar:in - Sie kriegen von ihr ebenfalls einen Binär-Code eines anderen Textdokuments zurück.
 5. Transformieren Sie den erhaltenen Binär-Code zurück in ein menschenlesbares Textdokument und halten Sie den Inhalt fest.
-    <QuillV2 toolbar={{code: true}} id="0cf89aa9-c120-4040-8d6c-6c6c56ef1f30" />
+    <QuillV2 hideToolbar monospace id="0cf89aa9-c120-4040-8d6c-6c6c56ef1f30" />
 6. Rekonstruieren Sie nun möglichst originalgetreu den Inhalt des erhaltenen Dokuments. Alle überflüssigen Informationen sollen entfernt werden!
     <QuillV2 toolbarExtra={{align: true}}  id="c47321a5-db32-4525-b123-9ae0563ead7d" />
+7. Tauschen Sie sich aus: was hat gut funktioniert, was war schwierig? Wie würden Sie Ihre Formatierungs-Hinweise anpassen, damit sie eindeutiger/besser funktionieren?
+    <QuillV2 id="d44dfb55-1f8e-4322-9080-fae5c949fd07" />
+8. Gedankenexperiment: Sie würden bei Ihrem digitalen Dokument gerne untenstehendes Katzenbildli einfügen. Wie würden Sie dies bei Ihrem Format spezifizieren?
+    <RandomCatImage />
+    <QuillV2 id="d44dfb55-1f8e-4322-9080-fae5c949fd07" />
+
 </ProgressState>
 
-::::::
+:::
 
 [^1]: Quelle: [Wikipedia](https://de.wikipedia.org/wiki/Datei) zugegriffen am 20.11.2024
