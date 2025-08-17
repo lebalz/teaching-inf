@@ -45,7 +45,7 @@
 - cells:
       - 28.10.2025
       - CSS
-      - Einführung in CSS, Klassen-Selektoren und -Eigenschaften
+      - Tag-Selektoren und -Eigenschaften
 - cells:
       - 04.11.2025
       - Intensivwoche Technik und Umwelt
@@ -55,15 +55,15 @@
 - cells:
       - 11.11.2025
       - CSS & HTML
-      - Wiederholung
+      - Einführung in CSS, Klassen-Selektoren und -Eigenschaften
 - cells:
       - 18.11.2025
-      - Test CSS & HTML
-      - Schriftliche Prüfung
-  type: test
+      - CSS & HTML
+      - Klassen-Selektoren und -Eigenschaften
 - cells:
       - 25.11.2025
-      - Style Frameworks
+      - CSS & HTML
+      - Fancy CSS & HTML, Wiederholung
 - cells:
       - 02.12.2025
       - Kantonaler Fachschaftstag
@@ -72,15 +72,13 @@
   type: holiday
 - cells:
       - 09.12.2025
-      - Style Frameworks
+      - Test CSS & HTML
+      - Schriftliche Prüfung
+  type: test
 - cells:
       - 16.12.2025
-      - Style Frameworks
-      - Arbeiten am Projekt
-- cells:
-      - 23.12.2025
-      - Style Frameworks
-      - Arbeiten am Projekt
+      - HTML & CSS
+      - Einführung in Style Frameworks
 - cells:
       - 30.12.2025
       - Winterferien
@@ -95,15 +93,12 @@
   icon: mdiPineTreeVariantOutline
 - cells:
       - 13.01.2026
-      - Arbeiten am Projekt
-- cells:
-      - 15.01.2026
-      - Abgabe Projekt
-      - "bis 22:00 Uhr"
-  type: test
+      - CSS & HTML
+      - Style Frameworks
 - cells:
       - 20.01.2026
-      - Deploy Prozess
+      - CSS & HTML
+      - Style Frameworks
 - cells:
       - 22.01.2026
       - Notenschluss
