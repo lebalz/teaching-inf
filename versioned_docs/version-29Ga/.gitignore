@@ -2,3 +2,13 @@
 02-BYOD/*
 !02-BYOD/_category_.yml
 03-Programmieren-1/*
+!03-Programmieren-1/02-Turtlegrafik/
+!03-Programmieren-1/03-Variablen/
+!03-Programmieren-1/04-Verzweigungen/
+!03-Programmieren-1/05-While/
+!03-Programmieren-1/06-Gruefnisch/
+!03-Programmieren-1/07-Repefragen/
+!03-Programmieren-1/10-mistakes.mdx
+!03-Programmieren-1/30-Tests.mdx
+!03-Programmieren-1/20-Test/
+03-Programmieren-1/_category_.json

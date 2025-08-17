@@ -5,3 +5,11 @@
 05-Daten-und-Codes/*
 100-Mathematik/01-Taschenrechner/*
 06-BigData-KI/*
+07-Kryptologie/*
+!07-Kryptologie/04-Chiffren-Knacken.mdx
+!07-Kryptologie/05-Kryptoanalyse/
+!07-Kryptologie/06-Symmetrisch/
+!07-Kryptologie/07-Krypto-Family.mdx
+!07-Kryptologie/08-Asymmetrisch/
+!07-Kryptologie/09-Hashing/
+07-Kryptologie/_category_.json
