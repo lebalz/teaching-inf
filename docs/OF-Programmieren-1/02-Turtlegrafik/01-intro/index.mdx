@@ -5,6 +5,7 @@ keywords:
   - Unterprogramme
 page_id: 4ac09d00-bd4c-4920-bc98-21343e21549b
 ---
+import ProgressState from '@tdev-components/documents/ProgressState';
 
 # 1. Einführung Python 👣
 
@@ -399,67 +400,84 @@ hideturtle()
 </Solution>
 :::
 
-## Aufgaben
+## Weitere Aufgaben
 
-::::aufgabe[Aufgabe 6: Haus von Nikolaus]
-<Answer type="state" id="98de0fb1-5032-43a2-b2b3-5d612f0aa49f" />
+:::::aufgabe[Aufgabe 6: Regentropt]
+<Answer type="state" id="425b06f5-ced0-41b5-9b92-fd2480d6b056" />
 
-Das "Haus vom Nikolaus" ist ein Zeichenspiel für Kinder. Ziel ist es, das besagte Haus in einem Linienzug aus genau acht Strecken zu zeichnen, ohne dabei eine Strecke zweimal zu durchlaufen. Zeichnen Sie das Haus vom Nikolaus.
+Schreiben Sie ein Programm, welches einen Regentropf zeichnet:
 
-![](images/haus_nikolaus.svg)
+![](./images/regentropf.svg)
 
-```py live_py title=haus__nikolaus.py id=d5730220-3200-4211-bf67-cce925c3a6be
+::::tip[Herangehensweise]
+<ProgressState 
+  labels={[
+        'Hinweis 1',
+        'Hinweis 2',
+        'Hinweis 3', 
+        'Hinweis 4',
+        'Hinweis 5'
+    ]}
+>
+1. Betrachten Sie den Regentropf ganz genau: sehen Sie die Ungereimtheit zuoberst an der Spitze?
+2. Dort sieht man, dass es sich um einen Punkt handelt:
+  ![Punkt zuoberst](./images/regentropf-detail1.svg)
+  Punkte können in Python mit dem Befehl `dot(radius)` gezeichnet werden. Der Radius ist die Grösse des Punktes.
+3. Der Regentropf besteht aus mehreren (total 10) untereinander gezeichneten Punkten mit grösserwerdendem Radius.
+  ![Mehrere Punkte aneinander](./images/regentropf-detail2.svg)
+4. Experimentieren Sie, ob Sie den Regentropfen erzeugen können - Abstände und Radien können Sie selber wählen.
+5. (falls sie selber keine Konfiguration finden konnten):  
+  Zeichnen Sie den ersten Punkt mit Radius `10`, bewegen Sie sich `10` Schritte nach unten und zeichnen Sie den nächsten Punkt mit Radius `20`, dann wieder `10` Schritte nach unten und den nächsten Punkt mit Radius `30` usw. bis zum letzten Punkt mit Radius `100`.
+</ProgressState >
+
+
+::::
+
+
+```py live_py title=regentropf.py id=e03daaaf-cc34-4cba-ba2d-7e09863f5e54
 from turtle import *
 ```
 
-:::details[Hinweis: Diagonale]
-Die Länge der Diagonale können Sie mithilfe von Pythagoras und einem Taschenrechner berechnen.
-
-Oder Sie verwenden den Trick, dass die Diagonale im Quadrat gerade $\sqrt 2$ mal länger ist als eine Seitenlänge - bei einer Seitenlänge von $100$ wären das also ca. $141$.
-
-Python kann ebenfalls die Quadratwurzel (englisch Squareroot, abgekürzt `sqrt`) ziehen - allerdings muss dieser Befehl zuerst noch importiert werden:
-
-```py live_py slim
-from math import sqrt # auf der ersten Zeile des Programms
-from turtle import *
-
-forward(sqrt(2) * 100) # die Wurzel aus 2 mal 100
-```
-
-:::
-
-#### ⭐️ Zusatz:
-
-Verwenden Sie für die Zeichnung Ihre Lieblingsfarbe und eine grössere Stiftdicke.
-
-<Solution id="dfe3919f-e285-4764-817d-9baf177e81b1">
+<Solution id="8474f40c-b720-4ec8-84dc-0b7006509c88">
 
 ```py live_py slim
 from turtle import *
 
-pensize(5)
-color('teal')
+right(90)
 
-forward(100)
-left(90)
-forward(100)
-left(90)
-forward(100)
-left(90)
-forward(100)
+dot(10)
+forward(10)
 
-left(90 + 45)
-forward(141)
-left(90)
-forward(71)
-left(90)
-forward(71)
-left(90)
-forward(141)
-hideturtle()
+dot(20)
+forward(10)
+
+dot(30)
+forward(10)
+
+dot(40)
+forward(10)
+
+dot(50)
+forward(10)
+
+dot(60)
+forward(10)
+
+dot(70)
+forward(10)
+
+dot(80)
+forward(10)
+
+dot(90)
+forward(10)
+
+dot(100)
+forward(10)
 ```
 </Solution>
-::::
+
+:::::
 
 
 :::aufgabe[Aufgabe 7: Treppe]

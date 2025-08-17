@@ -1,0 +1,112 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "elements": [
+    {
+      "id": "TDEV-BACKGROUND-IMAGE",
+      "type": "image",
+      "x": 0,
+      "y": 0,
+      "width": 110,
+      "height": 155,
+      "roughness": 0,
+      "opacity": 100,
+      "isDeleted": false,
+      "fileId": "TDEV-BACKGROUND--FILE",
+      "scale": [
+        1,
+        1
+      ],
+      "locked": true,
+      "customData": {
+        "exportFormatMimeType": "image/svg+xml",
+        "scale": 1,
+        "initExtension": ".svg"
+      },
+      "version": 2,
+      "versionNonce": 2112632937,
+      "index": "a0",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "transparent",
+      "seed": 1,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": null,
+      "boundElements": [],
+      "updated": 1755429546008,
+      "link": null,
+      "status": "pending",
+      "crop": null
+    },
+    {
+      "id": "TDEV-IMAGE--RECTANGLE",
+      "type": "rectangle",
+      "x": 0,
+      "y": 0,
+      "width": 110,
+      "height": 155,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 1,
+      "strokeStyle": "dotted",
+      "roughness": 0,
+      "opacity": 100,
+      "locked": true,
+      "version": 2,
+      "versionNonce": 1348509351,
+      "index": "a1",
+      "isDeleted": false,
+      "angle": 0,
+      "seed": 1,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": null,
+      "boundElements": [],
+      "updated": 1755429546008,
+      "link": null
+    },
+    {
+      "id": "IPTVsSL_24KVrg_U-D_F6",
+      "type": "ellipse",
+      "x": 51.13756925954861,
+      "y": 6.362428611576131,
+      "width": 7.724861266121028,
+      "height": 7.830694289434532,
+      "angle": 0,
+      "strokeColor": "#f08c00",
+      "backgroundColor": "#fd7e14",
+      "fillStyle": "solid",
+      "strokeWidth": 4,
+      "strokeStyle": "solid",
+      "roughness": 0,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "index": "a2",
+      "roundness": {
+        "type": 2
+      },
+      "seed": 715518505,
+      "version": 103,
+      "versionNonce": 290943079,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 1755430154965,
+      "link": null,
+      "locked": false
+    }
+  ],
+  "files": {
+    "TDEV-BACKGROUND--FILE": {
+      "id": "TDEV-BACKGROUND--FILE",
+      "mimeType": "image/svg+xml",
+      "dataURL": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGlkPSJjb2RlX3JlZ2VudHJvcGZfcHlfZWNmNzhjZDRfOTk5Zl80ZTY2XzkxNjBfMWVkNmY2YmQ0YzFiX3N2ZyIgd2lkdGg9IjExMCIgaGVpZ2h0PSIxNTUiIHZpZXdCb3g9IjE5NSwyNDAsMTEwLDE1NSI+CjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI1MCAyNTApIj4KPGxpbmUgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjAiIHN0eWxlPSJzdHJva2U6IGJsYWNrOyBzdHJva2Utd2lkdGg6IDE7Ii8+CjxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSI1IiBmaWxsPSJibGFjayIgc3R5bGU9IiIvPgo8bGluZSB4MT0iMCIgeTE9IjAiIHgyPSI2LjEyMzIzMzk5NTczNjc2NmUtMTYiIHkyPSIxMCIgc3R5bGU9InN0cm9rZTogYmxhY2s7IHN0cm9rZS13aWR0aDogMTsiLz4KPGNpcmNsZSBjeD0iNi4xMjMyMzM5OTU3MzY3NjZlLTE2IiBjeT0iMTAiIHI9IjEwIiBmaWxsPSJibGFjayIgc3R5bGU9IiIvPgo8bGluZSB4MT0iNi4xMjMyMzM5OTU3MzY3NjZlLTE2IiB5MT0iMTAiIHgyPSIxLjIyNDY0Njc5OTE0NzM1MzNlLTE1IiB5Mj0iMjAiIHN0eWxlPSJzdHJva2U6IGJsYWNrOyBzdHJva2Utd2lkdGg6IDE7Ii8+CjxjaXJjbGUgY3g9IjEuMjI0NjQ2Nzk5MTQ3MzUzM2UtMTUiIGN5PSIyMCIgcj0iMTUiIGZpbGw9ImJsYWNrIiBzdHlsZT0iIi8+CjxsaW5lIHgxPSIxLjIyNDY0Njc5OTE0NzM1MzNlLTE1IiB5MT0iMjAiIHgyPSIxLjgzNjk3MDE5ODcyMTAzZS0xNSIgeTI9IjMwIiBzdHlsZT0ic3Ryb2tlOiBibGFjazsgc3Ryb2tlLXdpZHRoOiAxOyIvPgo8Y2lyY2xlIGN4PSIxLjgzNjk3MDE5ODcyMTAzZS0xNSIgY3k9IjMwIiByPSIyMCIgZmlsbD0iYmxhY2siIHN0eWxlPSIiLz4KPGxpbmUgeDE9IjEuODM2OTcwMTk4NzIxMDNlLTE1IiB5MT0iMzAiIHgyPSIyLjQ0OTI5MzU5ODI5NDcwNjVlLTE1IiB5Mj0iNDAiIHN0eWxlPSJzdHJva2U6IGJsYWNrOyBzdHJva2Utd2lkdGg6IDE7Ii8+CjxjaXJjbGUgY3g9IjIuNDQ5MjkzNTk4Mjk0NzA2NWUtMTUiIGN5PSI0MCIgcj0iMjUiIGZpbGw9ImJsYWNrIiBzdHlsZT0iIi8+CjxsaW5lIHgxPSIyLjQ0OTI5MzU5ODI5NDcwNjVlLTE1IiB5MT0iNDAiIHgyPSIzLjA2MTYxNjk5Nzg2ODM4M2UtMTUiIHkyPSI1MCIgc3R5bGU9InN0cm9rZTogYmxhY2s7IHN0cm9rZS13aWR0aDogMTsiLz4KPGNpcmNsZSBjeD0iMy4wNjE2MTY5OTc4NjgzODNlLTE1IiBjeT0iNTAiIHI9IjMwIiBmaWxsPSJibGFjayIgc3R5bGU9IiIvPgo8bGluZSB4MT0iMy4wNjE2MTY5OTc4NjgzODNlLTE1IiB5MT0iNTAiIHgyPSIzLjY3Mzk0MDM5NzQ0MjA2ZS0xNSIgeTI9IjYwIiBzdHlsZT0ic3Ryb2tlOiBibGFjazsgc3Ryb2tlLXdpZHRoOiAxOyIvPgo8Y2lyY2xlIGN4PSIzLjY3Mzk0MDM5NzQ0MjA2ZS0xNSIgY3k9IjYwIiByPSIzNSIgZmlsbD0iYmxhY2siIHN0eWxlPSIiLz4KPGxpbmUgeDE9IjMuNjczOTQwMzk3NDQyMDZlLTE1IiB5MT0iNjAiIHgyPSI0LjI4NjI2Mzc5NzAxNTczNjVlLTE1IiB5Mj0iNzAiIHN0eWxlPSJzdHJva2U6IGJsYWNrOyBzdHJva2Utd2lkdGg6IDE7Ii8+CjxjaXJjbGUgY3g9IjQuMjg2MjYzNzk3MDE1NzM2NWUtMTUiIGN5PSI3MCIgcj0iNDAiIGZpbGw9ImJsYWNrIiBzdHlsZT0iIi8+CjxsaW5lIHgxPSI0LjI4NjI2Mzc5NzAxNTczNjVlLTE1IiB5MT0iNzAiIHgyPSI0Ljg5ODU4NzE5NjU4OTQxM2UtMTUiIHkyPSI4MCIgc3R5bGU9InN0cm9rZTogYmxhY2s7IHN0cm9rZS13aWR0aDogMTsiLz4KPGNpcmNsZSBjeD0iNC44OTg1ODcxOTY1ODk0MTNlLTE1IiBjeT0iODAiIHI9IjQ1IiBmaWxsPSJibGFjayIgc3R5bGU9IiIvPgo8bGluZSB4MT0iNC44OTg1ODcxOTY1ODk0MTNlLTE1IiB5MT0iODAiIHgyPSI1LjUxMDkxMDU5NjE2MzA4OTZlLTE1IiB5Mj0iOTAiIHN0eWxlPSJzdHJva2U6IGJsYWNrOyBzdHJva2Utd2lkdGg6IDE7Ii8+CjxjaXJjbGUgY3g9IjUuNTEwOTEwNTk2MTYzMDg5NmUtMTUiIGN5PSI5MCIgcj0iNTAiIGZpbGw9ImJsYWNrIiBzdHlsZT0iIi8+CjxsaW5lIHgxPSI1LjUxMDkxMDU5NjE2MzA4OTZlLTE1IiB5MT0iOTAiIHgyPSI2LjEyMzIzMzk5NTczNjc2NmUtMTUiIHkyPSIxMDAiIHN0eWxlPSJzdHJva2U6IGJsYWNrOyBzdHJva2Utd2lkdGg6IDE7Ii8+CjwvZz4KPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjUwIDI1MCkiPgo8cG9seWdvbiBwb2ludHM9IjAsMCAsLTUsLTkgLDAsLTcgLDUsLTkgIiBzdHJva2U9ImJsYWNrIiBmaWxsPSJibGFjayIgc3Ryb2tlLXdpZHRoPSIxIiBvcGFjaXR5PSIxIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg2LjEyMzIzMzk5NTczNjc2NmUtMTUsMTAwLjApIHJvdGF0ZSgwLjAsMCwwKSIvPgo8L2c+CjxtZXRhZGF0YT48cmF3PmZyb20gdHVydGxlIGltcG9ydCAqCnJpZ2h0KDkwKQpwcmludCgnZnJvbSB0dXJ0bGUgaW1wb3J0IConKQpwcmludCgncmlnaHQoOTApJykKcyA9IDEwCmZvciBpIGluIHJhbmdlKDEwKToKICAgIGRvdChzKmkgKyBzKQogICAgZm9yd2FyZChzKQogICAgcHJpbnQoZidkb3Qoe3MqaStzfSknKQogICAgcHJpbnQoZidmb3J3YXJkKHtzfSknKTwvcmF3PjwvbWV0YWRhdGE+PC9zdmc+",
+      "version": 2
+    }
+  }
+}
