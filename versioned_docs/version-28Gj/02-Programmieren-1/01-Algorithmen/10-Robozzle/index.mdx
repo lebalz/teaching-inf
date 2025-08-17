@@ -1,0 +1,252 @@
+---
+page_id: 338d80ab-b54a-4415-8f02-f4220eb2e35e
+---
+
+export const Solution = ({fns}) => {
+  return (
+    <div style={{marginBottom: '1em'}}>
+      {fns.map((fn, i) => (
+        <div key={i} style={{display: 'flex', alignItems: 'center'}}>
+          <h3 style={{width: '4em', marginBottom: 0}}>{fn.name}:</h3>
+          <div style={{display: 'flex', alignItems: 'baseline', flexWrap: 'wrap', flexBasis: '10em'}}>
+            {
+              [...new Array(fn.fields)].map((_, idx) => {
+                return (
+                  <div 
+                    key={idx} 
+                    style={{
+                      border: '1px solid currentcolor', 
+                      borderRadius: '4px', 
+                      margin: '4px', 
+                      width: '1.5em', 
+                      height: '1.5em',
+                      transform: 'translateY(0.3em)'
+                    }} 
+                  />
+                )
+              })
+            }
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+# RoboZZle
+
+:::cards{flexBasis="275px" alignItems="start"}
+    ![Beispiel 1a](images/01-example1.png)
+    [Beispiel 1a](https://alexanderson1993.github.io/robozzle-react/?level=-1)
+
+    <Solution 
+      fns={[
+        { name: 'Mn', fields: 10}
+      ]}
+    />
+    <Answer type="text" id="ab546c51-c07d-421b-998c-079eec78a7f5" />
+  ::br
+    ![Beispiel 1b](images/01-example1.png)
+    [Beispiel 1b](https://alexanderson1993.github.io/robozzle-react/?level=-2)
+
+    <Solution 
+      fns={[
+        { name: 'Mn', fields: 5},
+        { name: 'F1', fields: 2}
+      ]}
+    />
+    <Answer type="text" id="f66b338f-0975-4d1c-96ea-9ca923231c6a" />
+:::
+:::cards{maxWidth="350px"}
+  ![Beispiel 2](images/02-example2.png)
+  [Beispiel 2](https://alexanderson1993.github.io/robozzle-react/?level=-4)
+
+  <Solution 
+    fns={[
+      { name: 'Mn', fields: 3}
+    ]}
+  />
+  <Answer type="text" id="c69b9a3b-0a8a-4567-8f02-5169552b70e0" />
+:::
+
+## Aufgaben
+
+:::aufgabe[Robozzle 1]
+  <Answer type="state" id="dad7144a-37dc-43b6-8a63-aeb6701186a8" />
+
+  [Puzzle 1](https://alexanderson1993.github.io/robozzle-react/?level=14288)
+
+  ![Puzzle 1 --width=350px](./images/robozzle-14288.png)
+
+  <Solution 
+    fns={[
+      { name: 'Mn', fields: 5}
+    ]}
+  />
+
+
+  <Answer type="text" id="9ccf235b-728f-4fd9-b174-b0f83f1e0317" />
+:::
+
+:::aufgabe[Robozzle 2]
+  <Answer type="state" id="817d4d82-a301-41cd-8f80-2ad7aba43308" />
+
+  [Puzzle 2](https://alexanderson1993.github.io/robozzle-react/?level=14737)
+
+  ![Puzzle 2 --width=350px](./images/robozzle-14737.png)
+  <Solution 
+    fns={[
+      { name: 'Mn', fields: 8}
+    ]}
+  />
+
+
+  <Answer type="text" id="92976a7e-d27c-403c-8cbe-4eedcfa3261c" />
+:::
+
+:::aufgabe[Robozzle 3]
+  <Answer type="state" id="cd97fd59-1a05-49f8-9257-6eb44b1cc518" />
+
+  [Puzzle 3](https://alexanderson1993.github.io/robozzle-react/?level=14261)
+
+  ![Puzzle 3 --width=350px](./images/robozzle-14261.png)
+  
+  <Solution 
+    fns={[
+      { name: 'Mn', fields: 9}
+    ]}
+  />
+
+
+  <Answer type="text" id="b5058938-6e21-4770-9cfe-89aa580e9613" />
+:::
+
+
+:::aufgabe[Robozzle 4]
+  <Answer type="state" id="300594c6-c18b-43ef-a902-41e299911f62" />
+
+  [Puzzle 4](https://alexanderson1993.github.io/robozzle-react/?level=-3)
+
+  ![Puzzle 4 --width=350px](./images/robozzle-3.png)
+  <Solution 
+    fns={[
+      { name: 'Mn', fields: 10}
+    ]}
+  />
+
+  <Answer type="text" id="303bd090-3c63-4324-8be6-7ee82753fd72" />
+:::
+
+:::aufgabe[Robozzle 5]
+  <Answer type="state" id="35bafe95-42d6-4ae6-ba7c-9917ab89cf81" />
+
+  [Puzzle 5](https://alexanderson1993.github.io/robozzle-react/?level=105)
+
+  ![Puzzle 5 --width=350px](./images/robozzle-105.png)
+  <Solution 
+    fns={[
+      { name: 'Mn', fields: 4}
+    ]}
+  />
+
+
+  <Answer type="text" id="e29d2c96-9ac2-4b81-aa8e-064e0ce0e744" />
+:::
+
+:::aufgabe[Robozzle 6]
+  <Answer type="state" id="972be364-ac66-4185-a9ff-80e96b32c421" />
+
+  [Puzzle 6](https://alexanderson1993.github.io/robozzle-react/?level=140)
+
+  ![Puzzle 6 --width=350px](./images/robozzle-140.png)
+  <Solution 
+    fns={[
+      { name: 'Mn', fields: 6}
+    ]}
+  />
+
+
+  <Answer type="text" id="42e31674-68ff-4f7e-ae71-4067f6c46bf3" />
+:::
+
+:::aufgabe[Robozzle 7]
+  <Answer type="state" id="6b8528fe-06ee-447a-af40-d78d8bd978af" />
+
+  [Puzzle 7](https://alexanderson1993.github.io/robozzle-react/?level=27)
+
+  ![Puzzle 7 --width=350px](./images/robozzle-27.png)
+  <Solution 
+    fns={[
+      { name: 'Mn', fields: 10}
+    ]}
+  />
+
+
+  <Answer type="text" id="1710b7c5-ab54-4547-bfdb-48c15f0ffa12" />
+:::
+
+:::aufgabe[Robozzle 8]
+  <Answer type="state" id="dd083a7e-ed85-42aa-b33a-17f7fbcffcf1" />
+
+  [Puzzle 8](https://alexanderson1993.github.io/robozzle-react/?level=15093)
+
+  ![Puzzle 8 --width=350px](./images/robozzle-15093.png)
+  <Solution 
+    fns={[
+      { name: 'Mn', fields: 4}
+    ]}
+  />
+
+
+  <Answer type="text" id="cbbe6c43-65dc-41a4-82b7-5c1aad456217" />
+:::
+
+:::aufgabe[Robozzle 9]
+  <Answer type="state" id="24577e8c-1a50-4f6c-9cde-3698e122af1a" />
+
+  [Puzzle 9](https://alexanderson1993.github.io/robozzle-react/?level=12986)
+
+  ![Puzzle 9 --width=350px](./images/robozzle-12986.png)
+  <Solution 
+    fns={[
+      { name: 'Mn', fields: 10}
+    ]}
+  />
+
+
+  <Answer type="text" id="4aceb7b6-07e2-428a-8c6f-10acf1931795" />
+:::
+
+:::aufgabe[Robozzle 10]
+  <Answer type="state" id="bad183fc-86cf-4305-bf7d-47bae6ef5d77" />
+
+  [Puzzle 10](https://alexanderson1993.github.io/robozzle-react/?level=16166)
+
+  ![Puzzle 10 --width=350px](./images/robozzle-16166.png)
+  <Solution 
+    fns={[
+      { name: 'Mn', fields: 3},
+      { name: 'F1', fields: 4},
+    ]}
+  />
+
+  
+  <Answer type="text" id="3ced16c8-52d6-4ff1-9b6a-5d8bdc84dda8" />
+:::
+
+:::aufgabe[⭐ Robozzle 11]
+  <Answer type="state" id="e1c17885-8577-4d62-8dfc-4b380458424d" />
+
+  [Puzzle 11](https://alexanderson1993.github.io/robozzle-react/?level=87)
+
+  ![Puzzle 11 --width=350px](./images/robozzle-87.png)
+  <Solution 
+    fns={[
+      { name: 'Mn', fields: 5},
+      { name: 'F1', fields: 3},
+    ]}
+  />
+
+
+  <Answer type="text" id="3c4b4356-e842-4035-a384-3f13aac95eac" />
+:::

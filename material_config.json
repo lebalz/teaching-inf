@@ -7,20 +7,8 @@
             "open": false
         },
         {
-            "from": "docs/OF-Programmieren-1/",
-            "to": "versioned_docs/version-28Gb/02-Programmieren-1",
-            "ignore": ["02-Turtlegrafik/_category_.json"],
-            "open": false
-        },
-        {
             "from": "docs/OF-Word/",
             "to": "versioned_docs/version-28Gb/03-Word",
-            "ignore": [],
-            "open": false
-        },
-        {
-            "from": "docs/IN-Biber/2024/",
-            "to": "versioned_docs/version-28Gb/02-Programmieren-1/10-IN-Biber",
             "ignore": [],
             "open": false
         },
@@ -51,20 +39,8 @@
             "open": false
         },
         {
-            "from": "docs/OF-Programmieren-1/",
-            "to": "versioned_docs/version-28Gj/02-Programmieren-1",
-            "ignore": ["02-Turtlegrafik/_category_.json"],
-            "open": false
-        },
-        {
             "from": "docs/OF-Word/",
             "to": "versioned_docs/version-28Gj/03-Word",
-            "ignore": [],
-            "open": false
-        },
-        {
-            "from": "docs/IN-Biber/2024/",
-            "to": "versioned_docs/version-28Gj/02-Programmieren-1/10-IN-Biber",
             "ignore": [],
             "open": false
         },

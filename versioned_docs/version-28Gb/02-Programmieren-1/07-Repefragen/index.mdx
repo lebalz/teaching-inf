@@ -1,0 +1,102 @@
+---
+page_id: d67dfe94-d2ba-4a5e-8c9c-519caeab7892
+---
+
+# Kurzaufgaben Repetition
+
+:::aufgabe[Aufgabe 1]
+<Answer type="state" id="361bd244-1664-4532-88a1-677571c46af8" />
+Schreiben Sie ein Programm, welches:
+- Sie nach Ihrem Namen fragt
+- Sie nach einer Zahl fragt
+- so oft wie die eingegebene Zahl eine Zeile mit dem Inhalt "Hallo NAME" ausgibt (NAME durch den eingegebenen Namen ersetzen).
+
+Beispiel:
+```
+-> Ben
+-> 3
+Resultat:
+Hallo Ben
+Hallo Ben
+Hallo Ben
+```
+```py live_py id=add3d87e-50db-4453-a3ef-52b3c632af07
+
+```
+<Solution id="3dcca9c7-2962-46af-983d-f6f9b9d21775">
+```py live_py slim
+name = input('Wie heisst du?')
+zahl = input('Wie oft soll ich deinen Namen ausgeben?')
+zahl = int(zahl)
+for i in range(zahl):
+    print(f'Hallo {name}')
+```
+</Solution>
+:::
+
+:::aufgabe[Aufgabe 2]
+<Answer type="state" id="d13340b4-6b69-40f3-9952-c5c9b37f218a" />
+
+Passen Sie das obige Programm so an, dass die Zeilen nummeriert sind.
+
+Beispiel:
+```
+-> Ben
+-> 3
+Hallo Ben
+Hallo Ben
+Hallo Ben
+```
+```py live_py id=c841981d-69ac-41d4-9920-3a67e4fed98c
+
+```
+<Solution id="3dcca9c7-2962-46af-983d-f6f9b9d21775">
+```py live_py slim
+name = input('Wie heisst du?')
+zahl = input('Wie oft soll ich deinen Namen ausgeben?')
+zahl = int(zahl)
+for i in range(zahl):
+    print(f'{i+1}. {name}')
+```
+</Solution>
+:::
+
+::::aufgabe[Aufgabe 3]
+<Answer type="state" id="cbe42b1b-938e-46f8-8757-67a35b3ce7a2" />
+Nun soll unterschieden werden: ist die eingegebene Zahl grösser oder gleich Drei, soll ein Ausrufezeichen "!" hinzugefügt werden, sonst nicht.
+:::cards{minWidth="300px"}
+Beispiel 1:
+```
+-> Ben
+-> 2
+Hallo Ben
+Hallo Ben 
+```
+::br
+Beispiel 2:
+```
+-> Ben
+-> 4
+1. Hallo Ben!
+2. Hallo Ben!
+3. Hallo Ben!
+4. Hallo Ben! 
+```
+:::
+
+```py live_py id=f6ab8a57-ec6e-4ad9-8727-be393482a903
+
+```
+<Solution id="3dcca9c7-2962-46af-983d-f6f9b9d21775">
+```py live_py slim
+name = input('Wie heisst du?')
+zahl = input('Wie oft soll ich deinen Namen ausgeben?')
+zahl = int(zahl)
+for i in range(zahl):
+    if zahl >= 3:
+        print(f'{i+1}. {name}!')
+    else:
+        print(f'{i+1}. {name}')
+```
+</Solution>
+::::

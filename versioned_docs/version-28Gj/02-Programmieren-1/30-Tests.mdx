@@ -1,0 +1,75 @@
+---
+page_id: 1fb6cbf9-ea8f-4610-ac73-2870ad9df03b
+---
+
+import CmsText from '@tdev-components/documents/CmsText';
+import WithCmsText from '@tdev-components/documents/CmsText/WithCmsText';
+import CmsLink from '@tdev-components/documents/CmsText/Link';
+
+
+# Tests
+
+## Abschlussprüfung Programmieren 1
+
+<WithCmsText
+    entries={{
+        link: 'bb2fa3c5-6166-4e64-90cf-c173af37de7e'
+    }}
+>
+    <CmsLink name="link">👉 Zur Prüfung</CmsLink>
+</WithCmsText>
+
+
+<WithCmsText 
+    entries={{
+        name: 'df32c892-5553-4cef-89a2-f55e773fdbd6',
+        theorie: '60823a13-188e-4b5c-8aff-536931c61d83',
+        praktisch: 'c2e6298f-edb3-4897-b3c2-f79a07885b3f',
+        grade: '5c1d6e64-44b3-4636-9f0b-985598ed35b4'
+    }}
+>
+
+    Name
+    : <CmsText name="name"/>
+    Zählt
+    : 1
+    Theorie Teil
+    : <CmsText name="theorie"/> / 15
+    Praktischer Teil
+    : <CmsText name="praktisch"/> / 13
+    Note
+    : <CmsText name="grade"/>
+</WithCmsText>
+
+
+## Kurzprobe Programmieren 1
+
+<WithCmsText
+    entries={{
+        link: '06effe2d-bad6-4561-a9ef-821284c25602'
+    }}
+>
+    <CmsLink name="link">👉 Zur Prüfung</CmsLink>
+</WithCmsText>
+
+
+<WithCmsText 
+    entries={{
+        name: 'e32b7668-ab20-4e4b-a22f-5ad7a61fd11d',
+        theorie: '8c4426a5-3cff-449e-a5c6-dee183a3eeb2',
+        praktisch: 'c53e4197-06fa-4428-a1cb-062f30d96868',
+        grade: '30a0e692-aba7-4fc9-ab73-1812579bb783'
+    }}
+>
+
+    Name
+    : <CmsText name="name"/>
+    Zählt
+    : 0.5
+    Theorie Teil
+    : <CmsText name="theorie"/> / 8
+    Praktischer Teil
+    : <CmsText name="praktisch"/> / 9
+    Note
+    : <CmsText name="grade"/>
+</WithCmsText>
