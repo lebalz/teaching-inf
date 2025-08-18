@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
 
@@ -54,7 +54,7 @@ const Hangman = ({ words, showSolution, label }: Props) => {
     const renderWord = (): React.ReactNode[] => {
         return word.split('').map((letter, index) => (
             <span key={index} className={styles.letter}>
-                {guessedLetters.includes(letter) ? letter : '_'}
+                {guessedLetters.includes(letter) ? letter : ''}
             </span>
         ));
     };
@@ -113,9 +113,7 @@ const Hangman = ({ words, showSolution, label }: Props) => {
 
             <div className={styles.wordContainer}>{renderWord()}</div>
 
-            {gameStatus === 'won' && (
-                <div className={styles.message}>Yay 🥳! Gewonnen!</div>
-            )}
+            {gameStatus === 'won' && <div className={styles.message}>Yay 🥳! Gewonnen!</div>}
 
             {gameStatus === 'lost' && (
                 <div className={clsx(styles.message, styles.lost)}>

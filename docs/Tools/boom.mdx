@@ -1,13 +1,34 @@
 ---
 page_id: fc51ffc5-ea5a-4e9b-9c5e-bab35a93a6b4
 ---
+import { mdiBomb } from '@mdi/js';
+import Button from '@tdev-components/shared/Button'
 
 # Boom 
 
-<button 
+```tsx
+import { mdiBomb } from '@mdi/js';
+import Button from '@tdev-components/shared/Button';
+
+<Button 
     onClick={() => {
-        throw new Error("This is your first error!");
+        throw new Error("Brrr, ein gewollter Fehler!");
     }}
->
-    Break the world
-</button>
+    icon={mdiBomb}
+    text="Break the world"
+    iconSide='left'
+    size={1.2}
+    color="red"
+/>
+```
+
+<Button 
+    onClick={() => {
+        throw new Error("Brrr, ein gewollter Fehler!");
+    }}
+    icon={mdiBomb}
+    text="Break the world"
+    iconSide='left'
+    size={1.2}
+    color="red"
+/>
