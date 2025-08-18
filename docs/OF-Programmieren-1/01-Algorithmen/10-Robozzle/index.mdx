@@ -2,26 +2,26 @@
 page_id: 338d80ab-b54a-4415-8f02-f4220eb2e35e
 ---
 
-export const Solution = ({fns}) => {
+export const Solution = ({ fns }) => {
   return (
-    <div style={{marginBottom: '1em'}}>
+    <div style={{ marginBottom: '1em' }}>
       {fns.map((fn, i) => (
-        <div key={i} style={{display: 'flex', alignItems: 'center'}}>
-          <h3 style={{width: '4em', marginBottom: 0}}>{fn.name}:</h3>
-          <div style={{display: 'flex', alignItems: 'baseline', flexWrap: 'wrap', flexBasis: '10em'}}>
+        <div key={i} style={{ display: 'flex', alignItems: 'center' }}>
+          <h3 style={{ width: '4em', marginBottom: 0 }}>{fn.name}:</h3>
+          <div style={{ display: 'flex', alignItems: 'baseline', flexWrap: 'wrap', flexBasis: '10em' }}>
             {
               [...new Array(fn.fields)].map((_, idx) => {
                 return (
-                  <div 
-                    key={idx} 
+                  <div
+                    key={idx}
                     style={{
-                      border: '1px solid currentcolor', 
-                      borderRadius: '4px', 
-                      margin: '4px', 
-                      width: '1.5em', 
+                      border: '1px solid currentcolor',
+                      borderRadius: '4px',
+                      margin: '4px',
+                      width: '1.5em',
                       height: '1.5em',
                       transform: 'translateY(0.3em)'
-                    }} 
+                    }}
                   />
                 )
               })
@@ -34,6 +34,8 @@ export const Solution = ({fns}) => {
 };
 
 # RoboZZle
+
+Mit algorithmischem Denken können die folgenden RoboZZles (Kunstwort aus Roboter + Puzzle) gelöst werden.
 
 :::cards{flexBasis="275px" alignItems="start"}
     ![Beispiel 1a](images/01-example1.png)
