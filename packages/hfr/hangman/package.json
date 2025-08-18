@@ -4,10 +4,7 @@
     "main": "index.tsx",
     "types": "index.tsx",
     "dependencies": {},
-    "devDependencies": {
-        "@docusaurus/module-type-aliases": "*",
-        "@docusaurus/core": "*"
-    },
+    "devDependencies": {},
     "peerDependencies": {
         "@tdev/core": "*"
     }
