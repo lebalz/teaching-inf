@@ -151,3 +151,26 @@ div.no-search {
         grid-template-columns: minmax(3em, auto) minmax(10em, 2fr);
     }
 }
+
+div.theme-layout-navbar-sidebar-panel,
+nav.menu {
+    .theme-doc-sidebar-menu {
+        --tdev-sidebar-color: transparent;
+        .theme-doc-sidebar-item-category {
+            border-left: 4px solid var(--tdev-sidebar-color);
+            border-radius: 4px;
+            &.tdev {
+                --tdev-sidebar-color: var(--ifm-color-blue);
+            }
+            &.inf-of {
+                --tdev-sidebar-color: var(--ifm-color-primary);
+            }
+            &.inf-wms {
+                --tdev-sidebar-color: rgb(23, 195, 0);
+            }
+            &.math {
+                --tdev-sidebar-color: rgb(208, 35, 35);
+            }
+        }
+    }
+}
