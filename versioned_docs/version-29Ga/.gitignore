@@ -3,6 +3,7 @@
 02-BYOD/*
 !02-BYOD/_category_.yml
 03-Programmieren-1/*
+!03-Programmieren-1/01-Algorithmen/06-Struktogramme.mdx
 !03-Programmieren-1/02-Turtlegrafik/
 !03-Programmieren-1/03-Variablen/
 !03-Programmieren-1/04-Verzweigungen/
