@@ -26,7 +26,7 @@
 - cells:
     - 30.09.2025
     - Kennenlernwoche GYM1
-    - 
+    -
   type: holiday
   icon: mdiWalletTravel
 - cells:
@@ -56,8 +56,8 @@
   type: test
 - cells:
     - 11.11.2025
-    - Test Praktisch
-    - Kurztest praktisch zu den BYOD Basics / Vorbereitung "Informatik Biber"
+    - Informatik Biber
+    - Vorbereitung "Informatik Biber"
   type: test
 - cells:
     - 18.11.2025
@@ -110,7 +110,7 @@
 - cells:
     - 22.01.2026
     - Notenschluss
-    - 
+    -
   type: event
   icon: mdiFlagCheckered
 - cells:
@@ -120,7 +120,7 @@
 - cells:
     - 02.02.2026
     - Beginn Semester 2
-    - 
+    -
   type: event
   icon: mdiRun
 - cells:
@@ -131,6 +131,6 @@
 - cells:
     - 10.02.2026
     - Sportwoche
-    - 
+    -
   type: holiday
   icon: mdiWeatherSnowyHeavy
