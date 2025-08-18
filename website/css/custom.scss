@@ -156,20 +156,20 @@ div.theme-layout-navbar-sidebar-panel,
 nav.menu {
     .theme-doc-sidebar-menu {
         --tdev-sidebar-color: transparent;
-        .theme-doc-sidebar-item-category {
+        .library-item {
             border-left: 4px solid var(--tdev-sidebar-color);
             border-radius: 4px;
             &.tdev {
-                --tdev-sidebar-color: var(--ifm-color-blue);
+                --tdev-sidebar-color: var(--ifm-color-info);
             }
             &.inf-of {
-                --tdev-sidebar-color: var(--ifm-color-primary);
+                --tdev-sidebar-color: var(--ifm-color-blue);
             }
             &.inf-wms {
                 --tdev-sidebar-color: rgb(23, 195, 0);
             }
             &.math {
-                --tdev-sidebar-color: rgb(208, 35, 35);
+                --tdev-sidebar-color: var(--ifm-color-danger-darker);
             }
         }
     }
