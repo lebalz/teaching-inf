@@ -109,7 +109,7 @@
         {
             "from": "docs/Onboarding/",
             "to": "versioned_docs/version-29Ga/01-Onboarding",
-            "ignore": [],
+            "ignore": ["_category_.yml"],
             "open": false
         },
         {
@@ -139,7 +139,7 @@
         {
             "from": "docs/Onboarding/",
             "to": "versioned_docs/version-29Gj/01-Onboarding",
-            "ignore": [],
+            "ignore": ["_category_.yml"],
             "open": false
         },
         {
