@@ -102,6 +102,12 @@
             "from": "docs/Onboarding/",
             "to": "versioned_docs/version-28Wa/01-Onboarding",
             "ignore": ["_category_.yml"],
+            "open": true
+        },
+        {
+            "from": "docs/WMS-WINF/",
+            "to": "versioned_docs/version-28Wa/10-WINF",
+            "ignore": ["_category_.yml"],
             "open": false
         }
     ],
