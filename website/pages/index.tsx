@@ -8,15 +8,15 @@ import { Content } from '@theme/BlogPostPage';
 import _ from 'lodash';
 import useIsMobileView from '@tdev-hooks/useIsMobileView';
 import SourceRef from '@tdev-components/Figure/SourceRef';
-import bib1 from './images/compsci-1.json';
-import bib2 from './images/compsci-2.json';
-import bib3 from './images/compsci-3.json';
-import bib4 from './images/compsci-4.json';
-import bib5 from './images/compsci-5.json';
-import bib6 from './images/compsci-6.json';
+import bib1 from '@site/static/img/index/compsci-1.json';
+import bib2 from '@site/static/img/index/compsci-2.json';
+import bib3 from '@site/static/img/index/compsci-3.json';
+import bib4 from '@site/static/img/index/compsci-4.json';
+import bib5 from '@site/static/img/index/compsci-5.json';
+import bib6 from '@site/static/img/index/compsci-6.json';
 import Button from '@tdev-components/shared/Button';
 import { mdiShuffleVariant } from '@mdi/js';
-import { SIZE_M, SIZE_S } from '@tdev-components/shared/iconSizes';
+import { SIZE_M } from '@tdev-components/shared/iconSizes';
 
 function HomepageHeader() {
     const { siteConfig } = useDocusaurusContext();
@@ -74,12 +74,12 @@ const VideoWallpaper = ({
 
 export default function Home({ recentPosts }: Props): React.ReactNode {
     const videos = React.useRef([
-        { src: require('./images/compsci-1.mp4').default, bib: bib1 },
-        { src: require('./images/compsci-2.mp4').default, bib: bib2 },
-        { src: require('./images/compsci-3.mp4').default, bib: bib3 },
-        { src: require('./images/compsci-4.mp4').default, bib: bib4 },
-        { src: require('./images/compsci-5.mp4').default, bib: bib5 },
-        { src: require('./images/compsci-6.mp4').default, bib: bib6 }
+        { src: '/img/index/compsci-1.mp4', bib: bib1 },
+        { src: '/img/index/compsci-2.mp4', bib: bib2 },
+        { src: '/img/index/compsci-3.mp4', bib: bib3 },
+        { src: '/img/index/compsci-4.mp4', bib: bib4 },
+        { src: '/img/index/compsci-5.mp4', bib: bib5 },
+        { src: '/img/index/compsci-6.mp4', bib: bib6 }
     ]);
     const videoOrder = React.useRef([0, 1, 2, 3, 4, 5]);
     const [isShuffling, setIsShuffling] = React.useState(false);
