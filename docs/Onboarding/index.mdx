@@ -7,11 +7,11 @@ import BrowserOnly from "@docusaurus/BrowserOnly";
 
 export const ClassStartPage = () => {
   return (
-    <BrowserOnly fallback={<a href='../'>👉 Klassen-Startseite</a>}>
+    <BrowserOnly fallback={<a href='../home'>👉 Klassen-Startseite</a>}>
       {() => {
         const className = window.location.pathname.split('/')[1];
         return (
-          <a href='../'>👉 Klassen-Startseite (Informatik {className})</a>
+          <a href='../home'>👉 Klassen-Startseite (Informatik {className})</a>
         )
       }}
     </BrowserOnly>
