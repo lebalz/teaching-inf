@@ -11,3 +11,7 @@ export const sanitizeNumber = (excludedText: string[] = []) => {
         return replacer(`${solution}`.replace(',', '.')).replaceAll(/[^\d\.-]/g, '');
     };
 };
+
+export const trimUpper = (text?: string) => {
+    return text?.trim()?.toUpperCase();
+};

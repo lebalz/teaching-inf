@@ -1,124 +1,121 @@
 import clsx from 'clsx';
 import * as React from 'react';
-import styles from '../styles.module.scss';
+import shared from '../styles.module.scss';
+import styles from './styles.module.scss';
 import { useStore } from '@tdev/hooks/useStore';
 import { action } from 'mobx';
-const SANITIZE_REGEX = /[^ABCDEFGHIKLMNOPQRSTUWXYZ\s]/g;
-const QUADRAT = [
-    'A',
-    'B',
-    'C',
-    'D',
-    'E',
-    'F',
-    'G',
-    'H',
-    'I',
-    'K',
-    'L',
-    'M',
-    'N',
-    'O',
-    'P',
-    'Q',
-    'R',
-    'S',
-    'T',
-    'U',
-    'W',
-    'X',
-    'Y',
-    'Z',
-    ' '
-];
+import { observer } from 'mobx-react-lite';
+import Button from '@tdev-components/shared/Button';
+import { mdiKeyboardReturn, mdiShuffleVariant } from '@mdi/js';
+import { SIZE_S } from '@tdev-components/shared/iconSizes';
+import CopyBadge from '@tdev-components/shared/CopyBadge';
+import TextInput from '@tdev-components/shared/TextInput';
 
-const sanitizer = (text: string) => {
-    return text
-        .toUpperCase()
-        .replace(/\s+/g, ' ')
-        .replace(/J/g, 'I')
-        .replace(/V/g, 'U')
-        .replace(SANITIZE_REGEX, '');
-};
-
-export default () => {
-    const [text, setText] = React.useState('');
-    const [cipherText, setCipherText] = React.useState('');
-    const [source, setSource] = React.useState<'text' | 'cipher'>('text');
-    const store = useStore('siteStore').toolsStore;
-
-    React.useEffect(() => {
-        setText(store.polybios?.text || '');
-        setCipherText(store.polybios?.cipherText || '');
-        setSource(store.polybios.source || 'text');
-    }, []);
-
-    React.useEffect(() => {
-        return action(() => {
-            store.polybios = {
-                text,
-                cipherText,
-                source
-            };
-        });
-    }, [text, cipherText, source]);
-
-    React.useEffect(() => {
-        if (source !== 'text' || text.length === 0) {
-            return;
-        }
-        const cipher = text.split('').map((char) => {
-            const idx = QUADRAT.indexOf(char);
-            const col = idx % 5;
-            const row = Math.floor(idx / 5);
-            return `${row + 1}${col + 1}`;
-        });
-        setCipherText(cipher.join(' '));
-    }, [text]);
-
-    React.useEffect(() => {
-        if (source !== 'cipher' || cipherText.length === 0) {
-            return;
-        }
-        const cLines = cipherText.split(' ');
-        const txt = cLines.map((tuple) => {
-            const [row, col] = tuple.split('').map((c) => Number.parseInt(c, 10) - 1);
-            return QUADRAT[row * 5 + col];
-        });
-        setText(txt.join(''));
-    }, [cipherText]);
+export default observer(() => {
+    const store = useStore('siteStore').toolsStore.polybios;
+    const [newAlphabet, setNewAlphabet] = React.useState<string>('');
 
     return (
-        <div className={clsx('hero', 'shadow--lw', styles.container)}>
+        <div className={clsx('hero', 'shadow--lw', shared.container)}>
             <div className="container">
                 <p className="hero__subtitle">Polybios-Chiffre</p>
+                <div className={clsx(styles.polybios)}>
+                    <div className={clsx(styles.square)}>
+                        <div className={clsx(styles.item, styles.head)}></div>
+                        <div className={clsx(styles.item, styles.head)}>1</div>
+                        <div className={clsx(styles.item, styles.head)}>2</div>
+                        <div className={clsx(styles.item, styles.head)}>3</div>
+                        <div className={clsx(styles.item, styles.head)}>4</div>
+                        <div className={clsx(styles.item, styles.head)}>5</div>
+                        {store.alphabet.map((char, idx) => (
+                            <React.Fragment key={idx}>
+                                {idx % 5 === 0 && (
+                                    <div className={clsx(styles.item, styles.side)}>{idx / 5 + 1}</div>
+                                )}
+                                <div className={styles.item}>{char === ' ' ? '⎵' : char}</div>
+                            </React.Fragment>
+                        ))}
+                    </div>
+                    <div className={clsx(styles.actions)}>
+                        <Button
+                            text="Alphabet mischen"
+                            icon={mdiShuffleVariant}
+                            size={SIZE_S}
+                            iconSide="left"
+                            noOutline
+                            color="primary"
+                            onClick={() => store.shuffleAlphabet()}
+                        />
+                        <div className={clsx(styles.inputContainer)}>
+                            <TextInput
+                                label="Alphabet"
+                                value={newAlphabet}
+                                labelClassName={styles.label}
+                                onChange={action((value) => {
+                                    setNewAlphabet(value.toUpperCase());
+                                })}
+                                onEnter={action(() => {
+                                    store.setAlphabet(newAlphabet.split(''));
+                                    setNewAlphabet('');
+                                })}
+                                noSpellCheck
+                                noAutoFocus
+                            />
+                            <Button
+                                icon={mdiKeyboardReturn}
+                                title="Alphabet setzen"
+                                size={SIZE_S}
+                                onClick={() => {
+                                    store.setAlphabet(newAlphabet.split(''));
+                                    setNewAlphabet('');
+                                }}
+                            />
+                        </div>
+                        <CopyBadge
+                            value={store.alphabet.join('')}
+                            label="Schlüssel kopieren"
+                            size={SIZE_S}
+                            className={styles.copyBadge}
+                        />
+                    </div>
+                </div>
                 <h4>Klartext</h4>
-                <textarea
-                    className={clsx(styles.input)}
-                    value={text}
-                    onChange={(e) => {
-                        const pos = Math.max(e.target.selectionStart, e.target.selectionEnd);
-                        setSource('text');
-                        setText(sanitizer(e.target.value));
-                        setTimeout(() => e.target.setSelectionRange(pos, pos), 0);
-                    }}
-                    rows={5}
-                    placeholder="Klartext"
-                ></textarea>
+                <div className={shared.inputContainer}>
+                    <textarea
+                        className={clsx(shared.input)}
+                        value={store.text}
+                        onChange={(e) => {
+                            const pos = Math.max(e.target.selectionStart, e.target.selectionEnd);
+                            store.setText(e.target.value);
+                            queueMicrotask(() => {
+                                e.target.setSelectionRange(pos, pos);
+                            });
+                        }}
+                        onFocus={action(() => store.setSource('text'))}
+                        rows={5}
+                        placeholder="Klartext"
+                    ></textarea>
+                    {store.source === 'text' && <div className={shared.active}></div>}
+                </div>
                 <h4>Geheimtext</h4>
-                <textarea
-                    className={clsx(styles.input)}
-                    value={cipherText}
-                    onChange={(e) => {
-                        const pos = Math.max(e.target.selectionStart, e.target.selectionEnd);
-                        setSource('cipher');
-                        setCipherText(e.target.value.replace(/\s+/g, ' ').replace(/[^0-9\s]/g, ''));
-                        setTimeout(() => e.target.setSelectionRange(pos, pos), 0);
-                    }}
-                    rows={5}
-                    placeholder="Polybios Verschlüsselter Geheimtext"
-                ></textarea>
+                <div className={shared.inputContainer}>
+                    <textarea
+                        className={clsx(shared.input)}
+                        value={store.cipherText}
+                        onChange={(e) => {
+                            const pos = Math.max(e.target.selectionStart, e.target.selectionEnd);
+                            store.setCipherText(e.target.value);
+                            queueMicrotask(() => {
+                                e.target.setSelectionRange(pos, pos);
+                            });
+                        }}
+                        onFocus={action(() => store.setSource('cipher'))}
+                        rows={5}
+                        placeholder="Polybios Verschlüsselter Geheimtext"
+                    ></textarea>
+                    {store.source === 'cipher' && <div className={shared.active}></div>}
+                </div>
             </div>
         </div>
     );
-};
+});

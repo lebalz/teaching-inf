@@ -8,6 +8,7 @@ page_id: dc3c766b-306e-449b-9892-e8bb682472e2
 ---
 
 import Substitution from "@tdev-components/VisualizationTools/cryptology/Substitution";
+import { trimUpper } from "@tdev-components/documents/String/sanitizers";
 
 # Monoalphabetische Substitution
 
@@ -52,13 +53,15 @@ Auch hier sollten Sie das obige Tool für die Aufgaben nicht verwenden.
 Schlüssel
 : HTOIFPKGMABUZRLWNDESYCJVXQ
 
-| Klartext                                                                                                             | Geheimtext                                                                        |
-|----------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------|
-| <String solution="CHIFFRE" id="11417f68-e870-454f-91e7-d4f3b99ae4c0" />                                              | OGMPPDF                                                                           |
-| GEHEIMNIS                                                                                                            | <String solution="KFGFMZRME" id="0c315106-dd63-49b4-8d7e-4369dd2c7745" />         |
-| <String solution="DOPPELAGENT" id="f1026b86-f95f-4605-87ea-c4e84ae2939b" />                                          | ILWWFUHKFRS                                                                       |
-| BEREICH ABSICHERN                                                                                                    | <String solution="TFDFMOG HTEMOGFDR" id="80ffa8e8-b921-4477-9047-d2b5244dbbec" /> |
-| <String solution="AGENT X MELDET SICH UM MITTERNACHT" id="6a93e8f3-acfa-4609-9573-a23c103a93ef" inputWidth="22em" /> | HKFRS V ZFUIFS EMOG YZ ZMSSFDRHOGS                                                |
+<div style={{overflow: 'auto', whiteSpace: 'nowrap'}} className="noComment">
+  <div style={{width: '46em', whiteSpace: 'nowrap'}}>
+    <String solution="CHIFFRE" unit="OGMPPDF" inputWidth="22em" unitWidth="22em"  id="11417f68-e870-454f-91e7-d4f3b99ae4c0" sanitizer={trimUpper}/> 
+    <String label="GEHEIMNIS" solution="KFGFMZRME" inputWidth="22em" labelWidth="22em" id="0c315106-dd63-49b4-8d7e-4369dd2c7745" sanitizer={trimUpper}/>
+    <String solution="DOPPELAGENT" unit="ILWWFUHKFRS" inputWidth="22em" unitWidth="22em"id="f1026b86-f95f-4605-87ea-c4e84ae2939b" sanitizer={trimUpper}/>
+    <String label="BEREICH ABSICHERN" solution="TFDFMOG HTEMOGFDR" inputWidth="22em" labelWidth="22em" id="80ffa8e8-b921-4477-9047-d2b5244dbbec" sanitizer={trimUpper}/>
+    <String solution="AGENT X MELDET SICH UM MITTERNACHT" unit="HKFRS V ZFUIFS EMOG YZ ZMSSFDRHOGS" inputWidth="22em" unitWidth="22em" id="6a93e8f3-acfa-4609-9573-a23c103a93ef" sanitizer={trimUpper}/>
+  </div>
+</div>
 
 ::::
 

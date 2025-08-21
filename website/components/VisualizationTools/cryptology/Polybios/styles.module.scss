@@ -1,0 +1,50 @@
+.polybios {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+    .actions {
+        display: flex;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0.5em;
+        .copyBadge {
+            align-self: flex-end;
+        }
+    }
+}
+.square {
+    display: inline-grid;
+    grid-template-columns: repeat(6, 3em);
+    grid-template-rows: repeat(6, 3em);
+    border: 1.25px solid var(--ifm-color-content);
+    .item {
+        border: 1px solid var(--ifm-color-content);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--ifm-background-color);
+        color: var(--ifm-color-content);
+        &.head:first-child {
+            background: var(--ifm-color-emphasis-600);
+        }
+        &.head,
+        &.side {
+            color: black;
+            font-weight: bold;
+        }
+        &.head:not(:first-child) {
+            background: var(--ifm-color-success-lightest);
+        }
+        &.side {
+            background: var(--ifm-color-info-lightest);
+        }
+    }
+}
+.inputContainer {
+    display: flex;
+    .label {
+        margin-right: 0.5em;
+    }
+    // flex-wrap: wrap  ;
+}

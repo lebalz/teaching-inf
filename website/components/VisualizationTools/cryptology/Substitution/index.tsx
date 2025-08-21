@@ -4,7 +4,6 @@ import styles from '../styles.module.scss';
 import { differenceWith, isEqual, keys, shuffle, uniq, update } from 'lodash';
 import { useStore } from '@tdev/hooks/useStore';
 import { action } from 'mobx';
-import { trackDerivedFunction } from 'mobx/dist/internal';
 const ALPHABET = [
     'A',
     'B',
@@ -154,7 +153,7 @@ export default () => {
                             setText(sanitizer(e.target.value));
                             setTimeout(() => e.target.setSelectionRange(pos, pos), 0);
                         }}
-                        onClick={() => setSource('text')}
+                        onFocus={() => setSource('text')}
                         rows={5}
                         placeholder="Klartext"
                     ></textarea>
@@ -173,7 +172,10 @@ export default () => {
                             autoComplete="off"
                             className={clsx(key.length !== ALPHABET.length && styles.invalid)}
                             onChange={(e) => {
-                                const pos = Math.max(e.target.selectionStart, e.target.selectionEnd);
+                                const pos = Math.max(
+                                    e.target.selectionStart ?? e.target.value.length,
+                                    e.target.selectionEnd ?? e.target.value.length
+                                );
                                 setKeySource('basic');
                                 setKey(sanitizeKey(e.target.value));
                                 setTimeout(() => {
@@ -219,32 +221,36 @@ export default () => {
                     <summary>Erweiterte Schlüsseleingabe</summary>
                     <div>
                         <table className={styles.htable}>
-                            <tr>
-                                <th>Klartext</th>
-                                {ALPHABET.map((letter) => (
-                                    <td>{letter}</td>
-                                ))}
-                            </tr>
-                            <th>Geheimtext</th>
-                            {Object.entries(keyTable).map((entry) => (
-                                <td>
-                                    <input
-                                        className={styles.letterInput}
-                                        type="text"
-                                        value={entry[1]}
-                                        onChange={(e) => {
-                                            setKeySource('advanced');
-                                            const updatedKeyTable = { ...keyTable };
-                                            let newChar = e.target.value.trim();
-                                            if (!newChar) {
-                                                newChar = ' ';
-                                            }
-                                            updatedKeyTable[entry[0]] = newChar;
-                                            setKeyTable(updatedKeyTable);
-                                        }}
-                                    />
-                                </td>
-                            ))}
+                            <tbody>
+                                <tr>
+                                    <th>Klartext</th>
+                                    {ALPHABET.map((letter, idx) => (
+                                        <td key={idx}>{letter}</td>
+                                    ))}
+                                </tr>
+                                <tr>
+                                    <th>Geheimtext</th>
+                                    {Object.entries(keyTable).map((entry, idx) => (
+                                        <td key={idx}>
+                                            <input
+                                                className={styles.letterInput}
+                                                type="text"
+                                                value={entry[1]}
+                                                onChange={(e) => {
+                                                    setKeySource('advanced');
+                                                    const updatedKeyTable = { ...keyTable };
+                                                    let newChar = e.target.value.trim().toUpperCase();
+                                                    if (!newChar) {
+                                                        newChar = ' ';
+                                                    }
+                                                    updatedKeyTable[entry[0]] = newChar;
+                                                    setKeyTable(updatedKeyTable);
+                                                }}
+                                            />
+                                        </td>
+                                    ))}
+                                </tr>
+                            </tbody>
                         </table>
                     </div>
                 </details>
@@ -259,7 +265,7 @@ export default () => {
                             setCipherText(sanitizer(e.target.value));
                             setTimeout(() => e.target.setSelectionRange(pos, pos), 0);
                         }}
-                        onClick={() => setSource('cipher')}
+                        onFocus={() => setSource('cipher')}
                         rows={5}
                         placeholder="Monoalphabetisch verschlüsselter Geheimtext"
                     ></textarea>

@@ -81,12 +81,12 @@ export const PENTA_TABLE = {
     ['11101']: '.',
     ['11110']: '?',
     ['11111']: '@'
-};
+} as const;
 
 const deepCopy = (arr: number[][]): number[][] => {
-    const copy = [];
+    const copy: number[][] = [];
     arr.forEach((row) => {
-        const newRow = [];
+        const newRow: number[] = [];
         copy.push(newRow);
         row.forEach((cell) => {
             newRow.push(cell);
@@ -99,7 +99,7 @@ const toPenta = (text: string): string[] => {
     return text
         .toUpperCase()
         .split('')
-        .map((char) => PENTA_TABLE[char] || char);
+        .map((char) => PENTA_TABLE[char as keyof typeof PENTA_TABLE] || char);
 };
 
 const pentaChunks = (pentaText: string, appendIncompleteParts: boolean = true): string[] => {
@@ -116,7 +116,7 @@ const pentaChunks = (pentaText: string, appendIncompleteParts: boolean = true): 
 };
 
 const toText = (penta: string): string[] => {
-    return pentaChunks(penta).map((seq) => PENTA_TABLE[seq] || seq);
+    return pentaChunks(penta).map((seq) => PENTA_TABLE[seq as keyof typeof PENTA_TABLE] || seq);
 };
 
 const TextEditor = () => {

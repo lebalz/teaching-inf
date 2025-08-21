@@ -8,11 +8,13 @@ import { action } from 'mobx';
 
 const toPentaInt = (text: string): number[] => {
     const t = sanitizePentaString(text);
-    return t.split('').map((char) => Number.parseInt(PENTA_TABLE[char], 2));
+    return t.split('').map((char) => Number.parseInt(PENTA_TABLE[char as keyof typeof PENTA_TABLE], 2));
 };
 
 const fromPentaInt = (nums: number[]): string => {
-    return nums.map((num) => PENTA_TABLE[num.toString(2).padStart(5, '0')]).join('');
+    return nums
+        .map((num) => PENTA_TABLE[num.toString(2).padStart(5, '0') as keyof typeof PENTA_TABLE])
+        .join('');
 };
 
 const XORBlockCipher = () => {
@@ -151,7 +153,10 @@ const XORBlockCipher = () => {
                         placeholder="Schlüssel"
                         value={key}
                         onChange={(e) => {
-                            const pos = Math.max(e.target.selectionStart, e.target.selectionEnd);
+                            const pos = Math.max(
+                                e.target.selectionStart ?? e.target.value.length,
+                                e.target.selectionEnd ?? 0
+                            );
                             setKey(sanitizePentaString(e.target.value));
                             setTimeout(() => e.target.setSelectionRange(pos, pos), 0);
                         }}
@@ -170,7 +175,10 @@ const XORBlockCipher = () => {
                                 value={iv}
                                 className={clsx(iv.length !== key.length && styles.invalid)}
                                 onChange={(e) => {
-                                    const pos = Math.max(e.target.selectionStart, e.target.selectionEnd);
+                                    const pos = Math.max(
+                                        e.target.selectionStart ?? e.target.value.length,
+                                        e.target.selectionEnd ?? 0
+                                    );
                                     setIv(sanitizePentaString(e.target.value));
                                     setTimeout(() => {
                                         e.target.setSelectionRange(pos, pos);

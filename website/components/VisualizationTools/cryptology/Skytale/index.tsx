@@ -70,18 +70,22 @@ export default () => {
             <div className="container">
                 <p className="hero__subtitle">Skytale</p>
                 <h4>Klartext</h4>
-                <textarea
-                    className={clsx(styles.input)}
-                    value={text}
-                    onChange={(e) => {
-                        setSource('text');
-                        const pos = Math.max(e.target.selectionStart, e.target.selectionEnd);
-                        setText(e.target.value.replace(/\n/g, ' '));
-                        setTimeout(() => e.target.setSelectionRange(pos, pos), 0);
-                    }}
-                    rows={5}
-                    placeholder="Klartext"
-                ></textarea>
+                <div className={styles.inputContainer}>
+                    <textarea
+                        className={clsx(styles.input)}
+                        value={text}
+                        onChange={(e) => {
+                            setSource('text');
+                            const pos = Math.max(e.target.selectionStart, e.target.selectionEnd);
+                            setText(e.target.value.replace(/\n/g, ' '));
+                            setTimeout(() => e.target.setSelectionRange(pos, pos), 0);
+                        }}
+                        rows={5}
+                        onFocus={() => setSource('text')}
+                        placeholder="Klartext"
+                    ></textarea>
+                    {source === 'text' && <div className={styles.active}></div>}
+                </div>
                 <div className={styles.stringInputContainer}>
                     <h4>
                         <label htmlFor="skytale-key">Schlüssel</label>
@@ -99,16 +103,20 @@ export default () => {
                     />
                 </div>
                 <h4>Geheimtext</h4>
-                <textarea
-                    className={clsx(styles.input)}
-                    value={cipherText}
-                    onChange={(e) => {
-                        setSource('cipher');
-                        setCipherText(e.target.value);
-                    }}
-                    rows={5}
-                    placeholder="Skytale Verschlüsselter Geheimtext"
-                ></textarea>
+                <div className={styles.inputContainer}>
+                    <textarea
+                        className={clsx(styles.input)}
+                        value={cipherText}
+                        onChange={(e) => {
+                            setSource('cipher');
+                            setCipherText(e.target.value);
+                        }}
+                        rows={5}
+                        onFocus={() => setSource('cipher')}
+                        placeholder="Skytale Verschlüsselter Geheimtext"
+                    ></textarea>
+                    {source === 'cipher' && <div className={styles.active}></div>}
+                </div>
             </div>
         </div>
     );

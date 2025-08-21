@@ -1,5 +1,6 @@
 import { RootStore } from '@site/src/stores/rootStore';
 import { action, observable } from 'mobx';
+import Polybios from './Polybios';
 
 type Source = 'text' | 'cipher';
 
@@ -48,11 +49,7 @@ export class ToolsStore {
         iv: ''
     };
 
-    @observable.ref accessor polybios: { text: string; cipherText: string; source: 'text' | 'cipher' } = {
-        text: '',
-        cipherText: '',
-        source: 'text'
-    };
+    @observable.ref accessor polybios = new Polybios();
 
     @observable.ref accessor primeFactorizationTiming: {
         digits: number;

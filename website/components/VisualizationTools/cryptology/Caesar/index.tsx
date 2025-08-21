@@ -77,7 +77,7 @@ export default () => {
                             setText(sanitizer(e.target.value));
                             setTimeout(() => e.target.setSelectionRange(pos, pos), 0);
                         }}
-                        onClick={() => setSource('text')}
+                        onFocus={() => setSource('text')}
                         rows={5}
                         placeholder="Klartext"
                     ></textarea>
@@ -112,7 +112,7 @@ export default () => {
                             setCipherText(sanitizer(e.target.value));
                             setTimeout(() => e.target.setSelectionRange(pos, pos), 0);
                         }}
-                        onClick={() => setSource('cipher')}
+                        onFocus={() => setSource('cipher')}
                         rows={5}
                         placeholder="Caesar Verschlüsselter Geheimtext"
                     ></textarea>
