@@ -199,12 +199,14 @@ const main = async () => {
                 gitignore.push(categoryPath.replace(classDir, ''));
                 let category = {
                     collapsible: true,
-                    collapsed: false
+                    collapsed: false,
+                    className: 'library-item inf-of'
                 };
                 if (fs.existsSync(categoryPath)) {
                     category = JSON.parse(fs.readFileSync(categoryPath));
                     category.collapsed = false;
                     category.collapsible = true;
+                    category.className = 'library-item inf-of';
                 }
                 fs.writeFileSync(categoryPath, JSON.stringify(category, undefined, 2) + '\n');
             }
