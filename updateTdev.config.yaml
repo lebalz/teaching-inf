@@ -7,12 +7,18 @@ trackedElements:
       dst: src
       ignore:
           - components/Ai/**
+          - components/Admin/AdminPanel/index.tsx
           - models/Ai/**
           - pages/index.tsx
           - pages/__index.tsx
           - pages/.gitignore
           - stores/AiStore.ts
           - theme/**
+          - components/Admin/AdminPanel/index.tsx
+          - api/admin.ts
+          - api/aiRequest.ts
+          - api/IoEventTypes.ts
+          - stores/rootStore.ts
     - src: packages/tdev/
       dst: packages/tdev
     - src: updateSync/
