@@ -1,0 +1,160 @@
+---
+page_id: cc6b778e-d073-4268-803e-1201b8a30fa0
+unlisted: true
+---
+
+import Badge from '@tdev-components/shared/Badge';
+import HtmlEditor from '@tdev-components/documents/CodeEditor/HtmlEditor';
+import Steps from '@tdev-components/Steps';
+
+# HTML Dokumente
+
+HTML ist eine Abkürzung und steht für **H**yper**t**ext **M**arkup **L**anguage. Es ist eine **Auszeichnungssprache**, die verwendet wird, um Inhalte im Web zu strukturieren und zu formatieren. HTML ist die Grundlage für jede Webseite im Internet.
+
+Die Struktur eines Textes wird in HTML durch __Tags__ definiert.
+
+:::info[Tags]
+```html
+<name>Inhalt</name>
+```
+Tags werden nie angezeigt, sondern nur der Inhalt zwischen den Tags.
+
+name
+: der Tagename zeigt dem Browser an, um welchen Inhalt es sich handelt.
+: Bei `<p>` ist der Tagename `p`, für englisch **P**aragraph.
+Öffnende Tags
+: Sie starten einen neuen Bereich.
+: z.B. `<p>`
+Schliessende Tags
+: Sie beenden einen Bereich.
+: z.B. `</p>`
+: ⚠️ Beachten Sie das `/`!
+:::
+
+:::aufgabe[Tags]
+<Answer type="state" id="1678d2fe-d18c-4a70-8f79-ff05b8b18b9b" />
+
+Markieren Sie im folgenden Dokument alle <Badge color="green">Öffnenden Tags</Badge> grün und alle <Badge color="red">Schliessenden Tags</Badge> rot.
+
+<Answer 
+    type="text"
+    id="c5a80ea9-5159-4f25-9f67-909342b8dbc3"
+    monospace
+    default={`<h1>HTML</h1>\n<div>\n  Ein <code>div</code>-Tag steht für "Division", also für einen Bereich mit beliebigem Inhalt.\n  <p>\n    Ein <code>p</code>-Tag steht für "Paragraph", ein Bereich mit <b>Textinhalten</b>.\n  </p>\n</div>`}
+    toolbar={{background: true}}
+/>
+
+<Solution id="cf259ac1-7b37-4415-bf15-cfc1d0bec1e1">
+    ![](./images/tag-names.jpg)
+    Beachten Sie, dass die `<>` und `</>` jeweils auch dazugehören.
+</Solution>
+:::
+
+Wird obiges HTML-Dokument von einem Browser dargestellt, werden alle Tags entfernt und die Inhalte formatiert angezeigt:
+
+<HtmlEditor hideWarning>
+    ```html
+    <h1>HTML</h1>
+    <div>
+        Ein <code>div</code>-Tag steht für "Division", also für einen Bereich mit beliebigem Inhalt.
+        <p>
+            Ein <code>p</code>-Tag steht für "Paragraph", ein Bereich mit <b>Textinhalten</b>.
+        </p>
+    </div>
+    ```
+</HtmlEditor>
+
+:::info[Webseiten sind HTML-Dokumente]
+Die täglich besuchten Webseiten sind nichts anderes als HTML-Dokumente, die von einem Browser interpretiert und dargestellt werden.
+
+Ein solches Dokument kann auch heruntergeladen werden und durch Doppelklicken im Browser geöffnet werden.
+:::
+
+
+::::aufgabe[HTML-Dokumente öffnen]
+<Answer type="state" id="3173b13d-bfcc-478c-8302-c9d3d03a5aca" />
+
+<Steps>
+1. Laden Sie obiges HTML-Dokument herunter.
+2. Öffnen Sie das Dokument durch Doppelklick im Browser.
+3. Öffnen Sie das Dokument nun im Windows Editor
+    :::note[Im Editor öffnen]
+    Um eine Datei mit dem Windows __Editor__ zu öffnen, machen Sie einen Rechtsklick auf die Datei und klicken Sie __Öffnen mit__ → __Editor__
+
+    ![--maxWidth=400px](/img/byod-basics/win11/oeffnen_mit_standard.png)
+
+    Falls sich folgendes Fenster öffnet, wählen Sie hier __Editor__ aus und klicken Sie auf __Nur&nbsp;einmal__:
+
+    ![--maxWidth=250px](/img/byod-basics/win11/oeffnen_mit_editor.png)
+    :::
+3. Ersetzen Sie den Text `HTML` durch Ihren Namen (⚠️ die `<h1>` Tags lassen Sie stehen, es steht dann also `<h1>Maria</h1>`).
+4. Speichern Sie das Dokument ([[Ctrl]] + [[s]]) und aktualisieren Sie das Browserfenster.
+5. Wenn nun Ihr Name als Überschrift erscheint, markieren Sie die Aufgabe als erledigt.
+</Steps>
+::::
+
+## Verschachtelte Elemente
+
+Da die HTML-Tags einen eindeutigen Anfang und ein eindeutiges Ende haben, können sie auch ineinander verschachtelt werden. Dies ist bspw. bei Listen ganz nützlich:
+
+:::flex{flexBasis="250px"}
+<HtmlEditor title="auflistung.html" hideWarning minLines={11}>
+    ```html
+    <ul>
+        <li>Erstes Element</li>
+        <li>Zweites Element</li>
+        <li>Drittes Element</li>
+    </ul>
+    ```
+</HtmlEditor>
+::br
+<HtmlEditor title="verschachtelung.html" hideWarning>
+    ```html
+    <ul>
+        <li>Erstes Element</li>
+        <li>
+            Zweites Element
+            <ul>
+                <li>Unterpunkt 1</li>
+                <li>Unterpunkt 2</li>
+            </ul>
+        </li>
+        <li>Drittes Element</li>
+    </ul>
+    ```
+</HtmlEditor>
+:::
+
+:::insight[Einrückung]
+Beachten Sie die Einrückung der **verschachtelten Tags**. Dies ist zwar nicht zwingend notwendig, hilft aber, den Überblick zu behalten.
+
+#### Für Abschnitte:
+- Öffnende und schliessende Tags **immer auf der gleichen Einrückungsebene** stehen.
+- Verschachtelte Elemente sollen immer eine Ebene weiter eingerückt werden.
+:::
+
+## Tag-Namen
+
+
+Das [World Wide Web Consortium](https://www.w3.org/) (W3C) hat ab 1994 die Spezifikationen für HTML festgelegt, wobei sie auch die Tag-Namen für verschiedene Struktur-Elemente eines Dokuments festgelegt haben.
+
+`h1`
+: [header 1] Überschrift 1. Die grösste Überschrift
+`h2`
+: Überschrift 2. Eine etwas kleinere Überschrift
+`h3`, `h4`, `h5`, `h6`
+: Überschriften 3 bis 6. Immer kleiner werdende Überschriften
+`p`
+: Absatz oder Paragraph - wie in Word...
+`ul`
+: Ungeordnete Liste. Eine Liste ohne Nummerierung.
+`ol`
+: Geordnete Liste. Eine Liste mit Nummerierung.
+`li`
+: Listenelement. Ein Element in einer Liste.
+`b`
+: Fett. Text fett darstellen.
+`i`
+: Kursiv. Text kursiv darstellen.
+`u`
+: Unterstrichen. Text unterstrichen darstellen.

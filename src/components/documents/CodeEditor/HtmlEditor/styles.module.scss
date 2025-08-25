@@ -1,4 +1,8 @@
 .htmlEditor {
+    margin-bottom: 1em;
+    &:last-child {
+        margin-bottom: 0;
+    }
     .code {
         margin-bottom: 0.5rem;
     }
@@ -7,6 +11,9 @@
         margin-bottom: 0;
         div[class^='browserWindowHeader'] {
             padding: 0.2rem 0.8rem;
+        }
+        .sandbox {
+            background: var(--ifm-color-white);
         }
     }
 }

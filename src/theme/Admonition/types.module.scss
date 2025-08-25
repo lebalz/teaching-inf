@@ -5,6 +5,11 @@
         }
     }
 }
+:global(.alert) {
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
 .aufgabe {
     --ifm-alert-background-color: #e0f2f1; // Light Teal
     --ifm-alert-background-color-highlight: #b2dfde; // Slightly Darker Teal
