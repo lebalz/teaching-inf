@@ -150,12 +150,20 @@ class ProgressState extends iDocument<DocumentType.ProgressState> {
 
     @computed
     get totalSteps(): number {
-        return this.steps.length;
+        return (
+            this.steps.length ||
+            (
+                (this.root?.documents || []).find(
+                    (ps) => ps.type === DocumentType.ProgressState && ps?.totalSteps > 0
+                ) as ProgressState | undefined
+            )?.totalSteps ||
+            0
+        );
     }
 
     @action
     setTotalSteps(totalSteps: number) {
-        if (this.totalSteps !== totalSteps) {
+        if (this.totalSteps !== totalSteps && totalSteps > 0) {
             this.steps.replace(Array.from({ length: totalSteps }, (_, i) => new Step(i, this)));
         }
     }
