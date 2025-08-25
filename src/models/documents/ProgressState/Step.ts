@@ -139,6 +139,17 @@ class Step {
     }
 
     @computed
+    get isScrollingTo(): boolean {
+        if (!this.progressState.scrollTo) {
+            return false;
+        }
+        if (this.progressState.isDone) {
+            return this.isFinalStep;
+        }
+        return this.isActive;
+    }
+
+    @computed
     get isDisabled(): boolean {
         return this.index > this.progressState.progress + 1;
     }

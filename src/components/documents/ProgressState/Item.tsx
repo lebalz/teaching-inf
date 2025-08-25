@@ -21,12 +21,12 @@ const Item = observer((props: Props) => {
     const { item, label, step } = props;
     const [animate, setAnimate] = React.useState(false);
     React.useEffect(() => {
-        if (ref.current && step.progressState.scrollTo && step.isActive) {
+        if (ref.current && step.isScrollingTo) {
             ref.current.scrollIntoView({ behavior: 'auto', block: 'center', inline: 'start' });
             step.progressState.setScrollTo(false);
             setAnimate(true);
         }
-    }, [ref, step.progressState.scrollTo, step.isActive]);
+    }, [ref, step.isScrollingTo]);
 
     React.useEffect(() => {
         if (animate) {
