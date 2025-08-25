@@ -186,7 +186,7 @@ const getSiteConfig: SiteConfigProvider = () => {
             versions: VERSIONS,
             lastVersion: 'current',
             routeBasePath: '/',
-            exclude: ['tdev/**'],
+            exclude: process.env.NODE_ENV === 'production' ? ['tdev/**'] : [],
             showLastUpdateTime: true,
             includeCurrentVersion: true,
             sidebarCollapsible: true,
