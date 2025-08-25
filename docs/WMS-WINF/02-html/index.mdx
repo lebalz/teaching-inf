@@ -1,6 +1,5 @@
 ---
 page_id: cc6b778e-d073-4268-803e-1201b8a30fa0
-unlisted: true
 ---
 
 import Badge from '@tdev-components/shared/Badge';
@@ -12,25 +11,28 @@ import ProgressState from '@tdev-components/documents/ProgressState';
 
 HTML ist eine Abkürzung und steht für **H**yper**t**ext **M**arkup **L**anguage. Es ist eine **Auszeichnungssprache**, die verwendet wird, um Inhalte im Web zu strukturieren und zu formatieren. HTML ist die Grundlage für jede Webseite im Internet.
 
+## Struktur von HTML-Dokumenten
 Die Struktur eines Textes wird in HTML durch __Tags__ definiert.
 
-:::info[Tags]
 ```html
 <name>Inhalt</name>
 ```
-Tags werden nie angezeigt, sondern nur der Inhalt zwischen den Tags.
 
-name
-: der Tagename zeigt dem Browser an, um welchen Inhalt es sich handelt.
-: Bei `<p>` ist der Tagename `p`, für englisch **P**aragraph.
-Öffnende Tags
+Die **Tags** werden im Browser **nie angezeigt**, sondern nur der Inhalt zwischen den Tags. Folgende Begriffe sind wichtig:
+
+Tagname
+: der Tagname zeigt dem Browser an, um welchen Inhalt es sich handelt.
+: z.B. bei `<p>` ist der Tagname `p`, für englisch **P**aragraph.
+öffnende Tags
 : Sie starten einen neuen Bereich.
 : z.B. `<p>`
-Schliessende Tags
+schliessende Tags
 : Sie beenden einen Bereich.
 : z.B. `</p>`
 : ⚠️ Beachten Sie das `/`!
-:::
+HTML-Element
+: Ein HTML-Element besteht aus einem öffnenden Tag, einem schliessenden Tag und dem Inhalt dazwischen.
+: z.B. `<p>Dies ist ein Absatz.</p>`
 
 :::aufgabe[Tags]
 <Answer type="state" id="1678d2fe-d18c-4a70-8f79-ff05b8b18b9b" />
@@ -93,6 +95,13 @@ Ein solches Dokument kann auch heruntergeladen werden und durch Doppelklicken im
 5. Wenn nun Ihr Name als Überschrift erscheint, markieren Sie die Aufgabe als erledigt.
 </Steps>
 ::::
+
+## AI Tools?
+Wir werden später auch auf AI-Tools eingehen, die Ihnen bei der Erstellung von HTML-Dokumenten helfen können. Vorgängig sollen aber die grundlegenden Bausteine einer Webseite erarbeitet werden.
+
+:::info[Weshalb nicht direkt mit AI?]
+Mit AI-Tools lassen sich mittlerweilen wunderschöne Webseiten im Handumdrehen generieren. In Ihrer Berufslaufbahn wollen Sie allenfalls einmal Verantwortung für ein Projekt übernehmen, bei welchem Sie zwar die zugehörige Webseite nicht selber umsetzen, allerdings die Verantwortung dafür übernehmen sollen, Zeitschätzungen einordnen müssen und daraus eine Risikoabschätzung zur Tragfähigkeit des Projekts machen. Dazu ist ein etwas tiefergehendes Verständis sehr hilfreich.
+:::
 
 ## Verschachtelte Elemente
 
@@ -163,7 +172,7 @@ Das [World Wide Web Consortium](https://www.w3.org/) (W3C) hat ab 1994 die Spezi
 
 Probieren Sie die verschiedenen Tags selber aus!
 
-<ProgressState keepPreviousStepsOpen confirm labels={['Überschriften', 'Paragraphen', 'Ungeordnete Listen', 'Geordnete Listen', 'Formatierungen']} id="be56d813-c25b-48ca-ae33-f4188deb40cb">
+<ProgressState confirm labels={['Überschriften', 'Paragraphen', 'Ungeordnete Listen', 'Geordnete Listen', 'Formatierungen']} id="be56d813-c25b-48ca-ae33-f4188deb40cb">
 1. Fügen Sie für jede Überschriften-Ebene ein Beispiel ein.
     <HtmlEditor id="dbe22de1-6ea7-49c7-be9c-e9b1e5f000b2">
         ```html
