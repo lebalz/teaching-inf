@@ -6,6 +6,7 @@ unlisted: true
 import Badge from '@tdev-components/shared/Badge';
 import HtmlEditor from '@tdev-components/documents/CodeEditor/HtmlEditor';
 import Steps from '@tdev-components/Steps';
+import ProgressState from '@tdev-components/documents/ProgressState';
 
 # HTML Dokumente
 
@@ -135,15 +136,14 @@ Beachten Sie die Einrückung der **verschachtelten Tags**. Dies ist zwar nicht z
 
 ## Tag-Namen
 
-
 Das [World Wide Web Consortium](https://www.w3.org/) (W3C) hat ab 1994 die Spezifikationen für HTML festgelegt, wobei sie auch die Tag-Namen für verschiedene Struktur-Elemente eines Dokuments festgelegt haben.
 
 `h1`
-: [header 1] Überschrift 1. Die grösste Überschrift
+: Überschrift 1. Die grösste Überschrift (engl. *Heading 1*).
 `h2`
-: Überschrift 2. Eine etwas kleinere Überschrift
+: Überschrift 2. Eine etwas kleinere Überschrift  (engl. *Heading 2*)
 `h3`, `h4`, `h5`, `h6`
-: Überschriften 3 bis 6. Immer kleiner werdende Überschriften
+: Überschriften 3 bis 6. Immer kleiner werdende Überschriften.  (engl. *Heading 3-6*)
 `p`
 : Absatz oder Paragraph - wie in Word...
 `ul`
@@ -158,3 +158,136 @@ Das [World Wide Web Consortium](https://www.w3.org/) (W3C) hat ab 1994 die Spezi
 : Kursiv. Text kursiv darstellen.
 `u`
 : Unterstrichen. Text unterstrichen darstellen.
+
+### Tags ausprobieren
+
+Probieren Sie die verschiedenen Tags selber aus!
+
+<ProgressState keepPreviousStepsOpen confirm labels={['Überschriften', 'Paragraphen', 'Ungeordnete Listen', 'Geordnete Listen', 'Formatierungen']} id="be56d813-c25b-48ca-ae33-f4188deb40cb">
+1. Fügen Sie für jede Überschriften-Ebene ein Beispiel ein.
+    <HtmlEditor id="dbe22de1-6ea7-49c7-be9c-e9b1e5f000b2">
+        ```html
+        <h1>Überschrift 1</h1>
+        ```
+    </HtmlEditor>
+2. Was passiert, wenn Sie alles in einen Paragraphen schreiben?
+    <HtmlEditor id="a2ddd5e7-4f62-4192-be2c-b910705de963">
+        ```html
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+        </p>
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum vitae orci pellentesque, fermentum augue quis, molestie tortor. Pellentesque sollicitudin, lectus quis bibendum tempor, dui orci consequat nisl, at efficitur enim magna vitae urna.
+        </p>
+        <p>
+            Morbi fermentum ante urna, eleifend interdum nulla scelerisque at. Pellentesque nec diam ac magna eleifend viverra. Aenean sodales risus id.
+        </p>
+        ```
+    </HtmlEditor>
+    <Answer type="text" id="2ac5dc0f-be5d-4f80-92db-fcbc32d6fc1c" />
+3. Fügen Sie der Liste weitere Punkte hinzu.
+    <HtmlEditor id="d90cdf5f-7d80-400a-9538-63c7f236804f">
+        ```html
+        <ul>
+            <li>Apfel 🍎</li>
+            <li>Orange 🍊</li>
+            <li>...</li>
+        </ul>
+        ```
+    </HtmlEditor>
+4. Die ersten 5 Einträge meiner Bucket-Liste:
+    <HtmlEditor id="5989d996-e380-4a23-b10d-54df1d92e342">
+        ```html
+        <ol>
+            <li>Weltreise 🌍</li>
+            <li>... </li>
+        </ol>
+        ```
+    </HtmlEditor>
+5. Im folgenden Text sollen:
+    - Namen **fett** markiert werden.
+    - Tierarten *kursiv* dargestellt werden.
+    - Jahreszahlen <u>unterstrichen</u> werden.
+    <HtmlEditor id="4b2fcd10-1094-405f-9e38-219c475a5005">
+        ```html
+        <p>
+            Anna wollte im Jahr 2024 unbedingt einen Waschbären adoptieren, weil sie gehört hatte, dass Waschbären besonders talentiert im Klauen von Socken sind. Ihr Nachbar Bernd war skeptisch – seit 2019 fürchtet er sich wegen eines Vorfalls mit einer Gans, die unaufhörlich seine Türklingel betätigte. Clara hingegen hatte seit 2018 nur gute Erfahrungen mit ihrem Axolotl gemacht – na gut, bis auf den Tag, als das Tier versehentlich Claras gesamten Geburtstagskuchen auffraß. Am Ende beschlossen Anna, Bernd und Clara im Sommer 2025 zusammen einen Alpaka-Wander-Ausflug zu machen. Seitdem wissen sie: Gegen das Spucken von Alpakas hilft auch kein Regenschirm aus dem Baujahr 2007.
+        </p>
+        ```
+    </HtmlEditor>
+</ProgressState>
+
+
+### Übung
+
+:::aufgabe[HTML-Tags kennenlernen]
+<Answer type="state" id="a25b5df9-f4fc-4622-8f1f-3a801b699471" />
+
+Versuchen Sie den untenstehenden Text so zu strukturieren, dass die folgende Ausgabe erzeugt wird:
+
+![--width=350px](./images/html-doc.jpg)
+
+<Solution id="22d4930b-9ea3-46f3-8b0f-ef371f9ac8ab" title="Hinweis">
+    ![--width=350px](./images/html-doc-tagged.jpg)
+</Solution>
+---
+
+<HtmlEditor id="3b1202a4-776c-4ef5-88eb-ed0d3f0ff8e5" maxHeight="700px">
+```html
+🚀 HTML – Die grosse Bühne
+Was geht ab in HTML? 😎
+Hier lernst du die wichtigsten, allercoolsten und ultimativsten Tags kennen!
+
+Überschriften-Levels, Baby!
+HTML ist wie eine Gang und jeder hat seinen Rang:
+h5 – Fast schon der Underdog...
+h6 – Für die kleinen, aber feinen Extras!
+Paragraph = „Textklops“ – easy!
+
+Listen-Party 🥳
+Ungeordnete Liste: Coole Skills, die du brauchst
+Zocken können
+Meme-Game on point
+HTML beherrschen (du bist hier!)
+Geordnete Liste: To-Do, bevor du erwachsen wirst
+Peinliche Momente überleben
+Power-Naps meistern
+Mindestens einen Insider-Witz haben
+```
+</HtmlEditor>
+
+<Solution id="98e5a9bf-3af4-424a-bfec-a6f01c090654">
+<HtmlEditor hideWarning maxHeight="700px">
+    ```html
+    <h1>🚀 HTML – Die grosse Bühne</h1>
+    <h2>Was geht ab in HTML? 😎</h2>
+    <p>
+        Hier lernst du die <b>wichtigsten</b>, <i>allercoolsten</i> und <u>ultimativsten</u> Tags kennen!
+    </p>
+
+    <h3>Überschriften-Levels, Baby!</h3>
+    <h4>HTML ist wie eine Gang und jeder hat seinen Rang:</h4>
+    <h5>h5 – Fast schon der Underdog...</h5>
+    <h6>h6 – Für die kleinen, aber feinen Extras!</h6>
+
+    <p>Paragraph = „Textklops“ – easy!</p>
+
+    <h2>Listen-Party 🥳</h2>
+    <h3>Ungeordnete Liste: Coole Skills, die du brauchst</h3>
+    <ul>
+        <li><b>Zocken</b> können</li>
+        <li><i>Meme-Game</i> on point</li>
+        <li><u>HTML</u> beherrschen (du bist hier!)</li>
+    </ul>
+
+    <h3>Geordnete Liste: To-Do, bevor du erwachsen wirst</h3>
+    <ol>
+        <li>Peinliche Momente überleben</li>
+        <li>Power-Naps meistern</li>
+        <li>Mindestens einen Insider-Witz haben</li>
+    </ol>
+    ```
+</HtmlEditor>
+</Solution>
+
+:::
