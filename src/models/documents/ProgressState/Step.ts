@@ -2,14 +2,10 @@ import { action, computed, observable } from 'mobx';
 import ProgressState from '.';
 import {
     mdiCheckCircle,
-    mdiCheckCircleOutline,
     mdiCircleMedium,
     mdiCircleSlice8,
     mdiProgressCheck,
-    mdiRecordCircleOutline,
-    mdiSpeedometer,
-    mdiSpeedometerMedium,
-    mdiSpeedometerSlow
+    mdiRecordCircleOutline
 } from '@mdi/js';
 import { IfmColors } from '@tdev-components/shared/Colors';
 import _ from 'lodash';

@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
-import ProgressState, { MetaInit } from '@tdev-models/documents/ProgressState';
+import { MetaInit } from '@tdev-models/documents/ProgressState';
 import Icon from '@mdi/react';
 import { SIZE_M } from '@tdev-components/shared/iconSizes';
 import { mdiChevronDown, mdiChevronUp, mdiCloseCircle } from '@mdi/js';
