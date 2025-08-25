@@ -154,9 +154,9 @@ class ProgressState extends iDocument<DocumentType.ProgressState> {
             this.steps.length ||
             (
                 (this.root?.documents || []).find(
-                    (ps) => ps.type === DocumentType.ProgressState && ps?.totalSteps > 0
+                    (ps) => ps.type === DocumentType.ProgressState && ps?.steps.length > 0
                 ) as ProgressState | undefined
-            )?.totalSteps ||
+            )?.steps?.length ||
             0
         );
     }
