@@ -50,8 +50,8 @@ export class ScriptMeta extends TypeMeta<DocumentType.Script> {
     readonly slim: boolean;
     readonly hasHistory: boolean;
     readonly showLineNumbers: boolean;
-    readonly maxLines: number;
     readonly minLines?: number;
+    readonly maxLines: number;
     readonly isResettable: boolean;
     readonly canCompare: boolean;
     readonly canDownload: boolean;
