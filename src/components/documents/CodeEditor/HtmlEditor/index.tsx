@@ -9,7 +9,6 @@ import { useFirstMainDocument } from '@tdev-hooks/useFirstMainDocument';
 import CodeEditorComponent from '..';
 import ErrorBoundary from '@docusaurus/ErrorBoundary';
 import CodeBlock from '@theme/CodeBlock';
-import Card from '@tdev-components/shared/Card';
 import Button from '@tdev-components/shared/Button';
 import useIsBrowser from '@docusaurus/useIsBrowser';
 import BrowserWindow from '@tdev-components/BrowserWindow';

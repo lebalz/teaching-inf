@@ -94,7 +94,7 @@ const HtmlSandbox = observer((props: Props) => {
                     break;
                 case 'resize':
                     // Handle resize messages if needed
-                    setHeight(e.data.height + 50);
+                    setHeight(e.data.height * 1.1);
                     break;
             }
         };
