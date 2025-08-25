@@ -23,6 +23,7 @@ import ScriptVersion from './ScriptVersion';
 import { TypeMeta } from '@tdev-models/DocumentRoot';
 import { Props as CodeEditorProps } from '@tdev-components/documents/CodeEditor';
 import _ from 'lodash';
+import File from './FileSystem/File';
 const libDir = (globalData['live-editor-theme'] as { default: { libDir: string } }).default.libDir;
 
 export interface LogMessage {
@@ -336,7 +337,18 @@ export default class Script extends iDocument<DocumentType.Script> {
         return this.meta.postCode;
     }
 
-    get lang() {
+    get derivedLang(): string {
+        if (this.parent?.type === DocumentType.File) {
+            const ext = (this.parent as File).name.split('.').pop();
+            if (!ext || ext === 'py') {
+                return 'python';
+            }
+            return ext;
+        }
+        return this.meta.lang;
+    }
+
+    get lang(): string {
         if (this.meta.lang === 'py') {
             return 'python';
         }
