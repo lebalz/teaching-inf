@@ -1,0 +1,104 @@
+.vignere {
+    .table {
+        font-size: 12px;
+        --ifm-table-cell-padding: 0 0.2rem;
+        cursor: pointer;
+        display: grid;
+        grid-template-areas:
+            '. labelPlaintext'
+            'labelKey table';
+        grid-template-columns: 2em auto;
+        grid-template-rows: 2em auto;
+        .labelPlaintext {
+            grid-area: labelPlaintext;
+            text-align: center;
+            font-weight: bold;
+            font-size: medium;
+        }
+        .labelKey {
+            grid-area: labelKey;
+            writing-mode: sideways-lr;
+            text-align: center;
+            font-weight: bold;
+            font-size: medium;
+        }
+        .vignereTable {
+            grid-area: table;
+            .line {
+                --tdev-highlight-color: var(--ifm-color-warning-lightest);
+                &:not(.header) {
+                    line-height: 1.2;
+                }
+                > .alphabet {
+                    font-weight: bold;
+                    background-color: var(--ifm-color-secondary-darkest);
+                    transition: transform 0.2s;
+                    &:hover {
+                        background-color: var(--tdev-highlight-color);
+                    }
+                }
+                &:has(.col:hover) {
+                    background-color: var(--tdev-highlight-color);
+                    > .alphabet {
+                        background-color: var(--tdev-highlight-color);
+                        transform: scale(1.5);
+                        transform-origin: left center;
+                    }
+                }
+                &:has(.alphabet:hover):not(.header) {
+                    background-color: var(--tdev-highlight-color);
+                }
+                > .col {
+                    transition: transform 0.2s;
+                    &:hover {
+                        --tdev-highlight-color: var(--ifm-color-success);
+                        transform: scale(2);
+                    }
+                }
+            }
+            @for $i from 0 through 26 {
+                &:has(.line > .col-#{$i}:hover) {
+                    .line > .col-#{$i} {
+                        background-color: var(--tdev-highlight-color);
+                        &.alphabet {
+                            transform: scale(1.5);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .controls {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-left: 2em;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+        .modes {
+            display: flex;
+        }
+    }
+
+    .vignereStep {
+        display: flex;
+        align-items: center;
+        gap: 0;
+        .step {
+            display: flex;
+            font-family: var(--ifm-font-family-monospace);
+            flex-direction: column;
+            align-items: stretch;
+            .char {
+                letter-spacing: 0.5em;
+            }
+            .label {
+                font-weight: bold;
+                width: 7em;
+            }
+            .keyChar {
+                background-color: var(--ifm-color-secondary-lightest);
+            }
+        }
+    }
+}

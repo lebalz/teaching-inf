@@ -1,6 +1,7 @@
 import { RootStore } from '@site/src/stores/rootStore';
 import { action, observable } from 'mobx';
 import Polybios from './Polybios';
+import Vignere from './Vignere';
 
 type Source = 'text' | 'cipher';
 
@@ -50,6 +51,7 @@ export class ToolsStore {
     };
 
     @observable.ref accessor polybios = new Polybios();
+    @observable.ref accessor vignere = new Vignere();
 
     @observable.ref accessor primeFactorizationTiming: {
         digits: number;
