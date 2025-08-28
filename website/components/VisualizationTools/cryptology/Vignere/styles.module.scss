@@ -1,4 +1,10 @@
 .vignere {
+    background-color: var(--ifm-background-surface-color);
+    border-radius: var(--ifm-global-radius);
+    margin: 0 auto;
+    padding-right: 1em;
+    display: inline-block;
+    max-width: 100%;
     .table {
         font-size: 12px;
         --ifm-table-cell-padding: 0 0.2rem;
@@ -24,6 +30,7 @@
         }
         .vignereTable {
             grid-area: table;
+            padding-right: 1em;
             .line {
                 --tdev-highlight-color: var(--ifm-color-warning-lightest);
                 &:not(.header) {
@@ -75,30 +82,27 @@
         margin-left: 2em;
         gap: 0.5rem;
         margin-top: 0.5rem;
+        overflow-x: auto;
+        max-width: 100%;
         .modes {
             display: flex;
         }
     }
 
     .vignereStep {
-        display: flex;
-        align-items: center;
-        gap: 0;
-        .step {
-            display: flex;
-            font-family: var(--ifm-font-family-monospace);
-            flex-direction: column;
-            align-items: stretch;
-            .char {
-                letter-spacing: 0.5em;
-            }
-            .label {
-                font-weight: bold;
-                width: 7em;
-            }
-            .keyChar {
-                background-color: var(--ifm-color-secondary-lightest);
-            }
+        font-family: var(--ifm-font-family-monospace);
+        border: none;
+        --ifm-table-cell-padding: 0.2rem 0.4rem;
+        th {
+            text-align: left;
+        }
+        td,
+        tr,
+        th {
+            border: none;
+        }
+        td {
+            letter-spacing: 0.4em;
         }
     }
 }

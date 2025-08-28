@@ -11,20 +11,20 @@ const VignereStep = observer((props: Props) => {
     const { vignere } = store.toolsStore;
 
     return (
-        <div className={clsx(styles.vignereStep)}>
-            <div className={clsx(styles.step)}>
-                <span className={clsx(styles.label, styles.textChar)}>Klartext:</span>
-                <span className={clsx(styles.label, styles.keyChar)}>Schlüssel:</span>
-                <span className={clsx(styles.label, styles.cipherChar)}>Geheimtext:</span>
-            </div>
-            {vignere.state.map((step, idx) => (
-                <div key={idx} className={clsx(styles.step)}>
-                    <span className={clsx(styles.char, styles.textChar)}>{step.textChar}</span>
-                    <span className={clsx(styles.char, styles.keyChar)}>{step.keyChar}</span>
-                    <span className={clsx(styles.char, styles.cipherChar)}>{step.cipherChar}</span>
-                </div>
-            ))}
-        </div>
+        <table className={clsx(styles.vignereStep)}>
+            <tr>
+                <th>Klartext:</th>
+                <td>{vignere.plainText}</td>
+            </tr>
+            <tr>
+                <th>Schlüssel:</th>
+                <td>{vignere.keyText}</td>
+            </tr>
+            <tr>
+                <th>Geheimtext:</th>
+                <td>{vignere.cipherText}</td>
+            </tr>
+        </table>
     );
 });
 
