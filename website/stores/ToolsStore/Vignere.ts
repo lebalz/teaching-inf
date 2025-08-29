@@ -7,14 +7,7 @@ interface VignereStep {
 }
 
 class Vignere {
-    @observable accessor mode: 'encrypt' | 'decrypt' = 'encrypt';
     state = observable.array<VignereStep>([], { deep: false });
-
-    @action
-    setMode(mode: 'encrypt' | 'decrypt') {
-        this.mode = mode;
-        this.state.clear();
-    }
 
     @action
     addStep(step: VignereStep) {

@@ -28,20 +28,6 @@ const Vigenere = observer((props: Props) => {
                     </div>
                     <div className={clsx(styles.controls)}>
                         <div className={clsx(styles.modes)}>
-                            <div className={clsx(styles.modeButtons, 'button-group')}>
-                                <Button
-                                    text="Verschlüsseln"
-                                    color="primary"
-                                    active={vignere.mode === 'encrypt'}
-                                    onClick={action(() => vignere.setMode('encrypt'))}
-                                />
-                                <Button
-                                    text="Entschlüsseln"
-                                    color="primary"
-                                    active={vignere.mode === 'decrypt'}
-                                    onClick={action(() => vignere.setMode('decrypt'))}
-                                />
-                            </div>
                             {vignere.state.length > 0 && (
                                 <>
                                     <Button
