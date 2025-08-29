@@ -18,19 +18,7 @@ class Vignere {
 
     @action
     addStep(step: VignereStep) {
-        switch (this.mode) {
-            case 'encrypt':
-                this.state.push(step);
-                break;
-            case 'decrypt':
-                // Swap textChar and cipherChar
-                this.state.push({
-                    keyChar: step.keyChar,
-                    textChar: step.cipherChar,
-                    cipherChar: step.textChar
-                });
-                break;
-        }
+        this.state.push(step);
     }
 
     @action
