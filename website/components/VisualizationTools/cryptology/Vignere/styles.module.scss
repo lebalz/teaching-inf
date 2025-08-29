@@ -6,7 +6,8 @@
     display: inline-block;
     max-width: 100%;
     .table {
-        font-size: 12px;
+        font-size: 14px;
+        font-family: var(--ifm-font-family-monospace);
         --ifm-table-cell-padding: 0 0.2rem;
         cursor: pointer;
         display: grid;
@@ -31,10 +32,14 @@
         .vignereTable {
             grid-area: table;
             padding-right: 1em;
+            padding-bottom: 1em;
             .line {
                 --tdev-highlight-color: var(--ifm-color-warning-lightest);
+                &.header {
+                    line-height: 1.1;
+                }
                 &:not(.header) {
-                    line-height: 1.2;
+                    line-height: 0.9;
                 }
                 > .alphabet {
                     font-weight: bold;
@@ -79,9 +84,9 @@
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        margin-left: 2em;
+        margin-left: 1.8em;
         gap: 0.5rem;
-        margin-top: 0.5rem;
+        margin-top: 0;
         overflow-x: auto;
         max-width: 100%;
         .modes {
