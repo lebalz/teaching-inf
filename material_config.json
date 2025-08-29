@@ -33,15 +33,7 @@
         {
             "from": "docs/OF-Kryptologie/",
             "to": "versioned_docs/version-28Gb/07-Kryptologie",
-            "ignore": [
-                "04-Chiffren-Knacken.mdx",
-                "05-Kryptoanalyse",
-                "06-Symmetrisch",
-                "07-Krypto-Family.mdx",
-                "08-Asymmetrisch",
-                "09-Hashing",
-                "_category_.yml"
-            ],
+            "ignore": ["07-Krypto-Family.mdx", "08-Asymmetrisch", "09-Hashing", "_category_.yml"],
             "open": true
         }
     ],
@@ -85,15 +77,7 @@
         {
             "from": "docs/OF-Kryptologie/",
             "to": "versioned_docs/version-28Gj/07-Kryptologie",
-            "ignore": [
-                "04-Chiffren-Knacken.mdx",
-                "05-Kryptoanalyse",
-                "06-Symmetrisch",
-                "07-Krypto-Family.mdx",
-                "08-Asymmetrisch",
-                "09-Hashing",
-                "_category_.yml"
-            ],
+            "ignore": ["07-Krypto-Family.mdx", "08-Asymmetrisch", "09-Hashing", "_category_.yml"],
             "open": true
         }
     ],

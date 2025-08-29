@@ -53,7 +53,21 @@ In der Realität ist es besonders wichtig, dass die Verschlüsselungsfunktion s�
 Aus diesem Grund arbeiten aktuelle Verschlüsselungsfunktionen von Blockchiffren in **mehreren Runden**.
 :::
 
-## Rechenbeispiel
+
+### Beispiel CBC
+
+p
+: HEY
+iv
+: U
+k
+: Z
+
+![](img/cbc-example.png)
+
+Beachten Sie, dass der IV nur beim ersten Block verwendet wird und die Blocklänge hier genau ein Buchstabe ist. Die XOR-Operation ist hier mit `+` dargestellt und auch bei der "Block-Cipher-Encryption" wird XOR verwendet.
+
+## Vergleich ECB und CBC
 In diesem Rechenbeispiel sehen Sie den ECB- und den CBC-Modus im Vergleich.
 
 <DefinitionList>
