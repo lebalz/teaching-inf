@@ -84,7 +84,7 @@ const FrequencyAnalysis = () => {
                     onChange={(e) => setText(e.target.value)}
                     rows={5}
                 ></textarea>
-                <div>
+                <div className={clsx('button-block')}>
                     <Button
                         onClick={() => {
                             setSortAlphabetic(!sortAlphabetic);

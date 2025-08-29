@@ -3,16 +3,16 @@ import clsx from 'clsx';
 import styles from './styles.module.scss';
 import shared from '../styles.module.scss';
 import { observer } from 'mobx-react-lite';
-import VignereStep from './VignereStep';
+import VigenereStep from './VigenereStep';
 import { action } from 'mobx';
 import { useStore } from '@tdev-hooks/useStore';
 import Button from '@tdev-components/shared/Button';
 import { mdiRestore, mdiUndo } from '@mdi/js';
-import VignereTable from './VignereTable';
+import VigenereTable from './VigenereTable';
 
 interface Props {}
 
-const Vignere = observer((props: Props) => {
+const Vigenere = observer((props: Props) => {
     const store = useStore('siteStore');
     const { vignere } = store.toolsStore;
     return (
@@ -24,7 +24,7 @@ const Vignere = observer((props: Props) => {
                     <div className={clsx(styles.table)}>
                         <div className={clsx(styles.labelPlaintext)}>Klartext (p)</div>
                         <div className={clsx(styles.labelKey)}>Schlüssel (k)</div>
-                        <VignereTable />
+                        <VigenereTable />
                     </div>
                     <div className={clsx(styles.controls)}>
                         <div className={clsx(styles.modes)}>
@@ -61,7 +61,7 @@ const Vignere = observer((props: Props) => {
                                 </>
                             )}
                         </div>
-                        <VignereStep />
+                        <VigenereStep />
                     </div>
                 </div>
             </div>
@@ -69,4 +69,4 @@ const Vignere = observer((props: Props) => {
     );
 });
 
-export default Vignere;
+export default Vigenere;

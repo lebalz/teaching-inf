@@ -8,7 +8,7 @@ import { action } from 'mobx';
 interface Props {}
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-const VignereTable = observer((props: Props) => {
+const VigenereTable = observer((props: Props) => {
     const store = useStore('siteStore');
     const { vignere } = store.toolsStore;
 
@@ -51,4 +51,4 @@ const VignereTable = observer((props: Props) => {
     );
 });
 
-export default VignereTable;
+export default VigenereTable;

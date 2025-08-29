@@ -6,7 +6,7 @@ import { useStore } from '@tdev-hooks/useStore';
 
 interface Props {}
 
-const VignereStep = observer((props: Props) => {
+const VigenereStep = observer((props: Props) => {
     const store = useStore('siteStore');
     const { vignere } = store.toolsStore;
 
@@ -28,4 +28,4 @@ const VignereStep = observer((props: Props) => {
     );
 });
 
-export default VignereStep;
+export default VigenereStep;
