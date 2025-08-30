@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite';
 import iJson from '@tdev-models/Ai/JsonSchema/iJson';
 import TextInput from '@tdev-components/shared/TextInput';
 import { action } from 'mobx';
-import _ from 'lodash';
+import _ from 'es-toolkit/compat';
 import TextAreaInput from '@tdev-components/shared/TextAreaInput';
 import { IfmColors } from '@tdev-components/shared/Colors';
 import { mdiTrashCanOutline } from '@mdi/js';

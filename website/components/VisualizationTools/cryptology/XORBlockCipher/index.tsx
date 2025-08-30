@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { shuffle } from 'lodash';
+import { shuffle } from 'es-toolkit/compat';
 import * as React from 'react';
 import { PENTA_TABLE, sanitizePentaString } from '../../Pentacode';
 import styles from '../styles.module.scss';

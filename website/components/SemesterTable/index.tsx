@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { WEEK_DAYS } from '@tdev/helpers/time';
 import * as MDI from '@mdi/js';
 import Icon from '@mdi/react';
-import _ from 'lodash';
+import _ from 'es-toolkit/compat';
 
 export enum Type {
     Holiday = 'holiday',

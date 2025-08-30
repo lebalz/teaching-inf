@@ -1,7 +1,7 @@
 import { AiStore } from '@tdev-stores/AiStore';
 import { action, computed, observable } from 'mobx';
 import { AiTemplate as AiTemplateProps } from '@tdev-api/admin';
-import _ from 'lodash';
+import _ from 'es-toolkit/compat';
 import JsonSchema from './JsonSchema';
 
 const UpdateableFields: (keyof AiTemplate)[] = [

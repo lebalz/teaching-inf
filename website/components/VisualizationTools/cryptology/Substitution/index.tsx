@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import * as React from 'react';
 import styles from '../styles.module.scss';
-import { differenceWith, isEqual, keys, shuffle, uniq, update } from 'lodash';
+import { differenceWith, isEqual, keys, shuffle, uniq, update } from 'es-toolkit/compat';
 import { useStore } from '@tdev/hooks/useStore';
 import { action } from 'mobx';
 const ALPHABET = [

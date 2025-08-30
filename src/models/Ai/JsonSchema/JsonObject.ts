@@ -10,7 +10,7 @@ import {
 import JsonString from './JsonString';
 import JsonArray from './JsonArray';
 import JsonNumber from './JsonNumber';
-import _ from 'lodash';
+import _ from 'es-toolkit/compat';
 import JsonSchema, { JsonType } from '.';
 import { toModel } from './helpers';
 

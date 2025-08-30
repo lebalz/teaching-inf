@@ -5,7 +5,7 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import styles from './index.module.scss';
 import HomepageCourses from '@tdev-components/HomepageCourses';
 import { Content } from '@theme/BlogPostPage';
-import _ from 'lodash';
+import _ from 'es-toolkit/compat';
 import useIsMobileView from '@tdev-hooks/useIsMobileView';
 import SourceRef from '@tdev-components/Figure/SourceRef';
 import bib1 from '@site/static/img/index/compsci-1.json';

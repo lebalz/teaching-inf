@@ -7,7 +7,7 @@ import { action } from 'mobx';
 import Button from '@tdev-components/shared/Button';
 import { mdiCloseCircleOutline, mdiPlusCircleOutline } from '@mdi/js';
 import TextInput from '@tdev-components/shared/TextInput';
-import _ from 'lodash';
+import _ from 'es-toolkit/compat';
 import { SIZE_XS } from '@tdev-components/shared/iconSizes';
 
 interface Props {

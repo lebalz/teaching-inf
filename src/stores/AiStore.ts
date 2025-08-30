@@ -1,6 +1,6 @@
 import { action, observable } from 'mobx';
 import { RootStore } from '@tdev-stores/rootStore';
-import _ from 'lodash';
+import _ from 'es-toolkit/compat';
 import { computedFn } from 'mobx-utils';
 import iStore from '@tdev-stores/iStore';
 import AiRequest from '@tdev-models/Ai/AiRequest';

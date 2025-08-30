@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
-import { shuffle } from 'lodash';
+import { shuffle } from 'es-toolkit/compat';
 import { PENTA_TABLE } from '@tdev-components/VisualizationTools/Pentacode';
 import { useStore } from '@tdev/hooks/useStore';
 import { action } from 'mobx';

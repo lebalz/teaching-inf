@@ -4,7 +4,7 @@ import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
 import { default as JsonNumberModel } from '@tdev-models/Ai/JsonSchema/JsonNumber';
 import JsonType from '../JsonType';
-import _ from 'lodash';
+import _ from 'es-toolkit/compat';
 import MinMaxInput from './MinMaxInput';
 import { CommonProps } from '..';
 
