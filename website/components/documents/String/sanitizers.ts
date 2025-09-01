@@ -12,6 +12,10 @@ export const sanitizeNumber = (excludedText: string[] = []) => {
     };
 };
 
+export const trim = (text?: string) => {
+    return text?.trim();
+};
+
 export const trimUpper = (text?: string) => {
-    return text?.trim()?.toUpperCase();
+    return trim(text)?.toUpperCase();
 };

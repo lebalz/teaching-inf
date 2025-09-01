@@ -1,0 +1,187 @@
+---
+page_id: cc18b45c-33e5-4cd7-a9d8-ca7a1b0d13fb
+unlisted: true
+---
+import HtmlEditor from '@tdev-components/documents/CodeEditor/HtmlEditor';
+import Dir from '@tdev-components/FileSystem/Dir';
+import { trim } from "@tdev-components/documents/String/sanitizers";
+
+# Selbstschliessende Tags
+
+In HTML gibt es einige wenige Tags, die nur ein öffnendes, aber kein schliessendes Tag erfordern. Sie werden **leere Tags** oder **self-closing Tags** genannt und für Steuerinformationen (wie eine neue Zeile) oder für die Einbdindung von Medien eingesetzt.
+
+## Neue Zeile und Trennstrich
+
+:::def[`<br>` Zeilenumbruch]
+Ein Zeilenumbruch wird mit dem `<br>`-Tag erzeugt und steht fürs englische *line **br**eak*.
+:::
+:::def[`<hr>` Trennstrich]
+Ein Trennstrich wird mit dem `<hr>`-Tag erzeugt und steht fürs englische ***h**orizontal **r**ule*.
+:::
+
+:::aufgabe[Neue Zeile und Trennstrich]
+<Answer type="state" id="f9308b81-4126-49eb-969a-92b762fcbf49" />
+
+Erzeugen Sie folgende Ausgabe mit Umbrüchen nach jedem Satz.
+
+![--max-width=400px](./images/br-hr-tags.jpg)
+
+<HtmlEditor id="742734e7-5130-4ea0-83f3-90e80d5c899e">
+```html
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Pellentesque euismod enim urna nec dictum sapien enim nec erat.
+Mauris euismod nec dictum sapien enim nec erat.
+```
+</HtmlEditor>
+:::
+
+:::insight[Merke]
+Mit `<br>` können in einem Paragraphen Zeilenumbrüche eingefügt werden oder zusätzliche Leerzeilen eingefügt werden.
+
+<div className="compactDeflist">
+`<p>`
+: Paragraph
+: Fasst inhaltlich zusammengehörende Textteile zusammen. Nach jedem Paragraph wird eine neue Zeile mit Abstand eingefügt.
+`<br>`
+: Neue Zeile
+: Kann auch innerhalb von Paragraphen für neue Zeilen verwendet werden, ohne dass ein zusätzlicher Abstand eingefügt wird.
+</div>
+:::
+
+## Medien
+
+Mit HTML lassen sich auch Medien - Bilder, Videos, Audios aber auch ganze Webseiten - einbinden. Dazu stehen verschiedene HTML-Tags zur Verfügung - auch sie sind selbstschliessend. Damit die Quelle der Medien oder auch weitere Eigenschaften spezifiziert werden können, braucht man __Attribute__.
+
+:::definition[HTML Attribut]
+Ein HTML Attribut ist eine zusätzliche Information, die einem HTML-Element hinzugefügt wird. Attribute bestehen aus einem Namen und einem Wert und werden innerhalb des öffnenden Tags angegeben. Sie dienen dazu, das Verhalten oder das Aussehen eines Elements zu steuern.
+
+Es wird stets `name="wert"` geschrieben, wobei der Wert in **Anführungszeichen** stehen muss.
+
+<HtmlEditor hideWarning>
+```html
+Ein <span style="color:red;">roter</span> Text.
+```
+</HtmlEditor>
+
+Im Beispiel wird das HTML Attribut `style` mit der Eigenschaft `color: red;` verwendet, um die Textfarbe eines Textes zu ändern.
+:::
+
+## Dateipfade
+
+:::aufgabe[Pfade auswählen]
+<Answer type="state" id="1e1f49ec-6ccf-4c27-8f3b-15cd60798cf9" />
+
+<Dir 
+  open
+  noSelect 
+  dir={{
+    name: 'webseite',
+    children: [
+      'index.html 🟢',
+      { 
+        name: 'images',
+        children: [
+          'blume.png',
+          'sonne.jpg 👈'
+        ]
+      }
+    ]
+  }}
+/>
+<Answer type="string" id="cd6cf6ce-51d7-4c50-9e3a-ebba155eb69e" label="Start bei 🟢" solution="./images/sonne.jpg" sanitizer={trim} />
+
+---
+
+<Dir 
+  open
+  noSelect 
+  dir={{
+    name: 'webseite',
+    children: [
+      'index.html 🟢',
+      {
+        name: 'pages',
+        children: [
+          'about.html 🟠',
+          'cv.html',
+          {
+            name: 'images',
+            children: [
+              'me.png 👈',
+            ]
+          }
+        ]
+      }
+    ]
+  }}
+/>
+<Answer type="string" id="461aecf6-7a9b-4c48-b7d5-e188a6cb9d74" label="Start bei 🟢" solution="./pages/images/me.png" sanitizer={trim} />
+<Answer type="string" id="1639b223-96f3-4063-a31f-46ca7692ff35" label="Start bei 🟠" solution="./images/me.png" sanitizer={trim} />
+
+---
+<Dir 
+  open
+  noSelect 
+  dir={{
+    name: 'webseite',
+    children: [
+      'index.html',      
+      { 
+        name: 'images',
+        children: [
+          'blume.png 👈',
+          'sonne.jpg'
+        ]
+      },
+      {
+        name: 'pages',
+        children: [
+          'about.html',
+          'cv.html 🟢'
+        ]
+      }
+    ]
+  }}
+/>
+<Answer type="string" id="02024975-4189-4c0f-af88-8ac19ef2924b" label="Start bei 🟢" solution="../images/blume.png" sanitizer={trim} />
+
+:::
+
+### Bilder
+
+
+Bilder werden mit dem `<img>`-Tag eingebunden. Dabei ist das `src`-Attribut wichtig, da es den Pfad zur Bilddatei angibt. Ein Beispiel:
+
+```html
+<img src="bilder/beispiel.jpg" alt="Ein Beispielbild">
+```
+
+## Videos
+
+Videos können mit dem `<video>`-Tag eingebunden werden. Auch hier ist das `src`-Attribut wichtig. Ein Beispiel:
+
+```html
+<video src="videos/beispiel.mp4" controls>
+  Ihr Browser unterstützt das Video-Tag nicht.
+</video>
+```
+
+## Audios
+
+Audiodateien werden mit dem `<audio>`-Tag eingebunden. Ein Beispiel:
+
+```html
+<audio src="audio/beispiel.mp3" controls>
+  Ihr Browser unterstützt das Audio-Tag nicht.
+</audio>
+```
+
+## Ganze Webseiten
+
+Um eine ganze Webseite einzubinden, kann das `<iframe>`-Tag verwendet werden. Ein Beispiel:
+
+```html
+<iframe src="https://www.example.com" width="600" height="400">
+  Ihr Browser unterstützt das Iframe-Tag nicht.
+</iframe>
+```
