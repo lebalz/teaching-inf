@@ -1,0 +1,21 @@
+name: webseite
+children:
+  - name: images
+    children:
+      - lego-ninja-star.png
+      - lego-ninja-warrior.jpg
+  - name: assets
+    children:
+      - name: videos
+        children:
+          - lego-movie.mp4
+      - name: sounds
+        children:
+          - ninja-theme.wav
+  - name: blog
+    children:
+      - name: images
+        children:
+          - lego-ninja-badass.png
+      - about-ninjas.html 🟢
+  - index.html
