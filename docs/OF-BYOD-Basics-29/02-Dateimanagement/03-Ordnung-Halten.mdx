@@ -2,6 +2,8 @@
 page_id: 1d8f640d-3676-4c5b-89d2-0e017d8a2521
 ---
 
+import Dir from '@tdev-components/FileSystem/Dir';
+
 # Ordnung halten auf dem Computer
 Sie sind vermutlich gewohnt, mit Ihrem Smartphone oder Tablet zu arbeiten. Auf mobilen Geräten Ordnung zu halten ist relativ einfach, denn Sie müssen sich in der Regel keine Gedanken machen, wo Sie etwas abspeichern:
 - Ein Foto wird automatisch in der Foto-App gespeichert.
@@ -53,34 +55,22 @@ Die letzten drei Beispiele zeigen: Wenn zwei Dateien zum selben Thema oder Proje
 ::::info[Nummerierte Dateinamen]
 Liegt den Dateien in einem Ordner eine bestimmte Reihenfolge zugrunde, kann es sinnvoll sein, die Dateien nummeriert zu benennen. So kann leicht nach dem Namen sortiert werden und man findet die schnell die gesuchten Inhalte.
 
-```
-Schule
- ├── Mathematik
- │   ├── 01 Arithmetik - Musterlösung Aufgabe 5.png
- │   ├── 01 Arithmetik - Übungen.docx
- │   ├── 01 Arithmetik - Zusammenfassung.docx
- │   ├── 02 Trigometrie - Nachbesprechung Test.docx
- │   ├── 02 Trigometrie - Notizen.docx
- │   ├── ...
- │   └── 11 Analysis - Differentialrechnung.docx
-```
+import fileTree10 from "./assets/fileNames-numbered10.yaml";
+import fileTreeBugged from "./assets/fileNames-numbered.yaml";
 
-:::details[Weshalb `01 - ` und nicht `1 - `?]
-Bei der Sortierung von Dateinamen wird der erste Buchstabe verglichen: Ziffern kommen weiter oben als Buchstaben, Buchstaben werden alphabetisch sortiert. Sind die ersten Buchstaben gleich, wird der zweite Buchstabe verglichen und so weiter.
+:::cards{flexBasis=300px}
+<Dir dir={fileTree10} open />
+::br
+#### ⚠️ Weshalb `01` und nicht `1`?
+Bei der Sortierung von Dateinamen wird der erste Buchstabe verglichen:
+- Ziffern kommen weiter oben als Buchstaben
+- Buchstaben werden alphabetisch sortiert
+- Sind die ersten Buchstaben gleich, wird der zweite Buchstabe verglichen
 
-Im obigen Beispiel würde die Sortierung so aussehen:
-```
-Schule
- ├── Mathematik
- │   ├── 1 Arithmetik - Musterlösung Aufgabe 5.png
- │   ├── 1 Arithmetik - Übungen.docx
- │   ├── 1 Arithmetik - Zusammenfassung.docx
- │   ├── 11 Analysis - Differentialrechnung.docx
- │   ├── 2 Trigometrie - Nachbesprechung Test.docx
- │   ├── 2 Trigometrie - Notizen.docx
- │   └── ...
-```
+Dies würde dann also zu folgender Sortierung führen:
+<Dir dir={fileTreeBugged} open />
 :::
+
 ::::
 
 ## Wie sieht eine sinnvolle Ordnerstruktur aus?
@@ -91,24 +81,15 @@ Eine gute Ordnerstruktur hilft Ihnen, Dateien schnell zu finden und zu organisie
 
 Eine sinnvolle Ordnerstruktur – **z.B. in Ihrer Schul-OneDrive** – könnte so aussehen:
 
-```
-Schule
- ├── Administratives
- │   └── Gym1 - Stundenplan.pdf
- ├── Deutsch
- │   ├── Aufsätze
- │   │   ├── 01 Aufsatz Märchen.docx
- │   │   └── 02 Erörterung zu Textsorten.docx
- │   └── Grammatik
- │       ├── 01 Übungen.docx
- │       └── 02 Zusammenfassung Kommaregeln.docx
- └── Informatik
-     ├── 01 BYOD Basics
-     │   ├── 01 Übung Navigation
-     │   ├── 02 Szenarienbibliothek
-     │   └── 03 BYOD Übung
-     └── 02 Programmieren
-```
+import fileTreeSchule from "./assets/fileTreeSchule.yaml";
+
+:::cards
+<Dir
+    dir={fileTreeSchule}
+    open
+/>
+:::
+
 
 :::aufgabe[Aufräumen!]
 <TaskState id="29879a2c-bc98-4bbb-bfcb-2c66c85725d5" />

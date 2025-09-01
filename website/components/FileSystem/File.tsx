@@ -23,7 +23,7 @@ const File = observer((props: Props) => {
                     }
                     props.onSelect?.(file);
                 }}
-                className={clsx(styles.fileLink, active && styles.active)}
+                className={clsx(styles.fileLink, styles.name, active && styles.active)}
             >
                 {file}
             </span>

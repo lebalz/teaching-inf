@@ -1,0 +1,22 @@
+name: "/"
+children:
+  - name: Applications
+    children:
+      - "Google Chrome.app"
+      - "Microsoft Word.app"
+  - name: System
+    children:
+      - name: Library
+        children:
+          - name: CoreServices
+            children:
+              - "Finder.app"
+  - name: Users
+    children:
+      - name: Max
+        children:
+          - Desktop
+          - Downloads
+          - name: Documents
+            children:
+              - "Text.docx"

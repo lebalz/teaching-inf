@@ -4,8 +4,15 @@ page_id: fe65d503-3e9a-4253-a7e1-0cc2c7ffbc65
 
 import TabItem from "@theme/TabItem";
 import OsTabs from '@tdev-components/OsTabs';
+import Dir from '@tdev-components/FileSystem/Dir';
+
 
 # Speicher und Dateien
+
+import fileTreeWin from "./assets/fileTree1-win.yaml";
+import fileTreeOsx from "./assets/fileTree1-osx.yaml";
+
+
 Jeder Computer verfügt über permanenten **Speicher**, in dem Daten dauerhaft abgelegt werden. Diesen Speicher nennt man auch die **Festplatte** (auch: _HDD, Harddisk, Harddrive, Laufwerk_; wobei es sich heute praktisch immer um eine modernere, schnellere Lösung namens **SSD**[^1] handelt). Typischerweise hat die Festplatte eines modernen Laptops eine Kapazität von 256 GB bis 2 TB oder mehr.
 
 Um diesen Speicher zu organisieren, verwendet jedes Betriebssystem ein sogenanntes **Dateisystem**. Dieses sorgt dafür, dass man Dateien und Ordner anlegen, öffnen, verschieben und löschen kann.
@@ -15,33 +22,12 @@ Das Dateisystem ist als sogenannte **Baumstruktur** aufgebaut, die aus Ordnern u
 <OsTabs>
 <TabItem value="win">   
 Auf einem Windows-Computer könnte das Dateisystem ungefähr so aussehen, wie in diesem **Dateibaum** gezeigt:
-```
-C:
-├── Users
-│   └── Max
-│       ├── Desktop
-│       ├── Downloads
-│       └── Documents
-│           └── Text.docx
-├── Program Files
-│   ├── Google
-│   │   └── Chrome
-│   │       ├── chrome.exe
-│   │       └── manifest.json
-│   └── Microsoft
-│       └── Office
-│           ├── Word.exe
-│           └── Excel.exe
-└── Windows
-    ├── System32
-    │   ├── cmd.exe
-    │   ├── notepad.exe
-    │   └── drivers
-    │       └── etc
-    │           └── hosts
-    └── explorer.exe
-```
-
+:::cards
+<Dir
+    dir={fileTreeWin}
+    open
+/>
+:::
 Das `C:/` ist hier das Root-Verzeichnis[^2] – also der «Start» des Dateisystems. In diesem Root-Verzeichnis sehen wir drei Unter-Verzeichnisse (Ordner, Unterordner): `Users`, `Program Files` und `Windows`.
 
 Die Ordner `Programme` und `Windows` gehören zum Betriebssystem. Sie enthalten wichtige Programme und Systemdateien, mit denen wir meistens nichts zu tun haben. In den meisten Fällen arbeiten wir nur im Verzeichnis `Users`. Darin sehen wir einen Ordner für den Benutzer Max, in dem sich sie Unterordner `Desktop`, `Downloads` und `Documents` befinden. Im Ordner `Documents` liegt die Datei `Text.docx`. 
@@ -50,22 +36,14 @@ Die Ordner `Programme` und `Windows` gehören zum Betriebssystem. Sie enthalten 
 
 <TabItem value="mac">
 Auf einem Mac-Computer könnte das Dateisystem ungefähr so aussehen, wie in diesem **Dateibaum** gezeigt:
-```
-/
-├── Applications
-│   ├── Google Chrome.app
-│   └── Microsoft Word.app
-├── System
-│   └── Library
-│       └── CoreServices
-│           └── Finder.app
-└── Users
-    └── Max
-        ├── Desktop
-        ├── Downloads
-        └── Documents
-            └── Text.docx
-```
+
+:::cards
+<Dir
+    dir={fileTreeOsx}
+    open
+/>
+:::
+
 
 Der `/`-Ordner ist hier das Root-Verzeichnis – also der «Start» des Dateisystems. In diesem Root-Verzeichnis sehen wir drei Unter-Verzeichnisse: `Applications`, `System` und `Users`.
 

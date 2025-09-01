@@ -49,7 +49,7 @@ const DirComponent = observer((props: Props & { level: number }) => {
         <li className={clsx(styles.dir, styles.item)}>
             <div className={clsx(styles.dirName)}>
                 <span
-                    className={clsx(styles.dir)}
+                    className={clsx(styles.dir, props.level === 0 && styles.root)}
                     onClick={() => {
                         setOpen((prev) => !prev);
                         onSelect(isOpen ? undefined : '');
@@ -60,11 +60,13 @@ const DirComponent = observer((props: Props & { level: number }) => {
                         size={0.8}
                         color={isOpen ? 'var(--ifm-color-blue)' : 'var(--ifm-color-gray-600)'}
                     />
-                    <span className={clsx(styles.item, isActive && styles.active)}>{dir.name}</span>
+                    <span className={clsx(styles.item, styles.name, isActive && styles.active)}>
+                        {dir.name}
+                    </span>
                 </span>
             </div>
             {isOpen && dir.children.length > 0 && (
-                <ul>
+                <ul className={clsx(styles.subfolder)}>
                     {dir.children.map((child, idx) => {
                         if (typeof child === 'string') {
                             return (
@@ -106,7 +108,9 @@ const Dir = observer((props: Props & { path?: string }) => {
     );
     return (
         <DirContext.Provider value={path}>
-            <DirComponent dir={props.dir} open={props.open} onSelect={onSelect} level={0} />
+            <div className={clsx(styles.rootContainer)}>
+                <DirComponent dir={props.dir} open={props.open} onSelect={onSelect} level={0} />
+            </div>
         </DirContext.Provider>
     );
 });
