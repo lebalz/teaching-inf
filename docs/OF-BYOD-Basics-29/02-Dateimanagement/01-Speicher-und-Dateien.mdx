@@ -5,6 +5,7 @@ page_id: fe65d503-3e9a-4253-a7e1-0cc2c7ffbc65
 import TabItem from "@theme/TabItem";
 import OsTabs from '@tdev-components/OsTabs';
 import Dir from '@tdev-components/FileSystem/Dir';
+import { trim } from "@tdev-components/documents/String/sanitizers";
 
 
 # Speicher und Dateien
@@ -112,6 +113,132 @@ Geben Sie Ihre Lösung hier ein und überprüfen Sie sie mit dem Button. Markier
 :::
 </TabItem>
 </OsTabs>
+
+### Relative Pfade
+In der Informatik werden Pfade oft auch relativ zu einem Verzeichnis angegeben. Dabei werden
+- wie üblich Ordnernamen und Dateien mit einem Backslash `\` unter Windows oder einem Slash `/` unter macOS getrennt.
+- Ein `.` steht für das aktuelle Verzeichnis - ausgehend von der aktuell betrachteten Datei.
+- Ein `..` steht für das übergeordnete Verzeichnis - ausgehend von der betrachteten Datei der übergeordnete Ordner.
+
+::::info[Beispiel]
+:::cards
+::br{flexGrow=0 flexBasis=220px}
+<Dir 
+  open
+  noSelect 
+  dir={{
+    name: 'www',
+    children: [
+      {
+        name: 'static',
+        children: [
+          'logo.png 👈'
+        ]
+      },
+      {
+        name: 'webseite',
+        children: [
+        'index.txt 🟢',
+        { 
+          name: 'images',
+          children: [
+            'blume.png ',
+            'sonne.jpg 👈'
+          ]
+        }
+      ]}
+    ]
+  }}
+/>
+::br{flexBasis=300px}
+Ausgehend von `index.txt` (🟢) ist der relative Pfad
+- zu `sonne.jpg` (👈) `./images/sonne.jpg`
+- zu `logo.png` (👈) `../static/logo.png`
+:::
+::::
+::::aufgabe[Relative Pfade]
+<Answer type="state" id="4e3fdc24-5818-445b-a419-d4549dc0e7cc" />
+
+Geben Sie für folgende Pfade von der aktuellen Datei (🟢 oder 🟠) zum Ziel (👈) die korrekten relativen Pfade an:
+
+:::cards{flexBasis=300px}
+
+<Dir 
+  open
+  noSelect 
+  dir={{
+    name: 'webseite',
+    children: [
+      'index.txt 🟢',
+      {
+        name: 'images',
+        children: [
+          'blume.png',
+          'sonne.jpg 👈'
+        ]
+      }
+    ]
+  }}
+/>
+<Answer type="string" id="cd6cf6ce-51d7-4c50-9e3a-ebba155eb69e" label="Start bei 🟢" solution="./images/sonne.jpg" sanitizer={trim} />
+
+::br
+
+<Dir 
+  open
+  noSelect 
+  dir={{
+    name: 'webseite',
+    children: [
+      'index.html 🟢',
+      {
+        name: 'pages',
+        children: [
+          'about.txt 🟠',
+          'cv.txt',
+          {
+            name: 'images',
+            children: [
+              'me.png 👈'
+            ]
+          }
+        ]
+      }
+    ]
+  }}
+/>
+<Answer type="string" id="461aecf6-7a9b-4c48-b7d5-e188a6cb9d74" label="Start bei 🟢" solution="./pages/images/me.png" sanitizer={trim} />
+<Answer type="string" id="1639b223-96f3-4063-a31f-46ca7692ff35" label="Start bei 🟠" solution="./images/me.png" sanitizer={trim} />
+
+::br
+<Dir 
+  open
+  noSelect 
+  dir={{
+    name: 'webseite',
+    children: [
+      'index.txt',      
+      { 
+        name: 'images',
+        children: [
+          'blume.png 👈',
+          'sonne.jpg'
+        ]
+      },
+      {
+        name: 'pages',
+        children: [
+          'about.txt',
+          'cv.txt 🟢'
+        ]
+      }
+    ]
+  }}
+/>
+<Answer type="string" id="02024975-4189-4c0f-af88-8ac19ef2924b" label="Start bei 🟢" solution="../images/blume.png" sanitizer={trim} />
+:::
+
+::::
 
 ## Speichern und abspeichern
 Wenn wir beispielsweise ein neues Word-Dokument erstellen und es **abspeichern**, dann wird in dem Moment eine **neue Datei erstellt**, die einen Namen (z.B. `Test2.docx`) und einen entsprechenden Pfad hat. Es wird also ein kleiner Bereich der Festplatte reserviert, in dem der Inhalt dieses Word-Dokuments gespeichert wird.
