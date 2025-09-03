@@ -18,6 +18,7 @@ interface Props {
     open: boolean | number;
     onSelect?: (fName?: string) => void;
     noSelect?: boolean;
+    maxHeight?: string;
 }
 
 export const DirContext = React.createContext<string[]>([]);
@@ -108,7 +109,7 @@ const Dir = observer((props: Props & { path?: string }) => {
     );
     return (
         <DirContext.Provider value={path}>
-            <div className={clsx(styles.rootContainer)}>
+            <div className={clsx(styles.rootContainer)} style={{ maxHeight: props.maxHeight }}>
                 <DirComponent dir={props.dir} open={props.open} onSelect={onSelect} level={0} />
             </div>
         </DirContext.Provider>

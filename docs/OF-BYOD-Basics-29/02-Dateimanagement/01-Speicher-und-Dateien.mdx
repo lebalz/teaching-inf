@@ -5,7 +5,7 @@ page_id: fe65d503-3e9a-4253-a7e1-0cc2c7ffbc65
 import TabItem from "@theme/TabItem";
 import OsTabs from '@tdev-components/OsTabs';
 import Dir from '@tdev-components/FileSystem/Dir';
-import { trim } from "@tdev-components/documents/String/sanitizers";
+import { unifyPath } from "@tdev-components/documents/String/sanitizers";
 
 
 # Speicher und Dateien
@@ -74,6 +74,14 @@ Der **Pfad** ist die «Adresse» einer Datei oder eines Ordners im Dateisystem. 
 
 <OsTabs>
 <TabItem value="win">
+::::flex
+::br{flexBasis=200px flexGrow=0}
+<Dir
+    dir={fileTreeWin}
+    open
+    maxHeight="500px"
+/>
+::br{flexBasis=400px}
 Die einzelnen **Pfad-Segmente** (also die Verzweigungen auf dem Weg vom Root-Verzeichnis zum Ordner oder zur Datei) werden bei Windows durch _Backslashes_ (`\`) getrennt.
 
 Im obigen Beispiel sieht der Pfad zur Datei `Test.docx` wie folgt aus:
@@ -91,9 +99,18 @@ Bestimmen Sie im obigen Baum den Pfad zur Datei `chrome.exe`. Achten Sie auf die
 Geben Sie Ihre Lösung hier ein und überprüfen Sie sie mit dem Button. Markieren Sie die Aufgabe als erledigt, wenn dieser anzeigt, dass Ihre Lösung korrekt ist.
 <String id="e726160f-f04c-4aed-af40-c679b9bc1ccc" inputWidth="25em" solution="C:\Program Files\Google\Chrome\chrome.exe" />
 :::
+::::
 </TabItem>
 
 <TabItem value="mac">
+::::flex
+::br{flexBasis=200px flexGrow=0}
+<Dir
+    dir={fileTreeOsx}
+    open
+    maxHeight="500px"
+/>
+::br{flexBasis=400px}
 Die einzelnen **Pfad-Segmente** (also die Verzweigungen auf dem Weg vom Root-Verzeichnis zum Ordner oder zur Datei) werden bei macOS durch _Slashes_ (`/`) getrennt.
 
 Im obigen Beispiel sieht der Pfad zur Datei `Test.docx` wie folgt aus:
@@ -111,6 +128,7 @@ Bestimmen Sie im obigen Baum den Pfad zur Datei `Finder.app`. Achten Sie auf die
 Geben Sie Ihre Lösung hier ein und überprüfen Sie sie mit dem Button. Markieren Sie die Aufgabe als erledigt, wenn dieser anzeigt, dass Ihre Lösung korrekt ist.
 <String id="4ff12db9-dfd7-4f83-aac1-b7f8db54e7c8" inputWidth="25em" solution="/System/Library/CoreServices/Finder.app" />
 :::
+::::
 </TabItem>
 </OsTabs>
 
@@ -180,7 +198,7 @@ Geben Sie für folgende Pfade von der aktuellen Datei (🟢 oder 🟠) zum Ziel 
     ]
   }}
 />
-<Answer type="string" id="cd6cf6ce-51d7-4c50-9e3a-ebba155eb69e" label="Start bei 🟢" solution="./images/sonne.jpg" sanitizer={trim} />
+<Answer type="string" id="cd6cf6ce-51d7-4c50-9e3a-ebba155eb69e" label="Start bei 🟢" solution="./images/sonne.jpg" sanitizer={unifyPath} />
 
 ::br
 
@@ -207,8 +225,8 @@ Geben Sie für folgende Pfade von der aktuellen Datei (🟢 oder 🟠) zum Ziel 
     ]
   }}
 />
-<Answer type="string" id="461aecf6-7a9b-4c48-b7d5-e188a6cb9d74" label="Start bei 🟢" solution="./pages/images/me.png" sanitizer={trim} />
-<Answer type="string" id="1639b223-96f3-4063-a31f-46ca7692ff35" label="Start bei 🟠" solution="./images/me.png" sanitizer={trim} />
+<Answer type="string" id="461aecf6-7a9b-4c48-b7d5-e188a6cb9d74" label="Start bei 🟢" solution="./pages/images/me.png" sanitizer={unifyPath} />
+<Answer type="string" id="1639b223-96f3-4063-a31f-46ca7692ff35" label="Start bei 🟠" solution="./images/me.png" sanitizer={unifyPath} />
 
 ::br
 <Dir 
@@ -235,7 +253,7 @@ Geben Sie für folgende Pfade von der aktuellen Datei (🟢 oder 🟠) zum Ziel 
     ]
   }}
 />
-<Answer type="string" id="02024975-4189-4c0f-af88-8ac19ef2924b" label="Start bei 🟢" solution="../images/blume.png" sanitizer={trim} />
+<Answer type="string" id="02024975-4189-4c0f-af88-8ac19ef2924b" label="Start bei 🟢" solution="../images/blume.png" sanitizer={unifyPath} />
 :::
 
 ::::

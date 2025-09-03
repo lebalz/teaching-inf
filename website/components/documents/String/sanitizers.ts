@@ -19,3 +19,7 @@ export const trim = (text?: string) => {
 export const trimUpper = (text?: string) => {
     return trim(text)?.toUpperCase();
 };
+
+export const unifyPath = (path?: string) => {
+    return trim(path)?.replaceAll('\\', '/');
+};
