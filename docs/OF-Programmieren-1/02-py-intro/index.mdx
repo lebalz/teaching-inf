@@ -519,3 +519,67 @@ forward(29)
 ```
 </Solution>
 :::
+
+---
+
+### Zusatzaufgaben
+*Freiwillige Aufgaben*
+::::aufgabe[⭐ Haus von Nikolaus]
+<Answer type="state" id="98de0fb1-5032-43a2-b2b3-5d612f0aa49f" />
+
+Das "Haus vom Nikolaus" ist ein Zeichenspiel für Kinder. Ziel ist es, das besagte Haus in einem Linienzug aus genau acht Strecken zu zeichnen, ohne dabei eine Strecke zweimal zu durchlaufen. Zeichnen Sie das Haus vom Nikolaus.
+
+![](images/haus_nikolaus.svg)
+
+```py live_py title=haus__nikolaus.py id=49701941-1296-4805-a489-f50154a5ba9e
+from turtle import *
+```
+
+:::details[Hinweis: Diagonale]
+Die Länge der Diagonale können Sie mithilfe von Pythagoras und einem Taschenrechner berechnen.
+
+Oder Sie verwenden den Trick, dass die Diagonale im Quadrat gerade $\sqrt 2$ mal länger ist als eine Seitenlänge - bei einer Seitenlänge von $100$ wären das also ca. $141$.
+
+Python kann ebenfalls die Quadratwurzel (englisch Squareroot, abgekürzt `sqrt`) ziehen - allerdings muss dieser Befehl zuerst noch importiert werden:
+
+```py live_py slim
+from math import sqrt # auf der ersten Zeile des Programms
+from turtle import *
+
+forward(sqrt(2) * 100) # die Wurzel aus 2 mal 100
+```
+
+:::
+
+#### ⭐️ Zusatz:
+
+Verwenden Sie für die Zeichnung Ihre Lieblingsfarbe und eine grössere Stiftdicke.
+
+<Solution id="dfe3919f-e285-4764-817d-9baf177e81b1">
+
+```py live_py slim
+from turtle import *
+
+pensize(5)
+color('teal')
+
+forward(100)
+left(90)
+forward(100)
+left(90)
+forward(100)
+left(90)
+forward(100)
+
+left(90 + 45)
+forward(141)
+left(90)
+forward(71)
+left(90)
+forward(71)
+left(90)
+forward(141)
+hideturtle()
+```
+</Solution>
+::::
