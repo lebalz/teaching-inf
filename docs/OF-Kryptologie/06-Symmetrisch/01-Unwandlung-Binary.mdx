@@ -5,15 +5,21 @@ sidebar_custom_props:
     ref: 'https://ofi.gbsl.website/26e/Kryptologie/Symmetrisch/binaer'
 page_id: 052af75d-65c7-4a25-80e2-530ad598ce69
 ---
-
+import Steps from '@tdev-components/Steps';
 
 # Umwandlung ins Binärsystem
-In der heutigen Zeit besteht der Hauptzweck kryptographischer Verfahren nicht mehr aus der Verschlüsselung von Buchstaben auf Papier. Stattdessen geht es heute meistens darum, dass wir digitale Daten aller Art geheimhalten wollen. Da Computer mit binären Daten arbeiten, muss ein Klartext somit vor der Verschlüsselung in binäre Zahlen umgewandelt werden.
+In der heutigen Zeit besteht der Hauptzweck kryptographischer Verfahren nicht mehr aus der Verschlüsselung von Buchstaben auf Papier. Stattdessen geht es heute meistens darum, dass digitale Daten aller Art geheimgehalten werden sollen. Da Computer mit binären Daten arbeiten, muss ein Klartext somit vor der Verschlüsselung in binäre Zahlen umgewandelt werden.
 
-Das Verfahren zur Verschlüsselung eines Texts in der digitalen Welt sieht im Allgemeinen also folgendermassen aus:
-1. Codierung des Klartextes in eine Folge von binären Zahlen (Klartext → binärer Klartext)
-2. Verschlüsselung dieser Zahlenfolge (binärer Klartext → binärer Geheimtext)
-3. Decodierung des binären Geheimtextes (binärer Geheimtext → Geheimtext)
+Das Verfahren zur Verschlüsselung eines Texts in der digitalen Welt sieht im Allgemeinen also wie folgt aus:
+
+<Steps>
+1. **Klartext → binärer Klartext** <br />
+  Codierung des Klartextes in eine Folge von binären Zahlen
+2. **binärer Klartext → binärer Geheimtext** <br />
+  Verschlüsselung dieser Zahlenfolge
+3. **binärer Geheimtext → Geheimtext** <br />
+  Decodierung des binären Geheimtextes
+</Steps>
 
 ## Unterschied Codierung und Verschlüsselung
 Es ist wichtig, dass wir die Begriffe _Codierung_ und _Verschlüsselung_ unterscheiden:
@@ -21,7 +27,7 @@ Es ist wichtig, dass wir die Begriffe _Codierung_ und _Verschlüsselung_ untersc
 * Eine **Verschlüsselung** oder **Chiffre** hat das Ziel, zu verhindern, dass Aussenstehende an eine bestimmte Information gelangen. Dabei werden Daten mithilfe eines Schlüssels so verändert, dass ohne Kenntnis des Schlüssels nicht mehr auf die ursprüngliche Form geschlossen werden kann.
 
 ## Ein allgemeingültiges Verfahren
-Dass wir in der digitalen Welt mit Binärdaten arbeiten, hat den Nachteil, dass wir unseren Text zuerst als Folge von Binärzahlen codieren müssen. Der grosse Vorteil ist allerdings, dass wir damit sämtliche Arten von binär dargestellten Daten genau gleich verschlüsseln können - egal ob Text, Bilder, Ton, Videos, etc. Das war in der Antike noch nicht möglich, und auch noch nicht nötig - heute ist es allerdings unumgänglich.
+Dass wir in der digitalen Welt mit Binärdaten arbeiten, hat den Nachteil, dass wir unseren Text zuerst als Folge von Binärzahlen codieren müssen. Der **grosse Vorteil** ist allerdings, dass wir damit sämtliche Arten von binär dargestellten Daten genau gleich verschlüsseln können - egal ob Text, Bilder, Ton, Videos, etc. Das war in der Antike noch nicht möglich, und auch noch nicht nötig - heute ist es allerdings unumgänglich.
 
 ## Binärcodierung von Text
 Es gibt verschiedene Möglichkeiten, wie wir Text als Binärzahl codieren können. Zwei der wichtigsten Textcodierungen der heutigen Zeit sind [ASCII-Format](https://en.wikipedia.org/wiki/ASCII) und [UTF-8](https://de.wikipedia.org/wiki/UTF-8).

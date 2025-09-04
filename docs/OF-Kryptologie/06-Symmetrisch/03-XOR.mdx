@@ -5,13 +5,19 @@ sidebar_custom_props:
     ref: 'https://ofi.gbsl.website/26e/Kryptologie/Symmetrisch/xor'
 page_id: 098556a5-b06f-4e13-9919-0c59c262563d
 ---
+import ProgressState from '@tdev-components/documents/ProgressState';
+import { PixelEditor, TextEditor } from "@tdev-components/VisualizationTools/Pentacode";
 
 # XOR-Verschlüsselung
-Da wir nun mit Bits arbeiten und nicht mehr mit Buchstaben, müssen wir nach anderen Möglichkeiten zur Verschlüsselung suchen. Alphabetverschiebungen wie bei Caesar und Substitutionen sind nicht mehr geeignete Mittel, wenn nur die Zahlen `0` und `1` zur Verfügung stehen.
+Da nun mit Bits gearbeitet wird und nicht mehr mit Buchstaben, müssen andere Möglichkeiten zur Verschlüsselung gesucht werden. Alphabetverschiebungen wie bei Caesar und Substitutionen sind nicht mehr geeignete Mittel, wenn nur die Zahlen `0` und `1` zur Verfügung stehen.
 
 Nebst den bekannten Operationen, *Addition, Subtraktion, Multiplikation und Division* kann ein Computer auch noch weitere Operationen auf zwei Binärzahlen anwenden. Eine solche Operation ist das **XOR** (*exklusives Oder*, *exclusive OR*):
 
 > Das _exklusive Oder_ ist eine logische Operation, die genau dann $1$ ergibt, wenn genau eines der beiden Argument $1$ ist.
+
+oder als Eselsbrücke:
+
+> Wenn beide Bits gleich sind, ist das Ergebnis $0$. Wenn sie unterschiedlich sind, ist das Ergebnis $1$.
 
 XOR kann auch zur Verschlüsselung verwendet werden. Dabei wird jeweils 1 Bit des Klartextes mit einem Bit des Schlüssels verrechnet. Das Ergebnis ist 1 Bit des Geheimtextes.
 
@@ -19,14 +25,13 @@ Die Wahrheitstabelle[^1] sieht folgendermassen aus:
 
 :::cards{flexBasis=200px}
 #### Verschlüsselung
-<div className="table-full-width">
+
   |  *p*  |  *k*  | *c* = *p* **XOR** *k* |
   | :---: | :---: | :-------------------: |
   |   0   |   0   |           0           |
   |   0   |   1   |           1           |
   |   1   |   0   |           1           |
   |   1   |   1   |           0           |
-</div>
 
 p: *plain text* (Klartext) <br/>
 k: *key* (Schlüssel) <br/>
@@ -35,14 +40,12 @@ c: *cipher* (Verschlüsselt)
 ::br
 
 #### Entschlüsselung
-<div className="table-full-width">
 |  *c*  |  *k*  | *p* = *c* **XOR** *k* |
 | :---: | :---: | :-------------------: |
 |   0   |   0   |           0           |
 |   1   |   1   |           0           |
 |   1   |   0   |           1           |
 |   0   |   1   |           1           |
-</div>
 :::
 
 ## Bezug zu ROT13
@@ -82,21 +85,37 @@ Als Schlüssel haben Sie das Wort **MACHT** vereinbart.
 Sie dürfen für diese Aufgabe den Pentacode Text-Editor verwenden.
 :::
 
+<QuillV2 id="678e1c6a-c4c4-4795-9c9f-c559e202b359" monospace default={`c: 01010 00100 01010 11011 00000\nk: \np: `} />
+
 Geben Sie das Klartext-Ergebnis hier ein und überprüfen Sie es.
 
 <String id="9b1e97dc-6807-4ec3-bc18-182a57b0a2d4" solution="GEIST" />
 ::::
 
 ::::aufgabe[⭐️ Geheime Pixelgrafik austauschen]
-<TaskState id="006a36bc-e256-4783-99fd-2c869c601b5b" />
-Wählen Sie eine:n Partner:in und erledigen Sie gemeinsam folgende Aufgabe:
+Wählen Sie eine Partner:in und erledigen Sie gemeinsam folgende Aufgabe:
 
+<ProgressState id="1e1cfb99-d353-410e-a667-57d2cb2b9a9b">
 1. Einigen Sie sich auf ein geheimes Codewort mit einer Länge von genau 5 Buchstaben (keine Umlaute oder Sonderzeichen).
+    <Answer type="string" id="6f6eb37e-d9b9-4529-b940-e0ee2c25a1e1" />
 2. Verwenden Sie den Pentacode Text-Editor um den Schlüssel in eine binäre Bitfolge umzuwandeln.
-3. Verwenden Sie beide (versteckt und unabhängig voneinander) den verlinkten Pentacode Pixel-Editor, um je eine geheime 5x5 Pixelgrafik zu erstellen.
+    <TextEditor />
+    <Answer label="k" type="string" id="7c2e2265-1ce3-4dfa-87bd-c33f9ed2411a" fullWidth monospace />
+3. Verwenden Sie beide (versteckt und unabhängig voneinander) den Pentacode Pixel-Editor, um je eine geheime 5x5 Pixelgrafik zu erstellen.
+    <PixelEditor />
+    <Answer label="p" type="string" id="a95e696f-ade1-4c2e-b509-8c905d49f8e3" fullWidth monospace />
 4. Sie haben nun beide eine Bitfolge für Ihre jeweilige Pixelgrafik. Verschlüsseln Sie diese Bitfolge mit der XOR-Verschlüsselung, mit der Bitfolge des gemeinsamen Codeworts (Schritte 1 und 2).
+    <Answer label="p" type="string" id="a95e696f-ade1-4c2e-b509-8c905d49f8e3" fullWidth disabled monospace/>
+    <Answer label="k" type="string" id="7c2e2265-1ce3-4dfa-87bd-c33f9ed2411a" fullWidth disabled monospace/>
+    <Answer label="c" type="string" id="b3d1e242-b492-42a3-89da-5c37d909124a" fullWidth monospace/>
+
 5. Senden Sie einander die verschlüsselte Bitfolge via Teams.
 6. Entschlüsseln Sie die erhaltene Bitfolge und verwenden Sie den Pentacode Pixel-Editor um das geheime Bild Ihrer Partnerin / Ihres Partners anzuzeigen.
+    <Answer label="c" type="string" id="9b02bbe5-600d-4125-8ba6-33abc3d3abfd" fullWidth monospace/>
+    <Answer label="k" type="string" id="7c2e2265-1ce3-4dfa-87bd-c33f9ed2411a" fullWidth disabled monospace/>
+    <Answer label="p" type="string" id="44c7168e-4edd-41cf-a886-3870bbf570ce" fullWidth monospace/>
+    <PixelEditor />
+</ProgressState>
 ::::
 
 [^1]: Wenn wir mit Bits rechnen, können wir die Ergebnisse einer mathematischen Operation (Addition, Substraktion, XOR, etc) als Tabelle darstellen. Eine solche Tabelle nennen wir eine _Wahrheitstabelle_.

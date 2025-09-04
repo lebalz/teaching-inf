@@ -8,6 +8,9 @@ page_id: f588c1fd-086d-44ed-aa30-af28f735434c
 
 import DefinitionList from "@tdev-components/DefinitionList";
 import XORBlockCipher from "@tdev-components/VisualizationTools/cryptology/XORBlockCipher";
+import { TextEditor } from "@tdev-components/VisualizationTools/Pentacode";
+import ProgressState from '@tdev-components/documents/ProgressState';
+export const UPPER_NOSPACE = (val) => val.replace(/\s+/g, '').toUpperCase();
 
 # Verkettung von Blöcken
 Im letzten Kapitel wurde der Geheimtext zur Ver- bzw. Entschlüsselung in Blöcke aufgeteilt, die exakt so lang sind wie der Schlüssel. Die Blöcke werden anschliessend einzeln durch die XOR-Funktion mit dem Schlüssel ver- bzw. entschlüsselt.
@@ -67,6 +70,7 @@ k
 
 Beachten Sie, dass der IV nur beim ersten Block verwendet wird und die Blocklänge hier genau ein Buchstabe ist. Die XOR-Operation ist hier mit `+` dargestellt und auch bei der "Block-Cipher-Encryption" wird XOR verwendet.
 
+
 ## Vergleich ECB und CBC
 In diesem Rechenbeispiel sehen Sie den ECB- und den CBC-Modus im Vergleich.
 
@@ -95,8 +99,9 @@ Beim ECB-Modus weist dementsprechend auch der Geheimtext zwei identische Blöcke
 Lösen Sie diese Übungen **von Hand**! Sie dürfen einzig den [Pentacode Text-Editor](Pentacode#pentacode-text-editor) als Hilfsmittel verwenden.
 :::
 
+<TextEditor />
+
 ::::aufgabe[Aufgabe 1]
-<TaskState id="3e947bda-93d0-4351-8889-27c715f839f3" />
 Verschlüsseln Sie den folgenden Text mit der XOR-Blockchiffre im ECB-Modus.
 
 Text
@@ -104,27 +109,40 @@ Text
 Schlüssel
 : `BETA`
 
+<ProgressState id="ca1bb8d5-b74b-4003-8186-e44d2e383b29">
 1. Codieren Sie zuerst den Text mit Pentacode (Sie dürfen dazu den Pentacode Text-Editor verwenden).
+    <Answer label="p" type="string" id="5cb9daea-a3f9-471b-ae1e-fbc6967e9fe0" fullWidth monospace />
 2. Codieren Sie den Schlüssel ebenfalls mit Pentacode.
+    <Answer label="k" type="string" id="7a61ee6a-25c1-4f4b-a0ad-3d4f00031355" fullWidth monospace />
 3. Verschlüsseln Sie den binär dargestellten Text anschliessend mit dem binär dargestellten Schlüssel mittels XOR-Blockchiffre.
+    <Answer label="p" type="string" id="5cb9daea-a3f9-471b-ae1e-fbc6967e9fe0" fullWidth monospace disabled />
+    <Answer label="k" type="string" id="7a61ee6a-25c1-4f4b-a0ad-3d4f00031355" fullWidth monospace disabled />
+    <Answer label="c" type="string" id="b11950f2-d9be-403d-ab3a-ac97a49d8ab6" fullWidth monospace />
 4. Decodieren Sie die Pentacode-codierte Geheimtext-Bitfolge zu einer Zeichenfolge.
-
-Geben Sie das Resultat hier ein und überprüfen Sie es:
-<String id="c70c7722-6399-416e-941e-8c1e139cc2be" solution="RD@DVENTE GUGIXU" inputWidth="15em" />
+    <Answer label="c" type="string" id="b11950f2-d9be-403d-ab3a-ac97a49d8ab6" fullWidth solution="RD@DVENTE GUGIXU"/>
+</ProgressState>
 ::::
 
-:::aufgabe[Aufabe 2]
-<TaskState id="7cbdc2a0-fdde-40c6-b0c6-ca053c153c1c" />
-Verschlüsseln Sie den Text `BUCHSTABENSPIELE` mit dem Schlüssel `AKRONYM`. Wie lautet der Geheimtext?
+:::aufgabe[2. XOR Verschlüsselung]
+<Answer type="state" id="3dd663a7-45ad-45e6-ab03-995fe51bbe97" />
 
-<String id="7f132e02-6e16-49f9-b8e4-45f8d99d6710" solution="C?QG.MLCN--?PHMN" inputWidth="15em" />
+Verschlüsseln Sie den Text `BUCHSTABENSPIELE` mit dem Schlüssel `AKRONYM`
+
+<Answer type="text" id="a30ab42b-0e2a-4452-a7a4-f34c96e8a4cd" monospace/>
+
+
+<Answer label="Text (nicht binär)" type="string" id="b680e137-905a-4bc5-a05a-fe65bc1684ee" solution="C?QG.MLCN--?PHMN" sanitizer={UPPER_NOSPACE} monospace width="80%"/>
+
 :::
 
-:::aufgabe[Aufgabe 3]
-<TaskState id="d82362c3-0d3c-4b78-b329-cbe4d66b5497" />
-Entschlüssen Sie den Geheimtext `XWVJZWEKK,XWVJIK` mit dem Schlüssel `VVXKZ`. Wie lautet der Klartext?
+:::aufgabe[3. XOR Entschlüsseln]
+<Answer type="state" id="400edf18-c72e-4d30-a3ca-711f10649d57" />
 
-<String id="894e7364-c862-44f5-9a3a-7d15c7bea7aa" solution="NANA ASS ANANAS." inputWidth="15em" />
+Entschlüsseln Sie den Text `XWVJZWEKK,XWVJIK` mit dem Schlüssel `VVXKZ`
+
+<Answer type="text" id="f0c2bc43-cc15-4f58-8466-19f2f3374d2e" monospace />
+
+<Answer label="Text (nicht binär)" type="string" id="f877bdef-a2e9-4b82-a6cc-1b61109970c7" solution="NANA ASS ANANAS." sanitizer={UPPER_NOSPACE} monospace width="80%"/>
 :::
 
 ### CBC-Modus
@@ -132,74 +150,119 @@ Entschlüssen Sie den Geheimtext `XWVJZWEKK,XWVJIK` mit dem Schlüssel `VVXKZ`. 
 Lösen Sie diese Übungen **von Hand**! Sie dürfen einzig den [Pentacode Text-Editor](Pentacode#pentacode-text-editor) als Hilfsmittel verwenden.
 :::
 
-:::aufgabe[Aufgabe 1]
-<TaskState id="f854d6bd-092a-46b3-9e70-9ba3e79fd4a6" />
-Verschlüsseln Sie den Text `WINTER` mit dem Schlüssel `NY` und dem IV `AZ`. Wie lautet der Pentacode-Geheimtext?
+## CBC Modus
 
-<String id="3d6aafc5-96af-41ea-bfd5-87466b8e8f04" solution="XJXGSL" />
-
-<Solution id="a8b43d9d-2022-4cac-a61c-a761ecbc1ad7">
-**Block 1:**
-- p: `10111 01001`
-- IV: `00001 11010`
-- nach XOR mit IV: `10110 10011`
-- k: `01110 11001`
-- c: `11000 01010`
-
-**Block 2:**
-- p: `01110 10100`
-- IV: `11000 01010`
-- nach XOR mit IV: `10110 11110`
-- c: `11000 00111`
-
-**Block 3:**
-- p: `00101 10010`
-- IV: `11000 00111`
-- nach XOR mit IV: `11101 10101`
-- c: `10011 01100`
-
-**Resultat:**<br/>
-`XJXGSL`
-</Solution>
+:::info[Hinweis CBC-Modus]
+- Jeder Block hat genau so viele Bits wie der Schlüssel. (Hier werden also meist 2 Buchstaben (=`10` bits) pro Antwort in einem Block verwendet.)
+- `c1` ist ein Zwischenresultat, damit wird weitergearbeitet...
 :::
 
-::::aufgabe[Aufgabe 2]
-<TaskState id="baa15ab5-cf91-4880-b84e-3ed46050b2a2" />
+::::aufgabe[4. CBC-Modus: Verschlüsseln]
+<Answer type="state" id="6b6bd045-cd9b-4bd7-83d4-ccd3b485694c" />
+
+![CBC: Verschlüsseln](./img/CBC_encryption.svg)
+
+Verschlüsseln Sie den Text `WINTER` mit dem Schlüssel `NY` und dem IV `AZ`.
+
+<Answer type="text" id="aeaf6634-df2d-427f-9daa-970ff225f105" monospace />
+
+<br />
+
+(Antworten als Penta-Binärcode)
+:::cards{rows=3 flexBasis=210px}
+**Block 1**
+<Answer label="p" inputWidth="9em" labelWidth="2em" type="string" id="9f33bc0e-1475-49ee-8201-f389920f3da7" solution="10111 01001" sanitizer={UPPER_NOSPACE} monospace/>
+<Answer label="IV" inputWidth="9em" labelWidth="2em" type="string" id="576d141c-99d1-41dd-9cb6-2536b5eefc61" solution="00001 11010" sanitizer={UPPER_NOSPACE} monospace/>
+<i>Nach XOR mit IV </i>
+<Answer label="c1" inputWidth="9em" labelWidth="2em" type="string" id="6280885d-6427-4403-a09a-144b04f76716" solution="10110 10011" sanitizer={UPPER_NOSPACE} monospace/>
+<Answer label="k" inputWidth="9em" labelWidth="2em" type="string" id="53ff56be-1a4b-4ad0-86fb-a98590d83d50" solution="01110 11001" sanitizer={UPPER_NOSPACE} monospace/>
+<i>Nach XOR mit Schlüssel</i>
+<Answer label="c" inputWidth="9em" labelWidth="2em" type="string"  id="029d1f0e-f597-4eb4-bac5-7c9ef6d8e849" solution="11000 01010" sanitizer={UPPER_NOSPACE} monospace/>
+
+::br
+**Block 2**
+
+<Answer label="p" type="string" inputWidth="9em" labelWidth="2em"id="55c93903-3bdb-4189-8f80-68bb19f4cbd1" solution="01110 10100" sanitizer={UPPER_NOSPACE} monospace/>
+<Answer label="IV" type="string" inputWidth="9em" labelWidth="2em"id="4fd15699-160c-4738-8288-b9d2a3ac40d3" solution="11000 01010" sanitizer={UPPER_NOSPACE} monospace/>
+<i>Nach XOR mit IV </i>
+<Answer label="c1" inputWidth="9em" labelWidth="2em" type="string" id="52dc90fe-224a-4739-b277-1181fb41c265" solution="10110 11110" sanitizer={UPPER_NOSPACE} monospace/>
+<Answer label="k" inputWidth="9em" labelWidth="2em" type="string" id="53ff56be-1a4b-4ad0-86fb-a98590d83d50" disabled monospace/>
+<i>Nach XOR mit Schlüssel</i>
+<Answer label="c" inputWidth="9em" labelWidth="2em" type="string"  id="2bbfd220-5673-488a-a903-528ef7324885" solution="11000 00111" sanitizer={UPPER_NOSPACE} monospace/>
+::br
+
+**Block 3**
+
+<Answer inputWidth="9em" labelWidth="2em" label="p" type="string" id="8e2339e3-d4d9-4339-9709-bbbaf28e4e05" solution="00101 10010" sanitizer={UPPER_NOSPACE} monospace/>
+<Answer inputWidth="9em" labelWidth="2em" label="IV" type="string" id="8db5f43f-0bcd-4d11-8bca-a72286778e65" solution="11000 00111" sanitizer={UPPER_NOSPACE} monospace/>
+<i>Nach XOR mit IV </i>
+<Answer label="c1" inputWidth="9em" labelWidth="2em" type="string" id="3a7ac8ec-b6c6-4acd-b123-f1ca84d99fad" solution="11101 10101" sanitizer={UPPER_NOSPACE} monospace/>
+<Answer label="k" inputWidth="9em" labelWidth="2em" type="string" id="53ff56be-1a4b-4ad0-86fb-a98590d83d50" disabled monospace/>
+<i>Nach XOR mit Schlüssel</i>
+<Answer label="c" inputWidth="9em" labelWidth="2em" type="string"  id="a44a611e-6cff-41ea-9277-4b0859ea6249" solution="10011 01100" sanitizer={UPPER_NOSPACE} monospace/>
+:::
+
+<Answer label="Text (nicht binär)" fullWidth type="string" id="dabff993-1dc5-43c8-bfca-f944c8dc3f96" solution="XJXGSL" sanitizer={UPPER_NOSPACE} monospace/>
+::::
+
+
+::::aufgabe[5. CBC-Modus: Entschlüsseln]
+<Answer type="state" id="5d950f19-7371-4fbf-ac91-75fbad207f36" />
+
+![CBC Entschlüsseln](./img/CBC_decryption.svg)
+
 Entschlüsseln Sie den Text `NNHDFBA` mit dem Schlüssel `BE` und beliebigem IV.
 
-Geben Sie Ihre Lösung hier ein und kontrollieren Sie anschliessend mit der Musterlösung.
+<Answer type="text" id="1d46518d-94df-4d09-8d12-ae6f28df2b67" monospace />
 
-<QuillV2 id="d96cb4fc-a20c-439b-91d9-3a570db36704" />
+<br />
 
-<Solution id="1270a4c9-8cad-42f1-93b3-b6b2eb5342e0">
-**Block 1:**
-- c: `01110 01110`
-- k: `00010 00101`
-- nach XOR mit Schlüssel: `01100 01011`
-- IV: beliebig...
-- p: abhängig von IV
+(Antworten als Penta-Binärcode)
+:::cards{rows=4 flexBasis=210px}
+**Block 1**
+<Answer label="c" inputWidth="9em" labelWidth="2em" type="string" id="150519fd-560b-42e6-acec-58407af94ada" solution="01110 01110" sanitizer={UPPER_NOSPACE} monospace/>
+<Answer label="k" inputWidth="9em" labelWidth="2em" type="string" id="f20e9df7-4811-4856-a487-02e2ed6b883b" solution="00010 00101" sanitizer={UPPER_NOSPACE} monospace/>
+<i>Nach XOR mit Schlüssel </i>
+<Answer label="c1" inputWidth="9em" labelWidth="2em" type="string" id="92338241-0b77-4195-b65b-c4cf64bf6734" solution="01100 01011" sanitizer={UPPER_NOSPACE} monospace/>
+<Answer label="IV" inputWidth="9em" labelWidth="2em" type="string" id="aa136c52-c970-437f-b9ff-270468514137" checker={(val) => UPPER_NOSPACE(val)?.length === 10} monospace/>
+<i>Nach XOR mit IV </i>
+<Answer label="p" inputWidth="9em" labelWidth="2em" type="string"  id="14beb904-594a-43ff-a67c-88b9ce93cb3c" checker={(val) => UPPER_NOSPACE(val)?.length === 10} monospace/>
 
-**Block 2:**
-- c: `01000 00100`
-- nach XOR mit Schlüssel: `01010 00001`
-- IV: `01110 01110`
-- p: `00100 01111`
+::br
+**Block 2**
 
-**Block 3:**
-- c: `00110 00010`
-- nach XOR mit Schlüssel: `00100 00111`
-- IV: `01000 00100`
-- p: `01100 00011`
+<Answer label="c" type="string" inputWidth="9em" labelWidth="2em"id="97948788-feeb-4c72-94fe-5e176283218a" solution="01000 00100" sanitizer={UPPER_NOSPACE} monospace/>
+<Answer label="k" type="string" inputWidth="9em" labelWidth="2em"id="f20e9df7-4811-4856-a487-02e2ed6b883b" disabled monospace/>
+<i>Nach XOR mit Schlüssel</i>
+<Answer label="c1" inputWidth="9em" labelWidth="2em" type="string" id="b4afd242-e054-4f3c-b865-2d14cc206057" solution="01010 00001" sanitizer={UPPER_NOSPACE} monospace/>
+<Answer label="IV" inputWidth="9em" labelWidth="2em" type="string" id="d9ff2b83-e6de-490b-be42-11d4d4676da7" solution="01110 01110" sanitizer={UPPER_NOSPACE} monospace/>
+<i>Nach XOR mit IV </i>
+<Answer label="p" inputWidth="9em" labelWidth="2em" type="string"  id="00ac07c4-7f1f-4d9a-a908-7f41f20621b0" solution="00100 01111" sanitizer={UPPER_NOSPACE} monospace/>
+::br
 
-**Block 4:**
-- c: `00001`
-- nach XOR mit Schlüssel: `00011`
-- IV: `00110`
-- p: `00101`
+**Block 3**
 
-**Resultat:**<br/>
-`??DOLCE` (die ersten beiden Zeichen sind unbekannt)
-</Solution>
+<Answer label="c" inputWidth="9em" labelWidth="2em" type="string" id="b99355ce-bc59-4ac6-8183-cada8a706b27" solution="00110 00010" sanitizer={UPPER_NOSPACE} monospace/>
+<Answer label="k" inputWidth="9em" labelWidth="2em" type="string" id="f20e9df7-4811-4856-a487-02e2ed6b883b" disabled monospace/>
+<i>Nach XOR mit Schlüssel</i>
+<Answer label="c1" inputWidth="9em" labelWidth="2em" type="string" id="dc3049f2-5006-4507-8dd5-8759b7c24465" solution="00100 00111" sanitizer={UPPER_NOSPACE} monospace/>
+<Answer label="IV" inputWidth="9em" labelWidth="2em" type="string" id="e33acd9e-ccbf-4d39-aea2-9ee51b665fb2" solution="01000 00100" sanitizer={UPPER_NOSPACE} monospace/>
+<i>Nach XOR mit IV </i>
+<Answer label="p" inputWidth="9em" labelWidth="2em" type="string"  id="1bcc452d-3099-4ab4-b24d-b24407a63c41" solution="01100 00011" sanitizer={UPPER_NOSPACE} monospace/>
+::br
+
+**Block 4**
+
+<Answer label="c" inputWidth="9em" labelWidth="2em" type="string" id="30d7f06d-2d98-4649-b585-c3e0e11841fc" solution="00001" sanitizer={UPPER_NOSPACE} monospace/>
+<Answer label="k" inputWidth="9em" labelWidth="2em" type="string" id="f20e9df7-4811-4856-a487-02e2ed6b883b" disabled monospace/>
+<i>Nach XOR mit Schlüssel</i>
+<Answer label="c1" inputWidth="9em" labelWidth="2em" type="string" id="69af84b4-3d3a-4377-adbb-6870b71cb9c7" solution="00011" sanitizer={UPPER_NOSPACE} monospace/>
+<Answer label="IV" inputWidth="9em" labelWidth="2em" type="string" id="791d6b06-0ab1-4cb7-82d2-388ed8cd7626" solution="00110" sanitizer={UPPER_NOSPACE} monospace/>
+<i>Nach XOR mit IV </i>
+<Answer label="p" inputWidth="9em" labelWidth="2em" type="string"  id="d0fbef85-346d-4d70-bb60-972205240d36" solution="00101" sanitizer={UPPER_NOSPACE} monospace/>
+:::
+
+<Answer label="Text (nicht binär)" fullWidth  type="string" id="4ce989c5-27ad-4146-bdf6-adb7b5908b55" solution="DOLCE" sanitizer={(val) => UPPER_NOSPACE(val)?.length === 7 ? UPPER_NOSPACE(val).slice(2) : UPPER_NOSPACE(val)} monospace/>
 ::::
 
 ### Vertiefungsaufgaben
@@ -214,7 +277,7 @@ Beantworten Sie anschliessend der Reihe nach die unten stehenden Fragen. Notiere
   <div>
     **Beobachtung 1:** Im ECB-Modus erhalten wir den Geheimtext `PNPDPNPD` - also zweimal hintereinander die Buchstabenfolge `PNPD`. Auch im Klartext `BORABORA` finden wir zweimal hintereinander die Buchstabenfolge `BORA`. Im CBC-Modus sehen wir diese Symmetrie nicht mehr.
 
-     **Beobachtung 2:** Dafür taucht beim CBC-Modus im zweiten Block plötzlich der Initialvektor wieder auf - und zwar egal, mit welchen Initialvektor wir es versuchen.
+     **Beobachtung 2:** Dafür taucht beim CBC-Modus im zweiten Block plötzlich der Initialvektor wieder auf - und zwar egal, mit welchem Initialvektor wir es versuchen.
   </div>
 </details>
 <QuillV2 id="64c07b9a-e591-45af-9ba9-d1a4a7faef7e" />
@@ -285,5 +348,3 @@ Bei der **ent**schlüsselung passiert alles in umgekehrter Reihenfolge. Den Klar
 Lediglich für den ersten Block haben wir keinen solchen vorangehenden Block $n-1$. Hier müssen wir den ursprünglich verwendeten IV kennen und anwenden. Wenn wir hier den falschen IV verwenden, dann wir der erste Block unleserlich - jedoch hat dies eben keinen Einfluss auf alle anderen Blocks.
 </Solution>
 :::
-
----

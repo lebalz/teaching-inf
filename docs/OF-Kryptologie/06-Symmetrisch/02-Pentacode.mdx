@@ -14,9 +14,8 @@ Der Pentacode ist keine offizielle Codierung. Sie wurde von [Stefan Rothe und To
 ## Albhabet
 Mit 5 Bits (_Penta_ bedeutet 5) können $2^5 = 32$ Zeichen codiert werden. Die Tabelle beginnt mit dem Leerschlag (Zeichen $0$), gefolgt von den 26 Grossbuchstaben (Zeichen $1$ bis $26$). Zum Schluss folgen die Sonderzeichen `,`, `-`, `.`, `?`, und `@`.
 
-<details>
-  <summary>Pentacode-Tabelle</summary>
-  <div className="slim" style={{display: "flex", gap: "1em", width: "100%", justifyContent: "center"}}>
+::::details[Pentacode-Tabelle]{open .slim}
+:::flex{justifyContent=center gap=1em}
     | Buchstabe    | Zahl |   Binär |
     |:-------------|-----:|--------:|
     | *Leerschlag* |    0 | `00000` |
@@ -30,7 +29,7 @@ Mit 5 Bits (_Penta_ bedeutet 5) können $2^5 = 32$ Zeichen codiert werden. Die T
     | `H`          |    8 | `01000` |
     | `I`          |    9 | `01001` |
     | `J`          |   10 | `01010` |
-
+::br
     |   Buchstabe | Zahl |   Binär |
     |:----------|-----:|--------:|
     | `K`       |   11 | `01011` |
@@ -44,7 +43,7 @@ Mit 5 Bits (_Penta_ bedeutet 5) können $2^5 = 32$ Zeichen codiert werden. Die T
     | `S`       |   19 | `10011` |
     | `T`       |   20 | `10100` |
     | `U`       |   21 | `10101` |
-    
+::br    
     |   Buchstabe | Zahl |   Binär |
     |:----------|-----:|--------:|
     | `V`       |   22 | `10110` |
@@ -57,8 +56,9 @@ Mit 5 Bits (_Penta_ bedeutet 5) können $2^5 = 32$ Zeichen codiert werden. Die T
     | `.`       |   29 | `11101` |
     | `?`       |   30 | `11110` |
     | `@`       |   31 | `11111` |
-  </div>
-</details>
+:::
+::::
+
 
 :::aufgabe[Name codieren]
 <TaskState id="087efb9c-00b2-4a88-adae-e1dec3a7a555" />
@@ -89,6 +89,8 @@ Wie sieht Ihr Name als Pixelgrafik aus?
 In der vorangehenden Aufgabe haben Sie Ihren Namen mit Pentacode codiert. Kopieren Sie das Ergebnis jetzt in das Eingabefeld des Pixel-Editors und begutachten Sie das Ergebnis.
 
 Können Sie erklären, wie die Buchstaben Ihres Namens mit dem gezeichneten Bild zusammenhängen? Diskutieren Sie zu zweit.
+
+<Answer type="text" id="6476cbb1-ca0d-4c12-9f1e-1cf5aa0460f5" />
 :::
 
 ---
