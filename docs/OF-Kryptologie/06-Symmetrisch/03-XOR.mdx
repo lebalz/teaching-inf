@@ -67,10 +67,10 @@ Schlüssel
 
 Geben Sie das Resultat hier ein und überprüfen Sie es.
 
-<String id="d928f897-07c5-46a0-ab43-cc9e9f22f062" solution="10001 10111 01010" />
+<String id="d928f897-07c5-46a0-ab43-cc9e9f22f062" solution="10001 10111 01010" monospace/>
 ::::
 
-::::aufgabe[XOR entschlüsseln]
+:::::aufgabe[XOR entschlüsseln]
 <TaskState id="73351a5e-164d-4bbe-8b25-9d31fde886de" />
 Sie erhalten von einem Kollegen folgende verschlüsselte Nachricht:
 
@@ -81,27 +81,30 @@ Als Schlüssel haben Sie das Wort **MACHT** vereinbart.
 1. Codieren Sie den Schlüssel mit Pentacode und entschlüsseln Sie die Nachricht.
 2. Decodieren Sie die entschlüsselte Pentacode-Bitfolge zu einer Zeichenfolge.
 
-:::info[Pentacode Text-Editor]
+::::info[Pentacode Text-Editor]
 Sie dürfen für diese Aufgabe den Pentacode Text-Editor verwenden.
+:::details[Text-Editor]
+<TextEditor />
 :::
+::::
 
 <QuillV2 id="678e1c6a-c4c4-4795-9c9f-c559e202b359" monospace default={`c: 01010 00100 01010 11011 00000\nk: \np: `} />
 
 Geben Sie das Klartext-Ergebnis hier ein und überprüfen Sie es.
 
 <String id="9b1e97dc-6807-4ec3-bc18-182a57b0a2d4" solution="GEIST" />
-::::
+:::::
 
 ::::aufgabe[⭐️ Geheime Pixelgrafik austauschen]
 Wählen Sie eine Partner:in und erledigen Sie gemeinsam folgende Aufgabe:
 
 <ProgressState id="1e1cfb99-d353-410e-a667-57d2cb2b9a9b">
-1. Einigen Sie sich auf ein geheimes Codewort mit einer Länge von genau 5 Buchstaben (keine Umlaute oder Sonderzeichen).
+1. Einigen Sie sich auf ein geheimes Codewort mit einer Länge von genau __5__ Buchstaben (keine Umlaute oder Sonderzeichen).
     <Answer type="string" id="6f6eb37e-d9b9-4529-b940-e0ee2c25a1e1" />
 2. Verwenden Sie den Pentacode Text-Editor um den Schlüssel in eine binäre Bitfolge umzuwandeln.
     <TextEditor />
     <Answer label="k" type="string" id="7c2e2265-1ce3-4dfa-87bd-c33f9ed2411a" fullWidth monospace />
-3. Verwenden Sie beide (versteckt und unabhängig voneinander) den Pentacode Pixel-Editor, um je eine geheime 5x5 Pixelgrafik zu erstellen.
+3. Verwenden Sie beide (versteckt und unabhängig voneinander) den Pentacode Pixel-Editor, um je eine geheime __5x5__ Pixelgrafik zu erstellen.
     <PixelEditor />
     <Answer label="p" type="string" id="a95e696f-ade1-4c2e-b509-8c905d49f8e3" fullWidth monospace />
 4. Sie haben nun beide eine Bitfolge für Ihre jeweilige Pixelgrafik. Verschlüsseln Sie diese Bitfolge mit der XOR-Verschlüsselung, mit der Bitfolge des gemeinsamen Codeworts (Schritte 1 und 2).
