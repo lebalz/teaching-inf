@@ -10,6 +10,8 @@ trackedElements:
           - pages/__index.tsx
           - pages/.gitignore
           - theme/**
+    - src: src/theme/Root.tsx
+      dst: src/theme/Root.tsx
     - src: packages/tdev/
       dst: packages/tdev
     - src: updateSync/
@@ -24,3 +26,4 @@ watchedElements:
     - .env.example
     - static/bry-libs/
     - tsconfig.json
+    - src/theme/

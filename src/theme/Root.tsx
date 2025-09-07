@@ -14,6 +14,7 @@ import scheduleMicrotask from '@tdev-components/util/scheduleMicrotask';
 import { useHistory } from '@docusaurus/router';
 import Storage from '@tdev-stores/utils/Storage';
 import { noAuthMessage, offlineApiMessage } from './Root.helpers';
+import LoggedOutOverlay from '@tdev-components/LoggedOutOverlay';
 const { NO_AUTH, OFFLINE_API, TEST_USER, SENTRY_DSN } = siteConfig.customFields as {
     TEST_USER?: string;
     NO_AUTH?: boolean;
@@ -242,6 +243,7 @@ function Root({ children }: { children: React.ReactNode }) {
     }, [SENTRY_DSN]);
 
     React.useEffect(() => {
+        let timeoutId: ReturnType<typeof setTimeout>;
         const handleVisibilityChange = () => {
             if (document.hidden) {
                 /**
@@ -254,19 +256,17 @@ function Root({ children }: { children: React.ReactNode }) {
                  * make sure to reconnect the socket when the user returns to the page
                  * The delay is added to avoid reconnecting too quickly
                  */
-                const timeoutId = setTimeout(() => {
-                    if (rootStore.socketStore.isLive && rootStore.socketStore.socket?.disconnected) {
-                        rootStore.socketStore.reconnect();
-                    } else {
-                        rootStore.socketStore.connect();
-                    }
+                timeoutId = setTimeout(() => {
+                    rootStore.socketStore.reconnect();
                 }, 3000);
-                return () => clearTimeout(timeoutId);
             }
         };
 
         document.addEventListener('visibilitychange', handleVisibilityChange);
-        return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+        return () => {
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+            clearTimeout(timeoutId);
+        };
     }, [rootStore]);
 
     return (
@@ -281,6 +281,7 @@ function Root({ children }: { children: React.ReactNode }) {
             <StoresProvider value={rootStore}>
                 <MsalWrapper>{children}</MsalWrapper>
                 <RemoteNavigationHandler />
+                {!OFFLINE_API && <LoggedOutOverlay delayMs={5_000} stalledCheckIntervalMs={15_000} />}
             </StoresProvider>
         </>
     );
