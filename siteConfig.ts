@@ -1,7 +1,7 @@
 // This file is never changed by teaching-dev.
 // Use it to override or extend your app configuration.
 
-import { PluginConfig } from '@docusaurus/types';
+import { MarkdownConfig, PluginConfig } from '@docusaurus/types';
 import { mdiSourceCommit } from '@mdi/js';
 import path from 'path';
 import { EditUrlFunction, VersionOptions } from '@docusaurus/plugin-content-docs';
@@ -16,6 +16,7 @@ import {
     devModeAccessLocalFS,
     personalSpaceOverlay
 } from './src/siteConfig/navbarItems';
+import { ThemeConfig } from '@docusaurus/theme-common';
 
 const getEditUrl = (props: Parameters<EditUrlFunction>[0]) => {
     const { version, docPath, versionDocsDirPath } = props;
@@ -218,6 +219,12 @@ const getSiteConfig: SiteConfigProvider = () => {
                         };
                     }
                 ] satisfies PluginConfig[];
+            },
+            themes: (themes: PluginConfig[]) => {
+                return [...themes, '@docusaurus/theme-mermaid'] satisfies PluginConfig[];
+            },
+            markdown: (md: MarkdownConfig) => {
+                return { ...md, mermaid: true } satisfies MarkdownConfig;
             }
         }
     };
