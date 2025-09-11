@@ -55,30 +55,30 @@ export class ToolsStore {
 
     @observable.ref accessor primeFactorizationTiming: {
         digits: number;
-        range: number[];
+        range: [bigint, bigint];
         stage: number;
-        prime1: number;
-        prime2: number;
+        prime1: bigint;
+        prime2: bigint;
         tPrime: number;
-        measurements: { product: number; time: number }[];
-        prod: number;
+        measurements: { product: bigint; time: number }[];
+        prod: bigint;
         tMult: number;
         tFact: number;
-        factPrime1: number;
-        factPrime2: number;
+        factPrime1: bigint;
+        factPrime2: bigint;
     } = {
         digits: 6,
-        range: [0, 0],
+        range: [0n, 0n],
         stage: 0,
-        prime1: 0,
-        prime2: 0,
+        prime1: 0n,
+        prime2: 0n,
         tPrime: -1,
         measurements: [],
-        prod: 0,
+        prod: 0n,
         tMult: -1,
         tFact: -1,
-        factPrime1: 0,
-        factPrime2: 0
+        factPrime1: 0n,
+        factPrime2: 0n
     };
 
     @observable.ref accessor skytale: { text: string; cipherText: string; key: number; source: Source } = {
