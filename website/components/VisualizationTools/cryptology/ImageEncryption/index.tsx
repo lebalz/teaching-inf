@@ -9,11 +9,12 @@ import { action } from 'mobx';
 import Button from '@tdev-components/shared/Button';
 import { SIZE_S } from '@tdev-components/shared/iconSizes';
 import TextInput from '@tdev-components/shared/TextInput';
+import { observer } from 'mobx-react-lite';
 
-const ImageEncryption = () => {
-    const SRC_IMAGE_ID = 'source-image';
-    const SRC_CANVAS_ID = 'source-canvas';
-    const DEST_CANVAS_ID = 'dest-canvas';
+const ImageEncryption = observer(() => {
+    const SRC_IMAGE_ID = React.useId();
+    const SRC_CANVAS_ID = React.useId();
+    const DEST_CANVAS_ID = React.useId();
 
     const [imageDataUrl, setImageDataUrl] = useState<string | null>();
     const [srcImageLoaded, setSrcImageLoaded] = useState<boolean>(false);
@@ -21,7 +22,6 @@ const ImageEncryption = () => {
     const [mode, setMode] = React.useState<'CBC' | 'ECB'>('ECB');
     const [key, setKey] = React.useState('');
     const [iv, setIv] = React.useState('');
-    const [cipherImageData, setCipherImageData] = React.useState<ImageData>(null);
     const store = useStore('siteStore').toolsStore;
 
     // TODO: Refactor to use less flags and to store cipher image data in store.
@@ -268,6 +268,6 @@ const ImageEncryption = () => {
             </div>
         </div>
     );
-};
+});
 
 export default ImageEncryption;
