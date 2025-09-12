@@ -54,7 +54,7 @@ const Redundancy = () => {
                     placeholder="Originaltext"
                 ></textarea>
 
-                <div className={clsx('buttongroup', styles.modes)}>
+                <div className={clsx('button-group', styles.modes)}>
                     <button
                         className={clsx(
                             'button',

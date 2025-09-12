@@ -268,7 +268,7 @@ const BinDecoder = () => {
             <div className="container">
                 <p className="hero__subtitle">Bin Decoder</p>
                 <h4>Modus</h4>
-                <div className={clsx('buttongroup', styles.modes)}>
+                <div className={clsx('button-group', styles.modes)}>
                     <button
                         className={clsx(...BUTTON_CLSX, mode === 'latin1' && 'button--active')}
                         onClick={() => setMode('latin1')}
@@ -290,7 +290,7 @@ const BinDecoder = () => {
                         onChange={(e) => setBin(e.target.value.replace(/[^01\s]/g, '1'))}
                         rows={3}
                     ></textarea>
-                    <div className={clsx('buttongroup', styles.modes)}>
+                    <div className={clsx('button-group', styles.modes)}>
                         {['start', 'idle'].includes(state) ? (
                             <button className={clsx(...BUTTON_CLSX)} onClick={() => setState('start')}>
                                 Start

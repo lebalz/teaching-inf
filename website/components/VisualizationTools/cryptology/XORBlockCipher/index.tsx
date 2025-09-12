@@ -100,7 +100,7 @@ const XORBlockCipher = () => {
             <div className="container">
                 <p className="hero__subtitle">XOR Blockchiffre</p>
                 <h4>Modus</h4>
-                <div className={clsx('buttongroup', styles.modes)}>
+                <div className={clsx('button-group', styles.modes)}>
                     <button
                         className={clsx(
                             'button',
