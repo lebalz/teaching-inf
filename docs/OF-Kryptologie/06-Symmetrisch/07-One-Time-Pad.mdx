@@ -41,7 +41,7 @@ Als Erstes müssen die Buchstaben des Klartextes und des Schlüssels in Zahlen u
 
 Zum Verschlüsseln addieren wir die zum jeweiligen Klartextbuchstaben gehörende Zahl zur Zahl des Schlüsselbuchstabens. Falls das Resultat zu gross wird, ziehen wir 26 ab (genannt _Addition modulo 26_). Nun suchen wir den Buchstaben, der zur ausgerechneten Zahl passt:
 
-<div class="grid-2-1">
+:::cards{flexBasis=200px}
   <DefinitionList>
     <dt>Klartext</dt>
     <dd>E = 4</dd>
@@ -51,9 +51,9 @@ Zum Verschlüsseln addieren wir die zum jeweiligen Klartextbuchstaben gehörende
     <dd>M = 12</dd>
     <dt></dt>
     <dt>Geheimtext</dt>
-    <dd>Q = 16</dd>
+    <dd>→ __16 = Q__</dd>
   </DefinitionList>
-
+::br
   <DefinitionList>
     <dt>Klartext</dt>
     <dd>R = 17</dd>
@@ -63,13 +63,13 @@ Zum Verschlüsseln addieren wir die zum jeweiligen Klartextbuchstaben gehörende
     <dd>K = 10</dd>
     <dt></dt>
     <dt>Geheimtext</dt>
-    <dd>B = 27 - 26 = 1</dd>
+    <dd>→ __27 - 26 = 1 = B__</dd>
   </DefinitionList>
-</div>
+:::
 
 Die Entschlüsselung läuft genau umgekehrt. Anstatt den Schlüsselbuchstaben zu addieren, subtrahieren wir ihn. Falls das Resultat kleiner als 0 wird, addieren wir 26:
 
-<div class="grid-2-1">
+:::cards{flexBasis=200px}
   <DefinitionList>
     <dt>Geheimtext</dt>
     <dd>T = 19</dd>
@@ -79,9 +79,9 @@ Die Entschlüsselung läuft genau umgekehrt. Anstatt den Schlüsselbuchstaben zu
     <dd>F = 5</dd>
     <dt></dt>
     <dt>Klatext</dt>
-    <dd>O = 14</dd>
+    <dd>→ __14 = O__</dd>
   </DefinitionList>
-
+::br
   <DefinitionList>
     <dt>Geheimtext</dt>
     <dd>G = 6</dd>
@@ -91,9 +91,14 @@ Die Entschlüsselung läuft genau umgekehrt. Anstatt den Schlüsselbuchstaben zu
     <dd>J = 9</dd>
     <dt></dt>
     <dt>Klartext</dt>
-    <dd>X = -3 + 26 = 23</dd>
+    <dd>→ __-3 + 26 = 23 = X__</dd>
   </DefinitionList>
-</div>
+:::
+
+
+:::warning[One-Time-Pad ≠ One-Time-Passwort]
+Wàhrend das _One-Time-Pad_ ein (theoretisch) perfektes Verschlüsselungsverfahren ist, bezeichnet ein _One-Time-Passwort_ (OTP) ein Passwort, das nur für eine einzige Anmeldung gültig ist. Es wird häufig bei der Zwei-Faktor-Authentifizierung verwendet.
+:::
 
 ## Aufgaben
 :::aufgabe[Aufgabe 1: Häufigkeitsanalyse]
@@ -138,7 +143,7 @@ Das One-Time-Pad ist zwar perfekt sicher - aber es ist eben trotzdem nicht perfe
 <Solution id="452cd7fa-38a2-4943-b1e6-3dab506be3ec">
 - **Zufälliger Schlüssel:** Einen komplett zufälligen Schlüssel zu generieren ist gar nicht so einfach. Zudem können wir Menschen ihn uns auch kaum merken.
 - **Langer Schlüssel:** Der Schlüssel muss mindestens so lang sein, wie die gesamte Nachricht.
-- **Einmalverwendung des Schlüssels:** Wir dürfen jeden Schlüssel nur einmal verwenden. Wenn wir es schaffen, diesen Schlüssel jeweils sicher zu übermitteln, dann könnten wir vermutlich oft auch einfach gleich die geheime Nachricht selbst übermitteln.
+- **Einmalverwendung des Schlüssels:** Wir dürfen jeden Schlüssel nur einmal verwenden. Wenn wir es schaffen, diesen Schlüssel jeweils sicher zu übermitteln, dann könnten wir vermutlich oft auch mit selbiger Methode einfach gleich die geheime Nachricht sicher übermitteln.
 </Solution>
 :::
 
@@ -171,5 +176,4 @@ Alice und Bob sind Spione. Sie sind darauf angewiesen, dass Ihr Nachrichtenausta
 - Bob entschlüsselt die Nachricht wieder mit diesem Schlüssel und geht zu diesem Treffpunkt.
 </Solution>
 :::
-
 ---

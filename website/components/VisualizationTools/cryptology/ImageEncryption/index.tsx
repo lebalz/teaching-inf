@@ -6,6 +6,9 @@ import { shuffle } from 'es-toolkit/compat';
 import { PENTA_TABLE } from '@tdev-components/VisualizationTools/Pentacode';
 import { useStore } from '@tdev/hooks/useStore';
 import { action } from 'mobx';
+import Button from '@tdev-components/shared/Button';
+import { SIZE_S } from '@tdev-components/shared/iconSizes';
+import TextInput from '@tdev-components/shared/TextInput';
 
 const ImageEncryption = () => {
     const SRC_IMAGE_ID = 'source-image';
@@ -34,7 +37,7 @@ const ImageEncryption = () => {
     useEffect(() => {
         return action(() => {
             store.imageEncryption = {
-                imageDataUrl,
+                imageDataUrl: imageDataUrl ?? '',
                 srcImageLoaded,
                 resultReady,
                 mode,
@@ -43,6 +46,10 @@ const ImageEncryption = () => {
             };
         });
     }, [imageDataUrl, srcImageLoaded, resultReady, mode, key, iv]);
+
+    useEffect(() => {
+        setResultReady(false);
+    }, [mode]);
 
     function asCharCodes(value: string) {
         return value.split('').map((c) => c.charCodeAt(0) % 256);
@@ -89,7 +96,7 @@ const ImageEncryption = () => {
 
         const srcCanvas = document.getElementById(SRC_CANVAS_ID) as HTMLCanvasElement;
         const srcCtxt = srcCanvas.getContext('2d');
-        srcCtxt.drawImage(getSrcImage(), 0, 0);
+        srcCtxt?.drawImage(getSrcImage(), 0, 0);
     }
 
     async function encrypt() {
@@ -100,6 +107,9 @@ const ImageEncryption = () => {
 
         const srcImage = getSrcImage();
         const srcCtxt = srcCanvas.getContext('2d');
+        if (!srcCtxt) {
+            return;
+        }
         const srcImageData = srcCtxt.getImageData(0, 0, srcImage.width, srcImage.height);
         const destImageData = srcCtxt.createImageData(srcImageData);
 
@@ -107,7 +117,7 @@ const ImageEncryption = () => {
         const destRgbBytes = mode === 'ECB' ? encryptEcb(srcRgbBytes) : encryptCbc(srcRgbBytes);
 
         destImageData.data.set(inflateToRgbaBytes(destRgbBytes, 255));
-        destCanvas.getContext('2d').putImageData(destImageData, 0, 0);
+        destCanvas?.getContext('2d')?.putImageData(destImageData, 0, 0);
 
         setResultReady(true);
     }
@@ -147,68 +157,37 @@ const ImageEncryption = () => {
             <div className="container">
                 <p className="hero__subtitle">Bildverschlüsselung</p>
                 <h4>Modus</h4>
-                <div className={clsx('buttongroup', styles.modes)}>
-                    <button
-                        className={clsx(
-                            'button',
-                            'button--sm',
-                            'button--primary',
-                            'button--outline',
-                            mode === 'ECB' && 'button--active'
-                        )}
+                <div className={clsx('button-group', styles.modes)}>
+                    <Button
+                        active={mode === 'ECB'}
+                        size={SIZE_S}
                         onClick={() => setMode('ECB')}
-                    >
-                        ECB
-                    </button>
-                    <button
-                        className={clsx(
-                            'button',
-                            'button--sm',
-                            'button--primary',
-                            'button--outline',
-                            mode === 'CBC' && 'button--active'
-                        )}
+                        text="ECB"
+                        color="primary"
+                    />
+                    <Button
+                        active={mode === 'CBC'}
+                        size={SIZE_S}
                         onClick={() => setMode('CBC')}
-                    >
-                        CBC
-                    </button>
+                        text="CBC"
+                        color="primary"
+                    />
                 </div>
                 <div className={styles.stringInputContainer}>
-                    <h4>
-                        <label htmlFor="block-chain-key">Schlüssel</label>
-                    </h4>
-                    <input
-                        id="block-chain-key"
-                        type="text"
-                        placeholder="Schlüssel"
+                    <TextInput
+                        label="Schlüssel"
                         value={key}
-                        onChange={(e) => {
-                            const pos = Math.max(e.target.selectionStart, e.target.selectionEnd);
-                            setKey(e.target.value);
-                            setTimeout(() => e.target.setSelectionRange(pos, pos), 0);
+                        onChange={(txt) => {
+                            setKey(txt);
                         }}
+                        placeholder="Schlüssel"
+                        type="text"
                     />
                 </div>
                 {mode === 'CBC' && (
                     <div className={styles.stringInputContainer}>
                         <h4>
                             <label htmlFor="cbc-iv">Initialvektor (IV)</label>
-                        </h4>
-                        <div className={clsx(styles.iv, 'button-group')}>
-                            <input
-                                id="cbc-iv"
-                                type="text"
-                                placeholder="Der IV muss die gleiche Länge haben wie der Schlüssel"
-                                value={iv}
-                                className={clsx(iv.length !== key.length && styles.invalid)}
-                                onChange={(e) => {
-                                    const pos = Math.max(e.target.selectionStart, e.target.selectionEnd);
-                                    setIv(e.target.value);
-                                    setTimeout(() => {
-                                        e.target.setSelectionRange(pos, pos);
-                                    }, 0);
-                                }}
-                            />
                             {iv.length !== key.length && (
                                 <span
                                     className={clsx('badge', 'badge--danger', styles.errorBadge)}
@@ -217,8 +196,21 @@ const ImageEncryption = () => {
                                     Länge
                                 </span>
                             )}
-                            <button
-                                className={clsx('button', 'button--primary', 'button--sm')}
+                        </h4>
+                        <div className={clsx(styles.iv, 'button-group')}>
+                            <TextInput
+                                id="cbc-iv"
+                                value={iv}
+                                onChange={(txt) => {
+                                    setIv(txt);
+                                }}
+                                placeholder="Der IV muss die gleiche Länge haben wie der Schlüssel"
+                                type="text"
+                                className={clsx(iv.length !== key.length && styles.invalid)}
+                            />
+                            <Button
+                                text="Zufällig Setzen"
+                                color="primary"
                                 onClick={() => {
                                     if (key.length === 0) {
                                         return setIv('');
@@ -233,9 +225,7 @@ const ImageEncryption = () => {
                                     );
                                     setIv(rand.slice(0, key.length).join(''));
                                 }}
-                            >
-                                Zufällig Setzen
-                            </button>
+                            />
                         </div>
                     </div>
                 )}
@@ -244,21 +234,26 @@ const ImageEncryption = () => {
 
                 <button
                     className={clsx('button', 'button--primary', styles.btnUploadImage)}
-                    onClick={() => document.getElementById('input-upload-image').click()}
+                    onClick={() => document.getElementById('input-upload-image')?.click()}
                 >
                     🖼️ Bild auswählen
                 </button>
 
-                <img id={SRC_IMAGE_ID} src={imageDataUrl} className={styles.hidden} onLoad={onImageLoaded} />
+                <img
+                    id={SRC_IMAGE_ID}
+                    src={imageDataUrl ?? undefined}
+                    className={styles.hidden}
+                    onLoad={onImageLoaded}
+                />
 
                 <div className={styles.canvasesContainer}>
-                    <div className={clsx({ [styles.hidden]: !imageDataUrl })}>
-                        <h4>Unverschlüsseltes Bild</h4>
+                    <h4>Unverschlüsseltes Bild</h4>
+                    <div className={clsx(styles.image, !imageDataUrl && styles.hidden)}>
                         <canvas id={SRC_CANVAS_ID} />
                     </div>
 
-                    <div className={clsx({ [styles.hidden]: !resultReady })}>
-                        <h4>Verschlüsseltes Bild</h4>
+                    <h4>Verschlüsseltes Bild</h4>
+                    <div className={clsx(styles.image, !resultReady && styles.hidden)}>
                         <canvas id={DEST_CANVAS_ID} />
                     </div>
                 </div>

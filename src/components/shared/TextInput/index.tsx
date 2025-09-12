@@ -22,10 +22,12 @@ interface Props {
     min?: string | number | undefined;
     max?: string | number | undefined;
     readOnly?: boolean;
+    id?: string;
 }
 
 const TextInput = observer((props: Props) => {
-    const id = React.useId();
+    const _id = React.useId();
+    const id = props.id || _id;
     const [text, setText] = React.useState(props.defaultValue || '');
     return (
         <>
