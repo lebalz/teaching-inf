@@ -219,12 +219,6 @@ const getSiteConfig: SiteConfigProvider = () => {
                         };
                     }
                 ] satisfies PluginConfig[];
-            },
-            themes: (themes: PluginConfig[]) => {
-                return [...themes, '@docusaurus/theme-mermaid'] satisfies PluginConfig[];
-            },
-            markdown: (md: MarkdownConfig) => {
-                return { ...md, mermaid: true } satisfies MarkdownConfig;
             }
         }
     };

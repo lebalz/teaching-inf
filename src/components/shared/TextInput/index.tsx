@@ -4,6 +4,7 @@ import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
 
 interface Props {
+    id?: string;
     defaultValue?: string;
     placeholder?: string;
     onChange: (text: string) => void;
@@ -22,7 +23,6 @@ interface Props {
     min?: string | number | undefined;
     max?: string | number | undefined;
     readOnly?: boolean;
-    id?: string;
 }
 
 const TextInput = observer((props: Props) => {
