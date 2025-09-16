@@ -111,8 +111,6 @@
             "from": "docs/OF-Programmieren-1/",
             "to": "versioned_docs/version-29Ga/03-Programmieren-1",
             "ignore": [
-                "01-Algorithmen/06-Struktogramme.mdx",
-                "03-repeat",
                 "04-errors",
                 "05-functions",
                 "06-parameters",
@@ -147,8 +145,6 @@
             "from": "docs/OF-Programmieren-1/",
             "to": "versioned_docs/version-29Gj/03-Programmieren-1",
             "ignore": [
-                "01-Algorithmen/06-Struktogramme.mdx",
-                "03-repeat",
                 "04-errors",
                 "05-functions",
                 "06-parameters",
