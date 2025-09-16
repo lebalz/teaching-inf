@@ -42,7 +42,7 @@ forward(29)
 
 <Finding title="Was stellen Sie beim Treppen-Programm fest?">
 
-- Das Programm ist lang
+- Das Programm ist lang 🙄
 - man sieht nicht auf einen Blick,
   - wie viele Stufen die Treppe hat
   - ob alle Stufen gleich breit und hoch sind
@@ -96,6 +96,7 @@ Mit `for i in range(n):` wird eine wiederholte Ausführung vorbereitet. Der nach
 #### Beispiel
 ```py live_py slim
 from turtle import *
+### PRE
 for i in range(4):
     forward(50)
     left(90) 
@@ -292,7 +293,7 @@ for i in range(6):
 <Answer type="state" id="32d650c6-4422-41c8-bb3b-c40a6e42c8b4" />
 
 1. Zeichnen Sie einen Weihnachtsstern mit den Drehwinkeln `140°` und `80°`.
-2. Füllen Sie den Stern mit Ihrer Lieblingsfarbe. Schauen Sie sich dazu den Abschnitt "Füllen" unter [Turtle Befehle](../20-commands/index.mdx#füllen) an.
+2. Füllen Sie den Stern mit Ihrer Lieblingsfarbe. Studieren Sie dazu zuerst die drei Befehle im Kapitel "Füllen" unter [Turtle Befehle](../20-commands/index.mdx#füllen).
 
 ![](./images/weihnachtsstern_py.svg)
 
@@ -319,37 +320,7 @@ end_fill()
 </Solution>
 :::
 
-:::aufgabe[7. Quadrate]
-<Answer type="state" id="13b8185f-9ffa-4553-8e10-8129ad8240f9" />
-
-1. Zeichnen Sie folgende Leiter.
-2. Können Sie das Programm mit noch weniger Zeilen Code schreiben?
-3. Schaffen Sie es, nur 6 Zeilen Code zu verwenden?
-
-![](./images/leiter_py.svg)
-
-```py live_py title=leiter.py id=f0060a01-1ef0-4a7a-9ec9-a7567753e7ff
-from turtle import *
-
-```
-<Solution id="81d5ca4e-0b04-434a-a8c0-b84a1452da76">
-
-```py live_py slim
-from turtle import *
-
-for i in range(7):
-    # quadrat zeichnen
-    for j in range(4):
-        forward(30)
-        left(90)
-    # nachdem ein Quadrat gezeichnet wurde, muss man
-    # noch eine Seitenlänge vorwärts gehen
-    forward(30)
-```
-</Solution>
-:::
-
-::::aufgabe[8. Perlenkette]
+::::aufgabe[7. Perlenkette]
 <Answer type="state" id="64055a7b-64ff-4bf9-aaf5-f82acc56cbad" />
 
 Zeichnen Sie eine Perlenkette in Ihrer Lieblingsfarbe, die aus `18` Perlen (dots) besteht.
@@ -378,6 +349,37 @@ hideturtle()
 ```
 </Solution>
 ::::
+
+
+:::aufgabe[8. Quadrate]
+<Answer type="state" id="13b8185f-9ffa-4553-8e10-8129ad8240f9" />
+
+1. Zeichnen Sie folgende Leiter.
+2. Können Sie das Programm mit noch weniger Zeilen Code schreiben?
+3. Schaffen Sie es, nur 6 Zeilen Code zu verwenden?
+
+![](./images/leiter_py.svg)
+
+```py live_py title=leiter.py id=f0060a01-1ef0-4a7a-9ec9-a7567753e7ff
+from turtle import *
+
+```
+<Solution id="81d5ca4e-0b04-434a-a8c0-b84a1452da76">
+
+```py live_py slim
+from turtle import *
+
+for i in range(7):
+    # quadrat zeichnen
+    for j in range(4):
+        forward(30)
+        left(90)
+    # nachdem ein Quadrat gezeichnet wurde, muss man
+    # noch eine Seitenlänge vorwärts gehen
+    forward(30)
+```
+</Solution>
+:::
 
 :::aufgabe[9. Vogel]
 <Answer type="state" id="15dbe59c-3d22-44d4-ae01-7dd63e2964ec" />
