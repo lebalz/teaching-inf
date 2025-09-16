@@ -1,0 +1,134 @@
+---
+page_id: 51956629-7889-4339-b5a5-e3c30be3a120
+---
+
+import HtmlEditor from '@tdev-components/documents/CodeEditor/HtmlEditor';
+import HtmlIDE from '@tdev-components/documents/CodeEditor/HtmlEditor/HtmlIDE';
+import Dir from '@tdev-components/FileSystem/Dir';
+import { trim } from "@tdev-components/documents/String/sanitizers";
+import ProgressState from '@tdev-components/documents/ProgressState';
+
+
+# HTML Links
+
+HTML-Dokumente können auf andere HTML-Dokumente verweisen, zurückverweisen und weiterverweisen. Das Surfbare Internet wie wir es heute kennen ist im Endeffekt also eine Sammlung verlinkter HTML-Dokumente.
+
+
+:::def[`<a href="pfad/zu/html">Link-Text</a>`]
+Ein Link wird mit einem `<a>`-Tag erzeugt
+- das Attribut `href` das Link-Ziel angibt
+- der Inhalt des Tags als Link-Text angezeigt wird
+:::
+
+<HtmlIDE>
+```html path=/index.html hideWarning
+<h1>Startseite</h1>
+Willkommen auf meiner Webseite!
+<a href="./pages/first.html">Hier klicken</a> um zur nächsten Seite zu kommen.
+```
+```html path=/pages/first.html hideWarning
+<h1>Seite 1</h1>
+<ul>
+    <li>
+        <a href="./second.html">Zur nächsten Seite</a>
+    </li>
+    <li>
+        <a href="../index.html">Zurück zur Startseite</a>
+    </li>
+</ul>
+```
+```html path=/pages/second.html hideWarning
+<h1>Seite 2</h1>
+<ul>
+    <li>
+        <a href="./first.html">Zur zu Seite 1</a>
+    </li>
+    <li>
+        <a href="../index.html">Zurück zur Startseite</a>
+    </li>
+</ul>
+```
+</HtmlIDE>
+
+:::aufgabe[Ausprobieren]
+<Answer type="state" id="754a95c2-41a7-4dde-af3a-3afc6fa5151c" />
+
+Probieren Sie obiges Beispiel aus, klicken Sie die einzelnen Links und versuchen Sie zu verstehen, wie die HTML-Dokumente untereinander verlinkt sind.
+:::
+
+:::aufgabe[Seite verlinken und lokal nachbauen]
+<HtmlIDE
+    assets={{
+        '/assets/logo.jpg': 'https://static.wikia.nocookie.net/starwars/images/c/cc/Star-wars-logo-new-tall.jpg',
+        '/assets/characters.jpg': 'https://static.wikia.nocookie.net/starwars/images/c/cb/Star_Wars_poster.jpg',
+        '/assets/planeten.jpg': 'https://www.serieslyawesome.tv/wp-content/uploads/2025/06/star-wars-karte-galaxie-02_small.jpg',
+        '/assets/millenium-falcon.jpg': 'https://s.abcnews.com/images/Entertainment/HT-millenium-falcon-jef-170206_4x5_992.jpg',
+        '/assets/star-destroyer.jpg': 'https://s.abcnews.com/images/Entertainment/HT-x-wing-jef-170206.jpg',
+        '/assets/droiden.jpg': 'https://www.liveabout.com/thmb/yWGrm_8Kxli_jl4FZYOMUalM6RA=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/R2D2-C3PO_EP4-KEY-63_R_8x10-56a839973df78cf7729d2569.jpg'
+    }}
+>
+```html path=/index.html id=fe87d47a-6022-4ff4-834f-3247cf34966f
+<h1>Star Wars</h1>
+<img src="./assets/logo.jpg" alt="Star Wars Logo" width="300">
+```
+```html path=/charaktere.html id=191e249c-ddef-41d8-9c40-7c1af00973f7
+<h1>Charaktere</h1>
+<img src="./assets/characters.jpg" width="300">
+<ul>
+    <li>Luke Skywalker</li>
+    <li>Leia Organa</li>
+    <li>Darth Vader</li>
+</ul>
+```
+```html path=/planeten.html id=eaaa57f6-0396-4b17-a4b9-dcde96eb642d
+<h1>Planeten</h1>
+<img src="./assets/planeten.jpg" width="300">
+<ul>
+    <li>Tatooine</li>
+    <li>Alderaan</li>
+    <li>Hoth</li>
+</ul>
+```
+```html path=/technologie/raumschiffe.html id=3b25b473-fe17-4db6-8a40-868a8a8e7fb6
+<h1>Raumschiffe</h1>
+<img src="../assets/millenium-falcon.jpg" alt="Millennium Falcon" width="300">
+<ul>
+    <li>Millennium Falcon</li>
+    <li>X-Wing</li>
+    <li>Sternenzerstörer</li>
+</ul>
+<img src="../assets/star-destroyer.jpg" width="300">
+```
+```html path=/technologie/droiden.html id=d796693c-f03b-4129-8451-c4cdb810320f
+<h1>Droiden</h1>
+<img src="../assets/droiden.jpg" width="300">
+<ul>
+    <li>R2-D2</li>
+    <li>C-3PO</li>
+    <li>BB-8</li>
+</ul>
+```
+</HtmlIDE>
+
+<ProgressState id="6adae2c9-96b8-426a-b173-7499001765d0">
+1. Öffnen Sie alle HTML-Seiten und flicken Sie allfällige Fehler bei den Bild-Links.
+2. Fügen Sie eine Navigation zwischen den Seiten hinzu. Jede Seite soll **3 Links** haben:
+    - "Zurück zur Startseite" um auf die Startseite kommen
+    - "Weiter" um zur nächsten Seite zu kommen
+    - "Vorherige" um zur vorherigen Seite zu kommen.
+
+    Klickt man immer auf "Weiter", soll man zum Schluss wieder auf der Startseite landen, wobei die Reihenfolge Ihnen überlassen ist.
+3. Fügen Sie die Navigations-Links in ein `<nav>` Tag ein.
+4. (Freiwillig) Fügen Sie weitere passende Details, Bilder, Videos oder Sound zu den einzelnen Seiten hinzu.
+5. Laden Sie nun jede HTML-Seite auf Ihren Computer herunter. Zusätzlich brauchen Sie auch alle Bilder:
+    - <a download="logo.jpg" target="_blank" href="https://static.wikia.nocookie.net/starwars/images/c/cc/Star-wars-logo-new-tall.jpg">logo.jpg</a>
+    - <a download="characters.jpg" target="_blank" href="https://static.wikia.nocookie.net/starwars/images/c/cb/Star_Wars_poster.jpg">characters.jpg</a>
+    - <a download="planeten.jpg" target="_blank" href="https://www.serieslyawesome.tv/wp-content/uploads/2025/06/star-wars-karte-galaxie-02_small.jpg">planeten.jpg</a>
+    - <a download="millenium-falcon.jpg" target="_blank" href="https://s.abcnews.com/images/Entertainment/HT-millenium-falcon-jef-170206_4x5_992.jpg">millenium-falcon.jpg</a>
+    - <a download="star-destroyer.jpg" target="_blank" href="https://s.abcnews.com/images/Entertainment/HT-x-wing-jef-170206.jpg">star-destroyer.jpg</a>
+    - <a download="droiden.jpg" target="_blank" href="https://www.liveabout.com/thmb/yWGrm_8Kxli_jl4FZYOMUalM6RA=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/R2D2-C3PO_EP4-KEY-63_R_8x10-56a839973df78cf7729d2569.jpg">droiden.jpg</a>
+
+6. Erstellen Sie einen neuen Ordner `star-wars` und legen Sie die HTML-Files in diesem Ordner ab. **Die Ordnerstruktur muss mit derjenigen hier übereinstimmen!**
+7. Öffnen Sie die Seite in einem Browser und überprüfen Sie, dass alle Links funktionieren.
+</ProgressState>
+:::
