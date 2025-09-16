@@ -10,7 +10,7 @@ const duration = (anim: SVGAnimateElement) => {
     return 0;
 };
 
-const saveSvg = (svgEl: SVGSVGElement, name: string, code?: string, animated?: boolean) => {
+export const toSvg = (svgEl: SVGSVGElement, code?: string, animated?: boolean) => {
     svgEl.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
 
     const bbox = svgEl.getBBox();
@@ -70,7 +70,13 @@ const saveSvg = (svgEl: SVGSVGElement, name: string, code?: string, animated?: b
         svg.appendChild(metadata);
     }
 
-    var svgBlob = new Blob([wrapper.innerHTML], {
+    return [wrapper.innerHTML, animDuration] as const;
+};
+
+const saveSvg = (svgEl: SVGSVGElement, name: string, code?: string, animated?: boolean) => {
+    const [svgContent, animDuration] = toSvg(svgEl, code, animated);
+
+    var svgBlob = new Blob([svgContent], {
         type: 'image/svg+xml;charset=utf-8'
     });
     var svgUrl = URL.createObjectURL(svgBlob);
