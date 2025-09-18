@@ -90,6 +90,9 @@ const getSiteConfig: SiteConfigProvider = () => {
             personalSpaceOverlay,
             loginProfileButton
         ],
+        showEditThisPage: 'teachers',
+        showEditThisPageOptions: ['github', 'github-dev', 'cms'],
+        editThisPageCmsUrl: '/cms/',
         footer: {
             links: [
                 {
