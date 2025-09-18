@@ -57,17 +57,19 @@ Ein Beispiel dafür ist das Multiplizieren zweier (Prim-)Zahlen. Jeder Computer 
 
 :::aufgabe[Aufwand für den Computer]
 <TaskState id="005edc1e-5908-4bc7-a031-9f79a540e770" />
-1. Wie schnell kann der Computer multiplizieren und faktorisieren? Überprüfen Sie mit dem folgenden Tool, wie schnell Ihr Computer beim Multiplizieren und Faktorisieren ist. Nehmen Sie für Primzahlen mit `6`, `7` und `8` Nehmen Sie mehrere ($>3$) Messungen vor.
-2. Halten Sie die Messergebnisse fest.
-3. Was bedeutet es für eine kryptographische Anwendungen, wenn die beiden Primzahlen statt `8` Stellen mehrere hundert Stellen lang sind?
+1. Wie schnell sind Computer beim Multiplizieren und Faktorisieren? Überprüfen Sie mit dem untenstehenden Experimentier-Tool, wie schnell Ihr Computer beim Multiplizieren und Faktorisieren von grossen Primzahlen ist. Verwenden Sie für jede Grössenordnung (6, 7, 8, evtl. 9 und 10 stellige Primzahlen) mehrere ($>3$) Messungen vor.
+2. Halten Sie die Messergebnisse fest - kopieren Sie dazu den Plott der Messwerte als Bild in die Antwort.
+3. Was bedeutet es für eine kryptographische Anwendungen, wenn die beiden Primzahlen statt `9` oder `10` Stellen mehrere hundert Stellen lang sind?
 
 <QuillV2 id="cf5670a3-e0ea-45f9-8705-002b312c72da" />
 
 <Solution id="1d39392f-c263-4c86-8b86-8f182fd39e80">
-Messwerte auf einem modernen Laptop:
-* Mit 6 Stellen: 0ms zum Multiplizieren, ca. 70ms zum Faktorisieren
-* Mit 7 Stellen: 0ms zum Multiplizieren, ca. 420ms zum Faktorisieren
-* Mit 8 Stellen: 1ms zum Multiplizieren, ca. 1300ms zum Faktorisieren
+Messwerte auf einem modernen Laptop für zwei Primzahlen mit...:
+* ... 6 Stellen: \<1ms zum Multiplizieren, ca. 10ms zum Faktorisieren
+* ... 7 Stellen: \<1ms zum Multiplizieren, ca. 110ms zum Faktorisieren
+* ... 8 Stellen: \<1ms zum Multiplizieren, ca. 1 Sekunde zum Faktorisieren
+* ... 9 Stellen: \<1ms zum Multiplizieren, ca. \>1 Minute zum Faktorisieren
+* ... 10 Stellen: \<1ms zum Multiplizieren, ca. \>13 Minute zum Faktorisieren
 
 Je nach Grösse der Zahl würde es Tage, Monate, oder sogar Billionen von Jahren dauern, um eine so grosse Zahl in ihre Primfaktoren zu zerlegen. Das erinnert Sie vielleicht an das Beispiel mit der geheimen Farbmischung...!
 <br/>

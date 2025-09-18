@@ -57,7 +57,7 @@ const Stage = (props: StageProps) => {
                     <Badge color="green">
                         <Icon path={Play} size={SIZE_XS} color="white" />
                         <Icon path={mdiClock} size={SIZE_XS} color="white" />{' '}
-                        {props.result.time_ms.toFixed(1)} ms
+                        {props.result.time_ms < 1 ? '<1' : props.result.time_ms.toFixed(1)} ms
                     </Badge>
                 )}
             </div>
@@ -251,7 +251,20 @@ const PrimefactorizationTiming = () => {
     return (
         <div className={clsx('hero', 'shadow--lw', shared.container, shared.factorization)}>
             <div className="container">
-                <p className="hero__subtitle">Zeitanalyse Primfaktorzerlegung</p>
+                <p className="hero__subtitle" style={{ marginBottom: '0' }}>
+                    Zeitanalyse Primfaktorzerlegung
+                </p>
+                <p style={{ fontSize: '80%' }}>
+                    Mit diesem Tool können Sie die Zeit messen, die Ihr Computer benötigt, um
+                    <ol style={{ marginBottom: '0' }}>
+                        <li>zwei Primzahlen zu finden</li>
+                        <li>das Produkt der beiden Primzahlen zu berechnen</li>
+                        <li>das Produkt wieder in seine Primfaktoren zu zerlegen</li>
+                    </ol>
+                    Die Ergebnisse werden in einem Scatterplot dargestellt, wobei auf der x-Achse die Anzahl
+                    Stellen des Produkts und auf der y-Achse die benötigte Zeit in Millisekunden aufgetragen
+                    ist.
+                </p>
                 Primzahlen mit
                 <div className={clsx('button-group', shared.digits)}>
                     {[6, 7, 8, 9, 10].map((d) => (
@@ -271,18 +284,6 @@ const PrimefactorizationTiming = () => {
                     ))}
                 </div>
                 Stellen
-                <div className={styles.reset}>
-                    <Button
-                        text="Zurücksetzen"
-                        onClick={() => {
-                            setMeasures([]);
-                            setStage(0);
-                            workerRef.current?.terminate();
-                            workerRef.current = null;
-                            setIsFactoring(false);
-                        }}
-                    />
-                </div>
                 <Stage
                     onStage={onStage1}
                     label={`Zwei Primzahlen zwischen ${hNumber(range[0])} und ${hNumber(range[1])} wählen`}
@@ -333,6 +334,20 @@ const PrimefactorizationTiming = () => {
                             }
                         />
                     </>
+                )}
+                {measurements.length > 0 && (
+                    <div className={styles.reset}>
+                        <Button
+                            text="Zurücksetzen"
+                            onClick={() => {
+                                setMeasures([]);
+                                setStage(0);
+                                workerRef.current?.terminate();
+                                workerRef.current = null;
+                                setIsFactoring(false);
+                            }}
+                        />
+                    </div>
                 )}
                 {measurements.length > 0 && (
                     <div className={clsx(styles.scatter)}>
