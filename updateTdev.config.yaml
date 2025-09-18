@@ -10,6 +10,10 @@ trackedElements:
           - pages/__index.tsx
           - pages/.gitignore
           - theme/**
+          - components/documents/CodeEditor/Editor/Result/Graphics/Turtle.tsx
+          - components/documents/CodeEditor/Editor/utils/saveSvg.ts
+          - components/documents/CodeEditor/utils/tests/plugin.test.ts
+          - components/documents/CodeEditor/utils/svg2grbl.ts
     - src: src/theme/Root.tsx
       dst: src/theme/Root.tsx
     - src: packages/tdev/
