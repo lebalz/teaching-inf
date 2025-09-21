@@ -1,31 +1,31 @@
 - cells:
     - 20.08.2025
-    - A
+    - B
     - Programmieren 1
     - Algorithmen & RoboZZle
 - cells:
     - 27.08.2025
-    - B
+    - A
     - Programmieren 1
     - Algorithmen & RoboZZle
 - cells:
     - 03.09.2025
-    - A
+    - B
     - Programmieren 1
     - Algorithmen & Einstieg Turtlegrafik
 - cells:
     - 10.09.2025
-    - B
+    - A
     - Programmieren 1
     - Algorithmen & Einstieg Turtlegrafik
 - cells:
     - 17.09.2025
-    - A
+    - B
     - Programmieren 1
     - Wiederholte Ausführung
 - cells:
     - 24.09.2025
-    - B
+    - A
     - Programmieren 1
     - Wiederholte Ausführung
 - cells:
@@ -49,47 +49,47 @@
   type: holiday
 - cells:
     - 22.10.2025
-    - A
+    - B
     - Programmieren 1
     - Unterprogramme und Fehler
 - cells:
     - 29.10.2025
-    - B
+    - A
     - Programmieren 1
     - Unterprogramme und Fehler
 - cells:
     - 05.11.2025
-    - A
+    - B
     - Programmieren 1
     - Parameter
 - cells:
     - 12.11.2025
-    - B
+    - A
     - Programmieren 1
     - Parameter
 - cells:
     - 19.11.2025
-    - A
+    - B
     - Programmieren 1
     - Variablen, Eingabe & Ausgabe
 - cells:
     - 26.11.2025
-    - B
+    - A
     - Programmieren 1
     - Variablen, Eingabe & Ausgabe
 - cells:
     - 03.12.2025
-    - A
-    - Programmieren 1
-    - Verzweigungen
-- cells:
-    - 10.12.2025
     - B
     - Programmieren 1
     - Verzweigungen
 - cells:
-    - 17.12.2025
+    - 10.12.2025
     - A
+    - Programmieren 1
+    - Verzweigungen
+- cells:
+    - 17.12.2025
+    - B
     - Programmieren 1
     - Listen
 - cells:
@@ -108,17 +108,17 @@
   icon: mdiPineTreeVariantOutline
 - cells:
     - 07.01.2026
-    - B
-    - Programmieren 1
-    - Listen
-- cells:
-    - 14.01.2026
     - A
     - Programmieren 1
     - Listen
 - cells:
-    - 21.01.2026
+    - 14.01.2026
     - B
+    - Programmieren 1
+    - Listen
+- cells:
+    - 21.01.2026
+    - A
     - Programmieren 1
     - Listen
 - cells:
@@ -130,7 +130,7 @@
   icon: mdiFlagCheckered
 - cells:
     - 28.01.2026
-    - A
+    - B
     - Programmieren 1
     - Abschluss
 - cells:
