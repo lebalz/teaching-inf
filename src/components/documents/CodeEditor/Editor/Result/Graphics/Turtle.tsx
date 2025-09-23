@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './styles.module.scss';
 import { DOM_ELEMENT_IDS } from '@tdev-components/documents/CodeEditor/constants';
 import Graphics from '@tdev-components/documents/CodeEditor/Editor/Result/Graphics';
-import { saveSvg, toSvg } from '@tdev-components/documents/CodeEditor/Editor/utils/saveSvg';
+import { saveSvg } from '@tdev-components/documents/CodeEditor/Editor/utils/saveSvg';
 import Button from '@tdev-components/documents/CodeEditor/Button';
 import clsx from 'clsx';
 import { useDocument } from '@tdev-hooks/useContextDocument';
@@ -10,6 +10,7 @@ import { DocumentType } from '@tdev-api/document';
 import { observer } from 'mobx-react-lite';
 import { mdiAnimationPlay, mdiDownload, mdiStateMachine } from '@mdi/js';
 import { saveGrbl } from '@tdev-components/documents/CodeEditor/utils/svg2grbl';
+import type File from '@tdev-models/documents/FileSystem/File';
 
 const Turtle = observer(() => {
     const script = useDocument<DocumentType.Script>();
@@ -26,7 +27,10 @@ const Turtle = observer(() => {
                             if (turtleResult) {
                                 saveGrbl(
                                     turtleResult,
-                                    (script.meta.title || 'cnc').replace('.py', ''),
+                                    (script.meta.title || (script.parent as File)?.name || 'cnc').replace(
+                                        '.py',
+                                        ''
+                                    ),
                                     script.code
                                 );
                             }

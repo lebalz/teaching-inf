@@ -149,6 +149,24 @@ const convert2Grbl = (element: Node | RootNode | string): string[] => {
                 lastLineEnding = [x2, y2];
                 break;
             case 'circle':
+                const { cx, cy, r } = properties;
+                if (cx === undefined || cy === undefined || r === undefined) {
+                    return grbl;
+                }
+                const radius = Number(r) * scale;
+                grbl.push(GLOBAL_MODE);
+                const centerX = toPrecision((Number(cx) + x0) * scale);
+                const centerY = toPrecision((Number(cy) + y0) * scale);
+                const startX = toPrecision(centerX + radius);
+                const startY = centerY;
+                grbl.push(...penUp());
+                grbl.push(`G0 X${startX} Y${startY}`);
+                grbl.push(...penDown());
+                grbl.push(`G2 X${startX} Y${startY} I-${radius} J0 F${DRAW_SPEED}`);
+                grbl.push(GLOBAL_MODE);
+                grbl.push(...penUp());
+                grbl.push(`G0 X${centerX} Y${centerY}`);
+                grbl.push(...penDown());
                 break;
             case 'text':
                 break;
