@@ -43,6 +43,9 @@ const PasswordChecker = () => {
     React.useEffect(() => {
         loadJS('/js/hsimp.min.js').then(() => {
             const lib = (window as any).hsimp;
+            if (!lib) {
+                return;
+            }
             lib.setDictionary(DICTIONARY);
             lib.setPeriodDictionary(PERIOD_DICTIONARY);
             lib.setNamedNumberDictionary(NAMED_NUMBER_DICTIONARY);

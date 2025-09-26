@@ -40,19 +40,58 @@ Die **iterierte Quersumme** ist die Quersumme, die entsteht, wenn man solange im
 
 Die **alternierende Quersumme** entsteht durch abwechslungweises Addieren und Subtrahieren der einzelnen Ziffern (für 1234 lautet diese 1 - 2 + 3 - 4 = -2).
 
-:::aufgabe[Tabelle vervollständigen]
+::::aufgabe[Tabelle vervollständigen]
 <TaskState id="9c2b620d-d38d-4783-9662-042420cdcd40" />
 
 Vervollständigen Sie die oben stehende Tabelle auf Papier. Anstelle der in den Passwörtern enthaltenen Buchstaben können Sie die unten stehenden Zahlen einsetzen. Machen Sie am Schluss ein Foto Ihrer Tabelle und fügen Sie dieses hier ein:
 
 <QuillV2 id="1f008e64-69d8-4fd2-9107-01aaf56dc776" />
 
-<div className="slim-table no-table-header">
-|            |                                                                        |
-| :--------- | :--------------------------------------------------------------------- |
-| Buchstaben | `A B C D E F G H I _J _K _L _M _N _O _P _Q _R _S _T _U _V _W _X _Y _Z` |
-| Zahlen     | `1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26` |
-</div>
+:::flex{.slim-table .no-table-header justifyContent="space-around"}
+|     |      |
+|:----|-----:|
+| **A** | &nbsp;`1`  |
+| **B** | `2`  |
+| **C** | `3`  |
+| **D** | `4`  |
+| **E** | `5`  |
+| **F** | `6`  |
+::br
+|     |      |
+|:----|-----:|
+| **G** | `7`  |
+| **H** | `8`  |
+| **I** | `9`  |
+| **J** | `10` |
+| **K** | `11` |
+| **L** | `12` |
+::br
+|     |      |
+|:----|-----:|
+| **M** | `13` |
+| **N** | `14` |
+| **O** | `15` |
+| **P** | `16` |
+| **Q** | `17` |
+| **R** | `18` |
+::br
+
+|     |      |
+|:----|-----:|
+| **S** | `19` |
+| **T** | `20` |
+| **U** | `21` |
+| **V** | `22` |
+| **W** | `23` |
+| **X** | `24` |
+::br
+
+|     |      |
+|:----|-----:|
+| **Y** | `25` |
+| **Z** | `26` |
+
+:::
 
 1. Welche der beiden Funktionen würden Sie wählen, um die Passwörter zu speichern?
 2. Welche Probleme sehen Sie bei beiden Funktionen?
@@ -65,7 +104,7 @@ Vervollständigen Sie die oben stehende Tabelle auf Papier. Anstelle der in den 
 1. Bei der iterierten Quersumme muss das Ergebnis immer einstellig sein. Es gibt somit nur 10 mögliche Prüfsummen und somit viele **Kollisionen**: Mehrere Passwörter haben dieselbe Prüfsumme. Das ist nicht ideal. Deshalb ist die alternierende Quersumme besser geeignet, um Passwörter zu speichern.
 2. Auch bei der alternierenden Quersumme gibt es noch viele _Kollisionen_. Wenn ein Benutzer (Bob) beispielsweise das Passwort `donald` wählt, speichern wir die Prüfsumme `5` in unserer Datenbank. Wenn eine Angreiferin (Eve) nun versucht, Bobs Passwort zu knacken, könnte sie beispielsweise das Passwort `eve` ausprobieren, welches ebenfalls zur Prüfsumme `5` führt. Da wir nur die Prüfsumme und nicht das eigentliche Passwort gespeichert haben, können wir natürlich auch nur die Prüfsummen vergleichen. Weil bei `eve` nun ebenfalls `5` herauskommt, müssen wir davon ausgehen, dass Eve das korrekte Passwort eingegeben hat. Je mehr Kollisionen eine Prüfsumme aufweist, desto mehr «falsche» Passwörter können also fälschlicherweise als korrekt interpretiert werden. Das erhöht die Chance eines erfolgreichen Angriffs. 
 </Solution>
-:::
+::::
 
 :::insight[Wunsch: Injektiviät]
 Idealerweise gehört zu jeder Prüfsumme höchstens ein Passwort. Oder anders formuliert: Kollisionen sollen vermieden werden. Das bedeutet, dass jedes Passwort eine andere Prüfsumme erhalten soll.
