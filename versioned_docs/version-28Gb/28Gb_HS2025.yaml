@@ -49,33 +49,33 @@
   type: test
 - cells:
     - 07.11.2025
-    - Programmieren 2
-    - Wiederholung, Einstieg MicroBit
+    - Computer
+    - Logische Schaltungen 1
 - cells:
     - 14.11.2025
-    - Programmieren 2
-    - Datenstrukturen, Listen, MicroBit
+    - Computer
+    - Logische Schaltungen 2
 - cells:
     - 21.11.2025
-    - Programmieren 2
-    - Robotik
+    - Computer
+    - Halbaddierer
 - cells:
     - 28.11.2025
-    - Programmieren 2
-    - Robotik
+    - Computer
+    - Volladdierer, Speichern
 - cells:
     - 05.12.2025
-    - Programmieren 2
-    - Robotik
+    - Computer
+    - Rechnerarchitektur
 - cells:
     - 12.12.2025
-    - Programmieren 2
-    - "Wettbewerb: Robotik"
+    - Computer
+    - Test
   type: test
 - cells:
     - 19.12.2025
     - Programmieren 2
-    - Game of Life
+    - Wiederholung, Einstieg MicroBit
 - cells:
     - 26.12.2025
     - Winterferien
@@ -90,12 +90,12 @@
   icon: mdiPineTreeVariantOutline
 - cells:
     - 09.01.2026
-    - Computer
-    - Logische Schaltungen 1
+    - Programmieren 2
+    - Datenstrukturen, Listen, MicroBit
 - cells:
     - 16.01.2026
-    - Computer
-    - Logische Schaltungen 2
+    - Programmieren 2
+    - Robotik
 - cells:
     - 22.01.2026
     - Notenschluss
@@ -104,12 +104,12 @@
   icon: mdiFlagCheckered
 - cells:
     - 23.01.2026
-    - Computer
-    - Halbaddierer
+    - Programmieren 2
+    - Robotik
 - cells:
     - 30.01.2026
-    - Computer
-    - Volladdierer, Speichern
+    - Programmieren 2
+    - Robotik
 - cells:
     - 02.02.2026
     - Beginn Semester 2
@@ -117,12 +117,14 @@
   type: event
   icon: mdiRun
 - cells:
-    - 06.02.2026
-    - Netzwerke
-    - Einstieg
+    - 03.02.2026
+    - Programmieren 2
+    - "Wettbewerb: Robotik"
+  type: test
 - cells:
-    - 13.02.2026
+    - 10.02.2026
     - Sportwoche
     - 
   type: holiday
   icon: mdiWeatherSnowyHeavy
+
