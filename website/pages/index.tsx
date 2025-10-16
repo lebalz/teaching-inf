@@ -17,6 +17,7 @@ import bib6 from '@site/static/img/index/compsci-6.json';
 import Button from '@tdev-components/shared/Button';
 import { mdiShuffleVariant } from '@mdi/js';
 import { SIZE_M } from '@tdev-components/shared/iconSizes';
+import { observer } from 'mobx-react-lite';
 
 function HomepageHeader() {
     const { siteConfig } = useDocusaurusContext();
@@ -28,9 +29,6 @@ function HomepageHeader() {
             </div>
         </header>
     );
-}
-interface Props {
-    readonly recentPosts: readonly { readonly content: Content }[];
 }
 
 const VideoWallpaper = ({
@@ -72,7 +70,7 @@ const VideoWallpaper = ({
     );
 };
 
-export default function Home({ recentPosts }: Props): React.ReactNode {
+const Home = observer(() => {
     const videos = React.useRef([
         { src: '/img/index/compsci-1.mp4', bib: bib1 },
         { src: '/img/index/compsci-2.mp4', bib: bib2 },
@@ -144,4 +142,5 @@ export default function Home({ recentPosts }: Props): React.ReactNode {
             </Layout>
         </div>
     );
-}
+});
+export default Home;

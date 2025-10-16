@@ -5,6 +5,7 @@ import Link from '@docusaurus/Link';
 import siteConfig from '@generated/docusaurus.config';
 import { useStore } from '@tdev-hooks/useStore';
 import useIsBrowser from '@docusaurus/useIsBrowser';
+import { observer } from 'mobx-react-lite';
 const { DOCS_ONLY } = siteConfig.customFields as { DOCS_ONLY?: boolean };
 
 interface Klass {
@@ -86,7 +87,7 @@ const CourseComponent = ({ course }: { course: Course }) => {
     );
 };
 
-export default function HomepageCourses() {
+const HomepageCourses = observer(() => {
     const userStore = useStore('userStore');
     const isBrowser = useIsBrowser();
     return (
@@ -110,4 +111,6 @@ export default function HomepageCourses() {
             </div>
         </section>
     );
-}
+});
+
+export default HomepageCourses;
