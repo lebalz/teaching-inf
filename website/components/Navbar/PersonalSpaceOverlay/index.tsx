@@ -7,32 +7,49 @@ import Directory from '@tdev-components/documents/FileSystem/Directory';
 import React from 'react';
 import { PopupActions } from 'reactjs-popup/dist/types';
 import siteConfig from '@generated/docusaurus.config';
+import { observer } from 'mobx-react-lite';
+import { useStore } from '@tdev-hooks/useStore';
+import useIsBrowser from '@docusaurus/useIsBrowser';
+import { authClient } from '@tdev/auth-client';
 const { PERSONAL_SPACE_DOC_ROOT_ID } = siteConfig.customFields as { PERSONAL_SPACE_DOC_ROOT_ID: string };
 
-const PersonalSpaceOverlay = () => {
+const PersonalSpaceOverlay = observer(() => {
+    const { data: session } = authClient.useSession();
+    const isBrowser = useIsBrowser();
+    const sessionStore = useStore('sessionStore');
     const popupRef = React.useRef<PopupActions>(null);
+    if (!isBrowser) {
+        return null;
+    }
+
+    if (sessionStore.apiMode === 'api' && !session?.user) {
+        return null;
+    }
 
     return (
         <Popup
             trigger={
                 <div className={styles.buttonWrapper}>
                     <Button
-                        className={clsx('button--block', styles.button)}
+                        className={clsx(styles.button)}
                         onClick={(e) => {
                             e.preventDefault();
                         }}
                         icon={mdiFolderHomeOutline}
-                        size={0.95}
                         color="primary"
                         iconSide="left"
+                        title="Persönlicher Bereich"
+                        text="Persönlicher Bereich"
+                        textClassName={clsx(styles.text)}
                     />
                 </div>
             }
             on="click"
             modal
+            lockScroll
             closeOnDocumentClick={false}
             overlayStyle={{
-                background: 'rgba(0,0,0,0.6)',
+                background: 'rgba(0,0,0,0.5)',
                 width: '100vw',
                 display: 'block'
             }}
@@ -50,6 +67,6 @@ const PersonalSpaceOverlay = () => {
             </div>
         </Popup>
     );
-};
+});
 
 export default PersonalSpaceOverlay;
