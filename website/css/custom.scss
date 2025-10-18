@@ -80,6 +80,11 @@ html[data-theme='dark'] {
         backdrop-filter: blur(8px);
         --ifm-navbar-background-color: #ffffff9e;
     }
+
+    .clean-btn.theme-back-to-top-button {
+        backdrop-filter: blur(8px);
+        --ifm-color-emphasis-200: #ffffff9e;
+    }
 }
 html[data-theme='dark'] {
     #__docusaurus {
