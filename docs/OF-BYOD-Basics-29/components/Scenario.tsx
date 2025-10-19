@@ -18,8 +18,8 @@ const getGridSettings = (_nr?: number) => {
     const nr = _nr % 8;
     const isEven = nr % 2 === 0;
     return {
-        gridColumnStart: isEven ? 2 : 1,
-        gridColumnEnd: isEven ? 3 : 2,
+        gridColumnStart: isEven ? 1 : 2,
+        gridColumnEnd: isEven ? 2 : 3,
         gridRowStart: Math.ceil(nr / 2),
         gridRowEnd: Math.ceil(nr / 2) + 1
     };
