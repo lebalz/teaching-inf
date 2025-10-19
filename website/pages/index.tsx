@@ -102,7 +102,7 @@ const Home = observer(() => {
         <div className={clsx('no-search')}>
             <Layout>
                 <HomepageHeader />
-                <main>
+                <main className={clsx(styles.main)}>
                     <div className={clsx(styles.galleryWrapper)}>
                         {videosToShow.map((vid, idx) => {
                             return (

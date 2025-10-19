@@ -105,8 +105,6 @@
         }
     }
 }
-:global(#__docusaurus) {
-    :global(main) {
-        margin: 0;
-    }
+.main {
+    margin: 0;
 }
