@@ -8,15 +8,21 @@ interface Props {
     isOsx?: boolean;
     children: React.ReactNode;
     nr: number;
+    scenarioNr?: number;
 }
+
+export const ScenarioNrContext = React.createContext<number>(1);
+
 
 const Page = (props: Props) => {
     
     return (
-        <div className={clsx(styles.page)}>
-            <Badge className={clsx(styles.pageNr)} color='gray'>{props.nr}</Badge>
-            {props.children}
-        </div>
+        <ScenarioNrContext.Provider value={props.scenarioNr ?? 1}>
+            <div className={clsx(styles.page)}>
+                <Badge className={clsx(styles.pageNr)} color='gray'>{props.nr}</Badge>
+                {props.children}
+            </div>
+        </ScenarioNrContext.Provider>
     );
 };
 
