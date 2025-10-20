@@ -1,0 +1,98 @@
+---
+page_id: 4a267a23-c74b-4119-a5d9-202822db0545
+---
+
+import HtmlEditor from '@tdev-components/documents/CodeEditor/HtmlEditor';
+
+# CSS
+
+CSS (*Cascading Style Sheets*) ist eine Stylesheet-Sprache, die verwendet wird, um das Aussehen und die Formatierung von HTML-Dokumenten zu beschreiben. Mit CSS können das Layout, die Farben, Schriftarten und andere visuelle Aspekte von Webseiten gesteuert werden.
+
+::::cards{flexBasis="300px" gap="1em"}
+<HtmlEditor hideWarning>
+    ```html
+    <html>
+        <head>
+            <style>
+                h1 {
+                    color: blue;
+                }
+                code {
+                    background-color: yellow;
+                }
+            </style>
+        </head>
+        <body>
+            <h1>HTML</h1>
+            <div>
+                Ein <code>div</code>-Tag steht für "Division", also für einen Bereich mit beliebigem Inhalt.
+                <p>
+                    Ein <code>p</code>-Tag steht für "Paragraph", ein Bereich mit <b>Textinhalten</b>.
+                </p>
+            </div>
+        </body>
+    </html>
+    ```
+</HtmlEditor>
+::br
+Im `<style>`-Tag wird in der `CSS`-Syntax der Stil für dieses Dokument definiert.
+
+:::info[Selektoren]
+Mit einem __Selektor__ wird ein Element ausgewählt (z.B. `h1` oder `code`) und in geschweiften Klammern `{}` werden die __Eigenschaften__ und deren __Werte__ angegeben (z.B. `color: blue;` oder `background-color: yellow;`).
+:::
+
+- Z.4: Mit dem Selektor `h1` werden alle Überschriften der Ebene 1 ausgewählt und auf Z.5 deren **Textfarbe** auf Blau gesetzt.
+  :::aufgabe[Ausprobieren]
+  Fügen Sie eine weitere h1-Überschrift hinzu und beobachten Sie, wie diese automatisch blau dargestellt wird.
+  :::
+- Z.8: Mit dem Selektor `code` werden alle Code-Elemente ausgewählt und auf Z.9 deren **Hintergrundfarbe** auf Gelb gesetzt.
+
+::::
+
+:::info[Dokument-Struktur]
+Jetzt wo CSS verwendet wird, strukturieren wir das HTML-Dokument etwas um, wobei Inhalte unterschieden werden, ob sie für die Darstellung (im `<head>`) oder für den eigentlichen Inhalt (im `<body>`) zuständig sind.
+```html
+<html>
+    <head>
+        <!-- Hier kommen Metadaten und CSS-Definitionen hin -->
+    </head>
+    <body>
+        <!-- Hier kommt der eigentliche Seiteninhalt hin -->
+    </body>
+</html>
+```
+:::
+
+::::insight[Cascading]
+Das "Cascading" in CSS bezieht sich auf die Art und Weise, wie Stylesheets angewendet werden, wenn mehrere Regeln auf dasselbe Element zutreffen. In solchen Fällen wird die Regel mit der höchsten __Spezifität__ (also die präziseste Beschreibung des auszuwählenden Elements) oder die __zuletzt definierte Regel__ angewendet.
+
+:::details[Beispiel]
+
+In diesem Beispiel werden zwei verschiedene Hintergrundfarben für das `code`-Element definiert: Gelb und Grün. Da die grüne Regel zuletzt definiert wurde, wird sie angewendet, und alle `code`-Elemente haben einen grünen Hintergrund.
+<HtmlEditor hideWarning>
+    ```html
+    <html>
+        <head>
+            <style>
+                code {
+                    background-color: yellow;
+                }
+                code {
+                    background-color: green;
+                }
+            </style>
+        </head>
+        <body>
+            <h1>HTML</h1>
+            <div>
+                Ein <code>div</code>-Tag steht für "Division", also für einen Bereich mit beliebigem Inhalt.
+                <p>
+                    Ein <code>p</code>-Tag steht für "Paragraph", ein Bereich mit <b>Textinhalten</b>.
+                </p>
+            </div>
+        </body>
+    </html>
+    ```
+</HtmlEditor>
+:::
+::::

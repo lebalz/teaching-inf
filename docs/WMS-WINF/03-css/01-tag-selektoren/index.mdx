@@ -1,0 +1,25 @@
+---
+page_id: 1a426fe3-524f-41b4-98fe-3dacff9354f1
+unlisted: true
+---
+
+import HtmlEditor from '@tdev-components/documents/CodeEditor/HtmlEditor';
+import CvHtml from '!!raw-loader!./assets/cv.html';
+import CvCss from '!!raw-loader!./assets/cv.css';
+
+export const combinedCode = (html, css) => {
+    const indentedCss = css
+        .split('\n')
+        .map(line => `        ${line}`)
+        .join('\n');
+    return html.replace(`<style>\n    </style>`, `<style>\n${indentedCss}\n</style>`);
+}
+
+# Tag-Selektoren
+
+## Spezifität
+
+## Tag-Selektoren und Stilregeln
+
+<HtmlEditor hideWarning minHeight={'800px'} code={CvHtml} />
+<HtmlEditor hideWarning minHeight={'800px'} code={combinedCode(CvHtml, CvCss)} />
