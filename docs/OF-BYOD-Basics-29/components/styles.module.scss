@@ -1,4 +1,6 @@
+
 .scenario {
+    box-sizing: content-box;
     font-size: 12px;
     --ifm-h3-font-size: 16px;
     --ifm-heading-margin-bottom: 4px;
@@ -7,7 +9,6 @@
     border: 1px solid black;
     border-radius: 8px;
     padding: 4px;
-    flex-basis: calc(50% - 2px);
     position: relative;
     .os {
         position: absolute;
@@ -16,15 +17,16 @@
     }
 }
 .page {
+    box-sizing: content-box;
     width: 210mm;
     height: 297mm;
-    padding: 1cm;
+    padding: 0px;
+    margin: 0;
+    margin-left: 0.5px;
     display: grid;
-    grid-template-columns: repeat(2, calc(50% - 3px));
-    grid-template-rows: repeat(4, calc(25% - 3px));
-    grid-column-gap: 0px;
-    grid-row-gap: 0px;
-    gap: 4px;
+    grid-template-columns: repeat(2, calc(50% - 5mm / 2));
+    grid-template-rows: repeat(4, calc(25% - 15mm / 4));
+    gap: 5mm;
     margin-bottom: 16px;
     border: 2px dashed gray;
     --ifm-alert-padding-vertical: 2px;
@@ -46,6 +48,11 @@
     margin-bottom: 0;
 }
 
+@page {
+    size: A4 portrait;
+    margin: 5mm;
+    padding: 0;
+}
 @media print {
     :global(.markdown) {
         &::before {
@@ -62,11 +69,7 @@
     .page {
         page-break-after: always;
         border: none;
-        padding: 0;
         margin-bottom: 0;
-        &:not(:first-of-type) {
-            padding-top: 3rem;
-        }
         .pageNr {
             display: none;
         }
@@ -76,8 +79,13 @@
             padding: 0.25rem;
         }
     }
-    
+    main {
+        margin: 0;
+        padding: 0;
+    }
+    aside,
     h1,
+    head,
     nav {
         display: none;
     }
@@ -90,5 +98,11 @@
     }
     :global(.theme-doc-version-badge) {
         display: none;
+    }
+    @layer docusaurus.infima {
+        :global(.container.padding-top--md.padding-bottom--lg) {
+            padding-top: 0px !important;
+            padding-bottom: 0px !important;
+        }
     }
 }
