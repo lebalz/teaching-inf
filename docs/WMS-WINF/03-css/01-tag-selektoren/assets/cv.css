@@ -14,20 +14,19 @@ header {
     }
 }
 img {
-    width: 150px;
     border-radius: 50%;
 }
 address {
-    > div {
-        color: gray;
-    }
+    color: gray;
 }
 h2 {
     margin-top: 0;
 }
 main {
-    > div {
-        border: 1px solid black;
+    div {
+        border-width: 1px;
+        border-style: solid;
+        border-color: black;
         border-radius: 8px;
         padding: 10px;
         margin-bottom: 10px;
