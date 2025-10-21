@@ -93,6 +93,11 @@ const getSiteConfig: SiteConfigProvider = () => {
         showEditThisPage: 'teachers',
         showEditThisPageOptions: ['github', 'github-dev', 'cms'],
         editThisPageCmsUrl: '/cms/',
+        tdevConfig: {
+            taskStateOverview: {
+                hideTeachers: true
+            }
+        },
         footer: {
             links: [
                 {
