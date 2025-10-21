@@ -4,9 +4,11 @@ sidebar_custom_props:
 page_id: 975c2237-7335-428d-96db-2e7f507c1d31
 ---
 
+import DefinitionList from "@tdev-components/DefinitionList";
+
 # 3. Fehler
 
-Sie haben bereits festgestellt, dass Python sehr pingelig ist was Tippfehler und die präzise Verwendung von Klammern, Anführungszeichen, Doppelpunkten und Leerzeichen angeht. Jede Sprache hat seine eigenen Regeln, wie Wörter und Sätze strukturiert sein müssen. Diese Regeln sind allgemein bekannt als die **Syntax** einer Sprache. 
+Sie haben bereits festgestellt, dass Python sehr pingelig ist was Tippfehler und die präzise Verwendung von Klammern, Anführungszeichen, Doppelpunkten und Leerzeichen angeht. Jede Sprache hat seine **eigenen Regeln**, wie Wörter und Sätze strukturiert sein müssen. Diese Regeln sind allgemein bekannt als die **Syntax** einer Sprache. 
 
 Syntax
 : Bei **Programmiersprachen** wird mit der Syntax festgelegt, welche Wörter, in welcher Reihenfolge und in welchem Kontext erlaubt sind.
@@ -18,12 +20,12 @@ Syntax Fehler sind kleine Fehler in einem Programm. Da das Programm nicht von ei
 Die Python Sprache setzt sich aus folgenden Elementen zusammen:
 
 Schlüsselwörter
-: oder `Statements`
+: oder __Statements__
 : Wörter oder Zeichen, die ohne Anführungszeichen und ohne Klammern geschrieben werden.
 : z.B. `import`, `from` oder `for`, aber auch `:` oder `*`. 
-: Sie müssen in einer vordefinierten Reihenfolge vorliegen, damit diese von Python verstanden werden. *([↩ alle Schlüsselwörter](/python-keywords))*
+: Sie müssen in einer vordefinierten Reihenfolge vorliegen, damit diese von Python verstanden werden. *([alle Schlüsselwörter](/python-keywords))*
 Befehle
-: oder `Unterprogramme`, `Funktionen`
+: oder __Unterprogramme__, __Funktionen__
 : vordefinierte Befehle, die mit einer runden Klammer aufgerufen werden.
 : z.B. `print('hello')`
 Variablen
@@ -62,9 +64,9 @@ for i in range(4)
 
 Untersuchen Sie obenstehende Programmschnipsel. Was sagen Ihnen die Fehlermeldungen?
 
-- Auf welcher Zeile steht die Art des Fehlers?
+- Auf welcher Zeile der Fehlermeldung steht die Art des Fehlers?
     <Answer type="text" id="3b9aa96c-57b7-436d-88f8-6ef642a9569a" />
-- Wo finden Sie Hinweise auf den Fehler? Flicken Sie sie...
+- Wo in der Fehlermeldung finden Sie Hinweise auf den Fehler? Flicken Sie sie...
 
 ::::flex{min=250px}
 ```py live_py title=error1.py id=6cdb7162-bc67-4b3b-8879-93cef97a10a5
@@ -109,7 +111,7 @@ Die Fehlermeldung gibt den Hinweis, was falsch ist. Meist steht der wichtigste H
 
 ## Namens Fehler <span className="badge badge--danger">NameError</span>
 
-Liegt ein Fehler vor, der nicht bei Schlüsselwörtern (oder deren Anordnung) vorliegt, so handelt es sich oft um einen Namens-Fehler (`NameError`). Es wird also versucht, ein Unterprogramm zu öffnen (oder eine Variable abzufragen), das aber **unter diesem Namen nicht gefunden** werden kann.
+Tippfehler beim Aufrufen von Unterprogrammen oder bei der Verwendung von Variablen führen oft zu einem Namens-Fehler (`NameError`). Es wird also versucht, ein Unterprogramm zu öffnen (oder eine Variable abzufragen), das aber **unter diesem Namen nicht gefunden** werden kann.
 
 :::warning[Häufigste Ursachen]
 Die häufigste Ursachen von `NameError`s sind
@@ -155,19 +157,31 @@ Nachdem das Programm nun geflickt ist... was machen die Befehle?
 
 <Solution id="091be86e-ca29-4a0d-8282-468430553214">
 
-Zwei Namensfehler, die Fehlermeldung sagt die Zeilennummer und schlägt den richtigen Befehl vor:
-1. Zeile 5
+Drei Namensfehler, die Fehlermeldung sagt die Zeilennummer und schlägt den richtigen Befehl vor:
+
+<DefinitionList gridTemplateColumns="minmax(2em, 1fr) minmax(4em, 8fr)">
+<dt>Z. 3</dt>
+<dd>
     ```error
-    File <string>, line 5, in <module>
+    File "error_py", line 3, in <module>
+    NameError: name 'rond' is not defined
+    ```
+</dd>
+<dt>Z. 5</dt>
+<dd>
+    ```error
+    File "error_py", line 5, in <module>
     NameError: name 'ceyl' is not defined. Did you mean: 'ceil'?
     ```
-
-2. Zeile 6
-   ```error
-    File <string>, line 6, in <module>
+</dd>
+<dt>Z. 6</dt>
+<dd>
+    ```error
+    File "error_py", line 6, in <module>
     NameError: name 'flor' is not defined. Did you mean: 'floor'?
     ```
-
+</dd>
+</DefinitionList>
 </Solution>
 ::::
 
@@ -229,7 +243,7 @@ Hallo zum 0
 Hallo zum 1
 Ende
 ```
-lautet.
+lautet. Das Programm muss also immer wieder ausgeführt-, die Fehlermeldungen analysiert und Codeteile korrigiert werden.
 
 ```py live_py title=errors.py id=0538f258-5b10-4dec-be08-644e1f1df6a8
 for i in range(2):
@@ -252,7 +266,7 @@ Aus der Sicht von Python funktioniert alles und das Programm kann ausgeführt we
 
 Sobald aber das Programm ausgeführt wird, macht es nicht das, was Sie sich gewünscht haben - dann spricht man von Logik-Fehlern 💩...
 
-Diese Fehler sind im allgemeinen **am schwierigsten zu finden**. Ein häufiger Fehler ist aber, dass man bei einem Befehl die runden Klammern am Ende vergisst - für Python kein Problem, da es den Befehl kennt, jedoch nicht dazu aufgefordert wird, diesen auszuführen. 
+Diese Fehler sind im allgemeinen **am schwierigsten zu finden**. Ein häufiger Fehler ist aber, dass man bei einem Befehl die runden Klammern am Ende vergisst - für Python kein Problem, da es den Befehl kennt, jedoch nicht dazu aufgefordert wird, diesen auszuführen. (Der Befehl wird also nicht **aufgerufen**.)
 
 :::warning[Häufigste Ursachen]
 Checkliste für Logikfehler
@@ -277,12 +291,16 @@ Auf Zeile 4 fehlen die runden Klammern - `pendown` wird nicht ausgeführt! Fehle
 
 ---
 
-:::aufgabe[Fehler finden]
+::::aufgabe[Fehler finden]
 <Answer type="state" id="9fbdda43-73ca-43a1-9e51-ee20414b819b" />
 
 Finden und beheben Sie alle Fehler, so dass folgende Ausgabe entsteht:
 
 ![](./images/swiss-flag.svg)
+
+:::warning[Iteratives Vorgehen]
+Ein **iteratives Vorgehen** ist hier unumgänglich. Überprüfen Sie nach jeder Korrektur, ob Sie den aktuellen Fehler beheben konnten, oder ob noch weitere Fehler vorliegen.
+:::
 
 ```py live_py title=errors.py id=b11d905a-08e3-4f43-810f-c4c227bb5d46
 from turtle import *
@@ -346,4 +364,4 @@ end_fill()
 ```
 </Solution>
 
-:::
+::::

@@ -3,7 +3,6 @@
 02-BYOD/*
 !02-BYOD/_category_.yml
 03-Programmieren-1/*
-!03-Programmieren-1/04-errors/
 !03-Programmieren-1/05-functions/
 !03-Programmieren-1/06-parameters/
 !03-Programmieren-1/07-Variablen/

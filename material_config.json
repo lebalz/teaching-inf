@@ -111,7 +111,6 @@
             "from": "docs/OF-Programmieren-1/",
             "to": "versioned_docs/version-29Ga/03-Programmieren-1",
             "ignore": [
-                "04-errors",
                 "05-functions",
                 "06-parameters",
                 "07-Variablen",
@@ -144,7 +143,6 @@
             "from": "docs/OF-Programmieren-1/",
             "to": "versioned_docs/version-29Gj/03-Programmieren-1",
             "ignore": [
-                "04-errors",
                 "05-functions",
                 "06-parameters",
                 "07-Variablen",
