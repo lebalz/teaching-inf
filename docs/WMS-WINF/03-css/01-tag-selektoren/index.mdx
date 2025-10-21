@@ -6,6 +6,9 @@ import HtmlEditor from '@tdev-components/documents/CodeEditor/HtmlEditor';
 import CvHtml from '!!raw-loader!./assets/cv.html';
 import CvCss from '!!raw-loader!./assets/cv.css';
 import ProgressState from '@tdev-components/documents/ProgressState';
+import CodeBlock from '@theme/CodeBlock';
+
+# Tag-Selektoren
 
 export const combinedCode = (html, css) => {
     const indentedCss = css
@@ -15,20 +18,19 @@ export const combinedCode = (html, css) => {
     return html.replace(`<style>\n    </style>`, `<style>\n${indentedCss}\n</style>`);
 }
 
-# Tag-Selektoren
-
 Mit CSS können einzelne HTML-Elemente über ihren Tag-Namen angesprochen und gestaltet werden. Diese Art von Selektoren werden als **Tag-Selektoren** bezeichnet.
 
-export const example1 = '<p>\n    Dies ist <strong>ein</strong> <i>Absatz</i>.\n</p>\n<p>\n    Dies ist <strong>ein</strong> weiterer Absatz.\n</p>';
-
-```html
-<p>
+export const example1 = `<p>
     Dies ist <strong>ein</strong> <i>Absatz</i>.
 </p>
 <p>
     Dies ist <strong>ein</strong> weiterer Absatz.
-</p>
-```
+</p>`;
+
+<CodeBlock language="html" showLineNumbers>
+    {example1}
+</CodeBlock>
+
 ::::cards{columns=2}
 <HtmlEditor
   htmlTransformer={(css) => `<style>${css}</style><body>${example1}</body>`}
@@ -95,8 +97,10 @@ Probieren Sie die obigen Style-Regeln aus und halten Sie in eigenen Worten fest,
 ## Spezifität
 
 Mit der __Spezifität__ wird bestimmt, welche CSS-Regel angewendet wird, wenn mehrere Regeln auf dasselbe Element zutreffen. Je spezifischer eine Regel ist (also je genauer/präziser sie das Element beschreibt), desto höher ist ihre Priorität.
-```html
-<ul>
+
+Zudem können Regeln verschachtelt werden - von Aussen nach Innen müssen dann die Tag-Namen übereinstimmen, damit die Regel angewendet wird. Solche verschachtelten Regeln sind spezifischer als wenn nur der innerste Tag-Namen angesprochen wird.
+
+export const example2 = `<ul>
     <li>Erstes Element</li>
     <li>
         Zweites Element
@@ -106,12 +110,15 @@ Mit der __Spezifität__ wird bestimmt, welche CSS-Regel angewendet wird, wenn me
         </ul>
     </li>
     <li>Drittes Element</li>
-</ul>
-```
+</ul>`;
+
+<CodeBlock language="html" showLineNumbers>
+    {example2}
+</CodeBlock>
+
 ::::cards{columns=3}
 <HtmlEditor
-  htmlTransformer={(css) => `<style>${css}</style><body><ul><li>Erstes Element</li><li>Zweites Element<ul><li>Unterelement 1</li><li>Unterelement 2</li></ul></li><li>Drittes Element</li></ul>
-</body>`}
+  htmlTransformer={(css) => `<style>${css}</style><body>${example2}</body>`}
   hideWarning
   title='styles-1.css'
   lang='scss'
@@ -128,30 +135,28 @@ Das `<ul>`-Element wird angesprochen - ab dieser Ebene werden alle Texte rot dar
 :::
 ::br
 <HtmlEditor
-  htmlTransformer={(css) => `<style>${css}</style><body><ul><li>Erstes Element</li><li>Zweites Element<ul><li>Unterelement 1</li><li>Unterelement 2</li></ul></li><li>Drittes Element</li></ul>
-</body>`}
+  htmlTransformer={(css) => `<style>${css}</style><body>${example2}</body>`}
   hideWarning
   title='styles-2.css'
   lang='scss'
   minLines={8}
 >
 ```scss
+li {
+    color: green;
+}
 ul {
     color: red;
-    li {
-        color: green;
-    }
 }
 ```
 </HtmlEditor>
 
 :::insight[Bemerke]
-Die **spezifischere** Regel "gewinnt", nun werden alle `<li>`-Elemente grün dargestellt.
+Die **spezifischere** Regel "gewinnt" - nun werden alle `<li>`-Elemente grün dargestellt.
 :::
 ::br
 <HtmlEditor
-  htmlTransformer={(css) => `<style>${css}</style><body><ul><li>Erstes Element</li><li>Zweites Element<ul><li>Unterelement 1</li><li>Unterelement 2</li></ul></li><li>Drittes Element</li></ul>
-</body>`}
+  htmlTransformer={(css) => `<style>${css}</style><body>${example2}</body>`}
   hideWarning
   title='styles-3.css'
   lang='scss'
@@ -174,14 +179,16 @@ li {
 Nur die Elemente der zweiten Verschachtelungs-Eben werden blau dargestellt.
 :::
 ::::
+
 ## Tag-Selektoren und Stilregeln
+Eine Übung, in welcher Sie weitere Tag-Selektoren und Stilregeln kennenlernen und anwenden.
 
 ::::flex
 ::br{flexBasis="50%"}
 <HtmlEditor hideWarning minHeight={'800px'} code={CvHtml} id="0d6a39d8-21f2-48e1-a7e0-d88501a9bc7b" />
-::br{flexBasis="45%" maxWidth="45%"}
+::br{flexBasis="45%" maxWidth="45%" zIndex="199"}
 
-<ProgressState id="b7b34f3b-7463-40fb-821a-603aac543fe5">
+<ProgressState id="b7b34f3b-7463-40fb-821a-603aac543fe5" confirm preventTogglingFutureSteps>
 1. Ziel: das CV von Maria soll wie folgt gestaltet werden:
   ![](./images/cv-maria.jpg)
 2. Fügen Sie eine `margin` von `20px` und ein `padding` von `12px` zum `<body>`-Tag hinzu.
@@ -267,12 +274,13 @@ Nur die Elemente der zweiten Verschachtelungs-Eben werden blau dargestellt.
     :::
 9. Optimierungen: bei den Listen (`ul` und `ol`) kann der Zusätzliche Abstand nach Links noch etwas reduziert werden:
     ```css
-    ul, ol {
+    ul,
+    ol {
         margin-left: 10px;
     }
     ```
     :::insight[Bemerke]
-    Mit der Komma-Separierung `ul, ol` können mehrere Tags mit derselben Regel angesprochen werden.
+    Mit der Komma-Separierung `ul, ol` kann dieselbe Regel auf mehrere Tags angewandt werden.
     :::
 
 </ProgressState>
