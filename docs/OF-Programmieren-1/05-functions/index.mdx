@@ -7,6 +7,7 @@ page_id: 28f1e765-b19f-4f82-8819-5dd4eec8cad5
 ---
 
 import Strukto from '@tdev-components/VisualizationTools/Strukto';
+import ProgressState from '@tdev-components/documents/ProgressState';
 
 # 4. Unterprogramme 🏷
 
@@ -323,33 +324,35 @@ stufe()
 
 ::::
 
-::::aufgabe[Aufgabe 3 – Sechsecke]
+:::::aufgabe[Aufgabe 3 – Sechsecke]
 <Answer type="state" id="b1940f0b-2d69-4d40-84fc-676bddc1b45a" />
 
 Gehen Sie schrittweise die Anleitung durch - das Ergebnis muss noch nicht im ersten Schritt programmiert werden.
-:::cards{min-width=200px}
+::::cards{min-width=200px}
 ::br{flex-grow=2 code=true}
 ```py live_py title=sechseck.py id=6d4c82e3-ecaa-486e-a756-3a1a1a8a70fc
 from turtle import *
 
 ```
 ::br{flex-grow=1 max-height=500px overflow-y=auto}
-1. Zeichnen Sie ein Sechseck
-
-![](./images/sechseck.svg)
-
-
+<ProgressState id="f39b43cf-6052-4adc-a55f-b8440277b3e6">
+1. Zeichnen Sie ein Sechseck (noch ohne Unterprogramme!):
+    ![](./images/sechseck.svg)
 2. Verschieben Sie die Sequenz, die das Sechseck zeichnet, in einen neuen Befehl namens `sechseck()`. Denken Sie daran, der neue Befehl muss aufgerufen werden, damit er ausgeführt wird.
-3. Verwenden Sie den neuen Befehl, um die folgende Figur zu zeichnen, welche aus 10 Sechsecken besteht: 
-![](./images/sechsecke.svg)
+3. Verwenden Sie den neuen Befehl, um die folgende Figur zu zeichnen, welche aus 10 Sechsecken besteht:  
 
-<details>
-<summary>Tipp</summary>
+    ![](./images/sechsecke.svg)
 
-Nach jedem Sechseck muss $\frac{360 °}{10}=36 °$ gedreht werden.
+    :::details[Tipp]
+    Nach jedem Sechseck muss
+    $$
+    \frac{360 °}{10}=36 °
+    $$
+    gedreht werden.
+    :::
 
-</details>
-:::
+</ProgressState>
+::::
 
 <Solution id="d53f82b6-b87d-4cdf-8964-e8a97b981b07">
 
@@ -367,76 +370,9 @@ for i in range(10):
 ```
 </Solution>
 
-::::
-
-:::::aufgabe[Aufgabe 4 – Häuser]
-<Answer type="state" id="1bc32c1a-0345-494d-85b3-883ea40151cd" />
-
-Für diese Aufgabe können Sie als Ausgangslage Ihr Programm aus __1. Einführung in Python > Aufgabe 6: "Haus von Nikolaus"__ verwenden.
-
-
-::::cards{min-width=200px}
-::br{flex-grow=2 code=true}
-```py live_py title=stadt.py id=b5c82672-65db-4725-8ec9-7a80ac835b3d
-from turtle import *
-
-```
-::br{flex-grow=1 max-height=500px overflow-y=auto}
-1. Definieren Sie einen Befehl `haus()`, der ein Haus des Nikolaus zeichnet:  
-    **Achten** Sie darauf, dass die Turtle am Ende eines Häuschens jeweils unten rechts ist und nach rechts schaut.
-
-    ![](./images/haus_nikolaus.svg)
-
-    :::details[Haus von Nikolaus zeichnen]
-    Ein Beispiel für ein Haus des Nikolaus, so dass man unten rechts landet - natürlich muss dann noch gedreht werden...
-
-    ![](./images/haus-von-nikolaus.png)
-    :::
-
-
-
-2. Zeichnen Sie nun 4 Häuser nacheinander in unterschiedlichen Farben.
-
-![](./images/stadt.svg)
-::::
-
-<Solution id="0a1c7e36-0376-4001-a52d-e013c90c3c73">
-
-```py live_py slim
-from turtle import *
-
-def haus():
-    # Viereck
-    for i in range(4):
-        forward(50)
-        left(90)
-    # Diagonale 1
-    left(45)
-    forward(71)
-    # Dach
-    for i in range(2):
-        left(90)
-        forward(36)
-    # Diagonale 2
-    left(90)
-    forward(71)
-    # Drehen damit Turtle nach rechts schaut
-    left(45)
-
-color('red')
-haus()
-color('blue')
-haus()
-color('green')
-haus()
-color('orange')
-haus()
-```
-</Solution>
-
 :::::
 
-::::aufgabe[Aufgabe 5 – Blume]
+::::aufgabe[Aufgabe 4 – Blume]
 <Answer type="state" id="5f71b333-fd7d-446e-998b-d65c69bec060" />
 
 Sie werden in dieser Aufgabe unter der Verwendung mehrerer Unterprogramme eine komplexe Aufgabe schrittweise lösen.
@@ -503,5 +439,3 @@ for i in range(10):
 </Solution>
 
 ::::
-
-<Answer type="text" id="3ad167c6-a16b-4c32-a5ca-5ede1f2da2da" placeholder="📒 Notizen..." />
