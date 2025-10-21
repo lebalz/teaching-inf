@@ -50,9 +50,17 @@
     margin-bottom: 0;
 }
 
+html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    box-shadow: none !important;
+    border: none !important;
+    outline: none !important;
+}
 @page {
     size: A4 portrait;
-    margin: 5mm;
+    margin: 5mm calc(8mm + 1px) 5mm 8mm;
     padding: 0;
 }
 @media print {
@@ -63,6 +71,9 @@
         header {
             display: none;
         }
+    }
+    :global(.theme-back-to-top-button) {
+        display: none;
     }
     :global(.noComment) {
         margin: 0;

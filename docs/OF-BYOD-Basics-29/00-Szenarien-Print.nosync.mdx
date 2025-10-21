@@ -57,6 +57,12 @@ import Page from './components/Page'
 - Das Bildschirmfoto unter dem Namen `01_explorer` im Ordner `BYOD_Übung` abspeichern (oder es dahin verschieben und ggf. umbenennen)
 
 </Scenario>
+<Scenario isOsx>
+### Szenario 6
+- Ein Bildschirmfoto vom Programmfenster von «Finder» erstellen
+- Das Bildschirmfoto unter dem Namen `01_finder` im Ordner `BYOD_Übung` abspeichern (oder es dahin verschieben und ggf. umbenennen)
+
+</Scenario>
 
 
 <Scenario >
@@ -67,8 +73,9 @@ import Page from './components/Page'
   - die zuletzt heruntergeladenen Dokumente zuoberst angezeigt werden, danach
   - die grössten Dateien zuoberst angezeigt werden
 </Scenario>
+</Page>
 
-
+<Page nr={2}>
 <Scenario >
 ### Szenario 8
 
@@ -80,21 +87,6 @@ import Page from './components/Page'
 - Falls Sie VSCode aktiv verwenden und es deshalb nicht deinstallieren möchten, dann können Sie stattdessen das Programm [Thonny](https://thonny.org/) installieren und deinstallieren.
 :::
 </Scenario>
-</Page>
-<Page isOsx nr={2}>
-<Scenario nr={6} isOsx>
-### Szenario 6
-- Ein Bildschirmfoto vom Programmfenster von «Finder» erstellen
-- Das Bildschirmfoto unter dem Namen `01_finder` im Ordner `BYOD_Übung` abspeichern (oder es dahin verschieben und ggf. umbenennen)
-
-</Scenario>
-</Page>
-
-
-
-
-
-<Page nr={3}>
 <Scenario >
 ### Szenario 9
 
@@ -167,6 +159,11 @@ Beschriftung von Hand (z.B. mit dem Stift) zählt nicht. Die Schriftfarbe und -g
 
 </Scenario>
 
+</Page>
+
+
+
+<Page nr={3}>
 <Scenario >
 ### Szenario 16
 - Das Programm `hello_world.py` im Text Editor öffnen
@@ -175,16 +172,6 @@ Beschriftung von Hand (z.B. mit dem Stift) zählt nicht. Die Schriftfarbe und -g
   (Resultat: `print("It's a beautiful Day. Hello World!")`)
 - speichern
 </Scenario>
-</Page>
-<Page nr={4}>
-</Page>
-
-
-
-
-
-<Page nr={5}>
-
 <Scenario >
 ### Szenario 17
 - Das Programm `create_mesh.py` im Text Editor öffnen
@@ -242,22 +229,15 @@ Beschriftung von Hand (z.B. mit dem Stift) zählt nicht. Die Schriftfarbe und -g
 
 </Scenario>
 
+</Page>
+
+<Page nr={4}>
+
 <Scenario >
 ### Szenario 24
 - Öffnen Sie die GBSL-Webseite (die Adresse lautet `gbsl.ch`), ohne dabei eine Suchmaschine (z.B. Google, Bing, Ecosia, …) zu verwenden
 
 </Scenario>
-
-</Page>
-<Page nr={6}>
-</Page>
-
-
-
-
-
-
-<Page nr={7}>
 
 <Scenario >
 ### Szenario 25
@@ -270,6 +250,12 @@ Beschriftung von Hand (z.B. mit dem Stift) zählt nicht. Die Schriftfarbe und -g
 <Scenario isWin>
 ### Szenario 26
 Öffnen Sie das Programm «Microsoft Word» über das **Startmenu**.
+</Scenario>
+
+<Scenario isOsx>
+### Szenario 26
+Öffnen Sie das Programm «Microsoft Word» über die **Spotlight-Suche**.
+
 </Scenario>
 
 <Scenario >
@@ -308,13 +294,4 @@ SQRT3 = sqrt(3)
 ```
 </Scenario>
 </Page>
-<Page nr={8}>
-
-<Scenario nr={26} isOsx>
-### Szenario 26
-Öffnen Sie das Programm «Microsoft Word» über die **Spotlight-Suche**.
-
-</Scenario>
-</Page>
-
 </div>
