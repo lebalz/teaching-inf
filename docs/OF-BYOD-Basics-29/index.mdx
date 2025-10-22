@@ -7,6 +7,9 @@ page_id: bf43eff5-6c74-47a3-be14-b131f89bc270
 import Steps from '@tdev-components/Steps'
 import TypedText from '@tdev-components/VisualizationTools/TypedText'
 import DocCardList from '@theme/DocCardList';
+import CmsText from '@tdev-components/documents/CmsText';
+import DefinitionList from "@tdev-components/DefinitionList";
+import WithCmsText from '@tdev-components/documents/CmsText/WithCmsText';
 
 <TypedText type="h1" strings={[
     '<span style="color: lime">B</span><span style="color: springgreen">Y</span><span style="color: aquamarine">O</span><span style="color: turquoise">D</span>',
@@ -38,7 +41,7 @@ Inhalt
 : Die Lernziele finden Sie in den jeweiligen Modulen.
 : Die Szenarien für den praktischen Teil finden Sie [hier](00-Szenarien.mdx).
 
-:::cards{marginBottom=0 flexBasis=200px .compactDeflist}
+:::cards{flexBasis=200px .compactDeflist}
 ::br{background=transparent}
 
 #### Schriftlich
@@ -65,6 +68,30 @@ Modus
 : Am eigenen Laptop
 Szenarien
 : 10 zufällige Szenarien aus den [Prüfungsfragen](./00-Szenarien.mdx)
+:::
+:::cards{marginBottom=0}
+::br{background=transparent}
+<WithCmsText 
+    entries={{
+        schritflitch_punkte: "433f78ff-1dcc-4ba9-809f-2ac91101d416",
+        schritflitch_note: "a4477f77-8f83-4b84-907f-2a0080ad94bb",
+        praktisch_punkte: "b6422b1c-53ae-41da-9aaa-b3011637487c",
+        praktisch_note: "b1cb729c-f946-42db-bfa1-6db44c39776e",
+        note: "4a1a06fc-160c-4436-966e-5598ccc2299f"
+    }}
+>
+    <DefinitionList>
+        <dt>Schriftlich</dt>
+        <dd><CmsText name="schritflitch_punkte" /> von 12 Punkten</dd>
+        <dd>**Note**: <CmsText name="schritflitch_note" /></dd>
+        <dt>Praktisch</dt>
+        <dd><CmsText name="praktisch_punkte" /> von 10 Punkten</dd>
+        <dd>**Note**: <CmsText name="praktisch_note" /></dd>
+        <dt>Note :mdi[certificate]{.blue}</dt>
+        <dd>**<CmsText name="note" />**</dd>
+        <dd>(zählt $0.5$)</dd>
+    </DefinitionList>
+</WithCmsText>
 :::
 
 ::::
