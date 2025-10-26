@@ -1,0 +1,281 @@
+---
+page_id: 1a426fe3-524f-41b4-98fe-3dacff9354f1
+unlisted: true
+---
+
+import HtmlEditor from '@tdev-components/documents/CodeEditor/HtmlEditor';
+import ProgressState from '@tdev-components/documents/ProgressState';
+import CodeBlock from '@theme/CodeBlock';
+import GridDemo from './assets/GridDemo';
+
+# Pseudoklassen
+
+Über sogenannte __Pseudoklassen__ können CSS-Regeln definiert werden, die auf bestimmte Zustände von HTML-Elementen reagieren.
+
+Beispielsweise wenn ein Element besonders formatiert werden soll, wenn es mit der Maus berührt wird (`:hover`), oder wenn ein Element das erste Element einer Liste ist (`:first-child`).
+
+Diese Pseudoklassen starten immer mit einem Doppelpunkt `:` und werden an den Selektor angehängt.
+
+<HtmlEditor
+  htmlTransformer={(css) => `<style>${css}</style><body>Fahre mit der Maus über den <a href="#">👉 Link</a>.</body>`}
+  hideWarning
+  title='hover.css'
+  lang='scss'
+>
+```css
+a {
+    color: blue;
+    &:hover {
+        color: orange;
+    }
+}
+```
+</HtmlEditor>
+
+In diesem Beispiel wird die Schriftfarbe aller Links (`a`-Elemente) auf Blau gesetzt. Wenn ein Link mit der Maus berührt wird (`:hover`), ändert sich die Schriftfarbe zu Orange.
+
+::::tip[Verschachtelte Regeln: `&`]
+:::flex
+Das `&`-Zeichen im obigen Beispiel steht für eine **Ergänzung des aktuellen Selektors**, in diesem Fall also `a`.  
+
+Das obige Beispiel könnte also auch wie folgt geschrieben werden:
+::br
+```css
+a {
+    color: blue;
+}
+a:hover {
+    color: orange;
+}
+```
+:::
+::::
+
+
+export const combinedCode = (html, css) => {
+    const indentedCss = css
+        .split('\n')
+        .map(line => `        ${line}`)
+        .join('\n');
+    return html.replace(`<style>\n    </style>`, `<style>\n${indentedCss}\n</style>`);
+}
+
+Web-Dokumente ermöglichen, im Unterschied zu gedruckten Dokumenten, **Intergaktionen** mit den Betrachter:innen.
+
+export const example1 = `<h3>Meine Qualifikationen</h3>
+<ul>
+    <li>HTML</li>
+    <li>CSS</li>
+    <li>JavaScript</li>
+    <li>Markdown</li>
+    <li>React</li>
+    <li>TypeScript</li>
+</ul>`;
+
+<CodeBlock language="html" showLineNumbers>
+    {example1}
+</CodeBlock>
+
+::::flex{columns=3}
+<HtmlEditor
+  htmlTransformer={(css) => `<style>${css}</style><body>${example1}</body>`}
+  hideWarning
+  title='styles-1.css'
+  lang='scss'
+  minLines={12}
+>
+```scss
+li {
+    color: darkblue;
+    &:hover {
+        background-color: lightgray;
+    }
+}
+```
+</HtmlEditor>
+:::info
+Mit `:hover` wird der Hintergrund des Listenelements auf `lightgray` gesetzt, wenn die Maus über das Element fährt.
+:::
+
+::br
+<HtmlEditor
+  htmlTransformer={(css) => `<style>li { transform-origin: left; }${css}</style><body>${example1}</body>`}
+  hideWarning
+  title='styles-2.css'
+  lang='scss'
+  minLines={12}
+>
+```scss
+li {
+    color: darkblue;
+    transition-duration: 0.5s;
+    &:hover {
+        color: orange;
+        list-style-type: square;
+        transform: scale(1.2);
+    }
+}
+```
+</HtmlEditor>
+
+:::info
+Mit `:hover` wird das entsprechende Listenelement
+- orange eingefärbt :mdi[square]{.orange size=0.6}
+- das Listensymbol auf ein Quadrat (`square`) gesetzt
+- alles um den Faktor 1.2 vergrössert.
+
+Damit die Änderung nicht abrupt geschieht, wird mit `transition-duration` die Übergangszeit festgelegt.
+:::
+::br
+<HtmlEditor
+  htmlTransformer={(css) => `<style>${css}</style><body>${example1}</body>`}
+  hideWarning
+  title='styles-3.css'
+  lang='scss'
+  minLines={12}
+>
+```scss
+li {
+    color: darkblue;
+    &:first-child {
+        color: orange;
+    }
+    &:nth-child(2n) {
+        background-color: whitesmoke;
+    }
+    &:last-child {
+        color: green;
+    }
+}
+```
+</HtmlEditor>
+:::info
+- Die Standardfarbe für Listenelemente ist :mdi[square]{color="darkblue" size=0.6} `darkblue`.
+- Das erste Element (`:first-child`) wird in :mdi[square]{color="orange" size=0.6} `orange` dargestellt.
+- Jedes zweite Element (`:nth-child(2n)`) bekommt einen Hintergrund von `whitesmoke`.
+- Das letzte Element (`:last-child`) wird in :mdi[square]{color="green" size=0.6} `grün` dargestellt.
+:::
+::::
+
+
+::::aufgabe[Pseudoklassen anwenden]
+Ergänzen Sie die CSS-Regeln, so dass folgende Anforderungen erfüllt werden:
+
+<ProgressState id="9b1f1d57-3584-4d83-b1c3-eb808d66aa39" allOpen>
+1. Das erste `div`-Element soll einen roten Hintergrund erhalten.
+2. Das letzte `div`-Element soll einen grünen Hintergrund erhalten.
+3. Wird ein `div`-Element mit der Maus berührt, soll
+    - der `border-radius` auf 50 % gesetzt werden,
+    - die Hintergrundfarbe auf Hellblau geändert werden
+    - die Grösse um den Faktor $1.5$ vergrössert werden.
+4. Können Sie die Regeln so anordnen, dass die Hintergrundfarben des ersten und letzten Elements nicht ändern, wenn diese mit der Maus berührt werden?
+</ProgressState>
+
+:::info[Demo der Lösung]
+<GridDemo />
+:::
+
+<HtmlEditor
+  id='76768023-e4a7-4680-8714-626a2cb8681a'
+  hideWarning
+  title='aufgabe.html'
+  lang='html'
+>
+```html
+<html>
+<head>
+    <style>
+        main {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 10px;
+            padding: 10px;
+            width: 140px;
+            height: 140px;
+            border: 1px solid black;
+            div {
+                width: 40px;
+                height: 40px;
+                background-color: lightgray;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition-duration: 0.5s;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div>1</div>
+        <div>2</div>
+        <div>3</div>
+        <div>4</div>
+        <div>5</div>
+        <div>6</div>
+        <div>7</div>
+        <div>8</div>
+        <div>9</div>
+    </main>
+</body>
+</html>
+```
+</HtmlEditor>
+
+<Solution id="4604dc75-81f3-4fe1-b544-8d8ebf2e8229">
+```html showLineNumbers
+<html>
+<head>
+    <style>
+        main {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 10px;
+            padding: 10px;
+            width: 140px;
+            height: 140px;
+            border: 1px solid black;
+            div {
+                width: 40px;
+                height: 40px;
+                background-color: lightgray;
+                transition-duration: 0.5s;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                /* highlight-start */
+                &:hover {
+                    border-radius: 50%;
+                    transform: scale(1.5);
+                    background-color: lightblue;
+                }
+                &:first-child {
+                    background-color: red;
+                }
+                &:last-child {
+                    background-color: green;
+                }
+                /* highlight-end */
+            }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div>1</div>
+        <div>2</div>
+        <div>3</div>
+        <div>4</div>
+        <div>5</div>
+        <div>6</div>
+        <div>7</div>
+        <div>8</div>
+        <div>9</div>
+    </main>
+</body>
+</html>
+```
+</Solution>
+::::
