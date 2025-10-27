@@ -1,12 +1,14 @@
 ---
-page_id: 1a426fe3-524f-41b4-98fe-3dacff9354f1
-unlisted: true
+page_id: 8198328b-5d4d-4fdf-94d7-694df190bd77
 ---
 
 import HtmlEditor from '@tdev-components/documents/CodeEditor/HtmlEditor';
 import ProgressState from '@tdev-components/documents/ProgressState';
 import CodeBlock from '@theme/CodeBlock';
 import GridDemo from './assets/GridDemo';
+import GridSkeleton from '!!raw-loader!./assets/grid-skeleton.html';
+import Grid from '!!raw-loader!./assets/grid.html';
+import CvHtml from '!!raw-loader!../01-tag-selektoren/assets/cv.html';
 
 # Pseudoklassen
 
@@ -51,16 +53,9 @@ a:hover {
 :::
 ::::
 
-
-export const combinedCode = (html, css) => {
-    const indentedCss = css
-        .split('\n')
-        .map(line => `        ${line}`)
-        .join('\n');
-    return html.replace(`<style>\n    </style>`, `<style>\n${indentedCss}\n</style>`);
-}
-
 Web-Dokumente ermöglichen, im Unterschied zu gedruckten Dokumenten, **Intergaktionen** mit den Betrachter:innen.
+
+## Beispiele
 
 export const example1 = `<h3>Meine Qualifikationen</h3>
 <ul>
@@ -157,11 +152,12 @@ li {
 :::
 ::::
 
+## Aufgaben
 
 ::::aufgabe[Pseudoklassen anwenden]
 Ergänzen Sie die CSS-Regeln, so dass folgende Anforderungen erfüllt werden:
 
-<ProgressState id="9b1f1d57-3584-4d83-b1c3-eb808d66aa39" allOpen>
+<ProgressState id="9b1f1d57-3584-4d83-b1c3-eb808d66aa39" keepPreviousStepsOpen>
 1. Das erste `div`-Element soll einen roten Hintergrund erhalten.
 2. Das letzte `div`-Element soll einen grünen Hintergrund erhalten.
 3. Wird ein `div`-Element mit der Maus berührt, soll
@@ -180,102 +176,28 @@ Ergänzen Sie die CSS-Regeln, so dass folgende Anforderungen erfüllt werden:
   hideWarning
   title='aufgabe.html'
   lang='html'
->
-```html
-<html>
-<head>
-    <style>
-        main {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin: 10px;
-            padding: 10px;
-            width: 140px;
-            height: 140px;
-            border: 1px solid black;
-            div {
-                width: 40px;
-                height: 40px;
-                background-color: lightgray;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                transition-duration: 0.5s;
-            }
-        }
-    </style>
-</head>
-<body>
-    <main>
-        <div>1</div>
-        <div>2</div>
-        <div>3</div>
-        <div>4</div>
-        <div>5</div>
-        <div>6</div>
-        <div>7</div>
-        <div>8</div>
-        <div>9</div>
-    </main>
-</body>
-</html>
-```
-</HtmlEditor>
+  code={GridSkeleton}
+  maxLines={33}
+/>
 
 <Solution id="4604dc75-81f3-4fe1-b544-8d8ebf2e8229">
-```html showLineNumbers
-<html>
-<head>
-    <style>
-        main {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin: 10px;
-            padding: 10px;
-            width: 140px;
-            height: 140px;
-            border: 1px solid black;
-            div {
-                width: 40px;
-                height: 40px;
-                background-color: lightgray;
-                transition-duration: 0.5s;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                /* highlight-start */
-                &:hover {
-                    border-radius: 50%;
-                    transform: scale(1.5);
-                    background-color: lightblue;
-                }
-                &:first-child {
-                    background-color: red;
-                }
-                &:last-child {
-                    background-color: green;
-                }
-                /* highlight-end */
-            }
-        }
-    </style>
-</head>
-<body>
-    <main>
-        <div>1</div>
-        <div>2</div>
-        <div>3</div>
-        <div>4</div>
-        <div>5</div>
-        <div>6</div>
-        <div>7</div>
-        <div>8</div>
-        <div>9</div>
-    </main>
-</body>
-</html>
-```
+    <CodeBlock language="html" showLineNumbers children={Grid} />
 </Solution>
 ::::
+
+:::aufgabe[Steckbrief fertigstellen]
+Stellen Sie den [Steckbrief](../01-tag-selektoren/index.mdx#tag-selektoren-und-stilregeln) aus dem vorherigen Kapitel fertig, bevor Sie hier fortfahren.
+:::
+
+:::aufgabe[⭐ Bonusaufgabe: Steckbrief individualisieren]
+<Answer type="state" id="f96e5aac-9ca4-4595-a9ae-9d55310d3a9a" />
+
+1. Individualisieren Sie den Steckbrief im vorherigen Kapitel inhaltlich auf Ihre Person. Das Bild können Sie vorerst als Platzhalter beibehalten und dann später durch ein eigenes Bild ersetzen.
+2. Fügen Sie mit CSS-Pseudoklassen interaktive Effekte hinzu, z.B.:
+    - Ändern der Hintergrundfarbe, wenn die Maus über den Steckbrief fährt.
+    - Vergrössern des Bildes, wenn die Maus darüber fährt.
+    - Ändern der Schriftfarbe der Überschriften, wenn diese mit der Maus berührt werden.
+
+
+<HtmlEditor hideWarning minHeight={'800px'} code={CvHtml} id="0d6a39d8-21f2-48e1-a7e0-d88501a9bc7b" />
+:::
