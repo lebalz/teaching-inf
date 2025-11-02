@@ -9,15 +9,17 @@ import Strukto from '@tdev-components/VisualizationTools/Strukto';
 Ein weiteres Strukturelement eines Algorithmus sind __Parameter__. Die Verwendung von Parametern haben wir bereits in Aktion gesehen -  im Struktogramm sind alle Parameter <u>unterstrichen</u>, in Python werden alle Parameter als Liste, abgetrennt mit Kommas, in den <u>runden Klammern</u> geschrieben.
 
 :::info[Zur Erinnerung]
-Parameter ⊕ ⊖
+Parameter :mdi[plus-circle-outline] :mdi[minus-circle-outline]
 : Das Ergebnis eines Algorithmus kann variiert werden durch Werte, welche bei jeder Ausführung neu festgelegt werden.
-: **Beispiel**: Bei einem Online-Rezept kann der Parameter *Anzahl Personen*  mit den Knöpfen `⊕` und `⊖` variiert werden - die Mengenangaben werden dann aktualisiert, ohne die Reihenfolge der Einzelschritte zu verändern.
+**Beispiel**
+: Bei einem Online-Rezept kann der Parameter *Anzahl Personen*  mit den Knöpfen __:mdi[plus-circle-outline]__ und __:mdi[minus-circle-outline]__ variiert werden - die Mengenangaben werden dann aktualisiert, ohne die Reihenfolge der Einzelschritte zu verändern.
+: z.B. [Muffins-Rezept](https://www.chefkoch.de/rezepte/1692201277528566/Die-schnellsten-und-besten-Muffins-ueberhaupt.html)
 :::
 
-::::aufgabe[Aufgabe 1]
+::::aufgabe[Aufgabe 1: Parameter identifizieren und finden]
 <Answer type="state" id="a603eafc-7d9d-4745-b3cd-4613440c1317" />
 
-Markieren Sie im folgenden Programm (links) wie folgt:
+Markieren Sie im Programm unten alle Parameter und Befehlsnamen wie folgt:
 - Parameter <u>unterstreichen</u>
 - Befehlsnamen <span style={{background: 'yellow'}}>gelb</span> markieren
 
@@ -58,13 +60,15 @@ for i in range(5):
 
 Wie können Unterprogramme geschrieben werden, die **Parameter** akzeptieren?
 
-Untersuchen Sie die folgenden Unterprogramme (führen Sie diese aus!) und notieren Sie sich, was Sie feststellen.
 
 
-:::aufgabe[2. Unterprogramme mit Parametern]
+::::aufgabe[2. Unterprogramme mit Parametern]
 <Answer type="state" id="42ab260d-417d-4cda-a173-6e11abea1f76" />
 
-`hello.py`
+Untersuchen Sie die folgenden Unterprogramme (führen Sie diese aus!) - verstehen Sie, was passiert? Finden Sie einen Zusammenhang mit Parametern? Halten Sie Ihre Erkenntnisse fest.
+
+:::flex{minWidth=220px}
+#### hello.py
 ```py live_py slim
 def hallo(name):
     print('Hallo', name)
@@ -73,7 +77,9 @@ hallo('Maria')
 hallo('Reto')
 hallo('Hans')
 ```
-`rechnen.py`
+<Answer type="text" id="b376475c-61d1-47d7-8ee2-6c409dd72ab1" />
+::br
+#### rechnen.py
 ```py live_py slim
 def quotient(zahl1, zahl2):
     print(zahl1, ':', zahl2, '=', zahl1 / zahl2)
@@ -82,11 +88,16 @@ quotient(2, 3)
 quotient(5, 9)
 quotient(12, 20 + 4)
 ```
+<Answer type="text" id="a72a532a-86bf-48a6-8566-76819f102cb2" />
+:::
 
-- ⭐️ Was sind die Parameter bei `quotient(12, 20 + 4)`?
-- ⭐️ In welcher Reihenfolge werden diese verrechnet? 
 
-<Answer type="text" id="bdc8ef98-1690-49c0-bc81-8b3e50d758fc" />
+Zusatzfragen:
+- ⭐️ Welche Parameter werden bei `quotient(12, 20 + 4)` übergeben?
+- ⭐️ In welcher Reihenfolge werden die Parameter bei `quotient(12, 20 + 4)` verrechnet? 
+
+<Answer type="text" id="4aa9790d-103f-44cc-a08f-794a921c2506" />
+
 <Solution id="84d70fe9-937d-4dfa-a12f-193af91d6626">
 
 - Die beiden übergebenen Parameter sind `12` und `24`.
@@ -94,7 +105,7 @@ quotient(12, 20 + 4)
 
 </Solution>
 
-:::
+::::
 
 
 ## Unterprogramme mit Parametern
@@ -147,6 +158,11 @@ Es ist prinzipiell möglich, beliebig viele Parameter nacheinander zu übergeben
 
 :::danger[Häufige Fehler]
 Ein häufiger Fehler sind vergessene Kommas zwischen zwei Parameternamen. Dann entsteht ein **SyntaxError**. Die Fehlermeldung macht aber darauf aufmerksam.
+
+```py live_py slim
+from turtle import *
+goto(100 200)
+```
 
 ```bash
 goto(100 200)
