@@ -1,0 +1,66 @@
+<!--?xml version="1.0" standalone="no"?-->
+<svg id="code_py_fcfed020_b576_4676_8c5e_8321d36d04de_svg" width="234" height="220" xmlns="http://www.w3.org/2000/svg" viewBox="135,43,234,220">
+<g transform="translate(250 250)">
+<line x1="0" y1="0" x2="0" y2="0" style="stroke: black; stroke-width: 1px;"></line>
+<line x1="0" y1="0" x2="-60" y2="0" style="stroke: black; stroke-width: 1px;" opacity="0"></line>
+<line x1="-60" y1="0" x2="-26" y2="3" style="stroke: black; stroke-width: 1px;"></line>
+<line x1="-26" y1="3" x2="-8" y2="-75" style="stroke: black; stroke-width: 1px;"></line>
+<line x1="-8" y1="-75" x2="13" y2="8" style="stroke: black; stroke-width: 1px;"></line>
+<line x1="13" y1="8" x2="50" y2="-5" style="stroke: black; stroke-width: 1px;"></line>
+<line x1="50" y1="-5" x2="21" y2="-90" style="stroke: black; stroke-width: 1px;"></line>
+<line x1="21" y1="-90" x2="33" y2="-148" style="stroke: black; stroke-width: 1px;"></line>
+<line x1="33" y1="-148" x2="75" y2="-88" style="stroke: black; stroke-width: 1px;"></line>
+<line x1="75" y1="-88" x2="114" y2="-77" style="stroke: black; stroke-width: 1px;"></line>
+<line x1="114" y1="-77" x2="72" y2="-169" style="stroke: black; stroke-width: 1px;"></line>
+<line x1="72" y1="-169" x2="20" y2="-153" style="stroke: black; stroke-width: 1px;"></line>
+<line x1="20" y1="-153" x2="29" y2="-202" style="stroke: black; stroke-width: 1px;"></line>
+<line x1="29" y1="-202" x2="-27" y2="-199" style="stroke: black; stroke-width: 1px;"></line>
+<line x1="-27" y1="-199" x2="-13" y2="-157" style="stroke: black; stroke-width: 1px;"></line>
+<line x1="-13" y1="-157" x2="-98" y2="-165" style="stroke: black; stroke-width: 1px;"></line>
+<line x1="-98" y1="-165" x2="-110" y2="-72" style="stroke: black; stroke-width: 1px;"></line>
+<line x1="-110" y1="-72" x2="-71" y2="-71" style="stroke: black; stroke-width: 1px;"></line>
+<line x1="-71" y1="-71" x2="-41" y2="-130" style="stroke: black; stroke-width: 1px;"></line>
+<line x1="-41" y1="-130" x2="-24" y2="-76" style="stroke: black; stroke-width: 1px;"></line>
+<line x1="-24" y1="-76" x2="-60" y2="0" style="stroke: black; stroke-width: 1px;"></line>
+</g>
+<g transform="translate(250 250)">
+<polygon points="0,0 ,-5,-9 ,0,-7 ,5,-9 " stroke="black" fill="black" stroke-width="1" opacity="1" transform="translate(-60,0) rotate(-90.0,0,0)"></polygon>
+</g>
+<metadata><raw>from turtle import *
+from random import randint
+
+def move_to(x, y):
+    penup()
+    goto(2*x,2* y)
+    pendown()
+
+def circa_to(x, y):
+    goto(2*x + randint(-10, 10), 2*y + randint(-10, 10))
+    
+def circa_man():
+    move_to(-30, 0)
+    circa_to(-10, 0)
+    circa_to(0, 40)
+    circa_to(10, 0)
+    circa_to(30, 0)
+    circa_to(10, 40)
+    circa_to(20, 70)
+    circa_to(40, 40)
+    circa_to(55, 40)
+    circa_to(35, 80)
+    circa_to(10, 80)
+    circa_to(10, 100)
+    circa_to(-10, 100)
+    circa_to(-10, 80)
+    circa_to(-45, 80)
+    circa_to(-55, 40)
+    circa_to(-40, 40)
+    circa_to(-20, 70)
+    circa_to(-10, 40)
+    goto(-30*2, 0)
+speed(0)
+
+circa_man()
+
+
+</raw></metadata></svg>

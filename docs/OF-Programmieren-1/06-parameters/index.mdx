@@ -124,10 +124,10 @@ def quadrat(size):
         left(90)
 
 color('red')
-quadrat(50) # ein Quadrat mit der Grösse 50 zeichnen
+quadrat(50)
 
 color('blue')
-quadrat(100) # ein Quadrat mit der Grösse 100 zeichnen
+quadrat(100)
 ```
 
 Unterprogramm
@@ -168,14 +168,15 @@ quadrat(100, 'blue')
 Z. 9
 : Die Parameter `50` und `'red'` werden übergeben und im Unterprogramm auf Z. 4 und Z. 6 verwendet.
 : Es wird ein rotes Quadrat mit der Seitenlänge `50` gezeichnet.
-Z. 12
+Z. 10
 : Die Parameter `100` und `'blue'` werden übergeben und im Unterprogramm auf Z. 4 und Z. 6 verwendet.
 : Es wird ein blaues Quadrat mit der Seitenlänge `100` gezeichnet.
 </div>
 :::
 
 
-### Aufgabe
+### Aufgaben
+#### Sechseck
 ::::aufgabe[3. Parameternamen]
 :::cards{flexBasis="300px"}
 ::br{flex-grow=2 code=true}
@@ -232,7 +233,7 @@ sechseck(10, 'red')
 </Solution>
 
 ::::
-
+#### Hilfsfunktion
 :::aufgabe[4. Hilfsfunktion `move_to(x, y)`]
 <Answer type="state" id="abe0029f-8f24-4ac1-a27a-3676e7b44e6d" />
 
@@ -454,7 +455,7 @@ print('Liebt mich (1) oder liebt mich nicht (0)?', randint(0, 1))
 
 ::::aufgabe[7. Stern zufälliger Grösse]
 
-:::flex
+:::flex{flexBasis="300px"}
 ```py live_py id=dca4358c-8263-45e7-809a-45db5f62ba4d
 from turtle import *
 from random import randint
@@ -485,8 +486,14 @@ star(randint(5, 150))
 ### Sternenhimmel
 
 ::::aufgabe[8. Sternenhimmel]
-:::flex
 
+:::cards{flexBasis="300px" justifyContent="center"}
+::br{flexGrow=0}
+![](./images/sternenhimmel.svg)
+**Zielsetzung**: Ein Sternenhimmel mit vielen Sternen an zufälligen Positionen.
+:::
+
+:::flex{flexBasis="300px"}
 ```py live_py id=3a915381-3637-44d7-a6b5-d69b14a38a96
 from turtle import *
 from random import randint
@@ -505,10 +512,22 @@ from random import randint
 </ProgressState>
 :::
 
-<Solution id="e8e978ee-1a50-4713-a529-20d1bc16352a">
+:::details[⭐️ Zusatz: Zufällige Sternfarben]
+1. Fügen Sie der Funktion `star(size)` einen weiteren Parameter `farbe` hinzu.
+2. Übergeben Sie beim Aufruf von `star` eine zufällige Farbe aus der Liste `['yellow', 'white', 'lightgrey', 'lightyellow']`. Um eine zufällige Farbe auszuwählen, kann die Funktion `choice` aus der Bibliothek `random` verwendet werden. Hier ein Beispiel, welches Sie für die Farbauswahl anpassen können:
 ```py live_py slim
+from random import choice
+print('Zufälliger Schultag:', choice(['Mo', 'Di', 'Mi', 'Do', 'Fr']))
+```
+
+:::
+
+<Solution id="e8e978ee-1a50-4713-a529-20d1bc16352a">
+```py live_py slim maxLines=26
 from turtle import *
 from random import randint
+
+speed(0)
 
 def move_to(x, y):
     penup()
@@ -530,12 +549,57 @@ color('yellow')
 for i in range(100):
     rand_pos()
     star(randint(5, 20))
+hideturtle()
 ```
 </Solution>
 ::::
 
+### Zufällige Kunst
 
-## Wiederholungen
+::::aufgabe[9. Zufällige Kunst]
+:::cards{columns=3}
+![](./images/circa-man-1.svg)
+::br
+![](./images/circa-man-2.svg)
+::br
+![](./images/circa-man-3.svg)
+::br
+![](./images/circa-man-4.svg)
+::br
+![](./images/circa-man-5.svg)
+::br
+![](./images/circa-man-6.svg)
+:::
+
+Material
+: Stift
+: eine ausgedruckt [👉 Vorlage](./images/screen-coordinates_py.svg)
+
+<ProgressState id="4b884f34-c1d3-4b3c-a160-067fde5169bd" confirm>
+1. Zeichnen Sie mit bis zu 20 Punkten eine Figur auf dem Koordinaten-Gitter.
+2. Zeichnen Sie die Figur mit Turtles nach, wobei Sie ausschlisslich den Befehl `goto(x, y)` (und die in Aufgabe 4 geschriebene Funktion `move_to(x, y)`) verwenden dürfen.
+3. Nun kommt der Zufall ins Spiel: haben Sie eine Idee, wie Sie die Figur mit zufälligen Punkten zeichnen können? Überlegen Sie sich eine Vorgehensweise und probieren Sie diese allenfalls auch mit ein paar Punkten aus. Im nächsten Schritt wird eine mögliche Lösung vorgestellt.
+4. Fügen Sie eine neue Funktion `circa_to(x, y)` hinzu, welche die Turtle an eine Position nahe bei `x`, `y` bewegt. Mit `randint(-5, 5)` können Sie eine zufällige Position zur x- und y-Koordinate beim Aufrufen von `goto` hinzufügen. Ersetzen Sie danach alle Aufrufe von `goto(x, y)` durch `circa_to(x, y)`, um die Figur mit zufälligen Abweichungen zu zeichnen.  
+    <Solution id="f17657d1-7540-4a00-960e-1e9b9fa9874a" standalone>
+    ```py
+    from turtle import *
+    from random import randint
+    def circa_to(x, y):
+        goto(x + randint(-5, 5), y + randint(-5, 5))
+    ```
+    </Solution>
+    ---
+5. Zeichnen Sie die Figur mehrmals übereinander, um einen interessanten Effekt zu erzielen.
+</ProgressState>
+
+```py live_py id=53754c1e-6c03-4207-aa4e-8a5cbc6077af
+from turtle import *
+from random import randint
+
+```
+::::
+
+## Parameter bei Wiederholungen
 
 :::finding[Wiederholung: 🔁 Wiederholte Ausführung]
 Mit `for i in range(n):` wird eine wiederholte Ausführung vorbereitet. Der nachfolgende **Codeblock** wird `n` Mal wiederholt.
@@ -549,8 +613,8 @@ for i in range(4):
 
 Wozu steht eigentlich das `i` im `for i in range(4)`? Das ist fast wie ein Parameter: `i` enthält die Anzahl bereits ausgeführter Wiederholungen.
 
-:::cards{min-width=220px}
-Während Wiederholung 1: `i=0`, keine Wiederholung abgeschlossen ist.
+:::cards{columns=2}
+Während Wiederholung 1: `i=0`, keine Wiederholung ist abgeschlossen.
 ![](./images/06-repeat-0.svg)
 ::br
 Während Wiederholung 2: `i=1`, eine Wiederholung ist bereits abgeschlossen.
