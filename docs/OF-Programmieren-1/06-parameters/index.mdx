@@ -3,6 +3,7 @@ page_id: 1320588e-e29e-4e73-85e0-c902fb41a3fe
 ---
 
 import Strukto from '@tdev-components/VisualizationTools/Strukto';
+import ProgressState from '@tdev-components/documents/ProgressState';
 
 # 5. Parameter ⊕⊖
 
@@ -16,14 +17,14 @@ Parameter :mdi[plus-circle-outline] :mdi[minus-circle-outline]
 : z.B. [Muffins-Rezept](https://www.chefkoch.de/rezepte/1692201277528566/Die-schnellsten-und-besten-Muffins-ueberhaupt.html)
 :::
 
-::::aufgabe[Aufgabe 1: Parameter identifizieren und finden]
+::::aufgabe[1. Parameter identifizieren und finden]
 <Answer type="state" id="a603eafc-7d9d-4745-b3cd-4613440c1317" />
 
 Markieren Sie im Programm unten alle Parameter und Befehlsnamen wie folgt:
 - Parameter <u>unterstreichen</u>
 - Befehlsnamen <span style={{background: 'yellow'}}>gelb</span> markieren
 
-:::flex
+:::flex{flexBasis="250px"}
 <Answer 
     type="text"
     id="5d982467-ce54-4d49-b02b-5cb031053b34"
@@ -38,7 +39,7 @@ for i in range(5):
     right(90)
     forward(29)`}
 />
-::br
+::br{marginTop="1.2em"}
 ```py live_py slim
 from turtle import *
 
@@ -67,7 +68,7 @@ Wie können Unterprogramme geschrieben werden, die **Parameter** akzeptieren?
 
 Untersuchen Sie die folgenden Unterprogramme (führen Sie diese aus!) - verstehen Sie, was passiert? Finden Sie einen Zusammenhang mit Parametern? Halten Sie Ihre Erkenntnisse fest.
 
-:::flex{minWidth=220px}
+:::flex{flexBasis="420px"}
 #### hello.py
 ```py live_py slim
 def hallo(name):
@@ -110,7 +111,7 @@ Zusatzfragen:
 
 ## Unterprogramme mit Parametern
 
-Parameter sind also Werte, die an ein Unterprogramm **übergeben** werden können. Damit der übergebene Wert im Unterprogramm **wiederverwendet** werden kann, braucht jeder Parameter einen Namen. Der Wert ist dann über diesen Namen abrufbar. Der **Parametername** ist frei wählbar, sollte aber seine Bedeutung widerspiegeln.
+Parameter sind also Werte, die an ein Unterprogramm **übergeben** werden können. Damit der übergebene Wert im Unterprogramm **wiederverwendet** werden kann, braucht jeder Parameter einen Namen. Der Wert ist dann über diesen Namen abrufbar. Der **Parametername** ist frei wählbar, soll aber wenn möglich die Bedeutung des übergebenen Wertes widerspiegeln.
 
 ### Beispiel
 
@@ -137,9 +138,18 @@ Parametername
 : Englisch für "grösse". Der Parameter beschreibt also, wie **gross** das Quadrat, welches vom Unterprogramm gezeichnet wird, sein soll.
 : Es wird eine **Zahl** erwartet - mit Text oder anderen Werten kann das Unterprogramm nichts anfangen.
 
+:::info[Beachte]
+<div className="compactDeflist">
+Z. 9
+: Es wird ein Quadrat mit der Seitenlänge `50` gezeichnet (in roter Farbe, da vorher `color('red')` ausgeführt wurde).
+Z. 12
+: Es wird ein Quadrat mit der Seitenlänge `100` gezeichnet (in blauer Farbe, da vorher `color('blue')` ausgeführt wurde).
+</div>
+:::
+
 ## Mehrere Parameter
 
-Manchmal ist es praktisch (oder auch nötig), mehrere Parameter an ein Unterprogramm zu übergeben. Das sieht man etwa beim Befehl `goto(x, y)`. Beim obigen Programm könnte etwa auch die Farbe direkt im Unterprogramm `quadrat` gesetzt werden:
+Manchmal ist es praktisch (oder auch nötig), mehrere Parameter an ein Unterprogramm zu übergeben. Das sieht man etwa beim Befehl `goto(x, y)`, bei welchem die x- und y-Koordinaten übergeben werden. Beim obigen Programm könnte etwa auch die Farbe direkt im Unterprogramm `quadrat` gesetzt werden:
 
 ```py live_py slim
 from turtle import *
@@ -150,38 +160,31 @@ def quadrat(size, farbe):
         forward(size)
         left(90)
 
-quadrat(50, 'red')  # ein rotes Quadrat mit der Grösse 50 zeichnen
-quadrat(100, 'blue') # ein blaues Quadrat mit der Grösse 100 zeichnen
+quadrat(50, 'red')
+quadrat(100, 'blue')
 ```
-
-Es ist prinzipiell möglich, beliebig viele Parameter nacheinander zu übergeben.
-
-:::danger[Häufige Fehler]
-Ein häufiger Fehler sind vergessene Kommas zwischen zwei Parameternamen. Dann entsteht ein **SyntaxError**. Die Fehlermeldung macht aber darauf aufmerksam.
-
-```py live_py slim
-from turtle import *
-goto(100 200)
-```
-
-```bash
-goto(100 200)
-     ^^^^^^^
-SyntaxError: invalid syntax. Perhaps you forgot a comma?
-```
+:::info[Beachte]
+<div className="compactDeflist">
+Z. 9
+: Die Parameter `50` und `'red'` werden übergeben und im Unterprogramm auf Z. 4 und Z. 6 verwendet.
+: Es wird ein rotes Quadrat mit der Seitenlänge `50` gezeichnet.
+Z. 12
+: Die Parameter `100` und `'blue'` werden übergeben und im Unterprogramm auf Z. 4 und Z. 6 verwendet.
+: Es wird ein blaues Quadrat mit der Seitenlänge `100` gezeichnet.
+</div>
 :::
 
 
+### Aufgabe
 ::::aufgabe[3. Parameternamen]
-<Answer type="state" id="a3f42726-24e0-4a66-8a08-5bc74976c567" />
-
-:::cards{min-width=200px}
+:::cards{flexBasis="300px"}
 ::br{flex-grow=2 code=true}
 ```py live_py title=sechseck.py id=fcd69fed-4ed9-4706-954e-c49cf1c8b764
 from turtle import *
 
 ```
 ::br{overflow-y=auto max-height=550px flex-grow=1}
+<ProgressState id="bd9a30d2-31a3-4a41-9728-67fc51e7d1b1" confirm>
 1. Definieren Sie das Unterprogramm Namens `sechseck` mit einem Parameter `size`, mit welchem ein Sechseck mit der Grösse `size` gezeichnet werden kann. Rufen Sie das Programm mit `sechseck(20)` auf. 
 
     ![](./images/06_sechseck_1.svg)
@@ -198,7 +201,7 @@ from turtle import *
     ❓ In welcher Reihenfolge müssen die Sechsecke gezeichnet werden, damit genau das obige Bild entsteht?
 
     **Tipp**: Die Stiftdicke können Sie mit `pensize(10)` auf `10` setzen.
- 
+</ProgressState>
 :::
 <Solution id="ddb86a65-3456-449a-914d-3992bb074adf">
 
@@ -229,6 +232,308 @@ sechseck(10, 'red')
 </Solution>
 
 ::::
+
+:::aufgabe[4. Hilfsfunktion `move_to(x, y)`]
+<Answer type="state" id="abe0029f-8f24-4ac1-a27a-3676e7b44e6d" />
+
+Sequenzen, die immer wieder vorkommen, können als Unterprogramm zusammengefasst werden. Schreiben Sie das Unterprogramm `move_to(x, y)`, welches die Turtle an die Position `x`, `y` bewegt, ohne eine Linie zu zeichnen. Verwenden Sie dazu die Befehle `penup()`, `goto(x, y)` und `pendown()`. Testen Sie Ihr Unterprogramm, indem Sie die Turtle an verschiedene Positionen bewegen.
+
+
+```py live_py title=move_to.py id=80219976-df11-4955-a202-ba1828d9ed28
+from turtle import *
+
+def move_to(x, y):
+    pass
+
+def draw_star(farbe, size):
+    pass
+
+draw_star('red', 20)
+move_to(100, 100)
+draw_star('blue', 30)
+move_to(-150, 50)
+draw_star('green', 40)
+```
+
+:::
+
+### Häufige Fehler
+:::danger[SyntaxError: Vergessene Kommas]
+Ein häufiger Fehler sind vergessene Kommas zwischen zwei Parameternamen. Dann entsteht ein **SyntaxError**. Die Fehlermeldung macht aber darauf aufmerksam.
+
+```py live_py slim
+from turtle import *
+goto(100 200)
+```
+
+```bash
+goto(100 200)
+     ^^^^^^^
+SyntaxError: invalid syntax. Perhaps you forgot a comma?
+```
+:::
+
+:::danger[TypeError: Falsche Anzahl Parameter]
+Ein weiterer häufiger Fehler ist die falsche Anzahl übergebener Parameter. Auch hier macht die Fehlermeldung darauf aufmerksam - wie viele Argumente (`positional argument`) erwartet werden und wie viele übergeben wurden.
+```py live_py slim
+from turtle import *
+def quadrat(size):
+    for i in range(4):
+        forward(size)
+        left(90)
+quadrat(50, 'red')
+```
+
+```bash
+File "snippet.py", line 6, in <module>
+TypeError: quadrat() takes 1 positional argument but 2 were given
+```
+Hier wird also darauf hingewiesen, dass `quadrat()` nur einen Parameter erwartet, aber zwei übergeben wurden.
+:::
+
+::::danger[Überschreibung von Unterprogrammen]
+Wird ein Parametername verwendet, der bereits als Unterprogrammname existiert, so wird das Unterprogramm überschrieben. Das führt zu Fehlern, die schwer zu finden sind.
+
+```py live_py slim
+from turtle import forward, left, color
+
+def square(size, color):
+    color(color)
+    begin_fill()
+    for i in range(4):
+        forward(size)
+        left(90)
+    end_fill()
+square(50, 'red')
+```
+```bash
+File "snippet.py", line 4, in square
+TypeError: 'str' object is not callable
+```
+
+Die Fehlermeldung ist etwas kryptisch, aber sie weist darauf hin, dass versucht wurde, einen String (`str`), also etwa `'red'`, wie ein Unterprogramm aufzurufen.  
+Das passiert, weil auf **Z. 3** der Parametername `color` das Unterprogramm `color()` aus der Bibliothek `turtle` (**Z. 1**) überschrieben hat.
+:::success[Lösung]
+Der Parametername muss geändert werden - dabei gibt es unterschiedliche Ansätze:
+- Parametername in deutscher Sprache: `farbe` statt `color`.
+- Abkürzung des Parametername: `col` oder `colr` statt `color`.
+- Ein Präfix verwenden: `my_color` oder `p_color` statt `color`.
+:::
+::::
+
+:::aufgabe[5. Fehler finden und beheben]
+<Answer type="state" id="3b730979-1a76-477d-a633-64ca53e1b40f" />
+
+Finden und beheben Sie die Fehler im folgenden Programm.
+
+```py live_py title=fehler.py id=d7d1d6d3-b063-4922-812a-343ad38ba62f maxLines=27
+from turtle import *
+
+def move_to(x, y):
+    penup()
+    goto(x, y)
+    pendown()
+
+def bucket(forward):
+    right(90)
+    for i in range(3):
+        forward(forward)
+        left(90)
+    right(180)
+
+def cross(size, color):
+    color(color)
+    begin_fill()
+    for i in range(4):
+        bucket(size)
+        left(90)
+    end_fill()
+
+cross(50, 'red')
+move_to(80, 120)
+cross(40, 'blue', 'green')
+move_to(-40 110)
+cross(30, 'green')
+```
+<Solution id="56d80b70-8bb1-4268-88a2-591f50fb9df8" className="compactDeflist">
+```py showLineNumbers
+from turtle import *
+
+def move_to(x, y):
+    penup()
+    goto(x, y)
+    pendown()
+
+# highlight-next-line
+def bucket(forward):
+    right(90)
+    for i in range(3):
+        # highlight-next-line
+        forward(forward)
+        left(90)
+    right(180)
+
+# highlight-next-line
+def cross(size, color):
+    # highlight-next-line
+    color(color)
+    begin_fill()
+    for i in range(4):
+        bucket(size)
+        left(90)
+    end_fill()
+
+cross(50, 'red')
+move_to(80, 120)
+# highlight-next-line
+cross(40, 'blue', 'green')
+# highlight-next-line
+move_to(-40 110)
+cross(30, 'green')
+```
+
+Z. 8, 11
+: Der Parametername `forward` überschreibt das Unterprogramm `forward()` aus der Bibliothek `turtle`. Ändern Sie den Parameternamen etwa in `length` oder `size`.
+Z. 15, 16
+: Der Parametername `color` überschreibt das Unterprogramm `color()` aus der Bibliothek `turtle`. Ändern Sie den Parameternamen etwa in `farbe` oder `col`.
+Z. 25
+: Es werden drei Parameter übergeben, aber nur zwei erwartet. Entfernen Sie den dritten Parameter `'green'`.
+Z. 27
+: Es fehlt ein Komma zwischen den Parametern `-40` und `110`.
+
+</Solution>
+:::
+
+## Zufall
+Zufallszahlen sind für die Informatik sehr wichtig - etwa für die Simulation von realen Situationen, bei Computerspielen oder aber auch für die Kryptologie (beim verschlüsseln von Daten).  
+Aber auch beim Erzeugen von künstlerischen Werken sind Zufallszahlen sehr nützlich, da dadurch unvorhersehbare und interessante Muster entstehen können.
+
+In Python gibt es die Bibliothek `random`, welche verschiedene Befehle zum Arbeiten mit Zufallszahlen bereitstellt.
+
+:::def[`randint(min, max)`]
+Der Befehl `randint(min, max)` gibt eine zufällige ganze Zahl im Bereich von `min` bis `max` zurück, wobei die Grenzwerte auch erreicht werden können.
+
+```py live_py slim
+from random import randint
+
+print('Zufallszahl zwischen 1 und 10:', randint(1, 10))
+print('Zufallszahl zwischen 1 und 99:', randint(1, 99))
+```
+:::
+
+::::aufgabe[6. Liebes-Orakel]
+<Answer type="state" id="7de08fe3-ad59-4916-9449-361786fc4f0f" />
+
+:::cards{flexBasis="250px"}
+::br{flexGrow=2}
+Das Spiel "Liebt mich, liebt mich nicht" kennen wohl aus der Kindheit. Bei einer Blume werden die Blütenblätter nacheinander abgezupft, während man abwechselnd "Liebt mich" und "Liebt mich nicht" sagt. Am Ende entscheidet das letzte Blütenblatt über die Antwort.
+::br{flexGrow=0}
+![--width=250px](./images/liebt-mich-liebt-mich-nicht.jpg)
+:::
+
+Schreiben Sie ein Liebes-Orakel, welches dieselbe Frage wie die Blume beantwortet.
+
+Beim Ausführen soll das Programm einen Text ausgeben:
+
+- `Liebt mich (1) oder liebt mich nicht (0)? 0`
+- `Liebt mich (1) oder liebt mich nicht (0)? 1`
+
+```py live_py id=845659ab-f724-4e60-a053-3690e983396c
+```
+
+<Solution id="86216f5c-3b2b-42a1-8fad-ce3c6f373a61">
+```py live_py slim
+from random import randint
+print('Liebt mich (1) oder liebt mich nicht (0)?', randint(0, 1))
+```
+</Solution>
+
+::::
+
+### Sterne
+
+::::aufgabe[7. Stern zufälliger Grösse]
+
+:::flex
+```py live_py id=dca4358c-8263-45e7-809a-45db5f62ba4d
+from turtle import *
+from random import randint
+
+```
+::br
+<ProgressState id="a910bd87-ef2b-483e-ba3f-7211ec81848e" confirm>
+1. Schreiben Sie ein Unterprogramm `star`, welches einen Stern mit 5 Zacken und einer Seitenlänge von `100` zeichnet. Testen Sie das Unterprogramm, indem Sie es aufrufen.
+2. Modifizieren Sie das Unterprogramm so, dass die Seitenlänge als Parameter übergeben werden kann. Testen Sie das Unterprogramm, indem Sie es mit verschiedenen Seitenlängen aufrufen.
+3. Rufen Sie das Unterprogramm `star` nun mit einer zufälligen Seitenlänge zwischen `5` und `150` auf.
+</ProgressState>
+:::
+
+<Solution id="23cc7852-d7e6-47ca-b8ce-af669aeceb1f">
+```py live_py slim
+from turtle import *
+from random import randint
+
+def star(size):
+    for i in range(5):
+        forward(size)
+        right(2 * 360 / 5)
+star(randint(5, 150))
+```
+</Solution>
+::::
+
+### Sternenhimmel
+
+::::aufgabe[8. Sternenhimmel]
+:::flex
+
+```py live_py id=3a915381-3637-44d7-a6b5-d69b14a38a96
+from turtle import *
+from random import randint
+
+```
+::br
+<ProgressState id="8828c265-8dcb-4faf-bc01-453fbbf0c7e2" confirm>
+1. Fügen Sie die Hilfsfunktion `move_to(x, y)` aus der Aufgabe 4. und die Funktion `star(size)` aus der Aufgabe 7. in das Programm ein.
+2. Zeichnen Sie 10 Sterne der Grösse `30` an zufälligen Positionen zwischen `-200` und `200` für x- und y-Koordinate:
+    1. Stern der Grösse `30` zeichnen.
+    2. verwenden Sie `randint(-200, 200)` als Argument für die x- und y-Koordinate der Funktion `move_to`.
+    3. Schritte i. und ii. `10` Mal wiederholen.
+    4. Tipp: `speed(0)` am Anfang des Programms sorgt für eine schnelle Zeichnung.
+3. Zeichnen Sie nun auch noch die Grösse der Sterne zufällig zwischen `5` und `50`.
+4. Setzen Sie die [Hinergrundfarbe](../20-commands/index.mdx#zeichnungsfläche) auf schwarz und füllen Sie die Sterne gelb aus und zeichnen Sie nun `100` Sterne.
+</ProgressState>
+:::
+
+<Solution id="e8e978ee-1a50-4713-a529-20d1bc16352a">
+```py live_py slim
+from turtle import *
+from random import randint
+
+def move_to(x, y):
+    penup()
+    goto(x, y)
+    pendown()
+
+def rand_pos():
+    move_to(randint(-200, 200), randint(-200, 200))
+
+def star(size):
+    begin_fill()
+    for i in range(5):
+        forward(size)
+        right(2 * 360 / 5)
+    end_fill()
+
+Screen().bgcolor('black')
+color('yellow')
+for i in range(100):
+    rand_pos()
+    star(randint(5, 20))
+```
+</Solution>
+::::
+
 
 ## Wiederholungen
 
@@ -286,80 +591,6 @@ Im obigen Beispiel startet `i` bei `2` und wird solange um `3` erhöht, bis die 
 **! 11 wird nicht angenommen**.
 
 :::
-::::
-
-
-::::aufgabe[Aufgabe 4]
-<Answer type="state" id="222e78e2-9227-4696-916d-8f0c7e147b76" />
-
-1. <Answer type="state" id="0641b4ff-9bf2-452d-a97e-3b7626beb3f2" inline /> Kopieren Sie die Definition eines Hauses aus der letzten Übung in dieses Programm. Modifizieren Sie das Unterprogramm `haus(size)` so ab, dass nun die Grösse des Hauses spezifiziert werden kann. Die Wurzel einer Zahl kann mit `sqrt(zahl)` berechnet werden.
-    :::details[Haus von Nikolaus]
-    ![--width=300px](./images/haus-von-nikolaus.png)
-    :::
-2. <Answer type="state" id="ae65d26b-3922-4fe1-a8c8-ff25760325f4" inline /> Schreiben Sie ein Unterprogramm `move(x, y)`, welches die Schritte
-   1. Stift heben
-   2. zur Position `x`, `y` gehen
-   3. Stift senken  
-   
-   zusammenfasst. 
-3. <Answer type="state" id="d291c105-5a41-497d-b2d6-8a0a1941a60b" inline /> Mit dem Befehl `randint(min, max)` aus der Bibliothek `random` kann eine zufällige ganze Zahl erzeugt werden. Dabei muss der kleinst- und grösstmögliche Wert angegeben werden. Mit `move(randint(-20, 20), randint(-20, 20))` kann also die Turtle an eine beliebige Position verschoben werden. Zeichnen Sie 20 Häuser an zufälligen Positionen mit der Grösse `30`.
-
-![Stadt --width=300px](./images/06_house_city.png)
-
-4. <Answer type="state" id="01b44f0a-a0e7-47c9-a604-c6735e670782" inline /> Wählen Sie nun auch die Grösse zufällig: `haus(randint(10, 100))`
-5. <Answer type="state" id="8760223e-f4ac-4d16-b1a9-60b0808add71" inline /> Nun soll auch noch die Farbe zufällig gewählt werden. Der Befehl `choice` aus der Bibliothek `random` gibt jeweils ein zufälliges Element einer Liste zurück: `choice([1, 3, 5, 7, 9])` etwa wählt zufällig eine ungerade Zahl zwischen 1 und 10 aus. Die Liste der Farben:
-```py
-['violet', 'indigo', 'blue', 'green', 'lime', 'lightgreen', 'yellow', 'orange', 'orangered', 'red']
-```
-
-```py live_py title=stadt.py id=125d0c61-4e44-4e13-90bf-e1c99e4bb581
-from turtle import *
-from math import sqrt
-from random import randint, choice
-
-```
-<Solution id="9ade393f-3a94-4b7f-87f5-114ffc4f1e60">
-
-```py live_py slim
-from turtle import *
-from math import sqrt
-from random import randint, choice 
-
-def move(x, y):
-    penup()
-    goto(x, y)
-    pendown()
-
-def haus(size):
-    # Viereck zeichnen
-    for i in range(4):
-        forward(size)
-        left(90)
-    # Diagonale 1
-    left(45)
-    forward(sqrt(2) * size)
-    # Hausdach
-    left(90)
-    forward(sqrt(2) * size / 2)
-    left(90)
-    forward(sqrt(2) * size / 2)
-    # Diagonale 2
-    left(90)
-    forward(size * sqrt(2))
-    # wieder nach rechts schauen
-    left(45)
-
-# Die Programmausführung beginnt hier
-speed(20)
-pensize(3)
-
-for i in range(30):
-    pencolor(choice(['violet', 'indigo', 'blue', 'green', 'lime', 'lightgreen', 'yellow', 'orange', 'orangered', 'red']))
-    move(randint(-250, 250), randint(-250, 250))
-    haus(randint(10, 100))
-```
-</Solution>
-
 ::::
 
 
