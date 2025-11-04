@@ -175,8 +175,8 @@ Z. 10
 :::
 
 
-### Aufgaben
-#### Sechseck
+## Aufgaben
+### 3. Sechseck
 ::::aufgabe[3. Parameternamen]
 :::cards{flexBasis="300px"}
 ::br{flex-grow=2 code=true}
@@ -233,7 +233,7 @@ sechseck(10, 'red')
 </Solution>
 
 ::::
-#### Hilfsfunktion
+### 4. Hilfsfunktion
 :::aufgabe[4. Hilfsfunktion `move_to(x, y)`]
 <Answer type="state" id="abe0029f-8f24-4ac1-a27a-3676e7b44e6d" />
 
@@ -258,7 +258,7 @@ draw_star('green', 40)
 
 :::
 
-### Häufige Fehler
+## Häufige Fehler
 :::danger[SyntaxError: Vergessene Kommas]
 Ein häufiger Fehler sind vergessene Kommas zwischen zwei Parameternamen. Dann entsteht ein **SyntaxError**. Die Fehlermeldung macht aber darauf aufmerksam.
 
@@ -322,6 +322,7 @@ Der Parametername muss geändert werden - dabei gibt es unterschiedliche Ansätz
 :::
 ::::
 
+### 5. Fehler finden
 :::aufgabe[5. Fehler finden und beheben]
 <Answer type="state" id="3b730979-1a76-477d-a633-64ca53e1b40f" />
 
@@ -422,6 +423,7 @@ print('Zufallszahl zwischen 1 und 99:', randint(1, 99))
 ```
 :::
 
+### 6. Orakel
 ::::aufgabe[6. Liebes-Orakel]
 <Answer type="state" id="7de08fe3-ad59-4916-9449-361786fc4f0f" />
 
@@ -451,7 +453,7 @@ print('Liebt mich (1) oder liebt mich nicht (0)?', randint(0, 1))
 
 ::::
 
-### Sterne
+### 7. Sterne
 
 ::::aufgabe[7. Stern zufälliger Grösse]
 
@@ -483,7 +485,7 @@ star(randint(5, 150))
 </Solution>
 ::::
 
-### Sternenhimmel
+### 8. Sternenhimmel
 
 ::::aufgabe[8. Sternenhimmel]
 
@@ -554,7 +556,7 @@ hideturtle()
 </Solution>
 ::::
 
-### Zufällige Kunst
+### 9. Zufällige Kunst
 
 ::::aufgabe[9. Zufällige Kunst]
 :::cards{columns=3}
@@ -596,6 +598,11 @@ from turtle import *
 from random import randint
 
 ```
+:::details[⭐️ Zusatz]
+Einige Ideen für Erweiterungen:
+- Fügen Sie einen Parameter `jitter` zur Funktion `circa_to` hinzu, mit welchem die maximale Abweichung kontrolliert werden kann. Für `jitter=2` soll die Figur nur leicht, für `jitter=50` stärker verzerrt werden.
+- Fügen Sie einen Parameter `scale` zur Funktion `circa_to` hinzu, mit welcher die Grösse der Figur kontrolliert werden kann. Für `scale=0.5` soll die Figur halb so gross, für `scale=2` doppelt so gross gezeichnet werden.
+- Können Sie die Figur an einer beliebigen Position zeichnen?
 ::::
 
 ## Parameter bei Wiederholungen
@@ -656,8 +663,9 @@ Im obigen Beispiel startet `i` bei `2` und wird solange um `3` erhöht, bis die 
 :::
 ::::
 
+### ⭐ Challenges
 
-:::aufgabe[⭐️ Zusatz]
+:::aufgabe[⭐️ Quadrate]
 <Answer type="state" id="d89c87d2-8c51-415a-9101-f577aa1f1c65" />
 
 Zeichnen Sie folgende Quadrate. Auf wie viele Zeilen können Sie Ihr Programm kürzen?
@@ -672,13 +680,13 @@ from turtle import *
 ```py live_py slim
 from turtle import * 
 
-def move(x, y):
+def move_to(x, y):
     penup()
     goto(x, y)
     pendown()
 
 for i in range(1, 11):
-    move(i * 10, -i * 10)
+    move_to(i * 10, -i * 10)
     for n in range(4):
         left(90)
         forward(i * 20)
@@ -686,3 +694,88 @@ for i in range(1, 11):
 </Solution>
 
 :::
+
+
+
+::::aufgabe[⭐️ Punkte]
+
+
+:::cards{flexBasis="300px" justifyContent="center"}
+::br{flexGrow=0}
+![](./images/point-grid-explode.svg)
+**Zielsetzung**: Ein Punktegitter mit unterschiedlich starken Abweichungen.
+:::
+
+<ProgressState id="61e96c85-c34c-42dc-9edc-55decfc0b4c6" confirm>
+1. Zeichnen Sie eine Punkt-Zeile mit
+    - 11 Punkten mit Radius `15` in x-Richtung (verwenden Sie den `dot`-Befehl)
+    - Abstand `30` Einheiten
+    - mit der Funktion `move_to(x, y)` aus Aufgabe 4 (ohne `forward`!).
+
+    ![](./images/point-row.svg)
+2. Zeichnen Sie nun 11 solcher Punkt-Zeilen untereinander, mit einem Abstand von `30` Einheiten in y-Richtung. Die Schleifenvariable soll anders als `i` heissen (z.B. `j`).
+
+    ![](./images/point-grid.svg)
+
+    <Solution id="8c0ed94a-4eb6-40fd-b898-d78d9ec50f9e" standalone>
+    ```py live_py slim
+    from turtle import *
+    from random import randint
+
+    def move_to(x, y):
+        penup()
+        goto(x, y)
+        pendown()
+
+    for j in range(11):
+        for i in range(11):
+            move_to(i * 30 - 200, j * 30 - 200)
+            dot(15)
+            
+    hideturtle()
+    ```
+    </Solution>
+3. Fügen Sie die Funktion `circa_to(x, y)` aus Aufgabe 9 hinzu und verwenden Sie diese anstelle von `move_to(x, y)`, um die Punkte mit zufälligen Abweichungen zu zeichnen. Verwenden Sie eine Abweichung von $\pm 5$ Einheiten. Um die exakte Position zu kennzeichnen, soll zusätzlich ein kleiner roter Punkt an die unveränderte Position gesetzt werden.
+
+    ![](./images/point-grid-random-5.svg)
+    
+    <Solution id="455a0a51-39ca-4513-baad-e88b8da29569" standalone>
+    ```py live_py slim
+    from turtle import *
+    from random import randint
+
+    def move_to(x, y):
+        penup()
+        goto(x, y)
+        pendown()
+
+    def circa_to(x, y):
+        move_to(x + randint(-5, 5), y + randint(-5, 5))
+
+    for j in range(11):
+        for i in range(11):
+            circa_to(i * 30 - 200, j * 30 - 200)
+            dot(15)
+            goto(i * 30 - 200, j * 30 - 200)
+            dot()
+
+    hideturtle()
+    ```
+    </Solution>
+4. Fügen Sie der Funktion `circa_to(x, y)` einen Parameter `jitter` hinzu, mit welchem die maximale Abweichung kontrolliert werden kann. Finden Sie heraus, wie Sie mit den beiden Schleifenvariablen `i` und `j` eine grössere Abweichung für die Punkte weiter rechts-oben im Gitter erreichen können?
+
+    ![](./images/point-grid-diff.svg)
+
+5. Finales Bild: Kommentieren Sie die Zeilen aus, in welchen die roten Punkte und Striche gezeichnet werden.
+    ![](./images/point-grid-explode.svg)
+
+</ProgressState>
+
+
+```py live_py title=point-grid.py id=838457b5-f64f-46ec-9e11-4d990dec6cec
+from turtle import *
+from random import randint
+
+```
+
+::::
