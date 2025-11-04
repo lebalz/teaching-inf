@@ -118,9 +118,9 @@ Parameter sind also Werte, die an ein Unterprogramm **übergeben** werden könne
 ```py live_py slim
 from turtle import *
 
-def quadrat(size):
+def quadrat(grösse):
     for i in range(4):
-        forward(size)
+        forward(grösse)
         left(90)
 
 color('red')
@@ -134,8 +134,8 @@ Unterprogramm
 : `quadrat`
 : Zeichnet ein Quadrat mit der übergebenen Grösse.
 Parametername
-: `size`
-: Englisch für "grösse". Der Parameter beschreibt also, wie **gross** das Quadrat, welches vom Unterprogramm gezeichnet wird, sein soll.
+: `grösse`
+: Der Parameter beschreibt, wie **gross** das Quadrat, welches vom Unterprogramm gezeichnet wird, sein soll.
 : Es wird eine **Zahl** erwartet - mit Text oder anderen Werten kann das Unterprogramm nichts anfangen.
 
 :::info[Beachte]
@@ -154,10 +154,10 @@ Manchmal ist es praktisch (oder auch nötig), mehrere Parameter an ein Unterprog
 ```py live_py slim
 from turtle import *
 
-def quadrat(size, farbe):
+def quadrat(grösse, farbe):
     color(farbe)
     for i in range(4):
-        forward(size)
+        forward(grösse)
         left(90)
 
 quadrat(50, 'red')
@@ -186,14 +186,14 @@ from turtle import *
 ```
 ::br{overflow-y=auto max-height=550px flex-grow=1}
 <ProgressState id="bd9a30d2-31a3-4a41-9728-67fc51e7d1b1" confirm float='right'>
-1. Definieren Sie das Unterprogramm Namens `sechseck` mit einem Parameter `size`, mit welchem ein Sechseck mit der Grösse `size` gezeichnet werden kann. Rufen Sie das Programm mit `sechseck(20)` auf. 
+1. Definieren Sie das Unterprogramm Namens `sechseck` mit einem Parameter `grösse`, mit welchem ein Sechseck mit der Grösse `grösse` gezeichnet werden kann. Rufen Sie das Programm mit `sechseck(20)` auf. 
 
     ![](./images/06_sechseck_1.svg)
 2. Erzeugen Sie nun `10` Sechsecke. Das kleinste Sechseck hat die Seitenlänge `10`, das grösste die Seitenläng `100`.
 
     ![](./images/06_sechseck_2.svg)
 
-3. Fügen Sie der Funktion `sechseck(size)` den Parameter `farbe` hinzu und erzeugen Sie damit folgendes Bild:
+3. Fügen Sie der Funktion `sechseck(grösse)` den Parameter `farbe` hinzu und erzeugen Sie damit folgendes Bild:
 
     ![](./images/06_sechseck_3.svg)
 
@@ -211,10 +211,10 @@ from turtle import *
 
 speed(10)
 
-def sechseck(size, farbe):
+def sechseck(grösse, farbe):
     color(farbe)
     for i in range(6):
-        forward(size)
+        forward(grösse)
         left(60)
 
 pensize(10)
@@ -234,29 +234,74 @@ sechseck(10, 'red')
 
 ::::
 ### 4. Hilfsfunktion
-:::aufgabe[4. Hilfsfunktion `move_to(x, y)`]
-<Answer type="state" id="abe0029f-8f24-4ac1-a27a-3676e7b44e6d" />
+:::info[Hilfsfunktionen]
+*Sequenzen*, die immer wieder vorkommen, sollen als **Hilfsfunktion** zusammengefasst werden.  
+**Tipp**: Speichern Sie bewährte Hilfsfunktionen in Ihrem persönlichen Bereich in einem Ordner __Hilfsprogramme__ ab.
+:::
 
-Sequenzen, die immer wieder vorkommen, können als Unterprogramm zusammengefasst werden. Schreiben Sie das Unterprogramm `move_to(x, y)`, welches die Turtle an die Position `x`, `y` bewegt, ohne eine Linie zu zeichnen. Verwenden Sie dazu die Befehle `penup()`, `goto(x, y)` und `pendown()`. Testen Sie Ihr Unterprogramm, indem Sie die Turtle an verschiedene Positionen bewegen.
+::::aufgabe[4. `move_to(x, y)`]
+<Answer type="state" id="4ebaa3cd-f5bd-4a0f-ba29-e948cce7b83a" />
+
+Im untenstehenden Programm werden die Zeilen zum Bewegen der Turtle ohne dabei eine Linie zu zeichnen, immer wiederholt.
+
+Schreiben Sie ein Unterprogramm `move_to(x, y)`, welches diese Schritte zusammenfasst, also:
+- den Stift anhebt
+- zur Position (x, y) bewegt
+- und den Stift absenkt
 
 
-```py live_py title=move_to.py id=80219976-df11-4955-a202-ba1828d9ed28
+```py live_py title=move_to.py id=a5ad79c4-4ea2-4b7e-a7bc-bb8224ad2e06
+from turtle import *
+
+def quadrat(grösse, farbe):
+    color(farbe)
+    for i in range(4):
+        forward(grösse)
+        left(90)
+
+penup()
+goto(30, 30)
+pendown()
+quadrat(20, 'red')
+
+penup()
+goto(-50, 30)
+pendown()
+quadrat(30, 'blue')
+
+penup()
+goto(0, 100)
+pendown()
+quadrat(40, 'green')
+```
+
+<Solution id="b0fbce6a-3580-4614-adb5-630979387662">
+```py live_py slim
 from turtle import *
 
 def move_to(x, y):
-    pass
+    penup()
+    goto(x, y)
+    pendown()
 
-def draw_star(farbe, size):
-    pass
+def quadrat(grösse, farbe):
+    color(farbe)
+    for i in range(4):
+        forward(grösse)
+        left(90)
 
-draw_star('red', 20)
-move_to(100, 100)
-draw_star('blue', 30)
-move_to(-150, 50)
-draw_star('green', 40)
+move_to(30, 30)
+quadrat(20, 'red')
+
+move_to(-50, 30)
+quadrat(30, 'blue')
+
+move_to(0, 100)
+quadrat(40, 'green')
 ```
+</Solution>
 
-:::
+::::
 
 ## Häufige Fehler
 :::danger[SyntaxError: Vergessene Kommas]
@@ -278,9 +323,9 @@ SyntaxError: invalid syntax. Perhaps you forgot a comma?
 Ein weiterer häufiger Fehler ist die falsche Anzahl übergebener Parameter. Auch hier macht die Fehlermeldung darauf aufmerksam - wie viele Argumente (`positional argument`) erwartet werden und wie viele übergeben wurden.
 ```py live_py slim
 from turtle import *
-def quadrat(size):
+def quadrat(grösse):
     for i in range(4):
-        forward(size)
+        forward(grösse)
         left(90)
 quadrat(50, 'red')
 ```
@@ -298,11 +343,11 @@ Wird ein Parametername verwendet, der bereits als Unterprogrammname existiert, s
 ```py live_py slim
 from turtle import forward, left, color
 
-def square(size, color):
+def square(grösse, color):
     color(color)
     begin_fill()
     for i in range(4):
-        forward(size)
+        forward(grösse)
         left(90)
     end_fill()
 square(50, 'red')
@@ -323,8 +368,14 @@ Der Parametername muss geändert werden - dabei gibt es unterschiedliche Ansätz
 ::::
 
 ### 5. Fehler finden
-:::aufgabe[5. Fehler finden und beheben]
+::::aufgabe[5. Fehler finden und beheben]
 <Answer type="state" id="3b730979-1a76-477d-a633-64ca53e1b40f" />
+
+:::cards{flexBasis="300px" justifyContent="center"}
+::br{flexGrow=0}
+![](./images/crosses.svg)
+Gewünschte Ausgabe
+:::
 
 Finden und beheben Sie die Fehler im folgenden Programm.
 
@@ -404,7 +455,7 @@ Z. 27
 : Es fehlt ein Komma zwischen den Parametern `-40` und `110`.
 
 </Solution>
-:::
+::::
 
 ## Zufall
 Zufallszahlen sind für die Informatik sehr wichtig - etwa für die Simulation von realen Situationen, bei Computerspielen oder aber auch für die Kryptologie (beim verschlüsseln von Daten).  
