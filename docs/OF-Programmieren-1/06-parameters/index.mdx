@@ -341,7 +341,7 @@ Hier wird also darauf hingewiesen, dass `quadrat()` nur einen Parameter erwartet
 Wird ein Parametername verwendet, der bereits als Unterprogrammname existiert, so wird das Unterprogramm überschrieben. Das führt zu Fehlern, die schwer zu finden sind.
 
 ```py live_py slim
-from turtle import forward, left, color
+from turtle import forward, left, color, begin_fill, end_fill
 
 def square(grösse, color):
     color(color)
