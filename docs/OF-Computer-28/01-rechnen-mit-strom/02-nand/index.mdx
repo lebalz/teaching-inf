@@ -1,0 +1,144 @@
+---
+page_id: 04e7d537-9b4f-4f2f-80c8-38db243f8e60
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import ProgressState from '@tdev-components/documents/ProgressState';
+
+
+# Logische Grundoperationen
+
+## Schalter
+Es wäre falsch, sich für das Verständnis des Computers nur auf die Betrachtung von Leitungen zu beschränken. Genau so wichtig sind die **Schalter**, welche diese Leitungen ein und auschalten. Erst dadurch kann der Computer selbständig arbeiten und Zahlen miteinander verrechnen.
+
+Die Schalter, welche man zum Bau eines Computers verwendet sind aber nicht gewöhnliche Schalter, welche von Hand betätigt werden. Stattdessen setzt man Schalter ein, welche durch Strom betätigt werden. In der Anfangszeit des Computers waren dies elektromagnetische Schalter, __Relais__ genannt.
+
+::::definition[Relais]
+Ein Relais ist ein **Schalter**, welcher durch einen **Elektromagneten** angetrieben wird. Wenn der Elektromagnet mit der Batterie verbunden wird, so fliesst ein **Strom**. Dieser erzeugt ein **Magnetfeld**, welches einen Eisenbügel (Anker) anzieht. Dadurch werden die Kontakte des Schalters bewegt. Je nach Art des Relais schliessen sich die Kontakte oder öffnen sich.
+
+<Tabs>
+  <TabItem value="relais-off" label="Elektromagnet: Aus" default>
+    :::cards
+    ![--width=450px](./images/relais-off.png)
+    :::
+  </TabItem>
+  <TabItem value="relais-on" label="Elektromagnet: Ein">
+    :::cards
+    ![--width=450px](./images/relais-on.png)
+    :::
+  </TabItem>
+</Tabs>
+
+Sobald das Relais von der Batterie getrennt wird, verschwindet das Magnetfeld und der Anker fällt durch eine Feder in die Ausgangslage zurück.
+::::
+
+
+## Relais-Schalter
+
+Das Relais in unserem Baukasten kann sowohl als *Standard ON* als auch als *Standard OFF* Relais arbeiten - es ist ein sogenanntes **Umschaltrelais** und hat deshalb drei Kontakte.
+
+:::cards
+::br{flexShrink=1 flexBasis=120px}
+![Relais](./images/relais-umschalter.jpg)
+::br{flexShrink=1 flexBasis=60px}
+![Symbol Relais](./images/sym-relais.png)
+::br{flexGrow=3}
+- Links ist der kupferfarbige Elektromagnet zu sehen. Im Symbol ist er als gewellte Linie dargestellt.
+- Die beiden Anschlussstifte des Elektromagneten befinden sich ebenfalls links (im Bild ist nur einer zu sehen).
+- Auf der rechten Seite sind die Kontakte des Umschalters zu sehen. Der mittlere Kontakt wird durch den Elektromagneten bewegt und berührt entweder
+   - den linken Kontakt (Ausgangslage, Elektromagnet nich mit Batterie verbunden) oder
+   - den rechten Kontakt (Arbeitslage, Elektromagnet mit Batterie verbunden).
+:::
+
+::::aufgabe[1. Eine simple Relais-Schaltung]
+
+LED
+: 1x rot
+: 1x gelb
+: 1x grün
+Relais
+: 1x Umschaltrelais
+Grundausstattung
+: Batterie, Steckbrett, Verbindungskabel
+
+<ProgressState id="28821ac2b-ed81-41a0-bc62-c5770bfc85ff" confirm keepPreviousStepsOpen>
+1. Holen Sie die benötigten Materialien.
+2. Bauen Sie auf dem Steckbrett die folgende Schaltung auf:
+
+   ![Relais Schaltung --width=350px](./images/circuit-1-relais.jpg)
+
+   :::warning[LED-Ausrichtung]
+   Beachten Sie wieder, dass die kurzen Anschlüsse der LEDs immer auf der Seite des negativen Batteriepols stecken.
+   :::
+3. Schalten Sie den Schalter 1 am Doppelschalter ein und aus. So können Sie den Strom durch den Elektromagneten ein- und ausschalten. Beobachten Sie, wie sich die Kontakte im Relais bewegen. Wenn Sie alles richtig gemacht haben brennt die gelbe LED bei ausgeschaltetem Relais und die grüne, wenn das Relais eingeschaltet ist.
+4. Vergleichen Sie die symbolische Darstellung der Schaltung - reduziert auf das Wesentliche - mit der realen Schaltung auf dem Steckbrett. Können Sie die einzelnen Bauteile wiedererkennen?
+
+   ![Relais Schaltung symbolisch --width=200px](./images/circuit-1-symbolisch.png)
+</ProgressState>
+
+<Answer type="text" id="cbe886ed-640f-442f-832b-227d424de01e" placeholder="Notizen..." />
+::::
+
+## Logische Grundoperationen
+
+Mithilfe von zwei Relais lässt sich der Grundbaustein für den Bau eines Computers bauen - ein sogenanntes __NAND__-Gatter. Basierend auf diesem Baustein können alle weiteren logischen Operationen realisiert werden.
+
+Doch was ist ein Gatter? Im folgenden Video[^1] sehen Sie eine allgemeine Einführung zu den in der Informatik gängigen Gattern __UND__, __ODER__ und __NICHT__.
+
+:::cards
+::video[./images/LogischeGrundoperationen.mp4]{height=300px}
+:::
+
+### NAND-Gatter
+Ein __NAND__-Gatter (NOT AND) ist ein logisches Gatter mit zwei Eingängen und einem Ausgang. Der Ausgang ist genau dann `0`, wenn beide Eingänge `1` sind. In allen anderen Fällen ist der Ausgang `1`.
+
+| Eingang A | Eingang B | Ausgang E   |
+|:---------:|:---------:|:-----------:|
+|     0     |     0     |    **1**    |
+|     0     |     1     |    **1**    |
+|     1     |     0     |    **1**    |
+|     1     |     1     |    **0**    |
+
+:::warning[TODO]
+Alltagsbeispiel für NAND-Gatter ergänzen.
+:::
+
+## Simulation NAND-Gatter
+
+Bevor wir das __NAND__-Gatter mit Relais aufbauen, können wir es zuerst in einer Simulation ausprobieren.
+
+:::aufgabe[1. Simulation eines NAND-Gatters]
+<Answer type="state" id="8d40d34d-cfae-45b2-b3e7-be61a2e4df41" />
+
+Link
+: [nandgame.com](https://nandgame.com/)
+
+Versuchen Sie, das erste Level des Spiels zu lösen und halten Sie dann einen Screenshot des fertigen Gatters im Antwortfeld fest.
+
+<Answer type="text" id="4cd3c70f-23fb-4dfd-a150-c990dedc9754" />
+:::
+
+## NAND-Gatter mit Relais
+
+::::aufgabe[3. NAND-Gatter mit Relais]
+<Answer type="state" id="ecfefc37-d42e-46a9-ac17-cb590d25c34c" />
+
+Versuchen Sie, das NAND-Gatter vom NAND-Spiel real nachzubauen.
+
+<Solution id="0c43dd05-09ee-4fbe-b085-7f6bafdb4df1" title="Hinweis 1: Schaltplan">
+Hier ist der Schaltplan des NAND-Gatters:
+
+![--width=350px](./images/circuit-nand-symbolisch.png)
+
+</Solution>
+<div style={{height: '20px'}}></div>
+
+<Answer type="text" id="8b0fc583-103c-4304-a1a8-e1de6462c662" />
+
+<Solution id="f45ca49a-25ab-4e84-92e3-402f83dd0ed9">
+![--width=350px](./images/circuit-nand.jpg)
+</Solution>
+
+::::
+
+[^1]: Quelle: https://www.youtube.com/@einfachinfo
