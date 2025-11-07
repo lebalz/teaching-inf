@@ -11,4 +11,6 @@
 07-Kryptologie/*
 !07-Kryptologie/08-Asymmetrisch/99-Experiment-RSA.mdx
 !07-Kryptologie/_category_.yml
-07-Kryptologie/_category_.json
+08-Rechnerarchitektur/*
+!08-Rechnerarchitektur/_category_.yml
+08-Rechnerarchitektur/_category_.json
