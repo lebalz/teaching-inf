@@ -9,12 +9,14 @@ import Strukto from '@tdev-components/VisualizationTools/Strukto';
 # 6. Variablen
 
 ## Einführung
-Im vorhergehenden Kapitel haben Sie Quadrate gezeichnet, deren Seitenlänge im Programm fest eingebaut waren. Manchmal möchten Sie aber die Seitenlänge mit einem Eingabedialog einlesen. Dazu muss das Programm die eingegebene Zahl als Variable speichern.
-Variablen kann man sich wie eine Zügelbox vorstellen, welche mit einem Namen angeschrieben ist. Der Name beschreibt, was sich in der Box befindet, damit man den Inhalt später auch wieder findet.
+Im vorhergehenden Kapitel haben Sie Quadrate gezeichnet, deren Seitenlänge im Programm **fest eingebaut** waren. Manchmal sollen diese Werte aber auch **dynamisch festgelegt** werden - bspw. durch eine Benutzereingabe. Dazu muss das Programm die eingegebene Zahl als __Variable speichern__.
 
-![Variable Zuweisen --width=300px](./images/variable-init.svg)
+Variablen kann man sich wie eine **Zügelbox** vorstellen, welche mit einem **Namen** angeschrieben ist. Der Name beschreibt, was sich in der Box befindet, damit man den Inhalt später auch wieder findet.
 
-Mit der Schreibweise `anzahl = 12` wird eine solche Box erstellt. In Zukunft sagen wir, dass damit die Variable `anzahl` **definiert** und ihr einen **Wert zugewiesen** wird. Um den Inhalt der Box zu erhalten, kann der Name (ohne Anführungszeichen) geschrieben werden. Im Struktogramm werden alle Variablen **umrahmt**.
+![Variable Zuweisen --width=300px](./images/assign-variable.webp)
+
+
+Mit der Schreibweise `anzahl = 12` wird eine solche Box erstellt. In Zukunft sagen wir, dass damit die Variable `anzahl` **definiert** und ihr einen **Wert zugewiesen** wird. Um den Inhalt der Box zu erhalten, kann der Name (ohne Anführungszeichen und ohne Klammern) geschrieben werden. Im Struktogramm werden alle Variablen **umrahmt**.
 
 :::flex{width=250px alignItems=center}
 <Strukto program={[
@@ -39,30 +41,19 @@ print(anzahl + 13)
 ```py live_py slim
 anzahl = 12
 gewicht = 100
-print(f'{anzahl} Tafeln Schokolade sind {anzahl * gewicht} g schwer')
+print(anzahl, 'Tafeln Schokolade sind', anzahl * gewicht, 'g schwer')
 ```
 
-::::details[Formatierter Text: `f'{anzahl} Tafeln'`]
-:::def[formatierter Text `f''`]
-Variablenwerte lassen sich mit geschweiften Klammern `{}` in einen Text einfügen. Dazu muss zu Beginn des Textes ein kleines `f` (für "fromatierten Text") hinzugefügt werden.
-
-```py live_py slim
-name = 'Alfred'
-print(f'Hallo {name}')
-```
-:::
-::::
-
-## Überschreiben: Variablen neu Zuweisen 
+## Überschreiben: Variablen neu Zuweisen
 In einer "Zügelbox" kann immer nur ein einziger Wert gelagert werden. Wenn später also ein neuer Wert in eine bereits beschriftete Zügelbox gelegt wird, so wird zu diesem Zeitpunkt dort liegende Wert verdrängt. Künftig wird diese erneute Zuweisung **Überschreiben einer Variable** genannt.
 
-![Variablen überschreiben --width=350px](./images/variable-set.svg)
+![Variablen überschreiben --width=350px](./images/reassign-variable.webp)
 
 ```py live_py slim
 anzahl = 12
-print(f'Anzahl = {anzahl}')
+print('Anzahl =', anzahl)
 anzahl = 7
-print(f'Anzahl = {anzahl}')
+print('Anzahl =', anzahl)
 ```
 
 Im obigen Beispiel wird der **initiale Wert** der Variable `anzahl` (12) mit dem neuen Wert `7` überschrieben.
@@ -76,7 +67,7 @@ Die Variable wird **nicht rückwirkend** verändert. Solange eine Variable nicht
 
 Was geschieht im untenstehenden Programm? Fügen Sie bei jeder mit `print` startenden Zeile einen Kommentar hinzu mit:
 - ausgegebene Zahl `=>`
-- aktuell gespeicherter Wert in der Variable `anzahl` `anzahl=`
+- aktuell gespeicherter Wert in der Variable `anzahl` mit `anzahl=...`
 
 ```py live_py id=17a267c3-da3a-477b-9b1e-9ac027afb70d title=variable.py
 anzahl = 2
@@ -122,7 +113,17 @@ print(anzahl)       # => 16, anzahl=16
 :::
 
 :::finding[Gleichheitszeichen]
-In der mathematischen Sprache wird das Gleichheitszeichen `=` als Gleichung interpretiert. In Programmiersprachen wird es als **Zuweisung** verstanden und die Reihenfolge kann nicht vertauscht werden (z.B. `12 = anzahl` ist nicht gültig).
+<div className="compactDeflist">
+Mathematik
+: `=` bedeutet "ist gleich"
+: Es handelt sich um eine Gleichung, die Reihenfolge spielt keine Rolle.
+: $x + 2 = 12$ ist dasselbe wie $12 = x + 2$.
+Programmierung
+: `=` bedeutet "zuweisen"
+: Der rechtsstehende Wert wird der linksstehenden Variable zugewiesen, die Reihenfolge ist **entscheidend**.
+: ✅ `anzahl = 12` beschreibt eine Zuweisung.
+: ❌ `12 = anzahl` ist ein Syntaxfehler.
+</div>
 :::
 
 # Variablenwert einlesen, verändern und ausgeben
@@ -143,6 +144,7 @@ for i in range(anzahl):
     seite = seite + 10
 ```
 
+<div className="compactDeflist">
 Zeile 4
 : der Wert der Variable `anzahl` wird eingelesen - die Benutzer:in wird nach einer Zahl gefragt - die *Zeile 5* wird erst ausgeführt, wenn die Eingabe gemacht wurde.
 Zeile 5
@@ -154,6 +156,7 @@ Zeile 7
 Zeile 11
 : der Wert der Variable `seite` wird nach jeder Wiederholung um `10` erhöht.
 : Damit wird bei der nächsten Ausführung der *Zeile 9* die Seite um `10` Schritte grösser.
+</div>
 
 :::tip[Eingabe]
 In Python ist das Resultat einer Eingabe **immer ein Text**. Ein Text kann aber in eine Zahl umgewandelt werden, so dass dann auch damit gerechnet werden kann.
@@ -168,7 +171,7 @@ Eine eingegebene Zahl kann also entweder in eine ganze Zahl (`int`) oder in eine
 # Centimeter zu Meter
 grösse = input('Wie gross bist du [cm]?')
 grösse = int(grösse)
-print(f'Ich bin {grösse / 100} m gross')
+print('Ich bin', grösse / 100, 'm gross')
 ```
 Die Eingabe `180` wird in eine ganze Zahl umgewandelt und durch `100` geteilt, um die Grösse in Metern zu erhalten.
 ::br
@@ -176,7 +179,7 @@ Die Eingabe `180` wird in eine ganze Zahl umgewandelt und durch `100` geteilt, u
 # Meter zu Centimeter
 grösse = input('Wie gross bist du [m]?')
 grösse = float(grösse)
-print(f'Ich bin {grösse * 100} cm gross')
+print('Ich bin', grösse * 100, 'cm gross')
 ```
 Die Eingabe `1.80` wird in eine Dezimalzahl umgewandelt und mit `100` multipliziert, um die Grösse in Zentimetern zu erhalten.
 :::
@@ -195,7 +198,7 @@ Wird ein Wert über eine Eingabeaufforderung eingelesen, so wird dies im Strukto
 
 ```py live_py slim
 grösse = input('Wie gross bist du [cm]?')
-print(f'Ich bin {grösse} cm gross')
+print('Ich bin', grösse, 'cm gross')
 ```
 :::
 
@@ -209,7 +212,7 @@ print(f'Ich bin {grösse} cm gross')
 <Strukto program={[
     {type: 'input', code: <span><span className="var">grösse</span> = Wie gross bist du [m]?</span>},
     {type: 'input', code: <span><span className="var">gewicht</span> = Wie schwer bist du [kg]?</span>},
-    {type: 'step', code: <span><span className="var">bmi</span> = <span className="var">gewicht</span> geteilt durch das Produkt von <span className="var">grösse</span> mal <span className="var">grösse</span></span>},
+    {type: 'step', code: <span><span className="var">bmi</span> = <span className="var">gewicht</span> geteilt durch das Produkt aus <span className="var">grösse</span> mal <span className="var">grösse</span></span>},
     {type: 'step', code: <span>Ausgabe: BMI: <span className="var">bmi</span></span>}
 ]} />
 ::br
@@ -223,7 +226,10 @@ Was ist die Bedeutung des folgenden Fehlers?
 ```error
 TypeError: Can't multiply sequence by non-int of type 'str'
 ```
-→ Der eingegebene Text kann nicht multipliziert werden - zuerst müssen `gewicht` und `grösse` in Dezimalzahlen (`float`) umgewandelt werden: `gewicht = float(gewicht)`.
+→ Der eingegebene Text kann nicht multipliziert werden - zuerst müssen `gewicht` und `grösse` in Dezimalzahlen (`float`) umgewandelt werden:
+```py
+gewicht = float(gewicht)
+```
 :::
 
 :::tip[Funktioniert mein Code?]
@@ -239,7 +245,7 @@ Ergebnis
 <Solution id="081013e2-4c1c-4353-adb0-cb3c9972d0ab">
 
 ```py live_py slim
-grösse = input('Wie gross bist du [cm]?')
+grösse = input('Wie gross bist du [m]?')
 gewicht = input('Wie schwer bist du [kg]?')
 
 # umwandeln zu Zahlen
@@ -247,7 +253,7 @@ grösse = float(grösse)
 gewicht = float(gewicht)
 
 bmi = gewicht / (grösse * grösse) # Klammern sind entscheidend!
-print(f'BMI: {bmi}')
+print('BMI:', bmi)
 ```
 </Solution>
 ::::
