@@ -135,6 +135,12 @@
                 "_category_.yml"
             ],
             "open": true
+        },
+        {
+            "from": "docs/IN-Biber/2025/",
+            "to": "versioned_docs/version-29Ga/50-IN-Biber",
+            "ignore": [],
+            "open": false
         }
     ],
     "29Gj": [
@@ -165,6 +171,12 @@
                 "_category_.yml"
             ],
             "open": true
+        },
+        {
+            "from": "docs/IN-Biber/2025/",
+            "to": "versioned_docs/version-29Gj/50-IN-Biber",
+            "ignore": [],
+            "open": false
         }
     ],
     "pages": [
