@@ -194,6 +194,9 @@ nav.menu {
             &.inf-of {
                 --tdev-sidebar-color: var(--ifm-color-blue);
             }
+            &.competition {
+                --tdev-sidebar-color: var(--ifm-color-warning);
+            }
             &.inf-wms {
                 --tdev-sidebar-color: rgb(23, 195, 0);
             }
