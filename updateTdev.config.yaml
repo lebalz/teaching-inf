@@ -16,6 +16,8 @@ trackedElements:
           - components/documents/CodeEditor/utils/svg2grbl.ts
     - src: src/theme/Root.tsx
       dst: src/theme/Root.tsx
+    - src: src/theme/EditThisPage/
+      dst: src/theme/EditThisPage/
     - src: packages/tdev/
       dst: packages/tdev
     - src: updateSync/

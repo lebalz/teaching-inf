@@ -16,11 +16,10 @@ import {
     devModeAccessLocalFS,
     personalSpaceOverlay
 } from './src/siteConfig/navbarItems';
-import { ThemeConfig } from '@docusaurus/theme-common';
 
 const getEditUrl = (props: Parameters<EditUrlFunction>[0]) => {
     const { version, docPath, versionDocsDirPath } = props;
-    const joinPath = (parts: string[]) => `${versionDocsDirPath}/${parts.join('/')}`;
+    const joinPath = (parts: string[]) => `/${versionDocsDirPath}/${parts.join('/')}`;
     if (version === 'current') {
         return joinPath([docPath]);
     }
