@@ -103,14 +103,14 @@ Ein __NAND__-Gatter (NOT AND) ist ein logisches Gatter mit zwei Eingängen und e
 
 
 :::info[Beispiel: Licht in der Garage]
-![](./images/garage-licht-aus.png)
+![](./images/garage-licht-aus.webp)
 :::
 
 ## Simulation NAND-Gatter
 
 Bevor wir das __NAND__-Gatter mit Relais aufbauen, können wir es zuerst in einer Simulation ausprobieren.
 
-:::aufgabe[2. Simulation eines NAND-Gatters]
+::::aufgabe[2. Simulation eines NAND-Gatters]
 <Answer type="state" id="8d40d34d-cfae-45b2-b3e7-be61a2e4df41" />
 
 Link
@@ -118,8 +118,33 @@ Link
 
 Versuchen Sie, das erste Level des Spiels zu lösen und halten Sie dann einen Screenshot des fertigen Gatters im Antwortfeld fest.
 
+<Solution id="c23032a9-eb9e-4134-bb9a-c14b4c274a47" title="Hinweis 1">
+Betrachten Sie das __Standard OFF__ Relais:
+
+![--width=400px](./images/nandgame-relay-default-off.svg)
+
+Es liefert nur dann Strom (E = 1), wenn beide Eingänge A und B den Wert 1 haben. Es entspricht also einem __AND__-Gatter.
+</Solution>
+
+<Solution id="f2189b68-100c-4786-a757-d0aacd223fb4" title="Hinweis 2">
+Um das __AND__-Gatter aus dem Hinweis 1 in ein __NAND__-Gatter umzuwandeln, müssen wir den Ausgang invertieren. Dies erreichen wir, durch ein __Standard ON__ Relais:
+
+![--width=400px](./images/nandgame-relay-default-on.svg)
+
+Können Sie nun das komplette __NAND__-Gatter zusammensetzen?
+</Solution>
+<Solution id="e518177a-5002-41b4-907d-fe14ba21e25b" title="Hinweis 3: Schaltplan">
+Um das __AND__-Gatter aus dem Hinweis 1 in ein __NAND__-Gatter umzuwandeln, müssen wir den Ausgang invertieren. Dies erreichen wir, durch ein __Standard ON__ Relais:
+
+![--width=400px](./images/nandgame-relay-nand.svg)
+</Solution>
+<br />
 <Answer type="text" id="4cd3c70f-23fb-4dfd-a150-c990dedc9754" />
-:::
+
+<Solution id="cf288fae-8b73-42e7-99a5-6ae2d617e80a">
+![--width=250px](./images/nandgame-nand-lsg.jpg)
+</Solution>
+::::
 
 ## NAND-Gatter mit Relais
 

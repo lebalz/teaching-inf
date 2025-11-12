@@ -72,7 +72,7 @@ const plainExcalidrawImage = (
         ...elementsWithoutMeta.map((e) => (e.type === 'freedraw' ? e.strokeWidth : e.strokeWidth)),
         2
     );
-    const scale = isStandaloneDrawing ? (dX < 50 ? 15 : dX < 100 ? 8 : dX < 200 ? 4 : dX < 400 ? 3 : 1) : 1;
+    const scale = isStandaloneDrawing ? (dX < 50 ? 15 : dX < 100 ? 8 : dX < 200 ? 4 : dX < 400 ? 3 : 2) : 1;
     return {
         scale: scale,
         mimeType: mimeType,
