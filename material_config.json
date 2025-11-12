@@ -84,11 +84,11 @@
             "from": "docs/OF-Kryptologie/",
             "to": "versioned_docs/version-28Gj/07-Kryptologie",
             "ignore": ["08-Asymmetrisch/99-Experiment-RSA.mdx", "_category_.yml"],
-            "open": true
+            "open": false
         },
         {
             "from": "docs/OF-Computer-28/",
-            "to": "versioned_docs/version-28Gb/08-Rechnerarchitektur",
+            "to": "versioned_docs/version-28Gj/08-Rechnerarchitektur",
             "ignore": ["_category_.yml"],
             "open": true
         }
