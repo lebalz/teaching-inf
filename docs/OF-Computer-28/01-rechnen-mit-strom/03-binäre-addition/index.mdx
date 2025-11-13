@@ -1,0 +1,137 @@
+---
+page_id: 95882cbb-5b0f-41fb-996e-bd77bbd81ab5
+---
+import ProgressState from '@tdev-components/documents/ProgressState';
+import { noWhitespace } from '@tdev-components/documents/String/sanitizers';
+
+# Binäre Addition
+
+Wie funktioniert ein Computer? Diese Frage, oder zumindest die Unterfrage, wie ein Computer Zahlen addieren kann, möchten wir in der aktuellen Unterrichtseinheit beantworten.
+
+Dazu werden in einem ersten Schritt die Grundlagen der binären Addition und Subtraktion erarbeitet.
+
+:::info[Ziele]
+- Verstehen, wie die binäre Addition funktioniert
+- Binäre Rechnungen mit Stift und Papier durchführen können
+:::
+
+## Repetition Zahlensysteme
+
+Zahlen im Zehnersystem sind aus __10__ Ziffern (`0, 1, 2, 3, 4, 5, 6, 7, 8, 9`) zusammengesetzt, Zahlen im Binärsystem aus __2__ Ziffern (`0, 1`). Um "Hundert und Eins", $101$ im Zehnersystem von "Eins Null Eins", $101_2$ im Binärsystem zu unterscheiden, wird bei Binärzahlen der Suffix `2` angehängt.
+
+
+::::cards
+#### Zehnersystem
+$$
+\begin{aligned}
+
+328 &= 3 \cdot 10^2 + 2 \cdot 10^1 + 8 \cdot 10^0
+
+\end{aligned}
+$$
+:::warning[Bemerke]
+Jede Stelle einer Zahl gibt an, wie oft eine Potenz der Basis **10** vorkommt.  
+Im obigen Beispiel also "Dreimal $10^2$, zweimal $10^1$ und achtmal $10^0$".
+:::
+::br
+#### Binärsystem
+
+$$
+\begin{aligned}
+
+1011_2 &= 1 \cdot 2^3 + 0 \cdot 2^2 + 1 \cdot 2^1 + 1 \cdot 2^0
+
+\end{aligned}
+$$
+
+:::warning[Bemerke]
+Jede Stelle einer Zahl gibt an, wie oft eine Potenz der Basis **2** vorkommt.  
+Im obigen Beispiel also "Einmal $2^3$, einmal $2^1$ und einmal $2^0$", somit $8 + 2 + 1 = 11_{10}$ im Zehnersystem.
+:::
+::::
+
+::::aufgabe[1. Bin → Dez, Dez → Bin]
+<Answer type="state" id="7edbd4ea-3b6a-442d-b92d-5ddf3ad03194" />
+
+:::flex
+Wandeln Sie vom vom Binär- ins Dezimalsystem um.
+
+<Answer type="string" solution="21" sanitizer={noWhitespace} id="35afcc00-6e76-48f0-9f9a-50c75ff427e8">
+<span style={{minWidth: '8em', textAlign: 'right'}}>
+$10101_2=$
+</span>
+</Answer>
+
+<Answer type="string" solution="39" sanitizer={noWhitespace} id="3546b037-72e5-4adc-8c64-c709ae81cf80">
+<span style={{minWidth: '8em', textAlign: 'right'}}>
+$100111_2=$
+</span>
+</Answer>
+
+
+
+<Answer type="string" solution="368" sanitizer={noWhitespace} id="9a7b2a00-d0d2-4f33-89d4-b5c5a88ab10a">
+<span style={{minWidth: '8em', textAlign: 'right'}}>
+$101110000_{2}=$
+</span>
+</Answer>
+::br
+Wandeln Sie vom vom Dezimal- ins Binärsystem um.
+
+<Answer type="string" solution="100100" sanitizer={noWhitespace} id="b01535c5-58ce-4083-97e9-b13aa13ae579">
+<span style={{minWidth: '8em', textAlign: 'right'}}>
+$36_{10}=$
+</span>
+</Answer>
+
+<Answer type="string" solution="1000011" sanitizer={noWhitespace} id="b49dc4a8-088f-44a3-ab77-0e9bd49b6387">
+<span style={{minWidth: '8em', textAlign: 'right'}}>
+$67_{10}=$
+</span>
+</Answer>
+
+<Answer type="string" solution="10001110" sanitizer={noWhitespace} id="ef436a14-13f7-4db0-a26d-32393c25f016">
+<span style={{minWidth: '8em', textAlign: 'right'}}>
+$142_{10}=$
+</span>
+</Answer>
+:::
+::::
+
+## Binäre Addition
+
+Die binäre Addition funktioniert ähnlich wie die Addition im Zehnersystem. Allerdings wird hier nur mit den Ziffern `0` und `1` gerechnet:
+
+1. Beide Binärzahlen werden rechtsbündig untereinander geschrieben.
+2. Es wird von rechts nach links spaltenweise addiert, wobei
+    - $0 + 0 = 0$
+    - $0 + 1 = 1$
+    - $1 + 0 = 1$
+    - $1 + 1 = 10_{2}$ (also `0` schreiben und `1` merken)
+
+::::cards
+![--width=500px](./images/bin-add-example1.svg)
+
+:::insight[Bemerke]
+An der 4. Stelle von rechts entsteht ein Übertrag, da $1 + 1 = 10_2$. Die `0` wird in die Ergebnisstelle geschrieben und die `1` wird zur nächsten Stelle addiert.
+:::
+::br
+![--width=500px](./images/bin-add-example2.svg)
+:::insight[Bemerke]
+An der 3. Stelle von rechts entsteht ein Übertrag, der auf an der **4. Stelle** dazu führt, dass $1 + 1 + 1 = 11_2$ entsteht. Eine `1` wird in die Ergebnisstelle geschrieben und eine `1` wird zur nächsten Stelle addiert.
+::::
+
+:::aufgabe[2. Binäre Addition]
+Berechnen Sie die folgenden binären Additionen mit **Stift** und fügen Sie ein Foto/Screenshot Ihrer Lösung ein.
+
+<ProgressState id="ebd464e1-58e9-478d-bcf5-6c75e2c3a8fc" confirm keepPreviousStepsOpen>
+1. $110100 + 10111$
+2. $1010101 + 101010$
+3. $11111 + 1$
+4. $13 + 19$ (zuerst ins Binärsystem umwandeln, dann addieren...)
+</ProgressState>
+
+<Answer type="text" id="d02ea835-482e-4087-9943-add128858bfe" />
+
+:::
+

@@ -12,6 +12,19 @@ export const sanitizeNumber = (excludedText: string[] = []) => {
     };
 };
 
+export const sanitizeBinary = (excludedText: string[] = []) => {
+    const replacer = (text: string) => {
+        return excludedText.reduce((acc, curr) => acc.replaceAll(curr, ''), text);
+    };
+    return (solution: string) => {
+        return replacer(`${solution}`).replaceAll(/[^01]/g, '');
+    };
+};
+
+export const noWhitespace = (text?: string) => {
+    return text?.replaceAll(/\s/g, '');
+};
+
 export const trim = (text?: string) => {
     return text?.trim();
 };
