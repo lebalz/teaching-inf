@@ -12,13 +12,13 @@ import WithCmsText from '@tdev-components/documents/CmsText/WithCmsText';
 import CmsText from '@tdev-components/documents/CmsText';
 import DefinitionList from '@tdev-components/DefinitionList';
 import { useStore } from '@tdev-hooks/useStore';
+import { observer } from 'mobx-react-lite';
 
-export const Name = () => {
+export const Name = observer(() => {
     const userStore = useStore('userStore');
     const user = userStore.viewedUser;
     return user?.name ?? '???'
-
-}
+})
 
 # Mathematik 28Gj
 
