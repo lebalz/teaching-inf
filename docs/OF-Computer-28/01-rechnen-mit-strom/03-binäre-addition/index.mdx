@@ -13,6 +13,7 @@ Dazu werden in einem ersten Schritt die Grundlagen der binären Addition und Sub
 :::info[Ziele]
 - Verstehen, wie die binäre Addition funktioniert
 - Binäre Rechnungen mit Stift und Papier durchführen können
+- Verstehen, wie ein Computer mit Strom binäre Addition durchführen kann
 :::
 
 ## Repetition Zahlensysteme
@@ -138,3 +139,122 @@ Berechnen Sie die folgenden binären Additionen mit **Stift** und fügen Sie ein
 <Answer type="text" id="d02ea835-482e-4087-9943-add128858bfe" />
 :::
 
+## Addieren mit Strom
+
+Mit dem __NAND__-Gatter haben wir die Grundlage, um eine Schaltung zu bauen, die zwei binäre Zahlen mit mehreren Stellen addieren kann.
+
+Als Ausgangspunkt verwenden wir folgende Rechnung
+
+![--width=500px](./images/adder/calculation.svg)
+
+
+### Hinterste Stelle addieren - Der Halbaddierer
+Wir betrachten zunächst die hinterste Stelle:
+
+:::cards{flexBasis=300px}
+![Schriftliche Addition, hinterste Stelle](./images/adder/calculation-last-bit.svg)
+::br
+![isolierte Betrachtung](./images/adder/calculation-last-bit-zoom.svg)
+:::
+
+Wir benötigen also eine **Schaltung**, welche aus den beiden Eingängen $A_0$ und $B_0$ das Ergebnis $E_0$ erzeugt und eine andere Schaltung, welche aus den selben Eingängen den Übertrag $a_0$ erzeugt.
+
+Als Wahrheitstabellen ausgedrückt bedeutet dies:
+
+:::cards{flexBasis=250px .slim}
+| Eingang A<sub>0</sub> | Eingang B<sub>0</sub> | Ausgang E<sub>0</sub> |
+|:---------:|:---------:|:---------:|
+|         0 |         0 |         0 |
+|         0 |         1 |         1 |
+|         1 |         0 |         1 |
+|         1 |         1 |         0 |
+::br
+| Eingang A<sub>0</sub> | Eingang B<sub>0</sub> | Ausgang Ü<sub>0</sub> |
+|:---------:|:---------:|:---------:|
+|         0 |         0 |         0 |
+|         0 |         1 |         0 |
+|         1 |         0 |         0 |
+|         1 |         1 |         1 |
+:::
+
+Beide Wahrheitstabellen haben wir schon angetroffen. Diejenige für das Ergebnis $E_0$ entspricht der __XOR__-Operation, diejenige für den Übertrag $Ü_0$ entspricht der __UND__-Operation.
+
+Kombiniert man die beiden Operationen richtig, so entsteht ein Halbaddierer für eine Stelle. Im folgenden Video[^1] wird diese Schaltung vorgestellt.
+
+:::cards
+::video[./images/Halbaddierer.mp4]{height=300px}
+*Hinweis: Im Video wird der Ausgang E mit S für Summe bezeichnet.*
+:::
+
+Hier nochmals die Schaltung des Halbaddierers und das Symbol, welches wir in den Simulationen an Stelle der Schaltung verwenden:
+
+:::cards{flexBasis=200px}
+![Schaltung für Halbaddierer (HA) --width=200](./images/HalbaddiererSchaltung.png)
+::br
+![Symbol für Halbaddierer --width=100](./images/HalbaddiererSymbol.png)
+Hinweis:
+- **C** steht für englisch Carry und bedeutet Übertrag
+- **S** steht für Summe
+:::
+
+:::aufgabe[3. Simulation Halbaddierer]
+<Answer type="state" id="e29bcb2d-6cd2-4a24-a3ee-a1ee662969f2" />
+
+Link
+: [nandgame.com](https://nandgame.com/)
+
+Machen Sie im Nandgame das Level "Half Adder" und halten Sie einen Screenshot des fertigen Halbaddierers im Antwortfeld fest.
+
+<Answer type="text" id="20f2e6ca-cc7f-452d-b2c3-8150b9902190" />
+
+<Solution id="aa450244-3f67-4420-a602-5d37557760c8">
+![](./images/nand-game/[5]-halfadder.png)
+</Solution>
+:::
+### Weitere Einzelstellen addieren - Der Volladdierer
+
+:::cards{flexBasis=300px}
+![Schriftliche Addition zweithinterste Stelle (Stelle 1)](./images/adder/calculation-second-bit.svg)
+::br
+![Isolierte Betrachtung und Verallgemeinerung auf Stelle n](./images/adder/calculation-second-bit-zoom.svg)
+:::
+
+
+Wir brauchen also eine **Schaltung**, welche 3 Eingänge hat: $A_n$, $B_n$, $Ü_{n-1}$.    
+$Ü_{n-1}$ entspricht dem Übertrag aus der Stelle rechts von Stelle $n$.
+
+Eine solche Schaltung heisst **Volladdierer** und wird im folgenden Video[^1] vorgestellt.
+
+:::cards
+::video[./images/Volladdierer.mp4]{height=300px}
+:::
+
+Hier nochmals die Schaltung des Volladdierers und das Symbol, welches wir in den Simulationen an Stelle der Schaltung verwenden:
+ 
+:::cards{flexBasis=250px}
+![Schaltung für Volladdierer (VA) --width=200](./images/VolladdiererSchaltung.png)
+::br
+![Symbol für Volladdierer --width=100](./images/VolladdiererSymbol.png)
+Hinweis:
+- **C** steht für englisch Carry und bedeutet Übertrag
+- **S** steht für Summe
+:::
+
+
+:::aufgabe[4. Volladdierer]
+<Answer type="state" id="90172fa0-4e54-4b57-ba17-c9c02fccafd3" />
+
+Link
+: [nandgame.com](https://nandgame.com/)
+
+Machen Sie im Nandgame das Level "Full Adder" und halten Sie einen Screenshot des fertigen Volladdierers im Antwortfeld fest.
+
+<Answer type="text" id="9d5a4cf2-5296-43fa-95e0-80d8ecbff7db" />
+<Solution id="36e4ea79-28eb-4021-9478-4f6c2c9af9c1">
+![](./images/nand-game/[6]-fulladder.png)
+</Solution>
+:::
+
+
+
+[^1]: Quelle: https://www.youtube.com/@einfachinfo
