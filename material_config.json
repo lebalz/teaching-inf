@@ -39,7 +39,7 @@
         {
             "from": "docs/OF-Computer-28/",
             "to": "versioned_docs/version-28Gb/08-Rechnerarchitektur",
-            "ignore": ["_category_.yml", "01-rechnen-mit-strom/03-binäre-addition"],
+            "ignore": ["_category_.yml"],
             "open": true
         }
     ],
@@ -83,7 +83,7 @@
         {
             "from": "docs/OF-Computer-28/",
             "to": "versioned_docs/version-28Gj/08-Rechnerarchitektur",
-            "ignore": ["_category_.yml", "01-rechnen-mit-strom/03-binäre-addition"],
+            "ignore": ["_category_.yml"],
             "open": true
         },
         {
