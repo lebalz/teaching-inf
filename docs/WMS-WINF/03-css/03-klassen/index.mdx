@@ -1,0 +1,313 @@
+---
+page_id: b3143ef1-6d75-4040-be46-03748c4cc75c
+unlisted: true
+---
+import HtmlEditor from '@tdev-components/documents/CodeEditor/HtmlEditor';
+import ProgressState from '@tdev-components/documents/ProgressState';
+
+# Klassen
+
+Mit CSS-Klassen können CSS-Regeln auf HTML-Elemente angewendet werden, ohne dass diese Elemente einen bestimmten Tag-Namen haben müssen. Klassen werden mit einem Punkt (`.`) gefolgt vom Klassennamen definiert. Jedes Element, welches diese Klasse besitzt, wird von den entsprechenden CSS-Regeln beeinflusst.
+
+
+
+<HtmlEditor
+  hideWarning
+  title='css-classes.html'
+  lang='html'
+>
+```html
+<html>
+<head>
+    <style>
+        .highlight {
+            background-color: yellow;
+            font-weight: bold;
+        }
+        .badge {
+            border: 2px solid darkblue;
+            background-color: darkblue;
+            border-radius: 5px;
+            color: white;
+            &.red {
+                background-color: darkred;
+                border-color: darkred;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1 class="highlight">HTML</h1>
+    <div>
+        Ein <code class="badge">div</code>-Tag steht 
+        für <span class="badge red">Division</span>, 
+        also für einen Bereich mit
+        <span class="highlight">beliebigem Inhalt</span>.
+        <p>
+            Ein <code class="badge">span</code>-Tag steht 
+            für einen <span class="badge red">Bereich</span> 
+            innerhalb einer <span class="badge red">Zeile</span> mit 
+            <span class="highlight">beliebigem Inhalt</span>.
+        </p>
+    </div>
+</body>
+</html>
+```
+</HtmlEditor>
+
+:::info[Bemerke]
+- Klassen können auf beliebige HTML-Elemente angewendet werden, unabhängig vom Tag-Namen
+- Ein Element kann mehrere Klassen besitzen, indem die Klassennamen durch Leerzeichen getrennt werden.
+- Im CSS werden Klassen mit einem Punkt (`.`) gefolgt vom Klassennamen definiert.
+:::
+
+## Aufgabe 1
+
+::::aufgabe[Aufgabe 1]
+<HtmlEditor
+  id="ad11c783-5b96-4001-8b27-685c3f8dd45d"
+  lang='html'
+  title='assign-klass.html'
+  maxLines={40}
+>
+```html
+<html>
+<head>
+    <style>
+    .badge {
+        color: white;
+        border-radius: 4px;
+        padding: 2px 4px;
+        background-color: black;
+        line-height: 1.5;
+        &.grey {
+            background-color: grey;
+        }
+        &.blue {
+            background-color: blue;
+        }
+        &.red {
+            background-color: red;
+        }
+        &.green {
+            background-color: green;
+        }
+        &.yellow {
+            color: black;
+            background-color: yellow;
+        }
+    }
+    </style>
+</head>
+<body>
+    <h1>CSS Klassen</h1>
+    <ul>
+        <li>Ein schwarzer Badge</li>
+        <li>Ein grauer Badge</li>
+        <li>Ein blauer Badge</li>
+        <li>Ein grüner Badge</li>
+        <li>Ein roter Badge</li>
+        <li>Ein gelber Badge</li>
+    </ul>
+  </body>
+</html>
+```
+</HtmlEditor>
+
+<ProgressState>
+1. Weisen Sie den Badges in der Liste die entsprechenden Klassen zu, so dass sie die im CSS definierten Farben erhalten.
+
+    ![](./images/badge-classes.webp)
+
+    :::details[Hinweis]
+    Damit die Klasse `badge` vergeben werden kann, muss der Text `schwarzer`, `grauer`, etc. jeweils in ein `span`-Element eingeschlossen werden:
+    ```html
+    Ein <span>schwarzer</span> Badge
+    ```
+
+    So kann dann die Klasse `badge` dem `span`-Element hinzugefügt werden.
+    :::
+2. Fügen Sie eine weiteres Listenelement "Ein oranger Badge" hinzu und erstellen Sie die CSS-Klasse für einen orangen Badge.
+</ProgressState>
+
+<Solution id="47a63cac-a611-41b6-b516-d6a20c917e95">
+```html
+<html>
+<head>
+    <style>
+    .badge {
+        color: white;
+        border-radius: 4px;
+        padding: 2px 4px;
+        background-color: black;
+        line-height: 1.5;
+        &.grey {
+            background-color: grey;
+        }
+        &.blue {
+            background-color: blue;
+        }
+        &.red {
+            background-color: red;
+        }
+        &.green {
+            background-color: green;
+        }
+        &.orange {
+            background-color: orange;
+        }
+        &.yellow {
+            color: black;
+            background-color: yellow;
+        }
+    }
+    </style>
+</head>
+<body>
+    <h1>CSS Klassen</h1>
+    <ul>
+        <li>Ein <span class="badge">schwarzer</span> Badge</li>
+        <li>Ein <span class="badge grey">grauer</span> Badge</li>
+        <li>Ein <span class="badge blue">blauer</span> Badge</li>
+        <li>Ein <span class="badge green">grüner</span> Badge</li>
+        <li>Ein <span class="badge red">roter</span> Badge</li>
+        <li>Ein <span class="badge orange">oranger</span> Badge</li>
+        <li>Ein <span class="badge yellow">gelber</span> Badge</li>
+    </ul>
+  </body>
+</html>
+```
+</Solution>
+::::
+
+<HtmlEditor
+  hideWarning
+  title='tailwind.html'
+  lang='html'
+  minHeight={'200px'}
+>
+```html
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+  <body class="bg-gradient-to-br from-indigo-100 via-blue-50 to-purple-100 m-5 p-3 rounded-2xl shadow-2xl border border-slate-100">
+  <header class="flex items-center gap-8 mb-8 bg-white/80 backdrop-blur-md rounded-xl p-6 shadow-lg animate-fadeIn">
+    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Maria Grünfelder"
+      class="w-24 h-24 rounded-full object-cover ring-4 ring-indigo-300 shadow-lg transition-transform hover:scale-105">
+    <div>
+      <h1 class="text-4xl font-extrabold text-indigo-700 tracking-tight drop-shadow-sm">Maria Grünfelder</h1>
+      <address class="not-italic text-gray-500 text-base font-medium leading-relaxed mt-2">
+        <div class="flex items-center gap-1">maria.gruenfelder@email.com</div>
+        <div class="flex items-center gap-1">Biel, Schweiz</div>
+        <div class="flex items-center gap-1">+41 32 123 4567</div>
+      </address>
+    </div>
+  </header>
+
+  <main class="space-y-2">
+    <div class="shadow-md rounded-xl p-6 bg-gradient-to-tr from-white via-blue-50 to-indigo-50 backdrop-blur-md transition hover:shadow-xl">
+      <h2 class="text-2xl font-bold text-indigo-800 tracking-tight mb-2">About Me</h2>
+      <p class="text-gray-700 leading-relaxed">
+        Innovative software developer with 8+ years of experience in full stack development, passionate about building impactful products, and strong advocate for diversity in tech.
+      </p>
+    </div>
+
+    <div class="shadow-md rounded-xl p-6 bg-white/80 backdrop-blur-md transition hover:shadow-xl">
+      <h2 class="text-2xl font-bold text-blue-800 tracking-tight mb-2">Experience</h2>
+      <ol class="list-none">
+        <li class="mb-5">
+          <strong class="inline-block border border-blue-200 bg-blue-50 py-0.5 px-1.5 rounded text-blue-700 font-semibold shadow-sm mb-1">Senior Software Engineer</strong>
+          ExampleCorp <span class="text-sm text-gray-400">(2021–Present)</span>
+          <ul class="list-disc pl-8 mt-2 text-gray-700 marker:text-blue-400">
+            <li class="mb-1">Lead a team of 6 in developing scalable web applications.</li>
+            <li class="mb-1">Mentored junior developers and organized regular code review sessions.</li>
+          </ul>
+        </li>
+        <li>
+          <strong class="inline-block border border-blue-200 bg-blue-50 py-0.5 px-1.5 rounded text-blue-700 font-semibold shadow-sm mb-1">Software Developer</strong>
+          WebSoft AG <span class="text-sm text-gray-400">(2016–2021)</span>
+          <ul class="list-disc pl-8 mt-2 text-gray-700 marker:text-blue-400">
+            <li class="mb-1">Developed and maintained client-facing platforms using React and Node.js.</li>
+            <li class="mb-1">Implemented CI/CD pipelines and improved deployment workflows.</li>
+          </ul>
+        </li>
+      </ol>
+    </div>
+
+    <div class="shadow-md rounded-xl p-6 bg-gradient-to-tr from-white via-indigo-50 to-purple-50 transition hover:shadow-xl">
+      <h2 class="text-2xl font-bold text-indigo-800 tracking-tight mb-2">Education</h2>
+      <ol class="list-none">
+        <li class="mb-3">
+          <strong class="inline-block border border-blue-200 bg-blue-50 py-0.5 px-1.5 rounded text-blue-700 font-semibold shadow-sm mb-1">M.Sc. Computer Science</strong>
+          Technische Universität Berlin <span class="text-sm text-gray-400">(2014–2016)</span>
+        </li>
+        <li>
+          <strong class="inline-block border border-blue-200 bg-blue-50 py-0.5 px-1.5 rounded text-blue-700 font-semibold shadow-sm mb-1">B.Sc. Computer Science</strong>
+          Technische Universität Berlin <span class="text-sm text-gray-400">(2010–2014)</span>
+        </li>
+      </ol>
+    </div>
+
+    <div class="shadow-md rounded-xl p-6 bg-white/75 backdrop-blur-lg transition hover:shadow-xl">
+      <h2 class="text-2xl font-bold text-blue-800 tracking-tight mb-2">Skills</h2>
+      <ul class="list-disc pl-8 text-gray-700 marker:text-violet-400 space-y-0.5">
+        <li>HTML &amp; CSS</li>
+        <li>JavaScript (ES6+)</li>
+        <li>React, Vue.js</li>
+        <li>Node.js</li>
+        <li>SQL, MongoDB</li>
+        <li>CI/CD, Git</li>
+        <li>Unit &amp; Integration Testing</li>
+      </ul>
+    </div>
+
+    <div class="shadow-md rounded-xl p-6 bg-gradient-to-br from-white via-purple-50 to-fuchsia-50 transition hover:shadow-xl">
+      <h2 class="text-2xl font-bold text-purple-800 tracking-tight mb-2">Certifications</h2>
+      <ul class="list-disc pl-8 text-gray-700 marker:text-purple-400">
+        <li>AWS Certified Solutions Architect – Associate</li>
+        <li>Scrum Master (PSM I)</li>
+      </ul>
+    </div>
+
+    <div class="shadow-md rounded-xl p-6 bg-gradient-to-tr from-white via-green-50 to-teal-50 transition hover:shadow-xl">
+      <h2 class="text-2xl font-bold text-green-800 tracking-tight mb-2">Languages</h2>
+      <ul class="list-disc pl-8 text-gray-700 marker:text-green-400">
+        <li>German (native)</li>
+        <li>English (fluent)</li>
+        <li>French (intermediate)</li>
+      </ul>
+    </div>
+
+    <div class="shadow-md rounded-xl p-6 bg-white/80 backdrop-blur-md transition hover:shadow-xl">
+      <h2 class="text-2xl font-bold text-blue-800 tracking-tight mb-2">Hobbies</h2>
+      <ul class="list-disc pl-8 text-gray-700 marker:text-blue-300">
+        <li>Rock Climbing</li>
+        <li>Photography</li>
+        <li>Travel</li>
+        <li>Volunteering at coding workshops</li>
+      </ul>
+    </div>
+
+    <div class="shadow-md rounded-xl p-6 bg-gradient-to-tr from-white via-indigo-50 to-blue-100 transition hover:shadow-xl">
+      <h2 class="text-2xl font-bold text-indigo-700 tracking-tight mb-2">Fun Facts</h2>
+      <ul class="list-disc pl-8 text-gray-700 marker:text-indigo-300">
+        <li>Completed the Berlin Marathon twice</li>
+        <li>Proud owner of a rescue dog named Pixel</li>
+        <li>Sings in a jazz band</li>
+      </ul>
+    </div>
+
+    <div class="shadow-md rounded-xl p-6 bg-white/85 backdrop-blur-md transition hover:shadow-xl">
+      <h2 class="text-2xl font-bold text-indigo-800 tracking-tight mb-2">References</h2>
+      <p class="text-gray-700">Available upon request</p>
+    </div>
+
+  </main>
+</body>
+</html>
+```
+</HtmlEditor>
