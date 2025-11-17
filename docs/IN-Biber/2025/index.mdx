@@ -5,6 +5,10 @@ sidebar_custom_props:
     name: gbsl.silasberger.ch
     ref: 'https://gbsl.silasberger.ch/28Ga/IN-Biber-2024/'
 ---
+import DefinitionList from "@tdev-components/DefinitionList";
+import CmsText from '@tdev-components/documents/CmsText';
+import WithCmsText from '@tdev-components/documents/CmsText/WithCmsText';
+
 
 # Informatik-Biber 2025 🦫
 
@@ -20,6 +24,21 @@ Ziel 🎯
 : sich herausfordern
 : sich mit spannenden, besonderen Informatik-Fragen auseinandersetzen
 
+:::info[Login]
+<WithCmsText 
+    entries={{
+        username: "4a2bcec5-20b4-4aa7-81d0-73c4a0800c60",
+        password: "30be1079-f2a3-408b-9248-f1381be47c04", 
+    }}
+>
+    <DefinitionList>
+        <dt>Benutzername</dt>
+        <dd><CmsText name="username" /></dd>
+        <dt>Passwort</dt>
+        <dd><CmsText name="password" /></dd>
+    </DefinitionList>
+</WithCmsText>
+:::
 
 1. [https://wettbewerb.informatik-biber.ch/](https://wettbewerb.informatik-biber.ch/) öffnen
 2. Mit den obigen Zugangsdaten einloggen
