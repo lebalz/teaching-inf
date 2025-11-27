@@ -3192,17 +3192,6 @@
   resolved "https://registry.yarnpkg.com/@levischuck/tiny-cbor/-/tiny-cbor-0.2.11.tgz#833ddf7f3627dcb62d855d9c184061b4a1a875b3"
   integrity sha512-llBRm4dT4Z89aRsm6u2oEZ8tfwL/2l6BwpZ7JcyieouniDECM5AqNgr/y08zalEIvW3RSK4upYyybDcmjXqAow==
 
-"@lexical/clipboard@0.32.1", "@lexical/clipboard@^0.32.1":
-  version "0.32.1"
-  resolved "https://registry.yarnpkg.com/@lexical/clipboard/-/clipboard-0.32.1.tgz#e7b234beb202685e8648a143dd80beb168e08157"
-  integrity sha512-oO7CuMVh3EFEqtE6+7Ccf7jMD5RNUmSdTnFm/X4kYNGqs9lgGt8j5PgSk7oP9OuAjxKNdBTbltSlh54CX3AUIg==
-  dependencies:
-    "@lexical/html" "0.32.1"
-    "@lexical/list" "0.32.1"
-    "@lexical/selection" "0.32.1"
-    "@lexical/utils" "0.32.1"
-    lexical "0.32.1"
-
 "@lexical/clipboard@0.35.0", "@lexical/clipboard@^0.35.0":
   version "0.35.0"
   resolved "https://registry.yarnpkg.com/@lexical/clipboard/-/clipboard-0.35.0.tgz#ced9825dadb3779d9970aa571298691ef12422fd"
@@ -3214,15 +3203,6 @@
     "@lexical/utils" "0.35.0"
     lexical "0.35.0"
 
-"@lexical/code@0.32.1":
-  version "0.32.1"
-  resolved "https://registry.yarnpkg.com/@lexical/code/-/code-0.32.1.tgz#5bd243f7181b045c811b0f437f141bda3caa83b0"
-  integrity sha512-2rXj8s/CG32XKQ2EpORpACfpzyAxB+/SrQW2cjwczarLs5Fxnx6u6HwahZnxaF0z5UHIPUy90qDiOiRExc74Yg==
-  dependencies:
-    "@lexical/utils" "0.32.1"
-    lexical "0.32.1"
-    prismjs "^1.30.0"
-
 "@lexical/code@0.35.0":
   version "0.35.0"
   resolved "https://registry.yarnpkg.com/@lexical/code/-/code-0.35.0.tgz#2634ccf227914e6b9257fefa4bca0f1dfb373acb"
@@ -3231,18 +3211,6 @@
     "@lexical/utils" "0.35.0"
     lexical "0.35.0"
     prismjs "^1.30.0"
-
-"@lexical/devtools-core@0.32.1":
-  version "0.32.1"
-  resolved "https://registry.yarnpkg.com/@lexical/devtools-core/-/devtools-core-0.32.1.tgz#ba834df1e97f8add9f1e7ac5970755b852e426f9"
-  integrity sha512-3WnZQo6Qig7ccjDu2b8s1Kb5CCXowxnK0i8CCRG9mHAw7i6XpZUYAbk4rmcK/qbhLHrc7LwUrAMFzGtfLEH3XA==
-  dependencies:
-    "@lexical/html" "0.32.1"
-    "@lexical/link" "0.32.1"
-    "@lexical/mark" "0.32.1"
-    "@lexical/table" "0.32.1"
-    "@lexical/utils" "0.32.1"
-    lexical "0.32.1"
 
 "@lexical/devtools-core@0.35.0":
   version "0.35.0"
@@ -3256,27 +3224,12 @@
     "@lexical/utils" "0.35.0"
     lexical "0.35.0"
 
-"@lexical/dragon@0.32.1":
-  version "0.32.1"
-  resolved "https://registry.yarnpkg.com/@lexical/dragon/-/dragon-0.32.1.tgz#fbd9674d8ea192b6b0606dec8e0a866bbc5fa5c5"
-  integrity sha512-Dlx8P2b/O7gZLmXnoanmDkFL5RgA8Vvix4ZuSvT0apblqySzgi8l3NHHwwqXy1g2nfSupvpr7Dsf10Lu3l0Hlw==
-  dependencies:
-    lexical "0.32.1"
-
 "@lexical/dragon@0.35.0":
   version "0.35.0"
   resolved "https://registry.yarnpkg.com/@lexical/dragon/-/dragon-0.35.0.tgz#d1642dcd68642b99154ebb448ed92aa0858c4171"
   integrity sha512-SL6mT5pcqrt6hEbJ16vWxip5+r3uvMd0bQV5UUxuk+cxIeuP86iTgRh0HFR7SM2dRTYovL6/tM/O+8QLAUGTIg==
   dependencies:
     lexical "0.35.0"
-
-"@lexical/hashtag@0.32.1":
-  version "0.32.1"
-  resolved "https://registry.yarnpkg.com/@lexical/hashtag/-/hashtag-0.32.1.tgz#9abf06a2df6e65f1df426272f146cd4eb3f23ffc"
-  integrity sha512-S63bb7uIB4hO2V0UmzUiKlwAGegQlyFKqrOw9NJwOb8O96gHRxr27FUsEb8ToWLM8TSm2aw1WsZXs7CJQqGtCg==
-  dependencies:
-    "@lexical/utils" "0.32.1"
-    lexical "0.32.1"
 
 "@lexical/hashtag@0.35.0":
   version "0.35.0"
@@ -3286,14 +3239,6 @@
     "@lexical/utils" "0.35.0"
     lexical "0.35.0"
 
-"@lexical/history@0.32.1":
-  version "0.32.1"
-  resolved "https://registry.yarnpkg.com/@lexical/history/-/history-0.32.1.tgz#816a4a343aaae2eddb6ff858982fe5aa48fcb118"
-  integrity sha512-IRsKllumYEWxmzR2evN30MFY+JBM723lSyzm2PAQcgHCeBxi8t0Vc3EdyJRay+YdN65JgrohQi1WbktbK923uQ==
-  dependencies:
-    "@lexical/utils" "0.32.1"
-    lexical "0.32.1"
-
 "@lexical/history@0.35.0":
   version "0.35.0"
   resolved "https://registry.yarnpkg.com/@lexical/history/-/history-0.35.0.tgz#eb47badc2583c22b7599122f6d8315cbd3e720bb"
@@ -3301,15 +3246,6 @@
   dependencies:
     "@lexical/utils" "0.35.0"
     lexical "0.35.0"
-
-"@lexical/html@0.32.1":
-  version "0.32.1"
-  resolved "https://registry.yarnpkg.com/@lexical/html/-/html-0.32.1.tgz#968928770270d8e5397df6c10498a88c171d124b"
-  integrity sha512-uctCdC9gVzx/Sw9CimT4C2IDfSbfEGYunyIrJBpsfcdqp0rroGNizjIoZNBH3xcgkk9UDboSADo+wimbzEoy8A==
-  dependencies:
-    "@lexical/selection" "0.32.1"
-    "@lexical/utils" "0.32.1"
-    lexical "0.32.1"
 
 "@lexical/html@0.35.0":
   version "0.35.0"
@@ -3320,14 +3256,6 @@
     "@lexical/utils" "0.35.0"
     lexical "0.35.0"
 
-"@lexical/link@0.32.1", "@lexical/link@^0.32.1":
-  version "0.32.1"
-  resolved "https://registry.yarnpkg.com/@lexical/link/-/link-0.32.1.tgz#27d08cb19f9dfba2a9938302964ead9ba5fb56bf"
-  integrity sha512-atdwNpWjZ0U2/kgS0ATTkZ8lJLHiv3TsJgqJL33BuV9Gn7advJokd4faM79Y8XxkhiPi1lVTBSHgI8V4hs+c+Q==
-  dependencies:
-    "@lexical/utils" "0.32.1"
-    lexical "0.32.1"
-
 "@lexical/link@0.35.0", "@lexical/link@^0.35.0":
   version "0.35.0"
   resolved "https://registry.yarnpkg.com/@lexical/link/-/link-0.35.0.tgz#13daba7622d9f8f292c99469bdde93f287715d7c"
@@ -3335,15 +3263,6 @@
   dependencies:
     "@lexical/utils" "0.35.0"
     lexical "0.35.0"
-
-"@lexical/list@0.32.1", "@lexical/list@^0.32.1":
-  version "0.32.1"
-  resolved "https://registry.yarnpkg.com/@lexical/list/-/list-0.32.1.tgz#b3471011d1c1f0eaa2358daff6414bf06de696a7"
-  integrity sha512-3zShCfEdAvodR6mQ5CNN1gcEwfV341LXJzWCIkZzG1cPwaiBHUlT7TynQtKTPn1sATCEMmxoDG0/T+itsRNZgA==
-  dependencies:
-    "@lexical/selection" "0.32.1"
-    "@lexical/utils" "0.32.1"
-    lexical "0.32.1"
 
 "@lexical/list@0.35.0", "@lexical/list@^0.35.0":
   version "0.35.0"
@@ -3354,14 +3273,6 @@
     "@lexical/utils" "0.35.0"
     lexical "0.35.0"
 
-"@lexical/mark@0.32.1":
-  version "0.32.1"
-  resolved "https://registry.yarnpkg.com/@lexical/mark/-/mark-0.32.1.tgz#762c7887f09bbe833e21c0c487ae5a5c5ac93610"
-  integrity sha512-AXF2wmUvvSI45y+sgZKnU0pnUdttd9v75DDQgdplqtCkyDqHVGxVCNCrLE+PJtzIrwJxtA2UyC8yFZMBM92HpA==
-  dependencies:
-    "@lexical/utils" "0.32.1"
-    lexical "0.32.1"
-
 "@lexical/mark@0.35.0":
   version "0.35.0"
   resolved "https://registry.yarnpkg.com/@lexical/mark/-/mark-0.35.0.tgz#463d6438a9e21229b18d1424ce0f5bf231e1802a"
@@ -3369,19 +3280,6 @@
   dependencies:
     "@lexical/utils" "0.35.0"
     lexical "0.35.0"
-
-"@lexical/markdown@0.32.1", "@lexical/markdown@^0.32.1":
-  version "0.32.1"
-  resolved "https://registry.yarnpkg.com/@lexical/markdown/-/markdown-0.32.1.tgz#e8bba69b1ec5f520e01305ba681623f4165dceb8"
-  integrity sha512-AmUTRRx6Je0AOiQqp48Xn92/71AzhFgi4nO1EtPW5eae1CihrtiEh5UQr48mV6EyjvH9D3OlOLU8XrzS+J9a+w==
-  dependencies:
-    "@lexical/code" "0.32.1"
-    "@lexical/link" "0.32.1"
-    "@lexical/list" "0.32.1"
-    "@lexical/rich-text" "0.32.1"
-    "@lexical/text" "0.32.1"
-    "@lexical/utils" "0.32.1"
-    lexical "0.32.1"
 
 "@lexical/markdown@0.35.0", "@lexical/markdown@^0.35.0":
   version "0.35.0"
@@ -3396,13 +3294,6 @@
     "@lexical/utils" "0.35.0"
     lexical "0.35.0"
 
-"@lexical/offset@0.32.1":
-  version "0.32.1"
-  resolved "https://registry.yarnpkg.com/@lexical/offset/-/offset-0.32.1.tgz#adb4403b8dee5436584d166dd5d3d3d8bfec3620"
-  integrity sha512-zfHqoLlQ0lq1akFHy81xnDaRRE5KkqFa7OovOxKPBpALQCiJIAb2ykqj/Woc2oUeYaEcnkaFU9+kEWMK9yY0fQ==
-  dependencies:
-    lexical "0.32.1"
-
 "@lexical/offset@0.35.0":
   version "0.35.0"
   resolved "https://registry.yarnpkg.com/@lexical/offset/-/offset-0.35.0.tgz#3937b36fa769306adeb42907553ebf3285a2caf6"
@@ -3410,29 +3301,12 @@
   dependencies:
     lexical "0.35.0"
 
-"@lexical/overflow@0.32.1":
-  version "0.32.1"
-  resolved "https://registry.yarnpkg.com/@lexical/overflow/-/overflow-0.32.1.tgz#81a9c41a83023f91dafd7e90a9d4bc29e17d3998"
-  integrity sha512-wjcFGjzkbugds2Q5Wag59WrcxJwMUACEXms1FtFdu1/YcBPqNAKJSyfo8Z/5LGfstQEb2nPtSuEQZUb7v+XYyA==
-  dependencies:
-    lexical "0.32.1"
-
 "@lexical/overflow@0.35.0":
   version "0.35.0"
   resolved "https://registry.yarnpkg.com/@lexical/overflow/-/overflow-0.35.0.tgz#098af6bad9bdc8ad26b74d2a9fc0716df7f1f47b"
   integrity sha512-B25YvnJQTGlZcrNv7b0PJBLWq3tl8sql497OHfYYLem7EOMPKKDGJScJAKM/91D4H/mMAsx5gnA/XgKobriuTg==
   dependencies:
     lexical "0.35.0"
-
-"@lexical/plain-text@0.32.1", "@lexical/plain-text@^0.32.1":
-  version "0.32.1"
-  resolved "https://registry.yarnpkg.com/@lexical/plain-text/-/plain-text-0.32.1.tgz#aee5bcd3bb8b22bcad12b1bc9039dc5ad3ccc6d2"
-  integrity sha512-uFS3xoETB3phnYHZXfMKvl8gh6YRW7rpokuJmQVMHNNBklORmMpN00rRQ/zsc/jt/nPzaPpE5cLwSHXeJdqJUg==
-  dependencies:
-    "@lexical/clipboard" "0.32.1"
-    "@lexical/selection" "0.32.1"
-    "@lexical/utils" "0.32.1"
-    lexical "0.32.1"
 
 "@lexical/plain-text@0.35.0", "@lexical/plain-text@^0.35.0":
   version "0.35.0"
@@ -3443,30 +3317,6 @@
     "@lexical/selection" "0.35.0"
     "@lexical/utils" "0.35.0"
     lexical "0.35.0"
-
-"@lexical/react@^0.32.1":
-  version "0.32.1"
-  resolved "https://registry.yarnpkg.com/@lexical/react/-/react-0.32.1.tgz#f86f5f782d00e8f8f10b72be0c7a1bf895cb5af1"
-  integrity sha512-PCiAiwGIGfkYb2o9Kx+gGGqXwxqb7/W4cGSnw1nzmNtCerJ3S64WZs87Lgcow0RlDSwqzpH534+eCyIddueSqw==
-  dependencies:
-    "@floating-ui/react" "^0.27.8"
-    "@lexical/devtools-core" "0.32.1"
-    "@lexical/dragon" "0.32.1"
-    "@lexical/hashtag" "0.32.1"
-    "@lexical/history" "0.32.1"
-    "@lexical/link" "0.32.1"
-    "@lexical/list" "0.32.1"
-    "@lexical/mark" "0.32.1"
-    "@lexical/markdown" "0.32.1"
-    "@lexical/overflow" "0.32.1"
-    "@lexical/plain-text" "0.32.1"
-    "@lexical/rich-text" "0.32.1"
-    "@lexical/table" "0.32.1"
-    "@lexical/text" "0.32.1"
-    "@lexical/utils" "0.32.1"
-    "@lexical/yjs" "0.32.1"
-    lexical "0.32.1"
-    react-error-boundary "^3.1.4"
 
 "@lexical/react@^0.35.0":
   version "0.35.0"
@@ -3492,16 +3342,6 @@
     lexical "0.35.0"
     react-error-boundary "^3.1.4"
 
-"@lexical/rich-text@0.32.1", "@lexical/rich-text@^0.32.1":
-  version "0.32.1"
-  resolved "https://registry.yarnpkg.com/@lexical/rich-text/-/rich-text-0.32.1.tgz#6ff5e5af36f13df8fb4457cf5a29604df774302b"
-  integrity sha512-SnmpZ7boTLxeYfNezNLvchDiJOAALA2nD0Uq/SpkIOJ6R01R7m1aPdLv55LGKoBT9UxCRdo0HWXytwiVZI+ehQ==
-  dependencies:
-    "@lexical/clipboard" "0.32.1"
-    "@lexical/selection" "0.32.1"
-    "@lexical/utils" "0.32.1"
-    lexical "0.32.1"
-
 "@lexical/rich-text@0.35.0", "@lexical/rich-text@^0.35.0":
   version "0.35.0"
   resolved "https://registry.yarnpkg.com/@lexical/rich-text/-/rich-text-0.35.0.tgz#23e6d399488fbe4d39d326093c62ffc955d64efa"
@@ -3512,28 +3352,12 @@
     "@lexical/utils" "0.35.0"
     lexical "0.35.0"
 
-"@lexical/selection@0.32.1", "@lexical/selection@^0.32.1":
-  version "0.32.1"
-  resolved "https://registry.yarnpkg.com/@lexical/selection/-/selection-0.32.1.tgz#d3f003c2f989a2a516c9c991abdd72d3a020d1f4"
-  integrity sha512-X1aXJdq/5EOuSuMOqK3t+rEVmpqLf+vc2Kl5YuP8+gGWUbXuxR6iryrQuy1mAViZpF/5qw4HO/Sb+9JjubaZEg==
-  dependencies:
-    lexical "0.32.1"
-
 "@lexical/selection@0.35.0", "@lexical/selection@^0.35.0":
   version "0.35.0"
   resolved "https://registry.yarnpkg.com/@lexical/selection/-/selection-0.35.0.tgz#e3844433641a4e1824d9d611cc71e5b2bdd30877"
   integrity sha512-mMtDE7Q0nycXdFTTH/+ta6EBrBwxBB4Tg8QwsGntzQ1Cq//d838dpXpFjJOqHEeVHUqXpiuj+cBG8+bvz/rPRw==
   dependencies:
     lexical "0.35.0"
-
-"@lexical/table@0.32.1":
-  version "0.32.1"
-  resolved "https://registry.yarnpkg.com/@lexical/table/-/table-0.32.1.tgz#6da90c76403b3f9a4a0e2d14b89e6beec114b890"
-  integrity sha512-sGk2jUbQHj5hatpxRyl6IE2oWsjRnYhmaP94THzn95/uK69o8eSizcnd148WzYsX8Zz+L9PTLS1xjvCbfLTP+A==
-  dependencies:
-    "@lexical/clipboard" "0.32.1"
-    "@lexical/utils" "0.32.1"
-    lexical "0.32.1"
 
 "@lexical/table@0.35.0":
   version "0.35.0"
@@ -3544,29 +3368,12 @@
     "@lexical/utils" "0.35.0"
     lexical "0.35.0"
 
-"@lexical/text@0.32.1":
-  version "0.32.1"
-  resolved "https://registry.yarnpkg.com/@lexical/text/-/text-0.32.1.tgz#33d859019851a345101e112ee738a9ca731e4c0f"
-  integrity sha512-0Ek8F3KC4d16b2YaTHdyYFqDSBZ5KRtGrqU3GBog+VOGxucGaEbXEK1/ypX5CTe/wwkQDrH0FKWPQbd3l5t5YQ==
-  dependencies:
-    lexical "0.32.1"
-
 "@lexical/text@0.35.0":
   version "0.35.0"
   resolved "https://registry.yarnpkg.com/@lexical/text/-/text-0.35.0.tgz#60e7243023458b3fcf894afcbb27adffecdd7aa3"
   integrity sha512-uaMh46BkysV8hK8wQwp5g/ByZW+2hPDt8ahAErxtf8NuzQem1FHG/f5RTchmFqqUDVHO3qLNTv4AehEGmXv8MA==
   dependencies:
     lexical "0.35.0"
-
-"@lexical/utils@0.32.1", "@lexical/utils@^0.32.1":
-  version "0.32.1"
-  resolved "https://registry.yarnpkg.com/@lexical/utils/-/utils-0.32.1.tgz#feb9466ba1462555dd51448fa79b0363cdaa11bc"
-  integrity sha512-ZaqZZksNIHJd+g8GXc11D1ESi8JzsdLVQZ+9odXVaNxtwDIaGIqMSccFyuZ9VSoJDde4JXZkgp/0PShbAZDkyw==
-  dependencies:
-    "@lexical/list" "0.32.1"
-    "@lexical/selection" "0.32.1"
-    "@lexical/table" "0.32.1"
-    lexical "0.32.1"
 
 "@lexical/utils@0.35.0", "@lexical/utils@^0.35.0":
   version "0.35.0"
@@ -3577,15 +3384,6 @@
     "@lexical/selection" "0.35.0"
     "@lexical/table" "0.35.0"
     lexical "0.35.0"
-
-"@lexical/yjs@0.32.1":
-  version "0.32.1"
-  resolved "https://registry.yarnpkg.com/@lexical/yjs/-/yjs-0.32.1.tgz#f8119f508a0dcab352c17f020f216736132bc4e3"
-  integrity sha512-VHGTg5z4wcDkPe8NnhzA5+CoOKJ5tVmTmMvoiZ91rtNUFQPxWRky88Gjt1e3yXldYp4pImNEgtAjlWqvaJBYGA==
-  dependencies:
-    "@lexical/offset" "0.32.1"
-    "@lexical/selection" "0.32.1"
-    lexical "0.32.1"
 
 "@lexical/yjs@0.35.0":
   version "0.35.0"
@@ -3795,10 +3593,10 @@
   dependencies:
     "@types/mdx" "^2.0.0"
 
-"@mdxeditor/editor@^3.37.0":
-  version "3.48.0"
-  resolved "https://registry.yarnpkg.com/@mdxeditor/editor/-/editor-3.48.0.tgz#128aa43e63183ae5241bfe5026e4faf513d96c5b"
-  integrity sha512-2JqEraWnjZWfBQvq+0VVWYTNJpjjxucbLWgj7Kgyc5piTU3SLalG5FjNpBz71esZADZPybMj2aSIx7cYZkwV8w==
+"@mdxeditor/editor@^3.50.0":
+  version "3.50.0"
+  resolved "https://registry.yarnpkg.com/@mdxeditor/editor/-/editor-3.50.0.tgz#4c34aee1f7ff6b98b755b82677fd7e7d5984981d"
+  integrity sha512-PJPma6JBKAufOf+gKGHlXXl2+ZtLoBbQEQK8txuNjJzncULpxQXB4oG3sUqKaQSDQPiSRtYNWE2e9jg5SteP0Q==
   dependencies:
     "@codemirror/commands" "^6.2.4"
     "@codemirror/lang-markdown" "^6.2.3"
@@ -3830,7 +3628,7 @@
     cm6-theme-basic-light "^0.2.0"
     codemirror "^6.0.1"
     downshift "^7.6.0"
-    js-yaml "4.1.0"
+    js-yaml "4.1.1"
     lexical "^0.35.0"
     mdast-util-directive "^3.0.0"
     mdast-util-from-markdown "^2.0.0"
@@ -11863,10 +11661,10 @@ js-sha256@^0.11.1:
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"
   integrity sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==
 
-js-yaml@4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-4.1.0.tgz#c1fb65f8f5017901cdd2c951864ba18458a10602"
-  integrity sha512-wpxZs9NoxZaJESJGIZTyDEaYpl0FKSA+FB9aJiyemKhMwkxQg63h4T1KJgUGHpTqPDNRcmmYLugrRjJlBtWvRA==
+js-yaml@4.1.1, js-yaml@^4.1.0:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-4.1.1.tgz#854c292467705b699476e1a2decc0c8a3458806b"
+  integrity sha512-qQKT4zQxXl8lLwBtHMWwaTcGfFOZviOJet3Oy/xmGk2gZH677CJM9EvtfdSkgWcATZhj/55JZ0rmy3myCT5lsA==
   dependencies:
     argparse "^2.0.1"
 
@@ -11877,13 +11675,6 @@ js-yaml@^3.13.1:
   dependencies:
     argparse "^1.0.7"
     esprima "^4.0.0"
-
-js-yaml@^4.1.0:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-4.1.1.tgz#854c292467705b699476e1a2decc0c8a3458806b"
-  integrity sha512-qQKT4zQxXl8lLwBtHMWwaTcGfFOZviOJet3Oy/xmGk2gZH677CJM9EvtfdSkgWcATZhj/55JZ0rmy3myCT5lsA==
-  dependencies:
-    argparse "^2.0.1"
 
 jsesc@^3.0.2, jsesc@~3.1.0:
   version "3.1.0"
@@ -12096,11 +11887,6 @@ leven@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/leven/-/leven-3.1.0.tgz#77891de834064cccba82ae7842bb6b14a13ed7f2"
   integrity sha512-qsda+H8jTaUaN/x5vzW2rzc+8Rw4TAQ/4KjB46IwK5VH+IlVeeeje/EoZRpiXvIqjFgK84QffqPztGI3VBLG1A==
-
-lexical@0.32.1:
-  version "0.32.1"
-  resolved "https://registry.yarnpkg.com/lexical/-/lexical-0.32.1.tgz#6e2b3aac067a45bdafae576326fefca4f2e57a40"
-  integrity sha512-Rvr9p00zUwzjXIqElIjMDyl/24QHw68yaqmXUWIT3lSdSAr8OpjSJK3iWBLZwVZwwpVhwShZRckomc+3vSb/zw==
 
 lexical@0.35.0, lexical@^0.35.0:
   version "0.35.0"

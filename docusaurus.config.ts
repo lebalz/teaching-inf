@@ -1,7 +1,7 @@
 require('dotenv').config();
 import getSiteConfig from './siteConfig';
 import { themes as prismThemes } from 'prism-react-renderer';
-import type { Config, OnBrokenMarkdownImagesFunction, } from '@docusaurus/types';
+import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 import themeCodeEditor from './src/plugins/theme-code-editor'
 import { v4 as uuidv4 } from 'uuid';
@@ -93,40 +93,40 @@ const config: Config = applyTransformers({
   future: {
     v4: true,
     experimental_faster: {
-      /**
-       * no config options for swcJsLoader so far. 
-       * Instead configure it over the jsLoader in the next step 
-       */
-      swcJsLoader: false,
-      swcJsMinimizer: true,
-      swcHtmlMinimizer: true,
-      lightningCssMinimizer: true,
-      rspackBundler: true,
-      rspackPersistentCache: process.env.NETLIFY ? false : true,
-      mdxCrossCompilerCache: true,
-      ssgWorkerThreads: true,
-    },
+        /**
+         * no config options for swcJsLoader so far. 
+         * Instead configure it over the jsLoader in the next step 
+         */
+        swcJsLoader: false,
+        swcJsMinimizer: true,
+        swcHtmlMinimizer: true,
+        lightningCssMinimizer: true,
+        rspackBundler: true,
+        rspackPersistentCache: process.env.NETLIFY ? false : true,
+        mdxCrossCompilerCache: true,
+        ssgWorkerThreads: true,
+      },
   },
   webpack: {
     jsLoader: (isServer) => {
-      const defaultOptions = require("@docusaurus/faster").getSwcLoaderOptions({ isServer });
-      return {
-        loader: 'builtin:swc-loader', // (only works with Rspack)
-        options: {
-          ...defaultOptions,
-          jsc: {
-            parser: {
-              ...defaultOptions.jsc.parser,
-              decorators: true
+        const defaultOptions = require("@docusaurus/faster").getSwcLoaderOptions({ isServer });
+        return {
+          loader: 'builtin:swc-loader', // (only works with Rspack)
+          options: {
+            ...defaultOptions,
+            jsc: {
+              parser: {
+                ...defaultOptions.jsc.parser,
+                decorators: true
+              },
+              transform: {
+                ...defaultOptions.jsc.transform,
+                decoratorVersion: '2022-03',
+              }
             },
-            transform: {
-              ...defaultOptions.jsc.transform,
-              decoratorVersion: '2022-03',
-            }
           },
-        },
-      }
-    },
+        }
+      },
   },
 
   // Even if you don't use internationalization, you can use this field to set
