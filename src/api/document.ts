@@ -21,6 +21,7 @@ import type { BinaryFiles } from '@excalidraw/excalidraw/types';
 import type { ExcalidrawElement } from '@excalidraw/excalidraw/element/types';
 import Excalidoc from '@tdev/excalidoc/model';
 import ProgressState from '@tdev-models/documents/ProgressState';
+import TuringMachine from '@tdev-models/documents/TuringMachine';
 
 export enum Access {
     RO_DocumentRoot = 'RO_DocumentRoot',
@@ -51,7 +52,8 @@ export enum DocumentType {
     TextMessage = 'text_message',
     DynamicDocumentRoot = 'dynamic_document_root',
     DynamicDocumentRoots = 'dynamic_document_roots',
-    NetpbmGraphic = 'netpbm_graphic'
+    NetpbmGraphic = 'netpbm_graphic',
+    TuringMachine = 'turing_machine'
 }
 
 /**
@@ -156,6 +158,21 @@ export interface NetpbmGraphicData {
     imageData: string;
 }
 
+export interface TuringState {
+    state: string;
+    readSymbol: string;
+    writeSymbol: string;
+    moveDirection: 'L' | 'R' | 'H';
+    nextState: string;
+}
+
+export interface TuringMachineData {
+    program: TuringState[];
+    band: string[];
+    initialHeadPosition: number;
+    initialState: string;
+}
+
 export interface TypeDataMapping {
     [DocumentType.Script]: ScriptData;
     [DocumentType.TaskState]: TaskStateData;
@@ -174,6 +191,7 @@ export interface TypeDataMapping {
     [DocumentType.DynamicDocumentRoot]: DynamicDocumentRootData;
     [DocumentType.DynamicDocumentRoots]: DynamicDocumentRootsData;
     [DocumentType.NetpbmGraphic]: NetpbmGraphicData;
+    [DocumentType.TuringMachine]: TuringMachineData;
     // Add more mappings as needed
 }
 
@@ -195,6 +213,7 @@ export interface TypeModelMapping {
     [DocumentType.DynamicDocumentRoot]: DynamicDocumentRootModel;
     [DocumentType.DynamicDocumentRoots]: DynamicDocumentRoots;
     [DocumentType.NetpbmGraphic]: NetpbmGraphic;
+    [DocumentType.TuringMachine]: TuringMachine;
     /**
      * Add more mappings as needed
      * TODO: implement the mapping in DocumentRoot.ts
@@ -220,7 +239,8 @@ export type DocumentTypes =
     | DynamicDocumentRootModel
     | DynamicDocumentRoots
     | NetpbmGraphic
-    | ProgressState;
+    | ProgressState
+    | TuringMachine;
 
 export interface Document<Type extends DocumentType> {
     id: string;
