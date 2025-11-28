@@ -66,16 +66,16 @@
 - cells:
     - 05.12.2025
     - Computer
-    - Rechnerarchitektur
+    - Rechnerarchitektur LMC
 - cells:
     - 12.12.2025
     - Computer
-    - Test
-  type: test
+    - Arbeit am Steckbrief zu LS, Turingmaschine oder LMC
 - cells:
     - 19.12.2025
-    - Programmieren 2
-    - Wiederholung, Einstieg MicroBit
+    - Computer
+    - Abgabe Steckbrief zu LS, Turingmaschine oder LMC
+  type: test
 - cells:
     - 26.12.2025
     - Winterferien
@@ -91,7 +91,7 @@
 - cells:
     - 09.01.2026
     - Programmieren 2
-    - Datenstrukturen, Listen, MicroBit
+    - Wiederholung, Einstieg MicroBit, Datenstrukturen, Listen, MicroBit
 - cells:
     - 16.01.2026
     - Programmieren 2
