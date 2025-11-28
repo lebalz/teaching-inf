@@ -143,7 +143,7 @@
         {
             "from": "docs/IN-Biber/2025/",
             "to": "versioned_docs/version-29Ga/50-IN-Biber",
-            "ignore": [],
+            "ignore": ["_category_.yml"],
             "open": false
         }
     ],
@@ -178,7 +178,7 @@
         {
             "from": "docs/IN-Biber/2025/",
             "to": "versioned_docs/version-29Gj/50-IN-Biber",
-            "ignore": [],
+            "ignore": ["_category_.yml"],
             "open": false
         }
     ],
