@@ -60,7 +60,7 @@ function AufgabeAmonition(props: any) {
             icon={<AufgabeIcon />}
             title="Aufgabe"
             {...props}
-            className={clsx('alert', 'alert--info', props.className)}
+            className={clsx('alert', 'alert--info', styles.aufgabe, props.className)}
         >
             {props.children}
         </AdmonitionLayout>
@@ -73,7 +73,7 @@ function InfoAmonition(props: any) {
             icon={<IconNote />}
             title="Info"
             {...props}
-            className={clsx('alert', 'alert--primary', props.className)}
+            className={clsx('alert', 'alert--info', props.className)}
         >
             {props.children}
         </AdmonitionLayout>

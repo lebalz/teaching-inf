@@ -47,12 +47,6 @@ const getEditUrl = (props: Parameters<EditUrlFunction>[0]) => {
 
 const GIT_COMMIT_SHA = process.env.GITHUB_SHA || Math.random().toString(36).substring(7);
 const CWD = process.cwd();
-const ADMONITION_CONFIG = {
-    admonitions: {
-        keywords: ['aufgabe', 'finding', 'insight', 'definition'],
-        extendDefaults: true
-    }
-};
 const VERSIONS: { [version: string]: VersionOptions } = {
     current: {
         label: 'Material',
@@ -190,7 +184,6 @@ const getSiteConfig: SiteConfigProvider = () => {
             }
         ],
         docs: {
-            ...ADMONITION_CONFIG,
             versions: VERSIONS,
             lastVersion: 'current',
             routeBasePath: '/',
@@ -202,8 +195,7 @@ const getSiteConfig: SiteConfigProvider = () => {
                 return getEditUrl(fConfig);
             }
         },
-        blog: { ...ADMONITION_CONFIG, exclude: ['tdev/**'] },
-        pages: ADMONITION_CONFIG,
+        blog: { exclude: ['tdev/**'] },
         transformers: {
             plugins: (plugins: PluginConfig[]) => {
                 return [

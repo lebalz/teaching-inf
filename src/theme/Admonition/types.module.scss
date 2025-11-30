@@ -17,29 +17,20 @@
     }
 }
 .aufgabe {
-    --ifm-alert-background-color: #e0f2f1; // Light Teal
-    --ifm-alert-background-color-highlight: #b2dfde; // Slightly Darker Teal
-    --ifm-alert-foreground-color: #004d40; // Darker Teal for Text
-    --ifm-alert-border-color: #26a69a; // Medium Teal Border
+    --ifm-alert-background-color: var(--tdev-admonition-aufgabe-background-color); // Light Teal
+    --ifm-alert-background-color-highlight: var(
+        --tdev-admonition-aufgabe-background-color-highlight
+    ); // Slightly Darker Teal
+    --ifm-alert-foreground-color: var(--tdev-admonition-aufgabe-foreground-color); // Darker Teal for Text
+    --ifm-alert-border-color: var(--tdev-admonition-aufgabe-border-color); // Medium Teal Border
 }
 .definition {
-    --ifm-alert-background-color: #faefe7;
-    --ifm-alert-background-color-highlight: #eaded7;
-    --ifm-alert-foreground-color: #003100;
-    --ifm-alert-border-color: #988c8a;
-}
-
-html[data-theme='dark'] {
-    .aufgabe {
-        --ifm-alert-background-color: #20766c;
-        --ifm-alert-background-color-highlight: #1b524c;
-        --ifm-alert-foreground-color: #e0f2f1;
-        --ifm-alert-border-color: #3bcebf;
-    }
-    .definition {
-        --ifm-alert-background-color: #3e3532;
-        --ifm-alert-background-color-highlight: #4e4542;
-        --ifm-alert-foreground-color: #b8e6b8;
-        --ifm-alert-border-color: #6a5f5d;
-    }
+    --ifm-alert-background-color: var(--tdev-admonition-definition-background-color); // Light Brownish
+    --ifm-alert-background-color-highlight: var(
+        --tdev-admonition-definition-background-color-highlight
+    ); // Slightly Darker Brownish
+    --ifm-alert-foreground-color: var(
+        --tdev-admonition-definition-foreground-color
+    ); // Dark Brownish for Text
+    --ifm-alert-border-color: var(--tdev-admonition-definition-border-color); // Medium Brown
 }
