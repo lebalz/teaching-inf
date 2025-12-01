@@ -34,6 +34,10 @@ if (!DOCS_ONLY) {
         classes: ['28Wa']
     });
     CourseList.push({
+        title: 'Workshops',
+        classes: ['LPs']
+    });
+    CourseList.push({
         title: 'Ehemalige',
         classes: [
             {
