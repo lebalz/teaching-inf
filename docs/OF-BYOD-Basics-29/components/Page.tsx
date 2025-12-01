@@ -13,13 +13,13 @@ interface Props {
 
 export const ScenarioNrContext = React.createContext<number>(1);
 
-
 const Page = (props: Props) => {
-    
     return (
         <ScenarioNrContext.Provider value={props.testNr ?? 1}>
             <div className={clsx(styles.page)}>
-                <Badge className={clsx(styles.pageNr)} color='gray'>{props.nr}</Badge>
+                <Badge className={clsx(styles.pageNr)} color="gray">
+                    {props.nr}
+                </Badge>
                 {props.children}
             </div>
         </ScenarioNrContext.Provider>

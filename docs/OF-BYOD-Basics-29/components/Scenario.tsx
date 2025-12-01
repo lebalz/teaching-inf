@@ -29,13 +29,13 @@ const getGridSettings = (_nr?: number) => {
 const Scenario = (props: Props) => {
     const gridSettings = getGridSettings(props.nr);
     const scenarioNr = React.useContext(ScenarioNrContext);
-    
+
     return (
         <div className={clsx(styles.scenario)} style={gridSettings}>
             <div className={clsx(styles.meta)}>
-                {props.isOsx && <Badge color='black'>macOS</Badge>}
-                {props.isWin && <Badge color='blue'>Windows</Badge>}
-                <Badge color='gray'>#{scenarioNr}</Badge>
+                {props.isOsx && <Badge color="black">macOS</Badge>}
+                {props.isWin && <Badge color="blue">Windows</Badge>}
+                <Badge color="gray">#{scenarioNr}</Badge>
             </div>
             {props.children}
         </div>

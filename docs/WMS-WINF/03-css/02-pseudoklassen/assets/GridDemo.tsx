@@ -9,7 +9,7 @@ const GridDemo = () => {
                 <div key={i + 1}>{i + 1}</div>
             ))}
         </div>
-    )
-}
+    );
+};
 
 export default GridDemo;
