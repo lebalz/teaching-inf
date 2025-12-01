@@ -6,11 +6,16 @@ coverage
 .docusaurus
 .github
 .drone.yml
-
-docs
 versioned_docs
 
 *.md
+*.mdx
+docs/**/*.py
+docs/**/*.svg
+docs/**/*.xml
+docs/**/*.yml
+docs/**/*.yaml
+docs/**/*.json
 
 i18n
 versions.json
