@@ -1,3 +1,4 @@
 100-Tools/*
 !100-Tools/_category_.yml
 200-Teaching-Dev/*
+!200-Teaching-Dev/_category_.yml
