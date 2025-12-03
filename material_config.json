@@ -128,7 +128,6 @@
             "from": "docs/OF-Programmieren-1/",
             "to": "versioned_docs/version-29Ga/03-Programmieren-1",
             "ignore": [
-                "08-Verzweigungen",
                 "09-While",
                 "10-Gruefnisch",
                 "11-Repefragen",
@@ -163,7 +162,6 @@
             "from": "docs/OF-Programmieren-1/",
             "to": "versioned_docs/version-29Gj/03-Programmieren-1",
             "ignore": [
-                "08-Verzweigungen",
                 "09-While",
                 "10-Gruefnisch",
                 "11-Repefragen",
