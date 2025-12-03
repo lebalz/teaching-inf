@@ -73,7 +73,7 @@ print(anzahl + 13) # => 25
 ```py
 anzahl = 12
 gewicht = 100
-print(f'{anzahl} Tafeln Schokolade sind {anzahl * gewicht} g schwer')
+print(anzahl, 'Tafeln Schokolade sind', anzahl * gewicht, 'g schwer')
 ```
 
 </div>
@@ -86,7 +86,7 @@ print(f'{anzahl} Tafeln Schokolade sind {anzahl * gewicht} g schwer')
 ```py
 anzahl = 12
 gewicht = 100
-print(f'{anzahl} Tafeln Schokolade sind {anzahl * gewicht} g schwer')
+print(anzahl, 'Tafeln Schokolade sind', anzahl * gewicht, 'g schwer')
 # => 12 Tafeln Schokolade sind 1200 g schwer
 ```
 
@@ -95,11 +95,10 @@ print(f'{anzahl} Tafeln Schokolade sind {anzahl * gewicht} g schwer')
 
 
 # Formatierter Text
-Variablenwerte lassen sich mit geschweiften Klammern `{}` in einen Text einfügen.
 
 ```py
 name = 'Alfred'
-print(f'Hallo {name}') # => Hallo Alfred
+print('Hallo', name) # => Hallo Alfred
 ```
 
 
@@ -150,7 +149,7 @@ print(anzahl + 1) # => 15
 
 ```py
 alter = input('Wie alt bist du?')
-print(f'Ich bin {alter} Jahre alt.')
+print('Ich bin', alter, 'Jahre alt.')
 ```
 
 
@@ -162,6 +161,18 @@ Eingaben werden in einem **Parallelogramm** dargestellt.
 ![](images/07-strukto-input.png)
 
 </div>
+
+
+## Mit Eingaben rechnen
+
+```py
+anzahl = input('Wie viele Strecken soll die Spirale haben?')
+seite = 10
+for i in range(anzahl):
+    forward(seite)
+    left(90)
+    seite = seite + 10
+```
 
 
 ## Mit Eingaben rechnen
