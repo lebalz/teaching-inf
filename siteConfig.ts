@@ -1,7 +1,7 @@
 // This file is never changed by teaching-dev.
 // Use it to override or extend your app configuration.
 
-import { MarkdownConfig, PluginConfig } from '@docusaurus/types';
+import { PluginConfig } from '@docusaurus/types';
 import { mdiSourceCommit } from '@mdi/js';
 import path from 'path';
 import { EditUrlFunction, VersionOptions } from '@docusaurus/plugin-content-docs';
@@ -16,6 +16,7 @@ import {
     devModeAccessLocalFS,
     personalSpaceOverlay
 } from './src/siteConfig/navbarItems';
+import { themes as prismThemes } from 'prism-react-renderer';
 
 const getEditUrl = (props: Parameters<EditUrlFunction>[0]) => {
     const { version, docPath, versionDocsDirPath } = props;
@@ -172,6 +173,11 @@ const getSiteConfig: SiteConfigProvider = () => {
                 sidebar: {
                     hideable: true
                 }
+            },
+            prism: {
+                theme: prismThemes.github,
+                darkTheme: prismThemes.dracula,
+                additionalLanguages: ['bash', 'typescript', 'json', 'python', 'armasm']
             }
         },
         scripts: [

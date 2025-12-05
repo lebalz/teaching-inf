@@ -1,0 +1,89 @@
+---
+page_id: c3340503-6b8c-4f3e-b5d2-35656a075e58
+---
+
+import StripComments from './components/StripComments';
+
+# 6. Assembler im LMC
+
+![--width=350px](./images/lmc.png)
+
+Damit wir diese Aspekte genauer anschauen können, simulieren wir einen einfachen Rechner. Der "Little Man Computer" [LMC von Peter Higginson](https://www.peterhigginson.co.uk/lmc/) eignet sich dazu sehr gut.
+ 
+
+Die Benutzeroberfläche enthält drei Teile:
+
+Editor
+: Im LMC Editor werden die Befehle in Form von *Mnemonics* eingegeben
+Assembler
+: Der Assembler übersetzt diese *Mnemonics* in die Zahlen (Opcodes und Operanden) schreibt diese in die Speicherzellen
+Simulator
+: Der Simulator führt die Instruktionen dann aus.
+
+### Instruction Set
+
+Der LMC kennt **11** verschiedene Instruktionen und hat einen Speicher von 100 Zellen, welche von 00 bis 99 nummeriert werden. Mit diesen Instruktionen lassen sich alle Aktionen des Fetch-Decode-Execute Zyklus ausführen. 
+
+<div className="small-table">
+
+| Instruktion                        | Mnemonic | Opcode | Erklärung                                                          |
+|:-----------------------------------|:---------|:-------|:-------------------------------------------------------------------|
+| HALT                               | `HLT`    | `000`  | Programm beenden                                                   |
+| Addieren                           | `ADD`    | `1xx`  | Addiere den Inhalt von Speicherzelle xx zum Akkumulator            |
+| Subtrahieren                       | `SUB`    | `2xx`  | Subtrahiere den Inhalt von Speicherzelle xx vom Akkumulator        |
+| Speichern                          | `STA`    | `3xx`  | Speichere den Inhalt des Akkumulators in Speicherzelle xx          |
+| Lade                               | `LDA`    | `5xx`  | Lade den Inhalt von Speicherzelle xx in den Akkumulator            |
+| Gehe zu (Branch Always)            | `BRA`    | `6xx`  | Setze den Programmzähler auf xx (also spring als nächstes dorthin) |
+| Gehe wenn 0 (Branch if Zero)       | `BRZ`    | `7xx`  | Wenn der Akkumulator 0 enthält spring als nächstes nach xx         |
+| Gehe wenn \>=0 (Branch if Positive) | `BRP`    | `8xx`  | Wenn der Akkumulator positiv ist spring als nächstes nach xx       |
+| Eingabe                            | `INP`    | `901`  | Hol vom Operateur einen Eingabe und schreib sie in den Akkumulator |
+| Ausgabe                            | `OUT`    | `902`  | Gib den Inhalt des Akkumulators aus                                |
+| Freier Speicherort (Data Location) | `DAT`    |        | Weist dem nächstmöglichen, freien Speicherplatz im RAM einen Name zu. Optional kann auch der Zahlenwert des zugewiesenen Speicherplatzes angegeben werden. |
+
+</div>
+
+
+Editor und Assembler kennen *symbolische Links*; Speichezellen können Namen haben und mit diesem angesprochen werden. Kommentare werden mit einem `#` gekennzeichnet.
+
+Ein erstes Programm soll das veranschaulichen. Es fragt nach einer Eingabe, zählt dann 5 dazu und gibt das Resultat aus.
+
+```armasm
+;
+; Programm Ein- und Ausgabe
+;
+      INP            ; Eingabe holen und in akk speichern
+      ADD    five     ; fünf dazu
+      OUT            ; ausgeben
+      HLT            ; fertig
+
+five  DAT   5        ; 5 zum Addieren
+```
+
+Im Speicher stehen jetzt folgende Zahlen:
+
+```armasm
+00    901    (INP; Eingabe holen und in Akk laden)
+01    104    (ADD 04; addiere den Inhalt von Speicherzelle 04 zum Akk)
+02    902    (OUT; gib Akk aus)
+03    000    (HLT; Programm beenden)
+04    005    (Zahl 5; Datenzelle)
+```
+
+Mit "Run" kann das Programm nun ausgeführt werden.
+
+:::danger[Kommentare]
+Leider können die Online-Simulatoren keine Kommentare verarbeiten. Sie müssen die Kommentare vor dem Ausführen entfernen 😓
+
+<StripComments />
+
+:::
+
+:::aufgabe[Ausprobieren]
+<Answer type="state" id="1690189d-8968-4bea-9ab3-d4b66cf1ba7c" />
+
+Probieren Sie es aus! Macht das Programm, was es soll? Können Sie es so abändern, dass es statt 5 nun eine andere Zahl addiert?
+
+Halten Sie Ihre Erkenntnisse unten fest.
+
+<Answer type="7592108e-e78e-4152-b658-665ba0ca8a1e" id="text" />
+:::
