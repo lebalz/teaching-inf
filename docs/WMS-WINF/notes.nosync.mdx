@@ -1,0 +1,62 @@
+---
+page_id: 65ae54c4-f025-4258-af5a-584cb731aace
+---
+
+import Dir from '@tdev-components/FileSystem/Dir';
+
+# Notizen
+
+
+<Dir 
+  open
+  noSelect 
+  dir={{
+    name: 'www',
+    children: [
+      {
+        name: 'static',
+        children: [
+          'logo.png',
+          'me.png'
+        ]
+      },
+      {
+        name: 'webseite',
+        children: [
+            {
+                name: 'blog-01',
+                children: [
+                    'index.html',
+                    {
+                        name: 'images',
+                        children: [
+                            'skiing.png'
+                        ]
+                    }
+                ]
+            },
+            {
+                name: 'blog-02',
+                children: [
+                    'index.html',
+                    {
+                        name: 'images',
+                        children: [
+                            'beispiel.png'
+                        ]
+                    }
+                ]
+            },
+            { 
+            name: 'images',
+            children: [
+                'berge.png',
+                'landschaft.png'
+            ]
+            },
+            'index.html',
+        ]
+       }
+    ]
+  }}
+/>
