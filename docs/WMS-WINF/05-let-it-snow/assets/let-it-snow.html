@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="de">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Schneeflocken Effekt</title>
+        <style>
+            body {
+                margin: 0;
+                height: 100vh;
+                overflow: hidden; /* verhindert Scrollbalken */
+                background: #0a1a2a; /* dunkler Winterhintergrund */
+                color: white;
+                text-align: center;
+                padding-top: 50px;
+                font-family: sans-serif;
+            }
+
+            .snowflake {
+                position: fixed;
+                top: -10px;
+                color: white;
+                font-size: 1em;
+                user-select: none;
+                pointer-events: none;
+                animation: fall linear forwards;
+            }
+
+            @keyframes fall {
+                to {
+                    transform: translateY(110vh) rotate(720deg);
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <h1>🧑‍🎄 Let it Snow ❄️</h1>
+        <script>
+            function createSnowflake() {
+                const snowflake = document.createElement('div');
+                snowflake.classList.add('snowflake');
+                snowflake.innerHTML = '❄';
+
+                // zufällige Position und Größe
+                snowflake.style.left = Math.random() * window.innerWidth + 'px';
+                snowflake.style.fontSize = Math.random() * 10 + 10 + 'px';
+
+                // zufällige Fallgeschwindigkeit
+                const duration = Math.random() * 5 + 5;
+                snowflake.style.animationDuration = duration + 's';
+
+                document.body.appendChild(snowflake);
+
+                // Schneeflocke nach dem Fallen entfernen
+                setTimeout(() => {
+                    snowflake.remove();
+                }, duration * 1000);
+            }
+
+            // alle 200 ms eine neue Schneeflocke
+            setInterval(createSnowflake, 200);
+        </script>
+    </body>
+</html>
