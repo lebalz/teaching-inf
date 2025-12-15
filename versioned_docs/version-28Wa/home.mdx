@@ -9,9 +9,31 @@ import { SortTimeTableByDate } from '@tdev/helpers/time';
 import hs2025 from './28Wa_HS2025.yaml';
 
 import Directory from '@tdev-components/documents/FileSystem/Directory';
+import DefinitionList from "@tdev-components/DefinitionList";
+import CmsText from '@tdev-components/documents/CmsText';
+import WithCmsText from '@tdev-components/documents/CmsText/WithCmsText';
 
 # 28Wa Wirtschaftsinformatik
 
+::::details[Noten]
+:::note[Note HS25]
+<WithCmsText 
+    entries={{
+        punkte: "313ec2c3-95b5-4026-8eb5-7245eb6ca277",
+        note: "a0dc07b5-dc66-44f1-8ad7-4c547d3d2ee9", 
+    }}
+>
+    <DefinitionList>
+        <dt>Punkte</dt>
+        <dd><CmsText name="punkte" /></dd>
+        <dt>Note</dt>
+        <dd><CmsText name="note" /></dd>
+        <dt>Zählt</dt>
+        <dd>1</dd>
+    </DefinitionList>
+</WithCmsText>
+:::
+::::
 
 <SemesterTable
     header={['Datum', 'Thema', 'Inhalt']}
@@ -20,4 +42,6 @@ import Directory from '@tdev-components/documents/FileSystem/Directory';
     rows={hs2025}
     order={SortTimeTableByDate()}
 />
+
+
 <Directory name="Notizen" id="27bc50c5-3ff4-4782-95ab-a41a3ed1bb6d" />
