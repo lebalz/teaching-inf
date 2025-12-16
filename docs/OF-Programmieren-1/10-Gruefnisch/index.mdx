@@ -1,8 +1,11 @@
 ---
 page_id: b3872ad6-c78b-4672-ad8f-7d86d8156dba
 ---
+import ProgressState from '@tdev-components/documents/ProgressState';
 
 # Grüfnisch
+
+![--width=450px](./images/beispiel.webp)
 
 <blockquote>
 
@@ -27,6 +30,7 @@ u
 
 
 ### Beispiele
+
 Hallo
 : Hanafallonofo
 
@@ -106,7 +110,7 @@ print(text)
 ::::warning[Gross- & Kleinschreibung]
 Python nimmts genau beim ersetzen - die Gross- & Kleinschreibung spielt eine Rolle, nicht jedoch der Ort des `alt`en Wortes!
 
-Im folgenden Beispiel wird etwa nur das kleingeschriebene `ich` ersetzt, jedoch auch wenn es inmitten eines Textes auftritt. Das grossgeschrieben `Ich` zu Beginn des Satzes wird ignoriert...
+Im folgenden Beispiel wird etwa nur das kleingeschriebene `ich` ersetzt, jedoch auch wenn es inmitten eines Textes auftritt. Das grossgeschrieben `Ich` zu Beginn des Satzes wird ignoriert, dafür wird das `ich` in `wichtigem` ersetzt.
 
 ```py live_py slim
 text = 'Hallo ich bin Alfred. Ich schreibe an einem wichtigen Buch.'
@@ -115,9 +119,14 @@ text = text.replace('ich', 'ICH')
 print(text)
 ```
 
-Lösungen: (1) auch den Gross- und kleingeschriebenes ersetzen, oder (2) zuerst alles klein schreiben und dann ersetzen.
+Lösungsansätze:
+Mehrfachersetzung
+: Jegliche erlaubte Wortkombinationen ersetzen, also __ich__ und __Ich__.
+Kleinschreibung
+: Zuerst alles in kleine Buchstaben umwandeln und danach ersetzen.
+: *Nachteil*: Die ursprüngliche Gross- und Kleinschreibung geht verloren.
 
-:::cards{minWidth="300px"}
+:::flex{minWidth="300px"}
 ```py live_py slim
 text = 'Hallo ich bin Alfred. Ich schreibe an einem wichtigen Buch.'
 
@@ -125,7 +134,7 @@ text = text.replace('ich', 'XXX') # Alle 'ich' durch XXX ersetzen
 text = text.replace('Ich', 'XXX') # Alle 'Ich' durch XXX ersetzen
 print(text)
 ```
-::br{code=true}
+::br
 ```py live_py slim
 text = 'Hallo ich bin Alfred. Ich schreibe an einem wichtigen Buch.'
 
@@ -153,7 +162,7 @@ for i in range(5):
     print('❤️ ' * (i + 1))
 ```
 
-## Beispiel
+## Grüfnisch-Übungen
 
 
 :::aufgabe[Grüfnisch]
@@ -174,44 +183,43 @@ Wie lautet der Satz `Hallo, es ist Winter` auf Grüfnisch? (Von Hand, ohne Progr
 ::::aufgabe[Deutsch → Grüfnisch]
 <Answer type="state" id="55083ae2-51cc-4fcd-ad81-b113b9e4daf7" />
 
+<ProgressState id="6bc8da88-cf84-4b92-bb4d-a1c36beb0c69" confirm float='right' preventTogglingFutureSteps>
 1. Erstellen Sie ein Programm, welches einen Satz auf Grüfnisch übersetzt und ausgibt.
 2. Funktioniert Ihr Text auch, wenn Sie den Satz mit Grossbuchstaben, bspw. `Informatikunterricht` übersetzen? Passen Sie ihn entsprechen an.
-3. Um die Ausgabe etwas spannender zu machen, können wir die Ausgabe auch von Beavis ausgeben lassen. Ändern Sie Ihr Programm so, dass Beavis Grüfnisch spricht...
-
+3. Um die Ausgabe etwas spannender zu machen, können wir die Ausgabe auch von Beavis ausgeben lassen. Ändern Sie Ihr Programm so, dass Beavis Grüfnisch spricht...  
     ```py live_py slim
     from cowsay import beavis
     beavis('Hanafallonofo Pythonofon')
     ```
+    :::details[Weitere Figuren]
 
+    Anstelle von `cow()` können auch andere Figuren verwendet werden. Diese muss dann aber auch aus der Bibliothek `cowsay` importiert werden.
+
+    - `beavis`
+    - `cheese`
+    - `daemon`
+    - `cow`
+    - `dragon`
+    - `ghostbusters`
+    - `kitty`
+    - `meow`
+    - `milk`
+    - `stegosaurus`
+    - `stimpy`
+    - `turkey`
+    - `turtle`
+    - `tux`
+    :::
+4. Zusatz ⭐️: Passen Sie Ihr Programm so an, dass auch die Zusatzregel bei Grüfnisch umgesetzt wird. Wie könnte dies gelingen?
+    > Ausnahme beim Ersetzen: Bei Diphthongen/Zwielauten wird nur der erste verlängert (z. B. „au“ ⇒ „anafau“).
+    > Beispiel: "Bauen" hat den Diphtong `au` und wird also grüfnisch "Banafauenefen" ausgesprochen.
+
+</ProgressState>
 
 ```py live_py id=00070a97-3898-46a6-88df-79c2cd28ad17 title=gruefnisch.py
 text = 'hallo, es ist winter!'
 print('Original', text)
 ```
-
-:::details[Weitere Figuren]
-
-Anstelle von `cow()` können auch andere Figuren verwendet werden. Diese muss dann aber auch aus der Bibliothek `cowsay` importiert werden.
-
-- `beavis`
-- `cheese`
-- `daemon`
-- `cow`
-- `dragon`
-- `ghostbusters`
-- `kitty`
-- `meow`
-- `milk`
-- `stegosaurus`
-- `stimpy`
-- `turkey`
-- `turtle`
-- `tux`
-:::
-
-Zusatz ⭐️: Passen Sie Ihr Programm so an, dass auch die Zusatzregel bei Grüfnisch umgesetzt wird. Wie könnte dies gelingen?
-> Ausnahme beim Ersetzen: Bei Diphthongen/Zwielauten wird nur der erste verlängert (z. B. „au“ ⇒ „anafau“).
-> Beispiel: "Bauen" hat den Diphtong `au` und wird also grüfnisch "Banafauenefen" ausgesprochen.
 
 <Solution id='e2368d96-664c-4c52-86aa-496a5e936cdd'>
 
