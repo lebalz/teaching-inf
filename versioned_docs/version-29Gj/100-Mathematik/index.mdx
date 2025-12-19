@@ -5,6 +5,7 @@ page_id: 80b1efec-18d3-49d2-b6dd-a1f0a0df1b1e
 import DefinitionList from "@tdev-components/DefinitionList";
 import CmsText from '@tdev-components/documents/CmsText';
 import WithCmsText from '@tdev-components/documents/CmsText/WithCmsText';
+import Badge from '@tdev-components/shared/Badge';
 
 # Mathematik
 
@@ -14,15 +15,19 @@ import WithCmsText from '@tdev-components/documents/CmsText/WithCmsText';
     entries={{
         punkte: "06690c5b-5cac-4475-9471-4e05eb01e85b",
         note: "9cd9cf3f-4228-48c1-abf2-35ac3388ad66", 
+        zusatzpunkte: "9bcf9463-86a1-4984-bcf1-031e61c3fcd0", 
+        final: "0f44d267-c1e9-4064-9990-d4ffb2a67ea9", 
     }}
 >
     <DefinitionList>
         <dt>Test</dt>
         <dd>Bruchterme und Lineare Gleichungen</dd>
         <dt>Punkte</dt>
-        <dd><CmsText name="punkte" /></dd>
-        <dt>Note</dt>
+        <dd><CmsText name="punkte" /> + <Badge type="blue"><CmsText name="zusatzpunkte" /></Badge></dd>
+        <dt>Note Ursprünglich</dt>
         <dd><CmsText name="note" /></dd>
+        <dt>Note Final</dt>
+        <dd><CmsText name="final" /></dd>
         <dt>Zählt</dt>
         <dd>1</dd>
     </DefinitionList>
