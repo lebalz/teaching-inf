@@ -10,6 +10,7 @@
             "@types/node",
             "@types/wicg-file-system-access"
         ],
+        "moduleResolution": "bundler",
         "module": "esnext",
         "target": "esnext",
         "strict": true,

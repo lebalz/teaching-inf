@@ -28,6 +28,7 @@ export const rsDoctorPluginConfig: PluginConfig = process.env.RSDOCTOR === 'true
     {
         rsdoctorOptions: {
             /* Options */
+            mode: 'lite'
         }
     }
 ];
@@ -73,7 +74,13 @@ export const aliasConfigurationPluginConfig: PluginConfig = () => {
                         ],
                         /** original tdev source */
                         '@tdev-original': [path.resolve(cwd, './src'), path.resolve(cwd, './packages/tdev')]
-                    }
+                    },
+                    // support's to resolve symlinks in monorepos
+                    symlinks: false
+                },
+                watchOptions: {
+                    // ensure changes in symlinked packages are picked up on osx
+                    followSymlinks: true
                 },
                 optimization: {
                     concatenateModules: false

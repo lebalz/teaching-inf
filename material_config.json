@@ -176,18 +176,6 @@
             "open": false
         }
     ],
-    "LPs": [
-        {
-            "from": "docs/Tools/",
-            "to": "versioned_docs/version-LPs/100-Tools",
-            "ignore": ["_category_.yml"]
-        },
-        {
-            "from": "docs/tdev/",
-            "to": "versioned_docs/version-LPs/200-Teaching-Dev",
-            "ignore": ["_category_.yml"]
-        }
-    ],
     "pages": [
         {
             "from": "docs/Math/Taschenrechner/",

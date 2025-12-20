@@ -90,6 +90,9 @@ const getSiteConfig: SiteConfigProvider = () => {
         tdevConfig: {
             taskStateOverview: {
                 hideTeachers: true
+            },
+            excalidraw: {
+                excalidoc: true
             }
         },
         footer: {
@@ -201,7 +204,11 @@ const getSiteConfig: SiteConfigProvider = () => {
                 return getEditUrl(fConfig);
             }
         },
-        blog: { exclude: ['tdev/**'] },
+        blog: {},
+        apiDocumentProviders: [
+            require.resolve('@tdev/netpbm-graphic/register'),
+            require.resolve('@tdev/text-message/register')
+        ],
         transformers: {
             plugins: (plugins: PluginConfig[]) => {
                 return [

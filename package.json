@@ -110,6 +110,9 @@
         "typed.js": "^2.1.0",
         "uuid": "^13.0.0"
     },
+    "resolutions": {
+        "@rspack/core": "1.6.5"
+    },
     "devDependencies": {
         "@docusaurus/module-type-aliases": "^3.9.2",
         "@docusaurus/plugin-rsdoctor": "^3.9.2",

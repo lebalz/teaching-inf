@@ -6,6 +6,8 @@
     "dependencies": {},
     "devDependencies": {},
     "peerDependencies": {
-        "@tdev/core": "*"
+        "@tdev/core": "*",
+        "@mdi/js": "*",
+        "@mdi/react": "*"
     }
 }

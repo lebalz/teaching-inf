@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 import TextAreaInput from '@tdev-components/shared/TextAreaInput';
 import Card from '@tdev-components/shared/Card';
+// @ts-ignore
 import CodeBlock from '@theme/CodeBlock';
 
 interface HuffmanNode {

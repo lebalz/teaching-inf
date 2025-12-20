@@ -3,6 +3,8 @@ expectedTdevBranch: main
 trackedElements:
     - src: docusaurus.config.ts
       dst: docusaurus.config.ts
+    - src: tsconfig.package.json
+      dst: tsconfig.package.json
     - src: src/
       dst: src
       ignore:
@@ -24,8 +26,6 @@ trackedElements:
       dst: packages/tdev
     - src: updateSync/
       dst: updateSync
-    - src: docs/tdev/
-      dst: docs/tdev
     - src: .prettierrc
       dst: .prettierrc
     - src: vitest.config.ts
