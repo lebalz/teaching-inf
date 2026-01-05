@@ -93,12 +93,12 @@
   icon: mdiPineTreeVariantOutline
 - cells:
       - 13.01.2026
-      - CSS & HTML
-      - Style Frameworks
+      - JS Basics
+      - Grundlagen Javascript, Struktur grösserer Webseiten
 - cells:
       - 20.01.2026
       - CSS & HTML
-      - Style Frameworks
+      - Style Framework Bootstrap
 - cells:
       - 22.01.2026
       - Notenschluss
