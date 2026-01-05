@@ -1,0 +1,33 @@
+body {
+    margin: 10vh 10vw;
+    padding: 10vh 10vw;
+    border: 2px solid teal;
+    border-radius: 10px;
+    height: 60vh;
+    width: 60vw;
+    position: relative;
+    h1 {
+        text-align: center;
+        color: teal;
+        font:
+            3em 'Arial Black',
+            sans-serif;
+    }
+    button {
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font:
+            1.5em 'Arial Black',
+            sans-serif;
+        color: white;
+        background-color: teal;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        height: 3em;
+        width: 10em;
+    }
+}

@@ -3,6 +3,10 @@ page_id: 41bb5c6a-84ab-462e-8425-b14675aec870
 ---
 
 import HtmlEditor from '@tdev-components/documents/CodeEditor/HtmlEditor';
+import ProgressState from '@tdev-components/documents/ProgressState';
+import BrowserWindow from '@tdev-components/BrowserWindow';
+import CodeBlock from '@theme/CodeBlock';
+import Icon from '@mdi/react';
 
 # Grundlagen
 
@@ -203,8 +207,13 @@ Z. 4
 </div>
 :::
 
+import IndexHtml from '!!raw-loader!./assets/skeleton/index.html';
+import Style from '!!raw-loader!./assets/skeleton/styles.css';
+import JS from '!!raw-loader!./assets/skeleton/script.js';
+import OpenPreviewIcon from '@tdev/helpers/icons/vscOpenPreview.svg';
+
+
 ::::aufgabe[Ausprobieren]
-<Answer type="state" id="4e36dad7-c134-43fc-8b56-4efcdb476737" />
 
 Projekt-Ordner
 : __OneDrive/Informatik/js-fun__
@@ -218,83 +227,38 @@ js-fun
 ```
 :::
 
-1. Erstellen Sie die drei Dateien im angegebenen Ordner und öffnen Sie __js-fun__ in VS-Code.
+<ProgressState id="14644d0d-72c9-4b45-a685-c3fb56b68c88" confirm preventTogglingFutureSteps>
+
+1. Erstellen Sie die drei Dateien im angegebenen Ordner und öffnen Sie __js-fun/__ in VS-Code.
 2. Kopieren Sie die Inhalte der HTML-, CSS- und JS-Beispiele in die entsprechenden Dateien.
     :::details[HTML]
-    ```html
-    <!doctype html>
-    <html>
-        <head>
-            <meta charset="UTF-8" />
-            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-            <title>JavaScript Basics</title>
-            <script src="https://cdn.jsdelivr.net/npm/js-confetti@0.13.1/dist/js-confetti.browser.min.js"></script>
-        </head>
-        <body>
-            <h1>JavaScript Fun 🤩</h1>
-            <button onclick="celebrate()" onmouseenter="jump(event)">Click Me!</button>
-        </body>
-    </html>
-    ```
+    <CodeBlock language="html" showLineNumbers children={IndexHtml} />
     :::
     :::details[CSS]
-    ```css
-    body {
-        margin: 10vh 10vw;
-        padding: 10vh 10vw;
-        border: 2px solid teal;
-        border-radius: 10px;
-        height: 60vh;
-        width: 60vw;
-        position: relative;
-        h1 {
-            text-align: center;
-            color: teal;
-            font:
-                3em 'Arial Black',
-                sans-serif;
-        }
-        button {
-            display: block;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font:
-                1.5em 'Arial Black',
-                sans-serif;
-            color: white;
-            background-color: teal;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            height: 3em;
-            width: 10em;
-        }
-    }
-    ```
+    <CodeBlock language="css" showLineNumbers children={Style} />
     :::
     :::details[JavaScript]
-    ```javascript
-    function jump(event) {
-        const button = event.target;
-        button.style.left = Math.random() * document.body.clientWidth + 'px';
-        button.style.top = Math.random() * document.body.clientHeight + 'px';
-    }
-
-    const jsConfetti = new JSConfetti();
-    function celebrate() {
-        jsConfetti.addConfetti();
-    }
-    ```
+    <CodeBlock language="javascript" showLineNumbers children={JS} />
     :::
+    Öffnen Sie die Vorschau der HTML-Datei <OpenPreviewIcon /> (falls nicht verfügbar: [Live Server](https://marketplace.visualstudio.com/items?itemName=ms-vscode.live-server) installieren).
+    Die Seite sollte nun wie folgt aussehen:
+    <BrowserWindow>
+    ![--width=350px](./images/stage-1.png)
+    </BrowserWindow>
     :::warning[Hinweis]
     Die CSS- und JS-Dateien sind noch nicht verknüpft.
     :::
-3. Verknüpfen Sie nun die CSS- und JS-Dateien in der HTML-Datei wie oben gezeigt.
+
+3. Verknüpfen Sie nun die CSS- und JS-Dateien in der HTML-Datei wie oben gezeigt.  
+    Die Seite sollte nun wie folgt aussehen:
+    <BrowserWindow>
+    ![--width=350px](./images/stage-2.png)
+    </BrowserWindow>
 4. Was passiert, wenn Sie auf den Button klicken? In welcher Datei und auf welcher Zeile ist dieser Effekt definiert?
+    <Answer type="text" id="2c2a3003-7ddb-41ec-81d4-9789306f12e4" />
 5. Können Sie den Effekt deaktivieren und dann den Button erneut klicken? Was passiert nun?
-6. Inhaltsstruktur anpassen: Bei Firmen-Webseiten werden die CSS- und JS-Dateien oft in eigene Unterordner ausgelagert. Passen Passen Sie die Projekt-Struktur gemäss folgender Abbildung an und aktualisieren Sie die verlinkten Dokumente in der HTML-Datei entsprechend.
+    <Answer type="text" id="d4b62a9a-cff0-4bef-8830-ff26b47cd4fb" />
+6. Inhaltsstruktur anpassen: Bei Firmen-Webseiten werden die CSS- und JS-Dateien oft in eigene Unterordner ausgelagert. Passen Sie die Projekt-Struktur gemäss folgender Abbildung an und aktualisieren Sie die verlinkten Dokumente in der HTML-Datei entsprechend.
     Inhalts-Struktur
     :::dd
     ```
@@ -306,4 +270,20 @@ js-fun
     └── index.html
     ```
     :::
+</ProgressState>
 ::::
+
+## Zusammenfassung
+:::insight[Takeaways]
+- JavaScript ermöglicht interaktive und dynamische Inhalte auf Webseiten.
+- Webseiten-Projekte können **übersichtlicher** strukturiert werden, indem HTML, CSS und JavaScript in **separate Dateien** ausgelagert werden.
+    - Einbindungen werden im `<head>`-Bereich der HTML-Datei vorgenommen.
+    - CSS-Dateien werden mit dem `<link>`-Tag eingebunden, z.B.
+        ```html
+        <link rel="stylesheet" href="./styles.css">
+        ```
+    - JavaScript-Dateien werden mit dem `<script>`-Tag eingebunden, mit dem `defer`-Attribut wird sichergestellt, dass alle Webseiten-Inhalte bereits geladen sind wenn das Skript ausgeführt wird. Beispiel
+        ```html
+        <script src="./script.js" defer></script>
+        ```
+:::
