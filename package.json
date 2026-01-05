@@ -112,9 +112,6 @@
         "typed.js": "^2.1.0",
         "uuid": "^13.0.0"
     },
-    "resolutions": {
-        "@rspack/core": "1.6.5"
-    },
     "devDependencies": {
         "@docusaurus/module-type-aliases": "^3.9.2",
         "@docusaurus/plugin-rsdoctor": "^3.9.2",
@@ -149,6 +146,9 @@
         "vitest": "^2.0.5",
         "yaml-loader": "^0.8.1"
     },
+    "resolutions": {
+        "@rspack/core": "1.6.5"
+    },
     "peerDependencies": {
         "react-hook-form": "*"
     },
@@ -165,6 +165,6 @@
         ]
     },
     "engines": {
-        "node": ">=22.11"
+        "node": ">=24.12"
     }
 }
