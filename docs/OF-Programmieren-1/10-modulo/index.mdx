@@ -1,0 +1,135 @@
+---
+page_id: 1c146068-bc47-4173-9108-85d72d2a62be
+---
+
+import Clock from '@tdev-components/Clock';
+import TryUserClock from './components/TryUserClock'
+
+# 📝 Teilbarkeit von Zahlen
+
+Ist eine Zahl ganzzahlig durch eine andere Zahl teilbar? Diese Frage lässt sich mit dem **Modulo-Operator** leicht beantworten.
+
+:::def[`%` - Modulo-Operator]
+
+Der **Modulo-Operator** `%` gibt den **Rest** einer ganzzahligen Division zurück.
+
+```py live_py slim
+# 7 modulo 3 ergibt 1, da 7 / 3 = 2 Rest 1
+print(7 % 3)
+```
+:::
+
+So kann leicht überprüft werden, ob eine Zahl durch eine andere Zahl teilbar ist:
+
+```py live_py slim
+zahl1 = 938
+zahl2 = 14
+if zahl1 % zahl2 == 0:
+    print(f"{zahl1} ist durch {zahl2} teilbar.")
+else:
+    print(f"{zahl1} ist nicht durch {zahl2} teilbar.")
+```
+
+oder sogar auch alle Teiler einer Zahl in einem Bereich finden:
+
+```py live_py slim
+zahl = 938
+for i in range(2, 938):
+    if zahl % i == 0:
+        print(f"{i} ist ein Teiler von {zahl}.")
+```
+
+```py live_py slim
+from grid import Line
+
+line = Line.from_size(10, 'blue')
+print(line)
+```
+
+## FizzBuzz
+
+FizzBuzz ist ein klassisches Programmierproblem, das oft in Vorstellungsgesprächen verwendet wird. Die Aufgabe besteht darin, die Zahlen von 1 bis 100 auszugeben, aber für Vielfache von 3 "Fizz" anstelle der Zahl und für Vielfache von 5 "Buzz" auszugeben. Für Zahlen, die sowohl Vielfache von 3 als auch von 5 sind, soll "FizzBuzz" ausgegeben werden.
+
+:::aufgabe[FizzBuzz]
+<Answer type="state" id="f1db05c8-2e94-4f8d-919b-d863842facfe" />
+
+Schreibe ein Programm, das die Zahlen von 1 bis 100 ausgibt, aber für Vielfache von 3 "Fizz", für Vielfache von 5 "Buzz" und für Vielfache von sowohl 3 als auch 5 "FizzBuzz" ausgibt.
+
+```py live_py id="f20e2215-81e1-4745-97cb-4c075b5a27a7" fizz_buzz.py
+for i in range(1, 101):
+    print(i)
+```
+<Solution id="ed4667a1-f25e-4204-b39b-b6977614cacc">
+```py live_py slim
+for i in range(1, 101):
+    if i % 3 == 0 and i % 5 == 0:
+        print("FizzBuzz")
+    elif i % 3 == 0:
+        print("Fizz")
+    elif i % 5 == 0:
+        print("Buzz")
+    else:
+        print(i)
+```
+</Solution>
+:::
+
+## Uhren
+
+Mit der Bibliothek `clock` kann eine Uhr gesteuert werden - etwas speziell dabei: die Uhr arbeitet mit einem **360**-Stunden-, Minuten- und Sekundensystem (es werden also die Grade eines Kreises verwendet).
+
+::::aufgabe[Uhrzeit erraten]
+<Answer type="state" id="efacdbfb-e910-4b35-90ca-030c2d655fb4" />
+
+**Den Code noch nicht ausführen!**
+1. Finden Sie heraus, welche Uhrzeit bei folgender Uhr angezeigt wird, ohne den Code auszuführen? Überprüfen Sie Ihre Antwort danach, indem Sie den Code ausführen.
+2. Stellen Sie auf der Uhr die Zeit __9:40:03__ ein.
+3. Halten Sie kurz fest, wie Sie die Uhrzeit berechnet haben.
+
+:::flex
+```py live_py slim
+from clock import use_clock
+uhr = use_clock('uhr-demo')
+
+uhr.setHours(90)
+uhr.setMinutes(150)
+uhr.setSeconds(270)
+```
+::br
+<Clock clockId="uhr-demo" />
+:::
+:::note[Bemerkungen]
+<div className="compactDeflist">
+Z.2
+: Die Uhren-ID muss mit der Angezeigten Uhr übereinstimmen.
+</div>
+:::
+
+<Answer type="text" id="78c2aa0e-32fb-4f2b-bf5a-f36290e3c2aa" />
+::::
+
+## Uhrzeit einstellen
+
+::::aufgabe[Uhrzeit einstellen]
+<Answer type="state" id="6db9a017-5dad-40bb-9d53-8a381b4e108b" />
+
+Ihre Aufgabe ist es, die Benutzer:in Ihres Programms zu bitten, eine Uhrzeit in Stunden, Minuten und Sekunden einzugeben, und diese Zeit dann auf der Uhr anzuzeigen.
+
+:::cards
+<TryUserClock clockId="uhr-aufgabe-1" />
+:::
+
+:::flex
+```py live_py id=e1a7d594-84ef-4c06-83a8-e9b70e8cc2b6
+from clock import use_clock
+uhr = use_clock('uhr-aufgabe-1')
+```
+::br
+<Clock clockId="uhr-aufgabe-1" />
+:::
+::::
+
+## Die Uhr ticken lassen
+
+:::warning[🚧 Nächste Woche 😉]
+:::

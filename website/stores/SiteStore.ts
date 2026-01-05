@@ -7,4 +7,8 @@ export default class SiteStore {
     constructor(root: RootStore) {
         this.toolsStore = new ToolsStore(root);
     }
+
+    get clocks() {
+        return this.toolsStore.clocks;
+    }
 }
