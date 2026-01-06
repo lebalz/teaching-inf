@@ -80,21 +80,25 @@
       - HTML & CSS
       - Einführung in Style Frameworks
 - cells:
-      - 30.12.2025
+      - 23.12.2025
       - Winterferien
       - 🏂❄️⛷️🎄🧑‍🎄
   type: holiday
   icon: mdiPineTreeVariantOutline
 - cells:
-      - 06.01.2026
+      - 30.01.2026
       - Winterferien
       - 🏂❄️⛷️🎄🧑‍🎄
   type: holiday
   icon: mdiPineTreeVariantOutline
 - cells:
-      - 13.01.2026
+      - 6.01.2026
       - JS Basics
       - Grundlagen Javascript, Struktur grösserer Webseiten
+- cells:
+      - 13.01.2026
+      - CSS & HTML
+      - Style Framework Bootstrap
 - cells:
       - 20.01.2026
       - CSS & HTML
