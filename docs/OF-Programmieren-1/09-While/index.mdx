@@ -192,18 +192,117 @@ for zeile in range(5):
 </Solution>
 ::::
 
+## Micro:Bit
+
+Micro:Bit's sind Mini-Computer, die mit Python programmiert werden können. 
+
+:::info[Mehr über Micro:Bit]
+<iframe src="https://microbit.org/get-started/features/overview/" title="Micro:Bit Overview" width="100%" height="420px"></iframe>
+:::
+
+:::aufgabe[Micro:Bit - Programm ausprobieren]
+<Answer type="state" id="6f1ef7a7-7467-468e-82b0-355771f0bd08" />
+
+CodeEditor
+: https://python.microbit.org/v/3/project
+
+Probieren Sie das folgende Programm auf einem Micro:Bit aus. 
+
+```py
+from microbit import *
+
+while True:
+    for i in range(10):
+        display.show(i)
+        sleep(1000)
+```
+
+Ändern Sie den Code so, dass die Zahlen nun von `9` bis `0` heruntergezählt werden. Halten Sie den Code unten fest:
+
+```py live_py id=97f21544-4213-4fb4-8168-e1fb6d18a62e
+
+```
+<Solution id="ad10c3a3-214f-4291-85fb-06fbbe9e66be">
+```py
+from microbit import *
+
+while True:
+    for i in range(10):
+        display.show(9 - i)
+        sleep(1000)
+```
+</Solution>
+:::
+
+:::aufgabe[Micro:Bit - Display Füllen]
+<Answer type="state" id="321f1e85-b677-4e20-9980-49d06768f4f1" />
+
+CodeEditor
+: https://python.microbit.org/v/3/project
+
+::video[./assets/microbit-ex-1.mp4]{autoplay=true loop=true}
+
+```py live_py id=d37c8ada-93f7-4e7c-b7ef-6ae6089837f1
+
+```
+
+<Solution id="969622a4-4de8-4b0f-93d0-8a42eae13f53">
+```py
+from microbit import *
+
+while True:
+    display.clear()
+    for i in range(5):
+        for j in range(5):
+            display.set_pixel(i, j, 9)
+            sleep(200)
+```
+</Solution>
+:::
+
+:::aufgabe[Micro:Bit - Display Füllen 2]
+<Answer type="state" id="a83c240d-02af-4fc3-92cf-f0fcc6e460ca" />
+
+CodeEditor
+: https://python.microbit.org/v/3/project
+
+::video[./assets/microbit-ex-2.mp4]{autoplay=true loop=true}
+
+```py live_py id=698d29e7-02a7-4022-b6a0-4629010d8119
+
+```
+
+<Solution id="969622a4-4de8-4b0f-93d0-8a42eae13f53">
+```py
+from microbit import *
+
+while True:
+    display.clear()
+    for i in range(5):
+        for j in range(5):
+            display.set_pixel(i, j, 9)
+            sleep(50)
+    for i in range(5):
+        for j in range(5):
+            display.set_pixel(4-j, 4-i, 0)
+            sleep(50)
+```
+</Solution>
+:::
+
+
 ## Anwendung
 
 Die `while`-Schleife kommt oft bei Benutzerinteraktionen, Simulationen oder bei sich dynamisch ändernden Daten vor. Sonstige Wiederholungen lassen sich normalerweise einfacher mit einer `for`-Schleife umsetzen.
 
-<div className="smallDeflist">
 :::insight
+<div className="smallDeflist">
 `while`-Schleife
 : Die `while`-Schleife wird immer dann verwendet, wenn die Anzahl Wiederholungen **im Voraus unbekannt** ist.
 `for`-Schleife
 : Ist die Anzahl Wiederholungen **im Voraus bekannt**, wird meistens die `for`-Schleife verwendet.
-:::
 </div>
+:::
 
 :::aufgabe[Ratespiel]
 <Answer type="state" id="f5a8546d-ad02-47c9-a35a-9f680cffe497" />
