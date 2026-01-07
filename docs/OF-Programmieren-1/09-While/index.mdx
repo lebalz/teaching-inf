@@ -2,10 +2,9 @@
 page_id: e7bfcd07-19fe-4f6e-944b-d53700cf397f
 ---
 
-import Strukto from '@tdev-components/VisualizationTools/Strukto';
+import Strukto from '@tdev-components/VisualizationTools/Strukto'
 
 # 8. While
-
 
 ## Wiederholen, solange die Frage mit "Ja" beantwortet wird
 
@@ -13,20 +12,22 @@ import Strukto from '@tdev-components/VisualizationTools/Strukto';
 
 Im folgenden Beispiel wird solange eine Spirale gezeichnet, bis die Distanz der Turtle vom Zentrum mehr als `200px` beträgt.
 
-:::flex{width=250px alignItems=center}
+:::flex{width="250px" alignItems="center"}
+<Strukto
+  program={[
+{type: 'step', code: <span><span className="var">winkel</span> = 20 setzen</span>},
+{
+    type: 'repeat', 
+    code: <span>Ist der Abstand zum Zentrum kleiner als 200px?</span>,
+    block: [
+        {type: 'step', code: <span><u>5</u> Schritte vorwärts</span>},
+        {type: 'step', code: <span><span className="var">winkel</span>° nach links</span>},
+        {type: 'step', code: <span><span className="var">winkel</span> auf 99% des aktuellen Werts setzen</span>},
+    ]
+}
+]}
+/>
 
-<Strukto program={[
-    {type: 'step', code: <span><span className="var">winkel</span> = 20 setzen</span>},
-    {
-        type: 'repeat', 
-        code: <span>Ist der Abstand zum Zentrum kleiner als 200px?</span>,
-        block: [
-            {type: 'step', code: <span><u>5</u> Schritte vorwärts</span>},
-            {type: 'step', code: <span><span className="var">winkel</span>° nach links</span>},
-            {type: 'step', code: <span><span className="var">winkel</span> auf 99% des aktuellen Werts setzen</span>},
-        ]
-    }
-]} />
 ::br
 
 ```py live_py slim
@@ -44,6 +45,7 @@ while distance(0, 0) < 200:
 Diese Art von Wiederholung kann dazu führen, dass eine Frage immer mit "Ja" beantwortet wird und das Programm also nie endet.
 
 Oft ist dies nicht gewollt, doch einmal gestartet, ist es dann in der Browser-Version von Python schwierig, das Programm zu stoppen und die ganze Seite reagiert nicht mehr. Um das laufende Programm zu stoppen, muss:
+
 - der ganze Tab geschlossen und die Seite in einem neuen Tab geöffnet werden. (*Tipp*: Die URL zuerst kopieren...)
 - (den ganzen Browser über den Taskmanager schliessen)
 :::
@@ -68,7 +70,7 @@ while distance(0, 0) < 200:
 1. Wann gibt es mehr/weniger Windungen?
 2. Wann entsteht eine unendliche Schleife?
 
-<Answer type="text" id="e1247ee5-d13f-495b-b340-7a425b71d08d" toolbarAdd={{code: 1}}/>
+<Answer type="text" id="e1247ee5-d13f-495b-b340-7a425b71d08d" toolbarAdd={{code: 1}} />
 :::
 
 ## Wiederholungen mit der `while`-Schleife
@@ -90,7 +92,7 @@ while i < 4:
 
 Schreiben Sie das untenstehende Programm so um, dass nur noch `while` Schleifen verwendet werden.
 
-:::flex{columns=2 min-width=200px}
+:::flex{columns="2" min-width="200px"}
 ```py live_py slim
 from turtle import *
 
@@ -101,6 +103,7 @@ for i in range(5):
     left(72)
     backward(20) 
 ```
+
 ::br
 
 ```py live_py title=to-while.py id=2f288418-a751-4955-91e6-44ef58a2844b
@@ -109,21 +112,18 @@ from turtle import *
 :::
 
 <Solution id="1a34bc16-5fb1-4e2e-bf0e-9a08455e7579">
+  ```py live_py slim
+  from turtle import *
 
-```py live_py slim
-from turtle import *
-
-left(60)
-i = 0
-while i < 5:
-    forward(100)
-    left(72)
-    backward(20)
-    i = i + 1
-```
-
+  left(60)
+  i = 0
+  while i < 5:
+      forward(100)
+      left(72)
+      backward(20)
+      i = i + 1
+  ```
 </Solution>
-
 ::::
 
 ::::aufgabe[`while` zu `for`]
@@ -131,7 +131,7 @@ while i < 5:
 
 Schreiben Sie das untenstehende Programm so um, dass nur noch `for` Schleifen verwendet werden.
 
-:::flex{columns=2 min-width=200px}
+:::flex{columns="2" min-width="200px"}
 ```py live_py slim
 from turtle import *
 
@@ -158,6 +158,7 @@ while zeile < 5:
         spalte = spalte + 1
     zeile = zeile + 1
 ```
+
 ::br
 
 ```py live_py title=to-while.py id=729af77c-0c3b-46f9-b95a-35d86be96cde
@@ -166,45 +167,44 @@ from turtle import *
 :::
 
 <Solution id="1a34bc16-5fb1-4e2e-bf0e-9a08455e7579">
+  ```py live_py slim
+  from turtle import *
 
-```py live_py slim
-from turtle import *
+  speed(10)
 
-speed(10)
+  def move(x, y):
+      penup()
+      goto(x, y)
+      pendown()
 
-def move(x, y):
-    penup()
-    goto(x, y)
-    pendown()
+  def quadrat():
+      for i in range(4):
+          forward(20)
+          left(90)
 
-def quadrat():
-    for i in range(4):
-        forward(20)
-        left(90)
-
-for zeile in range(5):
-    for spalte in range(3):
-        move(zeile * 20, spalte * 20)
-        quadrat()
-```
+  for zeile in range(5):
+      for spalte in range(3):
+          move(zeile * 20, spalte * 20)
+          quadrat()
+  ```
 </Solution>
 ::::
 
-## Micro:Bit
+## Micro\:Bit
 
-Micro:Bit's sind Mini-Computer, die mit Python programmiert werden können. 
+Micro\:Bit's sind Mini-Computer, die mit Python programmiert werden können.
 
 :::info[Mehr über Micro:Bit]
-<iframe src="https://microbit.org/get-started/features/overview/" title="Micro:Bit Overview" width="100%" height="420px"></iframe>
+<iframe src="https://microbit.org/get-started/features/overview/" title="Micro:Bit Overview" width="100%" height="420px" />
 :::
 
 :::aufgabe[Micro:Bit - Programm ausprobieren]
 <Answer type="state" id="6f1ef7a7-7467-468e-82b0-355771f0bd08" />
 
 CodeEditor
-: https://python.microbit.org/v/3/project
+: [https://python.microbit.org/v/3/project](https://python.microbit.org/v/3/project)
 
-Probieren Sie das folgende Programm auf einem Micro:Bit aus. 
+Probieren Sie das folgende Programm auf einem Micro\:Bit aus.
 
 ```py
 from microbit import *
@@ -218,17 +218,17 @@ while True:
 Ändern Sie den Code so, dass die Zahlen nun von `9` bis `0` heruntergezählt werden. Halten Sie den Code unten fest:
 
 ```mpy live_py id=97f21544-4213-4fb4-8168-e1fb6d18a62e
-
 ```
+
 <Solution id="ad10c3a3-214f-4291-85fb-06fbbe9e66be">
-```py
-from microbit import *
+  ```py
+  from microbit import *
 
-while True:
-    for i in range(10):
-        display.show(9 - i)
-        sleep(1000)
-```
+  while True:
+      for i in range(10):
+          display.show(9 - i)
+          sleep(1000)
+  ```
 </Solution>
 :::
 
@@ -236,25 +236,24 @@ while True:
 <Answer type="state" id="321f1e85-b677-4e20-9980-49d06768f4f1" />
 
 CodeEditor
-: https://python.microbit.org/v/3/project
+: [https://python.microbit.org/v/3/project](https://python.microbit.org/v/3/project)
 
-::video[./videos/microbit-ex-top-down.mp4]{autoplay=true loop=true height="220px" width="100%"}
+::video[./videos/microbit-ex-top-down.mp4]{autoplay="true" loop="true" height="220px" width="100%"}
 
 ```mpy live_py id=ac1a9e7b-e31c-451a-a97f-ef719c728b4b
-
 ```
 
 <Solution id="969622a4-4de8-4b0f-93d0-8a42eae13f53">
-```py
-from microbit import *
+  ```py
+  from microbit import *
 
-while True:
-    display.clear()
-    for y in range(5):
-        for x in range(5):
-            display.set_pixel(x, y, 9)
-            sleep(200)
-```
+  while True:
+      display.clear()
+      for y in range(5):
+          for x in range(5):
+              display.set_pixel(x, y, 9)
+              sleep(200)
+  ```
 </Solution>
 :::
 
@@ -262,25 +261,24 @@ while True:
 <Answer type="state" id="89da107e-07b3-4e0c-8927-0c2773ea6c2d" />
 
 CodeEditor
-: https://python.microbit.org/v/3/project
+: [https://python.microbit.org/v/3/project](https://python.microbit.org/v/3/project)
 
-::video[./videos/microbit-ex-left-right.mp4]{autoplay=true loop=true height="220px" width="100%"}
+::video[./videos/microbit-ex-left-right.mp4]{autoplay="true" loop="true" height="220px" width="100%"}
 
 ```mpy live_py id=725be69c-c314-4692-8318-71343ae20df5
-
 ```
 
 <Solution id="d64236c8-565a-464c-afe5-5e17ca2695c7">
-```py
-from microbit import *
+  ```py
+  from microbit import *
 
-while True:
-    display.clear()
-    for x in range(5):
-        for y in range(5):
-            display.set_pixel(x, y, 9)
-            sleep(200)
-```
+  while True:
+      display.clear()
+      for x in range(5):
+          for y in range(5):
+              display.set_pixel(x, y, 9)
+              sleep(200)
+  ```
 </Solution>
 :::
 
@@ -288,86 +286,82 @@ while True:
 <Answer type="state" id="abed10f6-8ebe-4a55-b806-9988a4e7596e" />
 
 CodeEditor
-: https://python.microbit.org/v/3/project
+: [https://python.microbit.org/v/3/project](https://python.microbit.org/v/3/project)
 
-::video[./videos/microbit-ex-fill-and-clear.mp4]{autoplay=true loop=true height="220px" width="100%"}
+::video[./videos/microbit-ex-fill-and-clear.mp4]{autoplay="true" loop="true" height="220px" width="100%"}
 
 ```mpy live_py id=0feb0fee-5bc6-4c2e-8479-45751af90245
-
 ```
 
 <Solution id="969622a4-4de8-4b0f-93d0-8a42eae13f53">
-```py
-from microbit import *
+  ```py
+  from microbit import *
 
-while True:
-    display.clear()
-    for x in range(5):
-        for y in range(5):
-            display.set_pixel(x, y, 9)
-            sleep(50)
-    for x in range(5):
-        for y in range(5):
-            display.set_pixel(4-y, 4-x, 0)
-            sleep(50)
-```
+  while True:
+      display.clear()
+      for x in range(5):
+          for y in range(5):
+              display.set_pixel(x, y, 9)
+              sleep(50)
+      for x in range(5):
+          for y in range(5):
+              display.set_pixel(4-y, 4-x, 0)
+              sleep(50)
+  ```
 </Solution>
 :::
-
 
 :::aufgabe[Micro:Bit - Zufall]
 <Answer type="state" id="4d2133f8-3caa-4519-b93e-7496ceb130fd" />
 
 CodeEditor
-: https://python.microbit.org/v/3/project
+: [https://python.microbit.org/v/3/project](https://python.microbit.org/v/3/project)
 
-::video[./videos/microbit-ex-random.mp4]{autoplay=true loop=true height="220px" width="100%"}
+In jedem Durchgang wird ein zufälliges Pixel gewählt und der Zustand gewechselt (__einschalten__ falls es dunkel ist, __auschalten__ falls es hell ist).
+
+::video[./videos/microbit-ex-random.mp4]{autoplay="true" loop="true" height="220px" width="100%"}
 
 ```mpy live_py id=9bccd610-62ab-4578-926b-a90a7da4a86e
-
 ```
-
 
 <Solution id="7590d515-1a75-4bff-809f-d23d70c33e35">
-```py
-from microbit import *
-from random import randint
+  ```py
+  from microbit import *
+  from random import randint
 
-while True:
-    for d in range(9):
-        x = randint(0, 4)
-        y = randint(0, 4)
-        light = display.get_pixel(x, y)
-        display.set_pixel(x, y, 9 - light)
-        sleep(10)
-```
+  while True:
+      for d in range(9):
+          x = randint(0, 4)
+          y = randint(0, 4)
+          light = display.get_pixel(x, y)
+          display.set_pixel(x, y, 9 - light)
+          sleep(10)
+  ```
 </Solution>
 :::
 
 :::aufgabe[⭐ Challenge - Diagonal]
-
 CodeEditor
 : https://python.microbit.org/v/3/project
 
-::video[./videos/microbit-ex-diag.mp4]{autoplay=true loop=true height="220px" width="100%"}
+::video[./videos/microbit-ex-diag.mp4]{autoplay="true" loop="true" height="220px" width="100%"}
 
 ```mpy live_py id=ecbc0d7d-0990-46fb-ab1a-75c03edd6210
-
 ```
 
 <Solution id="90cb2fe2-762b-4d3c-94f1-e53eb198a319">
-```py
-from microbit import *
+  ```py
+  from microbit import *
 
-def toggle(x, y):
-    display.set_pixel(x, y, 9 - display.get_pixel(x, y))
-while True:
-    for d in range(9):
-        for x in range(max(0, d - 4), min(4, d) + 1):
-            y = d - x
-            toggle(x, y)
-            sleep(100)
-```
+  def toggle(x, y):
+      display.set_pixel(x, y, 9 - display.get_pixel(x, y))
+  while True:
+      for d in range(9):
+          for x in range(max(0, d - 4), min(4, d) + 1):
+              y = d - x
+              toggle(x, y)
+              sleep(100)
+  ```
 </Solution>
 :::
 
@@ -377,10 +371,10 @@ Die `while`-Schleife kommt oft bei Benutzerinteraktionen, Simulationen oder bei 
 
 :::insight
 <div className="smallDeflist">
-`while`-Schleife
-: Die `while`-Schleife wird immer dann verwendet, wenn die Anzahl Wiederholungen **im Voraus unbekannt** ist.
-`for`-Schleife
-: Ist die Anzahl Wiederholungen **im Voraus bekannt**, wird meistens die `for`-Schleife verwendet.
+  `while`-Schleife
+  : Die `while`-Schleife wird immer dann verwendet, wenn die Anzahl Wiederholungen **im Voraus unbekannt** ist.
+  `for`-Schleife
+  : Ist die Anzahl Wiederholungen **im Voraus bekannt**, wird meistens die `for`-Schleife verwendet.
 </div>
 :::
 
@@ -396,28 +390,26 @@ from random import randint
 ```
 
 <Solution id="1a34bc16-5fb1-4e2e-bf0e-9a08455e7579">
+  ```py live_py slim
+  from browser import alert
+  from random import randint 
 
-```py live_py slim
-from browser import alert
-from random import randint 
+  zahl = randint(0, 100)
+  geraten = -1
+  i = 0
+  while geraten != zahl:
+      i = i + 1
+      geraten = input(f'{i} Versuch: Gib eine ganze Zahl zwischen 0 und 100 ein.')
+      geraten = int(geraten)
+      
+      if geraten == zahl:
+          break
+      elif geraten > zahl:
+          alert(f'Die eingegebene Zahl {geraten} ist zu gross')
+      else:
+          alert(f'Die eingegebene Zahl {geraten} ist zu klein')
 
-zahl = randint(0, 100)
-geraten = -1
-i = 0
-while geraten != zahl:
-    i = i + 1
-    geraten = input(f'{i} Versuch: Gib eine ganze Zahl zwischen 0 und 100 ein.')
-    geraten = int(geraten)
-    
-    if geraten == zahl:
-        break
-    elif geraten > zahl:
-        alert(f'Die eingegebene Zahl {geraten} ist zu gross')
-    else:
-        alert(f'Die eingegebene Zahl {geraten} ist zu klein')
-
-alert(f'Du hast insgesamt {i} Versuche gebraucht um die Zahl {zahl} zu finden.')
-```
-
+  alert(f'Du hast insgesamt {i} Versuche gebraucht um die Zahl {zahl} zu finden.')
+  ```
 </Solution>
 :::
