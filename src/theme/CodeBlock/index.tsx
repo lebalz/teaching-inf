@@ -95,6 +95,7 @@ export default function CodeBlockWrapper(props: Props & MetaProps): React.ReactN
                             preCode={pre}
                             postCode={post}
                             maxLines={metaProps.maxLines && Number.parseInt(`${metaProps.maxLines}`, 10)}
+                            minLines={metaProps.minLines && Number.parseInt(`${metaProps.minLines}`, 10)}
                             readonly={!!metaProps.readonly}
                             noReset={!!metaProps.noReset}
                             noDownload={metaProps.versioned || !!metaProps.noDownload}
