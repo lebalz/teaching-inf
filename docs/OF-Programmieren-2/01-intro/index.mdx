@@ -1,0 +1,89 @@
+---
+page_id: 84f95bc1-847e-4178-9e7f-789082e1a083
+---
+
+import Strukto from '@tdev-components/VisualizationTools/Strukto'
+
+# 1. Intro
+
+## Algorithmus
+
+> «Ein Algorithmus beschreibt die Methode, mit der eine Aufgabe gelöst wird. Ein Algorithmus besteht aus einer Folge von Schritten, deren korrekte Abarbeitung die gestellte Aufgabe löst. Die Abarbeitung oder den Vorgang selbst bezeichnet man als Prozeß.»
+> 
+> Les Goldschlager/Andrew Lister: *Informatik*, 1984
+
+
+Damit wir von einem Algorithmus sprechen, müssen also **zwei** Bedingungen erfüllt sein:
+1. Es muss eine **Schritt-für-Schritt-Anleitung** vorliegen.
+2. Diese Schritt-für-Schritt-Anleitung muss eine **Aufgabe oder ein Problem lösen**.
+
+## Struktur
+Ein Algorithmus definiert, in welcher **Reihenfolge** die einzelnen Schritte nacheinander abgearbeitet werden. Die Beschreibung dieser Reihenfolge ist die **Struktur** des Algorithmus. Während die Einzelschritte je nach Anwendungsgebiet unterschiedlich sind, sind die Strukturen (beim Programmieren spricht man von **Kontrollstrukturen**) von Algorithmen universell.
+
+Folgende Strukturen können unterschieden werden:
+Sequenz 👣
+: eine Folge von Schritten/Anweisungen, die nacheinander abgearbeitet werden.
+:::dd
+```py live_py slim
+from turtle import *
+
+forward(100)
+left(120)
+forward(100)
+left(120)
+forward(100)
+left(120)
+:::
+Wiederholung 🔁
+: Einer oder mehrere Schritte werden eine bestimmte Anzahl mal wiederholt.
+:::dd
+```py live_py slim
+from turtle import *
+
+for i in range(3):
+    forward(100)
+    left(120)
+:::
+Bedingte Ausführung ⑂
+: Einer oder mehrere Schritte werden nur ausgeführt, wenn eine bestimmte Bedingung erfüllt ist.
+:::dd
+```py live_py slim
+from random import randint
+
+zahl1 = randint(1, 10)
+zahl2 = randint(1, 10)
+antwort = input(f'{zahl1} * {zahl2} = ? ')
+antwort = int(antwort)
+lösung = zahl1 * zahl2
+if antwort == lösung:
+    print(f'😎 Richtig! {zahl1} * {zahl2} = {lösung}')
+else:
+    print(f'🥸 {antwort} ist Falsch! {zahl1} * {zahl2} = {lösung}')
+:::
+Unterprogramm 🏷
+: Eine Sequenz kann mit einem Namen versehen werden. Anstatt immer die ganze Sequenz aufzuschreiben, kann der Name angegeben werden.
+:::dd
+```py live_py slim
+from turtle import *
+def dreieck():
+    for i in range(3):
+        forward(100)
+        left(120)
+dreieck()
+left(90)
+dreieck()
+:::
+Parameter ⊕ ⊖
+: Das Ergebnis eines Algorithmus kann variiert werden durch Werte, welche bei jeder Ausführung neu festgelegt werden.
+:::dd
+```py live_py slim
+from turtle import *
+def dreieck(seitenlänge, farbe):
+    color(farbe)
+    for i in range(3):
+        forward(seitenlänge)
+        left(120)
+dreieck(100, 'blue')
+dreieck(50, 'red')
+:::
+
