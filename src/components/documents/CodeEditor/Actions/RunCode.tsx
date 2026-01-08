@@ -18,11 +18,7 @@ const RunCode = observer(() => {
             className={clsx(styles.runCode, script.meta.slim && styles.slim)}
             iconSize={script.meta.slim ? '1.15em' : '1.6em'}
             onClick={() => {
-                if (script.isExecuting) {
-                    script.stopScript();
-                } else {
-                    script.execScript();
-                }
+                script.toggleScriptExecution();
             }}
             title={`${script.title} ausführen`}
         />

@@ -85,5 +85,170 @@ def dreieck(seitenlänge, farbe):
         left(120)
 dreieck(100, 'blue')
 dreieck(50, 'red')
+```
 :::
 
+## Schleifen
+
+Mit **Schleifen** können Anweisungen wiederholt ausgeführt werden, ohne dass diese mehrfach aufgeschrieben werden müssen. Es gibt zwei Arten von Schleifen:
+- **Zählschleifen**: Die Anzahl der Wiederholungen ist im Voraus bekannt.
+- **Bedingte Schleifen**: Die Anzahl der Wiederholungen ist nicht im Voraus bekannt, sondern hängt von einer Bedingung ab.
+
+Bisher haben wir nur Zählschleifen - die `for`-Schleife - kennengelernt.
+
+### Die `for`-Schleife
+```py live_py slim
+from turtle import *
+
+for i in range(5):
+    forward(100)
+    left(72)
+```
+
+Das `i` in der Schleife ist der sog. **Schleifenzähler**. Er wird bei jeder Wiederholung um 1 erhöht und beginnt standardmässig bei `0`. **Der Schleifenzähler kann innerhalb der Schleife verwendet werden.**
+
+```py live_py slim
+from turtle import *
+
+for i in range(5):
+    forward(10 * i)  # Die Länge der Linie hängt vom Schleifenzähler ab
+    left(90)
+```
+
+:::tip[Beachte]
+Es gibt **nur 4** gezeichnete Linien, da der Schleifenzähler bei `0` beginnt und bis `4` geht (was auf **Z. 4** Seitenlängen von `0`, `10`, `20`, `30`, `40` erzeugt).
+:::
+
+:::def[`for i in range(start, stopp):`]
+Die `for`-Schleife kann auch mit zwei Parametern verwendet werden: `start` und `stopp`. Der Schleifenzähler beginnt dann bei `start` und läuft bis `stopp - 1`.
+
+```py live_py slim
+from turtle import *
+
+for i in range(1, 6):  # Schleifenzähler läuft von 1 bis 5
+    forward(10 * i)
+    left(90)
+```
+:::
+
+:::insight[Merke]
+Bei der `for`-Schleife muss bereits im **Voraus** bekannt sein, wie oft die Schleife durchlaufen werden soll.
+:::
+
+### Die `while`-Schleife
+Die `while`-Schleife ist eine **bedingte Schleife**, ein Code-Block wird so lange wiederholt, wie eine bestimmte Bedingung erfüllt ist. Zähl-Schleifen können immer auch mit einer `while`-Schleife realisiert werden - es braucht dazu aber eine zusätzliche Variable, die den Zählerstand speichert.
+
+:::cards{flexBasis=300px}
+    **`for`-Schleife**
+
+    ```py live_py slim minLines=7
+    from turtle import *
+
+
+    for i in range(4):
+        forward(100)
+        left(90)
+    ```
+::br
+    **`while`-Schleife**
+
+    ```py live_py slim
+    from turtle import *
+
+    i = 0
+    while i < 4:
+        forward(100)
+        left(90)
+        i = i + 1
+    ```
+:::
+:::::tip[Beachte]
+<div className="compactDeflist">
+    Z. 3
+    : Der Schleifenzähler `i` wird initialisiert (auf `0` gesetzt).
+    Z. 4
+    : Die Bedingung der Schleife. Solange `i` kleiner als `4` ist, wird die Schleife ausgeführt.
+    Z. 8
+    : Der Schleifenzähler wird um `1` erhöht.
+    ::::dd
+        :::warning[Achtung: :mdi[all-inclusive]-Schleifen!]
+        Wenn die Bedingung der `while`-Schleife **niemals** falsch wird, läuft die Schleife unendlich weiter. Dann muss der Tab geschlossen und erneut geöffnet werden!
+        :::
+    ::::
+</div>
+:::::
+
+
+::::aufgabe[`for` zu `while`]
+<Answer type="state" id="a3946a2c-10d3-400f-86e8-4c6546e72fe6" />
+
+Schreiben Sie das untenstehende Programm so um, dass nur noch `while` Schleifen verwendet werden.
+
+:::flex{flexBasis="200px"}
+```py live_py slim
+from turtle import *
+
+left(60)
+
+for i in range(5):
+    forward(100)
+    left(72)
+    backward(20) 
+```
+
+::br
+
+```py live_py title=to-while.py id=2f288418-a751-4955-91e6-44ef58a2844b
+from turtle import *
+```
+:::
+
+<Solution id="1a34bc16-5fb1-4e2e-bf0e-9a08455e7579">
+  ```py live_py slim
+  from turtle import *
+
+  left(60)
+  i = 0
+  while i < 5:
+      forward(100)
+      left(72)
+      backward(20)
+      i = i + 1
+  ```
+</Solution>
+::::
+
+
+Die eigentliche Stärke der `while`-Schleife liegt aber darin, dass die Anzahl Wiederholungen **im Voraus nicht bekannt** sein muss. Die Schleife läuft so lange, bis eine bestimmte Bedingung erfüllt ist.
+
+Obiges Kopfrechnen-Beispiel könnte mit einer `while`-Schleife zu einem Kopfrechnen-Trainer erweitert werden, der so lange neue Aufgaben stellt, bis `x` eingegeben wird:
+
+```py live_py slim
+from browser import alert
+antwort = ''
+while antwort != 'x':
+    zahl1 = randint(1, 10)
+    zahl2 = randint(1, 10)
+    antwort = input(f'{zahl1} * {zahl2} = ? (x zum Beenden) ')
+    if antwort != 'x':
+        antwort = int(antwort)
+        lösung = zahl1 * zahl2
+        if antwort == lösung:
+            alert(f'😎 Richtig! {zahl1} * {zahl2} = {lösung}')
+        else:
+            alert(f'🥸 {antwort} ist Falsch! {zahl1} * {zahl2} = {lösung}')
+
+```
+
+## Anwendung
+
+Die `while`-Schleife kommt oft bei Benutzerinteraktionen, Simulationen oder bei sich dynamisch ändernden Daten vor. Sonstige Wiederholungen lassen sich normalerweise einfacher mit einer `for`-Schleife umsetzen.
+
+:::insight
+<div className="smallDeflist">
+  `while`-Schleife
+  : Die `while`-Schleife wird immer dann verwendet, wenn die Anzahl Wiederholungen **im Voraus unbekannt** ist.
+  `for`-Schleife
+  : Ist die Anzahl Wiederholungen **im Voraus bekannt**, wird meistens die `for`-Schleife verwendet.
+</div>
+:::
