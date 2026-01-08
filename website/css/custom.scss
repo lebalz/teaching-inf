@@ -86,10 +86,21 @@ html[data-theme='dark'] {
         --ifm-color-emphasis-200: #ebedf081;
     }
 }
+
+div.theme-admonition-tip {
+    --ifm-color-primary-contrast-background: #ebf2fc;
+    --ifm-color-primary-contrast-foreground: #102445;
+    --ifm-alert-border-color: var(--ifm-color-blue-dark);
+}
+
 html[data-theme='dark'] {
     #__docusaurus {
         .navbar--fixed-top:not(.navbar-sidebar--show) {
             --ifm-navbar-background-color: #2425269e;
+        }
+        div.theme-admonition-tip {
+            --ifm-color-primary-contrast-background: #102445;
+            --ifm-color-primary-contrast-foreground: #ebf2fc;
         }
     }
 }
