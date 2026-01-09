@@ -8,6 +8,10 @@ page_id: a7737c9f-2d8e-476e-8a00-a8ccf6b3c4e8
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import CmsCode from '@tdev-components/documents/CmsText/Code';
+import WithCmsText from '@tdev-components/documents/CmsText/WithCmsText';
+import CmsText from '@tdev-components/documents/CmsText';
+import DefinitionList from "@tdev-components/DefinitionList";
 
 # Computer
 
@@ -15,6 +19,30 @@ import TabItem from '@theme/TabItem';
 >
 > *– Albert Einstein*
 
+:::details[Beurteilung]
+<WithCmsText
+    entries={{
+        ptComplete: "7d870b69-ca97-48b0-8b29-7c5c76d5dcfb", 
+        ptCorrect: "8198214f-784c-4ad9-8005-e066eb79fb7f",
+        ptClearness: "eb65437a-4057-4d5f-a140-655c3b55b493",
+        ptTotal: "54fa3586-b0b9-412d-827d-a129fc0bd172",
+        grade: "c3f3c78f-217b-4fe6-829e-c8e26949bb96",
+        notes: "02f6ce31-abb3-42b4-8abc-5eabb64ca408"
+    }}
+>
+    <DefinitionList>
+        <dt>Punkte</dt>
+        <dd><CmsText name="ptTotal" />/12</dd>
+        <dd>**Vollständigkeit**: <CmsText name="ptComplete" />/4</dd>
+        <dd>**Korrektheit**: <CmsText name="ptCorrect" />/4</dd>
+        <dd>**Klarheit**: <CmsText name="ptClearness" />/4</dd>
+        <dt>Note</dt>
+        <dd><CmsText name="grade" /></dd>
+        <dt>Zählt</dt>
+        <dd>0.5</dd>
+    </DefinitionList>
+</WithCmsText>
+:::
 
 ::::aufgabe[Aufgabe]
 
@@ -66,3 +94,5 @@ Thema
 </Tabs>
 
 ::::
+
+
