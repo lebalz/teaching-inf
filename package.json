@@ -8,7 +8,7 @@
     "private": true,
     "scripts": {
         "docusaurus": "docusaurus",
-        "start": "concurrently --raw --kill-others 'NODE_OPTIONS=--max-old-space-size=12288 docusaurus start' 'sleep 5s && ts-node updateSync/packageDocsSync/watch.ts --src packages --dest docs/Packages'",
+        "start": "concurrently --raw --kill-others 'NODE_OPTIONS=--max-old-space-size=12288 docusaurus start' 'sleep 1s && ts-node updateSync/packageDocsSync/watch.ts --src packages --dest docs/Packages'",
         "prebuild": "ts-node updateSync/packageDocsSync/preBuild.ts --src packages --dest docs/Packages && node material_sync.js",
         "build": "docusaurus build",
         "postbuild": "node material_restore.js",
