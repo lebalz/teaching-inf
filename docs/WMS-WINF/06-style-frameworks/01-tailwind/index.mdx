@@ -1,0 +1,96 @@
+---
+page_id: 4da3ef9d-0dca-4a5e-b4cd-97759cab0c46
+---
+import HtmlEditor from '@tdev-components/documents/CodeEditor/HtmlEditor';
+
+# Tailwind
+
+:::cards{flexBasis=250px}
+::br{backgroundColor=var(--ifm-color-success-lightest)}
+**Highlights**
+- Hohe Flexibilität für individuelles Design
+- Gute Performance
+- Wachsende Beliebtheit bei modernen Projekten     
+::br{backgroundColor=var(--ifm-color-danger-lightest)}
+**Nachteile**
+- "vollgestopfte" HTML-Klassen
+- Lesbarkeit des HTML leidet bei komplexen Layouts ("Spaghetti")
+- Fehlende standardisierte Komponenten (Buttons, Modale etc. selbst bauen)
+:::
+
+[Tailwind CSS](https://tailwindcss.com/) ist ein CSS-Framework, das auf Utility-Klassen basiert. Anstatt eigene CSS-Klassen zu definieren, verwendet man vordefinierte Klassen, um das Styling direkt im HTML zu gestalten.
+
+Damit dies funktioniert, muss im `<head>`-Bereich der HTML-Datei das Tailwind CSS-Skript eingebunden werden:
+
+```html
+<html>
+  <head>
+      <!-- highlight-next-line -->
+      <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+  <body>
+      ...
+  </body>
+</html>
+```
+
+Anschliessend können die vordefinierten Tailwind-Klassen verwendet werden, um das Layout und Design der HTML-Elemente zu gestalten.
+
+:::cards{flexBasis=400px}
+#### Reine HTML-Struktur
+<HtmlEditor
+  hideWarning
+  title='tailwind.html'
+  lang='html'
+  minHeight={'200px'}
+>
+```html
+<html>
+<head>
+</head>
+<body>
+<div>
+    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Maria Grünfelder">
+    <div>
+        <h1>Maria Grünfelder</h1>
+        <address>
+            <div>maria.gruenfelder@email.com</div>
+            <div>Biel, Schweiz</div>
+            <div>+41 32 123 4567</div>
+        </address>
+    </div>
+</div>
+</body>
+</html>
+```
+</HtmlEditor>
+::br
+#### Mit Tailwind CSS
+<HtmlEditor
+  hideWarning
+  title='tailwind.html'
+  lang='html'
+  minHeight={'200px'}
+>
+```html
+<html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body>
+<div class="flex items-center gap-x-6 m-5 p-6 bg-linear-to-r from-red-100 to-fuchsia-200 rounded-xl shadow-xl/30">
+    <img class="size-30 rounded-full hover:scale-125 duration-300 ease-in border-6 border-solid border-red-300" src="https://randomuser.me/api/portraits/women/44.jpg" alt="Maria Grünfelder">
+    <div class="">
+        <h1 class="text-xl font-medium">Maria Grünfelder</h1>
+        <address class="text-gray-500 not-italic text-sm">
+            <div>maria.gruenfelder@email.com</div>
+            <div>Biel, Schweiz</div>
+            <div>+41 32 123 4567</div>
+        </address>
+    </div>
+</div>
+</body>
+</html>
+```
+</HtmlEditor>
+:::

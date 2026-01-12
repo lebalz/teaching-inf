@@ -43,14 +43,13 @@
     div[class^='admonitionHeading'] {
         display: none;
     }
+    :global(.theme-code-block) {
+        margin-bottom: 0;
+    }
 }
 
-:global(.theme-code-block) {
-    margin-bottom: 0;
-}
-
-html,
-body {
+html:has(.page),
+body:has(.page) {
     margin: 0 !important;
     padding: 0 !important;
     width: 100% !important;
