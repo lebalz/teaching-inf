@@ -5,11 +5,13 @@ import { PyWorker, PyWorkerApi } from '../workers/pyodide.worker';
 import ExecutionEnvironment from '@docusaurus/ExecutionEnvironment';
 import { Message, PY_AWAIT_INPUT, PY_CANCEL_INPUT, PY_INPUT } from '../config';
 import PyodideScript from '../models';
+import siteConfig from '@generated/docusaurus.config';
+const BASE_URL = siteConfig.baseUrl || '/';
 
 const TimingServiceWorker =
     ExecutionEnvironment.canUseDOM && 'serviceWorker' in navigator
-        ? navigator.serviceWorker.register('/pyodide.sw.js', {
-              scope: '/',
+        ? navigator.serviceWorker.register(`${BASE_URL}pyodide.sw.js`, {
+              scope: BASE_URL,
               type: 'module'
           })
         : null;
@@ -150,12 +152,15 @@ export default class PyodideStore {
             .forEach((doc) => {
                 doc.setExecuting(false);
             });
-        return this.initialize();
+        return this.initialize(true);
     }
 
     async initialize(skipSWRegistration = false) {
         const ComPyWorker = this.createPyWorker();
         if (!TimingServiceWorker || !ComPyWorker) {
+            console.error(
+                'Cannot initialize PyodideStore: missing service worker or worker creation failed.'
+            );
             return;
         }
         if (!skipSWRegistration) {
