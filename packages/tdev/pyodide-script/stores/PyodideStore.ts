@@ -68,10 +68,6 @@ export default class PyodideStore {
                 code.addLogMessage(message);
                 break;
             case 'clock':
-                console.log(
-                    'Clock message received in PyodideStore:',
-                    ...this.viewStore.root.siteStore.toolsStore.clocks.clocks.keys()
-                );
                 const clock = this.viewStore.root.siteStore.toolsStore.clocks.useClock(message.id);
                 switch (message.clockType) {
                     case 'hours':
@@ -201,20 +197,14 @@ export default class PyodideStore {
                     });
                 }
             });
-            console.log('Service worker registered with scope:', registration.scope);
-            navigator.serviceWorker.ready.then((reg) => {
-                console.log('Service worker ready with scope:', reg.scope);
-            });
 
             navigator.serviceWorker.onmessage = (event) => {
-                console.log(event);
                 switch (event.data.type) {
                     case PY_AWAIT_INPUT:
                         if (event.source instanceof ServiceWorker) {
                             // Update the service worker reference, in case the service worker is different to the one we registered
                             this._serviceWorkerRegistration = registration.active;
                         }
-                        console.log('Python code is awaiting input:', event.data.id, event.data.prompt);
                         runInAction(() => {
                             this.awaitingInputPrompt.set(event.data.id, event.data.prompt);
                         });

@@ -15,6 +15,7 @@ import Button from '@tdev-components/shared/Button';
 import { mdiClose, mdiLoading, mdiPlay, mdiSend } from '@mdi/js';
 import TextInput from '@tdev-components/shared/TextInput';
 import PyodideScript from '../models';
+import { action } from 'mobx';
 
 export interface Props {
     code?: string;
@@ -57,7 +58,6 @@ const Pyodide = observer((props: Props) => {
     const userStore = useStore('userStore');
     const viewStore = useStore('viewStore');
     const pyodideStore = viewStore.useStore('pyodideStore');
-    console.log('Pyodide render', props.id, props.code);
     const meta = React.useMemo(
         () =>
             new ModelMeta({
@@ -104,7 +104,7 @@ const Pyodide = observer((props: Props) => {
                                     // commands is array of key bindings.
                                     name: 'execute',
                                     bindKey: { win: 'Ctrl-Enter', mac: 'Command-Enter' },
-                                    exec: () => pyodideStore.run(doc)
+                                    exec: action(() => pyodideStore.run(doc))
                                 });
                                 node.editor.commands.addCommand({
                                     // commands is array of key bindings.
@@ -130,32 +130,6 @@ const Pyodide = observer((props: Props) => {
                         />
                     )}
                 </div>
-                {doc.hasPrompt && (
-                    <div>
-                        <TextInput
-                            label={doc.promptText || 'Eingabe'}
-                            onChange={(text) => {
-                                doc.setPromptResponse(text);
-                            }}
-                            value={doc.promptResponse || ''}
-                            onEnter={() => {
-                                doc.sendPromptResponse();
-                            }}
-                        />
-                        <Button
-                            onClick={() => {
-                                doc.sendPromptResponse();
-                            }}
-                            icon={mdiSend}
-                        />
-                        <Button
-                            icon={mdiClose}
-                            onClick={() => {
-                                doc.pyodideStore.cancelCodeExecution(doc.id);
-                            }}
-                        />
-                    </div>
-                )}
                 <div>
                     {doc.logs.length > 0 && (
                         <CodeBlock language="plaintext">
@@ -166,6 +140,38 @@ const Pyodide = observer((props: Props) => {
                         </CodeBlock>
                     )}
                 </div>
+                {doc.hasPrompt && (
+                    <div className={clsx(styles.prompt)}>
+                        <div className={clsx(styles.inputContainer)}>
+                            <TextInput
+                                label={doc.promptText || 'Eingabe'}
+                                onChange={(text) => {
+                                    doc.setPromptResponse(text);
+                                }}
+                                value={doc.promptResponse || ''}
+                                onEnter={() => {
+                                    doc.sendPromptResponse();
+                                }}
+                                className={clsx(styles.input)}
+                                labelClassName={clsx(styles.label)}
+                            />
+                        </div>
+                        <div className={clsx(styles.actions)}>
+                            <Button
+                                onClick={() => {
+                                    doc.sendPromptResponse();
+                                }}
+                                icon={mdiSend}
+                            />
+                            <Button
+                                icon={mdiClose}
+                                onClick={() => {
+                                    doc.pyodideStore.cancelCodeExecution(doc.id);
+                                }}
+                            />
+                        </div>
+                    </div>
+                )}
             </Card>
         </div>
     );
