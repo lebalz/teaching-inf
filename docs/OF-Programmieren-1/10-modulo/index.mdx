@@ -132,11 +132,16 @@ uhr = use_clock('uhr-aufgabe-1')
 
 ## Die Uhr ticken lassen
 
+<Clock clockId="sbb-uhr" />
+
 <Pyodide id="d0b707e6-13a1-4285-b74e-928f940f9a6d">
 ```py
-print('Hello')
+from time import sleep
+from clock import use_clock
+uhr = use_clock('sbb-uhr')
+
+while True:
+    uhr.setSeconds(uhr.seconds + 6)
+    sleep(1)
 ```
 </Pyodide>
-
-:::warning[🚧 Nächste Woche 😉]
-:::
