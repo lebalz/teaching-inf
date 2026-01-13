@@ -3,7 +3,8 @@ page_id: 1c146068-bc47-4173-9108-85d72d2a62be
 ---
 
 import Clock from '@tdev-components/Clock';
-import TryUserClock from './components/TryUserClock'
+import TryUserClock from './components/TryUserClock';
+import Pyodide from '@tdev/pyodide-script/components/Pyodide';
 
 # 📝 Teilbarkeit von Zahlen
 
@@ -130,6 +131,12 @@ uhr = use_clock('uhr-aufgabe-1')
 ::::
 
 ## Die Uhr ticken lassen
+
+<Pyodide id="d0b707e6-13a1-4285-b74e-928f940f9a6d">
+```py
+print('Hello')
+```
+</Pyodide>
 
 :::warning[🚧 Nächste Woche 😉]
 :::

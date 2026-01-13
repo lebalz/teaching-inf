@@ -32,6 +32,7 @@ export class Clock {
 
     @action
     setMinutes(deg: number) {
+        console.log('Setting minutes to', deg);
         this.minutes = deg;
     }
 
