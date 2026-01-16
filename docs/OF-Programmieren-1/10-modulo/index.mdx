@@ -83,7 +83,7 @@ Mit der Bibliothek `clock` kann eine Uhr gesteuert werden - etwas speziell dabei
 2. Stellen Sie auf der Uhr die Zeit __9:40:03__ ein.
 3. Halten Sie kurz fest, wie Sie die Uhrzeit berechnet haben.
 
-:::flex
+:::flex{flexBasis="250px"}
 ```py live_py slim
 from clock import use_clock
 uhr = use_clock('uhr-demo')
@@ -119,7 +119,7 @@ Ihre Aufgabe ist es, die Benutzer\:in Ihres Programms zu bitten, eine Uhrzeit in
 <TryUserClock clockId="uhr-aufgabe-1" />
 :::
 
-:::flex
+:::flex{flexBasis="250px"}
 ```py live_py id=e1a7d594-84ef-4c06-83a8-e9b70e8cc2b6
 from clock import use_clock
 uhr = use_clock('uhr-aufgabe-1')
@@ -134,19 +134,13 @@ uhr = use_clock('uhr-aufgabe-1')
 ## Die Uhr ticken lassen
 
 :::aufgabe[SBB-Uhr]
-
-
 <Answer id="6cbb5cf3-84ee-4635-b33d-ce85f9aed571" type="state" />
-
-
 
 1. Analysieren Sie das untenstehende Programm - wie wird der Sekundenzeiger zum ticken gebracht?
 2. Immer wenn der Sekundenzeiger auf 12 Uhr steht, soll der Minutenzeiger eine Minute vorwärts gehen.
 3. Immer wenn der Minutenzeiger springt und der Sekundenzeiger auf 12 Uhr steht, soll auch der Stundenzeiger eine Stunde vorgestellt werden.
 4. Bei der SBB-Uhr fährt der Sekundenzeiger kontinuierlich bis 12 Uhr und wartet dann dort eine Sekunde, bevor er springt. Können Sie dieses Verhalten nachstellen?
 :::
-
-
 
 <Clock clockId="sbb-uhr" />
 
