@@ -1,0 +1,306 @@
+---
+page_id: 655c6d38-5d2f-435d-be82-be05d28709ac
+---
+
+# Anwendung
+
+:::aufgabe[Uhr]
+<Answer type="state" id="e87794b2-04a0-4eba-86bc-5e5cd0852852" />
+
+CodeEditor
+: [https://python.microbit.org/v/3/project](https://python.microbit.org/v/3/project)
+
+
+
+::video[./images/clock.mp4]{autoplay="true" loop="true" height="220px" width="100%"}
+
+Ausgehend von folgender Vorlage soll eine tickende Uhr programmiert werden:
+
+```py
+from microbit import *
+
+zeit = [
+    Image.CLOCK1,
+    Image.CLOCK2,
+    Image.CLOCK3,
+    Image.CLOCK4,
+    Image.CLOCK5,
+    Image.CLOCK6,
+    Image.CLOCK7,
+    Image.CLOCK8,
+    Image.CLOCK9,
+    Image.CLOCK10,
+    Image.CLOCK11,
+    Image.CLOCK12,
+]
+
+while True:
+    display.show(Image.CLOCK1)
+```
+
+```mpy live_py id=dde9bb1e-fd17-4b80-a03b-1b7ae7f57cbf
+
+```
+
+<Solution id="bebc60a3-c833-423b-943f-eb6f3c6212c8">
+```py
+from microbit import *
+
+zeit = [
+    Image.CLOCK1,
+    Image.CLOCK2,
+    Image.CLOCK3,
+    Image.CLOCK4,
+    Image.CLOCK5,
+    Image.CLOCK6,
+    Image.CLOCK7,
+    Image.CLOCK8,
+    Image.CLOCK9,
+    Image.CLOCK10,
+    Image.CLOCK11,
+    Image.CLOCK12,
+]
+while True:
+    for bild in zeit:
+        display.show(bild)
+        sleep(1000)
+```
+</Solution>
+:::
+
+## Tastendruck erkennen
+
+Auf dem Micro:Bit können die beiden Tasten `A` und `B` abgefragt werden. Es gibt zwei Möglichkeiten, den Zustand der beiden Knöpfe abzufragen:
+
+`is_pressed()`
+: Prüft, ob die Taste gerade gedrückt ist (True/False).
+`was_pressed()`
+: Prüft, ob die Taste seit der letzten Abfrage gedrückt wurde (True/False).
+
+Beispiel
+
+:::cards{flexBasis="250px"}
+**Beispiel 1**
+```py
+from microbit import *
+
+while True:
+    if button_a.is_pressed():
+        display.show(Image.HAPPY)
+    elif button_b.is_pressed():
+        display.show(Image.SAD)
+    else:
+        display.show(Image.ASLEEP)
+```
+::br
+**Beispiel 2**
+```py
+from microbit import *
+
+while True:
+    if button_a.was_pressed():
+        display.show(Image.HAPPY)
+    elif button_b.was_pressed():
+        display.show(Image.SAD)
+    sleep(1000)
+```
+:::
+
+::::aufgabe[Tastenabfrage]
+<Answer type="state" id="bf26c524-265b-496b-b409-19de4ce09ad8" />
+
+Laden Sie nacheinander die Code-Beispiele 1 und 2 auf Ihren Micro:Bit und testen Sie das Verhalten der Programme beim Drücken der Tasten `A` und `B`. **Beschreiben Sie die Unterschiede im Verhalten der beiden Programme**.
+
+<Answer type="text" id="718f9e36-f9cf-4290-b116-83ad8b36acb0" />
+
+**Szenarien**: Was passiert?
+- Was passiert in Beispiel 1, wenn die Tasten `A` und `B` gleichzeitig gedrückt werden? Können Sie das Verhalten mit dem Code erklären?
+- Was passiert in Beispiel 2, wenn ganz schnell nacheinander 
+    - zuerst die Taste `A` und dann `B` gedrückt werden?
+    - zuerst die Taste `B` und dann `A` gedrückt werden?
+    - können Sie das Verhalten mit dem Code erklären?
+
+<Answer type="text" id="3486a604-c6ea-4ae6-a64c-4d4974f0d901" />
+
+
+::::
+
+::::aufgabe[Diashow]
+<Answer type="state" id="8f0e408b-f7f7-4c1c-b431-91d8ca3271ef" />
+
+Es soll eine Diashow programmiert werden, die mit der Taste `B` zum nächsten Bild und mit der Taste `A` zum vorherigen Bild wechselt. Ist man auf dem letzten Bild und klick __B__, so soll wiederum das erste Bild angezeigt werden (oder wenn auf dem ersten Bild __A__ gedrückt wird, soll das letzte Bild angezeigt werden).
+
+
+::video[./images/diashow.mp4]{autoplay="true" loop="true" height="220px" width="100%"}
+
+```py
+from microbit import *
+
+bilder = [
+    Image.PACMAN,
+    Image.PITCHFORK,
+    Image.RABBIT,
+    Image.ROLLERSKATE,
+    Image.SAD,
+    Image.SCISSORS,
+    Image.SILLY,
+    Image.SKULL,
+    Image.SMILE,
+    Image.SNAKE,
+    Image.SQUARE,
+    Image.SQUARE_SMALL,
+    Image.STICKFIGURE,
+    Image.SURPRISED,
+    Image.SWORD,
+    Image.TARGET,
+    Image.TORTOISE,
+    Image.TRIANGLE,
+    Image.TRIANGLE_LEFT,
+    Image.TSHIRT
+]
+
+while True:
+    display.show(Image.PACMAN)
+    sleep(1000)
+```
+
+:::details[Hinweis 1]
+Erstellen Sie eine Variable `bild_index`, die den Index des aktuell angezeigten Bildes speichert. Welcher Index hat das erste Bild in der Liste `bilder`?
+:::
+
+:::details[Hinweis 2]
+Wird __B__ gedrückt, so soll der Index um `1` erhöht werden. Wird __A__ gedrückt, so soll der Index um `1` verringert werden. Das aktuelle Bild muss natürlich noch angezeigt werden. Finden Sie heraus wie?
+:::
+
+:::details[Hinweis 3]
+... das aktuelle Bild kann dann mit `display.show(bilder[bild_index])` angezeigt werden.
+Was passiert nun, wenn Sie am ersten Bild sind und __A__ drücken? Was passiert, wenn Sie am letzten Bild sind und __B__ drücken? Wie können Sie das verhindern?
+:::
+
+```mpy id=4b5d2ac7-cbfe-43b6-a364-cafdc51c47ab live_py
+
+```
+
+### Bonus-Aufgaben
+- Fügen Sie einen Soundeffekt hinzu, der bei jedem Bildwechsel abgespielt wird. (Für vorwärts und rückwärts jeweils ein anderer Soundeffekt.)
+- Zeigen Sie ein zufälliges Bild an, wenn der Micro:Bit geschüttelt wird.
+- Schalten Sie automatisch zum nächsten Bild weiter, wenn für 5 Sekunden keine Taste gedrückt wurde.
+
+<Solution id="939032a1-2e50-4f21-a621-b51575987533">
+```py
+from microbit import *
+
+bilder = [
+    Image.PACMAN,
+    Image.PITCHFORK,
+    Image.RABBIT,
+    Image.ROLLERSKATE,
+    Image.SAD,
+    Image.SCISSORS,
+    Image.SILLY,
+    Image.SKULL,
+    Image.SMILE,
+    Image.SNAKE,
+    Image.SQUARE,
+    Image.SQUARE_SMALL,
+    Image.STICKFIGURE,
+    Image.SURPRISED,
+    Image.SWORD,
+    Image.TARGET,
+    Image.TORTOISE,
+    Image.TRIANGLE,
+    Image.TRIANGLE_LEFT,
+    Image.TSHIRT
+]
+bild_index = 0
+while True:
+    if button_b.was_pressed():
+        bild_index = bild_index + 1
+    elif button_a.was_pressed():
+        bild_index = bild_index - 1
+
+    if bild_index >= len(bilder):
+        bild_index = 0
+    elif bild_index < 0:
+        bild_index = len(bilder) - 1
+
+    display.show(bilder[bild_index])
+    sleep(100)
+```
+</Solution>
+::::
+
+
+:::details[Micro:Bit - Vordefinierte Bilder]
+Die Micro:Bit Bibliothek stellt eine Reihe vordefinierter Bilder zur Verfügung
+
+```py
+bilder = [
+    Image.ANGRY,
+    Image.ARROW_E,
+    Image.ARROW_N,
+    Image.ARROW_NE,
+    Image.ARROW_NW,
+    Image.ARROW_S,
+    Image.ARROW_SE,
+    Image.ARROW_SW,
+    Image.ARROW_W,
+    Image.ASLEEP,
+    Image.BUTTERFLY,
+    Image.CHESSBOARD,
+    Image.CLOCK1,
+    Image.CLOCK2,
+    Image.CLOCK3,
+    Image.CLOCK4,
+    Image.CLOCK5,
+    Image.CLOCK6,
+    Image.CLOCK7,
+    Image.CLOCK8,
+    Image.CLOCK9,
+    Image.CLOCK10,
+    Image.CLOCK11,
+    Image.CLOCK12,
+    Image.CONFUSED,
+    Image.COW,
+    Image.DIAMOND,
+    Image.DIAMOND_SMALL,
+    Image.DUCK,
+    Image.FABULOUS,
+    Image.GHOST,
+    Image.GIRAFFE,
+    Image.HAPPY,
+    Image.HEART,
+    Image.HEART_S,
+    Image.ALL,
+    Image.HOUSE,
+    Image.MEH,
+    Image.MUSIC_CROTCHET,
+    Image.MUSIC_QUAVER,
+    Image.MUSIC_QUAVERS,
+    Image.NO,
+    Image.PACMAN,
+    Image.PITCHFORK,
+    Image.RABBIT,
+    Image.ROLLERSKATE,
+    Image.SAD,
+    Image.SCISSORS,
+    Image.SILLY,
+    Image.SKULL,
+    Image.SMILE,
+    Image.SNAKE,
+    Image.SQUARE,
+    Image.SQUARE_SMALL,
+    Image.STICKFIGURE,
+    Image.SURPRISED,
+    Image.SWORD,
+    Image.TARGET,
+    Image.TORTOISE,
+    Image.TRIANGLE,
+    Image.TRIANGLE_LEFT,
+    Image.TSHIRT,
+    Image.UMBRELLA,
+    Image.XMAS,
+    Image.YES
+]
+```
+:::
