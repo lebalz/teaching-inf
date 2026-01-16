@@ -2,16 +2,17 @@
 page_id: 1c146068-bc47-4173-9108-85d72d2a62be
 ---
 
-import Clock from '@tdev-components/Clock';
-import TryUserClock from './components/TryUserClock';
-import Pyodide from '@tdev/pyodide-script/components/Pyodide';
+import Clock from '@tdev-components/Clock'
+
+import TryUserClock from './components/TryUserClock'
+
+import Pyodide from '@tdev/pyodide-script/components/Pyodide'
 
 # 📝 Teilbarkeit von Zahlen
 
 Ist eine Zahl ganzzahlig durch eine andere Zahl teilbar? Diese Frage lässt sich mit dem **Modulo-Operator** leicht beantworten.
 
 :::def[`%` - Modulo-Operator]
-
 Der **Modulo-Operator** `%` gibt den **Rest** einer ganzzahligen Division zurück.
 
 ```py live_py slim
@@ -40,13 +41,6 @@ for i in range(2, 938):
         print(f"{i} ist ein Teiler von {zahl}.")
 ```
 
-```py live_py slim
-from grid import Line
-
-line = Line.from_size(10, 'blue')
-print(line)
-```
-
 ## FizzBuzz
 
 FizzBuzz ist ein klassisches Programmierproblem, das oft in Vorstellungsgesprächen verwendet wird. Die Aufgabe besteht darin, die Zahlen von 1 bis 100 auszugeben, aber für Vielfache von 3 "Fizz" anstelle der Zahl und für Vielfache von 5 "Buzz" auszugeben. Für Zahlen, die sowohl Vielfache von 3 als auch von 5 sind, soll "FizzBuzz" ausgegeben werden.
@@ -60,18 +54,19 @@ Schreibe ein Programm, das die Zahlen von 1 bis 100 ausgibt, aber für Vielfache
 for i in range(1, 101):
     print(i)
 ```
+
 <Solution id="ed4667a1-f25e-4204-b39b-b6977614cacc">
-```py live_py slim
-for i in range(1, 101):
-    if i % 3 == 0 and i % 5 == 0:
-        print("FizzBuzz")
-    elif i % 3 == 0:
-        print("Fizz")
-    elif i % 5 == 0:
-        print("Buzz")
-    else:
-        print(i)
-```
+  ```py live_py slim
+  for i in range(1, 101):
+      if i % 3 == 0 and i % 5 == 0:
+          print("FizzBuzz")
+      elif i % 3 == 0:
+          print("Fizz")
+      elif i % 5 == 0:
+          print("Buzz")
+      else:
+          print(i)
+  ```
 </Solution>
 :::
 
@@ -83,6 +78,7 @@ Mit der Bibliothek `clock` kann eine Uhr gesteuert werden - etwas speziell dabei
 <Answer type="state" id="efacdbfb-e910-4b35-90ca-030c2d655fb4" />
 
 **Den Code noch nicht ausführen!**
+
 1. Finden Sie heraus, welche Uhrzeit bei folgender Uhr angezeigt wird, ohne den Code auszuführen? Überprüfen Sie Ihre Antwort danach, indem Sie den Code ausführen.
 2. Stellen Sie auf der Uhr die Zeit __9:40:03__ ein.
 3. Halten Sie kurz fest, wie Sie die Uhrzeit berechnet haben.
@@ -96,13 +92,16 @@ uhr.setHours(90)
 uhr.setMinutes(150)
 uhr.setSeconds(270)
 ```
+
 ::br
+
 <Clock clockId="uhr-demo" />
 :::
+
 :::note[Bemerkungen]
 <div className="compactDeflist">
-Z.2
-: Die Uhren-ID muss mit der Angezeigten Uhr übereinstimmen.
+  Z.2
+  : Die Uhren-ID muss mit der Angezeigten Uhr übereinstimmen.
 </div>
 :::
 
@@ -114,7 +113,7 @@ Z.2
 ::::aufgabe[Uhrzeit einstellen]
 <Answer type="state" id="6db9a017-5dad-40bb-9d53-8a381b4e108b" />
 
-Ihre Aufgabe ist es, die Benutzer:in Ihres Programms zu bitten, eine Uhrzeit in Stunden, Minuten und Sekunden einzugeben, und diese Zeit dann auf der Uhr anzuzeigen.
+Ihre Aufgabe ist es, die Benutzer\:in Ihres Programms zu bitten, eine Uhrzeit in Stunden, Minuten und Sekunden einzugeben, und diese Zeit dann auf der Uhr anzuzeigen.
 
 :::cards
 <TryUserClock clockId="uhr-aufgabe-1" />
@@ -125,23 +124,40 @@ Ihre Aufgabe ist es, die Benutzer:in Ihres Programms zu bitten, eine Uhrzeit in 
 from clock import use_clock
 uhr = use_clock('uhr-aufgabe-1')
 ```
+
 ::br
+
 <Clock clockId="uhr-aufgabe-1" />
 :::
 ::::
 
 ## Die Uhr ticken lassen
 
+:::aufgabe[SBB-Uhr]
+
+
+<Answer id="6cbb5cf3-84ee-4635-b33d-ce85f9aed571" type="state" />
+
+
+
+1. Analysieren Sie das untenstehende Programm - wie wird der Sekundenzeiger zum ticken gebracht?
+2. Immer wenn der Sekundenzeiger auf 12 Uhr steht, soll der Minutenzeiger eine Minute vorwärts gehen.
+3. Immer wenn der Minutenzeiger springt und der Sekundenzeiger auf 12 Uhr steht, soll auch der Stundenzeiger eine Stunde vorgestellt werden.
+4. Bei der SBB-Uhr fährt der Sekundenzeiger kontinuierlich bis 12 Uhr und wartet dann dort eine Sekunde, bevor er springt. Können Sie dieses Verhalten nachstellen?
+:::
+
+
+
 <Clock clockId="sbb-uhr" />
 
 <Pyodide id="d0b707e6-13a1-4285-b74e-928f940f9a6d">
-```py
-from time import sleep
-from clock import use_clock
-uhr = use_clock('sbb-uhr')
+  ```py
+  from time import sleep
+  from clock import use_clock
+  uhr = use_clock('sbb-uhr')
 
-while True:
-    uhr.setSeconds(uhr.seconds + 6)
-    sleep(1)
-```
+  while True:
+      uhr.setSeconds(uhr.seconds + 6)
+      sleep(1)
+  ```
 </Pyodide>

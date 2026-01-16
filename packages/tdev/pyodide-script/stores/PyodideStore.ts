@@ -69,21 +69,21 @@ export default class PyodideStore {
             case 'error':
                 code.addLogMessage(message);
                 break;
-            // case 'clock':
-            //     const clock = this.viewStore.root.siteStore.toolsStore.clocks.useClock(message.id);
-            //     switch (message.clockType) {
-            //         case 'hours':
-            //             clock.setHours(message.value);
-            //             break;
-            //         case 'minutes':
-            //             console.log('Clock message received', message, clock);
-            //             clock.setMinutes(message.value);
-            //             break;
-            //         case 'seconds':
-            //             clock.setSeconds(message.value);
-            //             break;
-            //     }
-            //     break;
+            case 'clock':
+                const clock = this.viewStore.root.siteStore.toolsStore.clocks.useClock(message.id);
+                switch (message.clockType) {
+                    case 'hours':
+                        clock.setHours(message.value);
+                        break;
+                    case 'minutes':
+                        console.log('Clock message received', message, clock);
+                        clock.setMinutes(message.value);
+                        break;
+                    case 'seconds':
+                        clock.setSeconds(message.value);
+                        break;
+                }
+                break;
             default:
                 break;
         }
