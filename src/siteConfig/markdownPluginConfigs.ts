@@ -50,13 +50,13 @@ export const codeAsAttributePluginConfig = [
                 attributeName: 'code'
             },
             {
-                name: 'Pyodide',
-                attributeName: 'code'
-            },
-            {
                 name: 'HtmlIDE',
                 attributeName: 'files',
                 processMultiple: true
+            },
+            {
+                name: 'Pyodide',
+                attributeName: 'code'
             },
             {
                 name: 'NetpbmEditor',
