@@ -11,7 +11,7 @@ import Badge from '@tdev-components/shared/Badge';
 
 ## Noten
 
-
+:::info
 <WithCmsText 
     entries={{
         punkte: "06690c5b-5cac-4475-9471-4e05eb01e85b",
@@ -33,3 +33,27 @@ import Badge from '@tdev-components/shared/Badge';
         <dd>1</dd>
     </DefinitionList>
 </WithCmsText>
+:::
+
+:::info
+<WithCmsText 
+    entries={{
+        punkte: "041a4443-cf56-427e-9845-ac9c0e344644",
+        note: "d4641fdc-a0ec-42c4-84dd-5e6ee4bbaa23", 
+        zeugnis: "516c13d6-c03f-4bad-84d9-ce6686be87d7", 
+    }}
+>
+    <DefinitionList>
+        <dt>Test</dt>
+        <dd>Bruchgleichungen und Textaufgaben</dd>
+        <dt>Punkte</dt>
+        <dd><CmsText name="punkte" /></dd>
+        <dt>Note</dt>
+        <dd><CmsText name="note" /></dd>
+        <dt>Zählt</dt>
+        <dd>1</dd>
+        <dt>Zeugnis</dt>
+        <dd><Badge color="blue">⌀ <CmsText name="zeugnis" /></Badge></dd>
+    </DefinitionList>
+</WithCmsText>
+:::
