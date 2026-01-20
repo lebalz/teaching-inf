@@ -2,11 +2,8 @@
 page_id: 1c146068-bc47-4173-9108-85d72d2a62be
 ---
 
-import Clock from '@tdev-components/Clock'
-
+import Clock from '@tdev/pyodide-code/components/Clock'
 import TryUserClock from './components/TryUserClock'
-
-import Pyodide from '@tdev/pyodide-script/components/Pyodide'
 
 # 📝 Teilbarkeit von Zahlen
 
@@ -144,14 +141,12 @@ uhr = use_clock('uhr-aufgabe-1')
 
 <Clock clockId="sbb-uhr" />
 
-<Pyodide id="d0b707e6-13a1-4285-b74e-928f940f9a6d">
-  ```py
-  from time import sleep
-  from clock import use_clock
-  uhr = use_clock('sbb-uhr')
+```py live_pyo id=d0b707e6-13a1-4285-b74e-928f940f9a6d
+from time import sleep
+from clock import use_clock
+uhr = use_clock('sbb-uhr')
 
-  while True:
-      uhr.setSeconds(uhr.seconds + 6)
-      sleep(1)
-  ```
-</Pyodide>
+while True:
+    uhr.set_seconds(uhr.seconds + 6)
+    sleep(1)
+```

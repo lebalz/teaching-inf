@@ -11,7 +11,7 @@ interface Props {
 const TryUserClock = observer((props: Props) => {
     const { clockId } = props;
     const siteStore = useStore('siteStore');
-    const clock = siteStore.clocks.useClock(clockId);
+    const clock = siteStore.clockStore.useClock(clockId);
 
     return (
         <Button

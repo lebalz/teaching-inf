@@ -2,7 +2,7 @@ import { RootStore } from '@site/src/stores/rootStore';
 import { action, observable } from 'mobx';
 import Polybios from './Polybios';
 import Vignere from './Vignere';
-import Clocks from './Clocks';
+import ClockStore from './ClockStore';
 
 type Source = 'text' | 'cipher';
 
@@ -53,7 +53,7 @@ export class ToolsStore {
 
     @observable.ref accessor polybios = new Polybios();
     @observable.ref accessor vignere = new Vignere();
-    @observable.ref accessor clocks = new Clocks();
+    @observable.ref accessor clockStore = new ClockStore();
 
     @observable.ref accessor primeFactorizationTiming: {
         digits: number;

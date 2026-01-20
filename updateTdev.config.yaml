@@ -1,5 +1,5 @@
 tdevPath: ../../gbsl-informatik/teaching-dev
-expectedTdevBranch: main
+expectedTdevBranch: feature/pyodide
 trackedElements:
     - src: docusaurus.config.ts
       dst: docusaurus.config.ts
@@ -22,6 +22,8 @@ trackedElements:
       dst: src/theme/EditThisPage/
     - src: src/theme/Admonition/
       dst: src/theme/Admonition/
+    - src: src/theme/CodeBlock/
+      dst: src/theme/CodeBlock/
     - src: packages/tdev/
       dst: packages/tdev
     - src: updateSync/
@@ -35,5 +37,5 @@ watchedElements:
     - package.json
     - .env.example
     - static/bry-libs/
-    - tsconfig.json
+    - tsconfig.tdev.json
     - src/theme/
