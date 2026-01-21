@@ -1,0 +1,117 @@
+---
+page_id: 8bea1c1f-b0b9-4c3a-bbcf-5d7b0e982ab7
+---
+
+# 9. Rückgabewerte
+
+Unterprogramme haben wir bisher als praktische Möglichkeit zum Strukturieren und Wiederverwenden von Code kennengelernt. Unterprogramme können aber auch dazu verwendet werden, um Berechnungen durchzuführen und Resultate **zurückzugeben** - wie eine mathematische Funktion.
+
+Die Funktionsweise solcher **Rückgabewerte** haben wir bereits bei der eingebauten Funktion `input()` kennengelernt, welche den von der Benutzer:in eingegebenen Wert **zurückgibt**.
+
+Eine solche Funktion können wir auch selber definieren. Zum Beispiel eine Funktion, welche eine Zahl quadriert und das Resultat zurückgibt:
+
+```py live_py slim
+def quadriere(x):
+    resultat = x * x
+    return resultat
+
+ergebnis = quadriere(5)
+print(ergebnis)
+```
+
+:::def[`return`]
+Der `return`-Befehl wird innerhalb einer Funktion verwendet, um einen Wert als Resultat der Funktion zurückzugeben.
+Die Funktion wird dann sofort verlassen und der zurückgegebene Wert steht an der Stelle des Funktionsaufrufs zur Verfügung.
+
+Der Rückgabewert kann von den Funktionsparametern abhängen, muss es aber nicht.
+
+```py live_py slim
+def pi():
+    return 3.141592653589793
+
+def fläche_kreis(radius):
+    return pi() * radius ** 2
+
+print('PI', pi())
+print(fläche_kreis(5))
+```
+:::
+
+::::aufgabe[Pythagoras]
+<Answer type="state" id="f044213e-db59-4aea-98b5-8c814d025857" />
+
+Passen Sie den folgenden Code so an, dass die Funktion `hypotenuse` die Länge der Hypotenuse eines rechtwinkligen Dreiecks mit den Katheten `a` und `b` berechnet und zurückgibt.
+
+:::note[Hinweis]
+Die untenstehenden Definitions-Boxen helfen beim Berechnen der Hypotenuse.
+:::
+
+```py live_py id=7c54019a-56c5-438d-807d-4fa55bbabde3
+def hypotenuse(a, b):
+    # Berechne die Länge der Hypotenuse eines rechtwinkligen Dreiecks
+    # mit den Katheten a und b
+    ...
+
+print(hypotenuse(3, 4))  # => 5.0
+print(hypotenuse(5, 12)) # => 13.0
+```
+
+<Solution id="3eb144e5-eeb9-45f7-b9e3-ef00a73e287b">
+```py live_py slim
+from math import sqrt
+
+def hypotenuse(a, b):
+    return sqrt(a**2 + b**2)
+
+print(hypotenuse(3, 4))
+print(hypotenuse(5, 12))
+```
+</Solution>
+::::
+
+
+
+:::def[Quadrieren `**`]
+In Python kann eine Zahl `x` mit `x**2` quadriert werden.
+:::
+
+:::def[Wurzelziehen `sqrt()`]
+Die Quadratwurzel einer Zahl `y` kann mit der Funktion `sqrt(y)` aus der `math`-Bibliothek berechnet werden. Diese muss zuerst importiert werden:
+```py live_py slim
+from math import sqrt
+print(sqrt(16))
+```
+:::
+
+:::aufgabe[Notenrechner]
+<Answer type="state" id="a3c4e585-ea66-4ad4-b9ff-4810b181d9db" />
+
+Schreiben Sie eine Funktion `note` mit den Parametern `punkte` und `max_punkte`, welche die Note auf einer Skala von 1 bis 6 zurückgibt. Die Note wird wie folgt berechnet:
+
+$$
+\text{Note} = \frac{\text{punkte}}{\text{max\_punkte}}\cdot 5 + 1
+$$
+
+```py live_py id=df6b359b-129d-4bf0-a631-2633f5693755
+
+```
+
+Prüfen Sie Ihre Funktion mit den folgenden Eingaben:
+
+```py
+print(note(6, 10))  # Ausgabe: 4.0
+print(note(7.5, 10))  # Ausgabe: 4.75
+```
+
+Zusatz ⭐
+- Stellen Sie sicher, dass nicht mehr als eine $6$ zurückgegeben wird, auch wenn die Eingabe `punkte` grösser als `max_punkte` ist.
+
+<Solution id="b22a9f27-5bd8-4fa6-9c77-235871ab294f">
+```py live_py slim
+def note(punkte, max_punkte):
+    return (punkte / max_punkte) * 5 + 1
+print(note(6, 10))
+print(note(7.5, 10))
+```
+</Solution>
+:::
