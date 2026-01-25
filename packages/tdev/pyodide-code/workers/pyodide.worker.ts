@@ -40,8 +40,7 @@ export class PyWorker {
         id: string,
         code: string,
         sendMessage: (message: Message) => void,
-        initCode: string = '',
-        modules: Record<string, object> = {}
+        filename = 'snippet.py'
     ): Promise<Message> {
         const pyodide = await pyodideReadyPromise;
         // Ensure unique timestamps for messages
@@ -81,13 +80,7 @@ export class PyWorker {
                 sendMessage(message);
             }
         });
-        for (const [name, module] of Object.entries(modules)) {
-            pyodide.registerJsModule(name, module);
-        }
 
-        if (initCode) {
-            await pyodide.runPythonAsync(initCode);
-        }
         // make a Python dictionary with the data from `context`
         const dict = pyodide.globals.get('dict');
         const globals = dict(Object.entries(context));
@@ -97,9 +90,10 @@ export class PyWorker {
             }
         });
         await pyodide.runPythonAsync(patchInputCode(id));
+        const fname = filename.endsWith('.py') ? filename : `${filename}.py`;
         try {
             // Execute the python code in this context
-            const result = await pyodide.runPythonAsync(code);
+            const result = await pyodide.runPythonAsync(code, { globals, filename: fname });
             return {
                 type: 'log',
                 message: result === undefined ? '' : `${result}`,

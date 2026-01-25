@@ -1,5 +1,5 @@
 tdevPath: ../../gbsl-informatik/teaching-dev
-expectedTdevBranch: feature/pyodide
+expectedTdevBranch: main
 trackedElements:
     - src: docusaurus.config.ts
       dst: docusaurus.config.ts

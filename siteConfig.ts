@@ -16,6 +16,7 @@ import {
     devModeAccessLocalFS,
     personalSpaceOverlay
 } from './src/siteConfig/navbarItems';
+import { brythonCodePluginConfig } from './src/siteConfig/pluginConfigs';
 import { themes as prismThemes } from 'prism-react-renderer';
 
 const getEditUrl = (props: Parameters<EditUrlFunction>[0]) => {
@@ -192,6 +193,26 @@ const getSiteConfig: SiteConfigProvider = () => {
                 defer: true
             }
         ],
+        plugins: [
+            brythonCodePluginConfig,
+            () => {
+                return {
+                    name: 'yaml-loader-config',
+                    configureWebpack(config, isServer, { currentBundler }) {
+                        return {
+                            module: {
+                                rules: [
+                                    {
+                                        test: /\.ya?ml$/,
+                                        use: 'yaml-loader'
+                                    }
+                                ]
+                            }
+                        };
+                    }
+                };
+            }
+        ],
         docs: {
             versions: VERSIONS,
             lastVersion: 'current',
@@ -210,31 +231,7 @@ const getSiteConfig: SiteConfigProvider = () => {
             require.resolve('@tdev/text-message/register'),
             require.resolve('@tdev/pyodide-code/register'),
             require.resolve('@tdev/brython-code/register')
-        ],
-        transformers: {
-            plugins: (plugins: PluginConfig[]) => {
-                return [
-                    ...plugins,
-                    () => {
-                        return {
-                            name: 'yaml-loader-config',
-                            configureWebpack(config, isServer, { currentBundler }) {
-                                return {
-                                    module: {
-                                        rules: [
-                                            {
-                                                test: /\.ya?ml$/,
-                                                use: 'yaml-loader'
-                                            }
-                                        ]
-                                    }
-                                };
-                            }
-                        };
-                    }
-                ] satisfies PluginConfig[];
-            }
-        }
+        ]
     };
 };
 
