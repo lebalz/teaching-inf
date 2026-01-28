@@ -119,5 +119,11 @@ Lösen und Bearbeiten aller Aufgaben der Kapitel 1-9 und der Anwendungsaufgaben,
 - Sie können mathematische Funktionen aus der `math`-Bibliothek verwenden (z.B. `sqrt`, `round`, `ceil`, `floor`).
 - Sie können Zufallszahlen mit der `random`-Bibliothek generieren (`randint`).
 - Sie können Vergleichsoperatoren (`==`, `!=`, `<`, `>`, `<=`, `>=`) verwenden, um Werte zu vergleichen.
-- Sie können logische Operatoren (`and`, `or`, `not`) verwenden, um mehrere Bedingungen miteinander zu verknüpfen.
+- Sie können logische Operatoren (`and`, `or`, `not`) verwenden, um mehrere Bedingungen miteinander zu verknüpfen, beispiel:
+    ```py live_py slim
+    alter = input('wie alt bist du?')
+    alter = int(alter)
+    if alter >= 10 and alter < 14:
+       print('Du bist zwischen 10 und 14 Jahren, aber dein 14. Geburtstag hattest du noch nicht')
+    ```
 :::
