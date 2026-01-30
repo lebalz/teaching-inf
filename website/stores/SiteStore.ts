@@ -34,6 +34,11 @@ export default class SiteStore {
                                 break;
                         }
                         break;
+                    case 'led':
+                        const led = this.toolsStore.ledStore.useLED(message.id);
+                        const [hue, saturation, brightness] = message.value;
+                        led.setHSL(hue, saturation, brightness);
+                        break;
                 }
 
                 break;

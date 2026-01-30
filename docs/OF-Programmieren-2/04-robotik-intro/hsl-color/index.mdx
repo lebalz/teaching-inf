@@ -1,0 +1,111 @@
+---
+page_id: e8626b18-516c-4569-b60e-4bd071004b76
+---
+
+import HslColorPicker from '../components/HslColorPicker';
+import LED from '@tdev/packages/pyodide-code/components/LED';
+
+# HSL-Farben
+
+Farbcodierungen mit RGB (Rot, Grün, Blau) sind sehr gebräuchlich. Dabei wird jede Farbe durch die Anteile der drei Grundfarben beschrieben.
+
+Farben können aber auch in **HSL** (***H**ue* für den Farbton, ***S**aturation* für die Sättigung, und ***L**ightness* für die Helligkeit) angegeben werden. Der Vorteil davon ist, dass die eigentliche Farbe auf einem Farbkreis definiert wird. Dies ermöglicht es etwa, die Farbe abhängig vom Winkel zu setzen. So ist es einfach möglich, Farben zu wählen, die harmonisch zusammenpassen und etwa Farbverläufe zu erzeugen.
+
+<HslColorPicker />
+
+:::aufgabe[HSL-Farben]
+<Answer type="state" id="569857de-c411-4e92-8c5e-7112c89c54bc" />
+
+Verwenden Sie die Schiebregler im Farbwähler, um die HSL-Werte zu verändern. Halten Sie fest, was die einzelnen Parameter (Hue, Saturation, Lightness) bewirken.
+
+<Answer type="text" id="5cf23f5a-cf81-43a8-931c-013ea2556de0" />
+:::
+
+Die HSL-Farben können wir später verwenden, um die Farb-LED's des Maqueen zu steuern. Vorerst betrachten wir die Farben aber isoliert.
+
+Mit der Bibliothek `led_control` kann eine LED-Komponente in unserem Code verwenden.
+
+<LED ledId='hsl-led' />
+
+```py live_pyo slim
+from time import sleep
+from led_control import use_led
+led = use_led('hsl-led')
+
+led.set_hsl(0, 100, 50)
+sleep(1)
+led.set_hsl(120, 100, 50)
+sleep(1)
+led.set_hsl(240, 100, 50)
+sleep(1)
+led.reset()
+```
+
+:::warning[`use_led`]
+Damit die richtige LED-Komponente angesprochen wird, muss die ID (hier `'hsl-led'`) mit der ID übereinstimmen, die in der LED-Komponente angezeigt wird.
+:::
+
+:::aufgabe[Code untersuchen]
+<Answer type="state" id="2a2a2fd8-6770-4110-939b-4f7534435903" />
+
+Untersuchen Sie den obigen Code 
+- welche Farben werden für wie lange angezeigt?
+- was bewirkt der Befehl `led.reset()`?
+:::
+
+::::aufgabe[Übergänge]
+<Answer type="state" id="20283bda-45ac-49a5-95f2-fa48dd4d6582" />
+
+Erzeugen Sie einen Farbverlauf, der einmal den Farbkreis durchläuft. Verwenden Sie dazu eine Schleife, die den Hue-Wert schrittweise ändert und nur ganz kurz (z.B. 0.05 Sekunden) zwischen den einzelnen Farbwechseln wartet.
+:::cards
+::video[./images/animate.mp4]{width="100%" height="200px" autoplay=true}
+:::
+
+<LED ledId='übergänge' />
+
+```py live_pyo id=df0e21f4-696f-4f0f-81ca-9b3d0af270a5
+from time import sleep
+from led_control import use_led
+led = use_led('übergänge')
+
+```
+::::
+
+## Teilbarkeit von Zahlen
+
+Ist eine Zahl ganzzahlig durch eine andere Zahl teilbar? Diese Frage lässt sich mit dem **Modulo-Operator** leicht beantworten.
+
+:::def[`%` - Modulo-Operator]
+Der **Modulo-Operator** `%` gibt den **Rest** einer ganzzahligen Division zurück.
+
+```py live_py slim
+# 7 modulo 3 ergibt 1, da 7 / 3 = 2 Rest 1
+print(7 % 3)
+```
+:::
+
+Der Modulo-Operator `%` gibt also den ganzzahligen Rest einer Division zurück. **Dies ist immer dann nützlich, wenn eine Zahl in einem bestimmten Bereich gehalten werden soll.**
+
+Sollen also nacheinander die Zahlen `0`, `1`, `2` ausgegeben werden, so kann dies mit dem Modulo-Operator erreicht werden:
+
+```py live_py slim
+for i in range(20):
+    print(i % 3)
+```
+
+Dies kann auch verwendet werden, um die Farbe `Hue` in einem Farbkreis zu immer zwischen 0 und 360 halten und so eine durchgehende Farb-Animation zu erzeugen.
+
+:::aufgabe[Farbanimation]
+<Answer type="state" id="7ea843ec-aa58-46ab-aed1-c0e5ba47562d" />
+
+Erzeugen Sie eine durchgehende Farbanimation (mit einer `while`-Schleife), bei der die Farbe des Maqueen-Roboters sich kontinuierlich ändert. Verwenden Sie dazu den Modulo-Operator, um den Hue-Wert auf den Werteberich von 0-360 zu begrenzen.
+
+<LED ledId='animation' />
+
+```py live_pyo id=149a58c3-1b5f-4358-83da-a72f5f490661
+from time import sleep
+from led_control import use_led
+led = use_led('animation')
+
+```
+:::

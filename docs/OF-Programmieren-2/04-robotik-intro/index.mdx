@@ -189,10 +189,23 @@ Referenz
 : [👉 Dokumentation/led-rgb](https://gbsl-informatik.github.io/maqueen-plus-v2-mpy/docs/api/led-rgb#api)
 :::
 
-::::def[HSL-Farben]
-Die Farben können auch in HSL (Hue, Saturation, Lightness) angegeben werden. Der Vorteil davon ist, dass die eigentliche Farbe auf einem Farbkreis definiert wird.
 
-![HSL-Farbkreis --width=300px](./images/hsl-color-circle.png)
+import HslColorPicker from './components/HslColorPicker';
+import LED from '@tdev/packages/pyodide-code/components/LED';
+
+<LED ledId='hsl-led' />
+```py live_pyo id=116b2b50-c1fb-4f38-a37f-afdccb0f5797
+from led_control import *
+
+led = use_led('hsl-led')
+
+```
+
+
+::::def[HSL-Farben]
+Die Farben können auch in **HSL** (***H**ue* für den Farbton, ***S**aturation* für die Sättigung, und ***L**ightness* für die Helligkeit) angegeben werden. Der Vorteil davon ist, dass die eigentliche Farbe auf einem Farbkreis definiert wird.
+
+<HslColorPicker />
 
 ```mpy
 from maqueen import *

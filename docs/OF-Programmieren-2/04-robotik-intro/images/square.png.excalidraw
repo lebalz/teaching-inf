@@ -1,8 +1,40 @@
 {
   "type": "excalidraw",
   "version": 2,
-  "source": "https://marketplace.visualstudio.com/items?itemName=pomdtr.excalidraw-editor",
   "elements": [
+    {
+      "id": "TDEV-STANDALONE-DRAWING",
+      "type": "rectangle",
+      "x": 335.30896351757815,
+      "y": 183.33334350585938,
+      "width": 251.69103648242185,
+      "height": 242.66665649414062,
+      "strokeColor": "#1e1e1ea1",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 0.05,
+      "strokeStyle": "dotted",
+      "roughness": 0,
+      "opacity": 100,
+      "locked": true,
+      "version": 2,
+      "versionNonce": 1069397788,
+      "index": "a0",
+      "isDeleted": false,
+      "angle": 0,
+      "seed": 1,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": null,
+      "boundElements": [],
+      "updated": 1769700802648,
+      "link": null,
+      "customData": {
+        "exportBackground": true,
+        "exportPadding": 4,
+        "scale": 4
+      }
+    },
     {
       "id": "B9hCyelP3_wuivO4vVWy6",
       "type": "rectangle",
@@ -22,8 +54,8 @@
       "frameId": null,
       "roundness": null,
       "seed": 1963651002,
-      "version": 30,
-      "versionNonce": 1173923706,
+      "version": 31,
+      "versionNonce": 1836129301,
       "isDeleted": false,
       "boundElements": [
         {
@@ -31,9 +63,10 @@
           "type": "arrow"
         }
       ],
-      "updated": 1713178766460,
+      "updated": 1769700802648,
       "link": null,
-      "locked": false
+      "locked": false,
+      "index": "a1"
     },
     {
       "id": "6iDOoZ1QJ3AxnNLTwLS8j",
@@ -54,11 +87,11 @@
       "frameId": null,
       "roundness": null,
       "seed": 2004055078,
-      "version": 40,
-      "versionNonce": 326129190,
+      "version": 41,
+      "versionNonce": 852368315,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1713178773967,
+      "boundElements": [],
+      "updated": 1769700802648,
       "link": null,
       "locked": false,
       "points": [
@@ -79,13 +112,14 @@
         "gap": 1
       },
       "startArrowhead": null,
-      "endArrowhead": "arrow"
+      "endArrowhead": "arrow",
+      "index": "a2"
     },
     {
       "id": "j2USwStuE7N8MRw4QHw-g",
       "type": "image",
-      "x": 342.0000305175781,
-      "y": 333.6666564941406,
+      "x": 336.30896351757815,
+      "y": 334.6666564941406,
       "width": 90.33334350585939,
       "height": 90.33334350585939,
       "angle": 0,
@@ -100,11 +134,11 @@
       "frameId": null,
       "roundness": null,
       "seed": 1540702054,
-      "version": 83,
-      "versionNonce": 303341670,
+      "version": 117,
+      "versionNonce": 1573868949,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1713179071395,
+      "boundElements": [],
+      "updated": 1769700809464,
       "link": null,
       "locked": false,
       "status": "pending",
@@ -112,20 +146,19 @@
       "scale": [
         1,
         1
-      ]
+      ],
+      "index": "a3",
+      "crop": null
     }
   ],
-  "appState": {
-    "gridSize": null,
-    "viewBackgroundColor": "#ffffff"
-  },
   "files": {
     "6cc66eae92f2351479669884f95f8f29beb30c7a": {
       "mimeType": "image/svg+xml",
       "id": "6cc66eae92f2351479669884f95f8f29beb30c7a",
-      "dataURL": "data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjQgMjQiIHJvbGU9InByZXNlbnRhdGlvbiIgc3R5bGU9IndpZHRoOiAzcmVtOyBoZWlnaHQ6IDNyZW07IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCI+CiAgICA8cGF0aCBkPSJNMTYsNkgxMC41VjEwSDFWMTVIM0EzLDMgMCAwLDAgNiwxOEEzLDMgMCAwLDAgOSwxNUgxNUEzLDMgMCAwLDAgMTgsMThBMywzIDAgMCwwIDIxLDE1SDIzVjEyQzIzLDEwLjg5IDIyLjExLDEwIDIxLDEwSDE5TDE2LDZNMTIsNy41SDE1LjVMMTcuNDYsMTBIMTJWNy41TTYsMTMuNUExLjUsMS41IDAgMCwxIDcuNSwxNUExLjUsMS41IDAgMCwxIDYsMTYuNUExLjUsMS41IDAgMCwxIDQuNSwxNUExLjUsMS41IDAgMCwxIDYsMTMuNU0xOCwxMy41QTEuNSwxLjUgMCAwLDEgMTkuNSwxNUExLjUsMS41IDAgMCwxIDE4LDE2LjVBMS41LDEuNSAwIDAsMSAxNi41LDE1QTEuNSwxLjUgMCAwLDEgMTgsMTMuNVoiIHN0eWxlPSJmaWxsOiAjMzU3OGU1OyIvPgo8L3N2Zz4=",
+      "dataURL": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgcm9sZT0icHJlc2VudGF0aW9uIiBzdHlsZT0id2lkdGg6IDNyZW07IGhlaWdodDogM3JlbTsiIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCI+CiAgICA8cGF0aCBkPSJNMTYsNkgxMC41VjEwSDFWMTVIM0EzLDMgMCAwLDAgNiwxOEEzLDMgMCAwLDAgOSwxNUgxNUEzLDMgMCAwLDAgMTgsMThBMywzIDAgMCwwIDIxLDE1SDIzVjEyQzIzLDEwLjg5IDIyLjExLDEwIDIxLDEwSDE5TDE2LDZNMTIsNy41SDE1LjVMMTcuNDYsMTBIMTJWNy41TTYsMTMuNUExLjUsMS41IDAgMCwxIDcuNSwxNUExLjUsMS41IDAgMCwxIDYsMTYuNUExLjUsMS41IDAgMCwxIDQuNSwxNUExLjUsMS41IDAgMCwxIDYsMTMuNU0xOCwxMy41QTEuNSwxLjUgMCAwLDEgMTkuNSwxNUExLjUsMS41IDAgMCwxIDE4LDE2LjVBMS41LDEuNSAwIDAsMSAxNi41LDE1QTEuNSwxLjUgMCAwLDEgMTgsMTMuNVoiIHN0eWxlPSJmaWxsOiAjMzU3OGU1OyIvPgo8L3N2Zz4=",
       "created": 1713179064139,
-      "lastRetrieved": 1713179064139
+      "lastRetrieved": 1713179064139,
+      "version": 2
     }
   }
 }

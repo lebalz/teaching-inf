@@ -1,0 +1,17 @@
+.card {
+    margin-bottom: 0.5em;
+}
+.ledCard {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .led {
+        border-radius: 50%;
+        :global(.rcp__well) {
+            display: none;
+        }
+    }
+    .id {
+        margin-left: 1em;
+    }
+}

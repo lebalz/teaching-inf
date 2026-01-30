@@ -14,6 +14,12 @@ declare module '@tdev/pyodide-code/pyodideJsModules' {
             value: number;
             timeStamp: number;
         };
+        led_control: {
+            type: 'led';
+            id: string;
+            value: [number, number, number];
+            timeStamp: number;
+        };
     }
 }
 
@@ -93,6 +99,52 @@ export const siteModules: Partial<ModuleType> = {
                             type: 'clock',
                             clockType: 'seconds',
                             value: deg,
+                            id: id,
+                            timeStamp: getTime()
+                        });
+                    }
+                };
+            }
+        };
+    },
+    led_control: (ctx) => {
+        const { sendMessage, getTime } = ctx;
+        return {
+            use_led: (id: string) => {
+                let hue = 0;
+                let saturation = 100;
+                let brightness = 50;
+                return {
+                    get hue() {
+                        return hue;
+                    },
+                    get saturation() {
+                        return saturation;
+                    },
+                    get brightness() {
+                        return brightness;
+                    },
+                    get hsl() {
+                        return [hue, saturation, brightness];
+                    },
+                    reset: () => {
+                        hue = 0;
+                        saturation = 100;
+                        brightness = 50;
+                        sendMessage({
+                            type: 'led',
+                            value: [hue, saturation, brightness],
+                            id: id,
+                            timeStamp: getTime()
+                        });
+                    },
+                    set_hsl: (h: number, m: number, s: number) => {
+                        hue = h;
+                        saturation = m;
+                        brightness = s;
+                        sendMessage({
+                            type: 'led',
+                            value: [hue, saturation, brightness],
                             id: id,
                             timeStamp: getTime()
                         });
