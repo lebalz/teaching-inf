@@ -12,6 +12,7 @@ import { SIZE_S } from '@tdev-components/shared/iconSizes';
 interface Props {}
 
 const svgDefs = (type: 'pub' | 'pri', mainColor: string) => {
+    const fillColor = type === 'pri' ? '#1d1d1b' : '#ffffff';
     return `<defs>
     <style>
       .center-1, .center-2, .shadow {
@@ -42,7 +43,7 @@ const svgDefs = (type: 'pub' | 'pri', mainColor: string) => {
       }
 
       .${type}>.roller {
-        fill: ${type === 'pri' ? '#1d1d1b' : '#ffffff'};
+        fill: ${fillColor};
       }
 
       .shadow {
