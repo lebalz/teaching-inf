@@ -20,9 +20,14 @@ jobs:
           submodules: 'recursive'
       - uses: actions/setup-node@v4
         with:
-          node-version: '>=22.11.0'
+          node-version: '>=24.13.0'
           cache: yarn
-      - name: Install dependencies and build website
+      - name: Install dependencies
+        run: |
+            git submodule update --init --recursive
+            yarn install
+
+      - name: Build Site
         env:
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
           TENANT_ID: ${{ secrets.TENANT_ID }}
@@ -35,11 +40,9 @@ jobs:
           SENTRY_DSN: ${{ vars.SENTRY_DSN }}
           SENTRY_AUTH_TOKEN: ${{ vars.SENTRY_AUTH_TOKEN }}
           GH_OAUTH_CLIENT_ID: ${{ vars.GH_OAUTH_CLIENT_ID}}
-        run: |
-            git submodule update --init --recursive
-            yarn install
-            yarn build
+        run: yarn build
         working-directory: .
+
       - name: Upload Build Artifact
         uses: actions/upload-pages-artifact@v3
         with:
