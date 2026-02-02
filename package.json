@@ -146,9 +146,6 @@
         "vitest": "^2.0.5",
         "yaml-loader": "^0.8.1"
     },
-    "resolutions": {
-        "@rspack/core": "1.6.5"
-    },
     "peerDependencies": {
         "react-hook-form": "*"
     },
