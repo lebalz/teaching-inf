@@ -1,0 +1,92 @@
+---
+page_id: a52f1b5b-c90a-423e-8083-3b1bb9a1362f
+unlisted: true
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import CmsCode from '@tdev-components/documents/CmsText/Code';
+import Restricted from '@tdev-components/documents/Restricted';
+import PermissionsPanel from "@tdev-components/PermissionsPanel"
+import { observer } from 'mobx-react-lite';
+import { useStore } from '@tdev-hooks/useStore';
+
+# Abschlussprüfung Programmieren 1
+
+<Restricted id="2fa339a5-9ee1-47d8-99b8-ce6857cc33c6">
+
+export const PFor = observer(() => {
+    const userStore = useStore('userStore');
+    return (
+        <Dl>
+            <dt>Prüfung für</dt>
+            <dd>{userStore.viewedUser?.name}</dd>
+        </Dl>
+    )
+});
+
+<PFor />
+
+## Aufgabe 5
+
+### 5a
+
+
+<PermissionsPanel documentRootId="6b4c20d6-ef26-4089-86e3-1708258dc0ba" />
+
+```py live_py title=5a.py id=6b4c20d6-ef26-4089-86e3-1708258dc0ba versioned
+from turtle import *
+```
+### 5b
+
+
+
+<PermissionsPanel documentRootId="19080281-a7cc-459a-ba21-9600e17faad4" />
+
+```py live_py title=5b.py id=19080281-a7cc-459a-ba21-9600e17faad4 versioned
+```
+### 5c
+
+
+<PermissionsPanel documentRootId="bdb8c73e-23e7-49dd-bc06-cea3297eb8db" />
+
+```py live_py title=5c.py id=bdb8c73e-23e7-49dd-bc06-cea3297eb8db versioned
+```
+
+### 5d
+
+<PermissionsPanel documentRootId="b28f8f49-17cc-4f5e-987f-c708808d8938" />
+
+```py live_py title=5d.py id=b28f8f49-17cc-4f5e-987f-c708808d8938 versioned
+```
+
+### 5e
+
+<PermissionsPanel documentRootId="28124f73-0ab0-49d2-98ca-692a38ce57b4" />
+
+```py live_py title=5d.py id=28124f73-0ab0-49d2-98ca-692a38ce57b4 versioned
+```
+
+
+## Aufgabe 6
+
+<CmsCode
+    id="ef65f743-b953-4f43-b6d5-41fcb0ea6639"
+    codeBlockProps={{language: 'python', showLineNumbers: true, title: 'Fehlerhafter Code, Nr. 6'}}
+    showActions
+/>
+
+
+<PermissionsPanel documentRootId="59e89f1b-1a89-417f-93a6-f14968aeecca" />
+
+```py live_py title=korrigiert.py id=59e89f1b-1a89-417f-93a6-f14968aeecca versioned
+```
+
+## Aufgabe 7
+
+<PermissionsPanel documentRootId="d02bcfe1-4636-4080-bd60-d6c356774792" />
+
+```py live_py title=aufgabe7.py id=d02bcfe1-4636-4080-bd60-d6c356774792 versioned
+from math import pi
+```
+
+</Restricted>
