@@ -5,8 +5,20 @@ page_id: 171440bc-5621-4429-b810-f0cae27079ae
 import DefinitionList from "@tdev-components/DefinitionList";
 import CmsText from '@tdev-components/documents/CmsText';
 import WithCmsText from '@tdev-components/documents/CmsText/WithCmsText';
+import CmsLink from '@tdev-components/documents/CmsText/Link';
+import Loader from '@tdev-components/Loader';
 
 # Programmieren 1
+
+:::tip[Zur Prüfung]
+<WithCmsText
+    entries={{
+        link: '9f773399-56f8-4c73-9353-11d66fb4c3a0'
+    }}
+>
+    <CmsLink name="link">👉 Zur Prüfung</CmsLink>
+</WithCmsText>
+:::
 
 <WithCmsText 
     entries={{
@@ -23,6 +35,7 @@ import WithCmsText from '@tdev-components/documents/CmsText/WithCmsText';
         <dd>0.5</dd>
     </DefinitionList>
 </WithCmsText>
+
 
 ## Lernziele
 
