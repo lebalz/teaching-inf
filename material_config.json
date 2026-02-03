@@ -179,6 +179,11 @@
       ]
     },
     {
+      "from": "docs/OF-Programmieren-1/50-Test/p1-v29-final.mdx",
+      "to": "versioned_docs/version-29Ga/03-Programmieren-1/50-Test/p1-v29-final.mdx",
+      "ignore": []
+    },
+    {
       "from": "docs/OF-Programmieren-1/",
       "to": "versioned_docs/version-29Ga/03-Programmieren-1",
       "ignore": [
@@ -215,6 +220,11 @@
       "ignore": [
         "_category_.yml"
       ]
+    },
+    {
+      "from": "docs/OF-Programmieren-1/50-Test/p1-v29-final.mdx",
+      "to": "versioned_docs/version-29Gj/03-Programmieren-1/50-Test/p1-v29-final.mdx",
+      "ignore": []
     },
     {
       "from": "docs/OF-Programmieren-1/",
