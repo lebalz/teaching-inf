@@ -9,69 +9,81 @@ import Restricted from '@tdev-components/documents/Restricted';
 import PermissionsPanel from "@tdev-components/PermissionsPanel"
 import { observer } from 'mobx-react-lite';
 import { useStore } from '@tdev-hooks/useStore';
+import Card from '@tdev-components/shared/Card';
+import Alert from '@tdev-components/shared/Alert';
 
-# Abschlussprüfung Programmieren 1
+# Probe Programmieren 1
 
 <Restricted id="2fa339a5-9ee1-47d8-99b8-ce6857cc33c6">
+<Card>
 
 export const PFor = observer(() => {
     const userStore = useStore('userStore');
     return (
-        <Dl>
-            <dt>Prüfung für</dt>
-            <dd>{userStore.viewedUser?.name}</dd>
-        </Dl>
+        <Alert type="info">
+            <Dl>
+                <dt>Prüfung für</dt>
+                <dd><b>{userStore.viewedUser?.name}</b></dd>
+                <dt>Datum</dt>
+                <dd>04.02.2026</dd>
+                <dt>Hilfsmittel</dt>
+                <dd>Alle Unterlagen auf der Unterrichtswebseite, inkl. persönlicher Notizen auf der Webseite oder in physischer Form.</dd>
+                <dt>Hinweise</dt>
+                <dd>Die Benutzung unerlaubter Hilfsmittel (bspw. KI's, andere Webseiten oder die Kommunikation mit Dritten) führt zur Note 1 in diesem Prüfungsteil.</dd>
+            </Dl>
+        </Alert>
+
     )
 });
 
 <PFor />
 
-## Aufgabe 5
+## Aufgabe 4
 
-### 5a
+### 4a
 
 
 <PermissionsPanel documentRootId="6b4c20d6-ef26-4089-86e3-1708258dc0ba" />
 
-```py live_py title=5a.py id=6b4c20d6-ef26-4089-86e3-1708258dc0ba versioned
+```py live_py title=4a.py id=6b4c20d6-ef26-4089-86e3-1708258dc0ba versioned
 from turtle import *
 ```
-### 5b
+### 4b
 
 
 
 <PermissionsPanel documentRootId="19080281-a7cc-459a-ba21-9600e17faad4" />
 
-```py live_py title=5b.py id=19080281-a7cc-459a-ba21-9600e17faad4 versioned
+```py live_py title=4b.py id=19080281-a7cc-459a-ba21-9600e17faad4 versioned
 ```
-### 5c
+### 4c
 
 
 <PermissionsPanel documentRootId="bdb8c73e-23e7-49dd-bc06-cea3297eb8db" />
 
-```py live_py title=5c.py id=bdb8c73e-23e7-49dd-bc06-cea3297eb8db versioned
+```py live_py title=4c.py id=bdb8c73e-23e7-49dd-bc06-cea3297eb8db versioned
 ```
 
-### 5d
+### 4d
 
 <PermissionsPanel documentRootId="b28f8f49-17cc-4f5e-987f-c708808d8938" />
 
-```py live_py title=5d.py id=b28f8f49-17cc-4f5e-987f-c708808d8938 versioned
+```py live_py title=4d.py id=b28f8f49-17cc-4f5e-987f-c708808d8938 versioned
 ```
 
-### 5e
+### 4e
 
 <PermissionsPanel documentRootId="28124f73-0ab0-49d2-98ca-692a38ce57b4" />
 
-```py live_py title=5d.py id=28124f73-0ab0-49d2-98ca-692a38ce57b4 versioned
+```py live_py title=4e.py id=28124f73-0ab0-49d2-98ca-692a38ce57b4 versioned
 ```
 
 
-## Aufgabe 6
+## Aufgabe 5
 
 <CmsCode
     id="ef65f743-b953-4f43-b6d5-41fcb0ea6639"
-    codeBlockProps={{language: 'python', showLineNumbers: true, title: 'Fehlerhafter Code, Nr. 6'}}
+    codeBlockProps={{language: 'python', showLineNumbers: true, title: 'Fehlerhafter Code, Nr. 5'}}
     showActions
 />
 
@@ -81,12 +93,30 @@ from turtle import *
 ```py live_py title=korrigiert.py id=59e89f1b-1a89-417f-93a6-f14968aeecca versioned
 ```
 
-## Aufgabe 7
+## Aufgabe 6
+
+:::def[`pi`]
+Die Kreiskonstante $\pi$ (pi) kann in Python aus der `math`-Bibliothek importiert werden.
+
+```py live_py slim
+from math import pi
+print(f'PI = {pi}')
+print(f'Kreisumfang für Radius=3cm: {2*pi*3}cm')
+```
+:::
+
 
 <PermissionsPanel documentRootId="d02bcfe1-4636-4080-bd60-d6c356774792" />
 
-```py live_py title=aufgabe7.py id=d02bcfe1-4636-4080-bd60-d6c356774792 versioned
+```py live_py title=aufgabe6.py id=d02bcfe1-4636-4080-bd60-d6c356774792 versioned
 from math import pi
 ```
+
+
+:::tip[Anforderung Aufgabe 6]
+Die volle Punktzahl gibt es, wenn Ihre Lösung Unterprogramme und Rückgabewerte sinnvoll einsetzt.
+:::
+
+</Card>
 
 </Restricted>
