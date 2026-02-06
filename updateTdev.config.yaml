@@ -34,8 +34,10 @@ trackedElements:
       dst: .prettierrc
     - src: vitest.config.ts
       dst: vitest.config.ts
-    - src: static/tdev-artifacts/.gitignore
-      dst: static/tdev-artifacts/.gitignore
+    - src: static/tdev-artifacts/
+      dst: static/tdev-artifacts/
+      ignore:
+          - '*/**'
 watchedElements:
     - .babel.config.js
     - package.json

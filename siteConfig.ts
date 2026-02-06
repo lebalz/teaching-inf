@@ -194,7 +194,7 @@ const getSiteConfig: SiteConfigProvider = () => {
             }
         ],
         plugins: [
-            brythonCodePluginConfig,
+            brythonCodePluginConfig(),
             () => {
                 return {
                     name: 'yaml-loader-config',
