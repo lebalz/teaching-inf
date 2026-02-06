@@ -20,6 +20,8 @@ trackedElements:
       dst: src/theme/Root.tsx
     - src: src/theme/EditThisPage/
       dst: src/theme/EditThisPage/
+    - src: src/theme/DocSidebarItem/
+      dst: src/theme/DocSidebarItem/
     - src: src/theme/Admonition/
       dst: src/theme/Admonition/
     - src: src/theme/CodeBlock/
@@ -32,6 +34,8 @@ trackedElements:
       dst: .prettierrc
     - src: vitest.config.ts
       dst: vitest.config.ts
+    - src: static/tdev-artifacts/.gitignore
+      dst: static/tdev-artifacts/.gitignore
 watchedElements:
     - .babel.config.js
     - package.json
