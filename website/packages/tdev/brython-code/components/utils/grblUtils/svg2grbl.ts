@@ -1,5 +1,5 @@
 import { parse, RootNode, Node, ElementNode } from 'svg-parser';
-import { toSvg } from '../Editor/utils/saveSvg';
+import { toSvg } from '../saveSvg';
 
 const objToAttr = (obj: Object) => {
     return Object.entries(obj || {})
