@@ -1,0 +1,114 @@
+- cells:
+    - 06.02.2026
+    - Robotik
+    - Sensoren und Aktoren
+- cells:
+    - 13.02.2026
+    - Sportwoche
+    - 
+  type: holiday
+  icon: mdiWeatherSnowyHeavy
+- cells:
+    - 20.02.2026
+    - Robotik
+    - Linienfolger
+- cells:
+    - 27.02.2026
+    - Robotik
+    - Vorbereitung Wettbewerb
+- cells:
+    - 06.03.2026
+    - Robotik
+    - Wettbewerb
+- cells:
+    - 13.03.2026
+    - Netzwerke
+    - Protokolle, Schichtenmodell
+- cells:
+    - 20.03.2026
+    - Netzwerke
+    - Routing, IP-Adresse
+- cells:
+    - 27.03.2026
+    - Netzwerke
+    - TCP/IP
+- cells:
+    - 03.04.2026
+    - Sonderwoche
+    - 
+  type: holiday
+  icon: mdiSchool
+- cells:
+    - 10.04.2026
+    - Frühlingsferien
+    - 
+  type: holiday
+  icon: mdiFlowerTulipOutline
+- cells:
+    - 17.04.2026
+    - Frühlingsferien
+    - 
+  type: holiday
+  icon: mdiFlowerTulipOutline
+- cells:
+    - 24.04.2026
+    - Netzwerke
+    - DNS
+- cells:
+    - 01.05.2026
+    - Netzwerke
+    - ATProtokoll
+- cells:
+    - 08.05.2026
+    - Projekt
+    - 🚀🚦🧨🪚⚙️🌡🤖
+- cells:
+    - 15.05.2026
+    - Auffahrt
+    - Frei
+  type: holiday
+- cells:
+    - 22.05.2026
+    - Projekt
+    - 🚀🚦🧨🪚⚙️🌡🤖
+- cells:
+    - 29.05.2026
+    - Projekt
+    - 🚀🚦🧨🪚⚙️🌡🤖
+- cells:
+    - 05.06.2026
+    - Projekt
+    - 🚀🚦🧨🪚⚙️🌡🤖
+- cells:
+    - 09.06.2026
+    - Besuch Museum für Kommunikation, Bern
+    - Workshop zum Thema "Daten im Netz"
+  type: event
+- cells:
+    - 12.06.2026
+    - "Projekt: Abschluss und Abgabe"
+    - 🚀🚦🧨🪚⚙️🌡🤖
+- cells:
+    - 19.06.2026
+    - "Projekt: Abschluss und Abgabe"
+    - 🚀🚦🧨🪚⚙️🌡🤖
+- cells:
+    - 25.06.2026
+    - Notenschluss
+    - 
+  type: event
+  icon: mdiFlagCheckered
+- cells:
+    - 26.06.2026
+    - Projekt Austauschen
+    - ↔️
+- cells:
+    - 03.07.2026
+    - Abschluss Informatik
+    - 
+- cells:
+    - 04.07.2026
+    - Beginn Sommerferien
+    - 
+  type: holiday
+  icon: mdiBeach

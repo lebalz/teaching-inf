@@ -11,6 +11,14 @@ const DAYS = {
     sa: 'Saturday',
     so: 'Sunday'
 };
+const CLASS_DAY = {
+    ['29Ga']: ['mi'],
+    ['29Gj']: ['mi', 'fr'],
+    ['28Gj']: ['fr'],
+    ['28Gb']: ['di']
+};
+const YEAR = 2026;
+const SEMESTER = 'FS';
 
 const needsEscape = (str) => {
     return /[:&*#|]/.test(str || '');
@@ -30,15 +38,19 @@ const needsEscape = (str) => {
 // };
 const EVENTS = {
     [7]: { desc: 'Sportwoche', type: 'holiday', icon: 'mdiWeatherSnowyHeavy' },
-    [14]: { desc: 'Skilager', type: 'holiday', icon: 'mdiSki' },
+    [14]: { desc: 'Sonderwoche', type: 'holiday', icon: 'mdiSchool' },
     [15]: { desc: 'Frühlingsferien', type: 'holiday', icon: 'mdiFlowerTulipOutline' },
     [16]: { desc: 'Frühlingsferien', type: 'holiday', icon: 'mdiFlowerTulipOutline' },
-    [24]: { desc: 'Sportwoche', type: 'holiday', icon: 'mdiSoccerField' },
+    [24]: { desc: 'Mündliche Maturwoche', type: 'holiday', icon: 'mdiSchool' },
     [28]: { desc: 'Sommerferien', type: 'holiday', icon: 'mdiBeach' }
 };
 const CLASS_EVENTS = {
-    ['28Gb']: {},
-    ['28Gj']: {},
+    ['28Gb']: {
+        [22]: { desc: 'Integrationstage', details: 'Gym 2 Klassen', type: 'holiday', date: '26.05.2026' }
+    },
+    ['28Gj']: {
+        [20]: { desc: 'Auffahrt', details: 'Frei', type: 'holiday', date: '15.05.2026' }
+    },
     ['29Ga']: {
         [8]: {
             desc: 'Exkursion Bio',
@@ -93,19 +105,17 @@ SCHOOL_EVENTS = {
         desc: 'SchiLw-Tag',
         details: 'Schulinterne Weiterbildung für Lehrpersonen',
         type: 'event',
-        date: '29.06.2026',
+        date: '01.07.2026',
         icon: 'mdiSchool'
+    },
+    [27]: {
+        desc: 'Beginn Sommerferien',
+        details: '',
+        type: 'holiday',
+        date: '04.07.2026',
+        icon: 'mdiBeach'
     }
 };
-
-const CLASS_DAY = {
-    ['29Ga']: ['mi'],
-    ['29Gj']: ['mi', 'fr'],
-    ['28Gj']: ['fr'],
-    ['28Gb']: ['fr']
-};
-const YEAR = 2026;
-const SEMESTER = 'FS';
 
 const SCHEDULE_GYM1_29_HS = [
     ['Einstieg', 'Inf-Webseite, BYOD'],
@@ -335,9 +345,7 @@ const SCHEDULE_GYM2_26_FS = [
     ['Projekt', '🚀🚦🧨🪚⚙️🌡🤖'],
     ['Projekt', '🚀🚦🧨🪚⚙️🌡🤖'],
     ['Projekt', '🚀🚦🧨🪚⚙️🌡🤖'],
-    ['Projekt: Abschluss und Abgabe', '🚀🚦🧨🪚⚙️🌡🤖'],
-    ['Projekt Austauschen, Abschluss', ''],
-    ['Abschluss Informatik', '']
+    ['Projekt: Abschluss und Abgabe', '🚀🚦🧨🪚⚙️🌡🤖']
 ];
 
 const SCHEDULE_GYM2_28_HS = [
@@ -363,6 +371,24 @@ const SCHEDULE_GYM2_28_HS = [
     ['Netzwerke', 'Einstieg'],
     ['Netzwerke', 'Routing']
 ];
+const SCHEDULE_GYM2_28_FS = [
+    ['Robotik', 'Sensoren und Aktoren'],
+    ['Robotik', 'Linienfolger'],
+    ['Robotik', 'Vorbereitung Wettbewerb'],
+    ['Robotik', 'Wettbewerb'],
+    ['Netzwerke', 'Protokolle, Schichtenmodell'],
+    ['Netzwerke', 'Routing, IP-Adresse'],
+    ['Netzwerke', 'TCP/IP'],
+    ['Netzwerke', 'DNS'],
+    ['Netzwerke', 'ATProtokoll'],
+    ['Projekt', '🚀🚦🧨🪚⚙️🌡🤖'],
+    ['Projekt', '🚀🚦🧨🪚⚙️🌡🤖'],
+    ['Projekt', '🚀🚦🧨🪚⚙️🌡🤖'],
+    ['Projekt', '🚀🚦🧨🪚⚙️🌡🤖'],
+    ['Projekt: Abschluss und Abgabe', '🚀🚦🧨🪚⚙️🌡🤖'],
+    ['Projekt Austauschen', '↔️'],
+    ['Abschluss Informatik', '']
+];
 
 // const CLASS_SCHEDULE_MAP = {
 //     ['29Ga']: SCHEDULE_GYM1_29_HS,
@@ -370,14 +396,14 @@ const SCHEDULE_GYM2_28_HS = [
 //     ['29Ga-HK']: prepareHK(SCHEDULE_GYM1_PRAKTIKUM, ['A', 'B']),
 //     ['29Gj-HK']: prepareHK(SCHEDULE_GYM1_PRAKTIKUM, ['A', 'B'])
 // };
-// const CLASS_SCHEDULE_MAP = {
-//     ['28Gb']: SCHEDULE_GYM2_28_HS,
-//     ['28Gj']: SCHEDULE_GYM2_28_HS
-// };
 const CLASS_SCHEDULE_MAP = {
-    ['29Ga']: SCHEDULE_GYM1_29_FS
-    // ['29Gj']: SCHEDULE_GYM1_29_FS
+    ['28Gb']: SCHEDULE_GYM2_28_FS,
+    ['28Gj']: SCHEDULE_GYM2_28_FS
 };
+// const CLASS_SCHEDULE_MAP = {
+//     ['29Ga']: SCHEDULE_GYM1_29_FS,
+//     ['29Gj']: SCHEDULE_GYM1_29_FS
+// };
 Object.keys(CLASS_SCHEDULE_MAP).forEach((klasse) => {
     const cells = [];
     let subjectNr = 0;

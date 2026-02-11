@@ -1,0 +1,113 @@
+- cells:
+    - 03.02.2026
+    - Robotik
+    - Sensoren und Aktoren
+- cells:
+    - 10.02.2026
+    - Sportwoche
+    - 
+  type: holiday
+  icon: mdiWeatherSnowyHeavy
+- cells:
+    - 17.02.2026
+    - Robotik
+    - Linienfolger
+- cells:
+    - 24.02.2026
+    - Robotik
+    - Vorbereitung Wettbewerb
+- cells:
+    - 03.03.2026
+    - Robotik
+    - Wettbewerb
+  type: test
+- cells:
+    - 10.03.2026
+    - Netzwerke
+    - Protokolle, Schichtenmodell
+- cells:
+    - 17.03.2026
+    - Netzwerke
+    - Routing, IP-Adresse
+- cells:
+    - 24.03.2026
+    - Netzwerke
+    - TCP/IP
+- cells:
+    - 31.03.2026
+    - Sonderwoche
+    - 
+  type: holiday
+  icon: mdiSchool
+- cells:
+    - 07.04.2026
+    - Frühlingsferien
+    - 
+  type: holiday
+  icon: mdiFlowerTulipOutline
+- cells:
+    - 14.04.2026
+    - Frühlingsferien
+    - 
+  type: holiday
+  icon: mdiFlowerTulipOutline
+- cells:
+    - 21.04.2026
+    - Netzwerke
+    - DNS
+- cells:
+    - 28.04.2026
+    - Netzwerke
+    - ATProtokoll
+- cells:
+    - 05.05.2026
+    - Projekt
+    - 🚀🚦🧨🪚⚙️🌡🤖
+- cells:
+    - 12.05.2026
+    - Projekt
+    - 🚀🚦🧨🪚⚙️🌡🤖
+- cells:
+    - 19.05.2026
+    - Projekt
+    - 🚀🚦🧨🪚⚙️🌡🤖
+- cells:
+    - 26.05.2026
+    - Integrationstage
+    - Gym 2 Klassen
+  type: holiday
+- cells:
+    - 02.06.2026
+    - Projekt
+    - 🚀🚦🧨🪚⚙️🌡🤖
+- cells:
+    - 09.06.2026
+    - Mündliche Maturwoche
+    - 
+  type: holiday
+  icon: mdiSchool
+- cells:
+    - 16.06.2026
+    - "Projekt: Abschluss und Abgabe"
+    - 🚀🚦🧨🪚⚙️🌡🤖
+  type: test
+- cells:
+    - 23.06.2026
+    - Projekt Austauschen
+    - ↔️
+- cells:
+    - 25.06.2026
+    - Notenschluss
+    - 
+  type: event
+  icon: mdiFlagCheckered
+- cells:
+    - 30.06.2026
+    - Abschluss Informatik
+    - 
+- cells:
+    - 04.07.2026
+    - Beginn Sommerferien
+    - 
+  type: holiday
+  icon: mdiBeach
