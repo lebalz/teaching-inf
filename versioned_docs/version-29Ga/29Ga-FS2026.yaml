@@ -1,0 +1,117 @@
+- cells:
+    - 04.02.2026
+    - Programmieren 1
+    - Test
+  type: test
+- cells:
+    - 11.02.2026
+    - Sportwoche
+    - 
+  type: holiday
+  icon: mdiWeatherSnowyHeavy
+- cells:
+    - 18.02.2026
+    - Exkursion Bio
+    - Naturhistorisches Museum Bern
+  type: event
+- cells:
+    - 25.02.2026
+    - Codes und Daten
+    - "Einstieg: Informationen vs. Daten, Zahlen speicherbar machen - Binärzahlen"
+- cells:
+    - 04.03.2026
+    - Codes und Daten
+    - Zeichencodierung, ASCII, Unicode
+- cells:
+    - 11.03.2026
+    - Codes und Daten
+    - UTF-8, Datenkompression, Huffman-Codierung
+- cells:
+    - 18.03.2026
+    - Codes und Daten
+    - Bildcodierung, Farbtiefe, Auflösung
+- cells:
+    - 25.03.2026
+    - Codes und Daten
+    - Ton- und Videoformate, Datenmengen und Grössenordnungen
+- cells:
+    - 01.04.2026
+    - Skilager
+    - 
+  type: holiday
+  icon: mdiSki
+- cells:
+    - 08.04.2026
+    - Frühlingsferien
+    - 
+  type: holiday
+  icon: mdiFlowerTulipOutline
+- cells:
+    - 15.04.2026
+    - Frühlingsferien
+    - 
+  type: holiday
+  icon: mdiFlowerTulipOutline
+- cells:
+    - 22.04.2026
+    - Codes und Daten
+    - Anwendungen, Wiederholung, Prüfungsvorbereitung
+- cells:
+    - 29.04.2026
+    - Codes und Daten
+    - Test
+  type: test
+- cells:
+    - 06.05.2026
+    - Computer
+    - "Rechnen mit Strom: Logische Schaltungen 1"
+- cells:
+    - 13.05.2026
+    - Computer
+    - "Rechnen mit Strom: Logische Schaltungen 2"
+- cells:
+    - 20.05.2026
+    - Computer
+    - "Rechnen mit Strom: Binäre Arithmetik, Zweierkomplement"
+- cells:
+    - 27.05.2026
+    - Computer
+    - "Rechnen mit Strom: Halbaddierer, Volladdierer"
+- cells:
+    - 03.06.2026
+    - Computer
+    - "Computerarchitektur: Von der Logik zum Computer"
+- cells:
+    - 10.06.2026
+    - Sportwoche
+    - 
+  type: holiday
+  icon: mdiSoccerField
+- cells:
+    - 17.06.2026
+    - Computer
+    - "Optional: praktische Prüfung zu logischen Schaltungen"
+  type: test
+- cells:
+    - 24.06.2026
+    - Filmanlass
+    - Alle GYM-1 Klassen GBSL
+  type: event
+- cells:
+    - 25.06.2026
+    - Notenschluss
+    - 
+  type: event
+  icon: mdiFlagCheckered
+- cells:
+    - 01.07.2026
+    - SchiLw-Tag
+    - Schulinterne Weiterbildung für Lehrpersonen
+  type: event
+  icon: mdiSchool
+- cells:
+    - 04.07.2026
+    - Sommerferien
+    - 
+  type: holiday
+  icon: mdiBeach

@@ -12,63 +12,100 @@ const DAYS = {
     so: 'Sunday'
 };
 
+const needsEscape = (str) => {
+    return /[:&*#|]/.test(str || '');
+};
+
+// const EVENTS = {
+//     [40]: {
+//         desc: /*'Umwelt- und Sozialwoche'*/ 'Kennenlernwoche GYM1',
+//         type: 'holiday',
+//         icon: 'mdiWalletTravel'
+//     },
+//     [41]: { desc: 'Herbstferien', details: '🏝️🏖️🏖️😎', type: 'holiday' },
+//     [42]: { desc: 'Herbstferien', details: '🏝️🏖️🏖️😎', type: 'holiday' },
+//     [52]: { desc: 'Winterferien', details: '🏂❄️⛷️🎄🧑‍🎄', icon: 'mdiPineTreeVariantOutline', type: 'holiday' },
+//     [1]: { desc: 'Winterferien', details: '🏂❄️⛷️🎄🧑‍🎄', icon: 'mdiPineTreeVariantOutline', type: 'holiday' },
+//     [7]: { desc: 'Sportwoche', type: 'holiday', icon: 'mdiWeatherSnowyHeavy' }
+// };
 const EVENTS = {
-    [40]: {
-        desc: /*'Umwelt- und Sozialwoche'*/ 'Kennenlernwoche GYM1',
-        type: 'holiday',
-        icon: 'mdiWalletTravel'
-    },
-    [41]: { desc: 'Herbstferien', details: '🏝️🏖️🏖️😎', type: 'holiday' },
-    [42]: { desc: 'Herbstferien', details: '🏝️🏖️🏖️😎', type: 'holiday' },
-    [52]: { desc: 'Winterferien', details: '🏂❄️⛷️🎄🧑‍🎄', icon: 'mdiPineTreeVariantOutline', type: 'holiday' },
-    [1]: { desc: 'Winterferien', details: '🏂❄️⛷️🎄🧑‍🎄', icon: 'mdiPineTreeVariantOutline', type: 'holiday' },
-    [7]: { desc: 'Sportwoche', type: 'holiday', icon: 'mdiWeatherSnowyHeavy' }
+    [7]: { desc: 'Sportwoche', type: 'holiday', icon: 'mdiWeatherSnowyHeavy' },
+    [14]: { desc: 'Skilager', type: 'holiday', icon: 'mdiSki' },
+    [15]: { desc: 'Frühlingsferien', type: 'holiday', icon: 'mdiFlowerTulipOutline' },
+    [16]: { desc: 'Frühlingsferien', type: 'holiday', icon: 'mdiFlowerTulipOutline' },
+    [24]: { desc: 'Sportwoche', type: 'holiday', icon: 'mdiSoccerField' },
+    [28]: { desc: 'Sommerferien', type: 'holiday', icon: 'mdiBeach' }
 };
 const CLASS_EVENTS = {
     ['28Gb']: {},
     ['28Gj']: {},
-    ['29Ga-HK']: {
-        [6]: { desc: 'Programmieren 1', details: 'Test', type: 'test', date: '04.02.2026' }
-    },
-    ['29Gj-HK']: {
-        [6]: { desc: 'Programmieren 1', details: 'Test', type: 'test', date: '04.02.2026' }
-    },
     ['29Ga']: {
-        [47]: { desc: 'Informatik Biber', details: 'Wettbewerb', type: 'event', date: '18.11.2025' },
-        [6]: { desc: 'Programmieren 1', details: 'Test', type: 'test', date: '04.02.2026' },
-        [49]: {
-            desc: 'Kantonaler Fachschaftstag',
-            details: 'Auftrag Studienwahl',
-            type: 'holiday',
-            icon: 'mdiSleep',
-            date: '02.12.2025'
-        }
+        [8]: {
+            desc: 'Exkursion Bio',
+            details: 'Naturhistorisches Museum Bern',
+            type: 'event',
+            date: '18.02.2026'
+        },
+        [26]: { desc: 'Filmanlass', details: 'Alle GYM-1 Klassen GBSL', type: 'event', date: '24.06.2026' }
     },
     ['29Gj']: {
-        [47]: { desc: 'Informatik Biber', details: 'Wettbewerb', type: 'event', date: '19.11.2025' },
-        [6]: { desc: 'Programmieren 1', details: 'Test', type: 'test', date: '04.02.2026' }
+        [20]: { desc: 'Auffahrt', details: 'Frei', type: 'holiday', date: '15.05.2026' },
+        [26]: { desc: 'Filmanlass', details: 'Alle GYM-1 Klassen GBSL', type: 'event', date: '24.06.2026' }
+    }
+};
+// const CLASS_EVENTS = {
+//     ['28Gb']: {},
+//     ['28Gj']: {},
+//     ['29Ga-HK']: {
+//         [6]: { desc: 'Programmieren 1', details: 'Test', type: 'test', date: '04.02.2026' }
+//     },
+//     ['29Gj-HK']: {
+//         [6]: { desc: 'Programmieren 1', details: 'Test', type: 'test', date: '04.02.2026' }
+//     },
+//     ['29Ga']: {
+//         [47]: { desc: 'Informatik Biber', details: 'Wettbewerb', type: 'event', date: '18.11.2025' },
+//         [6]: { desc: 'Programmieren 1', details: 'Test', type: 'test', date: '04.02.2026' },
+//         [49]: {
+//             desc: 'Kantonaler Fachschaftstag',
+//             details: 'Auftrag Studienwahl',
+//             type: 'holiday',
+//             icon: 'mdiSleep',
+//             date: '02.12.2025'
+//         }
+//     },
+//     ['29Gj']: {
+//         [47]: { desc: 'Informatik Biber', details: 'Wettbewerb', type: 'event', date: '19.11.2025' },
+//         [6]: { desc: 'Programmieren 1', details: 'Test', type: 'test', date: '04.02.2026' }
+//     }
+// };
+
+// SCHOOL_EVENTS = {
+//     // [42]: { desc: 'Beginn BYOD-Tests', type: 'test', date: '14.10.2025' },
+//     [5]: { desc: 'Notenschluss', type: 'event', date: '22.01.2026', icon: 'mdiFlagCheckered' },
+//     [6]: { desc: 'Beginn Semester 2', type: 'event', date: '02.02.2026', icon: 'mdiRun' }
+//     // [51]: [
+//     //     { desc: 'Weihnachtskonzert', type: 'holiday', date: '20.12.2024' }
+//     // ],
+// };
+SCHOOL_EVENTS = {
+    [26]: { desc: 'Notenschluss', type: 'event', date: '25.06.2026', icon: 'mdiFlagCheckered' },
+    [27]: {
+        desc: 'SchiLw-Tag',
+        details: 'Schulinterne Weiterbildung für Lehrpersonen',
+        type: 'event',
+        date: '29.06.2026',
+        icon: 'mdiSchool'
     }
 };
 
-SCHOOL_EVENTS = {
-    // [42]: { desc: 'Beginn BYOD-Tests', type: 'test', date: '14.10.2025' },
-    [5]: { desc: 'Notenschluss', type: 'event', date: '22.01.2026', icon: 'mdiFlagCheckered' },
-    [6]: { desc: 'Beginn Semester 2', type: 'event', date: '02.02.2026', icon: 'mdiRun' }
-    // [51]: [
-    //     { desc: 'Weihnachtskonzert', type: 'holiday', date: '20.12.2024' }
-    // ],
-};
-
 const CLASS_DAY = {
-    ['29Ga']: 'di',
-    ['29Gj']: 'mi',
-    ['29Ga-HK']: 'mi',
-    ['29Gj-HK']: 'mi',
-    ['28Gj']: 'fr',
-    ['28Gb']: 'fr'
+    ['29Ga']: ['mi'],
+    ['29Gj']: ['mi', 'fr'],
+    ['28Gj']: ['fr'],
+    ['28Gb']: ['fr']
 };
-const YEAR = 2025;
-const SEMESTER = 'HS';
+const YEAR = 2026;
+const SEMESTER = 'FS';
 
 const SCHEDULE_GYM1_29_HS = [
     ['Einstieg', 'Inf-Webseite, BYOD'],
@@ -120,6 +157,23 @@ const SCHEDULE_GYM1_PRAKTIKUM = [
     ['Programmieren 1', 'Listen'],
     ['Programmieren 1', 'Listen'],
     ['Programmieren 1', 'Abschluss']
+];
+const SCHEDULE_GYM1_29_FS = [
+    ['Programmieren 1', 'Test'],
+    ['Codes und Daten', 'Einstieg: Informationen vs. Daten, Zahlen speicherbar machen - Binärzahlen'],
+    ['Codes und Daten', 'Zeichencodierung, ASCII, Unicode'],
+    ['Codes und Daten', 'UTF-8, Datenkompression, Huffman-Codierung'],
+    ['Codes und Daten', 'Bildcodierung, Farbtiefe, Auflösung'],
+    ['Codes und Daten', 'Ton- und Videoformate, Datenmengen und Grössenordnungen'],
+    ['Codes und Daten', 'Anwendungen'],
+    ['Codes und Daten', 'Wiederholung, Prüfungsvorbereitung'],
+    ['Codes und Daten', 'Test'],
+    ['Computer', 'Rechnen mit Strom: Logische Schaltungen 1'],
+    ['Computer', 'Rechnen mit Strom: Logische Schaltungen 2'],
+    ['Computer', 'Rechnen mit Strom: Halbaddierer, Volladdierer'],
+    ['Computer', '4'],
+    ['Computer', '5'],
+    ['Computer', '6']
 ];
 const SCHEDULE_EF_HS1 = [
     ['Programmieren', 'Infrastruktur, Installation, Git, Markdown, Python Grundlagen'],
@@ -316,11 +370,14 @@ const SCHEDULE_GYM2_28_HS = [
 //     ['29Ga-HK']: prepareHK(SCHEDULE_GYM1_PRAKTIKUM, ['A', 'B']),
 //     ['29Gj-HK']: prepareHK(SCHEDULE_GYM1_PRAKTIKUM, ['A', 'B'])
 // };
+// const CLASS_SCHEDULE_MAP = {
+//     ['28Gb']: SCHEDULE_GYM2_28_HS,
+//     ['28Gj']: SCHEDULE_GYM2_28_HS
+// };
 const CLASS_SCHEDULE_MAP = {
-    ['28Gb']: SCHEDULE_GYM2_28_HS,
-    ['28Gj']: SCHEDULE_GYM2_28_HS
+    ['29Ga']: SCHEDULE_GYM1_29_FS
+    // ['29Gj']: SCHEDULE_GYM1_29_FS
 };
-
 Object.keys(CLASS_SCHEDULE_MAP).forEach((klasse) => {
     const cells = [];
     let subjectNr = 0;
@@ -328,72 +385,103 @@ Object.keys(CLASS_SCHEDULE_MAP).forEach((klasse) => {
     const SCHEDULE = CLASS_SCHEDULE_MAP[klasse];
     const colSize = SCHEDULE[0].length + 1;
     Array(
-        34,
-        35,
-        36,
-        37,
-        38,
-        39,
-        40,
-        41,
-        42,
-        43,
-        44,
-        45,
-        46,
-        47,
-        48,
-        49,
-        50,
-        51,
-        52,
-        1,
-        2,
-        3,
-        4,
-        5,
+        // 34,
+        // 35,
+        // 36,
+        // 37,
+        // 38,
+        // 39,
+        // 40,
+        // 41,
+        // 42,
+        // 43,
+        // 44,
+        // 45,
+        // 46,
+        // 47,
+        // 48,
+        // 49,
+        // 50,
+        // 51,
+        // 52,
+        // 1,
+        // 2,
+        // 3,
+        // 4,
+        // 5,
+        // 6,
+        // 7
         6,
-        7
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27
     ).forEach((weekNr) => {
-        const date = moment()
-            .year(YEAR + (weekNr < 30 ? 1 : 0))
-            .week(weekNr)
-            .day(DAYS[CLASS_DAY[klasse]])
-            .format('DD.MM.YYYY');
-        if (EVENTS[date]) {
-            cells.push({
-                cells: [date, EVENTS[date].desc, EVENTS[date].details || ''],
-                type: EVENTS[date].type,
-                icon: EVENTS[date].icon
-            });
-        } else if (EVENTS[weekNr]) {
-            cells.push({
-                cells: [date, EVENTS[weekNr].desc, EVENTS[weekNr].details || ''],
-                type: EVENTS[weekNr].type,
-                icon: EVENTS[weekNr].icon
-            });
-        } else if (CLASS_EVENTS[klasse][date]) {
-            cells.push({
-                cells: [date, CLASS_EVENTS[klasse][date].desc, CLASS_EVENTS[klasse][date].details || ''],
-                type: CLASS_EVENTS[klasse][date].type,
-                icon: CLASS_EVENTS[klasse][date].icon
-            });
-        } else if (CLASS_EVENTS[klasse][weekNr]) {
-            cells.push({
-                cells: [
-                    CLASS_EVENTS[klasse][weekNr].date,
-                    CLASS_EVENTS[klasse][weekNr].desc,
-                    CLASS_EVENTS[klasse][weekNr].details || ''
-                ],
-                type: CLASS_EVENTS[klasse][weekNr].type,
-                icon: CLASS_EVENTS[klasse][weekNr].icon
-            });
-        } else if (SCHEDULE[subjectNr]) {
-            const isTest = /test/gi.test(SCHEDULE[subjectNr].join(' '));
-            cells.push({
-                cells: [date, ...SCHEDULE[subjectNr].slice(0, 3)],
-                type: isTest ? 'test' : undefined
-            });
+        const dates = CLASS_DAY[klasse].map((abbr_day) => {
+            const day = DAYS[abbr_day];
+            return moment()
+                .year(YEAR + (SEMESTER == 'FS' ? 0 : weekNr < 30 ? 1 : 0))
+                .week(weekNr)
+                .day(day)
+                .format('DD.MM.YYYY');
+        });
+        let progressSubjectNr = false;
+        for (const date of dates) {
+            if (EVENTS[date]) {
+                cells.push({
+                    cells: [date, EVENTS[date].desc, EVENTS[date].details || ''],
+                    type: EVENTS[date].type,
+                    icon: EVENTS[date].icon
+                });
+            } else if (EVENTS[weekNr]) {
+                cells.push({
+                    cells: [date, EVENTS[weekNr].desc, EVENTS[weekNr].details || ''],
+                    type: EVENTS[weekNr].type,
+                    icon: EVENTS[weekNr].icon
+                });
+            } else if (CLASS_EVENTS[klasse][date]) {
+                cells.push({
+                    cells: [date, CLASS_EVENTS[klasse][date].desc, CLASS_EVENTS[klasse][date].details || ''],
+                    type: CLASS_EVENTS[klasse][date].type,
+                    icon: CLASS_EVENTS[klasse][date].icon
+                });
+            } else if (CLASS_EVENTS[klasse][weekNr]) {
+                cells.push({
+                    cells: [
+                        CLASS_EVENTS[klasse][weekNr].date,
+                        CLASS_EVENTS[klasse][weekNr].desc,
+                        CLASS_EVENTS[klasse][weekNr].details || ''
+                    ],
+                    type: CLASS_EVENTS[klasse][weekNr].type,
+                    icon: CLASS_EVENTS[klasse][weekNr].icon
+                });
+            } else if (SCHEDULE[subjectNr]) {
+                const isTest = /test/gi.test(SCHEDULE[subjectNr].join(' '));
+                cells.push({
+                    cells: [date, ...SCHEDULE[subjectNr].slice(0, 3)],
+                    type: isTest ? 'test' : undefined
+                });
+                progressSubjectNr = true;
+            }
+        }
+        if (progressSubjectNr) {
             subjectNr += 1;
         }
         if (SCHOOL_EVENTS[weekNr]) {
@@ -439,14 +527,15 @@ Object.keys(CLASS_SCHEDULE_MAP).forEach((klasse) => {
         const icon = row.icon ? `\n  icon: ${row.icon}` : '';
         const col4 = row.cells[3] !== undefined ? `\n    - ${row.cells[3]}` : '';
         return `- cells:
-    - ${row.cells[0] ?? ''}
-    - ${row.cells[1] ?? ''}
-    - ${row.cells[2] ?? ''}${col4}${cellType}${icon}`;
+    - ${needsEscape(row.cells[0]) ? `"${row.cells[0]}"` : (row.cells[0] ?? '')}
+    - ${needsEscape(row.cells[1]) ? `"${row.cells[1]}"` : (row.cells[1] ?? '')}
+    - ${needsEscape(row.cells[2]) ? `"${row.cells[2]}"` : (row.cells[2] ?? '')}${col4}${cellType}${icon}`;
     });
-    console.log(`Writing ${klasse}_${SEMESTER}${YEAR}.json`);
+    console.log(yamlCells.join('\n'));
+    console.log(`Writing ${klasse}-${SEMESTER}${YEAR}.yaml`);
     // console.log(prettyJson)
     fs.writeFileSync(
-        `versioned_docs/version-${klass}/${klasse}_${SEMESTER}${YEAR}.yaml`,
+        `versioned_docs/version-${klass}/${klasse}-${SEMESTER}${YEAR}.yaml`,
         yamlCells.join('\n') + '\n',
         'utf-8'
     );
