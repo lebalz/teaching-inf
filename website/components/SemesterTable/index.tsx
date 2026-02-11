@@ -161,6 +161,7 @@ interface TableProps {
     celled?: boolean;
     striped?: boolean;
     collapsing?: boolean;
+    className?: string;
     selectable?: boolean;
     order?: (rows: iRow[]) => iRow[];
 }
@@ -168,6 +169,7 @@ interface TableProps {
 const SemesterTable = (props: TableProps): React.ReactNode => {
     const {
         header,
+        className,
         rows: rawRows,
         alignments,
         size,
@@ -181,11 +183,35 @@ const SemesterTable = (props: TableProps): React.ReactNode => {
 
     const dateIndex = useMemo(() => header?.indexOf('Datum') ?? -1, [header]);
     const rows = useMemo(() => (order ? order(rawRows) : rawRows), [order, rawRows]);
+    const KWs = useMemo(() => {
+        if (dateIndex === -1) {
+            return [];
+        }
+        let currentWeek = -1;
+        return rows.map((row) => {
+            const cell = row.cells[dateIndex];
+            if (typeof cell === 'string') {
+                const date = getDate(cell);
+                if (date) {
+                    const week = weekNumber(date);
+                    console.log(cell, week);
+                    if (week !== currentWeek) {
+                        currentWeek = week;
+                        return week;
+                    }
+                }
+            }
+            return 0;
+        });
+    }, [dateIndex, rows]);
+
+    console.log(KWs);
 
     return (
         <table
             style={{ display: 'table', borderCollapse: 'collapse' }}
             className={clsx(
+                className,
                 styles.semesterTable,
                 styles[size as string],
                 compact && styles.compact,
@@ -211,7 +237,13 @@ const SemesterTable = (props: TableProps): React.ReactNode => {
             </thead>
             <tbody>
                 {rows.map((row, idx) => (
-                    <Row alignments={alignments} {...row} key={idx} dateIndex={dateIndex} />
+                    <Row
+                        alignments={alignments}
+                        {...row}
+                        key={idx}
+                        dateIndex={dateIndex}
+                        className={clsx(row.className, KWs[idx] > 0 && styles.firstOfWeek)}
+                    />
                 ))}
             </tbody>
         </table>

@@ -26,6 +26,11 @@ table.semesterTable {
         &.currentWeek {
             border-left: 8px solid var(--ifm-color-warning-lighter);
         }
+        &:not(.firstOfWeek) {
+            .cell:first-child {
+                padding-left: 1.5em;
+            }
+        }
         .cell {
             svg {
                 transform: translateY(20%);
