@@ -1,0 +1,114 @@
+- cells:
+    - 03.02.2026
+    - "CSS & HTML"
+    - Style Framework Bootstrap
+- cells:
+    - 10.02.2026
+    - Sportwoche
+    - 
+  type: holiday
+  icon: mdiWeatherSnowyHeavy
+- cells:
+    - 17.02.2026
+    - Wordpress
+    - "Projektstart: Blueprint einer Marketingseite erstellen"
+- cells:
+    - 24.02.2026
+    - Wordpress
+    - Wordpress aufsetzen, Themes suchen und installieren
+- cells:
+    - 03.03.2026
+    - Wordpress
+    - Seiten und Beiträge erstellen, Menüs und Widgets nutzen
+- cells:
+    - 10.03.2026
+    - Wordpress
+    - Seiten und Beiträge erstellen, Menüs und Widgets nutzen
+- cells:
+    - 17.03.2026
+    - Wordpress
+    - Anpassungen (CSS) und Optimierungen vornehmen
+- cells:
+    - 24.03.2026
+    - Wordpress
+    - Abgabe Projekt
+  type: test
+- cells:
+    - 31.03.2026
+    - Sonderwoche
+    - 
+  type: holiday
+  icon: mdiSchool
+- cells:
+    - 07.04.2026
+    - Frühlingsferien
+    - 
+  type: holiday
+  icon: mdiFlowerTulipOutline
+- cells:
+    - 14.04.2026
+    - Frühlingsferien
+    - 
+  type: holiday
+  icon: mdiFlowerTulipOutline
+- cells:
+    - 21.04.2026
+    - SQL
+    - Einführung, simple Abfragen
+- cells:
+    - 28.04.2026
+    - Bundeshausbesuch
+    - Sondersession NR, SR
+  type: event
+- cells:
+    - 05.05.2026
+    - SQL
+    - Simple Abfragen und Filterung
+- cells:
+    - 12.05.2026
+    - SQL
+    - Aggregierte Abfragen, Gruppieren, Statistiken
+- cells:
+    - 19.05.2026
+    - SQL + Wordpress
+    - SQL Abfragen in Wordpress nutzen
+- cells:
+    - 26.05.2026
+    - SQL + Wordpress
+    - SQL Abfragen in Wordpress nutzen
+- cells:
+    - 02.06.2026
+    - SQL + Wordpress
+    - SQL Abfragen in Wordpress nutzen
+- cells:
+    - 09.06.2026
+    - Mündliche Maturwoche
+    - 
+  type: holiday
+  icon: mdiSchool
+- cells:
+    - 16.06.2026
+    - Wordpress
+    - Abgabe Projekt
+  type: test
+- cells:
+    - 23.06.2026
+    - Triathlon
+    - 
+  type: event
+- cells:
+    - 25.06.2026
+    - Notenschluss
+    - 
+  type: event
+  icon: mdiFlagCheckered
+- cells:
+    - 30.06.2026
+    - API
+    - Externe Datenquellen und APIs nutzen
+- cells:
+    - 04.07.2026
+    - Beginn Sommerferien
+    - 
+  type: holiday
+  icon: mdiBeach

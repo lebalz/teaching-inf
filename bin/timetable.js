@@ -15,7 +15,8 @@ const CLASS_DAY = {
     ['29Ga']: ['mi'],
     ['29Gj']: ['mi', 'fr'],
     ['28Gj']: ['fr'],
-    ['28Gb']: ['di']
+    ['28Gb']: ['di'],
+    ['28Wa']: ['di']
 };
 const YEAR = 2026;
 const SEMESTER = 'FS';
@@ -63,6 +64,15 @@ const CLASS_EVENTS = {
     ['29Gj']: {
         [20]: { desc: 'Auffahrt', details: 'Frei', type: 'holiday', date: '15.05.2026' },
         [26]: { desc: 'Filmanlass', details: 'Alle GYM-1 Klassen GBSL', type: 'event', date: '24.06.2026' }
+    },
+    ['28Wa']: {
+        [18]: {
+            desc: 'Bundeshausbesuch',
+            details: 'Sondersession NR, SR',
+            type: 'event',
+            date: '28.04.2026'
+        },
+        [26]: { desc: 'Triathlon', details: '', type: 'event', date: '23.06.2026' }
     }
 };
 // const CLASS_EVENTS = {
@@ -389,6 +399,24 @@ const SCHEDULE_GYM2_28_FS = [
     ['Projekt Austauschen', '↔️'],
     ['Abschluss Informatik', '']
 ];
+const SCHEDULE_WINF_28_FS = [
+    ['CSS & HTML', 'Style Framework Bootstrap'],
+    ['Wordpress', 'Projektstart: Blueprint einer Marketingseite erstellen'],
+    ['Wordpress', 'Wordpress aufsetzen, Themes suchen und installieren'],
+    ['Wordpress', 'Seiten und Beiträge erstellen, Menüs und Widgets nutzen'],
+    ['Wordpress', 'Seiten und Beiträge erstellen, Menüs und Widgets nutzen'],
+    ['Wordpress', 'Anpassungen (CSS) und Optimierungen vornehmen'],
+    ['Wordpress', 'Abgabe Projekt'],
+    ['SQL', 'Einführung, simple Abfragen'],
+    ['SQL', 'Simple Abfragen und Filterung'],
+    ['SQL', 'Aggregierte Abfragen, Gruppieren, Statistiken'],
+    ['SQL + Wordpress', 'SQL Abfragen in Wordpress nutzen'],
+    ['SQL + Wordpress', 'SQL Abfragen in Wordpress nutzen'],
+    ['SQL + Wordpress', 'SQL Abfragen in Wordpress nutzen'],
+    ['Wordpress', 'Abgabe Projekt'],
+    ['API', 'Externe Datenquellen und APIs nutzen'],
+    ['API', 'Abschluss']
+];
 
 // const CLASS_SCHEDULE_MAP = {
 //     ['29Ga']: SCHEDULE_GYM1_29_HS,
@@ -397,8 +425,7 @@ const SCHEDULE_GYM2_28_FS = [
 //     ['29Gj-HK']: prepareHK(SCHEDULE_GYM1_PRAKTIKUM, ['A', 'B'])
 // };
 const CLASS_SCHEDULE_MAP = {
-    ['28Gb']: SCHEDULE_GYM2_28_FS,
-    ['28Gj']: SCHEDULE_GYM2_28_FS
+    ['28Wa']: SCHEDULE_WINF_28_FS
 };
 // const CLASS_SCHEDULE_MAP = {
 //     ['29Ga']: SCHEDULE_GYM1_29_FS,
