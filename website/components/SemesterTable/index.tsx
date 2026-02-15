@@ -194,7 +194,6 @@ const SemesterTable = (props: TableProps): React.ReactNode => {
                 const date = getDate(cell);
                 if (date) {
                     const week = weekNumber(date);
-                    console.log(cell, week);
                     if (week !== currentWeek) {
                         currentWeek = week;
                         return week;
@@ -204,8 +203,6 @@ const SemesterTable = (props: TableProps): React.ReactNode => {
             return 0;
         });
     }, [dateIndex, rows]);
-
-    console.log(KWs);
 
     return (
         <table

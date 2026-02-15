@@ -1,6 +1,6 @@
 import React from 'react';
-import { type Delta } from 'quill';
 import { useClientLib } from '@tdev-hooks/useClientLib';
+import type { Delta } from 'quill';
 
 export function useQuillHtmlSource(delta: Delta | string | null | undefined): string {
     const Quill = useClientLib(() => import('quill'), 'quill');
