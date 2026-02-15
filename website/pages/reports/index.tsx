@@ -12,9 +12,7 @@ import DocumentReport from './DocumentReport';
 interface Props {}
 
 const Reports = observer((props: Props) => {
-    const userStore = useStore('userStore');
     const pageStore = useStore('pageStore');
-    const componentStore = useStore('componentStore');
     const [version, setVersion] = React.useState<string>('');
     const [pagePath, setPagePath] = React.useState<string | null>(null);
     React.useEffect(() => {

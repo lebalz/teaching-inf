@@ -12,7 +12,7 @@ interface Props {
 
 const DocumentReport = observer((props: Props) => {
     const { doc } = props;
-    switch (doc.type) {
+    switch (doc?.type) {
         case 'script':
             return <CodeBlock language="py">{doc.code}</CodeBlock>;
         case 'pyodide_code':
