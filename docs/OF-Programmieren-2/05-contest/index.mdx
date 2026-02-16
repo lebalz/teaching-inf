@@ -1,0 +1,67 @@
+---
+page_id: dc80c967-0d31-4b2e-90f4-9064f1d0c55f
+---
+
+# 5. Wettbewerb
+
+Micro\:Bit Editor
+: [https://python.microbit.org/v/3](https://python.microbit.org/v/3)
+Maqueen Bibliothek
+: [https://gbsl-informatik.github.io/maqueen-plus-v2-mpy/](https://gbsl-informatik.github.io/maqueen-plus-v2-mpy/)
+
+:::cards{columns=2}
+![Maqueen Plus V2](./images/maqueen-plus-v2.jpg)
+::br
+![Verfügbare Sensoren](./images/maqueen-specs.jpg)
+:::
+
+:::info[Wettbewerb]
+Ziel
+: Bewältigung eines Parcours mit Hindernissen
+Gruppengrösse
+: 2 Personen
+Note
+: Zählt 0.5
+Bewertung
+: Kriterienraster + Wettbewerb
+: Kurzgespräch zum Code (Einschreibung als Gruppe)
+:::
+
+
+:::info[Beurteilungskriterien]
+Die Note setzt sich zusammen aus dem praktischen Teil und dem Bericht. Die Note zählt 0.5.
+
+Praktischer Teil
+: Für die Note zählen die umgesetzten Funktionalitäten des Roboters
+Kurzgespräch
+: Es wird ein kurzes Gespräch zum Code geführt, in welchem geprüft wird, ob der geschriebene Code verstanden wird, ob die Konzepte/Ideen/Überlegungen hinter den am Wettbewerb gezeigten Funktionalitäten auch erklährt werden können.
+: Stellt sich heraus, dass der Code oder entsprechende Konzepte nicht erklährt werden können, werden entsprechende Punkte abgezogen.
+
+Wettbewerb
+: Wer bewältigt den Parcours am schnellsten? Die ersten drei Plätze erhalten Bonuspunkte, welche die Note verbessern können.
+: **Platz 1**: +3 Punkte
+: **Platz 2**: +2 Punkte
+: **Platz 3**: +1 Punkt
+:::
+
+### Punkteskala
+
+| Punkte | Kriterien | Abzüge |
+| :---: | :--- | :--- |
+| 12 | Der Parcours wird bewältigt, ohne manuellen Eingriff. | Manueller Eingriff nötig: -4 Punkte |
+| 2| Der Roboter blinkt während der Fahrt in verschiedenen Farben. | Kein Blinken sondern kontinuierlicher Farbwechsel: -1 Punkte |
+| 2 | Der Roboter zeigt auf dem Display mit einem Pfeil an, ob er aktuell links, rechts oder gerade steuert. |  |
+| 2 | Der Roboter bleibt stehen, wenn er auf ein Hindernis trifft und fährt dann weiter, wenn es wieder weg ist. | Hält an, aber fährt dann nicht mehr weiter: -1 Punkt |
+| 2 | Der Roboter dreht sich um 360 ° wenn geklatscht wird. | Funktioniert nur teilweise: -1 Punkt |
+| 2 | Der Roboter spielt beim Richtungswechsel einen Ton oder eine kurze Melodie. |  |
+| 2 | Der Roboter findet den Weg zum Ziel, auch wenn Einbahnstrassen vorhanden sind. | ⭐ |
+| 3 | Der Roboter kann einem Hindernis ausweichen und findet die Fahrtstrecke wieder. | ⭐ |
+
+
+```py live_py slim
+punkte = 12 # erreichte Punkte
+ungerundete_note = (punkte / 21) * 5 + 1
+gerundete_note = round(ungerundete_note, 1) # Note auf eine Nachkommastelle gerundet
+note = min(6, gerundete_note)
+print('Note:', note)
+```
