@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 import QuillV2 from '@tdev-models/documents/QuillV2';
-import { useQuillHtmlSource } from './useQuillHtmlSource';
+import useQuillHtmlSource from './useQuillHtmlSource';
 import quillCss from '!!raw-loader!quill/dist/quill.snow.css'; // webpack raw-loader example
 
 interface Props {

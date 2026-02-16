@@ -2,7 +2,7 @@ import React from 'react';
 import { useClientLib } from '@tdev-hooks/useClientLib';
 import type { Delta } from 'quill';
 
-export function useQuillHtmlSource(delta: Delta | string | null | undefined): string {
+const useQuillHtmlSource = (delta: Delta | string | null | undefined): string => {
     const Quill = useClientLib(() => import('quill'), 'quill');
     const [html, setHtml] = React.useState<string>('');
 
@@ -39,4 +39,6 @@ export function useQuillHtmlSource(delta: Delta | string | null | undefined): st
     }, [deltaObj, Quill]);
 
     return html;
-}
+};
+
+export default useQuillHtmlSource;
