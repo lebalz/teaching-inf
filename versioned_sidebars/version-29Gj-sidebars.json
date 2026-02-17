@@ -30,6 +30,18 @@
                 "href": "https://erzbe-my.sharepoint.com/:b:/g/personal/balthasar_hofer_gbsl_ch/EVNTfGg8rchLrksyOyYdZecBml0o7984M3bjOk71OhFumA?e=3HTIQc"
               }
           ]
+        },
+        {
+          "type": "category",
+          "label": "Daten und Codes",
+          "collapsible": true,
+          "items": [
+            {
+              "type": "link",
+              "label": "Präsentation",
+              "href": "pathname:///p/Codierung/ofi/presentation.html"
+            }
+          ]
         }
       ]
     }

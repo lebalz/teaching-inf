@@ -75,6 +75,13 @@ Das Ziel dieser Umwandlung ist es, eine für einen bestimmten Zweck optimierte D
 #### [what3words.com](https://what3words.com/)
 :::
 
+:::aufgabe[Mein Name]
+<Answer type="state" id="2f1ac09f-e8c5-4990-9782-0c69277613a1" />
+
+Halten Sie Ihren Namen codiert als QR-Code, Braillezeichen oder in weiteren Codes fest.
+
+<Answer type="text" id="d7aa78aa-3ba1-4548-9a6d-b9f6bfe1b446" />
+:::
 
 import { mdiHome, mdiCompass } from '@mdi/js';
 import QrCode from '@tdev-components/shared/QrCode';
@@ -85,7 +92,7 @@ export const QrCodeComponent = () => {
     const userStore = useStore('userStore');
     const user = userStore.viewedUser;
     return (
-        <QrCode withInput size="30em" text={user?.name || 'Hallo Welt'} />
+        <QrCode withInput size="30em" text={user?.name || 'Hallo Welt'} download />
     )
 
 }
