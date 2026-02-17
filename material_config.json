@@ -25,14 +25,6 @@
       "open": false
     },
     {
-      "from": "docs/OF-Daten-und-Codes/",
-      "to": "versioned_docs/version-28Gb/05-Daten-und-Codes",
-      "ignore": [
-        "_category_.yml"
-      ],
-      "open": false
-    },
-    {
       "from": "docs/OF-BigData-KI/",
       "to": "versioned_docs/version-28Gb/06-BigData-KI",
       "ignore": [
@@ -86,14 +78,6 @@
     {
       "from": "docs/OF-Websites/",
       "to": "versioned_docs/version-28Gj/04-Webseiten",
-      "ignore": [
-        "_category_.yml"
-      ],
-      "open": false
-    },
-    {
-      "from": "docs/OF-Daten-und-Codes/",
-      "to": "versioned_docs/version-28Gj/05-Daten-und-Codes",
       "ignore": [
         "_category_.yml"
       ],
