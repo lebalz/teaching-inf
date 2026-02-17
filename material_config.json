@@ -178,6 +178,22 @@
         "51-Tests.mdx",
         "_category_.yml"
       ],
+      "open": false
+    },
+    {
+      "from": "docs/OF-Daten-und-Codes/",
+      "to": "versioned_docs/version-29Ga/04-Daten-und-Codes",
+      "ignore": [
+        "04-Unicode",
+        "05-UTF8",
+        "06-Uebungen",
+        "07-compression",
+        "08-Bildcodierung",
+        "09-Datenmengen",
+        "Lernziele",
+        "index.mdx",
+        "_category_.yml"
+      ],
       "open": true
     },
     {
@@ -219,6 +235,22 @@
         "30-Repefragen",
         "50-Test",
         "51-Tests.mdx",
+        "_category_.yml"
+      ],
+      "open": false
+    },
+    {
+      "from": "docs/OF-Daten-und-Codes/",
+      "to": "versioned_docs/version-29Gj/04-Daten-und-Codes",
+      "ignore": [
+        "04-Unicode",
+        "05-UTF8",
+        "06-Uebungen",
+        "07-compression",
+        "08-Bildcodierung",
+        "09-Datenmengen",
+        "Lernziele",
+        "index.mdx",
         "_category_.yml"
       ],
       "open": true

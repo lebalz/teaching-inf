@@ -10,6 +10,16 @@
 !03-Programmieren-1/50-Test/
 !03-Programmieren-1/51-Tests.mdx
 !03-Programmieren-1/_category_.yml
+04-Daten-und-Codes/*
+!04-Daten-und-Codes/04-Unicode/
+!04-Daten-und-Codes/05-UTF8/
+!04-Daten-und-Codes/06-Uebungen/
+!04-Daten-und-Codes/07-compression/
+!04-Daten-und-Codes/08-Bildcodierung/
+!04-Daten-und-Codes/09-Datenmengen/
+!04-Daten-und-Codes/Lernziele/
+!04-Daten-und-Codes/index.mdx
+!04-Daten-und-Codes/_category_.yml
 50-IN-Biber/*
 !50-IN-Biber/_category_.yml
-03-Programmieren-1/_category_.json
+04-Daten-und-Codes/_category_.json
