@@ -55,6 +55,10 @@ Das Ziel dieser Umwandlung ist es, eine für einen bestimmten Zweck optimierte D
 
 ## Beispiele für Codes
 
+
+import { mdiHome } from '@mdi/js';
+import QrCodeComponent from './components/QrCodeComponent';
+
 :::cards{cols=3 width=200px}
 ![](images/braille.jpg)
 #### Brailleschrift
@@ -82,21 +86,6 @@ Halten Sie Ihren Namen codiert als QR-Code, Braillezeichen oder in weiteren Code
 
 <Answer type="text" id="d7aa78aa-3ba1-4548-9a6d-b9f6bfe1b446" />
 :::
-
-
-import { mdiHome, mdiCompass } from '@mdi/js';
-import QrCode from '@tdev-components/shared/QrCode';
-import { useStore } from '@tdev-hooks/useStore';
-import { observer } from 'mobx-react-lite';
-
-export const QrCodeComponent = () => {
-    const userStore = useStore('userStore');
-    const user = userStore.viewedUser;
-    return (
-        <QrCode withInput size="30em" text={user?.name || 'Hallo Welt'} download />
-    )
-
-}
 
 
 
