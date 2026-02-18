@@ -59,3 +59,4 @@ watchedElements: # Log changes to these files (glob patterns) in the mainline te
     - .env.example
     # ...
 ```
+trigger
