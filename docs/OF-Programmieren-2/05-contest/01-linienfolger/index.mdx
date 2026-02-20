@@ -42,8 +42,6 @@ while True:
     elif sensoren[3] == 1:
         motor_run(Motor.LEFT, 40)
         motor_run(Motor.RIGHT, 0)
-    else:
-        motor_stop()
 ```
 :::tip[Bemerke]
 Weil zuerst der mittlere Sensor __M__ überprüft wird, ist bei den folgenden `elif` Bedingungen bereits **sicher**, dass __M__ Null ist, da sonst die erste Bedingung zugetroffen hätte. Deshalb braucht es ein zusätzliches `... and sensoren[2]==0` nicht.
