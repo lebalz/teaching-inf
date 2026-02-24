@@ -1,0 +1,113 @@
+---
+page_id: 9fcbaf6a-96e1-4d87-9fe7-4068b173039f
+---
+
+import React from 'react';
+import { createRandomString } from './assets/crypto.helper';
+import { Val, TemplateCode, DynamicInput } from '@tdev-components/DynamicValues';
+import { observer } from 'mobx-react-lite';
+import Button from '@tdev-components/shared/Button';
+import { useStore } from '@tdev-hooks/useStore';
+
+# Dokku Deployment
+
+Siehe [github.com/GBSL-Informatik/winf-dokku-wordpress](https://github.com/GBSL-Informatik/winf-dokku-wordpress).
+
+export const InputFields = observer(() => {
+    const pageStore = useStore('pageStore');
+    const [defaultValues, _] = React.useState([Array(8).fill("").map(() => createRandomString())]);
+        return (<div>
+                <DynamicInput name="APP_NAME" monospace default="winf-wp-1" />
+                <DynamicInput name="DOMAIN" monospace default="wp.winf.gbsl.website" />
+                <DynamicInput name="DOKKU_IP" monospace default="10.122.0.1" />
+                <DynamicInput name="AUTH_KEY" monospace default={defaultValues[0]} onRecalculate={createRandomString} />
+                <DynamicInput name="SECURE_AUTH_KEY" monospace default={defaultValues[1]} onRecalculate={createRandomString} />
+                <DynamicInput name="LOGGED_IN_KEY" monospace default={defaultValues[2]} onRecalculate={createRandomString} />
+                <DynamicInput name="NONCE_KEY" monospace default={defaultValues[3]} onRecalculate={createRandomString} />
+                <DynamicInput name="AUTH_SALT" monospace default={defaultValues[4]} onRecalculate={createRandomString} />
+                <DynamicInput name="SECURE_AUTH_SALT" monospace default={defaultValues[5]} onRecalculate={createRandomString} />
+                <DynamicInput name="LOGGED_IN_SALT" monospace default={defaultValues[6]} onRecalculate={createRandomString} />
+                <DynamicInput name="NONCE_SALT" monospace default={defaultValues[7]} onRecalculate={createRandomString} />
+                <Button onClick={() => {
+                    ['AUTH_KEY', 'SECURE_AUTH_KEY', 'LOGGED_IN_KEY', 'NONCE_KEY', 'AUTH_SALT', 'SECURE_AUTH_SALT', 'LOGGED_IN_SALT', 'NONCE_SALT'].forEach(key => {
+                        pageStore.current?.setDynamicValue(key, createRandomString());
+                    });
+                }} text="Recalculate Keys" />
+            </div>
+        )
+});
+
+<InputFields />
+
+
+<TemplateCode>
+```bash title="@dokku"
+dokku apps:create {{APP_NAME}}
+MYSQL_IMAGE_VERSION="8.0" MSQL_IMAGE="mysql" dokku mysql:create {{APP_NAME}}
+dokku mysql:link {{APP_NAME}} {{APP_NAME}}
+
+# optional: set buildpack - should not be necessary notmally
+# dokku config:set {{APP_NAME}} BUILDPACK_URL=https://github.com/heroku/heroku-buildpack-php
+
+mkdir -p /var/lib/dokku/data/storage/{{APP_NAME}}/plugins
+mkdir -p /var/lib/dokku/data/storage/{{APP_NAME}}/themes
+mkdir -p /var/lib/dokku/data/storage/{{APP_NAME}}/uploads
+
+chown 32767:32767 /var/lib/dokku/data/storage/{{APP_NAME}}/plugins
+chown 32767:32767 /var/lib/dokku/data/storage/{{APP_NAME}}/themes
+chown 32767:32767 /var/lib/dokku/data/storage/{{APP_NAME}}/uploads
+
+dokku storage:mount {{APP_NAME}} /var/lib/dokku/data/storage/{{APP_NAME}}/plugins:/app/wp-content/plugins
+dokku storage:mount {{APP_NAME}} /var/lib/dokku/data/storage/{{APP_NAME}}/themes:/app/wp-content/themes
+dokku storage:mount {{APP_NAME}} /var/lib/dokku/data/storage/{{APP_NAME}}/uploads:/app/wp-content/uploads
+
+mkdir /home/dokku/{{APP_NAME}}/nginx.conf.d/
+echo 'client_max_body_size 15M;' > /home/dokku/{{APP_NAME}}/nginx.conf.d/upload.conf
+chown dokku:dokku /home/dokku/{{APP_NAME}}/nginx.conf.d
+service nginx reload
+```
+</TemplateCode>
+
+ins env kopieren:
+
+<TemplateCode>
+```bash title="nano /home/dokku/{{APP_NAME}}/ENV"
+AUTH_KEY="{{AUTH_KEY}}"
+SECURE_AUTH_KEY="{{SECURE_AUTH_KEY}}"
+LOGGED_IN_KEY="{{LOGGED_IN_KEY}}"
+NONCE_KEY="{{NONCE_KEY}}"
+AUTH_SALT="{{AUTH_SALT}}"
+SECURE_AUTH_SALT="{{SECURE_AUTH_SALT}}"
+LOGGED_IN_SALT="{{LOGGED_IN_SALT}}"
+NONCE_SALT="{{NONCE_SALT}}"
+```
+</TemplateCode>
+
+und lokal
+
+<TemplateCode>
+```bash title="@laptop"
+git remote add dokku-{{APP_NAME}} dokku@{{DOKKU_IP}}:{{APP_NAME}}
+git push dokku-{{APP_NAME}} main
+```
+</TemplateCode>
+
+
+<TemplateCode>
+```bash title="@dokku"
+dokku domains:add {{APP_NAME}} {{DOMAIN}}
+dokku domains:remove {{APP_NAME}} {{APP_NAME}}.gbsl.website
+dokku letsencrypt:enable {{APP_NAME}}
+```
+</TemplateCode>
+
+
+## Destroying the App
+
+<TemplateCode>
+```bash title="@dokku"
+dokku mysql:unlink {{APP_NAME}} {{APP_NAME}}
+dokku apps:destroy {{APP_NAME}}
+dokku mysql:destroy {{APP_NAME}}
+```
+</TemplateCode>
