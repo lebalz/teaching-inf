@@ -243,7 +243,6 @@
       "from": "docs/OF-Daten-und-Codes/",
       "to": "versioned_docs/version-29Gj/04-Daten-und-Codes",
       "ignore": [
-        "04-Unicode",
         "05-UTF8",
         "06-Uebungen",
         "07-compression",
