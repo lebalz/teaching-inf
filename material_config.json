@@ -184,7 +184,6 @@
       "from": "docs/OF-Daten-und-Codes/",
       "to": "versioned_docs/version-29Ga/04-Daten-und-Codes",
       "ignore": [
-        "06-Uebungen",
         "07-compression",
         "08-Bildcodierung",
         "09-Datenmengen",
@@ -241,7 +240,6 @@
       "from": "docs/OF-Daten-und-Codes/",
       "to": "versioned_docs/version-29Gj/04-Daten-und-Codes",
       "ignore": [
-        "06-Uebungen",
         "07-compression",
         "08-Bildcodierung",
         "09-Datenmengen",
