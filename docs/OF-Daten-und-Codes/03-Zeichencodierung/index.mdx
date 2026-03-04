@@ -1,6 +1,8 @@
 ---
 page_id: 0b764057-eca2-46a6-9ca7-cecdfb1116f9
 ---
+import Webserial from '@tdev/webserial/component'
+import BinaryDecoder from '@tdev/webserial/decoders/BinaryDecoder/component'
 
 # 3. Zeichencodierung
 
@@ -372,6 +374,14 @@ Die ASCII-Codierung enthält noch keine Umlaute, weshalb mit [Latin 1, 256 Zeich
 :::
 
 </details>
+
+<Webserial 
+    baudRate={115200}
+    hideLogs
+    resetTrigger='::READY::'
+    initialData={'01001000 01100001 01101100 01101100 01101111 00100001'.replace(' ', '').split('')}
+    output={<BinaryDecoder />}
+/>
 
 ## Aufgaben
 
