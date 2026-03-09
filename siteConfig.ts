@@ -108,6 +108,10 @@ const getSiteConfig: SiteConfigProvider = () => {
                         {
                             label: 'Python',
                             to: 'https://www.python.org/'
+                        },
+                        {
+                            label: 'Excalidraw',
+                            to: '/excalidraw'
                         }
                     ]
                 },
