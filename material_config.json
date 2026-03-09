@@ -55,6 +55,14 @@
       "ignore": [
         "_category_.yml"
       ],
+      "open": false
+    },
+    {
+      "from": "docs/OF-Netzwerke/",
+      "to": "versioned_docs/version-28Gb/10-Netzwerke",
+      "ignore": [
+        "_category_.yml"
+      ],
       "open": true
     }
   ],
