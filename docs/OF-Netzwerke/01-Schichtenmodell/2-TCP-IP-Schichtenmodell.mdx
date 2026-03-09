@@ -1,0 +1,44 @@
+---
+sidebar_position: 2
+sidebar_custom_props:
+  source:
+    name: mygymer.ch
+    ref: >-
+      https://informatik.mygymer.ch/g23c/008.rechnernetze-kommunikation/02.tcp-ip.html
+page_id: 9726251e-e342-4338-bc44-0727f1941ae2
+---
+import PageReadCheck from '@tdev/page-read-check/PageReadCheck';
+import Stack from './components/TCP_IP_Stack'
+
+# TCP/IP-Schichtenmodell
+
+Genauso wie die Pakete im Beispiel übermittelt werden, geschieht dies auch am Computer – hier sprechen wir von Datenpaketen.
+
+Die oberen Schichten verwenden Dienste der unteren Schichten.
+Jede Schicht verpackt die Daten neu, wenn sie von der darüberliegenden Schicht übergeben werden und entpackt sie wieder beim Empfangen bevor sie wieder an die darüberliegende Schicht übergeben werden
+Jede Schicht hat einen bestimmten Auftrag.
+
+<Tabs
+  defaultValue="tcp-ip-stack"
+  values={[
+    {label: 'TCP/IP-Schichten', value: 'tcp-ip-stack'},
+    {label: 'Analogie', value: 'analogy'}
+  ]}>
+  <TabItem value="tcp-ip-stack">
+    <Stack />
+  </TabItem>
+  <TabItem value="analogy">
+    ## Die Analogie
+
+    Wenn wir im TCP/IP-Schichtenmodell die Schichten ansehen, dann ist jede Schicht für einen bestimmten Schritt zuständig.
+    ![--width=750px](./img/0b-schichtenmodell-analogie.png)
+  
+  </TabItem>
+</Tabs>
+
+---
+
+<PageReadCheck 
+  minReadTime={120}
+  id="7c4666a3-694e-40f7-99e0-c9121e20b599"
+/>

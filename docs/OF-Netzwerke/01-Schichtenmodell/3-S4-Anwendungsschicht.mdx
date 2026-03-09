@@ -1,0 +1,54 @@
+---
+sidebar_label: 4. Anwendungsschicht
+sidebar_position: 2
+sidebar_custom_props:
+  source:
+    name: rothe.io
+    ref: 'https://rothe.io/?b=network&p=80064'
+page_id: 2108d2f9-f98f-459e-ae5b-1f5114a5b5a3
+---
+import PageReadCheck from '@tdev/page-read-check/PageReadCheck';
+
+# Schicht 4: Anwendungsschicht
+
+Auf der Anwendungsschicht geht es um Dinge, die den Benutzer des Systems interessieren.
+
+## Beispiel «Schule»
+Im Beispiel «Schule» sind dies Pulte, welche von einem Schulhaus ins andere transportiert werden sollen. Wie genau Verpackung und Transport organisiert sind, wird auf dieser Ebene ausgeblendet. Hier geht es nur um den eigentlich Inhalt – also darum, welche und wie viele Pulte verschickt werden sollen.
+
+![](img/4-school-example.svg)
+
+## Internet
+Typische Anwendungen im Internet sind Webseiten, Web-Apps oder E-Mail.
+
+HTTP
+: Das Hypertext Transfer Protocol ist für die Übertragung von Webseiten zuständig. Genauer gesagt werden mit HTTP die Daten übertragen, aus welchen Webseiten zusammengesetzt sind, also HTML-Dateien, Bilder, usw.
+
+SMTP
+: Das Simple Mail Transfer Protocol wird eingesetzt, um E-Mails zu versenden. Das Protokoll regelt den Transport der E-Mail von der Absender:in bis zum E-Mail-Server auf Empfängerseite.
+
+IMAP
+: Das Internet Message Access Protocol wird zum Abrufen und Organisieren des eigenen Postfachs verwendet - sprich, um mit dem E-Mail-Server zu kommunizieren, der die eigene E-Mail-Box gespeichert hat.
+
+:::info
+Sie sehen, dass zum Senden und Empfangen von E-Mails zwei verschiedene Protokolle zum Einsatz kommen, was auf den ersten Blick erstaunen mag. Natürlich kommen die E-Mails beim Versenden über SMTP auch ohne IMAP an – aber nicht bei der Empfänger:in, sondern nur in deren Postfach. Um dieses abzurufen ist das zweite Protokoll (IMAP) nötig.
+:::
+
+---
+
+<PageReadCheck 
+  minReadTime={120}
+  id="b4708218-abc8-40e0-b83b-e57d6e30f20c"
+/>
+
+### Weitere Informationen
+
+::youtube[https://www.youtube-nocookie.com/embed/kBXQZMmiA4s]
+
+
+<PageReadCheck 
+  text={(unlocked, doc) => unlocked ? 'Gesehen?' : `Gesehen? (${doc.fReadTime})` }
+  disabledReason={(doc) => `Mindestens ${doc.meta.fMinReadTime} Video ansehen, um zu entsperren.`}
+  minReadTime={420}
+  id="5f612f31-4d27-4ec6-8597-619af8e16675"
+/>
