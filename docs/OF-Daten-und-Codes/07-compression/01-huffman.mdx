@@ -195,6 +195,25 @@ Decodieren Sie diese Bitfolge mit dem obenstehenden Codebaum. Das Symbol `⎵` s
 
 ::::
 
+### Minimale Codierung mit fester Bitlänge
+Die minimale Codierung ist eine Codierung mit fester Bitlänge, wobei die Bitlänge minimal ist, d.h. es werden so wenige Bits wie möglich pro Zeichen verwendet. Bei 4 verschiedenen Zeichen braucht es mindestens 2 Bits, da mit 1 Bit nur 2 verschiedene Zeichen codiert werden können (0 und 1). Mit 2 Bits können 4 verschiedene Zeichen codiert werden (00, 01, 10, 11).
+
+:::info[Beispiel]
+Das Wort «MISSISSIPPI IST EIN FLUSS» besteht aus 11 verschiedenen Zeichen: `M`, `I`, `S`, `P`, `⎵`, `T`, `E`, `N`, `F`, `L`, `U`. Eine **minimale Codierung mit fester Bitlänge** ordnet jedem Zeichen so wenige Bits wie möglich zu. Da es 11 verschiedene Zeichen gibt, braucht es mindestens 4 Bits pro Zeichen, da mit 3 Bits nur 8 verschiedene Zeichen codiert werden können ($2^3=8$; `000`, `001`, `010`, `011`, `100`, `101`, `110`, `111`), mit 4 Bits können $2^4=16$ verschiedene Zeichen codiert werden (`0000`, `0001`, ..., `1111`).
+
+Wir können also jedem Zeichen 4 Bits zuordnen, z.B.:
+
+| Zeichen | M    | I    | S    | P    | ⎵    | T    | E    | N    | F    | L    | U    |
+| :------ | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| Code    | `0000` | `0001` | `0010` | `0011` | `0100` | `0101` | `0110` | `0111` | `1000` | `1001` | `1010` |
+
+Die 25 Zeichen von «MISSISSIPPI IST EIN FLUSS» würden damit mit $25 \cdot 4 = 100$ Bits codiert werden.
+:::
+
+Der Vergleich der Huffman-Codierung mit UTF-8 ist nicht wirklich fair, da UTF-8 eine Codierung mit fester Bitlänge ist, bei der jedes Zeichen mit 8 Bits codiert wird, unabhängig von seiner Häufigkeit im Text. Die Huffman-Codierung hingegen ist eine Codierung mit variabler Bitlänge, bei der häufige Zeichen mit weniger Bits codiert werden als seltene Zeichen. Ein **fairerer Vergleich** wäre daher die Huffman-Codierung mit einer minimalen Codierung mit fester Bitlänge, bei der jedes Zeichen mit so wenigen Bits wie möglich codiert wird.
+
+## Weitere Übungen
+
 :::aufgabe[3. Huffman-Codierung 2]
 <ProgressState id="033bb88f-8a95-43ea-b8a4-df0817ea5743" keepPreviousStepsOpen confirm>
 1. Erstellen Sie zum Wort «EXTERNER EFFEKT» eine Häufigkeitstabelle.
