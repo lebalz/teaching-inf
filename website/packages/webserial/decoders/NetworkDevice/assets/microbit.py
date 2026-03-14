@@ -3,14 +3,21 @@ import radio
 TTL_INIT = 10
 ALLOW_PEER_TO_PEER = False
 SEPARATOR = ' '
+RESET_TRIGGER = '::READY::'
 
 def pad0(text: str, n: int):
     return ("{0:0>" + str(n) + "}").format(text)
 
 class IP:
+    LOOPBACK = '127.0.0.1'
+
     def __init__(self, ip):
         IP.validate(ip)
-        self.ip = ip
+        self.ip = ip.strip()
+
+    @property
+    def is_loopback(self):
+        return self.ip == IP.LOOPBACK
 
     @property
     def parts(self):
@@ -93,6 +100,7 @@ class Message:
     def __repr__(self):
         return 'Message(' + self.__str__() + ')'
 
+
 class Mode:
     CLIENT = 'client'
     ROUTER = 'router'
@@ -105,6 +113,7 @@ class Device:
             raise Exception('IP "' + ip + '" is invalid.')
         self.ip = myip
         self.config(power)
+        self.pending_serial_messages = []
 
     def config(self, power = 4):
         radio.off()
@@ -120,6 +129,14 @@ class Device:
             print(msg)
 
     def run(self):
+        if uart.any():
+            data = uart.readline()
+            text = ''
+            while data:
+                text += data.decode('utf-8')
+                data = uart.readline()
+            if text.strip():
+                self.pending_serial_messages.append(text.strip())
         raw = radio.receive()
         if not raw:
             return
@@ -130,7 +147,11 @@ class Device:
 
     def send(self, dest, message):
         to = IP.parse(dest)
+        if not to:
+            return
         msg = Message(self.ip, to, message)
+        if to.is_loopback:
+            return print(msg)
         radio.send(str(msg))
         
 
@@ -153,6 +174,38 @@ class Switch(Device):
         msg.decrement_ttl()
         radio.send(str(msg))
 
+class SerialMessage:
+    CONFIG = '::CONFIG::'
+    SEND = '::SEND::'
+
+    @staticmethod
+    def parse(message: str):
+        parts = message.split(SEPARATOR)
+        if len(parts) < 1:
+            return
+        code = parts[0]
+        if code == SerialMessage.CONFIG and len(parts) == 3:
+            return {
+                'type': 'set_config',
+                'mode': parts[1],
+                'ip': parts[2]
+            }
+        elif code == SerialMessage.CONFIG and len(parts) == 1:
+            return {
+                'type': 'get_config'
+            }
+        elif code == SerialMessage.SEND and len(parts) >= 3:
+            ip = IP.parse(parts[1])
+            msg = SEPARATOR.join(parts[2:])
+            if not ip or not msg.strip():
+                return
+            return {
+                'type': 'send',
+                'dest': str(ip),
+                'message': msg.strip()
+            }
+        else:
+            return    
 
 class Config:
     mode: str
@@ -196,18 +249,28 @@ class Config:
 
     def run(self):
         self.device.run()
+        if len(self.device.pending_serial_messages) > 0:
+            for text in self.device.pending_serial_messages:
+                msg = SerialMessage.parse(text)
+                if msg:
+                    if msg['type'] == 'set_config':
+                        self.set_mode(msg['mode'], False)
+                        self.set_ip(msg['ip'], False)
+                        self.configure()
+                    elif msg['type'] == 'get_config':
+                        print(str(self))
+                    elif msg['type'] == 'send':
+                        self.device.send(msg['dest'], msg['message'])
+            self.device.pending_serial_messages = []
 
     def __str__(self):
         return self.mode + SEPARATOR + self.ip
 
-    def parse(self, config: str):
-        parts = config.split(SEPARATOR)
-        self.set_mode(parts[0], False)
-        self.set_ip(parts[1], False)
-        self.configure()
-    
+print(RESET_TRIGGER)
 config = Config('client', '192.168.0.1')
-
+display.show(config.icon)
+current_config = str(config)
+print(current_config)
 while True:
     config.run()
     if button_b.was_pressed():
@@ -215,9 +278,12 @@ while True:
             config.set_mode(Mode.SWITCH)
         else:
             config.set_mode(Mode.CLIENT)
+    str_config = str(config)
+    if str_config != current_config:
+        current_config = str_config
         display.show(config.icon)
-        print(str(config))
-    if button_a.was_pressed() and config.mode == Mode.CLIENT:
-        config.device.send('192.168.0.2', 'Echo Foo Bar!')
+        print(current_config)
+    if button_a.was_pressed():
+        config.device.send(config.ip, 'Ping')
         
     

@@ -1,21 +1,24 @@
 import { mdiLaptop, mdiRouter, mdiRouterNetwork, mdiSwitch } from '@mdi/js';
 
+type Mode = (typeof DeviceConfig.MODES)[number];
+
 class DeviceConfig {
     static readonly SEPARATOR = ' ';
-    readonly mode: 'router' | 'client' | 'switch';
+    static readonly MODES = ['router', 'client', 'switch'] as const;
+    readonly mode: Mode;
     readonly ip: string;
 
-    constructor(mode: 'router' | 'client' | 'switch', ip: string) {
+    constructor(mode: Mode, ip: string) {
         this.mode = mode;
         this.ip = ip;
     }
 
     static parse(line: string): DeviceConfig | null {
         const [mode, ip] = line.split(DeviceConfig.SEPARATOR);
-        if (!mode || !ip || !['router', 'client', 'switch'].includes(mode)) {
+        if (!mode || !ip || !DeviceConfig.MODES.includes(mode as Mode)) {
             return null;
         }
-        return new DeviceConfig(mode as 'router' | 'client' | 'switch', ip);
+        return new DeviceConfig(mode as Mode, ip);
     }
 
     get icon() {

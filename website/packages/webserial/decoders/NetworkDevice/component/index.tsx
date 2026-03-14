@@ -6,9 +6,12 @@ import { useStore } from '@tdev-hooks/useStore';
 import { useDeviceId } from '@tdev/webserial/hooks/useDeviceId';
 import Decoder from '../models/Decoder';
 import { useFullscreenTargetId } from '@tdev-hooks/useFullscreenTargetId';
-import Icon from '@mdi/react';
-import { mdiNetworkOff } from '@mdi/js';
-import { SIZE_M } from '@tdev-components/shared/iconSizes';
+import Button from '@tdev-components/shared/Button';
+import Logs from '@tdev-components/documents/CodeEditor/Editor/Footer/Logs';
+import Badge from '@tdev-components/shared/Badge';
+import TextInput from '@tdev-components/shared/TextInput';
+import { mdiContentSave, mdiSend, mdiTagEdit } from '@mdi/js';
+import { SIZE_S } from '@tdev-components/shared/iconSizes';
 
 interface Props {}
 
@@ -32,7 +35,99 @@ const NetworkDevice = observer((props: Props) => {
 
     return (
         <div className={clsx(styles.networkDevice, isFullscreen && styles.fullscreen)}>
-            <Icon path={decoder.config?.icon || mdiNetworkOff} size={SIZE_M} color="var(--ifm-color-blue)" />
+            {decoder.config && (
+                <div>
+                    <div className={clsx(styles.config)}>
+                        <Button
+                            icon={decoder.config.icon}
+                            text={decoder.config.mode}
+                            onClick={() => {
+                                decoder.nextMode();
+                            }}
+                            color="blue"
+                        />
+                        {decoder.ipInput.length === 0 ? (
+                            <>
+                                <Badge>{decoder.config.ip}</Badge>
+                                <Button
+                                    onClick={() => {
+                                        console.log('set', decoder.config?.ip);
+                                        decoder.setIpInput(decoder.config?.ip || '192.168.0.1');
+                                    }}
+                                    icon={mdiTagEdit}
+                                    size={SIZE_S}
+                                />
+                            </>
+                        ) : (
+                            <>
+                                <TextInput
+                                    onChange={(text) => {
+                                        decoder.setIpInput(text);
+                                    }}
+                                    label="Daten"
+                                    value={decoder.ipInput}
+                                    onEnter={() => {
+                                        decoder.applyIpInput();
+                                    }}
+                                />
+                                <Button
+                                    onClick={() => {
+                                        decoder.applyIpInput();
+                                    }}
+                                    icon={mdiContentSave}
+                                    color="green"
+                                    size={SIZE_S}
+                                />
+                            </>
+                        )}
+                    </div>
+                    <div className={clsx(styles.messages)}>
+                        <div className={clsx(styles.input)}>
+                            <TextInput
+                                onChange={(text) => {
+                                    decoder.setMessage(text);
+                                }}
+                                label="Daten"
+                                value={decoder.message}
+                                onEnter={() => {
+                                    decoder.sendMessage();
+                                }}
+                                className={clsx(styles.textInput)}
+                                labelClassName={clsx(styles.label)}
+                            />
+                            <TextInput
+                                onChange={(text) => {
+                                    decoder.setReceiverIp(text);
+                                }}
+                                label="Empfänger (IP)"
+                                value={decoder.receiverIp}
+                                onEnter={() => {
+                                    decoder.sendMessage();
+                                }}
+                                className={clsx(styles.textInput)}
+                                labelClassName={clsx(styles.label)}
+                            />
+                            <Button
+                                onClick={() => {
+                                    decoder.sendMessage();
+                                }}
+                                icon={mdiSend}
+                                disabled={!decoder.canSend}
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
+            <Logs
+                messages={(device.receivedData[device.size - 1] === ''
+                    ? device.receivedData.slice(0, -1)
+                    : device.receivedData
+                ).map((d) => ({
+                    type: 'log',
+                    message: d
+                }))}
+                maxLines={20}
+            />
         </div>
     );
 });

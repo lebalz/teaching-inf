@@ -37,6 +37,7 @@ export interface iSubscriber {
     id: string;
     onNewLines: (newLines: string[]) => void;
     reset: () => void;
+    onConnectionStateChange?: (state: ConnectionState) => void;
 }
 
 export default class SerialDevice {
@@ -196,6 +197,9 @@ export default class SerialDevice {
     @action
     setConnectionState(state: ConnectionState) {
         this.connectionState = state;
+        for (const subscriber of this.subscriptions.values()) {
+            subscriber.onConnectionStateChange?.(state);
+        }
     }
 
     @action
