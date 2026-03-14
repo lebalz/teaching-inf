@@ -1,0 +1,14 @@
+---
+page_id: 340cb883-452f-4c5d-99e4-614a7ff7df54
+---
+import Webserial from '@tdev/webserial/component'
+import NetworkDevice from '@tdev/webserial/decoders/NetworkDevice/component'
+
+# Serial
+
+<Webserial 
+    baudRate={115200}
+    hideLogs
+    resetTrigger='::READY::'
+    output={<NetworkDevice />}
+/>
