@@ -1,9 +1,12 @@
 from microbit import *
 import radio
+import os
+
 TTL_INIT = 10
 ALLOW_PEER_TO_PEER = False
 SEPARATOR = ' '
 RESET_TRIGGER = '::READY::'
+CONFIG_FILE = 'config.txt'
 
 def pad0(text: str, n: int):
     return ("{0:0>" + str(n) + "}").format(text)
@@ -13,7 +16,7 @@ class IP:
 
     def __init__(self, ip):
         IP.validate(ip)
-        self.ip = ip.strip()
+        self.ip = str(ip).strip()
 
     @property
     def is_loopback(self):
@@ -58,7 +61,7 @@ class IP:
 
     @staticmethod
     def parse(ip: str):
-        parts = ip.strip().split('.')
+        parts = str(ip).strip().split('.')
         if len(parts) != 4:
             return
         try:
@@ -216,25 +219,28 @@ class Config:
         self.ip = '192.168.0.1'
         self.set_ip(ip, False)
         self.set_mode(mode, False)
-        self.configure()
+        self.configure(True)
 
-    def set_ip(self, ip: str, reconfigure = True):
+    def set_ip(self, ip: str, reconfigure = False):
         if IP.parse(ip):
             self.ip = ip.strip()
             if reconfigure:
                 self.configure()
 
-    def set_mode(self, mode, reconfigure = True):
+    def set_mode(self, mode, reconfigure = False):
         if mode in [Mode.CLIENT, Mode.ROUTER, Mode.SWITCH] and mode != self.mode:
             self.mode = mode
             if reconfigure:
                 self.configure()
 
-    def configure(self):
+    def configure(self, skipDump = False):
         if self.mode == Mode.CLIENT:
             self.device = Client(self.ip)
         elif self.mode == Mode.SWITCH:
             self.device = Switch(self.ip)
+        if skipDump:
+            return
+        self.dump()
 
     @property
     def icon(self):
@@ -254,8 +260,8 @@ class Config:
                 msg = SerialMessage.parse(text)
                 if msg:
                     if msg['type'] == 'set_config':
-                        self.set_mode(msg['mode'], False)
-                        self.set_ip(msg['ip'], False)
+                        self.set_mode(msg['mode'])
+                        self.set_ip(msg['ip'])
                         self.configure()
                     elif msg['type'] == 'get_config':
                         print(str(self))
@@ -266,8 +272,26 @@ class Config:
     def __str__(self):
         return self.mode + SEPARATOR + self.ip
 
+    def restore(self):
+        files = os.listdir()
+        if CONFIG_FILE in files:
+            with open(CONFIG_FILE) as file:
+                parts = file.read().split(SEPARATOR)
+            if len(parts) == 2:
+                self.set_mode(parts[0])
+                self.set_ip(parts[1])
+                self.configure()
+
+    def dump(self):
+        with open(CONFIG_FILE, 'w') as file:
+            file.write(self.mode + SEPARATOR + str(self.ip))
+        
+        
+
 print(RESET_TRIGGER)
+
 config = Config('client', '192.168.0.1')
+config.restore()
 display.show(config.icon)
 current_config = str(config)
 print(current_config)
@@ -275,15 +299,15 @@ while True:
     config.run()
     if button_b.was_pressed():
         if config.mode == Mode.CLIENT:
-            config.set_mode(Mode.SWITCH)
+            config.set_mode(Mode.SWITCH, True)
         else:
-            config.set_mode(Mode.CLIENT)
+            config.set_mode(Mode.CLIENT, True)
     str_config = str(config)
     if str_config != current_config:
         current_config = str_config
         display.show(config.icon)
         print(current_config)
     if button_a.was_pressed():
-        config.device.send(config.ip, 'Ping')
+        config.device.send(IP.LOOPBACK, 'Ping')
         
     
