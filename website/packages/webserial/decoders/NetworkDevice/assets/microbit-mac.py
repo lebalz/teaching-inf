@@ -1,5 +1,6 @@
 from microbit import *
 import radio
+import machine
 import os
 
 TTL_INIT = 10
@@ -11,12 +12,44 @@ CONFIG_FILE = 'config.txt'
 def pad0(text: str, n: int):
     return ("{0:0>" + str(n) + "}").format(text)
 
+class MAC:
+    BROADCAST_MAC = 'FF:FF:FF:FF:FF:FF'
+
+    @staticmethod
+    def is_broadcast(mac: str):
+        return str(mac).strip().upper() == MAC.BROADCAST_MAC
+    
+    @staticmethod
+    def microbit_mac():
+        mid = hex(int.from_bytes(machine.unique_id(), "little"))[6:]
+        return ":".join(mid[i:i+2] for i in range(0, 12, 2)).upper()
+
+    @staticmethod
+    def validate(mac: str):
+        parts = str(mac).strip().split(':')
+        if len(parts) != 6:
+            raise Exception('MAC "' + mac + '" is invalid.')
+        valid = [len(p) == 2 and int(p, 16) < 256 for p in parts]
+        if sum(valid) != 6:
+            raise Exception('MAC "' + mac + '" has invalid parts.')
+    
+    @staticmethod
+    def parse(mac: str):
+        try:
+            MAC.validate(mac)
+        except:
+            print('MAC "' + mac + '" has invalid parts.')
+            return
+        return str(mac).strip().upper()
+
 class IP:
+    UNCONFIGURED = '0.0.0.0'
     LOOPBACK = '127.0.0.1'
 
     def __init__(self, ip):
-        IP.validate(ip)
-        self.ip = str(ip).strip()
+        _ip = str(ip).strip()
+        IP.validate(_ip)
+        self.ip = _ip
 
     @property
     def is_loopback(self):
@@ -33,6 +66,16 @@ class IP:
     @property
     def binary(self):
         return bin(self.numeric)[2:]
+
+    def default_gateway_hex(self, mask = 24):
+        binary = self.binary[0:mask] + '0' * (31 - mask) + '1'
+        num = int(binary, 2)
+        return hex(num)
+
+    def is_broadcast(self, mask = 24):
+        binary = self.binary[mask:]
+        broadcast_addr = bin(2 ** (32 - mask) - 1)[2:]
+        return binary == broadcast_addr
 
     def __eq__(self, other):
         if isinstance(other, IP):
@@ -70,38 +113,81 @@ class IP:
             if sum(valid) == 4:
                 return IP(ip)
         except:
+            print('IP "' + ip + '" has non-integer parts.')
             return
 
-class Message:
-    def __init__(self, src, dest, message, ttl = TTL_INIT):
-        self.src = src if type(src) is IP else IP(src)
-        self.dest = dest if type(src) is IP else IP(dest)
-        self.message = message
-        self.ttl = ttl
+class EthernetFrame:
+    def __init__(self, dest, src, payload, timestamp = -1):
+        self.dest = MAC.parse(dest)
+        self.src = MAC.parse(src)
+        if not self.dest or not self.src:
+            raise Exception('Invalid MAC address in Ethernet frame.')
+        self.payload = payload
+        self.timestamp = timestamp
+    
+    def reset_timestamp(self):
+        self.timestamp = -1
 
     @staticmethod
-    def parse(message):
-        parts = message.split(SEPARATOR)
+    def parse(data, timestamp):
+        parts = data.split(SEPARATOR)
+        if len(parts) < 4:
+            return
+        try:
+            ts = int(parts[0])
+        except:
+            return
+        if ts < 0:
+            ts = timestamp
+        dest = MAC.parse(parts[1])
+        if not dest:
+            return
+        src = MAC.parse(parts[2])
+        if not src:
+            return
+        payload = SEPARATOR.join(parts[3:])
+        return EthernetFrame(dest, src, payload, ts)
+    
+    def __str__(self):
+        # TIMESTAMP, DEST, SRC, HOPS, PAYLOAD
+        return str(self.timestamp) + SEPARATOR + str(self.dest) + SEPARATOR + str(self.src) + SEPARATOR + self.payload
+
+    def __repr__(self):
+        return 'EthernetFrame(' + self.__str__() + ')'
+
+class IPFrame:
+    def __init__(self, src, dest, payload, ttl = TTL_INIT):
+        self.ttl = ttl
+        self.src = IP(src)
+        self.dest = IP(dest)
+        self.payload = payload
+
+    @staticmethod
+    def parse(data):
+        parts = data.split(SEPARATOR)
         if len(parts) < 3:
             return
-        ttl = int(parts[0])
+        try:
+            ttl = int(parts[0])
+        except:
+            return
         src = IP.parse(parts[1])
         if not src:
             return
         dest = IP.parse(parts[2])
         if not dest:
             return
-        msg = SEPARATOR.join(parts[3:])
-        return Message(src, dest, msg, ttl)
+        payload = SEPARATOR.join(parts[3:])
+        return IPFrame(src, dest, payload, ttl)
 
     def decrement_ttl(self):
         self.ttl -= 1
     
     def __str__(self):
-        return str(self.ttl) + ' ' + str(self.src) + SEPARATOR + str(self.dest) + SEPARATOR + self.message
+        return str(self.ttl) + SEPARATOR + str(self.src) + SEPARATOR + str(self.dest) + SEPARATOR + self.payload
 
     def __repr__(self):
-        return 'Message(' + self.__str__() + ')'
+        return 'IPFrame(' + self.__str__() + ')'
 
 
 class Mode:
@@ -110,25 +196,26 @@ class Mode:
     SWITCH = 'switch'
 
 class Device:
-    def __init__(self, ip, power=4):
-        myip = IP.parse(ip)
-        if not myip:
-            raise Exception('IP "' + ip + '" is invalid.')
-        self.ip = myip
-        self.config(power)
+    MAC = MAC.microbit_mac()
+
+    def __init__(self, ip=None, network_mask=24, power=4):
+        self.ip = IP.parse(ip if ip else IP.UNCONFIGURED)
+        IP.validate(self.ip)
+        # cidr notation, e.g. 24 for 255.255.255.0
+        self.network_mask = network_mask
+        self.power = power
+        self.configure()
         self.pending_serial_messages = []
 
-    def config(self, power = 4):
+    def configure(self):
         radio.off()
-        group = int(self.ip.parts[3])
-        radio.config(length=128, group=group, power=power)
+        address = self.ip.default_gateway_hex(self.network_mask)
+        group = int(self.ip.binary[self.network_mask - 8:self.network_mask], 2)
+        radio.config(length=128, group=group, power=self.power, address=int(address))
         radio.on()
 
-    def process_message(self, msg: Message):
-        # drop dead packages or packages sent peer to peer
-        if msg.ttl <= 0 or (not ALLOW_PEER_TO_PEER and msg.ttl == TTL_INIT):
-            return
-        if msg.dest.ip == self.ip.ip:
+    def process_message(self, pkg: EthernetFrame):
+        if pkg.dest == self.MAC or MAC.is_broadcast(pkg.dest):
             print(msg)
 
     def run(self):
@@ -140,38 +227,62 @@ class Device:
                 data = uart.readline()
             if text.strip():
                 self.pending_serial_messages.append(text.strip())
-        raw = radio.receive()
+        raw = radio.receive_full()
         if not raw:
             return
-        msg = Message.parse(raw)
-        if not msg:
+        msg, rssi, timestamp = raw
+        data = EthernetFrame.parse(raw, timestamp)
+        if not data:
             return
-        self.process_message(msg)
+        self.process_message(data)
 
-    def send(self, dest, message):
-        to = IP.parse(dest)
+    def send(self, dest, data):
+        to = MAC.parse(dest)
         if not to:
             return
-        msg = Message(self.ip, to, message)
-        if to.is_loopback:
+        msg = EthernetFrame(to, self.MAC, str(data))
+        if to == self.MAC:
             return print(msg)
         radio.send(str(msg))
-        
 
 class Client(Device):
-    def __init__(self, ip):
-        super().__init__(ip)
+    def __init__(self, ip, network_mask=24, power=4):
+        super().__init__(ip, network_mask, power)
 
 class Switch(Device):
-    def __init__(self, ip, suffix = 24):
-        super().__init__(ip)
-        self.suffix = suffix
+    def __init__(self, ip, network_mask=24, power=4):
+        super().__init__(ip, network_mask, power)
+        self.mac_table = {}
+
+    def process_message(self, msg: EthernetFrame):
+        if msg.dest in self.mac_table:
+            # ok, we know the destination and can send the message directly with a set timestamp
+        else:
+            # we don't know the destination, so we flood the message to all other devices, but we reset the timestamp to filter out duplicates
+            msg.reset_timestamp()
+
+        # learn the source MAC
+        # TODO: ditch messages with older timestamps
+        self.mac_table[msg.src] = msg.timestamp
+
+        if msg.src in self.mac_table:
+            if msg.timstamp > 0:
+        else:
+        print(msg)
+        if msg.dest == self.MAC:
+            return
+        # just flood the message to all other devices, no port concept possible with micro:bit radio
+        radio.send(str(msg))
+
+class Router(Device):
+    def __init__(self, ip, network_mask=24, power=4):
+        super().__init__(ip, network_mask, power)
 
     def process_message(self, msg: Message):
         if msg.dest == self.ip:
             print(msg)
             return
-        if msg.dest.binary[0:self.suffix] != self.ip.binary[0:self.suffix]:
+        if msg.dest.binary[0:self.network_mask] != self.ip.binary[0:self.network_mask]:
             return
         print(msg)
         msg.decrement_ttl()
@@ -290,7 +401,7 @@ class Config:
 
 print(RESET_TRIGGER)
 
-config = Config('client', '192.168.0.1')
+config = Config('client', '192.168.12.1')
 config.restore()
 display.show(config.icon)
 current_config = str(config)

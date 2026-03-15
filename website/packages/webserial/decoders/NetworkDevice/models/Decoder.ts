@@ -6,6 +6,23 @@ import DeviceConfig from './DeviceConfig';
 const CONFIG = '::CONFIG::';
 const SEND = '::SEND::';
 
+const isValidIp = (ip?: string) => {
+    if (!ip) {
+        return false;
+    }
+    const parts = ip.trim().split('.');
+    if (parts.length !== 4) {
+        return false;
+    }
+    for (const part of parts) {
+        const num = Number(part);
+        if (isNaN(num) || num < 0 || num > 255) {
+            return false;
+        }
+    }
+    return true;
+};
+
 class Decoder implements iSubscriber {
     readonly id: string;
     readonly device: SerialDevice;
@@ -28,9 +45,14 @@ class Decoder implements iSubscriber {
         this.ipInput = ip;
     }
 
+    @computed
+    get isValidInputIp() {
+        return isValidIp(this.ipInput);
+    }
+
     @action
     applyIpInput() {
-        if (this.config) {
+        if (this.config && this.isValidInputIp) {
             this.device.sendLine(`${CONFIG} ${this.config.mode} ${this.ipInput}`);
             this.ipInput = '';
         }
@@ -48,20 +70,7 @@ class Decoder implements iSubscriber {
 
     @computed
     get isValidReceiverIp() {
-        if (!this.receiverIp) {
-            return false;
-        }
-        const parts = this.receiverIp.split('.');
-        if (parts.length !== 4) {
-            return false;
-        }
-        for (const part of parts) {
-            const num = Number(part);
-            if (isNaN(num) || num < 0 || num > 255) {
-                return false;
-            }
-        }
-        return true;
+        return isValidIp(this.receiverIp);
     }
 
     @computed
@@ -72,14 +81,13 @@ class Decoder implements iSubscriber {
     @action
     sendMessage() {
         if (this.canSend) {
-            this.device.sendLine(`${SEND} ${this.receiverIp} ${this.message}`);
+            this.device.sendLine(`${SEND} ${this.receiverIp.trim()} ${this.message}`);
             this.message = '';
         }
     }
 
     @action
     onConnectionStateChange(state: ConnectionState) {
-        console.log('Connection state changed:', state);
         if (state === 'connected') {
             this.device.sendLine(CONFIG);
         } else {

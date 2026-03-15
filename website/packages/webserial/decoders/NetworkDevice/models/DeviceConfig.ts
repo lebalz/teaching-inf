@@ -1,4 +1,6 @@
-import { mdiLaptop, mdiRouter, mdiRouterNetwork, mdiSwitch } from '@mdi/js';
+import { mdiLaptop, mdiRouter } from '@mdi/js';
+const mdiSwitch =
+    'M 6.05 14.94 V 10.94 H 14.97 L 15 8.93 H 6.05 V 4.94 L 1.05 9.94 Z M 18 18.94 V 14.94 H 9.08 L 9.05 12.93 H 18 V 8.94 L 23 13.94 Z';
 
 type Mode = (typeof DeviceConfig.MODES)[number];
 

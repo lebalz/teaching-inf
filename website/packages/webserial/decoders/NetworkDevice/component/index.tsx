@@ -10,7 +10,7 @@ import Button from '@tdev-components/shared/Button';
 import Logs from '@tdev-components/documents/CodeEditor/Editor/Footer/Logs';
 import Badge from '@tdev-components/shared/Badge';
 import TextInput from '@tdev-components/shared/TextInput';
-import { mdiContentSave, mdiSend, mdiTagEdit } from '@mdi/js';
+import { mdiCloseCircle, mdiContentSave, mdiSend, mdiSquareEditOutline } from '@mdi/js';
 import { SIZE_S } from '@tdev-components/shared/iconSizes';
 
 interface Props {}
@@ -40,6 +40,7 @@ const NetworkDevice = observer((props: Props) => {
                     <div className={clsx(styles.config)}>
                         <Button
                             icon={decoder.config.icon}
+                            iconSide="left"
                             text={decoder.config.mode}
                             onClick={() => {
                                 decoder.nextMode();
@@ -47,24 +48,30 @@ const NetworkDevice = observer((props: Props) => {
                             color="blue"
                         />
                         {decoder.ipInput.length === 0 ? (
-                            <>
-                                <Badge>{decoder.config.ip}</Badge>
+                            <div className={clsx(styles.ip)}>
                                 <Button
                                     onClick={() => {
-                                        console.log('set', decoder.config?.ip);
                                         decoder.setIpInput(decoder.config?.ip || '192.168.0.1');
                                     }}
-                                    icon={mdiTagEdit}
-                                    size={SIZE_S}
+                                    text={`IP: ${decoder.config.ip}`}
+                                    icon={mdiSquareEditOutline}
+                                    color="blue"
                                 />
-                            </>
+                            </div>
                         ) : (
-                            <>
+                            <div
+                                className={clsx(
+                                    styles.ip,
+                                    styles.editing,
+                                    decoder.isValidInputIp ? styles.valid : styles.invalid
+                                )}
+                            >
                                 <TextInput
                                     onChange={(text) => {
-                                        decoder.setIpInput(text);
+                                        decoder.setIpInput(text || ' ');
                                     }}
-                                    label="Daten"
+                                    label="IP"
+                                    labelClassName={clsx(styles.label)}
                                     value={decoder.ipInput}
                                     onEnter={() => {
                                         decoder.applyIpInput();
@@ -77,33 +84,45 @@ const NetworkDevice = observer((props: Props) => {
                                     icon={mdiContentSave}
                                     color="green"
                                     size={SIZE_S}
+                                    disabled={!decoder.isValidInputIp}
                                 />
-                            </>
+                                <Button
+                                    onClick={() => {
+                                        decoder.setIpInput('');
+                                    }}
+                                    icon={mdiCloseCircle}
+                                    color="black"
+                                    size={SIZE_S}
+                                />
+                            </div>
                         )}
                     </div>
-                    <div className={clsx(styles.messages)}>
-                        <div className={clsx(styles.input)}>
+                    <div className={clsx(styles.input)}>
+                        <TextInput
+                            onChange={(text) => {
+                                decoder.setReceiverIp(text);
+                            }}
+                            label="IP Empfangsgerät"
+                            value={decoder.receiverIp}
+                            onEnter={() => {
+                                decoder.sendMessage();
+                            }}
+                            noAutoFocus
+                            placeholder={decoder.config.ip.split('.').slice(0, 3).join('.') + '.1'}
+                            className={clsx(styles.receiverIpInput)}
+                            labelClassName={clsx(styles.label)}
+                        />
+                        <div className={clsx(styles.message)}>
                             <TextInput
                                 onChange={(text) => {
                                     decoder.setMessage(text);
                                 }}
-                                label="Daten"
+                                label="Nachricht"
                                 value={decoder.message}
                                 onEnter={() => {
                                     decoder.sendMessage();
                                 }}
-                                className={clsx(styles.textInput)}
-                                labelClassName={clsx(styles.label)}
-                            />
-                            <TextInput
-                                onChange={(text) => {
-                                    decoder.setReceiverIp(text);
-                                }}
-                                label="Empfänger (IP)"
-                                value={decoder.receiverIp}
-                                onEnter={() => {
-                                    decoder.sendMessage();
-                                }}
+                                noAutoFocus
                                 className={clsx(styles.textInput)}
                                 labelClassName={clsx(styles.label)}
                             />
