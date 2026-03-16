@@ -151,11 +151,38 @@ class EthernetFrame:
         return EthernetFrame(_id, dest, src, payload, ts)
 
     def __str__(self):
-        # TIMESTAMP, ID, DEST, SRC, HOPS, PAYLOAD
+        # TIMESTAMP, ID, DEST, SRC, PAYLOAD
         return str(self.timestamp) + SEPARATOR + str(self._id) + SEPARATOR + str(self.dest) + SEPARATOR + str(self.src) + SEPARATOR + self.payload
 
     def __repr__(self):
         return 'EthernetFrame(' + self.__str__() + ')'
+
+class ARPFrame:
+    def __init__(self, sender_mac, sender_ip, dest_ip):
+        self.sender_mac = MAC.parse(sender_mac)
+        self.sender_ip = IP.parse(sender_ip)
+        self.dest_ip = IP.parse(dest_ip)
+
+    @staticmethod
+    def parse(data):
+        parts = data.split(SEPARATOR)
+        if len(parts) != 4:
+            return
+        if parts[0] != 'ARP':
+            return
+        sender_mac = MAC.parse(parts[1])
+        if not sender_mac:
+            return
+        sender_ip = IP.parse(parts[2])
+        if not sender_ip:
+            return
+        dest_ip = IP.parse(parts[3])
+        if not dest_ip:
+            return
+        return ARPFrame(sender_mac, sender_ip, dest_ip)
+
+    def __str__(self):
+        return 'ARP' + SEPARATOR + str(self.sender_mac) + SEPARATOR + str(self.sender_ip) + SEPARATOR + str(self.dest_ip)
 
 class IPFrame:
     def __init__(self, src, dest, payload, ttl = TTL_INIT):
@@ -167,26 +194,28 @@ class IPFrame:
     @staticmethod
     def parse(data):
         parts = data.split(SEPARATOR)
-        if len(parts) < 3:
+        if len(parts) < 4:
+            return
+        if parts[0] != 'IP':
             return
         try:
-            ttl = int(parts[0])
+            ttl = int(parts[1])
         except:
             return
-        src = IP.parse(parts[1])
+        src = IP.parse(parts[2])
         if not src:
             return
-        dest = IP.parse(parts[2])
+        dest = IP.parse(parts[3])
         if not dest:
             return
-        payload = SEPARATOR.join(parts[3:])
+        payload = SEPARATOR.join(parts[4:])
         return IPFrame(src, dest, payload, ttl)
 
     def decrement_ttl(self):
         self.ttl -= 1
     
     def __str__(self):
-        return str(self.ttl) + SEPARATOR + str(self.src) + SEPARATOR + str(self.dest) + SEPARATOR + self.payload
+        return 'IP' + SEPARATOR + str(self.ttl) + SEPARATOR + str(self.src) + SEPARATOR + str(self.dest) + SEPARATOR + self.payload
 
     def __repr__(self):
         return 'IPFrame(' + self.__str__() + ')'
@@ -215,6 +244,8 @@ class Device:
         self.radio_power = radio_power
         self.radio_group = radio_group
         self.radio_address = radio_address
+        self.default_gateway = None
+        self.default_gateway_mac = None
         self.configure()
         self.pending_serial_messages = []
         self._received_pkg_ids: list = [None] * PACKAGE_BUFFER_SIZE
@@ -276,15 +307,19 @@ class Device:
         radio.send(str(msg))
 
     def send_L3(self, dest, data):
+        if not self.default_gateway:
+            return self.pending_serial_messages.append(str(ErrorMessage('Cannot send L3 message without default gateway configured.')))
+        if not self.default_gateway_mac:
+            radio.send(str(ARPFrame(self.MAC, self.ip, self.default_gateway)))
+            return self.pending_serial_messages.append(str(ErrorMessage('Cannot send L3 message without default gateway MAC address resolved. Sent ARP request to resolve it.')))
         if not self.ip:
             return self.pending_serial_messages.append(str(ErrorMessage('Cannot send L3 message without IP address configured.')))
         to = IP.parse(dest)
         if not to:
             return self.pending_serial_messages.append(str(ErrorMessage('Cannot send L3 message without a valid destination IP address.')))
-        _id = self._pkg_id
-        self._pkg_id += 1
         ipframe = IPFrame(self.ip, to, data)
-        msg = EthernetFrame(_id, to, self.MAC, str(ipframe))
+        msg = EthernetFrame(self._pkg_id, self.default_gateway_mac, self.MAC, str(ipframe))
+        self._pkg_id += 1
         if to == self.ip:
             return print(msg)
         radio.send(str(msg))
@@ -292,6 +327,18 @@ class Device:
 class Client(Device):
     def __init__(self, ip, network_mask, radio_address, radio_group, radio_power):
         super().__init__(ip, network_mask, radio_address, radio_group, radio_power)
+    
+    def process_message(self, pkg: EthernetFrame, received_at: int):
+        if pkg.timestamp < 1:
+            return
+        if pkg.dest == self.MAC or MAC.is_broadcast(pkg.dest):
+            arp_frame = ARPFrame.parse(pkg.payload)
+            if arp_frame:
+                if arp_frame.dest_ip == self.ip and arp_frame.sender_ip == self.default_gateway:
+                    self.default_gateway_mac = arp_frame.sender_mac
+                    
+                return
+            print(pkg)
 
 class Switch(Device):
     def __init__(self, radio_address, radio_group, radio_power):
@@ -326,7 +373,7 @@ class Router(Device):
         self.mac_table = {}
         self.ip_table = {}
 
-    def process_message(self, msg: EthernetFrame):
+    def process_message(self, msg: EthernetFrame, received_at: int):
         is_known_dest = self.mac_table.get(msg.dest, -1) > 0
         if msg.timestamp > 0:
             # drop, since it was sent by another switch/router that already knew the destination.
@@ -360,8 +407,18 @@ class Router(Device):
                     # destination not in our routing table, so we just print it to tdev which should delegate it to the default gateway.
                     print(ip_frame)
                     return
-                self._pkg_id += 1    
+                self._pkg_id += 1
         else:
+            arp_frame = ARPFrame.parse(msg.payload)
+            if arp_frame:
+                if arp_frame.dest_ip == self.ip:
+                    self.ip_table[arp_frame.sender_ip] = arp_frame.sender_mac
+                    # this is an ARP request for our IP, so we reply with an ARP response containing our MAC address.
+                    arp_response = ARPFrame(self.MAC, self.ip, arp_frame.sender_ip)
+                    response_frame = EthernetFrame(self._pkg_id, arp_frame.sender_mac, self.MAC, str(arp_response))
+                    radio.send(str(response_frame))
+                    self._pkg_id += 1
+                return
             # act as a layer 2 switch if the payload is no valid IP frame, since we cannot route it.
             if not is_known_dest:
                 # we don't know the destination, so we flood the message to all other devices, but we 
@@ -476,6 +533,7 @@ class Config:
                 print(str(ErrorMessage('Router must have a valid IP address configured.')))
                 return self.configure(Mode.CLIENT, ip, address, group, power, skipDump)
             self.device = Router(self.ip, 24, self.radio[0], self.radio[1], self.radio[2])
+        self.changed = True
         if skipDump:
             return
         self.dump()
@@ -530,7 +588,11 @@ class Config:
             self.device.pending_serial_messages = []
 
     def __str__(self):
+        # mode ip radio_address radio_group radio_power
         return self.mode + SEPARATOR + str(self.ip) + SEPARATOR + str(self.radio[0]) + SEPARATOR + str(self.radio[1]) + SEPARATOR + str(self.radio[2])
+    
+    def send_config(self):
+        print(Device.MAC + SEPARATOR + str(self))
         
         
 
@@ -539,8 +601,6 @@ print(RESET_TRIGGER)
 config = Config('client')
 config.restore()
 display.show(config.icon)
-current_config = str(config)
-print(current_config)
 while True:
     config.run()
     if button_b.was_pressed():
@@ -550,11 +610,10 @@ while True:
             config.set_mode(Mode.ROUTER)
         else:
             config.set_mode(Mode.CLIENT)
-    str_config = str(config)
-    if str_config != current_config:
-        current_config = str_config
+    if config.changed:
+        config.changed = False
         display.show(config.icon)
-        print(current_config)
+        config.send_config()
     if button_a.was_pressed():
         if config.device.ip:
             config.device.send_L3(IP.LOOPBACK, 'Ping')
