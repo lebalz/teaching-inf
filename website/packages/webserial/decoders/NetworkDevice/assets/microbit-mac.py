@@ -1,7 +1,7 @@
-from microbit import *
-import radio
-import machine
-import os
+from microbit import sleep, running_time, display, Image, button_a, button_b, uart
+from radio import config as r_config, on as r_on, off as r_off, send as r_send, receive as r_receive
+from machine import unique_id
+from os import listdir
 
 TTL_INIT = 10
 ALLOW_PEER_TO_PEER = False
@@ -29,7 +29,7 @@ class MAC:
 
     @staticmethod
     def microbit_mac():
-        mid = hex(int.from_bytes(machine.unique_id(), "little"))[6:]
+        mid = hex(int.from_bytes(unique_id(), "little"))[6:]
         return ":".join(mid[i:i+2] for i in range(0, 12, 2)).upper()
 
     @staticmethod
@@ -257,11 +257,11 @@ class Device:
         self._pkg_id = 0
 
     def configure(self):
-        radio.off()
+        r_off()
         sleep(10)
-        radio.config(length=128, group=self.radio_group, power=self.radio_power, address=self.radio_address)
+        r_config(length=128, group=self.radio_group, power=self.radio_power, address=self.radio_address)
         sleep(10)
-        radio.on()
+        r_on()
 
     def process_message(self, pkg: EthernetFrame, received_at: int):
         if pkg.timestamp < 1:
@@ -278,7 +278,7 @@ class Device:
                 data = uart.readline()
             if text.strip():
                 self.pending_serial_messages.append(text.strip())
-        raw = radio.receive()
+        raw = r_receive()
         if not raw:
             return
         pkg = EthernetFrame.parse(raw)
@@ -294,15 +294,15 @@ class Device:
         self._process_pending_frames()
 
     def _process_pending_frames(self):
-        if len(self._pending_frames) < 1:
+        if len(self._pending_frames) == 0:
             return
         self._cleanup_stalled_pending_frames()
         i = 0
         while i < len(self._pending_frames):
-            pkg = self._pending_frames[i]
-            if pkg['check'](self):
+            ts, to, data = self._pending_frames[i]
+            if self.can_deliver_l3(to):
                 self._pending_frames.pop(i)
-                radio.send(str(pkg['frame'](self)))
+                r_send(str(self.create_ip_frame(to, data)))
             else:
                 i += 1
 
@@ -310,10 +310,10 @@ class Device:
         now = running_time()
         i = 0
         while i < len(self._pending_frames):
-             ts = self._pending_frames[i]['ts']
-             if now - ts >= 5000:
+            ts, to, data = self._pending_frames[i]
+            if now - ts >= 500:
                 self._pending_frames.pop(i)
-             else:
+            else:
                 i += 1
 
     def _is_double_receive(self, pkg: EthernetFrame):
@@ -335,7 +335,16 @@ class Device:
         self._pkg_id += 1
         if to == self.MAC:
             return print(msg)
-        radio.send(str(msg))
+        r_send(str(msg))
+
+    def create_ip_frame(self, dest_ip, data):
+        ipframe = IPFrame(self.ip, dest_ip, data)
+        pkg = EthernetFrame(self._pkg_id, self.default_gateway_mac, self.MAC, str(ipframe))
+        self._pkg_id += 1
+        return pkg
+
+    def can_deliver_l3(self, dest_ip):
+        return not d.default_gateway_mac
 
     def send_L3(self, dest, data):
         if not self.default_gateway:
@@ -346,27 +355,18 @@ class Device:
         if not to:
             return print(ErrorMessage('Cannot send L3 message without a valid destination IP address.'))
 
-        def frame(d: Device):
-            ipframe = IPFrame(d.ip, to, data)
-            pkg = EthernetFrame(d._pkg_id, d.default_gateway_mac, d.MAC, str(ipframe))
-            d._pkg_id += 1
-            return pkg
-
-        def check(d: Device):
-            return not d.default_gateway_mac
-
         if not self.default_gateway_mac:
-            self._pending_frames.append({'ts': running_time(), 'check': check, 'frame': frame})
+            self._pending_frames.append((running_time(), str(to), data))
             self.send_arp(self.default_gateway)
             return
-        msg = frame(self)        
+        msg = self.create_ip_frame(to, data)
         if to == self.ip:
             return print(msg)
-        radio.send(str(msg))
+        r_send(str(msg))
     
     def send_arp(self, dest_ip):
         arp = ARPFrame(self.MAC, self.ip, dest)
-        radio.send(str(EthernetFrame(self._pkg_id, MAC.BROADCAST_MAC, self.MAC, str(arp))))
+        r_send(str(EthernetFrame(self._pkg_id, MAC.BROADCAST_MAC, self.MAC, str(arp))))
         self._pkg_id += 1
 
 class Switch(Device):
@@ -394,9 +394,9 @@ class Switch(Device):
         if msg.dest == self.MAC:
             return
         # just flood the message to all other devices, no port concept possible with micro:bit radio
-        radio.send(str(msg))
+        r_send(str(msg))
 
-    def can_proceed_pending_frames(self, dest: str):
+    def can_deliver_l3(self, dest: str):
         return False
 
 class Client(Device):
@@ -427,6 +427,15 @@ class Router(Device):
         self.mac_table = {}
         self.ip_table = {}
 
+    def create_ip_frame(self, dest_ip, data):
+        next_hop_mac = self.ip_table[dest_ip]
+        pkg = EthernetFrame(self._pkg_id, next_hop_mac, self.MAC, data)
+        self._pkg_id += 1
+        return pkg
+
+    def can_deliver_l3(self, dest_ip):
+        return dest_ip in self.ip_table
+
     def process_message(self, msg: EthernetFrame, received_at: int):
         is_known_dest = self.mac_table.get(msg.dest, -1) > 0
         if msg.timestamp > 0:
@@ -451,23 +460,15 @@ class Router(Device):
                     return
                 if ip_frame.dest.is_broadcast(self.network_mask):
                     broadcast_frame = EthernetFrame(self._pkg_id, MAC.BROADCAST_MAC, self.MAC, str(ip_frame))
-                    radio.send(str(broadcast_frame))
+                    r_send(str(broadcast_frame))
                     self._pkg_id += 1
                     return
-                
-                def frame(d: Device):
-                    next_hop_mac = self.ip_table[ip_frame.dest.ip]
-                    forward_frame = EthernetFrame(self._pkg_id, next_hop_mac, self.MAC, str(ip_frame))
-                    d._pkg_id += 1
-                    return pkg
 
                 if ip_frame.dest.ip in self.ip_table:
-                    pkg = frame(self)
-                    radio.send(str(pkg))
+                    pkg = self.create_ip_frame(ip_frame.dest.ip, str(ip_frame))
+                    r_send(str(pkg))
                 elif self.ip.in_same_subnet(ip_frame.dest, self.network_mask):
-                    def check(d: Device):
-                        return ip_frame.dest.ip in d.ip_table
-                    self._pending_frames.append({'ts': running_time(), 'check': check, 'frame': frame})
+                    self._pending_frames.append((running_time(), ip_frame.dest.ip, str(ip_frame)))
                     self.send_arp(ip_frame.dest)
                 else:
                     # destination not in our routing table, so we just print it to tdev which should delegate it to the default gateway.
@@ -493,7 +494,7 @@ class Router(Device):
             if msg.dest == self.MAC:
                 return
             # just flood the message to all other devices, no port concept possible with micro:bit radio
-            radio.send(str(msg))
+            r_send(str(msg))
 
 class SerialMessage:
     CONFIG = '::CONFIG::'
