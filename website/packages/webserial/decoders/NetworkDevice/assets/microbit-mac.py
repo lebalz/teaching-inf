@@ -13,13 +13,20 @@ PACKAGE_BUFFER_SIZE = 32
 def pad0(text: str, n: int):
     return ("{0:0>" + str(n) + "}").format(text)
 
+class ErrorMessage:
+    def __init__(self, message):
+        self.message = message
+
+    def __str__(self):
+        return 'ERROR: ' + self.message
+
 class MAC:
     BROADCAST_MAC = 'FF:FF:FF:FF:FF:FF'
 
     @staticmethod
     def is_broadcast(mac):
         return str(mac).strip().upper() == MAC.BROADCAST_MAC
-    
+
     @staticmethod
     def microbit_mac():
         mid = hex(int.from_bytes(machine.unique_id(), "little"))[6:]
@@ -33,13 +40,13 @@ class MAC:
         valid = [len(p) == 2 and int(p, 16) < 256 for p in parts]
         if sum(valid) != 6:
             raise Exception('MAC "' + mac + '" has invalid parts.')
-    
+
     @staticmethod
     def parse(mac: str):
         try:
             MAC.validate(mac)
         except:
-            print('MAC "' + mac + '" has invalid parts.')
+            print(ErrorMessage('MAC "' + mac + '" has invalid parts.'))
             return
         return str(mac).strip().upper()
 
@@ -68,10 +75,13 @@ class IP:
     def binary(self):
         return bin(self.numeric)[2:]
 
-    def default_gateway_hex(self, mask = 24):
+    def default_gateway(self, mask = 24):
         binary = self.binary[0:mask] + '0' * (31 - mask) + '1'
         num = int(binary, 2)
-        return hex(num)
+        return IP('.'.join([str((num >> (8 * i)) % 256) for i in range(4)[::-1]]))
+
+    def in_same_subnet(self, other, mask = 24):
+        return self.binary[0:mask] == other.binary[0:mask]
 
     def is_broadcast(self, mask = 24):
         binary = self.binary[mask:]
@@ -91,7 +101,7 @@ class IP:
     def __str__(self):
         return self.ip
 
-    
+
     @staticmethod
     def validate(ip: str):
         parts = ip.strip().split('.')
@@ -101,7 +111,7 @@ class IP:
         valid = [n >= 0 and n < 256 for n in parts]
         if sum(valid) != 4:
             raise Exception('IP "' + ip + '" has out of range parts.')
-        
+
 
     @staticmethod
     def parse(ip: str):
@@ -127,18 +137,18 @@ class EthernetFrame:
             raise Exception('Invalid MAC address in Ethernet frame.')
         self.payload = payload
         self.timestamp = timestamp
-    
+
     def set_timestamp(self, timestamp):
         self.timestamp = timestamp
 
     @staticmethod
     def parse(data):
-        parts = data.split(SEPARATOR)
+        parts = str(data).split(SEPARATOR)
         if len(parts) < 4:
             return
         try:
-            _id = int(parts[0])
-            ts = int(parts[1])
+            ts = int(parts[0])
+            _id = int(parts[1])
         except:
             return
         dest = MAC.parse(parts[2])
@@ -213,7 +223,7 @@ class IPFrame:
 
     def decrement_ttl(self):
         self.ttl -= 1
-    
+
     def __str__(self):
         return 'IP' + SEPARATOR + str(self.ttl) + SEPARATOR + str(self.src) + SEPARATOR + str(self.dest) + SEPARATOR + self.payload
 
@@ -227,26 +237,20 @@ class Mode:
     SWITCH = 'switch'
     MODES = [CLIENT, ROUTER, SWITCH]
 
-class ErrorMessage:
-    def __init__(self, message):
-        self.message = message
-
-    def __str__(self):
-        return 'ERROR: ' + self.message
-
 class Device:
     MAC = MAC.microbit_mac()
 
-    def __init__(self, ip, network_mask, radio_address, radio_group, radio_power):
+    def __init__(self, ip, default_gateway, network_mask, radio_address, radio_group, radio_power):
         self.ip = IP.parse(ip)
+        self.default_gateway = IP.parse(default_gateway)
+        self.default_gateway_mac = None
         # cidr notation, e.g. 24 for 255.255.255.0
         self.network_mask = network_mask
         self.radio_power = radio_power
         self.radio_group = radio_group
         self.radio_address = radio_address
-        self.default_gateway = None
-        self.default_gateway_mac = None
         self.configure()
+        self._pending_frames = []
         self.pending_serial_messages = []
         self._received_pkg_ids: list = [None] * PACKAGE_BUFFER_SIZE
         self._received_pkg_ids_idx = 0
@@ -254,7 +258,9 @@ class Device:
 
     def configure(self):
         radio.off()
+        sleep(10)
         radio.config(length=128, group=self.radio_group, power=self.radio_power, address=self.radio_address)
+        sleep(10)
         radio.on()
 
     def process_message(self, pkg: EthernetFrame, received_at: int):
@@ -272,11 +278,11 @@ class Device:
                 data = uart.readline()
             if text.strip():
                 self.pending_serial_messages.append(text.strip())
-        raw = radio.receive_full()
+        raw = radio.receive()
         if not raw:
             return
-        msg, rssi, timestamp = raw
-        pkg = EthernetFrame.parse(msg)
+        pkg = EthernetFrame.parse(raw)
+        timestamp = running_time()
         if not pkg:
             return
         if self._is_double_receive(pkg):
@@ -285,64 +291,87 @@ class Device:
             # this is a package we sent, drop it.
             return
         self.process_message(pkg, timestamp)
+        self._process_pending_frames()
 
-    def _is_double_receive(self, pkg: EthernetFrame, skip_cache = False):
+    def _process_pending_frames(self):
+        if len(self._pending_frames) < 1:
+            return
+        self._cleanup_stalled_pending_frames()
+        i = 0
+        while i < len(self._pending_frames):
+            pkg = self._pending_frames[i]
+            if pkg['check'](self):
+                self._pending_frames.pop(i)
+                radio.send(str(pkg['frame'](self)))
+            else:
+                i += 1
+
+    def _cleanup_stalled_pending_frames(self):
+        now = running_time()
+        i = 0
+        while i < len(self._pending_frames):
+             ts = self._pending_frames[i]['ts']
+             if now - ts >= 5000:
+                self._pending_frames.pop(i)
+             else:
+                i += 1
+
+    def _is_double_receive(self, pkg: EthernetFrame):
+        if pkg.timestamp < 0:
+            # only consider packages with a valid timestamp for double receive detection, since packages with timestamp -1 are received directly from the sender and thus not affected by double receive.
+            return False
         pkg_id = (pkg._id, pkg.src)
         if pkg_id in self._received_pkg_ids:
             return True
-        if not skip_cache:
-            self._received_pkg_ids[self._received_pkg_ids_idx] = pkg_id
-            self._received_pkg_ids_idx = (self._received_pkg_ids_idx + 1) % PACKAGE_BUFFER_SIZE
+        self._received_pkg_ids[self._received_pkg_ids_idx] = pkg_id
+        self._received_pkg_ids_idx = (self._received_pkg_ids_idx + 1) % PACKAGE_BUFFER_SIZE
         return False
 
     def send_L2(self, dest, data):
         to = MAC.parse(dest)
         if not to:
-            return self.pending_serial_messages.append(str(ErrorMessage('Cannot send L2 message without a valid destination MAC address.')))
-        _id = self._pkg_id
+            return print(ErrorMessage('Cannot send L2 message without a valid destination MAC address.'))
+        msg = EthernetFrame(self._pkg_id, to, self.MAC, str(data))
         self._pkg_id += 1
-        msg = EthernetFrame(_id, to, self.MAC, str(data))
         if to == self.MAC:
             return print(msg)
         radio.send(str(msg))
 
     def send_L3(self, dest, data):
         if not self.default_gateway:
-            return self.pending_serial_messages.append(str(ErrorMessage('Cannot send L3 message without default gateway configured.')))
-        if not self.default_gateway_mac:
-            radio.send(str(ARPFrame(self.MAC, self.ip, self.default_gateway)))
-            return self.pending_serial_messages.append(str(ErrorMessage('Cannot send L3 message without default gateway MAC address resolved. Sent ARP request to resolve it.')))
+            return print(ErrorMessage('Cannot send L3 message without default gateway configured.'))
         if not self.ip:
-            return self.pending_serial_messages.append(str(ErrorMessage('Cannot send L3 message without IP address configured.')))
+            return print(ErrorMessage('Cannot send L3 message without IP address configured.'))
         to = IP.parse(dest)
         if not to:
-            return self.pending_serial_messages.append(str(ErrorMessage('Cannot send L3 message without a valid destination IP address.')))
-        ipframe = IPFrame(self.ip, to, data)
-        msg = EthernetFrame(self._pkg_id, self.default_gateway_mac, self.MAC, str(ipframe))
-        self._pkg_id += 1
+            return print(ErrorMessage('Cannot send L3 message without a valid destination IP address.'))
+
+        def frame(d: Device):
+            ipframe = IPFrame(d.ip, to, data)
+            pkg = EthernetFrame(d._pkg_id, d.default_gateway_mac, d.MAC, str(ipframe))
+            d._pkg_id += 1
+            return pkg
+
+        def check(d: Device):
+            return not d.default_gateway_mac
+
+        if not self.default_gateway_mac:
+            self._pending_frames.append({'ts': running_time(), 'check': check, 'frame': frame})
+            self.send_arp(self.default_gateway)
+            return
+        msg = frame(self)        
         if to == self.ip:
             return print(msg)
         radio.send(str(msg))
-
-class Client(Device):
-    def __init__(self, ip, network_mask, radio_address, radio_group, radio_power):
-        super().__init__(ip, network_mask, radio_address, radio_group, radio_power)
     
-    def process_message(self, pkg: EthernetFrame, received_at: int):
-        if pkg.timestamp < 1:
-            return
-        if pkg.dest == self.MAC or MAC.is_broadcast(pkg.dest):
-            arp_frame = ARPFrame.parse(pkg.payload)
-            if arp_frame:
-                if arp_frame.dest_ip == self.ip and arp_frame.sender_ip == self.default_gateway:
-                    self.default_gateway_mac = arp_frame.sender_mac
-                    
-                return
-            print(pkg)
+    def send_arp(self, dest_ip):
+        arp = ARPFrame(self.MAC, self.ip, dest)
+        radio.send(str(EthernetFrame(self._pkg_id, MAC.BROADCAST_MAC, self.MAC, str(arp))))
+        self._pkg_id += 1
 
 class Switch(Device):
     def __init__(self, radio_address, radio_group, radio_power):
-        super().__init__(None, 24, radio_address, radio_group, radio_power)
+        super().__init__(None, None, 24, radio_address, radio_group, radio_power)
         self.mac_table = {}
 
     def process_message(self, msg: EthernetFrame, received_at: int):
@@ -350,24 +379,49 @@ class Switch(Device):
         if msg.timestamp > 0:
             # drop, since it was sent by another switch/router that already knew the destination.
             return
-        if not is_known_dest:
-            # we don't know the destination, so we flood the message to all other devices, but we 
-            # reset the timestamp to ensure the package gets dropped when received by the destination.
-            msg.set_timestamp(0)
 
         if msg.timestamp == -1:
             # learn the source MAC when the package arrives directly from the sender (timestamp -1)
             self.mac_table[msg.src] = received_at
+            msg.set_timestamp(received_at)
 
-        print(msg)
+        if not is_known_dest:
+            # we don't know the destination, so we flood the message to all other devices, but we
+            # reset the timestamp to ensure the package gets dropped when received by the destination.
+            msg.set_timestamp(0)
+
+        print(str(msg))
         if msg.dest == self.MAC:
             return
         # just flood the message to all other devices, no port concept possible with micro:bit radio
         radio.send(str(msg))
 
+    def can_proceed_pending_frames(self, dest: str):
+        return False
+
+class Client(Device):
+    def __init__(self, ip, default_gateway, network_mask, radio_address, radio_group, radio_power):
+        super().__init__(ip, default_gateway, network_mask, radio_address, radio_group, radio_power)
+
+    def handle_package(self, pkg: EthernetFrame):
+        arp_frame = ARPFrame.parse(pkg.payload)
+        if arp_frame:
+            if arp_frame.dest_ip == self.ip and arp_frame.sender_ip == self.default_gateway:
+                self.default_gateway_mac = arp_frame.sender_mac
+        print(pkg)
+
+    def process_message(self, pkg: EthernetFrame, received_at: int):
+        if pkg.timestamp < 0:
+            return
+        if pkg.timestamp == 0 and pkg.src == self.MAC:
+            # this is a package we sent and is received again due to broadcast, drop it.
+            return
+        if pkg.dest == self.MAC or MAC.is_broadcast(pkg.dest):
+            self.handle_package(pkg)
+
 class Router(Device):
-    def __init__(self, ip, network_mask, radio_address, radio_group, radio_power):
-        super().__init__(ip, network_mask, radio_address, radio_group, radio_power)
+    def __init__(self, ip, default_gateway, network_mask, radio_address, radio_group, radio_power):
+        super().__init__(ip, default_gateway, network_mask, radio_address, radio_group, radio_power)
         if not self.ip:
             raise Exception('Router must have a valid IP address configured.')
         self.mac_table = {}
@@ -378,15 +432,14 @@ class Router(Device):
         if msg.timestamp > 0:
             # drop, since it was sent by another switch/router that already knew the destination.
             return
-        
+
         if msg.timestamp == -1:
             # learn the source MAC when the package arrives directly from the sender (timestamp -1)
             self.mac_table[msg.src] = received_at
-
         ip_frame = IPFrame.parse(msg.payload)
         if ip_frame:
             # learn the ip-mac mapping
-            self.ip_table[ip_frame.src] = msg.src
+            self.ip_table[ip_frame.src.ip] = msg.src
             if ip_frame.dest == self.ip:
                 # message for us, so we process it (here we just print it).
                 print(ip_frame)
@@ -399,29 +452,41 @@ class Router(Device):
                 if ip_frame.dest.is_broadcast(self.network_mask):
                     broadcast_frame = EthernetFrame(self._pkg_id, MAC.BROADCAST_MAC, self.MAC, str(ip_frame))
                     radio.send(str(broadcast_frame))
-                elif ip_frame.dest in self.ip_table:
-                    next_hop_mac = self.ip_table[ip_frame.dest]
+                    self._pkg_id += 1
+                    return
+                
+                def frame(d: Device):
+                    next_hop_mac = self.ip_table[ip_frame.dest.ip]
                     forward_frame = EthernetFrame(self._pkg_id, next_hop_mac, self.MAC, str(ip_frame))
-                    radio.send(str(forward_frame))
+                    d._pkg_id += 1
+                    return pkg
+
+                if ip_frame.dest.ip in self.ip_table:
+                    pkg = frame(self)
+                    radio.send(str(pkg))
+                elif self.ip.in_same_subnet(ip_frame.dest, self.network_mask):
+                    def check(d: Device):
+                        return ip_frame.dest.ip in d.ip_table
+                    self._pending_frames.append({'ts': running_time(), 'check': check, 'frame': frame})
+                    self.send_arp(ip_frame.dest)
                 else:
                     # destination not in our routing table, so we just print it to tdev which should delegate it to the default gateway.
                     print(ip_frame)
                     return
-                self._pkg_id += 1
         else:
             arp_frame = ARPFrame.parse(msg.payload)
             if arp_frame:
                 if arp_frame.dest_ip == self.ip:
-                    self.ip_table[arp_frame.sender_ip] = arp_frame.sender_mac
+                    print(msg)
+                    sender_ip = str(arp_frame.sender_ip)
+                    sender_mac = str(arp_frame.sender_mac)
+                    self.ip_table[sender_ip] = sender_mac
                     # this is an ARP request for our IP, so we reply with an ARP response containing our MAC address.
-                    arp_response = ARPFrame(self.MAC, self.ip, arp_frame.sender_ip)
-                    response_frame = EthernetFrame(self._pkg_id, arp_frame.sender_mac, self.MAC, str(arp_response))
-                    radio.send(str(response_frame))
-                    self._pkg_id += 1
+                    self.send_arp(sender_ip)
                 return
             # act as a layer 2 switch if the payload is no valid IP frame, since we cannot route it.
             if not is_known_dest:
-                # we don't know the destination, so we flood the message to all other devices, but we 
+                # we don't know the destination, so we flood the message to all other devices, but we
                 # reset the timestamp to ensure the package gets dropped when received by the destination.
                 msg.set_timestamp(0)
             print(msg)
@@ -441,7 +506,7 @@ class SerialMessage:
         if len(parts) < 1:
             return
         code = parts[0]
-        if code == SerialMessage.CONFIG and len(parts) == 3:
+        if code == SerialMessage.CONFIG and len(parts) == 7:
             return {
                 'type': 'set_config',
                 'data': SEPARATOR.join(parts[1:])
@@ -471,38 +536,46 @@ class SerialMessage:
                 'message': msg.strip()
             }
         else:
-            return    
+            return
 
 class Config:
     device: Device
-    
+
     @staticmethod
-    def parse_value(value, is_int = False):
+    def parse_value(value, is_int = False, default = None):
         if value == 'None':
-            return None
+            return default
         if not is_int:
             return value
         try:
             return int(value)
         except:
-            return None
+            return default
 
     def __init__(self, mode, ip = None):
         self.mode = 'client'
         self.ip = None
+        self.default_gateway = None
         self.radio = (None, None, 4) # address, group, power
         self.network_mask = 24
-        self.configure(mode, ip, None, None, 4, True)
-    
-    def set_mode(self, mode, skipDump = False):
-        self.configure(mode, self.ip, self.radio[0], self.radio[1], self.radio[2], skipDump)
+        self.configure(mode, ip, None, None, None, 4, True)
 
-    def configure(self, mode, ip=None, address = None, group = None, power: int = 4, skipDump = False):
+    def set_mode(self, mode, skip_dump = False):
+        self.configure(mode, self.ip, self.default_gateway, self.radio[0], self.radio[1], self.radio[2], skip_dump)
+
+    def configure(self, mode, ip=None, default_gateway=None, address = None, group = None, power = None, skip_dump = False):
         new_ip = IP.parse(str(ip))
         if new_ip:
             self.ip = new_ip.ip
         else:
             self.ip = None
+        new_dg = IP.parse(str(default_gateway))
+        if not new_dg and new_ip:
+            new_dg = new_ip.default_gateway(self.network_mask)
+        if new_dg:
+            self.default_gateway = new_dg.ip
+        else:
+            self.default_gateway = None
 
         if mode in Mode.MODES:
             self.mode = mode
@@ -510,8 +583,8 @@ class Config:
 
         if address is not None:
             val[0] = address
-        elif new_ip:
-            val[0] = int(new_ip.default_gateway_hex(self.network_mask), 16)
+        elif new_dg:
+            val[0] = new_dg.numeric
         else:
             val[0] = int(0x75626974) # default micro:bit radio address
 
@@ -522,32 +595,32 @@ class Config:
         else:
             val[1] = 0 # default group
 
-        val[2] = power
+        if power is not None:
+            val[2] = power
+        else:
+            val[2] = 4 # default power
         self.radio = tuple(val)
         if self.mode == Mode.CLIENT:
-            self.device = Client(self.ip, 24, self.radio[0], self.radio[1], self.radio[2])
+            self.device = Client(self.ip, self.default_gateway, self.network_mask, self.radio[0], self.radio[1], self.radio[2])
         elif self.mode == Mode.SWITCH:
             self.device = Switch(self.radio[0], self.radio[1], self.radio[2])
         elif self.mode == Mode.ROUTER:
             if not self.ip:
                 print(str(ErrorMessage('Router must have a valid IP address configured.')))
-                return self.configure(Mode.CLIENT, ip, address, group, power, skipDump)
-            self.device = Router(self.ip, 24, self.radio[0], self.radio[1], self.radio[2])
+                return self.configure(Mode.CLIENT, ip, default_gateway, address, group, power, skip_dump)
+            self.device = Router(self.ip, self.default_gateway, self.network_mask, self.radio[0], self.radio[1], self.radio[2])
         self.changed = True
-        if skipDump:
+        if skip_dump:
             return
         self.dump()
 
     def configure_from_string(self, config_str):
         parts = config_str.split(SEPARATOR)
-        if len(parts) != 5:
+        if len(parts) != 6:
             return
         p = Config.parse_value
-        try:
-            pwr = int(parts[4])
-        except:
-            pwr = 4
-        self.configure(p(parts[0]), p(parts[1]), p(parts[2], True), p(parts[3], True), pwr)
+        print(config_str)
+        self.configure(p(parts[0]), p(parts[1]), p(parts[2]), p(parts[3], True), p(parts[4], True), p(parts[5], True, 4))
 
     def dump(self):
         with open(CONFIG_FILE, 'w') as file:
@@ -580,7 +653,7 @@ class Config:
                     if msg['type'] == 'set_config':
                         self.configure_from_string(msg['data'])
                     elif msg['type'] == 'get_config':
-                        print(str(self))
+                        self.send_config()
                     elif msg['type'] == 'send_L2':
                         self.device.send_L2(msg['dest'], msg['message'])
                     elif msg['type'] == 'send_L3':
@@ -588,13 +661,13 @@ class Config:
             self.device.pending_serial_messages = []
 
     def __str__(self):
-        # mode ip radio_address radio_group radio_power
-        return self.mode + SEPARATOR + str(self.ip) + SEPARATOR + str(self.radio[0]) + SEPARATOR + str(self.radio[1]) + SEPARATOR + str(self.radio[2])
-    
+        # mode ip default_gateway radio_address radio_group radio_power
+        return self.mode + SEPARATOR + str(self.ip) + SEPARATOR + str(self.default_gateway) + SEPARATOR + str(self.radio[0]) + SEPARATOR + str(self.radio[1]) + SEPARATOR + str(self.radio[2])
+
     def send_config(self):
         print(Device.MAC + SEPARATOR + str(self))
-        
-        
+
+
 
 print(RESET_TRIGGER)
 
@@ -619,5 +692,5 @@ while True:
             config.device.send_L3(IP.LOOPBACK, 'Ping')
         else:
             config.device.send_L2(config.device.MAC, 'Ping')
-        
+
     
