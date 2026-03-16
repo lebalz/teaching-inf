@@ -2,7 +2,8 @@
 page_id: 340cb883-452f-4c5d-99e4-614a7ff7df54
 ---
 import Webserial from '@tdev/webserial/component'
-import NetworkDevice from '@tdev/webserial/decoders/NetworkDevice/component'
+import NetworkDevice from '@tdev/packages/webserial/decoders/NetworkDevice/components'
+import WithoutComments from '@tdev/packages/webserial/decoders/NetworkDevice/components/WithoutComments'
 
 # Serial
 
@@ -12,3 +13,8 @@ import NetworkDevice from '@tdev/webserial/decoders/NetworkDevice/component'
     resetTrigger='::READY::'
     output={<NetworkDevice />}
 />
+
+
+## Without Comments
+
+<WithoutComments />
