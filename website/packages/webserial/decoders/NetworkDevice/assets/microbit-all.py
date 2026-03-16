@@ -1,4 +1,4 @@
-from microbit import sleep, running_time, display, Image, button_a, button_b, uart
+from microbit import running_time, display, Image, button_a, button_b, uart
 from radio import config as r_config, on as r_on, off as r_off, send as r_send, receive as r_receive
 from machine import unique_id
 from os import listdir
@@ -250,7 +250,6 @@ class Device:
         self.radio_group = radio_group
         self.radio_address = radio_address
         self.configure()
-        self._pending_frames = []
         self.pending_serial_messages = []
         self._received_pkg_ids: list = [None] * PACKAGE_BUFFER_SIZE
         self._received_pkg_ids_idx = 0
@@ -258,9 +257,7 @@ class Device:
 
     def configure(self):
         r_off()
-        sleep(10)
         r_config(length=128, group=self.radio_group, power=self.radio_power, address=self.radio_address)
-        sleep(10)
         r_on()
 
     def process_message(self, pkg: EthernetFrame, received_at: int):
@@ -292,29 +289,9 @@ class Device:
             return
         self.process_message(pkg, timestamp)
         self._process_pending_frames()
-
+    
     def _process_pending_frames(self):
-        if len(self._pending_frames) == 0:
-            return
-        self._cleanup_stalled_pending_frames()
-        i = 0
-        while i < len(self._pending_frames):
-            ts, to, data = self._pending_frames[i]
-            if self.can_deliver_l3(to):
-                self._pending_frames.pop(i)
-                r_send(str(self.create_ip_frame(to, data)))
-            else:
-                i += 1
-
-    def _cleanup_stalled_pending_frames(self):
-        now = running_time()
-        i = 0
-        while i < len(self._pending_frames):
-            ts, to, data = self._pending_frames[i]
-            if now - ts >= 500:
-                self._pending_frames.pop(i)
-            else:
-                i += 1
+        pass
 
     def _is_double_receive(self, pkg: EthernetFrame):
         if pkg.timestamp < 0:
@@ -336,38 +313,6 @@ class Device:
         if to == self.MAC:
             return print(msg)
         r_send(str(msg))
-
-    def create_ip_frame(self, dest_ip, data):
-        ipframe = IPFrame(self.ip, dest_ip, data)
-        pkg = EthernetFrame(self._pkg_id, self.default_gateway_mac, self.MAC, str(ipframe))
-        self._pkg_id += 1
-        return pkg
-
-    def can_deliver_l3(self, dest_ip):
-        return not d.default_gateway_mac
-
-    def send_L3(self, dest, data):
-        if not self.default_gateway:
-            return print(ErrorMessage('Cannot send L3 message without default gateway configured.'))
-        if not self.ip:
-            return print(ErrorMessage('Cannot send L3 message without IP address configured.'))
-        to = IP.parse(dest)
-        if not to:
-            return print(ErrorMessage('Cannot send L3 message without a valid destination IP address.'))
-
-        if not self.default_gateway_mac:
-            self._pending_frames.append((running_time(), str(to), data))
-            self.send_arp(self.default_gateway)
-            return
-        msg = self.create_ip_frame(to, data)
-        if to == self.ip:
-            return print(msg)
-        r_send(str(msg))
-    
-    def send_arp(self, dest_ip):
-        arp = ARPFrame(self.MAC, self.ip, dest)
-        r_send(str(EthernetFrame(self._pkg_id, MAC.BROADCAST_MAC, self.MAC, str(arp))))
-        self._pkg_id += 1
 
 class Switch(Device):
     def __init__(self, radio_address, radio_group, radio_power):
@@ -402,12 +347,12 @@ class Switch(Device):
 class Client(Device):
     def __init__(self, ip, default_gateway, network_mask, radio_address, radio_group, radio_power):
         super().__init__(ip, default_gateway, network_mask, radio_address, radio_group, radio_power)
+        self._pending_frames = []
 
     def handle_package(self, pkg: EthernetFrame):
         arp_frame = ARPFrame.parse(pkg.payload)
-        if arp_frame:
-            if arp_frame.dest_ip == self.ip and arp_frame.sender_ip == self.default_gateway:
-                self.default_gateway_mac = arp_frame.sender_mac
+        if arp_frame and arp_frame.dest_ip == self.ip and arp_frame.sender_ip == self.default_gateway:
+            self.default_gateway_mac = arp_frame.sender_mac
         print(pkg)
 
     def process_message(self, pkg: EthernetFrame, received_at: int):
@@ -418,6 +363,60 @@ class Client(Device):
             return
         if pkg.dest == self.MAC or MAC.is_broadcast(pkg.dest):
             self.handle_package(pkg)
+
+    def create_ip_frame(self, dest_ip, data):
+        ipframe = IPFrame(self.ip, dest_ip, data)
+        pkg = EthernetFrame(self._pkg_id, self.default_gateway_mac, self.MAC, str(ipframe))
+        self._pkg_id += 1
+        return pkg
+
+    def can_deliver_l3(self, dest_ip):
+        return not self.default_gateway_mac
+
+    def send_L3(self, dest, data):
+        if not self.default_gateway:
+            return print(ErrorMessage('Cannot send L3 message without default gateway configured.'))
+        if not self.ip:
+            return print(ErrorMessage('Cannot send L3 message without IP address configured.'))
+        to = IP.parse(dest)
+        if not to:
+            return print(ErrorMessage('Cannot send L3 message without a valid destination IP address.'))
+
+        if not self.default_gateway_mac:
+            self._pending_frames.append((running_time(), str(to), data))
+            self.send_arp(self.default_gateway)
+            return
+        msg = self.create_ip_frame(to, data)
+        if to == self.ip:
+            return print(msg)
+        r_send(str(msg))
+    
+    def send_arp(self, dest_ip):
+        arp = ARPFrame(self.MAC, self.ip, dest)
+        r_send(str(EthernetFrame(self._pkg_id, MAC.BROADCAST_MAC, self.MAC, str(arp))))
+        self._pkg_id += 1
+
+    def _process_pending_frames(self):
+        if len(self._pending_frames) == 0:
+            return
+        self._cleanup_stalled_pending_frames()
+        i = 0
+        while i < len(self._pending_frames):
+            ts, to, data = self._pending_frames[i]
+            if self.can_deliver_l3(to):
+                self._pending_frames.pop(i)
+                r_send(str(self.create_ip_frame(to, data)))
+            else:
+                i += 1
+    def _cleanup_stalled_pending_frames(self):
+        now = running_time()
+        i = 0
+        while i < len(self._pending_frames):
+            ts, to, data = self._pending_frames[i]
+            if now - ts >= 500:
+                self._pending_frames.pop(i)
+            else:
+                i += 1
 
 class Router(Device):
     def __init__(self, ip, default_gateway, network_mask, radio_address, radio_group, radio_power):
@@ -628,7 +627,7 @@ class Config:
             file.write(str(self))
 
     def restore(self):
-        files = os.listdir()
+        files = listdir()
         if CONFIG_FILE in files:
             with open(CONFIG_FILE) as file:
                 config = file.read()
