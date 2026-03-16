@@ -4,23 +4,95 @@ const mdiSwitch =
 
 type Mode = (typeof DeviceConfig.MODES)[number];
 
+type Radio = {
+    address: number | undefined;
+    group: number | undefined;
+    power: number;
+};
+
+interface Config {
+    mode: Mode;
+    ip?: string | null;
+    defaultGateway?: string | null;
+    radioAddress?: number | null;
+    radioGroup?: number | null;
+    radioPower?: number | null;
+}
+
 class DeviceConfig {
     static readonly SEPARATOR = ' ';
     static readonly MODES = ['router', 'client', 'switch'] as const;
+    readonly mac: string;
     readonly mode: Mode;
-    readonly ip: string;
+    readonly ip?: string;
+    readonly defaultGateway?: string;
+    readonly radio: Radio;
 
-    constructor(mode: Mode, ip: string) {
+    constructor(
+        mac: string,
+        mode: Mode,
+        ip?: string,
+        defaultGateway?: string,
+        radioAddress?: number,
+        radioGroup?: number,
+        radioPower = 4
+    ) {
+        this.mac = mac;
         this.mode = mode;
         this.ip = ip;
+        this.defaultGateway = defaultGateway;
+        this.radio = {
+            address: radioAddress,
+            group: radioGroup,
+            power: radioPower
+        };
+    }
+
+    updateWith(config: Partial<Config>) {
+        return new DeviceConfig(
+            this.mac,
+            config.mode ?? this.mode,
+            config.ip === null ? undefined : (config.ip ?? this.ip),
+            config.defaultGateway === null ? undefined : (config.defaultGateway ?? this.defaultGateway),
+            config.radioAddress === null ? undefined : (config.radioAddress ?? this.radio.address),
+            config.radioGroup === null ? undefined : (config.radioGroup ?? this.radio.group),
+            config.radioPower === null ? undefined : (config.radioPower ?? this.radio.power)
+        );
+    }
+
+    get config(): Config {
+        return {
+            mode: this.mode,
+            ip: this.ip,
+            defaultGateway: this.defaultGateway,
+            radioAddress: this.radio.address,
+            radioGroup: this.radio.group,
+            radioPower: this.radio.power
+        };
+    }
+
+    get configString() {
+        return `${this.mode} ${this.ip ?? 'None'} ${this.defaultGateway ?? 'None'} ${this.radio.address ?? 'None'} ${this.radio.group ?? 'None'} ${this.radio.power}`;
     }
 
     static parse(line: string): DeviceConfig | null {
-        const [mode, ip] = line.split(DeviceConfig.SEPARATOR);
-        if (!mode || !ip || !DeviceConfig.MODES.includes(mode as Mode)) {
+        const [mac, mode, ip, defaultGateway, address, group, power] = line
+            .split(DeviceConfig.SEPARATOR)
+            .map((p) => p.trim())
+            .map((p) => (p === 'None' ? undefined : p));
+
+        if (!mode || !mac || !DeviceConfig.MODES.includes(mode as Mode)) {
             return null;
         }
-        return new DeviceConfig(mode as Mode, ip);
+        return new DeviceConfig(
+            mac,
+            mode as Mode,
+            ip,
+            defaultGateway,
+            address ? parseInt(address) : undefined,
+            group ? parseInt(group) : undefined,
+            power ? parseInt(power) : 4
+        );
     }
 
     get icon() {

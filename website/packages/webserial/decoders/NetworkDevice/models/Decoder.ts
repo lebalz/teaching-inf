@@ -1,10 +1,11 @@
 import SerialDevice, { ConnectionState, iSubscriber } from '@tdev/webserial/models/SerialDevice';
 import { action, computed, observable } from 'mobx';
-import Message from './Message';
+import IPFrame from './IPFrame';
 import DeviceConfig from './DeviceConfig';
 
 const CONFIG = '::CONFIG::';
-const SEND = '::SEND::';
+const SEND_L2 = '::L2::';
+const SEND_L3 = '::L3::';
 
 const isValidIp = (ip?: string) => {
     if (!ip) {
@@ -23,16 +24,34 @@ const isValidIp = (ip?: string) => {
     return true;
 };
 
+const isValidMac = (mac?: string) => {
+    if (!mac) {
+        return false;
+    }
+    const parts = mac.trim().split(':');
+    if (parts.length !== 6) {
+        return false;
+    }
+    for (const part of parts) {
+        if (!/^[0-9a-fA-F]{2}$/.test(part)) {
+            return false;
+        }
+    }
+    return true;
+};
+
 class Decoder implements iSubscriber {
     readonly id: string;
     readonly device: SerialDevice;
     @observable.ref accessor config: DeviceConfig | null = null;
     @observable accessor message: string = '';
     @observable accessor receiverIp: string = '';
+    @observable accessor receiverMac: string = '';
 
-    @observable accessor ipInput: string = '';
+    // just the input field for the IP, not necessarily the actual device IP (which is in config)
+    @observable accessor deviceIp: string = '';
 
-    messages = observable.array<Message>([], { deep: false });
+    messages = observable.array<IPFrame>([], { deep: false });
 
     constructor(id: string, device: SerialDevice) {
         this.id = id;
@@ -41,21 +60,26 @@ class Decoder implements iSubscriber {
     }
 
     @action
-    setIpInput(ip: string) {
-        this.ipInput = ip;
+    setDeviceIp(ip: string) {
+        this.deviceIp = ip;
     }
 
     @computed
-    get isValidInputIp() {
-        return isValidIp(this.ipInput);
+    get isValidDeviceIp() {
+        return isValidIp(this.deviceIp);
     }
 
-    @action
-    applyIpInput() {
-        if (this.config && this.isValidInputIp) {
-            this.device.sendLine(`${CONFIG} ${this.config.mode} ${this.ipInput}`);
-            this.ipInput = '';
+    flashDeviceIp() {
+        if (this.config) {
+            const newConfig = this.config.updateWith({
+                ip: this.isValidDeviceIp ? this.deviceIp : null
+            });
+            this.flashConfig(newConfig);
         }
+    }
+
+    flashConfig(config: DeviceConfig) {
+        this.device.sendLine(`${CONFIG} ${config.configString}`);
     }
 
     @action
@@ -64,8 +88,21 @@ class Decoder implements iSubscriber {
     }
 
     @action
+    setReceiverMac(mac: string) {
+        this.receiverMac = mac.toUpperCase().trim();
+    }
+
+    @computed
+    get isValidReceiverMac() {
+        return isValidMac(this.receiverMac);
+    }
+
+    @action
     setReceiverIp(ip: string) {
-        this.receiverIp = ip;
+        if (!this.config?.ip) {
+            return;
+        }
+        this.receiverIp = ip.trim();
     }
 
     @computed
@@ -74,15 +111,28 @@ class Decoder implements iSubscriber {
     }
 
     @computed
-    get canSend() {
+    get canSendL2() {
+        return this.message.length > 0 && this.isValidReceiverMac;
+    }
+
+    @computed
+    get canSendL3() {
         return this.message.length > 0 && this.isValidReceiverIp;
     }
 
     @action
-    sendMessage() {
-        if (this.canSend) {
-            this.device.sendLine(`${SEND} ${this.receiverIp.trim()} ${this.message}`);
-            this.message = '';
+    send_L2() {
+        if (this.canSendL2) {
+            this.device.sendLine(`${SEND_L2} ${this.receiverMac} ${this.message}`);
+            // this.message = '';
+        }
+    }
+
+    @action
+    send_L3() {
+        if (this.canSendL3) {
+            this.device.sendLine(`${SEND_L3} ${this.receiverIp} ${this.message}`);
+            // this.message = '';
         }
     }
 
@@ -99,13 +149,14 @@ class Decoder implements iSubscriber {
     @action
     onNewLines(lines: string[]) {
         for (const line of lines) {
-            const message = Message.parse(line);
+            const message = IPFrame.parse(line);
             if (message) {
                 this.messages.push(message);
             } else {
                 const config = DeviceConfig.parse(line);
                 if (config) {
                     this.config = config;
+                    this.deviceIp = '';
                 }
             }
         }
@@ -126,7 +177,8 @@ class Decoder implements iSubscriber {
         if (this.config) {
             const idx = [...DeviceConfig.MODES].indexOf(this.config.mode);
             const nextIdx = (idx + 1) % DeviceConfig.MODES.length;
-            this.device.sendLine(`${CONFIG} ${DeviceConfig.MODES[nextIdx]} ${this.config.ip}`);
+            const newConfig = this.config.updateWith({ mode: DeviceConfig.MODES[nextIdx] });
+            this.flashConfig(newConfig);
         }
     }
 }
