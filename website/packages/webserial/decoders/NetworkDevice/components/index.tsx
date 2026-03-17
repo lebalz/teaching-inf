@@ -175,7 +175,7 @@ const NetworkDevice = observer((props: Props) => {
                                 disabled={!decoder.canSendL2}
                             />
                         </div>
-                        {decoder.config.ip && (
+                        {decoder.config.ip && decoder.showIP && !props.hideIpConfig && (
                             <div className={clsx(styles.message)}>
                                 <TextInput
                                     onChange={(text) => {
