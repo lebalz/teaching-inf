@@ -626,9 +626,7 @@ display.show(config.icon)
 while True:
     config.run()
     if button_b.was_pressed():
-        print('RESET')
         print(RESET_TRIGGER)
-        config.send_config()
     if config.changed:
         config.changed = False
         display.show(config.icon)

@@ -9,16 +9,16 @@ import WithoutComments from '@tdev/packages/webserial/decoders/NetworkDevice/com
 
 ### Client
 <Webserial 
-    deviceId='client'
+    deviceId='client-sd'
     baudRate={115200}
     hideLogs
     resetTrigger='::READY::'
-    output={<NetworkDevice config={{mode: 'client', ip: '192.168.1.2' }}/>}
+    output={<NetworkDevice config={{mode: 'client', ip: '192.168.0.2' }}/>}
 />
 
 ### Switch
 <Webserial
-    deviceId='switch'
+    deviceId='switch-sd'
     baudRate={115200}
     hideLogs
     resetTrigger='::READY::'
@@ -28,11 +28,11 @@ import WithoutComments from '@tdev/packages/webserial/decoders/NetworkDevice/com
 
 ### Router
 <Webserial 
-    deviceId='router'
+    deviceId='router-sd'
     baudRate={115200}
     hideLogs
     resetTrigger='::READY::'
-    output={<NetworkDevice config={{mode: 'router', ip: '192.168.1.1'}}/>}
+    output={<NetworkDevice config={{mode: 'router', ip: '192.168.0.1'}}/>}
 />
 
 
