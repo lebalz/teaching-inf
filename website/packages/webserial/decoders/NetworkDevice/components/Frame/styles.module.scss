@@ -1,0 +1,54 @@
+.frames {
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto 1fr;
+    font-family: var(--ifm-font-family-monospace);
+    row-gap: 2px;
+    align-items: stretch;
+}
+
+.dest,
+.dst,
+.dest_ip {
+    background-color: var(--ifm-color-success-lightest);
+}
+
+.src,
+.sender_mac,
+.sender_ip {
+    background-color: var(--ifm-color-info-lightest);
+}
+
+.dest,
+.src,
+.type,
+.ttl,
+.dst,
+.payload,
+.sender_mac,
+.sender_ip,
+.dest_ip,
+.textPayload {
+    padding: 2px 6px;
+    display: flex;
+    align-items: center;
+}
+
+.ipFrameContainer,
+.arpFrameContainer {
+    grid-column: 3 / -1;
+    display: grid;
+    grid-template-columns: subgrid;
+    border-radius: 4px;
+}
+
+.ipFrameContainer {
+    border: 2px solid var(--ifm-color-primary);
+}
+
+.arpFrameContainer {
+    border: 2px solid var(--ifm-color-warning);
+}
+
+.textPayload {
+    grid-column: 3 / -1;
+}

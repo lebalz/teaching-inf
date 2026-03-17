@@ -7,11 +7,32 @@ import WithoutComments from '@tdev/packages/webserial/decoders/NetworkDevice/com
 
 # Serial
 
+### Client
 <Webserial 
+    deviceId='client'
     baudRate={115200}
     hideLogs
     resetTrigger='::READY::'
-    output={<NetworkDevice />}
+    output={<NetworkDevice config={{mode: 'client', ip: '192.168.1.2' }}/>}
+/>
+
+### Switch
+<Webserial
+    deviceId='switch'
+    baudRate={115200}
+    hideLogs
+    resetTrigger='::READY::'
+    output={<NetworkDevice config={{mode: 'switch'}}/>}
+/>
+
+
+### Router
+<Webserial 
+    deviceId='router'
+    baudRate={115200}
+    hideLogs
+    resetTrigger='::READY::'
+    output={<NetworkDevice config={{mode: 'router', ip: '192.168.1.1'}}/>}
 />
 
 

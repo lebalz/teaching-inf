@@ -10,7 +10,7 @@ type Radio = {
     power: number;
 };
 
-interface Config {
+export interface Config {
     mode: Mode;
     ip?: string | null;
     defaultGateway?: string | null;
@@ -72,14 +72,18 @@ class DeviceConfig {
     }
 
     get configString() {
-        return `${this.mode} ${this.ip ?? 'None'} ${this.defaultGateway ?? 'None'} ${this.radio.address ?? 'None'} ${this.radio.group ?? 'None'} ${this.radio.power}`;
+        const ip = this.mode === 'router' ? (this.ip ?? '192.168.0.1') : this.ip;
+        return `${this.mode} ${ip ?? 'None'} ${this.defaultGateway ?? 'None'} ${this.radio.address ?? 'None'} ${this.radio.group ?? 'None'} ${this.radio.power}`;
     }
 
     static parse(line: string): DeviceConfig | null {
-        const [mac, mode, ip, defaultGateway, address, group, power] = line
+        const [cType, mac, mode, ip, defaultGateway, address, group, power] = line
             .split(DeviceConfig.SEPARATOR)
             .map((p) => p.trim())
             .map((p) => (p === 'None' ? undefined : p));
+        if (cType !== '::CONFIG::') {
+            return null;
+        }
 
         if (!mode || !mac || !DeviceConfig.MODES.includes(mode as Mode)) {
             return null;

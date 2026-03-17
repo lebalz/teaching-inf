@@ -1,7 +1,8 @@
 import SerialDevice, { ConnectionState, iSubscriber } from '@tdev/webserial/models/SerialDevice';
 import { action, computed, observable } from 'mobx';
-import IPFrame from './IPFrame';
-import DeviceConfig from './DeviceConfig';
+import DeviceConfig, { Config } from './DeviceConfig';
+import EthernetFrame from './EthernetFrame';
+import { rest } from 'es-toolkit';
 
 const CONFIG = '::CONFIG::';
 const SEND_L2 = '::L2::';
@@ -40,23 +41,36 @@ const isValidMac = (mac?: string) => {
     return true;
 };
 
+const DEFAULT_CONFIG: DeviceConfig = new DeviceConfig(
+    'ff:ff:ff:ff:ff:ff',
+    'client',
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined
+);
+
 class Decoder implements iSubscriber {
     readonly id: string;
     readonly device: SerialDevice;
+    @observable.ref accessor _defaultConfig: Config | null = null;
     @observable.ref accessor config: DeviceConfig | null = null;
     @observable accessor message: string = '';
     @observable accessor receiverIp: string = '';
     @observable accessor receiverMac: string = '';
+    @observable accessor error: string = '';
 
     // just the input field for the IP, not necessarily the actual device IP (which is in config)
     @observable accessor deviceIp: string = '';
 
-    messages = observable.array<IPFrame>([], { deep: false });
+    packages = observable.array<EthernetFrame>([], { deep: false });
 
-    constructor(id: string, device: SerialDevice) {
+    constructor(id: string, device: SerialDevice, defaultConfig?: Config) {
         this.id = id;
         this.device = device;
         this.device.subscribe(this);
+        this._defaultConfig = defaultConfig || null;
     }
 
     @action
@@ -74,6 +88,7 @@ class Decoder implements iSubscriber {
             const newConfig = this.config.updateWith({
                 ip: this.isValidDeviceIp ? this.deviceIp : null
             });
+            console.log('Flashing new config with IP', newConfig);
             this.flashConfig(newConfig);
         }
     }
@@ -142,29 +157,66 @@ class Decoder implements iSubscriber {
             this.device.sendLine(CONFIG);
         } else {
             this.config = null;
-            this.messages.clear();
+            this.packages.clear();
         }
+    }
+
+    @action
+    clearError() {
+        this.error = '';
     }
 
     @action
     onNewLines(lines: string[]) {
         for (const line of lines) {
-            const message = IPFrame.parse(line);
-            if (message) {
-                this.messages.push(message);
-            } else {
-                const config = DeviceConfig.parse(line);
-                if (config) {
-                    this.config = config;
-                    this.deviceIp = '';
+            if (line.startsWith('ERROR:')) {
+                this.error = line;
+                continue;
+            }
+            const configPkg = DeviceConfig.parse(line);
+            if (!configPkg) {
+                const ethernetPkg = EthernetFrame.parse(line);
+                if (ethernetPkg) {
+                    this.packages.push(ethernetPkg);
+                    return;
+                }
+            }
+            const hadConfig = !!this.config;
+            if (configPkg) {
+                this.config = configPkg;
+                this.deviceIp = '';
+            }
+            if (!hadConfig && this._defaultConfig) {
+                if (this.config) {
+                    const updated = this.config.updateWith(this._defaultConfig);
+                    this.flashConfig(updated);
+                } else {
+                    const newConfig = DEFAULT_CONFIG.updateWith(this._defaultConfig);
+                    this.flashConfig(newConfig);
                 }
             }
         }
     }
 
     @action
+    resetConfig() {
+        if (!this._defaultConfig) {
+            this.device.sendLine(CONFIG);
+            return;
+        }
+        if (this.config) {
+            const { ip, ...rest } = this._defaultConfig;
+            const updated = this.config.updateWith({ ...rest, ip: this.config.ip ?? ip });
+            this.flashConfig(updated);
+        } else {
+            const newConfig = DEFAULT_CONFIG.updateWith(this._defaultConfig);
+            this.flashConfig(newConfig);
+        }
+    }
+
+    @action
     reset() {
-        this.messages.clear();
+        this.packages.clear();
     }
 
     @action

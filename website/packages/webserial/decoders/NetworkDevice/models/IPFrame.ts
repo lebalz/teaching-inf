@@ -1,4 +1,5 @@
 class IPFrame {
+    readonly type: 'ip' = 'ip';
     static readonly SEPARATOR = ' ';
     readonly ttl: number;
     readonly src: string;

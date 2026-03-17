@@ -9,6 +9,7 @@ SEPARATOR = ' '
 RESET_TRIGGER = '::READY::'
 CONFIG_FILE = 'config.txt'
 PACKAGE_BUFFER_SIZE = 32
+DEFAULT_POWER = 4
 
 def pad0(text: str, n: int):
     return ("{0:0>" + str(n) + "}").format(text)
@@ -20,12 +21,11 @@ class ErrorMessage:
     def __str__(self):
         return 'ERROR: ' + self.message
 
+BROADCAST_MAC = 'FF:FF:FF:FF:FF:FF'
 class MAC:
-    BROADCAST_MAC = 'FF:FF:FF:FF:FF:FF'
-
     @staticmethod
     def is_broadcast(mac):
-        return str(mac).strip().upper() == MAC.BROADCAST_MAC
+        return str(mac).strip().upper() == BROADCAST_MAC
 
     @staticmethod
     def microbit_mac():
@@ -310,22 +310,27 @@ class Device:
     def send_L3(self, dest, data):
         if not self.default_gateway:
             return print(ErrorMessage('Cannot send L3 message without default gateway configured.'))
-        if not self.default_gateway_mac:
-            arp = ARPFrame(self.MAC, self.ip, self.default_gateway)
-            radio.send(str(EthernetFrame(self._pkg_id, MAC.BROADCAST_MAC, self.MAC, str(arp))))
-            print(str(EthernetFrame(self._pkg_id, MAC.BROADCAST_MAC, self.MAC, str(arp))))
-            return print(ErrorMessage('Cannot send L3 message without default gateway MAC address resolved. Sent ARP request to resolve it.'))
-        if not self.ip:
-            return print(ErrorMessage('Cannot send L3 message without IP address configured.'))
         to = IP.parse(dest)
         if not to:
-            return print(ErrorMessage('Cannot send L3 message without a valid destination IP address.'))
+            return print(ErrorMessage('Keine gültige IP Adresse angegeben: ' + dest))
+        if not self.default_gateway_mac:
+            self.send_arp(str(self.default_gateway))
+            return print(ErrorMessage('Unbekannte MAC Adresse des Routers. ARP Nachricht gesendet.'))
+        if not self.ip:
+            return print(ErrorMessage('Cannot send L3 message without IP address configured.'))
         ipframe = IPFrame(self.ip, to, data)
         msg = EthernetFrame(self._pkg_id, self.default_gateway_mac, self.MAC, str(ipframe))
         self._pkg_id += 1
         if to == self.ip:
             return print(msg)
         radio.send(str(msg))
+    
+    def send_arp(self, to_ip, sender_mac = BROADCAST_MAC, timestamp = -1):
+        arp_response = ARPFrame(self.MAC, self.ip, to_ip)
+        response_frame = EthernetFrame(self._pkg_id, sender_mac, self.MAC, str(arp_response), timestamp)
+        self._pkg_id += 1
+        radio.send(str(response_frame))
+
 
 class Client(Device):
     def __init__(self, ip, default_gateway, network_mask, radio_address, radio_group, radio_power):
@@ -396,7 +401,7 @@ class Router(Device):
             self.ip_table[ip_frame.src.ip] = msg.src
             if ip_frame.dest == self.ip:
                 # message for us, so we process it (here we just print it).
-                print(ip_frame)
+                print(msg)
                 return
             else:
                 # message for another IP, so we need to forward it, but first we decrement the TTL and drop it if TTL is 0.
@@ -404,7 +409,7 @@ class Router(Device):
                 if ip_frame.ttl < 1:
                     return
                 if ip_frame.dest.is_broadcast(self.network_mask):
-                    broadcast_frame = EthernetFrame(self._pkg_id, MAC.BROADCAST_MAC, self.MAC, str(ip_frame), running_time())
+                    broadcast_frame = EthernetFrame(self._pkg_id, BROADCAST_MAC, self.MAC, str(ip_frame), running_time())
                     radio.send(str(broadcast_frame))
                 elif ip_frame.dest.ip in self.ip_table:
                     next_hop_mac = self.ip_table[ip_frame.dest.ip]
@@ -412,7 +417,7 @@ class Router(Device):
                     radio.send(str(forward_frame))
                 else:
                     # destination not in our routing table, so we just print it to tdev which should delegate it to the default gateway.
-                    print(ip_frame)
+                    print(msg)
                     return
                 self._pkg_id += 1
         else:
@@ -424,10 +429,7 @@ class Router(Device):
                     sender_mac = str(arp_frame.sender_mac)
                     self.ip_table[sender_ip] = sender_mac
                     # this is an ARP request for our IP, so we reply with an ARP response containing our MAC address.
-                    arp_response = ARPFrame(self.MAC, self.ip, sender_ip)
-                    response_frame = EthernetFrame(self._pkg_id, sender_mac, self.MAC, str(arp_response), received_at)
-                    radio.send(str(response_frame))
-                    self._pkg_id += 1
+                    self.send_arp(sender_ip, sender_mac, received_at)
                 return
             # act as a layer 2 switch if the payload is no valid IP frame, since we cannot route it.
             if not is_known_dest:
@@ -504,9 +506,9 @@ class Config:
         self.mode = 'client'
         self.ip = None
         self.default_gateway = None
-        self.radio = (None, None, 4) # address, group, power
+        self.radio = (None, None, DEFAULT_POWER) # address, group, power
         self.network_mask = 24
-        self.configure(mode, ip, None, None, None, 4, True)
+        self.configure(mode, ip, None, None, None, DEFAULT_POWER, True)
 
     def set_mode(self, mode, skip_dump = False):
         self.configure(mode, self.ip, self.default_gateway, self.radio[0], self.radio[1], self.radio[2], skip_dump)
@@ -527,7 +529,7 @@ class Config:
 
         if mode in Mode.MODES:
             self.mode = mode
-        val = [None, None, 4] # address, group, power
+        val = [None, None, DEFAULT_POWER] # address, group, power
 
         if address is not None:
             val[0] = address
@@ -546,7 +548,7 @@ class Config:
         if power is not None:
             val[2] = power
         else:
-            val[2] = 4 # default power
+            val[2] = DEFAULT_POWER
         self.radio = tuple(val)
         if self.mode == Mode.CLIENT:
             self.device = Client(self.ip, self.default_gateway, self.network_mask, self.radio[0], self.radio[1], self.radio[2])
@@ -554,7 +556,7 @@ class Config:
             self.device = Switch(self.radio[0], self.radio[1], self.radio[2])
         elif self.mode == Mode.ROUTER:
             if not self.ip:
-                print(str(ErrorMessage('Router must have a valid IP address configured.')))
+                print(ErrorMessage('Router must have a valid IP address configured.'))
                 return self.configure(Mode.CLIENT, ip, default_gateway, address, group, power, skip_dump)
             self.device = Router(self.ip, self.default_gateway, self.network_mask, self.radio[0], self.radio[1], self.radio[2])
         self.changed = True
@@ -567,8 +569,7 @@ class Config:
         if len(parts) != 6:
             return
         p = Config.parse_value
-        print(config_str)
-        self.configure(p(parts[0]), p(parts[1]), p(parts[2]), p(parts[3], True), p(parts[4], True), p(parts[5], True, 4))
+        self.configure(p(parts[0]), p(parts[1]), p(parts[2]), p(parts[3], True), p(parts[4], True), p(parts[5], True, DEFAULT_POWER))
 
     def dump(self):
         with open(CONFIG_FILE, 'w') as file:
@@ -613,7 +614,7 @@ class Config:
         return self.mode + SEPARATOR + str(self.ip) + SEPARATOR + str(self.default_gateway) + SEPARATOR + str(self.radio[0]) + SEPARATOR + str(self.radio[1]) + SEPARATOR + str(self.radio[2])
 
     def send_config(self):
-        print(Device.MAC + SEPARATOR + str(self))
+        print(SerialMessage.CONFIG + SEPARATOR + Device.MAC + SEPARATOR + str(self))
 
 
 
@@ -625,20 +626,19 @@ display.show(config.icon)
 while True:
     config.run()
     if button_b.was_pressed():
-        if config.mode == Mode.CLIENT:
-            config.set_mode(Mode.SWITCH)
-        elif config.mode == Mode.SWITCH:
-            config.set_mode(Mode.ROUTER)
-        else:
-            config.set_mode(Mode.CLIENT)
+        print('RESET')
+        print(RESET_TRIGGER)
+        config.send_config()
     if config.changed:
         config.changed = False
         display.show(config.icon)
         config.send_config()
     if button_a.was_pressed():
         if config.device.ip:
-            config.device.send_L3(IP.LOOPBACK, 'Ping')
+            if config.device.default_gateway:
+                ts = running_time() if config.mode == Mode.ROUTER else -1
+                config.device.send_arp(config.device.default_gateway, BROADCAST_MAC, ts)
+            else:
+                config.device.send_L2(BROADCAST_MAC, 'Ping')
         else:
-            config.device.send_L2(config.device.MAC, 'Ping')
-
-    
+            config.device.send_L2(BROADCAST_MAC, 'Ping')
