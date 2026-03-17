@@ -114,7 +114,7 @@ class Decoder implements iSubscriber {
 
     @computed
     get canSetIP() {
-        return this.config?.ip !== null;
+        return this.config?.ip !== null && this.config?.mode !== 'switch';
     }
 
     @action
