@@ -29,7 +29,7 @@ class EthernetFrame {
     }
 
     get ethernetString() {
-        return `${this.dst}${EthernetFrame.SEPARATOR}${this.src}${EthernetFrame.SEPARATOR}${this.payload}`;
+        return `${this.dst}    ${this.src}    ${this.payload}`;
     }
 
     static parse(line: string): EthernetFrame | null {
