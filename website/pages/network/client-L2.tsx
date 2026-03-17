@@ -17,7 +17,14 @@ const ClientL2 = observer((): React.ReactNode => {
                     resetTrigger="::READY::"
                     output={
                         <NetworkDevice
-                            config={{ mode: 'client', ip: null, radioPower: 1, radioGroup: 0 }}
+                            config={{
+                                mode: 'client',
+                                ip: '192.168.0.2',
+                                defaultGateway: '192.168.0.1',
+                                radioAddress: 1969383796,
+                                radioPower: 1,
+                                radioGroup: 0
+                            }}
                             hideIpConfig
                         />
                     }

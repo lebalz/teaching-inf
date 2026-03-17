@@ -15,7 +15,18 @@ const Switch = observer((): React.ReactNode => {
                     baudRate={115200}
                     hideLogs
                     resetTrigger="::READY::"
-                    output={<NetworkDevice config={{ mode: 'switch', radioPower: 1, radioGroup: 0 }} />}
+                    output={
+                        <NetworkDevice
+                            config={{
+                                mode: 'switch',
+                                radioPower: 1,
+                                radioGroup: 0,
+                                radioAddress: 1969383796,
+                                ip: '192.168.0.2',
+                                defaultGateway: '192.168.0.1'
+                            }}
+                        />
+                    }
                 />
             </main>
         </Layout>
