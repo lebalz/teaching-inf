@@ -112,6 +112,11 @@ class Decoder implements iSubscriber {
         return isValidMac(this.receiverMac);
     }
 
+    @computed
+    get canSetIP() {
+        return this.config?.ip !== null;
+    }
+
     @action
     setReceiverIp(ip: string) {
         if (!this.config?.ip) {
@@ -206,7 +211,10 @@ class Decoder implements iSubscriber {
         }
         if (this.config) {
             const { ip, ...rest } = this._defaultConfig;
-            const updated = this.config.updateWith({ ...rest, ip: this.config.ip ?? ip });
+            const updated = this.config.updateWith({
+                ...rest,
+                ip: this.canSetIP ? (this.config.ip ?? ip) : null
+            });
             this.flashConfig(updated);
         } else {
             const newConfig = DEFAULT_CONFIG.updateWith(this._defaultConfig);

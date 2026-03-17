@@ -87,14 +87,16 @@ const NetworkDevice = observer((props: Props) => {
                         )}
                         {decoder.deviceIp.length === 0 ? (
                             <div className={clsx(styles.ip)}>
-                                <Button
-                                    onClick={() => {
-                                        decoder.setDeviceIp(decoder.config?.ip || '192.168.0.1');
-                                    }}
-                                    text={`IP: ${decoder.config.ip}`}
-                                    icon={mdiSquareEditOutline}
-                                    color="blue"
-                                />
+                                {decoder.canSetIP && (
+                                    <Button
+                                        onClick={() => {
+                                            decoder.setDeviceIp(decoder.config?.ip || '192.168.0.1');
+                                        }}
+                                        text={`IP: ${decoder.config.ip}`}
+                                        icon={mdiSquareEditOutline}
+                                        color="blue"
+                                    />
+                                )}
                             </div>
                         ) : (
                             <div
@@ -211,7 +213,14 @@ const NetworkDevice = observer((props: Props) => {
                     {decoder.error}
                 </Alert>
             )}
-            <Frames decoder={decoder} />
+            {/* <Frames decoder={decoder} /> */}
+            <Logs
+                messages={decoder.packages.map((pkg) => ({
+                    type: 'log',
+                    message: pkg.ethernetString
+                }))}
+                maxLines={20}
+            />
             <Details summary="Logs">
                 <Logs
                     messages={(device.receivedData[device.size - 1] === ''

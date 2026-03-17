@@ -16,7 +16,7 @@ const Router = observer((): React.ReactNode => {
                     baudRate={115200}
                     hideLogs
                     resetTrigger="::READY::"
-                    output={<NetworkDevice config={{ mode: 'router' }} />}
+                    output={<NetworkDevice config={{ mode: 'router', radioPower: 1 }} />}
                 />
                 <h2>Interface 2</h2>
                 <Webserial
@@ -24,7 +24,7 @@ const Router = observer((): React.ReactNode => {
                     baudRate={115200}
                     hideLogs
                     resetTrigger="::READY::"
-                    output={<NetworkDevice config={{ mode: 'router' }} />}
+                    output={<NetworkDevice config={{ mode: 'router', radioPower: 1 }} />}
                 />
             </main>
         </Layout>

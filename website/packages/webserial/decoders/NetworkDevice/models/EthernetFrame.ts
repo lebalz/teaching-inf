@@ -28,6 +28,10 @@ class EthernetFrame {
         }
     }
 
+    get ethernetString() {
+        return `${this.dst}${EthernetFrame.SEPARATOR}${this.src}${EthernetFrame.SEPARATOR}${this.payload}`;
+    }
+
     static parse(line: string): EthernetFrame | null {
         try {
             const [ts, id, dst, src, ...payloadParts] = line.split(EthernetFrame.SEPARATOR);
