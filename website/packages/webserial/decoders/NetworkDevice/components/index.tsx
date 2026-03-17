@@ -24,6 +24,7 @@ import Alert from '@tdev-components/shared/Alert';
 interface Props {
     config?: Config;
     canChangeMode?: boolean;
+    hideIpConfig?: boolean;
 }
 
 const NetworkDevice = observer((props: Props) => {
@@ -87,7 +88,7 @@ const NetworkDevice = observer((props: Props) => {
                         )}
                         {decoder.deviceIp.length === 0 ? (
                             <div className={clsx(styles.ip)}>
-                                {decoder.canSetIP && (
+                                {decoder.showIP && !props.hideIpConfig && (
                                     <Button
                                         onClick={() => {
                                             decoder.setDeviceIp(decoder.config?.ip || '192.168.0.1');

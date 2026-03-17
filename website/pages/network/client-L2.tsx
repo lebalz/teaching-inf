@@ -15,7 +15,12 @@ const ClientL2 = observer((): React.ReactNode => {
                     baudRate={115200}
                     hideLogs
                     resetTrigger="::READY::"
-                    output={<NetworkDevice config={{ mode: 'client', ip: null, radioPower: 1 }} />}
+                    output={
+                        <NetworkDevice
+                            config={{ mode: 'client', ip: null, radioPower: 1, radioGroup: 0 }}
+                            hideIpConfig
+                        />
+                    }
                 />
             </main>
         </Layout>

@@ -113,8 +113,8 @@ class Decoder implements iSubscriber {
     }
 
     @computed
-    get canSetIP() {
-        return this.config?.ip !== null && this.config?.mode !== 'switch';
+    get showIP() {
+        return this.config?.mode !== 'switch';
     }
 
     @action
@@ -213,7 +213,7 @@ class Decoder implements iSubscriber {
             const { ip, ...rest } = this._defaultConfig;
             const updated = this.config.updateWith({
                 ...rest,
-                ip: this.canSetIP ? (this.config.ip ?? ip) : null
+                ip: this.showIP ? (this.config.ip ?? ip) : null
             });
             this.flashConfig(updated);
         } else {
