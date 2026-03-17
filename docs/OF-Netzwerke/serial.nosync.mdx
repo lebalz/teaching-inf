@@ -1,0 +1,41 @@
+---
+page_id: 340cb883-452f-4c5d-99e4-614a7ff7df54
+---
+import Webserial from '@tdev/webserial/component'
+import NetworkDevice from '@tdev/packages/webserial/decoders/NetworkDevice/components'
+import WithoutComments from '@tdev/packages/webserial/decoders/NetworkDevice/components/WithoutComments'
+
+# Serial
+
+### Client
+<Webserial 
+    deviceId='client-sd'
+    baudRate={115200}
+    hideLogs
+    resetTrigger='::READY::'
+    output={<NetworkDevice config={{mode: 'client', ip: '192.168.0.2' }}/>}
+/>
+
+### Switch
+<Webserial
+    deviceId='switch-sd'
+    baudRate={115200}
+    hideLogs
+    resetTrigger='::READY::'
+    output={<NetworkDevice config={{mode: 'switch'}}/>}
+/>
+
+
+### Router
+<Webserial 
+    deviceId='router-sd'
+    baudRate={115200}
+    hideLogs
+    resetTrigger='::READY::'
+    output={<NetworkDevice config={{mode: 'router', ip: '192.168.0.1'}}/>}
+/>
+
+
+## Without Comments
+
+<WithoutComments />

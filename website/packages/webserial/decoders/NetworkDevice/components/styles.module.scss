@@ -1,0 +1,55 @@
+.networkDevice {
+    .config {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 0.5rem;
+        .ip {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            &.invalid {
+                border: 2px dashed var(--ifm-color-danger);
+                border-radius: var(--ifm-global-radius);
+            }
+            &.editing {
+                gap: 0;
+                align-items: stretch;
+                .label {
+                    margin-right: 0.5rem;
+                }
+            }
+        }
+    }
+    .configMode {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .input {
+        .label {
+            display: block;
+        }
+        .receiverIpInput {
+            font-family: var(--ifm-font-family-monospace);
+            max-width: 12em;
+        }
+        .message {
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            .label {
+                flex-basis: 100%;
+            }
+            .textInput {
+                flex-grow: 1;
+                flex-shrink: 1;
+                flex-basis: 12em;
+                margin-top: 0;
+            }
+        }
+    }
+}
