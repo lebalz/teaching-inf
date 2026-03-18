@@ -262,6 +262,12 @@
         "_category_.yml"
       ],
       "open": false
+    },
+    {
+      "from": "docs/Math/Taschenrechner/",
+      "to": "versioned_docs/version-29Gj/100-Mathematik/01-Taschenrechner",
+      "ignore": [],
+      "open": false
     }
   ],
   "pages": [
