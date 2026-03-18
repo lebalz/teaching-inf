@@ -192,7 +192,6 @@
       "from": "docs/OF-Daten-und-Codes/",
       "to": "versioned_docs/version-29Ga/04-Daten-und-Codes",
       "ignore": [
-        "08-Bildcodierung",
         "09-Datenmengen",
         "Lernziele",
         "index.mdx",
