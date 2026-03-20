@@ -137,7 +137,7 @@
     },
     {
       "from": "docs/OF-Netzwerke/",
-      "to": "versioned_docs/version-28Gb/10-Netzwerke",
+      "to": "versioned_docs/version-28Gj/10-Netzwerke",
       "ignore": [
         "_category_.yml"
       ],
