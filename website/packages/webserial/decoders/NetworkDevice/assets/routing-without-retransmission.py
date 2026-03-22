@@ -14,54 +14,70 @@ DEFAULT_POWER = 4
 def pad0(text: str, n: int):
     return ("{0:0>" + str(n) + "}").format(text)
 
-class ErrorMessage:
-    def __init__(self, message):
-        self.message = message
+def report(message):
+    print(message)
 
-    def __str__(self):
-        return 'ERROR: ' + self.message
+def report_error(message):
+    print('ERROR: ' + message)
 
+bbc_id = hex(int.from_bytes(unique_id(), "little"))[6:]
+MICROBIT_MAC = ":".join(bbc_id[i:i+2] for i in range(0, 12, 2)).upper()
 BROADCAST_MAC = 'FF:FF:FF:FF:FF:FF'
-class MAC:
-    @staticmethod
-    def is_broadcast(mac):
-        return str(mac).strip().upper() == BROADCAST_MAC
 
-    @staticmethod
-    def microbit_mac():
-        mid = hex(int.from_bytes(unique_id(), "little"))[6:]
-        return ":".join(mid[i:i+2] for i in range(0, 12, 2)).upper()
+def is_broadcast_mac(mac):
+    return str(mac).strip().upper() == BROADCAST_MAC
 
-    @staticmethod
-    def validate(mac: str):
-        parts = str(mac).strip().split(':')
-        if len(parts) != 6:
-            raise Exception('MAC "' + mac + '" is invalid.')
-        valid = [len(p) == 2 and int(p, 16) < 256 for p in parts]
-        if sum(valid) != 6:
-            raise Exception('MAC "' + mac + '" has invalid parts.')
+def validate_mac(mac):
+    parts = str(mac).strip().split(':')
+    if len(parts) != 6:
+        raise Exception('MAC "' + mac + '" is invalid.')
+    valid = [len(p) == 2 and int(p, 16) < 256 for p in parts]
+    if sum(valid) != 6:
+        raise Exception('MAC "' + mac + '" has invalid parts.')
 
-    @staticmethod
-    def parse(mac: str):
-        try:
-            MAC.validate(mac)
-        except:
-            print(ErrorMessage('MAC "' + mac + '" has invalid parts.'))
-            return
-        return str(mac).strip().upper()
+def parse_mac(mac):
+    try:
+        validate_mac(mac)
+    except:
+        report_error('MAC "' + mac + '" has invalid parts.')
+        return
+    return str(mac).strip().upper()
+
+
+IP_UNCONFIGURED = '0.0.0.0'
+IP_LOOPBACK = '127.0.0.1'
+
+def validate_ip(ip: str):
+    parts = ip.strip().split('.')
+    if len(parts) != 4:
+        raise Exception('IP "' + ip + '" is invalid.')
+    parts = [int(p) for p in parts]
+    valid = [n >= 0 and n < 256 for n in parts]
+    if sum(valid) != 4:
+        raise Exception('IP "' + ip + '" has out of range parts.')
+
+def parse_ip(ip: str):
+    parts = str(ip).strip().split('.')
+    if len(parts) != 4:
+        return
+    try:
+        parts = [int(p) for p in parts]
+        valid = [n >= 0 and n < 256 for n in parts]
+        if sum(valid) == 4:
+            return IP(ip)
+    except:
+        report_error('IP "' + ip + '" has non-integer parts.')
+        return
 
 class IP:
-    UNCONFIGURED = '0.0.0.0'
-    LOOPBACK = '127.0.0.1'
-
     def __init__(self, ip):
         _ip = str(ip).strip()
-        IP.validate(_ip)
+        validate_ip(_ip)
         self.ip = _ip
 
     @property
     def is_loopback(self):
-        return self.ip == IP.LOOPBACK
+        return self.ip == IP_LOOPBACK
 
     @property
     def parts(self):
@@ -98,38 +114,30 @@ class IP:
     def __str__(self):
         return self.ip
 
-
-    @staticmethod
-    def validate(ip: str):
-        parts = ip.strip().split('.')
-        if len(parts) != 4:
-            raise Exception('IP "' + ip + '" is invalid.')
-        parts = [int(p) for p in parts]
-        valid = [n >= 0 and n < 256 for n in parts]
-        if sum(valid) != 4:
-            raise Exception('IP "' + ip + '" has out of range parts.')
-
-
-    @staticmethod
-    def parse(ip: str):
-        parts = str(ip).strip().split('.')
-        if len(parts) != 4:
-            return
-        try:
-            parts = [int(p) for p in parts]
-            valid = [n >= 0 and n < 256 for n in parts]
-            if sum(valid) == 4:
-                return IP(ip)
-        except:
-            print('IP "' + ip + '" has non-integer parts.')
-            return
+def parse_eth(data):
+    parts = str(data).split(SEPARATOR)
+    if len(parts) < 4:
+        return
+    try:
+        ts = int(parts[0])
+        _id = int(parts[1])
+    except:
+        return
+    dest = parse_mac(parts[2])
+    if not dest:
+        return
+    src = parse_mac(parts[3])
+    if not src:
+        return
+    payload = SEPARATOR.join(parts[4:])
+    return EthernetFrame(_id, dest, src, payload, ts)
 
 class EthernetFrame:
     def __init__(self, _id, dest, src, payload, timestamp = -1):
         # this is needed only because we use radio and thus a message can be received multiple times when in reach of multiple devices.
         self._id = _id
-        self.dest = MAC.parse(dest)
-        self.src = MAC.parse(src)
+        self.dest = parse_mac(dest)
+        self.src = parse_mac(src)
         if not self.dest or not self.src:
             raise Exception('Invalid MAC address in Ethernet frame.')
         self.payload = payload
@@ -138,25 +146,6 @@ class EthernetFrame:
     def set_timestamp(self, timestamp):
         self.timestamp = timestamp
 
-    @staticmethod
-    def parse(data):
-        parts = str(data).split(SEPARATOR)
-        if len(parts) < 4:
-            return
-        try:
-            ts = int(parts[0])
-            _id = int(parts[1])
-        except:
-            return
-        dest = MAC.parse(parts[2])
-        if not dest:
-            return
-        src = MAC.parse(parts[3])
-        if not src:
-            return
-        payload = SEPARATOR.join(parts[4:])
-        return EthernetFrame(_id, dest, src, payload, ts)
-
     def __str__(self):
         # TIMESTAMP, ID, DEST, SRC, PAYLOAD
         return str(self.timestamp) + SEPARATOR + str(self._id) + SEPARATOR + str(self.dest) + SEPARATOR + str(self.src) + SEPARATOR + self.payload
@@ -164,32 +153,52 @@ class EthernetFrame:
     def __repr__(self):
         return 'EthernetFrame(' + self.__str__() + ')'
 
+
+def parse_arp(data):
+    parts = data.split(SEPARATOR)
+    if len(parts) != 4:
+        return
+    if parts[0] != 'ARP':
+        return
+    sender_mac = parse_mac(parts[1])
+    if not sender_mac:
+        return
+    sender_ip = parse_ip(parts[2])
+    if not sender_ip:
+        return
+    dest_ip = parse_ip(parts[3])
+    if not dest_ip:
+        return
+    return ARPFrame(sender_mac, sender_ip, dest_ip)
+
 class ARPFrame:
     def __init__(self, sender_mac, sender_ip, dest_ip):
-        self.sender_mac = MAC.parse(sender_mac)
-        self.sender_ip = IP.parse(sender_ip)
-        self.dest_ip = IP.parse(dest_ip)
-
-    @staticmethod
-    def parse(data):
-        parts = data.split(SEPARATOR)
-        if len(parts) != 4:
-            return
-        if parts[0] != 'ARP':
-            return
-        sender_mac = MAC.parse(parts[1])
-        if not sender_mac:
-            return
-        sender_ip = IP.parse(parts[2])
-        if not sender_ip:
-            return
-        dest_ip = IP.parse(parts[3])
-        if not dest_ip:
-            return
-        return ARPFrame(sender_mac, sender_ip, dest_ip)
+        self.sender_mac = parse_mac(sender_mac)
+        self.sender_ip = parse_ip(sender_ip)
+        self.dest_ip = parse_ip(dest_ip)
 
     def __str__(self):
         return 'ARP' + SEPARATOR + str(self.sender_mac) + SEPARATOR + str(self.sender_ip) + SEPARATOR + str(self.dest_ip)
+
+
+def parse_ip_frame(data):
+    parts = data.split(SEPARATOR)
+    if len(parts) < 4:
+        return
+    if parts[0] != 'IP':
+        return
+    try:
+        ttl = int(parts[1])
+    except:
+        return
+    src = parse_ip(parts[2])
+    if not src:
+        return
+    dest = parse_ip(parts[3])
+    if not dest:
+        return
+    payload = SEPARATOR.join(parts[4:])
+    return IPFrame(src, dest, payload, ttl)
 
 class IPFrame:
     def __init__(self, src, dest, payload, ttl = TTL_INIT):
@@ -198,25 +207,6 @@ class IPFrame:
         self.dest = IP(dest)
         self.payload = payload
 
-    @staticmethod
-    def parse(data):
-        parts = data.split(SEPARATOR)
-        if len(parts) < 4:
-            return
-        if parts[0] != 'IP':
-            return
-        try:
-            ttl = int(parts[1])
-        except:
-            return
-        src = IP.parse(parts[2])
-        if not src:
-            return
-        dest = IP.parse(parts[3])
-        if not dest:
-            return
-        payload = SEPARATOR.join(parts[4:])
-        return IPFrame(src, dest, payload, ttl)
 
     def decrement_ttl(self):
         self.ttl -= 1
@@ -235,11 +225,9 @@ class Mode:
     MODES = [CLIENT, ROUTER, SWITCH]
 
 class Device:
-    MAC = MAC.microbit_mac()
-
     def __init__(self, ip, default_gateway, network_mask, radio_address, radio_group, radio_power):
-        self.ip = IP.parse(ip)
-        self.default_gateway = IP.parse(default_gateway)
+        self.ip = parse_ip(ip)
+        self.default_gateway = parse_ip(default_gateway)
         self.default_gateway_mac = None
         # cidr notation, e.g. 24 for 255.255.255.0
         self.network_mask = network_mask
@@ -260,8 +248,8 @@ class Device:
     def process_message(self, pkg: EthernetFrame, received_at: int):
         if pkg.timestamp < 1:
             return
-        if pkg.dest == self.MAC or MAC.is_broadcast(pkg.dest):
-            print(pkg)
+        if pkg.dest == self.MAC or is_broadcast_mac(pkg.dest):
+            report(pkg)
 
     def run(self):
         if uart.any():
@@ -275,13 +263,13 @@ class Device:
         raw = radio.receive()
         if not raw:
             return
-        pkg = EthernetFrame.parse(raw)
+        pkg = parse_eth(raw)
         timestamp = running_time()
         if not pkg:
             return
         if self._is_double_receive(pkg):
             return
-        if MAC.is_broadcast(pkg.dest) and pkg.src == self.MAC:
+        if is_broadcast_mac(pkg.dest) and pkg.src == self.MAC:
             # this is a package we sent, drop it.
             return
         self.process_message(pkg, timestamp)
@@ -298,31 +286,31 @@ class Device:
         return False
 
     def send_L2(self, dest, data):
-        to = MAC.parse(dest)
+        to = parse_mac(dest)
         if not to:
-            return print(ErrorMessage('Cannot send L2 message without a valid destination MAC address.'))
+            return report_error('Cannot send L2 message without a valid destination MAC address.')
         msg = EthernetFrame(self._pkg_id, to, self.MAC, str(data))
         self._pkg_id += 1
         if to == self.MAC:
-            return print(msg)
+            return report(msg)
         radio.send(str(msg))
 
     def send_L3(self, dest, data):
         if not self.default_gateway:
-            return print(ErrorMessage('Cannot send L3 message without default gateway configured.'))
-        to = IP.parse(dest)
+            return report_error('Cannot send L3 message without default gateway configured.')
+        to = parse_ip(dest)
         if not to:
-            return print(ErrorMessage('Keine gültige IP Adresse angegeben: ' + dest))
+            return report_error('Keine gültige IP Adresse angegeben: ' + dest)
         if not self.default_gateway_mac:
             self.send_arp(str(self.default_gateway))
-            return print(ErrorMessage('Unbekannte MAC Adresse des Routers. ARP Nachricht gesendet.'))
+            return report_error('Unbekannte MAC Adresse des Routers. ARP Nachricht gesendet.')
         if not self.ip:
-            return print(ErrorMessage('Cannot send L3 message without IP address configured.'))
+            return report_error('Cannot send L3 message without IP address configured.')
         ipframe = IPFrame(self.ip, to, data)
         msg = EthernetFrame(self._pkg_id, self.default_gateway_mac, self.MAC, str(ipframe))
         self._pkg_id += 1
         if to == self.ip:
-            return print(msg)
+            return report(msg)
         radio.send(str(msg))
     
     def send_arp(self, to_ip, sender_mac = BROADCAST_MAC, timestamp = -1):
@@ -337,10 +325,10 @@ class Client(Device):
         super().__init__(ip, default_gateway, network_mask, radio_address, radio_group, radio_power)
 
     def handle_package(self, pkg: EthernetFrame):
-        arp_frame = ARPFrame.parse(pkg.payload)
+        arp_frame = parse_arp(pkg.payload)
         if arp_frame and arp_frame.dest_ip == self.ip and arp_frame.sender_ip == self.default_gateway:
             self.default_gateway_mac = arp_frame.sender_mac
-        print(pkg)
+        report(pkg)
 
     def process_message(self, pkg: EthernetFrame, received_at: int):
         if pkg.timestamp < 0:
@@ -348,7 +336,7 @@ class Client(Device):
         if pkg.timestamp == 0 and pkg.src == self.MAC:
             # this is a package we sent and is received again due to broadcast, drop it.
             return
-        if pkg.dest == self.MAC or MAC.is_broadcast(pkg.dest):
+        if pkg.dest == self.MAC or is_broadcast_mac(pkg.dest):
             self.handle_package(pkg)
 
 class Switch(Device):
@@ -372,7 +360,7 @@ class Switch(Device):
             # reset the timestamp to ensure the package gets dropped when received by the destination.
             msg.set_timestamp(0)
 
-        print(str(msg))
+        report(str(msg))
         if msg.dest == self.MAC:
             return
         # just flood the message to all other devices, no port concept possible with micro:bit radio
@@ -395,13 +383,13 @@ class Router(Device):
         if msg.timestamp == -1:
             # learn the source MAC when the package arrives directly from the sender (timestamp -1)
             self.mac_table[msg.src] = received_at
-        ip_frame = IPFrame.parse(msg.payload)
+        ip_frame = parse_ip_frame(msg.payload)
         if ip_frame:
             # learn the ip-mac mapping
             self.ip_table[ip_frame.src.ip] = msg.src
             if ip_frame.dest == self.ip:
                 # message for us, so we process it (here we just print it).
-                print(msg)
+                report(msg)
                 return
             else:
                 # message for another IP, so we need to forward it, but first we decrement the TTL and drop it if TTL is 0.
@@ -417,14 +405,14 @@ class Router(Device):
                     radio.send(str(forward_frame))
                 else:
                     # destination not in our routing table, so we just print it to tdev which should delegate it to the default gateway.
-                    print(msg)
+                    report(msg)
                     return
                 self._pkg_id += 1
         else:
-            arp_frame = ARPFrame.parse(msg.payload)
+            arp_frame = parse_arp(msg.payload)
             if arp_frame:
                 if arp_frame.dest_ip == self.ip:
-                    print(msg)
+                    report(msg)
                     sender_ip = str(arp_frame.sender_ip)
                     sender_mac = str(arp_frame.sender_mac)
                     self.ip_table[sender_ip] = sender_mac
@@ -439,68 +427,67 @@ class Router(Device):
             else:
                 # we know the destination, so we set the timestamp to ensure the package gets dropped when received by the destination.
                 msg.set_timestamp(received_at)
-            print(msg)
+            report(msg)
             if msg.dest == self.MAC:
                 return
             # just flood the message to all other devices, no port concept possible with micro:bit radio
             radio.send(str(msg))
 
-class SerialMessage:
-    CONFIG = '::CONFIG::'
-    SEND_L2 = '::L2::'
-    SEND_L3 = '::L3::'
 
-    @staticmethod
-    def parse(message: str):
-        parts = message.split(SEPARATOR)
-        if len(parts) < 1:
+SM_CONFIG = '::CONFIG::'
+SM_SEND_L2 = '::L2::'
+SM_SEND_L3 = '::L3::'
+
+
+def parse_serial_msg(message: str):
+    parts = message.split(SEPARATOR)
+    if len(parts) < 1:
+        return
+    code = parts[0]
+    if code == SM_CONFIG and len(parts) == 7:
+        return {
+            'type': 'set_config',
+            'data': SEPARATOR.join(parts[1:])
+        }
+    elif code == SM_CONFIG and len(parts) == 1:
+        return {
+            'type': 'get_config'
+        }
+    elif code == SM_SEND_L2 and len(parts) >= 3:
+        mac = parse_mac(parts[1])
+        msg = SEPARATOR.join(parts[2:])
+        if not mac:
             return
-        code = parts[0]
-        if code == SerialMessage.CONFIG and len(parts) == 7:
-            return {
-                'type': 'set_config',
-                'data': SEPARATOR.join(parts[1:])
-            }
-        elif code == SerialMessage.CONFIG and len(parts) == 1:
-            return {
-                'type': 'get_config'
-            }
-        elif code == SerialMessage.SEND_L2 and len(parts) >= 3:
-            mac = MAC.parse(parts[1])
-            msg = SEPARATOR.join(parts[2:])
-            if not mac:
-                return
-            return {
-                'type': 'send_L2',
-                'dest': mac,
-                'message': msg.strip()
-            }
-        elif code == SerialMessage.SEND_L3 and len(parts) >= 3:
-            ip = IP.parse(parts[1])
-            msg = SEPARATOR.join(parts[2:])
-            if not ip or not msg.strip():
-                return
-            return {
-                'type': 'send_L3',
-                'dest': str(ip),
-                'message': msg.strip()
-            }
-        else:
+        return {
+            'type': 'send_L2',
+            'dest': mac,
+            'message': msg.strip()
+        }
+    elif code == SM_SEND_L3 and len(parts) >= 3:
+        ip = parse_ip(parts[1])
+        msg = SEPARATOR.join(parts[2:])
+        if not ip or not msg.strip():
             return
+        return {
+            'type': 'send_L3',
+            'dest': str(ip),
+            'message': msg.strip()
+        }
+    else:
+        return
+
+def parse_value(value, is_int = False, default = None):
+    if value == 'None':
+        return default
+    if not is_int:
+        return value
+    try:
+        return int(value)
+    except:
+        return default
 
 class Config:
     device: Device
-
-    @staticmethod
-    def parse_value(value, is_int = False, default = None):
-        if value == 'None':
-            return default
-        if not is_int:
-            return value
-        try:
-            return int(value)
-        except:
-            return default
 
     def __init__(self, mode, ip = None):
         self.mode = 'client'
@@ -514,12 +501,12 @@ class Config:
         self.configure(mode, self.ip, self.default_gateway, self.radio[0], self.radio[1], self.radio[2], skip_dump)
 
     def configure(self, mode, ip=None, default_gateway=None, address = None, group = None, power = None, skip_dump = False):
-        new_ip = IP.parse(str(ip))
+        new_ip = parse_ip(str(ip))
         if new_ip:
             self.ip = new_ip.ip
         else:
             self.ip = None
-        new_dg = IP.parse(str(default_gateway))
+        new_dg = parse_ip(str(default_gateway))
         if not new_dg and new_ip:
             new_dg = new_ip.default_gateway(self.network_mask)
         if new_dg:
@@ -556,7 +543,7 @@ class Config:
             self.device = Switch(self.radio[0], self.radio[1], self.radio[2])
         elif self.mode == Mode.ROUTER:
             if not self.ip:
-                print(ErrorMessage('Router must have a valid IP address configured.'))
+                report_error('Router must have a valid IP address configured.')
                 return self.configure(Mode.CLIENT, ip, default_gateway, address, group, power, skip_dump)
             self.device = Router(self.ip, self.default_gateway, self.network_mask, self.radio[0], self.radio[1], self.radio[2])
         self.changed = True
@@ -568,7 +555,7 @@ class Config:
         parts = config_str.split(SEPARATOR)
         if len(parts) != 6:
             return
-        p = Config.parse_value
+        p = parse_value
         self.configure(p(parts[0]), p(parts[1]), p(parts[2]), p(parts[3], True), p(parts[4], True), p(parts[5], True, DEFAULT_POWER))
 
     def dump(self):
@@ -597,7 +584,7 @@ class Config:
         self.device.run()
         if len(self.device.pending_serial_messages) > 0:
             for text in self.device.pending_serial_messages:
-                msg = SerialMessage.parse(text)
+                msg = parse_serial_msg(text)
                 if msg:
                     if msg['type'] == 'set_config':
                         self.configure_from_string(msg['data'])
@@ -614,11 +601,11 @@ class Config:
         return self.mode + SEPARATOR + str(self.ip) + SEPARATOR + str(self.default_gateway) + SEPARATOR + str(self.radio[0]) + SEPARATOR + str(self.radio[1]) + SEPARATOR + str(self.radio[2])
 
     def send_config(self):
-        print(SerialMessage.CONFIG + SEPARATOR + Device.MAC + SEPARATOR + str(self))
+        report(SM_CONFIG + SEPARATOR + MICROBIT_MAC + SEPARATOR + str(self))
 
 
 
-print(RESET_TRIGGER)
+report(RESET_TRIGGER)
 
 config = Config('client')
 config.restore()
@@ -626,7 +613,7 @@ display.show(config.icon)
 while True:
     config.run()
     if button_b.was_pressed():
-        print(RESET_TRIGGER)
+        report(RESET_TRIGGER)
     if config.changed:
         config.changed = False
         display.show(config.icon)
