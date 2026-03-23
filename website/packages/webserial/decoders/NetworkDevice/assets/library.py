@@ -18,6 +18,8 @@ def send_package(pkg):
 	radio.send(str(pkg))
 def report_error(message):
 	report('ERROR: ' + message)
+def report_info(message):
+	report('INFO: ' + message)
 _uid = hex(int.from_bytes(unique_id(), "little"))[6:]
 BBC_MAC = ":".join(_uid[i:i+2] for i in range(0, 12, 2)).upper()
 del _uid
@@ -153,6 +155,7 @@ class Device:
 		self.radio_address = radio_address
 		self.configure()
 		self.pending_serial_messages = []
+		self.pending_arp_request = None
 		self._received_pkg_ids = [None] * PACKAGE_BUFFER_SIZE
 		self._received_pkg_ids_idx = 0
 		self._pkg_id = 0
@@ -194,22 +197,35 @@ class Device:
 		self._pkg_id += 1
 		if to == BBC_MAC: return report(msg)
 		send_package(msg)
-	def send_L3(self, dest, data):
-		if not self.default_gateway: return report_error('Cannot send L3 message without default gateway configured.')
-		to = parse_ip(dest)
-		if not to: return report_error('Keine gültige IP Adresse angegeben: ' + dest)
+	def resolve_mac(self, ip):
 		if not self.default_gateway_mac:
 			self.send_arp(str(self.default_gateway))
-			return report_error('Unbekannte MAC Adresse des Routers. ARP Nachricht gesendet.')
-		if not self.ip: return report_error('Cannot send L3 message without IP address configured.')
-		ipframe = IPFrame(self.ip, to, data)
-		msg = EthernetFrame(self._pkg_id, self.default_gateway_mac, BBC_MAC, str(ipframe))
+			report_info('MAC Adresse von ' + str(self.default_gateway) + ' unbekannt. Sende ARP Nachricht.')
+			return None
+		return self.default_gateway_mac
+	def send_L3(self, dest, data, src_ip = None, ttl = TTL_INIT, timestamp = -1):
+		if not self.default_gateway: return report_error('Kann keine IP Nachricht ohne konfiguriertes default gateway senden.')
+		to = parse_ip(dest)
+		if not to: return report_error('Keine gültige IP Adresse angegeben: ' + dest)
+		dest_mac = self.resolve_mac(to)
+		if dest_mac is None:
+			self.pending_arp_request = (dest, data, src_ip, ttl, timestamp)
+			return
+		if not self.ip: return report_error('Kann keine IP Nachricht ohne konfigurierte IP Adresse senden.')
+		sender_ip = src_ip if src_ip else self.ip
+		ipframe = IPFrame(sender_ip, to, data, ttl)
+		msg = EthernetFrame(self._pkg_id, dest_mac, BBC_MAC, str(ipframe), timestamp)
 		self._pkg_id += 1
 		if to == self.ip: return report(msg)
 		send_package(msg)
-	def send_arp(self, to_ip, sender_mac = BROADCAST_MAC, timestamp = -1):
+	def send_pending_L3(self):
+		if not self.pending_arp_request: return
+		pkg = self.pending_arp_request
+		self.send_L3(pkg[0], pkg[1], pkg[2], pkg[3], pkg[4])
+		self.pending_arp_request = None
+	def send_arp(self, to_ip, receiver_mac = BROADCAST_MAC, timestamp = -1):
 		arp_response = ARPFrame(BBC_MAC, self.ip, to_ip)
-		response_frame = EthernetFrame(self._pkg_id, sender_mac, BBC_MAC, str(arp_response), timestamp)
+		response_frame = EthernetFrame(self._pkg_id, receiver_mac, BBC_MAC, str(arp_response), timestamp)
 		self._pkg_id += 1
 		send_package(response_frame)
 class Client(Device):
@@ -217,7 +233,10 @@ class Client(Device):
 		super().__init__(ip, default_gateway, network_mask, radio_address, radio_group, radio_power)
 	def handle_package(self, pkg):
 		arp_frame = parse_arp(pkg.payload)
-		if arp_frame and arp_frame.dest_ip == self.ip and arp_frame.sender_ip == self.default_gateway: self.default_gateway_mac = arp_frame.sender_mac
+		if arp_frame and arp_frame.sender_ip == self.default_gateway and arp_frame.dest_ip == self.ip:
+			self.default_gateway_mac = arp_frame.sender_mac
+			if is_broadcast_mac(pkg.dest): self.send_arp(str(arp_frame.sender_ip), pkg.src)
+			elif pkg.dest == BBC_MAC: self.send_pending_L3()
 		report(pkg)
 	def process_message(self, pkg, received_at):
 		if pkg.timestamp < 0: return
@@ -243,6 +262,13 @@ class Router(Device):
 		if not self.ip: raise Exception('Router must have a valid IP address configured.')
 		self.mac_table = {}
 		self.ip_table = {}
+	def resolve_mac(self, ip):
+		mac = self.ip_table.get(str(ip), None)
+		if mac: return mac
+		if ip.default_gateway(self.network_mask) == self.ip.default_gateway(self.network_mask):
+			self.send_arp(str(ip), BROADCAST_MAC, running_time())
+			report_info('MAC Adresse von ' + str(ip) + ' unbekannt. Sende ARP Nachricht.')
+			return None
 	def process_message(self, msg, received_at):
 		is_known_dest = self.mac_table.get(msg.dest, -1) > 0
 		if msg.timestamp > 0: return
@@ -254,6 +280,7 @@ class Router(Device):
 			else:
 				ip_frame.decrement_ttl()
 				if ip_frame.ttl < 1: return
+				report(msg)
 				if ip_frame.dest.is_broadcast(self.network_mask):
 					broadcast_frame = EthernetFrame(self._pkg_id, BROADCAST_MAC, BBC_MAC, str(ip_frame), running_time())
 					send_package(broadcast_frame)
@@ -261,7 +288,7 @@ class Router(Device):
 					next_hop_mac = self.ip_table[ip_frame.dest.ip]
 					forward_frame = EthernetFrame(self._pkg_id, next_hop_mac, BBC_MAC, str(ip_frame), running_time())
 					send_package(forward_frame)
-				else: return report(msg)
+				else: return
 				self._pkg_id += 1
 		else:
 			arp_frame = parse_arp(msg.payload)
@@ -271,16 +298,18 @@ class Router(Device):
 					sender_ip = str(arp_frame.sender_ip)
 					sender_mac = str(arp_frame.sender_mac)
 					self.ip_table[sender_ip] = sender_mac
-					self.send_arp(sender_ip, sender_mac, received_at)
+					if is_broadcast_mac(msg.dest): self.send_arp(sender_ip, sender_mac, received_at)
+					elif msg.dest == BBC_MAC: self.send_pending_L3()
 				return
+			report(msg)
 			if not is_known_dest: msg.set_timestamp(0)
 			else: msg.set_timestamp(received_at)
-			report(msg)
 			if msg.dest == BBC_MAC: return
 			send_package(msg)
 SM_CONFIG = '::CONFIG::'
 SM_SEND_L2 = '::L2::'
 SM_SEND_L3 = '::L3::'
+SM_ROUTE_PKG = '::R::'
 def parse_serial_msg(message):
 	parts = message.split(S)
 	if len(parts) < 1: return
@@ -297,6 +326,13 @@ def parse_serial_msg(message):
 		msg = S.join(parts[2:])
 		if not ip or not msg.strip(): return
 		return ('send_L3', str(ip), msg.strip())
+	elif code == SM_ROUTE_PKG and len(parts) >= 5:
+		ttl = parse_value(parts[1], True)
+		src = parse_ip(parts[2])
+		dst = parse_ip(parts[3])
+		msg = S.join(parts[4:])
+		if not src or not dst or (ttl is None) or not msg.strip(): return
+		return ('route_pkg', ttl, str(src), str(dst), msg.strip())
 def parse_value(value, is_int = False, default = None):
 	if value == 'None': return default
 	if not is_int: return value
@@ -391,6 +427,12 @@ class Config:
 					elif msg[0] == 'get_config': self.send_config()
 					elif msg[0] == 'send_L2': self.device.send_L2(msg[1], msg[2])
 					elif msg[0] == 'send_L3': self.device.send_L3(msg[1], msg[2])
+					elif msg[0] == 'route_pkg':
+						ttl = msg[1]
+						src = msg[2]
+						dst = msg[3]
+						payload = msg[4]
+						self.device.send_L3(dst, payload, src, ttl, 0)
 			self.device.pending_serial_messages = []
 		if self.changed:
 			self.changed = False
