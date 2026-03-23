@@ -269,6 +269,12 @@ class Router(Device):
 			self.send_arp(str(ip), BROADCAST_MAC, running_time())
 			report_info('MAC Adresse von ' + str(ip) + ' unbekannt. Sende ARP Nachricht.')
 			return None
+		gateway_ip = str(self.default_gateway)
+		gateway_mac = self.ip_table.get(gateway_ip, None)
+		if gateway_mac: return gateway_mac
+		self.send_arp(str(self.default_gateway))
+		report_info('MAC Adresse von ' + gateway_ip + ' unbekannt. Sende ARP Nachricht.')
+		return None
 	def process_message(self, msg, received_at):
 		is_known_dest = self.mac_table.get(msg.dest, -1) > 0
 		if msg.timestamp > 0: return
@@ -298,7 +304,7 @@ class Router(Device):
 					sender_ip = str(arp_frame.sender_ip)
 					sender_mac = str(arp_frame.sender_mac)
 					self.ip_table[sender_ip] = sender_mac
-					if is_broadcast_mac(msg.dest): self.send_arp(sender_ip, sender_mac, received_at)
+					if is_broadcast_mac(msg.dest): self.send_arp(sender_ip, sender_mac, 0)
 					elif msg.dest == BBC_MAC: self.send_pending_L3()
 				return
 			report(msg)
