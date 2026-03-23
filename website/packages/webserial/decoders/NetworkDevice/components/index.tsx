@@ -10,21 +10,29 @@ import Button from '@tdev-components/shared/Button';
 import Logs from '@tdev-components/documents/CodeEditor/Editor/Footer/Logs';
 import Badge from '@tdev-components/shared/Badge';
 import TextInput from '@tdev-components/shared/TextInput';
-import { mdiCloseCircle, mdiContentSave, mdiRestore, mdiSend, mdiSquareEditOutline } from '@mdi/js';
-import { SIZE_S } from '@tdev-components/shared/iconSizes';
+import {
+    mdiAccessPointNetwork,
+    mdiCloseCircle,
+    mdiContentSave,
+    mdiRadioTower,
+    mdiSend,
+    mdiSquareEditOutline,
+    mdiSync
+} from '@mdi/js';
+import { SIZE_S, SIZE_XS } from '@tdev-components/shared/iconSizes';
 import CopyBadge from '@tdev-components/shared/CopyBadge';
 import { Config } from '../models/DeviceConfig';
 import Icon from '@mdi/react';
 import Card from '@tdev-components/shared/Card';
 // @ts-ignore
 import Details from '@theme/Details';
-import Frames from './Frame/Frames';
 import Alert from '@tdev-components/shared/Alert';
 
 interface Props {
     config?: Config;
     canChangeMode?: boolean;
     hideIpConfig?: boolean;
+    syncQueryString?: boolean;
 }
 
 const NetworkDevice = observer((props: Props) => {
@@ -37,9 +45,9 @@ const NetworkDevice = observer((props: Props) => {
     const isFullscreen = viewStore.isFullscreenTarget(fullscreenTargetId);
     const decoder = React.useMemo(() => {
         if (device) {
-            return new Decoder(subscriptionId, device, props.config);
+            return new Decoder(subscriptionId, device, props.config, props.syncQueryString);
         }
-    }, [device, subscriptionId, props.config]);
+    }, [device, subscriptionId, props.config, props.syncQueryString]);
 
     if (!(decoder && device)) {
         return <div>Netzwerk</div>;
@@ -55,22 +63,27 @@ const NetworkDevice = observer((props: Props) => {
                             label={`MAC: ${decoder.config.mac}`}
                             color="blue"
                         />
-                        {decoder.config.ip && (
+                        {decoder.showIP && decoder.config.ip && !props.hideIpConfig && (
                             <CopyBadge
                                 value={decoder.config.ip}
                                 label={`IP: ${decoder.config.ip}`}
                                 color="blue"
                             />
                         )}
-                        {decoder.config.defaultGateway && (
+                        {decoder.showIP && decoder.config.defaultGateway && !props.hideIpConfig && (
                             <Badge>{`Gateway: ${decoder.config.defaultGateway}`}</Badge>
                         )}
-                        <Badge>{decoder.config.radio.address}</Badge>
-                        <Badge>{decoder.config.radio.group}</Badge>
-                        <Badge>{decoder.config.radio.power}</Badge>
+                        <Badge>
+                            <Icon path={mdiAccessPointNetwork} size={SIZE_XS} /> {decoder.config.radio.group}@
+                            {decoder.config.radio.address ?? 'n/a'}
+                        </Badge>
+                        <Badge>
+                            <Icon path={mdiRadioTower} size={SIZE_XS} /> {decoder.config.radio.power}
+                        </Badge>
                         <Button
-                            title="Konfiguration zurücksetzen"
-                            icon={mdiRestore}
+                            title="Konfiguration flashen"
+                            icon={mdiSync}
+                            spin={decoder.isFlashingConfig}
                             onClick={() => {
                                 decoder.resetConfig();
                             }}

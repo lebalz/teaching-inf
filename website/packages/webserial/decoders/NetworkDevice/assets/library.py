@@ -230,11 +230,11 @@ class Switch(Device):
 	def process_message(self, msg, received_at):
 		if msg.timestamp > 0: return
 		is_known_dest = self.mac_table.get(msg.dest, -1) > 0
+		report(msg)
 		if msg.timestamp == -1:
 			self.mac_table[msg.src] = received_at
 			msg.set_timestamp(received_at)
 		if not is_known_dest: msg.set_timestamp(0)
-		report(msg)
 		if msg.dest == BBC_MAC: return
 		send_package(msg)
 class Router(Device):

@@ -4,30 +4,24 @@ import { observer } from 'mobx-react-lite';
 import styles from './styles.module.scss';
 import Webserial from '@tdev/webserial/component';
 import NetworkDevice from '@tdev/packages/webserial/decoders/NetworkDevice/components';
+import React from 'react';
+import { useDeviceConfig } from '@tdev/packages/webserial/decoders/NetworkDevice/hooks/useDeviceConfig';
 
 const Switch = observer((): React.ReactNode => {
+    const config = useDeviceConfig('switch', { radioPower: 1 });
     return (
         <Layout title={`Network Microbit Switch`} wrapperClassName={clsx(styles.network)}>
             <main>
                 <h1>Switch</h1>
-                <Webserial
-                    deviceId="switch"
-                    baudRate={115200}
-                    hideLogs
-                    resetTrigger="::READY::"
-                    output={
-                        <NetworkDevice
-                            config={{
-                                mode: 'switch',
-                                radioPower: 1,
-                                radioGroup: 0,
-                                radioAddress: 1969383796,
-                                ip: '192.168.0.2',
-                                defaultGateway: '192.168.0.1'
-                            }}
-                        />
-                    }
-                />
+                {config && (
+                    <Webserial
+                        deviceId="switch"
+                        baudRate={115200}
+                        hideLogs
+                        resetTrigger="::READY::"
+                        output={<NetworkDevice config={config} syncQueryString />}
+                    />
+                )}
             </main>
         </Layout>
     );

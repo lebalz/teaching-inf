@@ -54,23 +54,26 @@ const DEFAULT_CONFIG: DeviceConfig = new DeviceConfig(
 class Decoder implements iSubscriber {
     readonly id: string;
     readonly device: SerialDevice;
+    readonly syncQueryString: boolean;
     @observable.ref accessor _defaultConfig: Config | null = null;
     @observable.ref accessor config: DeviceConfig | null = null;
     @observable accessor message: string = '';
     @observable accessor receiverIp: string = '';
     @observable accessor receiverMac: string = '';
     @observable accessor error: string = '';
+    @observable accessor flashingStartetAt: number = -1;
 
     // just the input field for the IP, not necessarily the actual device IP (which is in config)
     @observable accessor deviceIp: string = '';
 
     packages = observable.array<EthernetFrame>([], { deep: false });
 
-    constructor(id: string, device: SerialDevice, defaultConfig?: Config) {
+    constructor(id: string, device: SerialDevice, defaultConfig?: Config, syncQueryString: boolean = false) {
         this.id = id;
         this.device = device;
         this.device.subscribe(this);
         this._defaultConfig = defaultConfig || null;
+        this.syncQueryString = syncQueryString;
     }
 
     @action
@@ -88,7 +91,6 @@ class Decoder implements iSubscriber {
             const newConfig = this.config.updateWith({
                 ip: this.isValidDeviceIp ? this.deviceIp : null
             });
-            console.log('Flashing new config with IP', newConfig);
             this.flashConfig(newConfig);
         }
     }
@@ -166,9 +168,22 @@ class Decoder implements iSubscriber {
         }
     }
 
+    @computed
+    get isFlashingConfig() {
+        return this.flashingStartetAt > 0;
+    }
+
     @action
     clearError() {
         this.error = '';
+    }
+
+    _updateQueryString() {
+        if (!this.syncQueryString || !this.config) {
+            return;
+        }
+        const newUrl = `${window.location.pathname}?${this.config.queryString}`;
+        window.history.replaceState(null, '', newUrl);
     }
 
     @action
@@ -179,6 +194,13 @@ class Decoder implements iSubscriber {
                 continue;
             }
             const configPkg = DeviceConfig.parse(line);
+            if (!configPkg && this.flashingStartetAt > 0) {
+                if (this.flashingStartetAt + 1000 < Date.now()) {
+                    this.error = 'Konfiguration fehlgeschlagen - automatisch erneut ausgeführt.';
+                    this.resetConfig();
+                }
+                return;
+            }
             if (!configPkg) {
                 const ethernetPkg = EthernetFrame.parse(line);
                 if (ethernetPkg) {
@@ -189,6 +211,11 @@ class Decoder implements iSubscriber {
             const hadConfig = !!this.config;
             if (configPkg) {
                 this.config = configPkg;
+                this.flashingStartetAt = -1;
+                if (this.error && this.error.startsWith('Konfiguration fehlgeschlagen')) {
+                    this.error = '';
+                }
+                this._updateQueryString();
                 this.deviceIp = '';
             }
             if (!hadConfig && this._defaultConfig) {
@@ -205,6 +232,7 @@ class Decoder implements iSubscriber {
 
     @action
     resetConfig() {
+        this.flashingStartetAt = Date.now();
         if (!this._defaultConfig) {
             this.device.sendLine(CONFIG);
             return;

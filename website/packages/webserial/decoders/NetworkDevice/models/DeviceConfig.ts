@@ -76,6 +76,26 @@ class DeviceConfig {
         return `${this.mode} ${ip ?? 'None'} ${this.defaultGateway ?? 'None'} ${this.radio.address ?? 'None'} ${this.radio.group ?? 'None'} ${this.radio.power}`;
     }
 
+    get queryString() {
+        const params = new URLSearchParams();
+        if (this.ip) {
+            params.set('ip', this.ip);
+        }
+        if (this.defaultGateway) {
+            params.set('defaultGateway', this.defaultGateway);
+        }
+        if (this.radio.address !== undefined) {
+            params.set('address', this.radio.address.toString());
+        }
+        if (this.radio.group !== undefined) {
+            params.set('group', this.radio.group.toString());
+        }
+        if (this.radio.power !== undefined) {
+            params.set('power', this.radio.power.toString());
+        }
+        return params.toString();
+    }
+
     static parse(line: string): DeviceConfig | null {
         const [cType, mac, mode, ip, defaultGateway, address, group, power] = line
             .split(DeviceConfig.SEPARATOR)

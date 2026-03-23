@@ -319,6 +319,7 @@ class Switch(Device):
             return
 
         is_known_dest = self.mac_table.get(msg.dest, -1) > 0
+        report(msg)
         if msg.timestamp == -1:
             # learn the source MAC when the package arrives directly from the sender (timestamp -1)
             self.mac_table[msg.src] = received_at
@@ -329,7 +330,6 @@ class Switch(Device):
             # reset the timestamp to ensure the package gets dropped when received by another switch
             msg.set_timestamp(0)
 
-        report(msg)
         if msg.dest == BBC_MAC:
             return
         # just flood the message to all other devices, no port concept possible with micro:bit radio
