@@ -35,6 +35,7 @@ interface Props {
     hideIpConfig?: boolean;
     syncQueryString?: boolean;
     router?: Router;
+    noIcon?: boolean;
 }
 
 const NetworkDevice = observer((props: Props) => {
@@ -163,10 +164,12 @@ const NetworkDevice = observer((props: Props) => {
                             </div>
                         )}
                     </div>
-                    <Card classNames={{ body: clsx(styles.configMode) }}>
-                        <Icon path={decoder.config.icon} size={4} color="var(--ifm-color-blue)" />
-                        <Badge>{decoder.config.mode}</Badge>
-                    </Card>
+                    {!props.noIcon && (
+                        <Card classNames={{ body: clsx(styles.configMode) }}>
+                            <Icon path={decoder.config.icon} size={4} color="var(--ifm-color-blue)" />
+                            <Badge>{decoder.config.mode}</Badge>
+                        </Card>
+                    )}
                     <div className={clsx(styles.input)}>
                         <TextInput
                             onChange={(text) => {

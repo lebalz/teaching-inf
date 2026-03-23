@@ -1,6 +1,5 @@
-import { action, computed } from 'mobx';
-import Decoder, { SEND_L2, SEND_L3, SEND_ROUTING_PKG } from './Decoder';
-import EthernetFrame from './EthernetFrame';
+import { action } from 'mobx';
+import Decoder from './Decoder';
 import IPFrame from './IPFrame';
 
 class Router {

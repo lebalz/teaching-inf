@@ -8,6 +8,8 @@ import { useRouterConfig } from '../../hooks/useRouterConfig';
 import React from 'react';
 import { default as RouterModel } from '../../models/Router';
 import { Config } from '../../models/DeviceConfig';
+import Icon from '@mdi/react';
+import { mdiRouter, mdiRouterNetwork } from '@mdi/js';
 
 interface Props {
     nr: number;
@@ -17,14 +19,14 @@ interface Props {
 const NIC = observer((props: Props) => {
     const { nr, config, router } = props;
     return (
-        <div>
+        <div className={clsx(styles.nic)}>
             <h2>Interface {nr + 1}</h2>
             <Webserial
                 deviceId={`interface-${nr + 1}`}
                 baudRate={115200}
                 hideLogs
                 resetTrigger="::READY::"
-                output={<NetworkDevice config={config} router={router} />}
+                output={<NetworkDevice config={config} router={router} noIcon />}
             />
         </div>
     );
@@ -46,11 +48,12 @@ const Router = observer((): React.ReactNode => {
     }
 
     return (
-        <>
+        <div className={clsx(styles.router, styles[`nics${configs.length}`])}>
+            <Icon path={mdiRouter} size={4} className={clsx(styles.ico)} color="var(--ifm-color-blue)" />
             {configs.map((config, idx) => {
                 return <NIC key={idx} nr={idx} config={config} router={router} />;
             })}
-        </>
+        </div>
     );
 });
 
