@@ -1,5 +1,5 @@
 from micropython import const
-from microbit import running_time, display, Image, button_a, button_b, uart, sleep
+from microbit import running_time, display, button_a, button_b, uart, sleep
 import radio
 from machine import unique_id
 from os import listdir
@@ -10,11 +10,13 @@ RESET_TRIGGER = '::READY::'
 CONFIG_FILE = 'config.txt'
 PACKAGE_BUFFER_SIZE = const(32)
 DEFAULT_POWER = const(4)
-
+P_IN=(0,2)
+P_OUT=(4,2)
 def report(message):
     uart.write(str(message) + '\n')
 
 def send_package(pkg):
+    display.set_pixel(P_OUT[0],P_OUT[1], 9)
     radio.send(str(pkg))
 
 def report_error(message):
@@ -208,8 +210,7 @@ class Device:
 
     def configure(self):
         radio.off()
-        print(self.radio_address, self.radio_group, self.radio_power)
-        radio.config(length=128, group=self.radio_group, power=self.radio_power, address=self.radio_address)
+        radio.config(length=128,group=self.radio_group,channel=self.radio_group%84,power=self.radio_power,address=self.radio_address,queue=10,data_rate=radio.RATE_1MBIT)
         radio.on()
 
     def process_message(self, pkg, received_at):
@@ -239,6 +240,7 @@ class Device:
         if is_broadcast_mac(pkg.dest) and pkg.src == BBC_MAC:
             # this is a package we sent, drop it.
             return
+        display.set_pixel(P_IN[0],P_IN[1],9)
         self.process_message(pkg, timestamp)
 
     def _is_double_receive(self, pkg):
@@ -260,7 +262,7 @@ class Device:
         self._pkg_id += 1
         if to == BBC_MAC:
             return report(msg)
-        send_package(str(msg))
+        send_package(msg)
 
     def send_L3(self, dest, data):
         if not self.default_gateway:
@@ -278,13 +280,13 @@ class Device:
         self._pkg_id += 1
         if to == self.ip:
             return report(msg)
-        send_package(str(msg))
+        send_package(msg)
     
     def send_arp(self, to_ip, sender_mac = BROADCAST_MAC, timestamp = -1):
         arp_response = ARPFrame(BBC_MAC, self.ip, to_ip)
         response_frame = EthernetFrame(self._pkg_id, sender_mac, BBC_MAC, str(arp_response), timestamp)
         self._pkg_id += 1
-        send_package(str(response_frame))
+        send_package(response_frame)
 
 
 class Client(Device):
@@ -312,11 +314,11 @@ class Switch(Device):
         self.mac_table = {}
 
     def process_message(self, msg, received_at):
-        is_known_dest = self.mac_table.get(msg.dest, -1) > 0
         if msg.timestamp > 0:
             # drop, since it was sent by another switch/router that already knew the destination.
             return
 
+        is_known_dest = self.mac_table.get(msg.dest, -1) > 0
         if msg.timestamp == -1:
             # learn the source MAC when the package arrives directly from the sender (timestamp -1)
             self.mac_table[msg.src] = received_at
@@ -324,14 +326,14 @@ class Switch(Device):
 
         if not is_known_dest:
             # we don't know the destination, so we flood the message to all other devices, but we
-            # reset the timestamp to ensure the package gets dropped when received by the destination.
+            # reset the timestamp to ensure the package gets dropped when received by another switch
             msg.set_timestamp(0)
 
-        report(str(msg))
+        report(msg)
         if msg.dest == BBC_MAC:
             return
         # just flood the message to all other devices, no port concept possible with micro:bit radio
-        send_package(str(msg))
+        send_package(msg)
 
 class Router(Device):
     def __init__(self, ip, default_gateway, network_mask, radio_address, radio_group, radio_power):
@@ -356,8 +358,7 @@ class Router(Device):
             self.ip_table[ip_frame.src.ip] = msg.src
             if ip_frame.dest == self.ip:
                 # message for us, so we process it (here we just print it).
-                report(msg)
-                return
+                return report(msg)
             else:
                 # message for another IP, so we need to forward it, but first we decrement the TTL and drop it if TTL is 0.
                 ip_frame.decrement_ttl()
@@ -365,15 +366,14 @@ class Router(Device):
                     return
                 if ip_frame.dest.is_broadcast(self.network_mask):
                     broadcast_frame = EthernetFrame(self._pkg_id, BROADCAST_MAC, BBC_MAC, str(ip_frame), running_time())
-                    send_package(str(broadcast_frame))
+                    send_package(broadcast_frame)
                 elif ip_frame.dest.ip in self.ip_table:
                     next_hop_mac = self.ip_table[ip_frame.dest.ip]
                     forward_frame = EthernetFrame(self._pkg_id, next_hop_mac, BBC_MAC, str(ip_frame), running_time())
-                    send_package(str(forward_frame))
+                    send_package(forward_frame)
                 else:
                     # destination not in our routing table, so we just print it to tdev which should delegate it to the default gateway.
-                    report(msg)
-                    return
+                    return report(msg)
                 self._pkg_id += 1
         else:
             arp_frame = parse_arp(msg.payload)
@@ -398,13 +398,11 @@ class Router(Device):
             if msg.dest == BBC_MAC:
                 return
             # just flood the message to all other devices, no port concept possible with micro:bit radio
-            send_package(str(msg))
-
+            send_package(msg)
 
 SM_CONFIG = '::CONFIG::'
 SM_SEND_L2 = '::L2::'
 SM_SEND_L3 = '::L3::'
-
 
 def parse_serial_msg(message):
     parts = message.split(SEPARATOR)
@@ -439,14 +437,23 @@ def parse_value(value, is_int = False, default = None):
         return default
 
 
-CLIENT_IMG = Image('00000:09990:09090:09990:0000')
-SWITCH_IMG = Image('00090:99999:00000:99999:09000')
-ROUTER_IMG = Image('99099:90009:00900:90009:99099')
+CLIENT_IMG = (0,0,0,0,0, 0,9,9,9,0, 0,9,0,9,0, 0,9,9,9,0, 0,0,0,0,0)
+SWITCH_IMG = (0,0,0,9,0, 9,9,9,9,9, 0,0,0,0,0, 9,9,9,9,9, 0,9,0,0,0)
+ROUTER_IMG = (9,9,0,9,9, 9,0,0,0,9, 0,0,9,0,0, 9,0,0,0,9, 9,9,0,9,9)
+
+def show_icon(icon):
+    for i in range(25):
+        x = i % 5
+        y = i // 5
+        if (x==2 and y == 0) or (x==2 and y == 4):
+            continue
+        display.set_pixel(i%5,i//5,icon[i])
 
 class Config:
     def __init__(self, mode, ip = None):
         self.mode = 'client'
         self.ip = None
+        self.i = 0
         self.default_gateway = None
         self.radio = (int(0x75626974), 0, DEFAULT_POWER) # address, group, power
         self.network_mask = 24
@@ -458,12 +465,13 @@ class Config:
 
     def configure(self, mode, ip=None, default_gateway=None, address = None, group = None, power = None, skip_dump = False):
         display.clear()
-        new_ip = parse_ip(str(ip))
+        self.i = 0
+        new_ip = parse_ip(ip)
         if new_ip:
             self.ip = new_ip.ip
         else:
             self.ip = None
-        new_dg = parse_ip(str(default_gateway))
+        new_dg = parse_ip(default_gateway)
         if new_dg:
             self.default_gateway = new_dg.ip
         else:
@@ -493,7 +501,11 @@ class Config:
             self.device = Router(self.ip, self.default_gateway, self.network_mask, self.radio[0], self.radio[1], self.radio[2])
         if skip_dump:
             return
-        # self.dump()
+        try:
+            with open(CONFIG_FILE, 'w') as file:
+                file.write(str(self))
+        except:
+            return
 
     def configure_from_string(self, config_str):
         parts = config_str.split(SEPARATOR)
@@ -503,30 +515,33 @@ class Config:
         p = parse_value
         self.configure(p(parts[0]), p(parts[1]), p(parts[2]), p(parts[3], True), p(parts[4], True), p(parts[5], True, DEFAULT_POWER), False)
 
-    # def dump(self):
-        # with open(CONFIG_FILE, 'w') as file:
-        #     file.write(str(self))
-        # pass
 
-    # def restore(self):
-    #     files = listdir()
-    #     if CONFIG_FILE in files:
-    #         with open(CONFIG_FILE) as file:
-    #             config = file.read()
-    #         self.configure_from_string(config)
+    def restore(self):
+        try:
+            files = listdir()
+            if CONFIG_FILE in files:
+                with open(CONFIG_FILE) as file:
+                    config = file.read()
+                self.configure_from_string(config)
+        except:
+            return
 
     @property
     def icon(self):
-        if self.mode == CLIENT_MODE:
-            return CLIENT_IMG
-        elif self.mode == SWITCH_MODE:
+        if self.mode == SWITCH_MODE:
             return SWITCH_IMG
         elif self.mode == ROUTER_MODE:
             return ROUTER_IMG
         else:
-            return '?'
+            return CLIENT_IMG
 
     def run(self):
+        if self.i % 100 == 0:
+            if display.get_pixel(P_IN[0],P_IN[1]) > 0:
+                display.set_pixel(P_IN[0],P_IN[1], display.get_pixel(P_IN[0],P_IN[1]) - 1)
+            if display.get_pixel(P_OUT[0],P_OUT[1]) > 0:
+                display.set_pixel(P_OUT[0],P_OUT[1], display.get_pixel(P_OUT[0],P_OUT[1]) - 1)
+        self.i += 1
         self.device.run()
         if self.device.pending_serial_messages:
             for text in self.device.pending_serial_messages:
@@ -542,6 +557,9 @@ class Config:
                     elif msg[0] == 'send_L3':
                         self.device.send_L3(msg[1], msg[2])
             self.device.pending_serial_messages = []
+        if self.changed:
+            self.changed = False
+            show_icon(config.icon)
 
     def __str__(self):
         return SEPARATOR.join((self.mode, str(self.ip), str(self.default_gateway), str(self.radio[0]), str(self.radio[1]), str(self.radio[2])))
@@ -555,15 +573,12 @@ class Config:
 report(RESET_TRIGGER)
 
 config = Config('client')
-# config.restore()
-display.show(config.icon)
+config.restore()
+show_icon(config.icon)
 while True:
     config.run()
     if button_b.was_pressed():
         report(RESET_TRIGGER)
-    if config.changed:
-        config.changed = False
-        display.show(config.icon)
     if button_a.was_pressed():
         if config.device.ip:
             if config.device.default_gateway:
