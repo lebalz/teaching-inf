@@ -1,5 +1,5 @@
 from micropython import const
-from microbit import running_time, display, Image, button_a, button_b, uart
+from microbit import running_time, display, Image, button_a, button_b, uart, sleep
 import radio
 from machine import unique_id
 from os import listdir
@@ -12,10 +12,13 @@ PACKAGE_BUFFER_SIZE = const(32)
 DEFAULT_POWER = const(4)
 
 def report(message):
-    print(message)
+    uart.write(str(message) + '\n')
+
+def send_package(pkg):
+    radio.send(str(pkg))
 
 def report_error(message):
-    print('ERROR: ' + message)
+    report('ERROR: ' + message)
 
 _uid = hex(int.from_bytes(unique_id(), "little"))[6:]
 BBC_MAC = ":".join(_uid[i:i+2] for i in range(0, 12, 2)).upper()
@@ -37,8 +40,6 @@ def parse_mac(mac):
         return
     return str(mac).strip().upper()
 
-
-
 def parse_ip(ip):
     parts = str(ip).strip().split('.')
     if len(parts) != 4:
@@ -53,6 +54,7 @@ def parse_ip(ip):
         return
 
 class IP:
+    __slots__ = ('ip',)
     def __init__(self, ip):
         self.ip = str(ip).strip()
 
@@ -104,6 +106,7 @@ def parse_eth(data):
     return EthernetFrame(_id, dest, src, payload, ts)
 
 class EthernetFrame:
+    __slots__ = ('_id', 'dest', 'src', 'payload', 'timestamp')
     def __init__(self, _id, dest, src, payload, timestamp=-1):
         self._id = _id
         self.dest = dest
@@ -136,6 +139,7 @@ def parse_arp(data):
     return ARPFrame(sender_mac, sender_ip, dest_ip)
 
 class ARPFrame:
+    __slots__ = ('sender_mac', 'sender_ip', 'dest_ip')
     def __init__(self, sender_mac, sender_ip, dest_ip):
         self.sender_mac = sender_mac
         self.sender_ip = sender_ip
@@ -165,6 +169,7 @@ def parse_ip_frame(data):
     return IPFrame(src, dest, payload, ttl)
 
 class IPFrame:
+    __slots__ = ('ttl', 'src', 'dest', 'payload')
     def __init__(self, src, dest, payload, ttl=TTL_INIT):
         self.ttl = ttl
         self.src = src
@@ -203,6 +208,7 @@ class Device:
 
     def configure(self):
         radio.off()
+        print(self.radio_address, self.radio_group, self.radio_power)
         radio.config(length=128, group=self.radio_group, power=self.radio_power, address=self.radio_address)
         radio.on()
 
@@ -254,7 +260,7 @@ class Device:
         self._pkg_id += 1
         if to == BBC_MAC:
             return report(msg)
-        radio.send(str(msg))
+        send_package(str(msg))
 
     def send_L3(self, dest, data):
         if not self.default_gateway:
@@ -272,13 +278,13 @@ class Device:
         self._pkg_id += 1
         if to == self.ip:
             return report(msg)
-        radio.send(str(msg))
+        send_package(str(msg))
     
     def send_arp(self, to_ip, sender_mac = BROADCAST_MAC, timestamp = -1):
         arp_response = ARPFrame(BBC_MAC, self.ip, to_ip)
         response_frame = EthernetFrame(self._pkg_id, sender_mac, BBC_MAC, str(arp_response), timestamp)
         self._pkg_id += 1
-        radio.send(str(response_frame))
+        send_package(str(response_frame))
 
 
 class Client(Device):
@@ -325,7 +331,7 @@ class Switch(Device):
         if msg.dest == BBC_MAC:
             return
         # just flood the message to all other devices, no port concept possible with micro:bit radio
-        radio.send(str(msg))
+        send_package(str(msg))
 
 class Router(Device):
     def __init__(self, ip, default_gateway, network_mask, radio_address, radio_group, radio_power):
@@ -359,11 +365,11 @@ class Router(Device):
                     return
                 if ip_frame.dest.is_broadcast(self.network_mask):
                     broadcast_frame = EthernetFrame(self._pkg_id, BROADCAST_MAC, BBC_MAC, str(ip_frame), running_time())
-                    radio.send(str(broadcast_frame))
+                    send_package(str(broadcast_frame))
                 elif ip_frame.dest.ip in self.ip_table:
                     next_hop_mac = self.ip_table[ip_frame.dest.ip]
                     forward_frame = EthernetFrame(self._pkg_id, next_hop_mac, BBC_MAC, str(ip_frame), running_time())
-                    radio.send(str(forward_frame))
+                    send_package(str(forward_frame))
                 else:
                     # destination not in our routing table, so we just print it to tdev which should delegate it to the default gateway.
                     report(msg)
@@ -392,7 +398,7 @@ class Router(Device):
             if msg.dest == BBC_MAC:
                 return
             # just flood the message to all other devices, no port concept possible with micro:bit radio
-            radio.send(str(msg))
+            send_package(str(msg))
 
 
 SM_CONFIG = '::CONFIG::'
@@ -451,6 +457,7 @@ class Config:
         self.configure(mode, self.ip, self.default_gateway, self.radio[0], self.radio[1], self.radio[2], skip_dump)
 
     def configure(self, mode, ip=None, default_gateway=None, address = None, group = None, power = None, skip_dump = False):
+        display.clear()
         new_ip = parse_ip(str(ip))
         if new_ip:
             self.ip = new_ip.ip
@@ -467,13 +474,14 @@ class Config:
         val = [int(0x75626974), 0, DEFAULT_POWER] # address, group, power
 
         if address is not None:
-            val[0] = address        
+            val[0] = int(address)
         if group is not None:
-            val[1] = group
+            val[1] = int(group)
         if power is not None:
-            val[2] = power
+            val[2] = int(power)
 
         self.radio = tuple(val)
+        self.changed = True
         if self.mode == CLIENT_MODE:
             self.device = Client(self.ip, self.default_gateway, self.network_mask, self.radio[0], self.radio[1], self.radio[2])
         elif self.mode == SWITCH_MODE:
@@ -483,28 +491,29 @@ class Config:
                 report_error('Router must have a valid IP address configured.')
                 return self.configure(CLIENT_MODE, ip, default_gateway, address, group, power, skip_dump)
             self.device = Router(self.ip, self.default_gateway, self.network_mask, self.radio[0], self.radio[1], self.radio[2])
-        self.changed = True
         if skip_dump:
             return
-        self.dump()
+        # self.dump()
 
     def configure_from_string(self, config_str):
         parts = config_str.split(SEPARATOR)
         if len(parts) != 6:
+            report_error('Invalid config string received: ' + config_str)
             return
         p = parse_value
-        self.configure(p(parts[0]), p(parts[1]), p(parts[2]), p(parts[3], True), p(parts[4], True), p(parts[5], True, DEFAULT_POWER))
+        self.configure(p(parts[0]), p(parts[1]), p(parts[2]), p(parts[3], True), p(parts[4], True), p(parts[5], True, DEFAULT_POWER), False)
 
-    def dump(self):
-        with open(CONFIG_FILE, 'w') as file:
-            file.write(str(self))
+    # def dump(self):
+        # with open(CONFIG_FILE, 'w') as file:
+        #     file.write(str(self))
+        # pass
 
-    def restore(self):
-        files = listdir()
-        if CONFIG_FILE in files:
-            with open(CONFIG_FILE) as file:
-                config = file.read()
-            self.configure_from_string(config)
+    # def restore(self):
+    #     files = listdir()
+    #     if CONFIG_FILE in files:
+    #         with open(CONFIG_FILE) as file:
+    #             config = file.read()
+    #         self.configure_from_string(config)
 
     @property
     def icon(self):
@@ -525,6 +534,7 @@ class Config:
                 if msg:
                     if msg[0] == 'set_config':
                         self.configure_from_string(msg[1])
+                        config.send_config()
                     elif msg[0] == 'get_config':
                         self.send_config()
                     elif msg[0] == 'send_L2':
@@ -538,13 +548,14 @@ class Config:
 
     def send_config(self):
         report(SEPARATOR.join((SM_CONFIG, BBC_MAC, str(self))))
+        sleep(100)
 
 
 
 report(RESET_TRIGGER)
 
 config = Config('client')
-config.restore()
+# config.restore()
 display.show(config.icon)
 while True:
     config.run()
@@ -553,7 +564,6 @@ while True:
     if config.changed:
         config.changed = False
         display.show(config.icon)
-        config.send_config()
     if button_a.was_pressed():
         if config.device.ip:
             if config.device.default_gateway:
