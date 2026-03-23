@@ -53,3 +53,13 @@
         }
     }
 }
+
+.notifications {
+    max-height: 15em;
+    overflow-y: auto;
+    .msgs {
+        display: flex;
+        flex-direction: column-reverse;
+        gap: 0.5rem;
+    }
+}

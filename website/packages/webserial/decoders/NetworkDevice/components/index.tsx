@@ -28,6 +28,7 @@ import Card from '@tdev-components/shared/Card';
 import Details from '@theme/Details';
 import Alert from '@tdev-components/shared/Alert';
 import Router from '../models/Router';
+import Notifications from './Notifications';
 
 interface Props {
     config?: Config;
@@ -245,18 +246,7 @@ const NetworkDevice = observer((props: Props) => {
                     )}
                 </div>
             )}
-            {decoder.error && (
-                <Alert
-                    type="danger"
-                    onDiscard={() => {
-                        decoder.clearError();
-                    }}
-                    title="Fehler"
-                >
-                    {decoder.error}
-                </Alert>
-            )}
-            {/* <Frames decoder={decoder} /> */}
+            <Notifications decoder={decoder} />
             <Logs
                 messages={decoder.packages.map((pkg) => ({
                     type: 'log',

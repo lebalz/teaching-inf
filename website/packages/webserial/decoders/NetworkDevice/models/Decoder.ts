@@ -35,6 +35,12 @@ const DEFAULT_CONFIG: DeviceConfig = new DeviceConfig(
     undefined
 );
 
+interface Notification {
+    type: 'danger' | 'warning' | 'info';
+    timestamp: number;
+    message: string;
+}
+
 class Decoder implements iSubscriber {
     readonly id: string;
     readonly device: SerialDevice;
@@ -45,13 +51,13 @@ class Decoder implements iSubscriber {
     @observable accessor message: string = '';
     @observable accessor receiverIp: string = '';
     @observable accessor receiverMac: string = '';
-    @observable accessor error: string = '';
     @observable accessor flashingStartetAt: number = -1;
 
     // just the input field for the IP, not necessarily the actual device IP (which is in config)
     @observable accessor deviceIp: string = '';
 
     packages = observable.array<EthernetFrame>([], { deep: false });
+    notifications = observable.array<Notification>([]);
 
     constructor(
         id: string,
@@ -191,8 +197,8 @@ class Decoder implements iSubscriber {
     }
 
     @action
-    clearError() {
-        this.error = '';
+    clearNotifications() {
+        this.notifications.clear();
     }
 
     _updateQueryString() {
@@ -204,16 +210,38 @@ class Decoder implements iSubscriber {
     }
 
     @action
+    discardNotification(timeStamp: number) {
+        const notification = this.notifications.find((n) => n.timestamp === timeStamp);
+        if (notification) {
+            this.notifications.remove(notification);
+        }
+    }
+
+    @action
+    cleanupNotifications() {
+        const now = Date.now();
+        this.notifications.replace(this.notifications.filter((n) => n.timestamp > now - 5000));
+    }
+
+    @action
     onNewLines(lines: string[]) {
         for (const line of lines) {
             if (line.startsWith('ERROR:')) {
-                this.error = line;
+                this.notifications.push({ type: 'danger', message: line, timestamp: Date.now() });
+                continue;
+            }
+            if (line.startsWith('INFO:')) {
+                this.notifications.push({ type: 'info', message: line, timestamp: Date.now() });
                 continue;
             }
             const configPkg = DeviceConfig.parse(line);
             if (!configPkg && this.flashingStartetAt > 0) {
                 if (this.flashingStartetAt + 1000 < Date.now()) {
-                    this.error = 'Konfiguration fehlgeschlagen - automatisch erneut ausgeführt.';
+                    this.notifications.push({
+                        type: 'warning',
+                        message: 'Konfiguration fehlgeschlagen - automatisch erneut ausgeführt.',
+                        timestamp: Date.now()
+                    });
                     this.resetConfig();
                 }
                 return;
@@ -232,9 +260,6 @@ class Decoder implements iSubscriber {
             if (configPkg) {
                 this.config = configPkg;
                 this.flashingStartetAt = -1;
-                if (this.error && this.error.startsWith('Konfiguration fehlgeschlagen')) {
-                    this.error = '';
-                }
                 this._updateQueryString();
                 this.deviceIp = '';
             }
