@@ -2,29 +2,13 @@ import SerialDevice, { ConnectionState, iSubscriber } from '@tdev/webserial/mode
 import { action, computed, observable } from 'mobx';
 import DeviceConfig, { Config } from './DeviceConfig';
 import EthernetFrame from './EthernetFrame';
-import { rest } from 'es-toolkit';
+import Router from './Router';
+import IPFrame from './IPFrame';
 
 const CONFIG = '::CONFIG::';
-const SEND_L2 = '::L2::';
-const SEND_L3 = '::L3::';
-
-const isValidIp = (ip?: string) => {
-    if (!ip) {
-        return false;
-    }
-    const parts = ip.trim().split('.');
-    if (parts.length !== 4) {
-        return false;
-    }
-    for (const part of parts) {
-        const num = Number(part);
-        if (isNaN(num) || num < 0 || num > 255) {
-            return false;
-        }
-    }
-    return true;
-};
-
+export const SEND_L2 = '::L2::';
+export const SEND_L3 = '::L3::';
+export const SEND_ROUTING_PKG = '::R::';
 const isValidMac = (mac?: string) => {
     if (!mac) {
         return false;
@@ -55,6 +39,7 @@ class Decoder implements iSubscriber {
     readonly id: string;
     readonly device: SerialDevice;
     readonly syncQueryString: boolean;
+    @observable.ref accessor router: Router | null;
     @observable.ref accessor _defaultConfig: Config | null = null;
     @observable.ref accessor config: DeviceConfig | null = null;
     @observable accessor message: string = '';
@@ -68,12 +53,22 @@ class Decoder implements iSubscriber {
 
     packages = observable.array<EthernetFrame>([], { deep: false });
 
-    constructor(id: string, device: SerialDevice, defaultConfig?: Config, syncQueryString: boolean = false) {
+    constructor(
+        id: string,
+        device: SerialDevice,
+        defaultConfig?: Config,
+        syncQueryString: boolean = false,
+        router?: Router
+    ) {
         this.id = id;
         this.device = device;
         this.device.subscribe(this);
         this._defaultConfig = defaultConfig || null;
         this.syncQueryString = syncQueryString;
+        this.router = router || null;
+        if (router) {
+            router.addInterface(this);
+        }
     }
 
     @action
@@ -83,7 +78,7 @@ class Decoder implements iSubscriber {
 
     @computed
     get isValidDeviceIp() {
-        return isValidIp(this.deviceIp);
+        return IPFrame.isValidIp(this.deviceIp);
     }
 
     flashDeviceIp() {
@@ -119,6 +114,22 @@ class Decoder implements iSubscriber {
         return this.config?.mode !== 'switch';
     }
 
+    @computed
+    get binaryIp() {
+        if (!this.config?.ip) {
+            return null;
+        }
+        return IPFrame.parseIp(this.config.ip);
+    }
+
+    @computed
+    get ipNetworkPart() {
+        if (!this.binaryIp) {
+            return null;
+        }
+        return this.binaryIp & IPFrame.NETWORK_MASK;
+    }
+
     @action
     setReceiverIp(ip: string) {
         if (!this.config?.ip) {
@@ -129,7 +140,7 @@ class Decoder implements iSubscriber {
 
     @computed
     get isValidReceiverIp() {
-        return isValidIp(this.receiverIp);
+        return IPFrame.isValidIp(this.receiverIp);
     }
 
     @computed
@@ -140,6 +151,12 @@ class Decoder implements iSubscriber {
     @computed
     get canSendL3() {
         return this.message.length > 0 && this.isValidReceiverIp;
+    }
+
+    @action
+    sendRawPkg(pkg: string) {
+        console.log('Sending raw pkg to device', { pkg }, 'from', this.config?.ip);
+        this.device.sendLine(pkg);
     }
 
     @action
@@ -205,6 +222,9 @@ class Decoder implements iSubscriber {
                 const ethernetPkg = EthernetFrame.parse(line);
                 if (ethernetPkg) {
                     this.packages.push(ethernetPkg);
+                    if (ethernetPkg.ipFrame && this.router) {
+                        this.router.routePacket(this, ethernetPkg.ipFrame);
+                    }
                     return;
                 }
             }
@@ -258,6 +278,7 @@ class Decoder implements iSubscriber {
     @action
     cleanup() {
         this.device.unsubscribe(this.id);
+        this.router?.removeInterface(this);
     }
 
     @action

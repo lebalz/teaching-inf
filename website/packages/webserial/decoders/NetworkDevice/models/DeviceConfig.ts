@@ -78,22 +78,23 @@ class DeviceConfig {
 
     get queryString() {
         const params = new URLSearchParams();
+
         if (this.ip) {
-            params.set('ip', this.ip);
+            params.append('ip', this.ip);
         }
         if (this.defaultGateway) {
-            params.set('defaultGateway', this.defaultGateway);
+            params.append('gateway', this.defaultGateway);
         }
         if (this.radio.address !== undefined) {
-            params.set('address', this.radio.address.toString());
+            params.append('address', this.radio.address.toString());
         }
         if (this.radio.group !== undefined) {
-            params.set('group', this.radio.group.toString());
+            params.append('group', this.radio.group.toString());
         }
         if (this.radio.power !== undefined) {
-            params.set('power', this.radio.power.toString());
+            params.append('power', this.radio.power.toString());
         }
-        return params.toString();
+        return params;
     }
 
     static parse(line: string): DeviceConfig | null {

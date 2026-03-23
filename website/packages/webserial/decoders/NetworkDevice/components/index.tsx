@@ -27,12 +27,14 @@ import Card from '@tdev-components/shared/Card';
 // @ts-ignore
 import Details from '@theme/Details';
 import Alert from '@tdev-components/shared/Alert';
+import Router from '../models/Router';
 
 interface Props {
     config?: Config;
     canChangeMode?: boolean;
     hideIpConfig?: boolean;
     syncQueryString?: boolean;
+    router?: Router;
 }
 
 const NetworkDevice = observer((props: Props) => {
@@ -43,11 +45,22 @@ const NetworkDevice = observer((props: Props) => {
     const fullscreenTargetId = useFullscreenTargetId();
     const device = webserialStore.devices.get(deviceId);
     const isFullscreen = viewStore.isFullscreenTarget(fullscreenTargetId);
-    const decoder = React.useMemo(() => {
+    const [decoder, setDecoder] = React.useState<Decoder | null>(null);
+    React.useEffect(() => {
         if (device) {
-            return new Decoder(subscriptionId, device, props.config, props.syncQueryString);
+            const model = new Decoder(
+                subscriptionId,
+                device,
+                props.config,
+                props.syncQueryString,
+                props.router
+            );
+            setDecoder(model);
+            // return () => {
+            //     model.cleanup();
+            // };
         }
-    }, [device, subscriptionId, props.config, props.syncQueryString]);
+    }, [device, subscriptionId, props.config, props.syncQueryString, props.router]);
 
     if (!(decoder && device)) {
         return <div>Netzwerk</div>;
@@ -55,7 +68,7 @@ const NetworkDevice = observer((props: Props) => {
 
     return (
         <div className={clsx(styles.networkDevice, isFullscreen && styles.fullscreen)}>
-            {decoder.config && (
+            {decoder.config ? (
                 <div>
                     <div className={clsx(styles.config)}>
                         <CopyBadge
@@ -83,7 +96,7 @@ const NetworkDevice = observer((props: Props) => {
                         <Button
                             title="Konfiguration flashen"
                             icon={mdiSync}
-                            spin={decoder.isFlashingConfig}
+                            spin={decoder.isFlashingConfig ? -2 : 0}
                             onClick={() => {
                                 decoder.resetConfig();
                             }}
@@ -214,6 +227,19 @@ const NetworkDevice = observer((props: Props) => {
                             </div>
                         )}
                     </div>
+                </div>
+            ) : (
+                <div>
+                    {device.isConnected && (
+                        <Button
+                            title="Konfiguration flashen"
+                            icon={mdiSync}
+                            spin={decoder.isFlashingConfig}
+                            onClick={() => {
+                                decoder.resetConfig();
+                            }}
+                        />
+                    )}
                 </div>
             )}
             {decoder.error && (
