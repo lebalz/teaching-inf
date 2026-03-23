@@ -10,6 +10,7 @@ export default class WebserialStore {
         this.viewStore = viewStore;
     }
 
+    @action
     useDevice(id: string, options?: Partial<SerialOptions>, config?: Partial<Config>): SerialDevice {
         if (this.devices.has(id)) {
             return this.devices.get(id)!;
