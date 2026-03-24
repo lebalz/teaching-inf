@@ -281,6 +281,7 @@ class Decoder implements iSubscriber {
                 this.config = configPkg;
                 this.flashingStartetAt = -1;
                 this._updateQueryString();
+                this.router?._updateQueryString();
                 this.deviceIp = '';
             }
             if (!hadConfig && this._defaultConfig) {
