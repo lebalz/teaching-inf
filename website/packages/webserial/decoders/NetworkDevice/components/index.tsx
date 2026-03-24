@@ -121,7 +121,7 @@ const NetworkDevice = observer((props: Props) => {
                                         onClick={() => {
                                             decoder.setDeviceIp(decoder.config?.ip || '192.168.0.1');
                                         }}
-                                        text={`IP: ${decoder.config.ip}`}
+                                        text={`IP: ${decoder.config.ip ?? 'n/a'}`}
                                         icon={mdiSquareEditOutline}
                                         color="blue"
                                     />
@@ -170,10 +170,13 @@ const NetworkDevice = observer((props: Props) => {
                                     <Button
                                         onClick={() => {
                                             decoder.setDeviceGateway(
-                                                decoder.config?.defaultGateway || '192.168.0.1'
+                                                decoder.config?.defaultGateway ||
+                                                    decoder.config?.ip?.split('.')?.slice(0, 3)?.join('.') +
+                                                        '.1' ||
+                                                    '192.168.0.1'
                                             );
                                         }}
-                                        text={`Gateway: ${decoder.config.defaultGateway}`}
+                                        text={`Gateway: ${decoder.config.defaultGateway ?? 'n/a'}`}
                                         icon={mdiSquareEditOutline}
                                         color="blue"
                                     />

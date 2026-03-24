@@ -104,6 +104,7 @@ class Decoder implements iSubscriber {
                 ip: this.isValidDeviceIp ? this.deviceIp : null
             });
             this.flashConfig(newConfig);
+            this.deviceIp = '';
         }
     }
 
@@ -112,6 +113,7 @@ class Decoder implements iSubscriber {
             const newConfig = this.config.updateWith({
                 defaultGateway: this.isValidDeviceGateway ? this.deviceGateway : null
             });
+            this.deviceGateway = '';
             this.flashConfig(newConfig);
         }
     }
@@ -189,7 +191,6 @@ class Decoder implements iSubscriber {
     send_L2() {
         if (this.canSendL2) {
             this.device.sendLine(`${SEND_L2} ${this.receiverMac} ${this.message}`);
-            // this.message = '';
         }
     }
 
@@ -197,7 +198,6 @@ class Decoder implements iSubscriber {
     send_L3() {
         if (this.canSendL3) {
             this.device.sendLine(`${SEND_L3} ${this.receiverIp} ${this.message}`);
-            // this.message = '';
         }
     }
 
@@ -282,7 +282,6 @@ class Decoder implements iSubscriber {
                 this.flashingStartetAt = -1;
                 this._updateQueryString();
                 this.router?._updateQueryString();
-                this.deviceIp = '';
             }
             if (!hadConfig && this._defaultConfig) {
                 if (this.config) {
@@ -307,7 +306,10 @@ class Decoder implements iSubscriber {
             const { ip, ...rest } = this._defaultConfig;
             const updated = this.config.updateWith({
                 ...rest,
-                ip: this.showIP ? (this.config.ip ?? ip) : null
+                ip: this.showIP ? (this.config.ip ?? ip) : null,
+                defaultGateway: this.showIP
+                    ? (this.config.defaultGateway ?? this._defaultConfig.defaultGateway)
+                    : null
             });
             this.flashConfig(updated);
         } else {
