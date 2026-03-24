@@ -164,7 +164,7 @@ const NetworkDevice = observer((props: Props) => {
                                 />
                             </div>
                         )}
-                        {decoder.deviceIp.length === 0 ? (
+                        {decoder.deviceGateway.length === 0 ? (
                             <div className={clsx(styles.ip)}>
                                 {decoder.showIP && !props.hideIpConfig && (
                                     <Button
