@@ -456,9 +456,6 @@ while True:
 	config.run()
 	if button_b.was_pressed(): report(RESET_TRIGGER)
 	if button_a.was_pressed():
-		if config.device.ip:
-			if config.device.default_gateway:
-				ts = running_time() if config.mode == ROUTER_MODE else -1
-				config.device.send_arp(config.device.default_gateway, BROADCAST_MAC, ts)
-			else: config.device.send_L2(BROADCAST_MAC, 'Ping')
-		else: config.device.send_L2(BROADCAST_MAC, 'Ping')
+		if config.device.ip and config.device.default_gateway:
+			ts = 0 if config.mode == ROUTER_MODE else -1
+			config.device.send_arp(config.device.default_gateway, BROADCAST_MAC, ts)
