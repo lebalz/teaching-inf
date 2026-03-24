@@ -164,6 +164,58 @@ const NetworkDevice = observer((props: Props) => {
                                 />
                             </div>
                         )}
+                        {decoder.deviceIp.length === 0 ? (
+                            <div className={clsx(styles.ip)}>
+                                {decoder.showIP && !props.hideIpConfig && (
+                                    <Button
+                                        onClick={() => {
+                                            decoder.setDeviceGateway(
+                                                decoder.config?.defaultGateway || '192.168.0.1'
+                                            );
+                                        }}
+                                        text={`Gateway: ${decoder.config.defaultGateway}`}
+                                        icon={mdiSquareEditOutline}
+                                        color="blue"
+                                    />
+                                )}
+                            </div>
+                        ) : (
+                            <div
+                                className={clsx(
+                                    styles.ip,
+                                    styles.editing,
+                                    decoder.isValidDeviceIp ? styles.valid : styles.invalid
+                                )}
+                            >
+                                <TextInput
+                                    onChange={(text) => {
+                                        decoder.setDeviceGateway(text || ' ');
+                                    }}
+                                    label="Gateway"
+                                    labelClassName={clsx(styles.label)}
+                                    value={decoder.deviceGateway}
+                                    onEnter={() => {
+                                        decoder.flashDeviceGateway();
+                                    }}
+                                />
+                                <Button
+                                    onClick={() => {
+                                        decoder.flashDeviceGateway();
+                                    }}
+                                    icon={mdiContentSave}
+                                    color="green"
+                                    size={SIZE_S}
+                                />
+                                <Button
+                                    onClick={() => {
+                                        decoder.setDeviceGateway('');
+                                    }}
+                                    icon={mdiCloseCircle}
+                                    color="black"
+                                    size={SIZE_S}
+                                />
+                            </div>
+                        )}
                     </div>
                     {!props.noIcon && (
                         <Card classNames={{ body: clsx(styles.configMode) }}>

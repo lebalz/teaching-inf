@@ -9,7 +9,7 @@ const RouterPage = observer((): React.ReactNode => {
         <Layout title={`Network Microbit Router`} wrapperClassName={clsx(styles.network)}>
             <main>
                 <h1>Router</h1>
-                <Router />
+                <Router syncQueryString />
             </main>
         </Layout>
     );

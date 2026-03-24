@@ -55,6 +55,7 @@ class Decoder implements iSubscriber {
 
     // just the input field for the IP, not necessarily the actual device IP (which is in config)
     @observable accessor deviceIp: string = '';
+    @observable accessor deviceGateway: string = '';
 
     packages = observable.array<EthernetFrame>([], { deep: false });
     notifications = observable.array<Notification>([]);
@@ -87,10 +88,29 @@ class Decoder implements iSubscriber {
         return IPFrame.isValidIp(this.deviceIp);
     }
 
+    @action
+    setDeviceGateway(ip: string) {
+        this.deviceGateway = ip;
+    }
+
+    @computed
+    get isValidDeviceGateway() {
+        return IPFrame.isValidIp(this.deviceGateway);
+    }
+
     flashDeviceIp() {
         if (this.config) {
             const newConfig = this.config.updateWith({
                 ip: this.isValidDeviceIp ? this.deviceIp : null
+            });
+            this.flashConfig(newConfig);
+        }
+    }
+
+    flashDeviceGateway() {
+        if (this.config) {
+            const newConfig = this.config.updateWith({
+                defaultGateway: this.isValidDeviceGateway ? this.deviceGateway : null
             });
             this.flashConfig(newConfig);
         }
@@ -205,7 +225,7 @@ class Decoder implements iSubscriber {
         if (!this.syncQueryString || !this.config) {
             return;
         }
-        const newUrl = `${window.location.pathname}?${this.config.queryString}`;
+        const newUrl = `${window.location.pathname}?${this.config.queryString.toString()}`;
         window.history.replaceState(null, '', newUrl);
     }
 

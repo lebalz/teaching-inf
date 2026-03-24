@@ -1,10 +1,14 @@
 import { action } from 'mobx';
 import Decoder from './Decoder';
 import IPFrame from './IPFrame';
+import DeviceConfig from './DeviceConfig';
 
 class Router {
     private interfaces = new Map<string, Decoder>();
-    constructor() {}
+    readonly syncQueryString: boolean;
+    constructor(syncQueryString: boolean) {
+        this.syncQueryString = syncQueryString;
+    }
 
     addInterface(decoder: Decoder) {
         this.interfaces.set(decoder.id, decoder);
@@ -12,6 +16,18 @@ class Router {
 
     removeInterface(decoder: Decoder) {
         this.interfaces.delete(decoder.id);
+    }
+
+    _updateQueryString() {
+        if (!this.syncQueryString) {
+            return;
+        }
+        const interfaces = [...this.interfaces.values()]
+            .map((intf) => intf.config)
+            .filter((config): config is DeviceConfig => !!config);
+        const mergedQueryString = interfaces.map((config) => config.queryString.toString()).join('&');
+        const newUrl = `${window.location.pathname}?${mergedQueryString}`;
+        window.history.replaceState(null, '', newUrl);
     }
 
     @action

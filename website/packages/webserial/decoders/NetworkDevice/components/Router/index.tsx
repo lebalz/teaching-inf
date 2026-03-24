@@ -32,14 +32,20 @@ const NIC = observer((props: Props) => {
     );
 });
 
-const Router = observer((): React.ReactNode => {
+interface RouterProps {
+    syncQueryString?: boolean;
+}
+
+const Router = observer((props: RouterProps): React.ReactNode => {
+    const { syncQueryString = false } = props;
     const configs = useRouterConfig([
         { radioPower: 1, ip: '192.168.0.1' },
         { radioPower: 1, ip: '10.0.0.1' }
     ]);
     const router = React.useMemo(() => {
-        return new RouterModel();
+        return new RouterModel(syncQueryString);
     }, []);
+
     React.useEffect(() => {
         return () => router.dispose();
     }, []);

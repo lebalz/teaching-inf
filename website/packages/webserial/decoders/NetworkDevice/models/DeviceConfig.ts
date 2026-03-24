@@ -73,7 +73,8 @@ class DeviceConfig {
 
     get configString() {
         const ip = this.mode === 'router' ? (this.ip ?? '192.168.0.1') : this.ip;
-        return `${this.mode} ${ip ?? 'None'} ${this.defaultGateway ?? 'None'} ${this.radio.address ?? 'None'} ${this.radio.group ?? 'None'} ${this.radio.power}`;
+        const gateway = this.mode === 'router' ? (this.defaultGateway ?? '192.168.0.1') : this.defaultGateway;
+        return `${this.mode} ${ip ?? 'None'} ${gateway ?? 'None'} ${this.radio.address ?? 'None'} ${this.radio.group ?? 'None'} ${this.radio.power}`;
     }
 
     get queryString() {
