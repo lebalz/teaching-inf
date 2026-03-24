@@ -184,7 +184,7 @@ const NetworkDevice = observer((props: Props) => {
                                 className={clsx(
                                     styles.ip,
                                     styles.editing,
-                                    decoder.isValidDeviceIp ? styles.valid : styles.invalid
+                                    decoder.isValidDeviceGateway ? styles.valid : styles.invalid
                                 )}
                             >
                                 <TextInput
