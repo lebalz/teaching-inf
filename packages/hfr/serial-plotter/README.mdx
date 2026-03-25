@@ -1,0 +1,47 @@
+---
+tags:
+    - WebSerial
+    - Visualization
+page_id: fb31a799-d7f6-4b7d-976b-88e6f21c2016
+---
+
+import BrowserWindow from '@tdev-components/BrowserWindow';
+import SerialPlotter from '@hfr/serial-plotter/components';
+import Webserial from '@tdev/webserial/component'
+
+# Serial Plotter
+
+```tsx
+import SerialPlotter from '@hfr/serial-plotter/components';
+import Webserial from '@tdev/webserial/component'
+<Webserial
+    baudRate={115200}
+    hideLogs
+    resetTrigger='::READY::'
+    output={<SerialPlotter
+        separator=' '
+        config={{ timestamp: 0, ['Temperatur']: 1 }}
+        minValue={24}
+        timeFormatter='ms'
+        grid={[5, 5]}
+    />}
+/>
+```
+
+<BrowserWindow>
+    <Webserial
+        baudRate={115200}
+        hideLogs
+        resetTrigger='::READY::'
+        initialData={[
+            '0 24', '1000 24.5', '2000 25', '3000 24.8', '4000 25.2', '5000 25.5', '6000 25.3', '7000 25.7', '8000 26', '9000 25.9', '10000 26.2', '11000 26.5', '12000 26.3', '13000 26.7', '14000 27', '15000 26.8', '16000 27.2', '17000 27.5', '18000 27.3', '19000 27.7', '20000 28'
+        ]}
+        output={<SerialPlotter
+            separator=' '
+            config={{ timestamp: 0, ['Temperatur']: 1 }}
+            minValue={24}
+            timeFormatter='ms'
+            grid={[5, 5]}
+        />}
+    />
+</BrowserWindow>

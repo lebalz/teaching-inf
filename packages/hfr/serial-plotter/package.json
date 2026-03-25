@@ -1,0 +1,14 @@
+{
+    "name": "@hfr/serial-plotter",
+    "version": "1.0.0",
+    "main": "index.ts",
+    "types": "index.ts",
+    "dependencies": {
+        "recharts": "^3.8.1",
+        "exceljs": "^4.4.0"
+    },
+    "devDependencies": {},
+    "peerDependencies": {
+        "@tdev/core": "*"
+    }
+}
