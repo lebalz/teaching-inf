@@ -45,3 +45,30 @@ import Webserial from '@tdev/webserial/component'
         />}
     />
 </BrowserWindow>
+
+## Wemos D1 mini mit DS18B20 Sensor
+
+Wemos D1 mini (ESP8266) mit DS18B20 Temperatursensor.
+
+
+import DispLib from '!!raw-loader!@hfr/serial-plotter/assets/esp8266-ds18-display.py';
+import NoDispLib from '!!raw-loader!@hfr/serial-plotter/assets/esp8266-ds18.py';
+import GfxLib from '!!raw-loader!@hfr/serial-plotter/assets/gfx.py';
+import CodeBlock from '@theme/CodeBlock';
+
+<Tabs>
+    <TabItem value="no-display" label="Ohne Display">
+        <CodeBlock language="python" title="main.py" showLineNumbers>
+            {NoDispLib}
+        </CodeBlock>
+    </TabItem>
+    <TabItem value="display" label="Mit Display">
+        <CodeBlock language="python" title="main.py" showLineNumbers>
+            {DispLib}
+        </CodeBlock>
+        [GFX Library](https://github.com/adafruit/Adafruit-GFX-Library) für die Darstellung auf dem OLED Display.
+        <CodeBlock language="python" title="gfx.py" showLineNumbers>
+            {GfxLib}
+        </CodeBlock>
+    </TabItem>
+</Tabs>
