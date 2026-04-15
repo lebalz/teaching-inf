@@ -41,8 +41,7 @@ const MdxPage = observer((props: Props) => {
             return;
         }
         if (userStore.isUserSwitched) {
-            // TODO: is this important? Has a big impact, probably remove from tdev core?
-            // current.loadLinkedDocumentRoots();
+            current.loadLinkedDocumentRoots();
         }
     }, [pageStore.current, userStore.viewedUserId]);
     return null;

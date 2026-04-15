@@ -21,7 +21,7 @@ export const SidebarVersions = (
     globalData['docusaurus-plugin-content-docs'].default as GlobalPluginData
 ).versions.map((version) => {
     const versionPath = ensureTrailingSlash(version.path);
-    const slashCount = version.path.split('/').length + 1;
+    const slashCount = version.path === '/' ? 2 : version.path.split('/').length + 1;
     const rdocs = version.docs.filter((doc) => {
         if (version.mainDocId === 'index' && doc.id === version.mainDocId) {
             return true;
@@ -107,6 +107,7 @@ export class PageStore extends iStore {
             })
             .then(
                 action((data) => {
+                    const currentPage = this.current;
                     const grouped = groupBy(data.documentRoots, (dr) => `${dr.path}::${dr.page_id}`);
                     const pages = Object.values(grouped).map((docRootDescriptors) => {
                         const doc = docRootDescriptors[0]!;
@@ -124,6 +125,9 @@ export class PageStore extends iStore {
                         const page = new Page(`${AUTO_GENERATED_PAGE_PREFIX}${path}`, path, this);
                         pages.push(page);
                     });
+                    if (currentPage && !pages.find((p) => p.id === currentPage.id)) {
+                        pages.push(currentPage);
+                    }
                     this.pages.replace(pages);
                     this._pageIndex = data.documentRoots;
                 })
