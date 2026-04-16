@@ -9,10 +9,10 @@
     "scripts": {
         "docusaurus": "docusaurus",
         "start": "concurrently --raw --kill-others 'NODE_OPTIONS=--max-old-space-size=12288 docusaurus start' 'sleep 1s && ts-node updateSync/packageDocsSync/watch.ts --src packages --dest docs/Packages'",
-        "prebuild": "ts-node updateSync/packageDocsSync/preBuild.ts --src packages --dest docs/Packages && node material_sync.js",
+        "prebuild": "ts-node --files updateSync/packageDocsSync/preBuild.ts --src packages --dest docs/Packages && node material_sync.js",
         "build": "docusaurus build",
         "postbuild": "node material_restore.js",
-        "prebuild:dev": "ts-node updateSync/packageDocsSync/preBuild.ts --src packages --dest docs/Packages",
+        "prebuild:dev": "ts-node --files updateSync/packageDocsSync/preBuild.ts --src packages --dest docs/Packages",
         "build:dev": "docusaurus build",
         "sync": "node material_sync.js",
         "sync:secure": "node material_sync_secure.js",
@@ -30,7 +30,7 @@
         "format": "prettier --write .",
         "format:check": "prettier --check .",
         "test": "vitest --coverage",
-        "updateTdev": "ts-node updateSync/updateTdev.ts",
+        "updateTdev": "ts-node --files updateSync/updateTdev.ts",
         "add": "node material_add.js",
         "postadd": "node material_sync.js",
         "present": "gulp serve"
