@@ -13,11 +13,36 @@ type Radio = {
 export interface Config {
     mode: Mode;
     ip?: string | null;
+    nic?: number | null;
     defaultGateway?: string | null;
     radioAddress?: number | null;
     radioGroup?: number | null;
     radioPower?: number | null;
 }
+
+export const configToQueryString = (config: Config): URLSearchParams => {
+    const params = new URLSearchParams();
+
+    if (config.ip) {
+        params.append('ip', config.ip);
+    }
+    if (config.defaultGateway) {
+        params.append('gateway', config.defaultGateway);
+    }
+    if (config.radioAddress !== undefined && config.radioAddress !== null) {
+        params.append('address', config.radioAddress.toString());
+    }
+    if (config.radioGroup !== undefined && config.radioGroup !== null) {
+        params.append('group', config.radioGroup.toString());
+    }
+    if (config.radioPower !== undefined && config.radioPower !== null) {
+        params.append('power', config.radioPower.toString());
+    }
+    if (config.nic !== undefined && config.nic !== null) {
+        params.append('nic', config.nic.toString());
+    }
+    return params;
+};
 
 class DeviceConfig {
     static readonly SEPARATOR = ' ';
@@ -78,24 +103,7 @@ class DeviceConfig {
     }
 
     get queryString() {
-        const params = new URLSearchParams();
-
-        if (this.ip) {
-            params.append('ip', this.ip);
-        }
-        if (this.defaultGateway) {
-            params.append('gateway', this.defaultGateway);
-        }
-        if (this.radio.address !== undefined) {
-            params.append('address', this.radio.address.toString());
-        }
-        if (this.radio.group !== undefined) {
-            params.append('group', this.radio.group.toString());
-        }
-        if (this.radio.power !== undefined) {
-            params.append('power', this.radio.power.toString());
-        }
-        return params;
+        return configToQueryString(this.config).toString();
     }
 
     static parse(line: string): DeviceConfig | null {

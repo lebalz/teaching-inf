@@ -1,7 +1,8 @@
-import { action } from 'mobx';
+import { action, computed } from 'mobx';
 import Decoder from './Decoder';
 import IPFrame from './IPFrame';
-import DeviceConfig from './DeviceConfig';
+import DeviceConfig, { configToQueryString } from './DeviceConfig';
+import { parseQueryParams } from '../hooks/useRouterConfig';
 
 class Router {
     private interfaces = new Map<string, Decoder>();
@@ -12,20 +13,41 @@ class Router {
 
     addInterface(decoder: Decoder) {
         this.interfaces.set(decoder.id, decoder);
+        console.log('add', decoder.id, decoder);
+        this.updateQueryString();
     }
 
     removeInterface(decoder: Decoder) {
         this.interfaces.delete(decoder.id);
     }
 
-    _updateQueryString() {
+    updateQueryString() {
         if (!this.syncQueryString) {
             return;
         }
-        const interfaces = [...this.interfaces.values()]
-            .map((intf) => intf.config)
-            .filter((config): config is DeviceConfig => !!config);
-        const mergedQueryString = interfaces.map((config) => config.queryString.toString()).join('&');
+        const current = parseQueryParams(window.location.search);
+        const nics = [...this.interfaces.keys()];
+
+        for (const nic of nics) {
+            const intf = this.interfaces.get(nic);
+            if (intf?.config) {
+                intf.syncQueryString;
+                const nicNr = parseInt(nic.replace(/^.*-nic-/, ''), 10);
+                const currentIdx = current.findIndex((c) => c.nic === nicNr);
+                if (currentIdx !== -1) {
+                    current[currentIdx] = {
+                        nic: nicNr,
+                        ...intf.config
+                    };
+                } else {
+                    current.push({
+                        nic: nicNr,
+                        ...intf.config
+                    });
+                }
+            }
+        }
+        const mergedQueryString = current.map((config) => configToQueryString(config).toString()).join('&');
         const newUrl = `${window.location.pathname}?${mergedQueryString}`;
         window.history.replaceState(null, '', newUrl);
     }

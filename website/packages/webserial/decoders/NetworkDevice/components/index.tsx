@@ -31,6 +31,7 @@ import Router from '../models/Router';
 import Notifications from './Notifications';
 
 interface Props {
+    id?: string;
     config?: Config;
     canChangeMode?: boolean;
     hideIpConfig?: boolean;
@@ -40,7 +41,8 @@ interface Props {
 }
 
 const NetworkDevice = observer((props: Props) => {
-    const subscriptionId = React.useId();
+    const sId = React.useId();
+    const subscriptionId = props.id ?? sId;
     const viewStore = useStore('viewStore');
     const webserialStore = viewStore.useStore('webserialStore');
     const deviceId = useDeviceId();

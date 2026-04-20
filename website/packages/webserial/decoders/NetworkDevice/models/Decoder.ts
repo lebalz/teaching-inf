@@ -280,8 +280,11 @@ class Decoder implements iSubscriber {
             if (configPkg) {
                 this.config = configPkg;
                 this.flashingStartetAt = -1;
-                this._updateQueryString();
-                this.router?._updateQueryString();
+                if (this.router) {
+                    this.router.updateQueryString();
+                } else {
+                    this._updateQueryString();
+                }
             }
             if (!hadConfig && this._defaultConfig) {
                 if (this.config) {

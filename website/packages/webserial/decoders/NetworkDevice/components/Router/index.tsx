@@ -10,23 +10,33 @@ import { default as RouterModel } from '../../models/Router';
 import { Config } from '../../models/DeviceConfig';
 import Icon from '@mdi/react';
 import { mdiRouter, mdiRouterNetwork } from '@mdi/js';
+import Badge from '@tdev-components/shared/Badge';
+import { useStore } from '@tdev-hooks/useStore';
 
 interface Props {
     nr: number;
     config: Config;
     router: RouterModel;
+    routerId: string;
 }
 const NIC = observer((props: Props) => {
-    const { nr, config, router } = props;
+    const { nr, config, router, routerId } = props;
+    const viewStore = useStore('viewStore');
+    const webserialStore = viewStore.useStore('webserialStore');
+    const deviceId = `${routerId}-interface-${nr + 1}`;
+    const decoderId = `${routerId}-nic-${nr + 1}`;
+    const device = webserialStore.devices.get(deviceId);
     return (
         <div className={clsx(styles.nic)}>
-            <h2>Interface {nr + 1}</h2>
+            <h2>
+                Interface {nr + 1} {config.ip && !device?.isConnected && <Badge>{config.ip}</Badge>}
+            </h2>
             <Webserial
-                deviceId={`interface-${nr + 1}`}
+                deviceId={deviceId}
                 baudRate={115200}
                 hideLogs
                 resetTrigger="::READY::"
-                output={<NetworkDevice config={config} router={router} noIcon />}
+                output={<NetworkDevice config={config} id={decoderId} router={router} noIcon />}
             />
         </div>
     );
@@ -38,17 +48,16 @@ interface RouterProps {
 
 const Router = observer((props: RouterProps): React.ReactNode => {
     const { syncQueryString = false } = props;
-    const configs = useRouterConfig([
-        { radioPower: 1, ip: '192.168.0.1' },
-        { radioPower: 1, ip: '10.0.0.1' }
-    ]);
+    const rid = React.useId();
+    const configs = useRouterConfig([{ radioPower: 1, ip: '192.168.0.1' }]);
     const router = React.useMemo(() => {
         return new RouterModel(syncQueryString);
-    }, []);
+    }, [configs]);
 
     React.useEffect(() => {
         return () => router.dispose();
     }, []);
+
     if (!router) {
         return null;
     }
@@ -57,7 +66,7 @@ const Router = observer((props: RouterProps): React.ReactNode => {
         <div className={clsx(styles.router, styles[`nics${configs.length}`])}>
             <Icon path={mdiRouter} size={4} className={clsx(styles.ico)} color="var(--ifm-color-blue)" />
             {configs.map((config, idx) => {
-                return <NIC key={idx} nr={idx} config={config} router={router} />;
+                return <NIC key={idx} routerId={rid} nr={idx} config={config} router={router} />;
             })}
         </div>
     );
