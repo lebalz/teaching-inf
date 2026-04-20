@@ -19,37 +19,31 @@ import Directory from '@tdev-components/documents/FileSystem/Directory';
 
 <Tabs queryString="semester">
     <TabItem label="Semester 4" value="s4" default>
-        <TabItem label="Doppellektion">
-            <SemesterTable
-                header={['Datum', 'Thema', 'Inhalt']}
-                compact
-                selectable
-                rows={fs2026}
-                order={SortTimeTableByDate()}
-            />
-        </TabItem>
+        <SemesterTable
+            header={['Datum', 'Thema', 'Inhalt']}
+            compact
+            selectable
+            rows={fs2026}
+            order={SortTimeTableByDate()}
+        />
     </TabItem>
     <TabItem label="Semester 3" value="s3">
-        <TabItem label="Doppellektion">
-            <SemesterTable
-                header={['Datum', 'Thema', 'Inhalt']}
-                compact
-                selectable
-                rows={hs2025}
-                order={SortTimeTableByDate()}
-            />
-        </TabItem>
+        <SemesterTable
+            header={['Datum', 'Thema', 'Inhalt']}
+            compact
+            selectable
+            rows={hs2025}
+            order={SortTimeTableByDate()}
+        />
     </TabItem>
     <TabItem label="Semester 2" value="s2">
-        <TabItem label="Doppellektion">
-            <SemesterTable
-                header={['Datum', 'Thema', 'Inhalt']}
-                compact
-                selectable
-                rows={fs2025}
-                order={SortTimeTableByDate()}
-            />
-        </TabItem>
+        <SemesterTable
+            header={['Datum', 'Thema', 'Inhalt']}
+            compact
+            selectable
+            rows={fs2025}
+            order={SortTimeTableByDate()}
+        />
     </TabItem>
     <TabItem label="Semester 1" value="s1">
         <Tabs>
