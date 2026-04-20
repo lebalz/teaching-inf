@@ -203,11 +203,16 @@ class Decoder implements iSubscriber {
 
     @action
     onConnectionStateChange(state: ConnectionState) {
-        if (state === 'connected') {
-            this.device.sendLine(CONFIG);
-        } else {
-            this.config = null;
-            this.packages.clear();
+        switch (state) {
+            case 'connected':
+                this.device.sendLine(CONFIG);
+                break;
+            case 'disconnected':
+                this.packages.clear();
+                break;
+            default:
+                this.config = null;
+                this.packages.clear();
         }
     }
 
@@ -329,7 +334,7 @@ class Decoder implements iSubscriber {
     @action
     cleanup() {
         this.device.unsubscribe(this.id);
-        this.router?.removeInterface(this);
+        this.router?.removeInterface(this.id);
     }
 
     @action
