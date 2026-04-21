@@ -29,11 +29,22 @@ Die Datenmenge, welche aus **acht Bits** gebildet wird, nennen wir ein **Byte**.
 
 ![](./images/byte.png)
 
-Da für jedes Kästchen zwei Möglichkeiten vorhanden sind, können wir ein Byte auf $2^8=256$ verschiedene Arten mit Nullen und Einsen füllen. Mit einem Byte können also $256$ verschiedene Dinge gespeichert werden, beispielsweise die Zahlen $0$ bis $255$ oder $256$ verschiedene Schriftzeichen.
+Da für jedes Kästchen zwei Möglichkeiten vorhanden sind, können wir ein Byte auf $2^8=256$ verschiedene Arten mit Nullen und Einsen füllen. Mit einem Byte können also $256$ verschiedene Dinge gespeichert werden, beispielsweise die Zahlen $0$ bis $255$ oder total $256$ verschiedene Schriftzeichen.
 
 ## SI-Präfixe
 
-Für Datenmengen werden die SI-Präfixe des Internationalen Einheitensystems (SI) verwendet, wie sie auch bei anderen Masseinheiten gebräuchlich sind (z.B. ein Kilogramm Brot, eine Megawattstunde, 34 Gigatonnen CO2-Emission pro Jahr).
+SI
+: **Internationales Einheitensystem** (französisch für *Système international d'unités*)
+: international anerkanntes System von Einheiten, das die Grundlage für die meisten Masseinheiten bildet.
+: **Beispiele**
+:::dd
+Einheiten im SI-System:
+  - Kilogramm (kg) für Masse.
+  - Meter (m) für Längen.
+  - Sekunde (s) für Zeit.
+:::
+
+FÜr die Angabe von Datenmengen werden die SI-Präfixe verwendet, welche die Datenmenge mit einer Zehnerpotenz multiplizieren:
 
 <div className="small-table center">
   | Bezeichnung | typisches Beispiel                                   |  Kürzel |    Potenz |    Grösse |
@@ -43,16 +54,16 @@ Für Datenmengen werden die SI-Präfixe des Internationalen Einheitensystems (SI
   | Kilobyte    | eine halbe Seite Text                                |  `1 kB` |    $10^3$ |  `1000 B` |
   | Megabyte    | eine Minute Musik (MP3)                              |  `1 MB` |    $10^6$ | `1000 kB` |
   | Gigabyte    | eine Viertelstunde Video (Full HD)                   |  `1 GB` |    $10^9$ | `1000 MB` |
-  | Terabyte    | Speicherplatz einer (eher kleinen) Festplatte (2024) |  `1 TB` | $10^{12}$ | `1000 GB` |
+  | Terabyte    | Speicherplatz einer (eher kleinen) Festplatte (2026) |  `1 TB` | $10^{12}$ | `1000 GB` |
   | Petabyte    |                                                      |  `1 PB` | $10^{15}$ | `1000 TB` |
   | Exabyte     |                                                      |  `1 EB` | $10^{18}$ | `1000 PB` |
 </div>
 
 ## Historische Binärpräfixe
 
-Weil Datenspeicher eine binäre Adressierung verwenden, sind Speicherkapazitäten üblicherweise eine Zweierpotenz. Deshalb war es früher üblich, $2^{10}=1024$ Byte als Kilobyte oder 1 kB zu bezeichnen.
+Weil Datenspeicher eine binäre Adressierung verwenden, sind Speicherkapazitäten üblicherweise Zweierpotenzen. Deshalb war es früher üblich, $2^{10}=1024$ Byte als ein Kilobyte oder `1 kB` zu bezeichnen.
 
-1996 hat die International Electrotechnical Commission (IEC) spezielle Präfixe für **Binärpräfixe** festgelegt:
+1996 hat die International Electrotechnical Commission (IEC) spezielle Einheitsgrössen für **Binärpräfixe** festgelegt:
 
 <div className="small-table center">
   | Bezeichnungen |  Kürzel |   Potenz |    Grösse |
