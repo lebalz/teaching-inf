@@ -200,8 +200,6 @@
       "from": "docs/OF-Daten-und-Codes/",
       "to": "versioned_docs/version-29Ga/04-Daten-und-Codes",
       "ignore": [
-        "08-Bildcodierung/05-Kompression.mdx",
-        "09-Datenmengen",
         "Lernziele",
         "index.mdx",
         "_category_.yml"
@@ -255,8 +253,6 @@
       "from": "docs/OF-Daten-und-Codes/",
       "to": "versioned_docs/version-29Gj/04-Daten-und-Codes",
       "ignore": [
-        "08-Bildcodierung/05-Kompression.mdx",
-        "09-Datenmengen",
         "Lernziele",
         "index.mdx",
         "_category_.yml"
