@@ -3,6 +3,7 @@
     "extends": "./tsconfig.json",
     "compilerOptions": {
         "noEmit": false,
+        "ignoreDeprecations": "6.0",
         "moduleResolution": "bundler",
         "module": "esnext",
         "target": "esnext"

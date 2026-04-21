@@ -1,7 +1,7 @@
-import { action, computed } from 'mobx';
+import { action } from 'mobx';
 import Decoder from './Decoder';
 import IPFrame from './IPFrame';
-import DeviceConfig, { configToQueryString } from './DeviceConfig';
+import { configToQueryString } from './DeviceConfig';
 import { parseQueryParams } from '../hooks/useRouterConfig';
 
 class Router {
@@ -17,21 +17,23 @@ class Router {
         this.updateQueryString();
     }
 
-    removeInterface(decoder: Decoder) {
-        this.interfaces.delete(decoder.id);
+    removeInterface(decoderId: string) {
+        this.interfaces.delete(decoderId);
+        this.updateQueryString(decoderId);
     }
 
-    updateQueryString() {
-        if (!this.syncQueryString) {
-            return;
-        }
-        const current = parseQueryParams(window.location.search);
+    queryString(ignoredDecoderId?: string) {
+        const idx2ignore = ignoredDecoderId
+            ? Number.parseInt(ignoredDecoderId.replace(/^.*-nic-/, ''), 10) - 1
+            : null;
+        const current = parseQueryParams(window.location.search).filter(
+            (_, idx) => idx2ignore === null || idx !== idx2ignore
+        );
         const nics = [...this.interfaces.keys()];
 
         for (const nic of nics) {
             const intf = this.interfaces.get(nic);
             if (intf?.config) {
-                intf.syncQueryString;
                 const nicNr = parseInt(nic.replace(/^.*-nic-/, ''), 10);
                 const currentIdx = current.findIndex((c) => c.nic === nicNr);
                 if (currentIdx !== -1) {
@@ -48,6 +50,15 @@ class Router {
             }
         }
         const mergedQueryString = current.map((config) => configToQueryString(config).toString()).join('&');
+        return mergedQueryString;
+    }
+
+    @action
+    updateQueryString(ignoredDecoderId?: string) {
+        if (!this.syncQueryString) {
+            return;
+        }
+        const mergedQueryString = this.queryString(ignoredDecoderId);
         const newUrl = `${window.location.pathname}?${mergedQueryString}`;
         window.history.replaceState(null, '', newUrl);
     }
