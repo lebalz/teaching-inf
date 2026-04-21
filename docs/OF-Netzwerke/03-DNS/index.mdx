@@ -6,6 +6,8 @@ sidebar_custom_props:
 page_id: 4f87f30c-b269-4c98-b092-fc0145d69a68
 ---
 
+import OsTabs from '@tdev-components/OsTabs'
+
 # Domain-Name-System
 
 :::tip[Ziele]
@@ -147,9 +149,12 @@ Man kann solche Anfragen aber auch von Hand machen. Dazu können Sie die Seite h
 ::::aufgabe[Aufgabe 1]
 <Answer type="state" id="0ad4bde0-94a3-4822-8c97-bd14774433a5" />
 
-Wie findet man die IP-Adresse, welche zu einem Domain-Name gehört? (Googeln Sie nach einer Website, welche einen Dienst anbietet, der dies tut.)
+Dienst
+: https://tools.keycdn.com/dig
 
-<Answer  type="text"  id="67acbe64-ea7b-46ea-b07a-c09376f21381"/>
+Finden Sie die IP-Adresse von [login.gbsl.website](http://login.gbsl.website) heraus. Stimmt sie mit obiger IP-Adresse überein? Und bei [hacksql.gbsl.website](https://hacksql.gbsl.website)? Überlegen Sie sich, woher diese Unterschiede kommen könnten.
+
+Suchen Sie auch nach weiteren IP-Adressen, bspw. von www.instagram.com.
 
 :::details[:mdi[account-cowboy-hat] The Hacky Way :mdi[arrow-right] Übers Terminal :mdi[console]]
 
@@ -162,60 +167,60 @@ nslookup de.wikipedia.org
 Probieren Sie es aus, wenn Sie Lust auf mehr Hacker-Feeling haben.
 :::
 
-
-Finden Sie die IP-Adresse von [login.gbsl.website](http://login.gbsl.website) heraus. Stimmt sie mit obiger IP-Adresse überein? Und bei [hacksql.gbsl.website](https://hacksql.gbsl.website)? Überlegen Sie sich, woher diese Unterschiede kommen könnten.
-
-Suchen Sie auch nach weiteren IP-Adressen, bspw. von www.instagram.com.
-
 <Answer type="text" id="f4bc7d69-fc50-4ca2-8186-8c74f8061e22" />
 
 ::::
 
 
 ::::aufgabe[Aufgabe 2]
-<Answer type="state" id="ebf745e1-a325-44cb-bb9e-49569f9316ea" />
+<Answer type="state" id="8f2813e2-741c-472c-9294-02e53fae531b" />
 
-Untenstehende Abbildung zeigt eine verdächtige aussehende E-Mail. Sie enthält einen Button, unter welchem angeblich Details eines Fotos angeschaut werden können.
+Welchen Weg nimmt eine Anfrage? Dies kann mit dem Befehl `tracert` (Windows) oder `traceroute` (Mac) herausgefunden werden. Geben Sie beispielsweise den folgenden Befehl ein:
 
-![](images/fishy-mail.png)
+<OsTabs>
+  <TabItem value="win" label="Windows">
+    __PowerShell__ öffnen und folgenden Befehl eingeben:
 
-Der Button ist mit einem Link verbunden, welcher vom E-Mail-Programm am unteren Rand angezeigt wird, sobald man mit der Maus über den Button fährt (**⚠ nicht klicken!**). Darin ist ein Domain-Namen enthalten, der links Unten im Browser angezeigt wird.
+    ```
+    tracert login.gbsl.website
+    ```
+  </TabItem>
+  <TabItem value="mac" label="Mac">
+    __Terminal__ öffnen und folgenden Befehl eingeben:
+    
+    ```
+    traceroute login.gbsl.website
+    ```
+  </TabItem>
+</OsTabs>
 
+- Wie viele Stationen (Hops) sind es von Ihrem Computer bis zum Server von login.gbsl.website?
+- Wie lange dauert es, bis die Anfrage den Server erreicht?
+- Was bedeuten die `*** ms`-Angaben in der Ausgabe?
 
-Im obigen E-Mail ist das `satellite-equipment.ru`, ein Domain-Namen aus Russland.
-
-Schauen Sie in Ihrem Postfach nach, ob Sie in letzter Zeit suspekte E-Mails erhalten haben. Finden Sie dort ebenfalls den die Domain-Namen heraus und überprüfen Sie folgende Punkte:
-- welche IP-Adresse hinter diesem Domain-Namen steht
-- wem diese Domain gehört und 
-- in welchem Land die Besitzer:in zuhause ist?
-
-<Answer  type="text"  id="b59db98a-25aa-456a-8a6d-b938849bc6f0" />
-
-:::tip[Hinweis]
-Verwenden Sie https://tools.keycdn.com/dig und https://www.whois.com/whois/
-:::
+<Answer type="text" id="24fde4a3-fcd3-449c-85c7-35b6dfac65dd" />
 ::::
 
-:::danger
-Warnung: Auch hier gilt wieder: Nie auf solche Buttons klicken, denn in diesem Fall ist das Risiko hoch, dass Ihr Computer mit einem Virus infiziert wird. 
-:::
-
 :::aufgabe[Aufgabe 3]
-<Answer type="state" id="dc4203ff-182c-44d1-8b1c-0b503e300f29" />
+<Answer type="state" id="cdae3ade-29d9-4ea2-a598-6fdcc0f5beb7" />
 
-Diese Aufgabe hat nicht direkt mit dem Domain-Name-System zu tun. Da hinter der E-Mail aus Aufgabe 2 aber mit Sicherheit jemand mit böswilliger Absicht steckt, können wir noch überprüfen, ob  der Link bereits **als gefährlich registriert** ist.
+Wie lange dauert es, bis eine Anfrage von einem Server beantwortet wird? Probieren Sie es mit dem `ping`-Befehl aus, z.B. mit
 
-Solche Überprüfungen bietet z.B. die Seite 	https://sitecheck.sucuri.net/ an.
+```
+ping login.gbsl.website
+```
 
-(Obiger Link funktioniert bereits nicht mehr, weshalb Sie bei dieser Aufgabe einen einen Link aus Ihrer untersuchten Mail aus Aufgabe 2 verwenden können). 
+(mit [[Ctrl]] + [[c]] können Sie den Ping-Befehl jederzeit abbrechen).
 
-**Achtung: Geben Sie diese URL auschliesslich in das für die Überprüfung vorgesehene Feld ein!**
+- Wie lange dauert es, bis die Anfrage beantwortet wird?
+- Probieren Sie es mit verschiedenen Webseiten aus...
 
-<Answer  type="text"  id="880a65ab-0f42-409b-b4eb-85d16d1de961" placeholder="Resultat der Überprüfung"/>
+<Answer type="text" id="7c29b7a6-a806-4081-a06b-b362dcc7a4ee" />
+
 :::
-
 
 :::aufgabe[Aufgabe 4]
+
 <Answer type="state" id="5a3152ce-03e6-46d6-9dd4-c741027b2b9f" />
 
 Sie möchten Ihr eigenes Unternehmen gründen, oder Sie möchten eine Kampagne für ein Ihnen wichtiges Anliegen führen. In beiden Fällen hilft einen Auftritt im Web, um möglichst erfolgreich zu sein. Eine grosse Rolle spielt dabei, ob Sie einen einprägsamen und packenden Domain-Name finden. Dieser muss selbstverständlich noch verfügbar sein.
@@ -237,7 +242,7 @@ Angenommen einem Angreifer gelingt es, Ihrem Computer eine beliebige, aber falsc
 :::
 
 
-## Hack-Angriff DNS-Hijacking
+## ⭐ Hack-Angriff DNS-Hijacking
 
 Ausschnitt: Start bis 2:51 Minuten.
 
