@@ -117,17 +117,6 @@
       "open": false
     },
     {
-      "from": "docs/Math/Taschenrechner/",
-      "to": "versioned_docs/version-28Gj/100-Mathematik/01-Taschenrechner",
-      "ignore": [],
-      "open": false
-    },
-    {
-      "from": "docs/Math/Quadratische-Funktionen/",
-      "to": "versioned_docs/version-28Gj/100-Mathematik/02-Quadratische-Funktionen",
-      "ignore": []
-    },
-    {
       "from": "docs/OF-Programmieren-2/",
       "to": "versioned_docs/version-28Gj/09-Programmieren-2/",
       "ignore": [
@@ -142,6 +131,22 @@
         "_category_.yml"
       ],
       "open": true
+    },
+    {
+      "from": "docs/Math/Taschenrechner/",
+      "to": "versioned_docs/version-28Gj/100-Mathematik/01-Taschenrechner",
+      "ignore": [],
+      "open": false
+    },
+    {
+      "from": "docs/Math/Quadratische-Funktionen/",
+      "to": "versioned_docs/version-28Gj/100-Mathematik/02-Quadratische-Funktionen",
+      "ignore": []
+    },
+    {
+      "from": "docs/Math/Exponentialfunktion/",
+      "to": "versioned_docs/version-28Gj/100-Mathematik/03-Exponentialfunktion",
+      "ignore": []
     }
   ],
   "28Wa": [
