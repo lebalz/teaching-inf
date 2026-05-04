@@ -70,7 +70,7 @@ INSERT INTO legodudes (
     69,
     420,
     'https://inf.gbsl.website/img/lego/lego_3.jpg',
-    'Früher wollte er unbedingt Leute zum Mars schicken. Als seine Firma aber bankrott ging und er der einzige Mitarbeiter war, musste er es selbst tun. Das hat er auch geschafft. Das einzige positive an der Mission war aber sein Überleben.'
+    'Früher wollte er unbedingt Leute zum Mars schicken. Als seine Firma aber bankrott ging und er alle gehörig genervt hatte, war er der einzige Mitarbeiter und musste es selbst tun. Das hat er auch geschafft. Das einzige positive an der Mission war aber dass er auf dem Mars blieb.'
 ), (
     4,
     'Larry der Stürmer',
@@ -108,7 +108,7 @@ INSERT INTO legodudes (
     'Schweiz',
     'Milch',
     37,
-    99,
+    67,
     'https://inf.gbsl.website/img/lego/lego_7.jpg',
     'Ein typischer Schweizer. Hat halt einen selbstmähenden Rasenmäher im Garten seines Einfamilien-Neubaus. Er kommt eigentlich nur aus dem Haus, wenn die Nachbarkids zu laut Peter Reber hören.'
 );
