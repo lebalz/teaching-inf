@@ -1,0 +1,256 @@
+---
+page_id: dd508089-0cfd-4a5b-88c2-1aae1788f5b3
+---
+
+# Einstieg SQL
+
+:::info[db-sql.ch]
+
+Erstellen Sie unter https://db-sql.ch mit Ihrer Schul-E-Mail-Adresse einen Account. Sie erhalten anschliessend eine E-Mail mit einem Link, um Ihr Konto zu aktivieren.
+
+Sobald Sie dies erledigt haben, können Sie auf die für Sie freigegebenen Datenbankverbindungen zugreifen.
+:::
+
+### SQL
+
+Eine SQL-Abfrage ist vom Aufbau her immer gleich:
+
+```sql
+SELECT
+  [DISTINCT]
+  Auswahlliste
+  FROM Quelle [Alias-Name]
+  [WHERE Where-Klausel]
+  [ [GROUP BY {Group-by-Attribut}] +
+    [HAVING Having-Klausel]]
+  [ORDER BY {Sortierungsattribut [ASC|DESC]}
+  [LIMIT {Datensatz-Anzahl}];
+```
+
+wobei alles, was in eckigen Klammern steht, optional ist.
+
+
+`DISTINCT`
+: Jeder Datensatz wird nur einmal ausgegeben, auch wenn er mehrfach in der Tabelle vorkommt.
+`Auswahlliste`
+: Bestimmt, welche Attribute (Spalten) der Quelle angezeigt werden sollen (`*` für alle) und ob Aggregationsfunktionen angewendet werden sollen. Aufgezählte Elemente sind mit einem *Komma* voneinander getrennt.
+`Quelle [Alias-Name]`
+: Spezifiziert, wo die Daten herkommen. Es können Relationen angegeben werden und miteinander als kartesisches Produkt oder als Verbund (`JOIN`) verknüpft werden. Durch die Angabe eines *Alias-Namen* können die Relationen für die Abfrage umbenannt werden.
+`Where-Klausel` 
+: Bestimmt die Bedingungen, unter denen die Daten ausgegeben werden sollen. Einzelne Bedingungen können mit `OR` oder `AND` verknüpft werden. 
+`Group-by-Attribut`
+: Legt fest, ob unterschiedliche Werte als einzelne Zeilen ausgegeben werden sollen oder ob alle Attributwerte aggregiert (bspw. aufsummiert (`SUM`), gemittelt (`AVG`), kleinster Wert (`MIN`), grösster Wert (`MAX`),...) zu einem einzelnen Ergebniswert zusammengefasst werden. 
+`Having-by-Attribut`
+: Ist wie die `WHERE`-Klausel, nur dass sich die angegebenen Bedingungen auf das Ergebnis einer Aggregationsfunktion beziehen. 
+`Sortierungsattribut`
+: Nach dem `ORDER BY` Statement werden Attribute angegeben, nach denen sortiert werden soll. Für eine aufsteigende Reihenfolge (1, 2, 3, ...) wird `ASC` spezifiziert, für eine absteigende Reihenfolge `DESC` (99, 80, 13, ...). 
+`LIMIT`
+: Gibt an wie viele Datensätze angezeigt werden sollen. Besonders hilfreich bei grossen Datensätzen, oder wenn nur eine gewisse Anzahl der *grössten*/*kleinsten* Attributwerte gesucht werden.
+
+## Beispiele zum ausprobieren
+
+
+Datenbank
+: __legomania__
+: 👉 https://db-sql.ch/connections/6750d31f-6978-4e24-b044-e2dd9763bd4f/legomania
+
+:::aufgabe[1. Ausprobieren]
+<Answer type="state" id="1ce2ccdb-0531-4bb4-8e4d-f2a01e344dc7" />
+Was passiert mit dieser Abfrage? Probieren Sie es aus!
+
+```sql
+SELECT name, beschreibung, bild FROM legodudes;
+```
+
+<Answer type="text" id="077c9a9c-f013-4303-bb35-c0f8773ee1ff" />
+:::
+
+:::aufgabe[2. Ausprobieren]
+<Answer type="state" id="635c7604-39b6-4ceb-a261-f2063d7aa474" />
+Was passiert mit dieser Abfrage? Probieren Sie es aus!
+
+```sql
+SELECT * FROM legodudes;
+```
+
+<Answer type="text" id="84d3a56b-8391-44c0-b23f-a2856d412534" />
+:::
+
+::::aufgabe[3. Ausprobieren]
+<Answer type="state" id="435bde21-0d1f-4861-a632-bc8e91923e54" />
+Was passiert mit diesen Abfragen? Wo liegt der Unterschied? Probieren Sie es aus!
+
+:::cards{min-width=300px}
+```sql
+SELECT *
+    FROM legodudes
+    ORDER BY name ASC;
+```
+::br
+```sql
+SELECT *
+    FROM legodudes
+    ORDER BY name DESC;
+```
+:::
+<Answer type="text" id="9f810ce3-f6dd-4443-89d2-595c40e420a8" />
+::::
+
+::::aufgabe[4. Ausprobieren]
+<Answer type="state" id="a0441175-8b0d-476e-9380-b38ed8ac33b8" />
+Was macht das `LIMIT`? Wo liegt der Unterschied zum zweiten Query? Probieren Sie es aus!
+
+:::cards{min-width=300px}
+```sql
+SELECT *
+    FROM legodudes
+    LIMIT 5;
+```
+::br
+```sql
+SELECT *
+    FROM legodudes
+    ORDER BY name
+    LIMIT 5;
+```
+:::
+<Answer type="text" id="5bedce67-e21a-46f4-9d95-030a03bd902e" />
+::::
+
+::::aufgabe[5. Ausprobieren]
+<Answer type="state" id="3cf49cad-0881-4af4-9ff3-b03dca2c0984" />
+Was passiert mit diesen Abfragen? Wo liegt der Unterschied? Probieren Sie es aus!
+
+:::cards{min-width=300px}
+```sql
+--- nur mit der id 4
+SELECT *
+    FROM legodudes
+    WHERE id=4;
+```
+::br
+```sql
+SELECT *
+    FROM legodudes
+    WHERE land='USA';
+```
+:::
+<Answer type="text" id="403151f9-3c88-4b63-8496-8efd3f9e392e" />
+::::
+
+## Konkrete Aufgaben
+:::aufgabe[6. Haustiere]
+<Answer type="state" id="6e010a67-1961-45cd-9ead-94e910f5a439" />
+
+
+Fragen Sie alle Haustiere ab, wobei nur die Tierart, der Name und das Bild (in dieser Reihenfolge) ausgegeben werden sollen. Die Resultate sollen zudem alphabetisch absteigend nach der Tierart sortiert sein.
+
+<Answer type="text" id="b413db16-1e52-49ba-b1e8-8fbdd32d7042" monospace />
+
+<Solution id="9bb5ae4d-6c10-4aa2-aa36-0c94ca8279d2">
+
+```sql
+SELECT tierart, name, bild
+    FROM haustiere
+    ORDER BY tierart ASC
+```
+</Solution>
+:::
+
+:::aufgabe[7. Nur Hunde]
+<Answer type="state" id="b6a32f4e-3465-4a88-9f53-73769be2e5cc" />
+
+Fragen Sie bei den Haustieren alle Hunde ab, wobei alle Attribute ausgegeben werden sollen.
+
+<Answer type="text" id="119abd04-a372-4b1a-95c7-e7808d4f48b0" monospace />
+
+<Solution id="9bb5ae4d-6c10-4aa2-aa36-0c94ca8279d2" >
+
+```sql
+SELECT *
+    FROM haustiere
+    WHERE tierart = 'Hund'
+```
+</Solution>
+:::
+
+### Logische Operatoren
+
+Mit den logischen Operatoren `AND`, `OR` und `NOT` können mehrere Bedingungen miteinander verknüpft werden.
+
+::::cards{min-width=500px}
+Zwei Bedingungen, die erste **und** die zweite müssen erfüllt sein
+
+```sql
+SELECT * FROM haustiere
+    WHERE lieblingsfutter='Körner' AND tierart='Hamster';
+```
+::br
+Zwei Bedingungen, die Eine **oder** die Andere muss erfüllt sein
+```sql
+SELECT * FROM haustiere
+    WHERE lieblingsfutter='Körner' 
+        OR lieblingsfutter='Fisch';
+```
+::br
+Kombinierte Bedingung - die **Klammerung** gibt an, was zusammengehört.
+```sql
+SELECT * FROM haustiere
+    WHERE 
+        NOT lieblingsfutter='Körner' AND (tierart='Hund' OR tierart='Katze');
+```
+:::warning[Beachte]
+- Das `NOT` bezieht sich jeweils nur auf den direkt folgenden Ausdruck.
+- Spalten-Namen müssen bei jeden Vergleich erneut angegeben werden.
+:::
+::::
+
+::::aufgabe[8. Klammerung]
+<Answer type="state" id="db511385-8b83-4e9f-bfcf-92c427ef15a5" />
+
+Wo liegt der Unterschied?
+
+1. Probieren Sie die Abfragen aus
+2. vergleichen Sie die Resultate
+3. Erklären Sie das Verhalten
+
+:::cards{min-width=500px}
+```sql
+SELECT * FROM haustiere
+    WHERE (NOT lieblingsfutter='Körner' AND tierart='Hund') OR tierart='Hamster';
+```
+::br
+```sql
+SELECT * FROM haustiere
+    WHERE NOT lieblingsfutter='Körner' AND (tierart='Hund' OR tierart='Hamster');
+```
+:::
+
+<Answer type="text" id="7a4c2b2c-3a43-42e4-bc96-8b0a15655362" />
+
+::::
+
+### Distinct
+
+Mit dem Schlüsselwort `DISTINCT` kann angegeben werden, dass jeder Datensatz nur einmal ausgegeben werden soll, auch wenn er mehrfach in der Tabelle vorkommt.
+
+Beispiel: Es sollen alle Tierarten ausgegeben werden, die in der Tabelle `haustiere` vorkommen.
+
+```sql
+SELECT DISTINCT tierart FROM haustiere;
+```
+
+:::aufgabe[9. Distinct]
+<Answer type="state" id="7614f3bd-be23-4e3b-9daf-7356cfdcdbbc" />
+
+Geben Sie alle Länder in welchen Legodudes wohnen in alphabetisch absteigender Reihenfolge aus.
+
+<Answer type="text" id="d9f1ce1a-020e-4a24-b7e7-38a198df6572" monospace />
+<Solution id="9bb5ae4d-6c10-4aa2-aa36-0c94ca8279d2">
+
+```sql
+SELECT DISTINCT land FROM legodudes ORDER BY land ASC;
+```
+</Solution>
+
+:::

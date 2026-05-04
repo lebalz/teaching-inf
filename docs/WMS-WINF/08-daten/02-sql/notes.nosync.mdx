@@ -1,0 +1,62 @@
+---
+page_id: 12dbf476-9df3-40ce-8731-f63aa8c92def
+---
+
+import { Val, TemplateCode, DynamicInput } from '@tdev-components/DynamicValues';
+
+# Notizen
+
+
+<DynamicInput name="user" default='ef_gbsl' monospace />
+<DynamicInput name="password" default='ef_gbsl' monospace />
+
+<TemplateCode>
+    ```sql
+    CREATE ROLE {{user}} WITH LOGIN PASSWORD '{{password}}';
+    -- connect to a database you want the user to grant access
+    GRANT SELECT ON ALL TABLES IN SCHEMA public TO {{user}};
+    ```
+</TemplateCode>
+
+<DynamicInput name="schema" default='legodudes' monospace />
+<TemplateCode>
+    ```sql
+        -- connect to a database you want the user to grant access (for flights db)
+    GRANT USAGE ON SCHEMA {{schema}} TO {{user}};
+    GRANT SELECT ON ALL TABLES IN SCHEMA {{schema}} TO {{user}};
+    GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA {{schema}} TO {{user}};
+    ```
+</TemplateCode>
+
+## Create DB on dokku with given files
+
+```bash
+scp demo-flights.sql root@123.22.23.23:/root/demo-flights.sql
+
+ssh root@123.22.23.23
+
+# on dokku
+mkdir flights
+mv demo-flights.sql flights/demo-flights.sql
+
+dokku postgres:create flights-db
+docker cp flights/ $(dokku postgres:info flights-db --id):/home/flights
+
+dokku postgres:enter flights-db
+
+# inside postgres container "flights-db"
+cd /home/flights
+psql -f demo-small.sql -U postgres
+```
+
+## Export Database (plain text)
+
+```bash
+pg_dump --host=<host> --port=5432 --username=postgres --password --dbname=<db-name> > dump.sql
+```
+
+## Import Database (plain text)
+
+```bash
+psql --host=<host> --port=5432 --username=postgres --password --dbname=<db-name> < dump.sql
+```
