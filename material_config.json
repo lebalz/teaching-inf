@@ -225,7 +225,7 @@
         "index.mdx",
         "_category_.yml"
       ],
-      "open": true
+      "open": false
     },
     {
       "from": "docs/IN-Biber/2025/",
@@ -234,6 +234,17 @@
         "_category_.yml"
       ],
       "open": false
+    },
+    {
+      "from": "docs/OF-Computer-28/",
+      "to": "versioned_docs/version-29Ga/08-Rechnerarchitektur",
+      "ignore": [
+        "_category_.yml",
+        "02-miniaturisierung",
+        "03-turingmachine",
+        "04-architecture"
+      ],
+      "open": true
     }
   ],
   "29Gj": [
@@ -278,7 +289,7 @@
         "index.mdx",
         "_category_.yml"
       ],
-      "open": true
+      "open": false
     },
     {
       "from": "docs/IN-Biber/2025/",
@@ -293,6 +304,17 @@
       "to": "versioned_docs/version-29Gj/100-Mathematik/01-Taschenrechner",
       "ignore": [],
       "open": false
+    },
+    {
+      "from": "docs/OF-Computer-28/",
+      "to": "versioned_docs/version-29Gj/08-Rechnerarchitektur",
+      "ignore": [
+        "_category_.yml",
+        "02-miniaturisierung",
+        "03-turingmachine",
+        "04-architecture"
+      ],
+      "open": true
     }
   ],
   "pages": [
