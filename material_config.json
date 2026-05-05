@@ -63,6 +63,14 @@
       "ignore": [
         "_category_.yml"
       ],
+      "open": false
+    },
+    {
+      "from": "docs/OF-Projekt/",
+      "to": "versioned_docs/version-28Gj/15-Projekt",
+      "ignore": [
+        "_category_.yml"
+      ],
       "open": true
     }
   ],
@@ -127,6 +135,14 @@
     {
       "from": "docs/OF-Netzwerke/",
       "to": "versioned_docs/version-28Gj/10-Netzwerke",
+      "ignore": [
+        "_category_.yml"
+      ],
+      "open": false
+    },
+    {
+      "from": "docs/OF-Projekt/",
+      "to": "versioned_docs/version-28Gj/15-Projekt",
       "ignore": [
         "_category_.yml"
       ],
