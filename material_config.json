@@ -236,13 +236,10 @@
       "open": false
     },
     {
-      "from": "docs/OF-Computer-28/",
-      "to": "versioned_docs/version-29Ga/08-Rechnerarchitektur",
+      "from": "docs/OF-Computer-29/",
+      "to": "versioned_docs/version-29Ga/05-Rechnerarchitektur",
       "ignore": [
-        "_category_.yml",
-        "02-miniaturisierung",
-        "03-turingmachine",
-        "04-architecture"
+        "_category_.yml"
       ],
       "open": true
     }
@@ -306,13 +303,10 @@
       "open": false
     },
     {
-      "from": "docs/OF-Computer-28/",
-      "to": "versioned_docs/version-29Gj/08-Rechnerarchitektur",
+      "from": "docs/OF-Computer-29/",
+      "to": "versioned_docs/version-29Gj/05-Rechnerarchitektur",
       "ignore": [
-        "_category_.yml",
-        "02-miniaturisierung",
-        "03-turingmachine",
-        "04-architecture"
+        "_category_.yml"
       ],
       "open": true
     }

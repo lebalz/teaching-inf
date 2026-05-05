@@ -17,9 +17,6 @@
 50-IN-Biber/*
 !50-IN-Biber/_category_.yml
 100-Mathematik/01-Taschenrechner/*
-08-Rechnerarchitektur/*
-!08-Rechnerarchitektur/_category_.yml
-!08-Rechnerarchitektur/02-miniaturisierung/
-!08-Rechnerarchitektur/03-turingmachine/
-!08-Rechnerarchitektur/04-architecture/
-08-Rechnerarchitektur/_category_.json
+05-Rechnerarchitektur/*
+!05-Rechnerarchitektur/_category_.yml
+05-Rechnerarchitektur/_category_.json
