@@ -67,7 +67,7 @@
     },
     {
       "from": "docs/OF-Projekt/",
-      "to": "versioned_docs/version-28Gj/15-Projekt",
+      "to": "versioned_docs/version-28Gb/15-Projekt",
       "ignore": [
         "_category_.yml"
       ],
