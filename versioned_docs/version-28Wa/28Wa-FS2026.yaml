@@ -70,16 +70,16 @@
     - Aggregierte Abfragen, Gruppieren, Statistiken
 - cells:
     - 19.05.2026
-    - SQL + Wordpress
-    - SQL Abfragen in Wordpress nutzen
+    - SQL + Web
+    - SQL Abfragen in Webanwendungen nutzen
 - cells:
     - 26.05.2026
-    - SQL + Wordpress
-    - SQL Abfragen in Wordpress nutzen
+    - SQL + Web
+    - SQL Abfragen in Webanwendungen nutzen
 - cells:
     - 02.06.2026
-    - SQL + Wordpress
-    - SQL Abfragen in Wordpress nutzen
+    - SQL + Web
+    - SQL Abfragen in Webanwendungen nutzen
 - cells:
     - 09.06.2026
     - Mündliche Maturwoche
@@ -88,8 +88,8 @@
   icon: mdiSchool
 - cells:
     - 16.06.2026
-    - Wordpress
-    - Abgabe Projekt
+    - Probe SQL
+    - 
   type: test
 - cells:
     - 23.06.2026
