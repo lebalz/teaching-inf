@@ -11,7 +11,7 @@ html[data-theme='dark'] {
     --current-alert-padding-vertical: var(--ifm-alert-padding-vertical);
     --current-alert-padding-horizontal: var(--ifm-alert-padding-horizontal);
     &:not(.standalone) {
-        :global(.alert) {
+        > :global(.alert) {
             border-top-left-radius: 0;
             border-bottom-left-radius: 0;
             --ifm-alert-padding-vertical: 0.2em;

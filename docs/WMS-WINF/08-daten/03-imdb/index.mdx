@@ -1,6 +1,7 @@
 ---
 page_id: 3b293f59-1bac-49e1-93b1-e7d2cd6566af
 ---
+import ProgressState from '@tdev-components/documents/ProgressState';
 
 # IMDb mit SQL
 
@@ -180,6 +181,211 @@ SELECT 'https://www.imdb.com/title/' || id || '/' as url, *
 FROM movies 
 WHERE type='short' AND start_year=2026 
 LIMIT 100;
+```
+</Solution>
+:::
+
+
+
+## Aggregierte Abfragen
+
+Oft sollen Ergebnisse in einer zusammengefassten Form ausgegeben werden. So ist bspw. oft von Interesse, wie viele Datensätze in einer Tabelle vorhanden sind, oder wie hoch der Durchschnittswert einer Spalte ist. Hierfür gibt es die sogenannten __aggregierten Abfragen__.
+
+::::aufgabe[4. Aggregierte Abfragen]
+
+Datenbank
+: __legomania__
+: 👉 https://db-sql.ch/connections/3567ba88-a01d-4c46-9912-e802d128d2eb/legomania
+
+<ProgressState confirm labels={['COUNT', 'SUM', 'AVG', 'MAX', 'MIN']} keepPreviousStepsOpen id="156a15ce-41dc-481d-bd4f-a065b72f9224">
+1. `COUNT(*)`
+    Was macht diese Abfrage?
+    ```sql
+    SELECT COUNT(*) FROM legodudes;
+    ```
+    <Answer type="text" id="a5d0e032-b405-4c17-aed4-e2649677017b" />
+2. `SUM()`
+    Was macht diese Abfrage?
+    ```sql
+    SELECT SUM(lieblingszahl) FROM legodudes;
+    ```
+    <Answer type="text" id="ebf2df34-b065-49e9-af58-f17f9fa7ea9b" />
+3. `AVG()`
+    Was macht diese Abfrage?
+    ```sql
+    SELECT AVG(lieblingszahl) FROM legodudes;
+    ```
+    <Answer type="text" id="43885a23-4014-4d76-bf03-35a3533cac0e" />
+4. `MAX()`
+    Was macht diese Abfrage?
+    ```sql
+    SELECT MAX(lieblingszahl) FROM legodudes;
+    ```
+    <Answer type="text" id="060345c1-a704-4c8e-9562-2ed00ca844bb" />
+5. `MIN()`
+    Was macht diese Abfrage?
+    ```sql
+    SELECT MIN(lieblingszahl) FROM legodudes;
+    ```
+    <Answer type="text" id="d788ba81-ded3-4bb4-858e-83d9057059b3" />
+
+</ProgressState>
+
+<Solution id="c86d034a-9cef-4424-be56-60cf9072431c">
+    :::def[`COUNT(*)`]
+
+    Zählt die Anzahl der Datensätze in einer Tabelle.
+
+    ```sql
+    SELECT COUNT(*) FROM legodudes;
+    /* count 
+    -------
+        7   */
+    ```
+    :::
+
+
+    :::def[`SUM()`]
+
+    Addiert die Werte einer Spalte.
+
+    ```sql
+    SELECT SUM(lieblingszahl) FROM legodudes;
+    /*  sum 
+    -----
+        651 */
+    ```
+    :::
+
+    :::def[`AVG()`]
+
+    Berechnet den Mittelwert der Werte einer Spalte.
+
+    ```sql
+    SELECT AVG(lieblingszahl) FROM legodudes;
+    /*  avg 
+    ------
+        93.0  */
+    ```
+    :::
+
+    :::def[`MAX()`]
+
+    Gibt den maximalen Wert einer Spalte zurück.
+
+    ```sql
+    SELECT MAX(lieblingszahl) FROM legodudes;
+    /*  max 
+    ------
+        420  */
+    ```
+    :::
+
+    :::def[`MIN()`]
+
+    Gibt den minimalen Wert einer Spalte zurück.
+
+    ```sql
+    SELECT MIN(lieblingszahl) FROM legodudes;
+    /*  min 
+    -----
+        1  */
+    ```
+    :::
+</Solution>
+
+::::
+
+Die Aggregationsfunktionen lassen sich nun auch als verschachtelte `WHERE`-Klauseln verwenden, bspw. um alle Legodudes auszugeben, die die höchste Lieblingszahl haben:
+
+```sql
+SELECT *
+FROM legodudes 
+WHERE lieblingszahl = (SELECT MAX(lieblingszahl) FROM legodudes);
+```
+
+:::tip[Merke]
+In der `WHERE`-Klausel können auch verschachtelte Abfragen verwendet werden, sofern diese nur einen einzigen Wert zurückgeben.
+:::
+
+:::aufgabe[5. Ältester Legodude]
+<Answer type="state" webKey="5c502b3e-547a-4aab-929e-bedc944e8a1f" />
+
+Datenbank
+: __legomania__
+: https://db-sql.ch/connections/6750d31f-6978-4e24-b044-e2dd9763bd4f/legomania
+
+Geben Sie den jüngsten Legodude aus, indem Sie eine verschachtelte Unterabfrage verwenden.
+
+<Answer type="text" webKey="55a6f5b1-4ce1-4c8a-82f9-3e0247272352" monospace />
+<Solution webKey="44077255-cf6b-4d5f-a152-de6c3cf6e37e">
+
+```sql
+SELECT * FROM legodudes 
+WHERE alter = (SELECT MIN(alter) FROM legodudes);
+```
+</Solution>
+:::
+
+## Group By
+Oft interessiert aber nicht nur die Anzahl der Datensätze, sondern die Anzahl der Datensätze pro Kategorie. 
+
+Hierfür gibt es den `GROUP BY`-Befehl.
+
+::::def[`GROUP BY`]
+
+Mit `GROUP BY` lassen sich Datensätze nach einer oder mehrerer Spalten gruppieren. Die Aggregatfunktionen werden dann auf die einzelnen Gruppen angewendet.
+
+```sql
+SELECT land, COUNT(*) 
+FROM legodudes 
+GROUP BY land;
+/*  land      | count 
+  ------------+-------
+   Irland     |     1 
+   Österreich |     1 
+   Schweden   |     1 
+   USA        |     3 
+   Schweiz    |     1  */
+```
+
+:::warning[Wichtig]
+Für jede Spalte, die nicht in der `GROUP BY`-Klausel steht, muss eine Aggregatfunktion verwendet werden!
+:::
+::::
+
+:::aufgabe[6. Spielfilme pro Jahr]
+<Answer type="state" webKey="fbbb07f6-cd07-4efe-90db-6138295f49ac" />
+
+Datenbank
+: __imdb__
+: https://db-sql.ch/connections/3567ba88-a01d-4c46-9912-e802d128d2eb/imdb
+
+In welchem Jahr (`start_year`) wurden wie viele Spielfilme (`movies`) veröffentlicht? Erstellen Sie eine Tabelle, welche die Anzahl der Spielfilme pro Jahr anzeigt.
+
+<Answer type="text" monospace webKey="77d74a75-a953-460d-bf21-09b81af0c8e5" />
+
+**Zusatz**:
+- Ordnen Sie die Tabelle nach dem Startjahr absteigend.
+- Zeigen Sie nur Einträge an, bei welchen das Startjahr bekannt (= nicht `NULL`) ist.
+- Beschriften Sie die Spalten mit `Jahr` und `Anzahl Spielfilme`.
+
+<Solution webKey="cec19b30-2764-41f8-aaf5-58082370ed20">
+
+```sql
+SELECT start_year, count(*)
+FROM movies
+GROUP BY start_year
+```
+
+Erweiterung:
+
+```sql
+SELECT start_year AS "Jahr", count(*) AS "Anzahl Spielfilme"
+FROM movies
+WHERE start_year IS NOT NULL
+GROUP BY start_year
+ORDER BY start_year DESC
 ```
 </Solution>
 :::
