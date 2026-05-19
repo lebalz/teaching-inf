@@ -309,7 +309,7 @@ In der `WHERE`-Klausel können auch verschachtelte Abfragen verwendet werden, so
 :::
 
 :::aufgabe[5. Ältester Legodude]
-<Answer type="state" webKey="5c502b3e-547a-4aab-929e-bedc944e8a1f" />
+<Answer type="state" id="5c502b3e-547a-4aab-929e-bedc944e8a1f" />
 
 Datenbank
 : __legomania__
@@ -317,8 +317,8 @@ Datenbank
 
 Geben Sie den jüngsten Legodude aus, indem Sie eine verschachtelte Unterabfrage verwenden.
 
-<Answer type="text" webKey="55a6f5b1-4ce1-4c8a-82f9-3e0247272352" monospace />
-<Solution webKey="44077255-cf6b-4d5f-a152-de6c3cf6e37e">
+<Answer type="text" id="55a6f5b1-4ce1-4c8a-82f9-3e0247272352" monospace />
+<Solution id="44077255-cf6b-4d5f-a152-de6c3cf6e37e">
 
 ```sql
 SELECT * FROM legodudes 
@@ -355,7 +355,7 @@ Für jede Spalte, die nicht in der `GROUP BY`-Klausel steht, muss eine Aggregatf
 ::::
 
 :::aufgabe[6. Spielfilme pro Jahr]
-<Answer type="state" webKey="fbbb07f6-cd07-4efe-90db-6138295f49ac" />
+<Answer type="state" id="fbbb07f6-cd07-4efe-90db-6138295f49ac" />
 
 Datenbank
 : __imdb__
@@ -363,14 +363,14 @@ Datenbank
 
 In welchem Jahr (`start_year`) wurden wie viele Spielfilme (`movies`) veröffentlicht? Erstellen Sie eine Tabelle, welche die Anzahl der Spielfilme pro Jahr anzeigt.
 
-<Answer type="text" monospace webKey="77d74a75-a953-460d-bf21-09b81af0c8e5" />
+<Answer type="text" monospace id="77d74a75-a953-460d-bf21-09b81af0c8e5" />
 
 **Zusatz**:
 - Ordnen Sie die Tabelle nach dem Startjahr absteigend.
 - Zeigen Sie nur Einträge an, bei welchen das Startjahr bekannt (= nicht `NULL`) ist.
 - Beschriften Sie die Spalten mit `Jahr` und `Anzahl Spielfilme`.
 
-<Solution webKey="cec19b30-2764-41f8-aaf5-58082370ed20">
+<Solution id="cec19b30-2764-41f8-aaf5-58082370ed20">
 
 ```sql
 SELECT start_year, count(*)
