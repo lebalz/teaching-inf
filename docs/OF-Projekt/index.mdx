@@ -2,9 +2,11 @@
 page_id: d023eb95-3ee0-498b-b9b8-df3631bab267
 ---
 
-
 import BrowserWindow from '@tdev-components/BrowserWindow';
 import PermissionsPanel from '@tdev-components/PermissionsPanel';
+import DefinitionList from "@tdev-components/DefinitionList";
+import CmsText from '@tdev-components/documents/CmsText';
+import WithCmsText from '@tdev-components/documents/CmsText/WithCmsText';
 
 # Projekt
 
@@ -52,6 +54,20 @@ Beurteilung
 <PermissionsPanel documentRootId="fc4b445e-0e7a-4a2b-97d9-d580d9d6348f" />
 
 <Answer type="text" id="fc4b445e-0e7a-4a2b-97d9-d580d9d6348f"  />
+
+<WithCmsText 
+    entries={{
+        punkte: "fe550d5e-dda8-4924-96c1-9be51eb70671",
+        notizen: "dfd19b88-cf08-4040-91fa-a047642da1d3", 
+    }}
+>
+    <DefinitionList>
+        <dt>Punkte</dt>
+        <dd><CmsText name="punkte" /> / 2</dd>
+        <dt>Notizen</dt>
+        <dd><CmsText name="notizen" /></dd>
+    </DefinitionList>
+</WithCmsText>
 :::
 
 :::tip[Tagebuch Woche 3]
