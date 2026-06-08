@@ -163,6 +163,11 @@
       "from": "docs/Math/Exponentialfunktion/",
       "to": "versioned_docs/version-28Gj/100-Mathematik/03-Exponentialfunktion",
       "ignore": []
+    },
+    {
+      "from": "docs/Math/Folgen-und-Reihen/",
+      "to": "versioned_docs/version-28Gj/100-Mathematik/04-Folgen-und-Reihen",
+      "ignore": []
     }
   ],
   "28Wa": [
