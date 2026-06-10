@@ -140,7 +140,6 @@
         "remark": "^15.0.1",
         "remark-directive": "^4.0.0",
         "remark-frontmatter": "^5.0.0",
-        "rsync": "^0.6.1",
         "tsx": "^4.20.3",
         "typescript": "^6.0.2",
         "vfile": "^6.0.3",

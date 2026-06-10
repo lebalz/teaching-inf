@@ -5,7 +5,7 @@ TypeScript-based scripts for synchronizing teaching materials and documentation 
 ## Scripts
 
 - `sync` - Sync materials according to configuration
-- `sync:secure` - Sync secure pages and static files
+- `sync:secure` - 🚧 Sync secure pages and static files
 - `add` - Add new material to versioning config
 - `remove` - Remove material from versioning config
 - `cleanup` - Cleanup temporary files
