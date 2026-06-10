@@ -13,7 +13,7 @@ TypeScript-based scripts for synchronizing teaching materials and documentation 
 
 ## Configuration
 
-Configuration is defined in `material_config.json`. Each class version has a list of source folders to sync with their destination paths and ignore patterns.
+Configuration is defined in `material_config.yaml`. Each class version has a list of source folders to sync with their destination paths and ignore patterns.
 
 ## Usage
 

@@ -1,8 +1,40 @@
 import fs from 'fs';
 import path from 'path';
 import Rsync from 'rsync';
+import yaml from 'js-yaml';
 
 type RsyncInstance = InstanceType<typeof Rsync>;
+
+export interface SyncConfig {
+    from: string;
+    to: string;
+    ignore: string[];
+    open?: boolean;
+}
+
+export type ConfigEntry = string | SyncConfig;
+
+export interface ConfigType {
+    [key: string]: ConfigEntry[];
+}
+
+const materialConfigPath = path.resolve(__dirname, '..', 'material_config.yaml');
+
+export const loadMaterialConfig = (): ConfigType => {
+    const source = fs.readFileSync(materialConfigPath, 'utf-8');
+    return (yaml.load(source) ?? {}) as ConfigType;
+};
+
+export const saveMaterialConfig = (config: ConfigType): void => {
+    fs.writeFileSync(
+        materialConfigPath,
+        yaml.dump(config, {
+            noRefs: true,
+            lineWidth: -1,
+            sortKeys: false
+        })
+    );
+};
 
 /**
  * Ensure rsync sync completes successfully, retrying on failure

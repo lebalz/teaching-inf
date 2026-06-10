@@ -1,26 +1,12 @@
 import fs from 'fs';
 import path from 'path';
 import Rsync from 'rsync';
-import { ensureSync, syncSecure } from './material_helpers';
-import CONFIG from '../material_config.json';
+import { ConfigType, ensureSync, loadMaterialConfig, syncSecure } from './material_helpers';
 
 const repoRoot = path.resolve(__dirname, '..');
 process.chdir(repoRoot);
 
-interface SyncConfig {
-    from: string;
-    to: string;
-    ignore: string[];
-    open?: boolean;
-}
-
-type ConfigEntry = string | SyncConfig;
-
-interface ConfigType {
-    [key: string]: ConfigEntry[];
-}
-
-const typedConfig = CONFIG as ConfigType;
+const typedConfig: ConfigType = loadMaterialConfig();
 
 const DOC_PATHS = ['docs/', 'src/pages/', 'news/'];
 

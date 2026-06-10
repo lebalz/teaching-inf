@@ -1,25 +1,12 @@
 import fs from 'fs';
 import path from 'path';
 import minimist from 'minimist';
-import CONFIG from '../material_config.json';
+import { loadMaterialConfig } from './material_helpers';
 
 const repoRoot = path.resolve(__dirname, '..');
 process.chdir(repoRoot);
 
-interface SyncConfig {
-    from: string;
-    to: string;
-    ignore: string[];
-    open?: boolean;
-}
-
-type ConfigEntry = string | SyncConfig;
-
-interface ConfigType {
-    [key: string]: ConfigEntry[];
-}
-
-const configs: ConfigType = CONFIG as ConfigType;
+const configs = loadMaterialConfig();
 const argv = minimist(process.argv.slice(2));
 
 if (argv.help) {

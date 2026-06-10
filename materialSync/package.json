@@ -12,10 +12,13 @@
     "restore": "tsx material_restore.ts"
   },
   "dependencies": {
+    "js-yaml": "^4.1.1",
     "minimist": "^1.2.8",
-    "rsync": "^0.6.1"
+    "rsync": "^0.6.1",
+    "yaml-loader": "^0.8.1"
   },
   "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
     "@types/minimist": "^1.2.5",
     "@types/node": "^22.0.0",
     "@types/rsync": "^0.4.36",
