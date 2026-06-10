@@ -4,12 +4,12 @@
   "description": "Material synchronization scripts for teaching documentation",
   "private": true,
   "scripts": {
-    "sync": "ts-node --files material_sync.ts",
-    "sync:secure": "ts-node --files material_sync_secure.ts",
-    "add": "ts-node --files material_add.ts",
-    "remove": "ts-node --files material_remove.ts",
-    "cleanup": "ts-node --files material_cleanup.ts",
-    "restore": "ts-node --files material_restore.ts"
+    "sync": "tsx material_sync.ts",
+    "sync:secure": "tsx material_sync_secure.ts",
+    "add": "tsx material_add.ts",
+    "remove": "tsx material_remove.ts",
+    "cleanup": "tsx material_cleanup.ts",
+    "restore": "tsx material_restore.ts"
   },
   "dependencies": {
     "minimist": "^1.2.8",
@@ -19,7 +19,7 @@
     "@types/minimist": "^1.2.5",
     "@types/node": "^22.0.0",
     "@types/rsync": "^0.4.36",
-    "ts-node": "^10.9.2",
+    "tsx": "^4.20.3",
     "typescript": "^6.0.2"
   }
 }
