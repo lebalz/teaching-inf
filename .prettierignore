@@ -31,4 +31,4 @@ static/katex/katex.min.css
 *.jpg
 *.png
 static/p/reveal.js
-material_config.json
+material_config.yaml
