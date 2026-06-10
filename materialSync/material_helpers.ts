@@ -1,17 +1,17 @@
-const fs = require('fs');
-const path = require('path');
-const Rsync = require('rsync');
+import fs from 'fs';
+import path from 'path';
+import Rsync from 'rsync';
+
+type RsyncInstance = InstanceType<typeof Rsync>;
 
 /**
- *
- * @param {Rsync} rsync
- * @param {string} srcPath
+ * Ensure rsync sync completes successfully, retrying on failure
  */
-const ensureSync = async (rsync, srcPath) => {
+export const ensureSync = async (rsync: RsyncInstance, srcPath: string): Promise<boolean> => {
     let success = false;
     while (!success) {
-        rs = new Promise((resolve, reject) => {
-            rsync.execute((err, code, cmd) => {
+        const rs = new Promise<boolean>((resolve) => {
+            rsync.execute((err: Error | null, code: number, cmd: string) => {
                 if (!err) {
                     console.log('✅', cmd);
                     resolve(true);
@@ -30,19 +30,22 @@ const ensureSync = async (rsync, srcPath) => {
     return success;
 };
 
-const syncSecure = async () => {
+/**
+ * Sync secure pages and static files
+ */
+export const syncSecure = async (): Promise<void> => {
+    const projectRoot = process.cwd();
+
     /** copy secure pages */
-    const securePages = path.join(__dirname, 'secure/sync/pages/');
+    const securePages = path.join(projectRoot, 'secure/sync/pages/');
     if (fs.existsSync(securePages)) {
         const rsync = new Rsync().source(securePages).destination('src/pages/secure').archive().delete();
         await ensureSync(rsync, securePages);
     }
     /** secure static */
-    const secureStatic = path.join(__dirname, 'secure/sync/static/');
+    const secureStatic = path.join(projectRoot, 'secure/sync/static/');
     if (fs.existsSync(secureStatic)) {
         const rsync = new Rsync().source(secureStatic).destination('static/secure').archive().delete();
         await ensureSync(rsync, secureStatic);
     }
 };
-
-module.exports = { ensureSync, syncSecure };

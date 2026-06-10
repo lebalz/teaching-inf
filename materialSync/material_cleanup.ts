@@ -1,0 +1,101 @@
+import fs from 'fs';
+import path from 'path';
+import minimist from 'minimist';
+import CONFIG from '../material_config.json';
+
+const repoRoot = path.resolve(__dirname, '..');
+process.chdir(repoRoot);
+
+interface SyncConfig {
+    from: string;
+    to: string;
+    ignore: string[];
+    open?: boolean;
+}
+
+type ConfigEntry = string | SyncConfig;
+
+interface ConfigType {
+    [key: string]: ConfigEntry[];
+}
+
+const configs: ConfigType = CONFIG as ConfigType;
+const argv = minimist(process.argv.slice(2));
+
+if (argv.help) {
+    console.log(`
+yarn run cleanup
+
+examples:
+
+yarn run cleanup
+`);
+    process.exit(0);
+}
+
+const klassen = Object.keys(configs);
+
+fs.rmSync('src/pages/secure', { recursive: true, force: true });
+fs.rmSync('static/secure', { recursive: true, force: true });
+
+klassen.forEach((klass) => {
+    const config = configs[klass];
+    const tmp_dir = `versioned_docs/version-${klass}/.tmp`;
+    const copyBack: string[] = [];
+
+    fs.mkdirSync(tmp_dir, { recursive: true });
+
+    config.forEach((src) => {
+        const srcConfig = typeof src === 'string' ? null : src;
+        const toPath = srcConfig?.to || `versioned_docs/version-${klass}/${srcConfig ? '' : src}`;
+        const ignoreList = srcConfig?.ignore || [];
+
+        if (ignoreList.length > 0) {
+            fs.mkdirSync(`${tmp_dir}/${toPath}`, { recursive: true });
+        }
+
+        ignoreList.forEach((keep) => {
+            if (fs.existsSync(`${toPath}/${keep}`)) {
+                const bkpLocation = `${tmp_dir}/${toPath}/${keep}`;
+                if (!fs.existsSync(path.dirname(bkpLocation))) {
+                    fs.mkdirSync(path.dirname(bkpLocation), { recursive: true });
+                }
+                fs.copyFileSync(`${toPath}/${keep}`, `${tmp_dir}/${toPath}/${keep}`);
+            }
+            copyBack.push(`${toPath}/${keep}`);
+        });
+
+        if (fs.existsSync(toPath)) {
+            let parent = path.dirname(toPath);
+            if (fs.lstatSync(toPath).isDirectory()) {
+                fs.rmSync(toPath, { recursive: true, force: true });
+            } else {
+                fs.unlinkSync(toPath);
+                const categoryPath = path.join(path.dirname(toPath), '_category_.json');
+                if (srcConfig?.open) {
+                    console.log(categoryPath, fs.existsSync(categoryPath));
+                }
+                if (srcConfig?.open && fs.existsSync(categoryPath)) {
+                    console.log('REMOVE CAT', categoryPath);
+                    fs.unlinkSync(categoryPath);
+                }
+            }
+            while (fs.readdirSync(parent).length === 0) {
+                fs.rmSync(parent, { recursive: true, force: true });
+                parent = path.dirname(parent);
+            }
+        }
+    });
+
+    copyBack.forEach((f) => {
+        if (!fs.existsSync(`${tmp_dir}/${f}`)) {
+            return;
+        }
+        if (!fs.existsSync(path.dirname(f))) {
+            fs.mkdirSync(path.dirname(f), { recursive: true });
+        }
+        fs.copyFileSync(`${tmp_dir}/${f}`, f);
+    });
+
+    fs.rmSync(tmp_dir, { recursive: true, force: true });
+});

@@ -1,80 +1,84 @@
-const fs = require('fs');
-const path = require('path');
-const Rsync = require('rsync');
-const { ensureSync, syncSecure } = require('./material_helpers');
-/** @type {{
- * [key: string]: {
- *  from: string,
- *  to: string,
- *  ignore: string[],
- *  open?: boolean
- * }[]}} */
-const CONFIG = require('./material_config.json');
+import fs from 'fs';
+import path from 'path';
+import Rsync from 'rsync';
+import { ensureSync, syncSecure } from './material_helpers';
+import CONFIG from '../material_config.json';
+
+const repoRoot = path.resolve(__dirname, '..');
+process.chdir(repoRoot);
+
+interface SyncConfig {
+    from: string;
+    to: string;
+    ignore: string[];
+    open?: boolean;
+}
+
+type ConfigEntry = string | SyncConfig;
+
+interface ConfigType {
+    [key: string]: ConfigEntry[];
+}
+
+const typedConfig = CONFIG as ConfigType;
 
 const DOC_PATHS = ['docs/', 'src/pages/', 'news/'];
 
-const docBasePath = (src) => {
+const docBasePath = (src: string): string => {
     return DOC_PATHS.find((p) => src.startsWith(p)) || DOC_PATHS[0];
 };
 
 /**
- *
- * @param {string} path
- * @returns {string[]}
+ * Recursively find markdown template files (starting with _)
  */
-const findMdTemplate = (src) => {
-    const mdFiles = [];
+const findMdTemplate = (src: string): string[] => {
+    const mdFiles: string[] = [];
     if (fs.lstatSync(src).isDirectory()) {
         fs.readdirSync(src).forEach((file) => {
             const fname = path.join(src, file);
             if (fs.lstatSync(fname).isDirectory()) {
                 mdFiles.push(...findMdTemplate(fname));
-            } else if (file.endsWith('.md') || file.endsWith('.mdx')) {
-                if (file.startsWith('_')) {
-                    mdFiles.push(fname);
-                }
+            } else if ((file.endsWith('.md') || file.endsWith('.mdx')) && file.startsWith('_')) {
+                mdFiles.push(fname);
             }
         });
     } else {
-        if (src.endsWith('.md') || src.endsWith('.mdx')) {
-            if (src.startsWith('_')) {
-                mdFiles.push(src);
-            }
+        if ((src.endsWith('.md') || src.endsWith('.mdx')) && src.startsWith('_')) {
+            mdFiles.push(src);
         }
     }
     return mdFiles;
 };
 
 /**
- *
- * @param {string} path
- * @returns
+ * Get path relative to doc base path
  */
-const relative2Doc = (path) => {
-    const base = docBasePath(path);
-    return base ? path.slice(base.length) : path;
+const relative2Doc = (p: string): string => {
+    const base = docBasePath(p);
+    return base ? p.slice(base.length) : p;
 };
 
-const ensureStartingSlash = (path) => {
-    if (typeof path !== 'string') {
-        return path;
+const ensureStartingSlash = (p: string): string => {
+    if (typeof p !== 'string') {
+        return p;
     }
-    if (path.startsWith('/')) {
-        return path;
+    if (p.startsWith('/')) {
+        return p;
     }
-    return `/${path}`;
-};
-const ensureTrailingSlash = (path) => {
-    if (typeof path !== 'string') {
-        return path;
-    }
-    if (path.endsWith('/')) {
-        return path;
-    }
-    return `${path}/`;
+    return `/${p}`;
 };
 
-const main = async () => {
+const ensureTrailingSlash = (p: string): string => {
+    if (typeof p !== 'string') {
+        return p;
+    }
+    if (p.endsWith('/')) {
+        return p;
+    }
+    return `${p}/`;
+};
+
+const main = async (): Promise<void> => {
     /**
      * page for the class
      * includes the sync-pages from the secure folder
@@ -85,7 +89,7 @@ const main = async () => {
         fs.mkdirSync('docs');
         fs.cpSync('_docs/home.md', 'docs/home.md');
         /** copy all markdown-templates - otherwise some pages might fail */
-        findMdTemplate(path.join(__dirname, '_docs')).forEach((file) => {
+        findMdTemplate(path.join(__dirname, '../_docs')).forEach((file) => {
             fs.cpSync(file, file.replace('/_docs/', '/docs/'));
         });
     }
@@ -122,37 +126,38 @@ const main = async () => {
         flag: 'w'
     }); /** overwrite */
 
-    Object.keys(CONFIG).forEach(async (klass) => {
-        const config = CONFIG[klass];
-        const gitignore = [];
+    Object.keys(typedConfig).forEach(async (klass) => {
+        const config = typedConfig[klass];
+        const gitignore: string[] = [];
         const classDir = klass === 'pages' ? 'src/pages/' : `versioned_docs/version-${klass}/`;
-        const promises = [];
+
         config.forEach(async (src) => {
-            var srcPath = undefined;
-            var toPath = undefined;
-            const ignore = [];
-            switch (typeof src) {
-                case 'string':
-                    srcPath = src;
-                    toPath = `${classDir}${relative2Doc(src)}`;
-                    break;
-                case 'object':
-                    srcPath = src.from;
-                    if (src.to) {
-                        toPath = src.to;
-                    } else {
-                        toPath = `${classDir}${relative2Doc(srcPath)}`;
-                    }
-                    ignore.push(...(src.ignore || []));
-                    break;
+            let srcPath: string | undefined;
+            let toPath: string | undefined;
+            const ignore: string[] = [];
+
+            if (typeof src === 'string') {
+                srcPath = src;
+                toPath = `${classDir}${relative2Doc(src)}`;
+            } else {
+                srcPath = src.from;
+                if (src.to) {
+                    toPath = src.to;
+                } else {
+                    toPath = `${classDir}${relative2Doc(srcPath)}`;
+                }
+                ignore.push(...(src.ignore || []));
             }
+
             if (process.env.WITHOUT_DOCS && srcPath.startsWith('docs/')) {
                 srcPath = `_${srcPath}`;
             }
+
             const isDir = fs.lstatSync(srcPath).isDirectory();
             if (isDir) {
                 srcPath = ensureTrailingSlash(srcPath);
             }
+
             const parent = path.dirname(toPath);
             if (!fs.existsSync(parent)) {
                 fs.mkdirSync(parent, { recursive: true });
@@ -187,7 +192,8 @@ const main = async () => {
                 fs.copyFileSync(srcPath, toPath);
                 gitignore.push(toPath.replace(classDir, ''));
             }
-            if (src.open) {
+
+            if (typeof src !== 'string' && src.open) {
                 const folder = isDir ? toPath : parent;
                 try {
                     fs.mkdirSync(folder, { recursive: true });
@@ -197,25 +203,26 @@ const main = async () => {
                 const categoryPath = path.join(folder, '_category_.json');
                 console.log('---------- CAT', categoryPath);
                 gitignore.push(categoryPath.replace(classDir, ''));
-                let category = {
+                let category: Record<string, unknown> = {
                     collapsible: true,
                     collapsed: false,
                     className: 'library-item inf-of'
                 };
                 if (fs.existsSync(categoryPath)) {
-                    category = JSON.parse(fs.readFileSync(categoryPath));
+                    category = JSON.parse(fs.readFileSync(categoryPath, 'utf-8'));
                     category.collapsed = false;
                     category.collapsible = true;
                     category.className = 'library-item inf-of';
                 }
                 fs.writeFileSync(categoryPath, JSON.stringify(category, undefined, 2) + '\n');
             }
+
             fs.writeFileSync(`${classDir}.gitignore`, gitignore.join('\n'));
         });
     });
 };
 
-main().catch((e) => {
+main().catch((e: Error) => {
     console.error(e);
     process.exit(1);
 });
