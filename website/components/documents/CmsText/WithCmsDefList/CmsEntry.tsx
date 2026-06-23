@@ -10,10 +10,11 @@ interface Props {
     name: string;
     label?: string;
     hideEmpty?: boolean;
+    postfix?: string;
 }
 
 const CmsEntry = observer((props: Props) => {
-    const { name, label, hideEmpty } = props;
+    const { name, label, hideEmpty, postfix } = props;
     const textId = React.useContext(CmsTextContext)?.entries[name];
     const userStore = useStore('userStore');
     const isBrowser = useIsBrowser();
@@ -32,7 +33,11 @@ const CmsEntry = observer((props: Props) => {
     return (
         <>
             {label && <dt className={clsx(styles.label)}>{props.label}</dt>}
-            <dd>{cmsText.text}</dd>
+            <dd>
+                {cmsText.text}
+                {props.postfix && ' '}
+                {props.postfix}
+            </dd>
         </>
     );
 });

@@ -9,6 +9,7 @@ import DefinitionList from '@tdev-components/DefinitionList';
 interface Props {
     entries: CmsTextEntries;
     labels: { [key: string]: string };
+    postfixes?: { [key: string]: string };
     className?: string;
     hideEmpty?: boolean;
 }
@@ -24,6 +25,7 @@ const WithCmsDefList = observer((props: Props) => {
                             key={name}
                             name={name}
                             label={props.labels[name]}
+                            postfix={props.postfixes?.[name]}
                             hideEmpty={props.hideEmpty}
                         />
                     );
