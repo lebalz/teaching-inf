@@ -5,11 +5,13 @@ import { observer } from 'mobx-react-lite';
 import WithCmsText, { CmsTextEntries } from '@tdev-components/documents/CmsText/WithCmsText';
 import CmsEntry from './CmsEntry';
 import DefinitionList from '@tdev-components/DefinitionList';
+import type { DocumentRootStore } from '@tdev-stores/DocumentRootStore';
 
+export type LabelFunction = (entries: CmsTextEntries, docRootStore: DocumentRootStore) => string;
 interface Props {
     entries: CmsTextEntries;
-    labels: { [key: string]: string };
-    postfixes?: { [key: string]: string };
+    labels: { [key: string]: string | LabelFunction };
+    postfixes?: { [key: string]: string | LabelFunction };
     className?: string;
     hideEmpty?: boolean;
 }

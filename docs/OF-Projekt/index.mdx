@@ -26,7 +26,20 @@ Termin 2: Finale Abgabe
 : :mdi[file-tree-outline] **Ordnerinhalt**: Siehe [Kapitel "Abgabe"](#abgabe)
 :::
 
+export const labeler = (theorie, praxis) => {
+    return (entries, store) => {
+        const fachP = store.find(entries.fachbegriffep)?.firstMainDocument;
+        if (fachP?.type === 'cms_text') {
+            if (fachP.isEmpty) {
+                return praxis
+            }
+        }
+        return theorie
+    }
+} 
+
 :::tip[Rückmeldung]
+
 <WithCmsDefList 
     entries={{
         tagebuch: "b3109b36-05e2-48d1-ba05-aeae6c095666",
@@ -62,7 +75,7 @@ Termin 2: Finale Abgabe
         abgabep: "Abgabe",
         hintergrundp: "Hintergrund",
         korrektp: "Korrekt",
-        tiefep: "Tiefe",
+        tiefep: labeler("Tiefe", "praktischer Teil"),
         fachbegriffep: "Fachbegriffe",
         aufbaup: "Aufbau",
         skriptp: "Skript",
@@ -77,9 +90,9 @@ Termin 2: Finale Abgabe
         tagebuch: "/ 8",
         vorgabenp: "/ 2",
         abgabep: "/ 2",
-        hintergrundp: "/ 4|5",
+        hintergrundp: labeler("/ 4", "/ 5"),
         korrektp: "/ 4",
-        tiefep: "/ 8|15",
+        tiefep: labeler("/ 8", "/ 15"),
         fachbegriffep: "/ 4",
         aufbaup: "/ 4",
         skriptp: "/ 4",
