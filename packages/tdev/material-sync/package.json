@@ -2,14 +2,15 @@
   "name": "@tdev/material-sync",
   "version": "1.0.0",
   "description": "Material synchronization scripts for teaching documentation",
+  "type": "module",
   "private": true,
   "scripts": {
-    "sync": "tsx material_sync.ts",
-    "sync:secure": "tsx material_sync_secure.ts",
-    "add": "tsx material_add.ts",
-    "remove": "tsx material_remove.ts",
-    "cleanup": "tsx material_cleanup.ts",
-    "restore": "tsx material_restore.ts"
+    "sync": "tsx src/sync.ts",
+    "add": "tsx src/add.ts",
+    "remove": "tsx src/remove.ts",
+    "cleanup": "tsx src/cleanup.ts",
+    "restore": "tsx src/restore.ts",
+    "addClass": "tsx src/add_class.ts"
   },
   "dependencies": {
   },

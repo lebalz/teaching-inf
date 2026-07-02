@@ -20,7 +20,7 @@ import {
 import { brythonCodePluginConfig } from './src/siteConfig/pluginConfigs';
 import { themes as prismThemes } from 'prism-react-renderer';
 
-const raw = fs.readFileSync('./material_config.yaml', 'utf8');
+const raw = fs.readFileSync('./material.config.yaml', 'utf8');
 type MatrialConfigEntry = {
     from: string;
     to: string;

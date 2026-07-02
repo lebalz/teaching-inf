@@ -9,6 +9,7 @@ trackedElements:
       dst: src
       ignore:
           - pages/index.tsx
+          - pages/index.module.css
           - pages/__index.tsx
           - pages/.gitignore
           - theme/**

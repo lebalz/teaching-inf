@@ -1,10 +1,9 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 import minimist from 'minimist';
-import { loadMaterialConfig } from './material_helpers';
+import { loadMaterialConfig, REPO_ROOT, resolveMaterialConfig } from './helpers.js';
 
-const repoRoot = path.resolve(__dirname, '..');
-process.chdir(repoRoot);
+process.chdir(REPO_ROOT);
 
 const configs = loadMaterialConfig();
 const argv = minimist(process.argv.slice(2));
@@ -22,9 +21,6 @@ yarn run cleanup
 
 const klassen = Object.keys(configs);
 
-fs.rmSync('src/pages/secure', { recursive: true, force: true });
-fs.rmSync('static/secure', { recursive: true, force: true });
-
 klassen.forEach((klass) => {
     const config = configs[klass];
     const tmp_dir = `versioned_docs/version-${klass}/.tmp`;
@@ -32,10 +28,10 @@ klassen.forEach((klass) => {
 
     fs.mkdirSync(tmp_dir, { recursive: true });
 
-    config.forEach((src) => {
-        const srcConfig = typeof src === 'string' ? null : src;
-        const toPath = srcConfig?.to || `versioned_docs/version-${klass}/${srcConfig ? '' : src}`;
-        const ignoreList = srcConfig?.ignore || [];
+    config.forEach((_config) => {
+        const config = resolveMaterialConfig(klass, _config);
+        const toPath = config?.to || `versioned_docs/version-${klass}/${config ? '' : _config}`;
+        const ignoreList = config?.ignore || [];
 
         if (ignoreList.length > 0) {
             fs.mkdirSync(`${tmp_dir}/${toPath}`, { recursive: true });
@@ -59,10 +55,10 @@ klassen.forEach((klass) => {
             } else {
                 fs.unlinkSync(toPath);
                 const categoryPath = path.join(path.dirname(toPath), '_category_.json');
-                if (srcConfig?.open) {
+                if (config?.open) {
                     console.log(categoryPath, fs.existsSync(categoryPath));
                 }
-                if (srcConfig?.open && fs.existsSync(categoryPath)) {
+                if (config?.open && fs.existsSync(categoryPath)) {
                     console.log('REMOVE CAT', categoryPath);
                     fs.unlinkSync(categoryPath);
                 }

@@ -1,11 +1,16 @@
-import fs from 'fs';
-import path from 'path';
-import { exit } from 'process';
+import fs from 'node:fs';
+import { exit } from 'node:process';
 import minimist from 'minimist';
-import { loadMaterialConfig, saveMaterialConfig } from './material_helpers';
+import {
+    DOC_PATHS,
+    loadMaterialConfig,
+    relative2Doc,
+    REPO_ROOT,
+    resolveMaterialConfig,
+    saveMaterialConfig
+} from './helpers.js';
 
-const repoRoot = path.resolve(__dirname, '..');
-process.chdir(repoRoot);
+process.chdir(REPO_ROOT);
 
 const configs = loadMaterialConfig();
 const argv = minimist(process.argv.slice(2));
@@ -18,26 +23,10 @@ examples:
 
 yarn run add docs/byod-basics/v24/ --to="24a,24b"   // --> adds /byod-basics/v24 to 24a & 24b
 yarn run add docs/byod-basics/v24/ --to="24a,24b" --as="My-Material" // --> adds /byod-basics to 24a & 24b
-yarn run add byod-basics/v24/ --to="24a,24b" --as="My-Material" // same as above
-yarn run add byod-basics/v24 --to="24a,24b" --as="My-Material"  // same as above
 yarn run add docs/byod-basics/v24/ --to="24a,24b" --as="My-Material" --ignore="_category_.json,*.txt"
 `);
     exit(0);
 }
-
-const DOC_PATHS = ['docs/', 'src/pages/', 'blog/'];
-
-const docBasePath = (src: string): string => {
-    return DOC_PATHS.find((p) => src.startsWith(p)) || DOC_PATHS[0];
-};
-
-/**
- * Get path relative to doc base path
- */
-const relative2Doc = (p: string): string => {
-    const base = docBasePath(p);
-    return base ? p.slice(base.length) : p;
-};
 
 let src: string = argv._[0];
 
@@ -53,7 +42,7 @@ if (isDir && !src.endsWith('/')) {
 }
 
 const klassen = argv.to ? (argv.to as string).split(',') : Object.keys(configs);
-const to = argv.as || argv.name || relative2Doc(src);
+const asPath = argv.as || argv.name || relative2Doc(src);
 let ignore: string[] = [];
 
 if (argv.ignore) {
@@ -70,23 +59,16 @@ klassen.forEach((klass) => {
         `);
         return;
     }
-    configs[klass] = configs[klass].filter((srcPath) => {
-        if (typeof srcPath === 'string') {
-            if (srcPath === src) {
-                console.log('ℹ️  Modify old source: ', srcPath);
-                return false;
-            }
-        } else {
-            if (srcPath.from === src) {
-                console.log('ℹ️  Modify old source: ', srcPath);
-                return false;
-            }
+    configs[klass] = configs[klass].filter((_config) => {
+        const config = resolveMaterialConfig(klass, _config);
+        if (config.from === src) {
+            console.log('ℹ️  Modify old source: ', config.from);
+            return false;
         }
         return true;
     });
 
-    const toPath = `versioned_docs/version-${klass}/${to}`;
-    configs[klass].push({ from: src, to: toPath, ignore: ignore });
+    configs[klass].push({ from: src, as: asPath, ignore: ignore });
 });
 
 saveMaterialConfig(configs);

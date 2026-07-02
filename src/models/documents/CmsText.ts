@@ -42,11 +42,6 @@ class CmsText extends iDocument<'cms_text'> {
         }
     }
 
-    @computed
-    get isEmpty(): boolean {
-        return /^\s*$/.test(this.text);
-    }
-
     get data(): TypeDataMapping['cms_text'] {
         return {
             text: this.text
