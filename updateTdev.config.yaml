@@ -33,6 +33,8 @@ trackedElements:
       dst: .prettierrc
     - src: vitest.config.ts
       dst: vitest.config.ts
+    - src: bin/archive-version.sh
+      dst: bin/archive-version.sh
     - src: static/tdev-artifacts/
       dst: static/tdev-artifacts/
       ignore:
