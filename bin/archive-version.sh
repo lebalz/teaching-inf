@@ -60,7 +60,7 @@ git commit -m "Prepare archive for versions: $VERSIONS_CSV"
 yarn run docusaurus build
 
 # only after a successful build, push the branch and tags to the remote repository
-git push origin $BRANCH
+git push origin $BRANCH --force
 
 # call `docusaurus build` directly to avoid prebuild/postbuild hooks
 
