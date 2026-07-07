@@ -80,7 +80,7 @@ const getSiteConfig: SiteConfigProvider = () => {
     return {
         title: 'Informatik',
         tagline: 'Gymnasium Biel-Seeland',
-        url: 'https://inf.gbsl.website',
+        url: 'https://inf.28.gbsl.website',
         gitHub: {
             orgName: 'lebalz',
             projectName: 'teaching-inf'
@@ -130,40 +130,11 @@ const getSiteConfig: SiteConfigProvider = () => {
                     ]
                 },
                 {
-                    title: 'Links',
-                    items: [
-                        // {
-                        //     label: 'Troubleshooting Office 365',
-                        //     to: '/troubleshooting',
-                        // },
-                        {
-                            label: 'Jupyterhub',
-                            to: 'https://jupyter.gbsl.website'
-                        }
-                    ]
-                },
-                {
                     title: 'Gymnasium',
                     items: [
                         {
-                            label: 'Passwort Zurücksetzen',
-                            to: 'https://password.edubern.ch/'
-                        },
-                        {
-                            label: 'Office 365',
-                            to: 'https://office.com'
-                        },
-                        {
                             label: 'GBSL',
                             to: 'https://gbsl.ch'
-                        },
-                        {
-                            label: 'Intranet',
-                            to: 'https://erzbe.sharepoint.com/sites/GYMB/gbsl'
-                        },
-                        {
-                            label: 'Stundenplan',
-                            to: 'https://mese.webuntis.com/WebUntis/?school=gym_Biel-Bienne#/basic/main'
                         }
                     ]
                 }
@@ -175,22 +146,9 @@ const getSiteConfig: SiteConfigProvider = () => {
                                 Text und Bilder von Balthasar Hofer, Ausnahmen sind gekennzeichnet. 
                               </div>
                             </div>
-                          </a>
-                          <a 
-                            class="badge badge--primary"
-                            style="margin-top: 0.5rem;"
-                            href="https://github.com/lebalz/teaching-inf/commits/${GIT_COMMIT_SHA}"
-                          >
-                              <svg viewBox="0 0 24 24" role="presentation" style="width: 0.9rem; height: 0.9rem; transform: translateY(15%) rotate(90deg); transform-origin: center center;"><path d="${mdiSourceCommit}" style="fill: currentcolor;"></path></svg> ${GIT_COMMIT_SHA.substring(0, 7)}
                           </a>`
         },
         themeConfig: {
-            algolia: {
-                appId: 'P2ENEETR74',
-                apiKey: 'e5251468d5a81bb7569048e52f735999',
-                indexName: 'inf-gbsl',
-                searchPagePath: 'search'
-            },
             docs: {
                 sidebar: {
                     hideable: true
@@ -206,7 +164,7 @@ const getSiteConfig: SiteConfigProvider = () => {
             {
                 src: 'https://umami.gbsl.website/tell-me.js',
                 ['data-website-id']: process.env.UMAMI_ID,
-                ['data-domains']: 'inf.gbsl.website',
+                ['data-domains']: 'inf.28.gbsl.website',
                 async: true,
                 defer: true
             }
