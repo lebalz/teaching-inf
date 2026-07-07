@@ -54,7 +54,14 @@ const getEditUrl = (props: Parameters<EditUrlFunction>[0]) => {
 };
 
 const GIT_COMMIT_SHA = process.env.GITHUB_SHA || Math.random().toString(36).substring(7);
-const CWD = process.cwd();
+const BUILD_ARCHIVE = process.env.BUILD_ARCHIVE === 'true';
+
+declare module '@tdev/siteConfig/siteConfig' {
+    export interface TdevConfig {
+        isArchiveBuild?: boolean;
+    }
+}
+
 const VERSIONS: { [version: string]: VersionOptions } = {
     current: {
         label: 'Material',
@@ -100,7 +107,8 @@ const getSiteConfig: SiteConfigProvider = () => {
             },
             excalidraw: {
                 excalidoc: true
-            }
+            },
+            isArchiveBuild: BUILD_ARCHIVE
         },
         footer: {
             links: [

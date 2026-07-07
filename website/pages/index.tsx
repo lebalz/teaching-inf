@@ -17,6 +17,7 @@ import Button from '@tdev-components/shared/Button';
 import { mdiShuffleVariant } from '@mdi/js';
 import { SIZE_M } from '@tdev-components/shared/iconSizes';
 import { observer } from 'mobx-react-lite';
+import customFields from '@tdev-components/util/customFields';
 
 function HomepageHeader() {
     const { siteConfig } = useDocusaurusContext();
@@ -29,6 +30,8 @@ function HomepageHeader() {
         </header>
     );
 }
+
+const { tdevConfig } = customFields;
 
 const VideoWallpaper = ({
     src,
@@ -142,35 +145,39 @@ const Home = observer(() => {
                                 title: 'WMS',
                                 classes: ['28Wa']
                             },
-                            {
-                                title: 'Workshops',
-                                classes: ['LPs']
-                            },
-                            {
-                                title: 'Ehemalige',
-                                classes: [
-                                    {
-                                        uri: 'https://ofi.24.gbsl.website',
-                                        label: '24'
-                                    },
-                                    {
-                                        uri: 'https://ef.24.gbsl.website/24ef/home',
-                                        label: '24 EF'
-                                    },
-                                    {
-                                        uri: 'https://ofi.25.gbsl.website/25h/home',
-                                        label: '25h'
-                                    },
-                                    {
-                                        uri: 'https://ofi.26.gbsl.website',
-                                        label: '26'
-                                    },
-                                    {
-                                        uri: 'https://ofi.25.gbsl.website/24w/home',
-                                        label: '24w'
-                                    }
-                                ]
-                            }
+                            ...(tdevConfig.isArchiveBuild
+                                ? []
+                                : [
+                                      {
+                                          title: 'Workshops',
+                                          classes: ['LPs']
+                                      },
+                                      {
+                                          title: 'Ehemalige',
+                                          classes: [
+                                              {
+                                                  uri: 'https://ofi.24.gbsl.website',
+                                                  label: '24'
+                                              },
+                                              {
+                                                  uri: 'https://ef.24.gbsl.website/24ef/home',
+                                                  label: '24 EF'
+                                              },
+                                              {
+                                                  uri: 'https://ofi.25.gbsl.website/25h/home',
+                                                  label: '25h'
+                                              },
+                                              {
+                                                  uri: 'https://ofi.26.gbsl.website',
+                                                  label: '26'
+                                              },
+                                              {
+                                                  uri: 'https://ofi.25.gbsl.website/24w/home',
+                                                  label: '24w'
+                                              }
+                                          ]
+                                      }
+                                  ])
                         ]}
                         extendDefaultCourses
                     />
