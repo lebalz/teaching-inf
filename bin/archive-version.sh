@@ -3,7 +3,7 @@
 set -e
 
 
-usage="usage: ./archive-version.sh \"28Gj,28Gk,28Gl\" git@github.com:lebalz/ofi-blog-v26.gitpo>.git v28.domain.ch"
+usage="usage: ./archive-version.sh \"28Gj,28Gk,28Gl\" git@github.com:lebalz/ofi-blog-v28.gitpo>.git v28.domain.ch"
 
 # export env variable "BUILD_ARCHIVE" to indicate that we are building the archive version
 export BUILD_ARCHIVE=true

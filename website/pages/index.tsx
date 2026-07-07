@@ -17,7 +17,7 @@ import Button from '@tdev-components/shared/Button';
 import { mdiShuffleVariant } from '@mdi/js';
 import { SIZE_M } from '@tdev-components/shared/iconSizes';
 import { observer } from 'mobx-react-lite';
-import customFields from '@tdev-components/util/customFields';
+import customFields from '@tdev-components/utils/customFields';
 
 function HomepageHeader() {
     const { siteConfig } = useDocusaurusContext();

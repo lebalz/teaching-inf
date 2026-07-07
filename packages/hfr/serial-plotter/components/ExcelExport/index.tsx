@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import saveAs from '@tdev-components/util/saveAs';
+import saveAs from '@tdev-components/utils/saveAs';
 import ExcelJS from 'exceljs';
 import Decoder, { Measurement } from '../../models/Decoder';
 import Button from '@tdev-components/shared/Button';
