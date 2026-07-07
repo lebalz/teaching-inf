@@ -141,10 +141,6 @@ const Home = observer(() => {
                     </div>
                     <HomepageCourses
                         courseList={[
-                            {
-                                title: 'WMS',
-                                classes: ['28Wa']
-                            },
                             ...(tdevConfig.isArchiveBuild
                                 ? []
                                 : [
@@ -155,6 +151,10 @@ const Home = observer(() => {
                                       {
                                           title: 'Ehemalige',
                                           classes: [
+                                              {
+                                                  uri: 'https://inf.28.gbsl.website/28Wa/home',
+                                                  label: '28Wa'
+                                              },
                                               {
                                                   uri: 'https://ofi.24.gbsl.website',
                                                   label: '24'
