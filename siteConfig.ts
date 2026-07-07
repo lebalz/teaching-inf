@@ -1,7 +1,6 @@
 // This file is never changed by teaching-dev.
 // Use it to override or extend your app configuration.
 
-import { PluginConfig } from '@docusaurus/types';
 import { mdiSourceCommit } from '@mdi/js';
 import path from 'path';
 import { EditUrlFunction, VersionOptions } from '@docusaurus/plugin-content-docs';
@@ -19,6 +18,8 @@ import {
 } from './src/siteConfig/navbarItems';
 import { brythonCodePluginConfig } from './src/siteConfig/pluginConfigs';
 import { themes as prismThemes } from 'prism-react-renderer';
+import versions from './versions.json' with { type: 'json' };
+console.log('versions.json', versions);
 
 const raw = fs.readFileSync('./material.config.yaml', 'utf8');
 type MatrialConfigEntry = {
@@ -61,7 +62,7 @@ const VERSIONS: { [version: string]: VersionOptions } = {
     }
 };
 if (!process.env.DOCS_ONLY) {
-    ['28Gb', '28Gj', '28Wa', '29Ga', '29Gj', 'LPs'].forEach((version) => {
+    versions.forEach((version) => {
         VERSIONS[version] = {
             label: version,
             banner: 'none'
