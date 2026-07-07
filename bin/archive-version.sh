@@ -3,18 +3,18 @@
 set -e
 
 
-usage="usage: ./archive-version.sh \"28Gj,28Gk,28Gl\" git@github.com:lebalz/ofi-blog-v26.gitpo>.git"
+usage="usage: ./archive-version.sh \"28Gj,28Gk,28Gl\" git@github.com:lebalz/ofi-blog-v26.gitpo>.git v28.domain.ch"
 
 # second argument are comma separated list of versions to deploy to, e.g. "28Gj,28Gk,28Gl"
 # split into array using IFS
 IFS=',' read -r -a VERSIONS <<< "$1"
 
 REMOTE_URL=$2
+DOMAIN=$3
 
 # print the versions to deploy to
 # comma separated list of versions to deploy to, e.g. "28Gj,28Gk,28Gl"
 VERSIONS_CSV=$(IFS=','; echo "${VERSIONS[*]}")
-VERSIONS_DASH=$(IFS='-'; echo "${VERSIONS[*]}")
 BRANCH="archive-$(IFS='/'; echo "${VERSIONS[*]}")"
 echo "Deploying version $BRANCH to $REMOTE_URL"
 
@@ -32,15 +32,14 @@ else
 fi
 
 yarn workspace @tdev/material-sync sync
-yarn workspace @tdev/material-sync prepareArchive "$VERSIONS_CSV"
+yarn workspace @tdev/material-sync prepareArchive "$VERSIONS_CSV" --domain="$DOMAIN"
 git add .
 git commit -m "Prepare archive for versions: $VERSIONS_CSV"
-git tag -a "$VERSIONS_DASH" -m "Archive for versions: $VERSIONS_CSV"
 
 yarn run docusaurus build
 
 # only after a successful build, push the branch and tags to the remote repository
-git push origin $BRANCH --tags
+git push origin $BRANCH
 
 # call `docusaurus build` directly to avoid prebuild/postbuild hooks
 
