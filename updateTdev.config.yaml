@@ -5,6 +5,10 @@ trackedElements:
       dst: docusaurus.config.ts
     - src: tsconfig.package.json
       dst: tsconfig.package.json
+    - src: tsconfig.docusaurus.json
+      dst: tsconfig.docusaurus.json
+    - src: tsconfig.tdev.json
+      dst: tsconfig.tdev.json
     - src: src/
       dst: src
       ignore:
@@ -27,6 +31,8 @@ trackedElements:
       dst: src/theme/CodeBlock/
     - src: packages/tdev/
       dst: packages/tdev
+    - src: packages/hfr/github-cms/
+      dst: packages/hfr/github-cms
     - src: updateSync/
       dst: updateSync
     - src: .prettierrc

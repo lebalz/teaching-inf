@@ -5,7 +5,7 @@ import { mdiSourceCommit } from '@mdi/js';
 import path from 'path';
 import { EditUrlFunction, VersionOptions } from '@docusaurus/plugin-content-docs';
 import type { SiteConfigProvider } from '@tdev/siteConfig/siteConfig';
-import * as yaml from 'js-yaml';
+import { load as yamlLoad } from 'js-yaml';
 import fs from 'fs';
 import {
     accountSwitcher,
@@ -19,6 +19,12 @@ import {
 import { brythonCodePluginConfig } from './src/siteConfig/pluginConfigs';
 import { themes as prismThemes } from 'prism-react-renderer';
 import versions from './versions.json' with { type: 'json' };
+import githubCmsPlugin from './packages/hfr/github-cms/plugin';
+import {
+    recommendedBeforeDefaultRemarkPlugins,
+    recommendedRehypePlugins,
+    recommendedRemarkPlugins
+} from './src/siteConfig/markdownPluginConfigs';
 
 const raw = fs.readFileSync('./material.config.yaml', 'utf8');
 type MatrialConfigEntry = {
@@ -26,7 +32,7 @@ type MatrialConfigEntry = {
     to: string;
     ignore: string[];
 };
-const matrialConfig: Partial<{ [key: string]: MatrialConfigEntry[] }> = yaml.load(raw) || {};
+const matrialConfig: Partial<{ [key: string]: MatrialConfigEntry[] }> = yamlLoad(raw) || {};
 
 const getEditUrl = (props: Parameters<EditUrlFunction>[0]) => {
     const { version, docPath, versionDocsDirPath } = props;
@@ -228,7 +234,13 @@ const getSiteConfig: SiteConfigProvider = () => {
                         };
                     }
                 };
-            }
+            },
+            githubCmsPlugin({
+                pages: {},
+                remarkPlugins: recommendedRemarkPlugins,
+                rehypePlugins: recommendedRehypePlugins,
+                beforeDefaultRemarkPlugins: recommendedBeforeDefaultRemarkPlugins
+            })
         ],
         docs: {
             versions: VERSIONS,
@@ -243,13 +255,20 @@ const getSiteConfig: SiteConfigProvider = () => {
             }
         },
         blog: {},
+        dynamicRoutes: [
+            {
+                path: '/cms/',
+                component: '@hfr/github-cms/components'
+            }
+        ],
         apiDocumentProviders: [
             require.resolve('@tdev/netpbm-graphic/register'),
             require.resolve('@tdev/text-message/register'),
             require.resolve('@tdev/pyodide-code/register'),
             require.resolve('@tdev/brython-code/register'),
             require.resolve('@tdev/webserial/register'),
-            require.resolve('@tdev/page-read-check/register')
+            require.resolve('@tdev/page-read-check/register'),
+            require.resolve('@hfr/github-cms/register')
         ]
     };
 };
