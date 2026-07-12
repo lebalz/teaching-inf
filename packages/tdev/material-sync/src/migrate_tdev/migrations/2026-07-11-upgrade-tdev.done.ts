@@ -72,13 +72,14 @@ const migrate: MigrationRunner = async (root, apiMode, managed): Promise<void> =
     await $`rm -rf node_modules`;
     await $`rm yarn.lock`;
     await $`yarn install`;
+    await $`yarn format`;
 
     await $`git add .`;
     await $`git commit -m ${'Migrate TDEV'}`;
-    // await $`git checkout main`;
-    // await $`git merge ${branchName}`;
-    // await $`git branch -d ${branchName}`;
-    // await $`git push`;
+    await $`git checkout main`;
+    await $`git merge ${branchName}`;
+    await $`git branch -d ${branchName}`;
+    await $`git push`;
 };
 
 export default migrate;
