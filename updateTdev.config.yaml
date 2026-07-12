@@ -8,7 +8,7 @@ trackedElements:
     - src: tsconfig.docusaurus.json
       dst: tsconfig.docusaurus.json
     - src: tsconfig.tdev.json
-      dst: tsconfig.tdev.json
+      dst: tsconfig.json
     - src: src/
       dst: src
       ignore:
@@ -45,6 +45,8 @@ trackedElements:
       dst: static/tdev-artifacts/
       ignore:
           - '*/**'
+    - src: static/pyodide.sw.js
+      dst: static/pyodide.sw.js
 watchedElements:
     - .babel.config.js
     - package.json
