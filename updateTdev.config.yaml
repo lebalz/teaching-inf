@@ -1,56 +1,58 @@
 tdevPath: ../../gbsl-informatik/teaching-dev
 expectedTdevBranch: main
 trackedElements:
-    - src: docusaurus.config.ts
-      dst: docusaurus.config.ts
-    - src: tsconfig.package.json
-      dst: tsconfig.package.json
-    - src: tsconfig.docusaurus.json
-      dst: tsconfig.docusaurus.json
-    - src: tsconfig.tdev.json
-      dst: tsconfig.json
-    - src: src/
-      dst: src
-      ignore:
-          - pages/index.tsx
-          - pages/index.module.css
-          - pages/__index.tsx
-          - pages/.gitignore
-          - theme/**
-    - src: src/pages/index.tsx
-      dst: src/pages/__index.tsx
-    - src: src/theme/Root.tsx
-      dst: src/theme/Root.tsx
-    - src: src/theme/EditThisPage/
-      dst: src/theme/EditThisPage/
-    - src: src/theme/DocSidebarItem/
-      dst: src/theme/DocSidebarItem/
-    - src: src/theme/Admonition/
-      dst: src/theme/Admonition/
-    - src: src/theme/CodeBlock/
-      dst: src/theme/CodeBlock/
-    - src: packages/tdev/
-      dst: packages/tdev
-    - src: packages/hfr/github-cms/
-      dst: packages/hfr/github-cms
-    - src: updateSync/
-      dst: updateSync
-    - src: .prettierrc
-      dst: .prettierrc
-    - src: vitest.config.ts
-      dst: vitest.config.ts
-    - src: bin/archive-version.sh
-      dst: bin/archive-version.sh
-    - src: static/tdev-artifacts/
-      dst: static/tdev-artifacts/
-      ignore:
-          - '*/**'
-    - src: static/pyodide.sw.js
-      dst: static/pyodide.sw.js
+  - src: docusaurus.config.ts
+    dst: docusaurus.config.ts
+  - src: tsconfig.package.json
+    dst: tsconfig.package.json
+  - src: tsconfig.docusaurus.json
+    dst: tsconfig.docusaurus.json
+  - src: tsconfig.tdev.json
+    dst: tsconfig.json
+  - src: src/
+    dst: src
+    ignore:
+      - pages/index.tsx
+      - pages/index.module.css
+      - pages/__index.tsx
+      - pages/.gitignore
+      - theme/**
+  - src: src/pages/index.tsx
+    dst: src/pages/__index.tsx
+  - src: src/theme/Root.tsx
+    dst: src/theme/Root.tsx
+  - src: src/theme/EditThisPage/
+    dst: src/theme/EditThisPage/
+  - src: src/theme/DocSidebarItem/
+    dst: src/theme/DocSidebarItem/
+  - src: src/theme/Admonition/
+    dst: src/theme/Admonition/
+  - src: src/theme/CodeBlock/
+    dst: src/theme/CodeBlock/
+  - src: packages/tdev/
+    dst: packages/tdev
+    ignore:
+      - material-sync/src/migrate_tdev/migrations
+  - src: packages/hfr/github-cms/
+    dst: packages/hfr/github-cms
+  - src: updateSync/
+    dst: updateSync
+  - src: .prettierrc
+    dst: .prettierrc
+  - src: vitest.config.ts
+    dst: vitest.config.ts
+  - src: bin/archive-version.sh
+    dst: bin/archive-version.sh
+  - src: static/tdev-artifacts/
+    dst: static/tdev-artifacts/
+    ignore:
+      - '*/**'
+  - src: static/pyodide.sw.js
+    dst: static/pyodide.sw.js
 watchedElements:
-    - .babel.config.js
-    - package.json
-    - .env.example
-    - static/bry-libs/
-    - tsconfig.tdev.json
-    - src/theme/
+  - .babel.config.js
+  - package.json
+  - .env.example
+  - static/bry-libs/
+  - tsconfig.tdev.json
+  - src/theme/
