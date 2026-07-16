@@ -166,7 +166,7 @@ const Home = observer(() => {
                                               },
                                               {
                                                   uri: 'https://ofi.25.gbsl.website/25h/home',
-                                                  label: '25h'
+                                                  label: '25'
                                               },
                                               {
                                                   uri: 'https://ofi.24.gbsl.website',
@@ -175,10 +175,6 @@ const Home = observer(() => {
                                               {
                                                   uri: 'https://ef.24.gbsl.website/24ef/home',
                                                   label: '24 EF'
-                                              },
-                                              {
-                                                  uri: 'https://ofi.25.gbsl.website/24w/home',
-                                                  label: '24w'
                                               }
                                           ]
                                       }
