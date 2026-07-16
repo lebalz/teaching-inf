@@ -154,15 +154,19 @@ const Home = observer(() => {
                                           ]
                                       },
                                       {
-                                          title: 'Workshops',
-                                          classes: ['LPs']
-                                      },
-                                      {
                                           title: 'Ehemalige',
                                           classes: [
                                               {
-                                                  uri: 'https://inf.28.gbsl.website/28Wa/home',
-                                                  label: '28Wa'
+                                                  uri: 'https://inf.28.gbsl.website',
+                                                  label: '28'
+                                              },
+                                              {
+                                                  uri: 'https://ofi.26.gbsl.website',
+                                                  label: '26'
+                                              },
+                                              {
+                                                  uri: 'https://ofi.25.gbsl.website/25h/home',
+                                                  label: '25h'
                                               },
                                               {
                                                   uri: 'https://ofi.24.gbsl.website',
@@ -171,14 +175,6 @@ const Home = observer(() => {
                                               {
                                                   uri: 'https://ef.24.gbsl.website/24ef/home',
                                                   label: '24 EF'
-                                              },
-                                              {
-                                                  uri: 'https://ofi.25.gbsl.website/25h/home',
-                                                  label: '25h'
-                                              },
-                                              {
-                                                  uri: 'https://ofi.26.gbsl.website',
-                                                  label: '26'
                                               },
                                               {
                                                   uri: 'https://ofi.25.gbsl.website/24w/home',
