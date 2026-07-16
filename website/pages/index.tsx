@@ -142,42 +142,13 @@ const Home = observer(() => {
                     <HomepageCourses
                         courseList={[
                             {
+                                title: 'Gym',
+                                classes: ['28Gb', '28Gj']
+                            },
+                            {
                                 title: 'WMS',
                                 classes: ['28Wa']
-                            },
-                            ...(tdevConfig.isArchiveBuild
-                                ? []
-                                : [
-                                      {
-                                          title: 'Workshops',
-                                          classes: ['LPs']
-                                      },
-                                      {
-                                          title: 'Ehemalige',
-                                          classes: [
-                                              {
-                                                  uri: 'https://ofi.24.gbsl.website',
-                                                  label: '24'
-                                              },
-                                              {
-                                                  uri: 'https://ef.24.gbsl.website/24ef/home',
-                                                  label: '24 EF'
-                                              },
-                                              {
-                                                  uri: 'https://ofi.25.gbsl.website/25h/home',
-                                                  label: '25h'
-                                              },
-                                              {
-                                                  uri: 'https://ofi.26.gbsl.website',
-                                                  label: '26'
-                                              },
-                                              {
-                                                  uri: 'https://ofi.25.gbsl.website/24w/home',
-                                                  label: '24w'
-                                              }
-                                          ]
-                                      }
-                                  ])
+                            }
                         ]}
                         extendDefaultCourses
                     />
