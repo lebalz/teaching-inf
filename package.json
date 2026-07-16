@@ -33,6 +33,7 @@
         "updateTdev": "tsx updateSync/updateTdev.ts",
         "add": "yarn workspace @tdev/material-sync run add",
         "postadd": "yarn workspace @tdev/material-sync sync",
+        "addClass": "yarn workspace @tdev/material-sync run addClass",
         "present": "gulp serve"
     },
     "dependencies": {

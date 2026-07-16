@@ -145,6 +145,15 @@ const Home = observer(() => {
                                 ? []
                                 : [
                                       {
+                                          title: 'EF Inf',
+                                          classes: [
+                                              {
+                                                  uri: 'https://efi.gbsl.website/28EF/home',
+                                                  label: '28EF'
+                                              }
+                                          ]
+                                      },
+                                      {
                                           title: 'Workshops',
                                           classes: ['LPs']
                                       },
