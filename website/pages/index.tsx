@@ -154,6 +154,10 @@ const Home = observer(() => {
                                           ]
                                       },
                                       {
+                                          title: 'Math',
+                                          classes: ['28Gj']
+                                      },
+                                      {
                                           title: 'Ehemalige',
                                           classes: [
                                               {
