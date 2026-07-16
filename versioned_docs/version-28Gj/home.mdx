@@ -13,58 +13,11 @@ import hs2025 from './28Gj_HS2025.yaml';
 import fs2026 from './28Gj-FS2026.yaml';
 import Directory from '@tdev-components/documents/FileSystem/Directory';
 
-# 28Gj Informatik
+# 28Gj Mathematik
 
-<Tabs queryString="semester">
-    <TabItem label="Semester 4" value="s4" default>
-            <SemesterTable
-                header={['Datum', 'Thema', 'Inhalt']}
-                compact
-                selectable
-                rows={fs2026}
-                order={SortTimeTableByDate()}
-            />
-    </TabItem>
-    <TabItem label="Semester 3" value="s3">
-            <SemesterTable
-                header={['Datum', 'Thema', 'Inhalt']}
-                compact
-                selectable
-                rows={hs2025}
-                order={SortTimeTableByDate()}
-            />
-    </TabItem>
-    <TabItem label="Semester 2" value="s2" default>
-            <SemesterTable
-                header={['Datum', 'Thema', 'Inhalt']}
-                compact
-                selectable
-                rows={fs2025}
-                order={SortTimeTableByDate()}
-            />
-    </TabItem>
-    <TabItem label="Semester 1" value="s1">
-        <Tabs>
-            <TabItem label="Einzellektion" value="gym1-hs-theorie">
-                <SemesterTable
-                    header={['Datum', 'Thema', 'Inhalt']}
-                    compact
-                    selectable
-                    rows={hs2024}
-                    order={SortTimeTableByDate()}
-                />
-            </TabItem>
-            <TabItem label="Praktikum" value="gym1-hs-praktikum">
-                <SemesterTable
-                    header={['Datum', 'Halbklasse', 'Thema', 'Inhalt']}
-                    compact
-                    selectable
-                    rows={hk2024}
-                    order={SortTimeTableByDate()}
-                />
-            </TabItem>
-        </Tabs>
-    </TabItem>
-</Tabs>
+:::info[Informatik-Seite archiviert]
+Die Informatik-Seite des Jahrgangs 28 wurde archiviert und ist [hier](https://inf.28gj.gbsl.website/28Gj/home) verfügbar.
+:::
 
-<Directory name="Notizen" id="ed3a2610-562f-410a-92d2-f248a78f946d" />
+
+
