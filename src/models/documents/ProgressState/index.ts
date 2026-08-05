@@ -35,7 +35,7 @@ export class ModelMeta extends TypeMeta<'progress_state'> {
     readonly keepPreviousStepsOpen: boolean;
 
     constructor(props: Partial<MetaInit>) {
-        super('progress_state', props.readonly ? Access.RO_User : undefined, props.pagePosition);
+        super('progress_state', props, true);
         this.default = props.default ?? DEFAULT_PROGRESS;
         this.readonly = !!props.readonly;
         if (props.allOpen) {
@@ -60,6 +60,7 @@ export class ModelMeta extends TypeMeta<'progress_state'> {
 }
 
 class ProgressState extends iDocument<'progress_state'> implements iTaskableDocument<'progress_state'> {
+    readonly hideFromOverview = false;
     @observable accessor _progress: number = 0;
     @observable accessor _totalSteps: number = 0;
     @observable accessor _viewedIndex: number | undefined = undefined;

@@ -298,7 +298,9 @@ export class DocumentRootStore extends iStore {
         if (config.load.documentRoot === 'replace' && !config.meta) {
             return;
         }
-        const defaultType = data.documents[0]?.type;
+        const defaultType = this.root.componentStore.extractDefaultDocumentType(
+            data.documents.map((d) => d.type)
+        );
         const meta =
             config.meta ||
             (this.find(data.id)?.meta as TypeMeta<any>) ||
@@ -310,7 +312,8 @@ export class DocumentRootStore extends iStore {
         }
         if (config.load.documentRoot) {
             if (config.load.documentRoot === 'addIfMissing') {
-                if (!this.find(data.id)) {
+                const current = this.find(data.id);
+                if (!current) {
                     this.addDocumentRoot(documentRoot);
                 }
             } else {
@@ -356,18 +359,17 @@ export class DocumentRootStore extends iStore {
             const old = model.permission;
             let needsReload = false;
             if (access !== model.rootAccess) {
-                model.setRootAccess(access);
+                model.setRootAccess(access, true);
                 const current = model.permission;
                 needsReload = NoneAccess.has(old) && !NoneAccess.has(current);
             }
             if (sharedAccess !== model.sharedAccess) {
                 needsReload =
                     needsReload || (NoneAccess.has(model.sharedAccess) && !NoneAccess.has(sharedAccess));
-                model.setSharedAccess(sharedAccess);
+                model.setSharedAccess(sharedAccess, true);
             }
             if (needsReload) {
                 this.reload(model);
-                console.log('reload model', model.id);
             }
         }
     }

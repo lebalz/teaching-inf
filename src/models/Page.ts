@@ -2,7 +2,7 @@
  * A Markdown or MDX Page
  */
 
-import { action, computed, observable, ObservableMap } from 'mobx';
+import { action, computed, observable, ObservableMap, observableRef } from 'mobx';
 import { AUTO_GENERATED_PAGE_PREFIX, PageStore } from '@tdev-stores/PageStore';
 import _ from 'es-toolkit/compat';
 import iDocument from '@tdev-models/iDocument';
@@ -22,8 +22,8 @@ export default class Page {
     readonly path: string;
     initialLoadComplete = false;
 
-    @observable.ref accessor _primaryViewedStudentGroupName: string | undefined = undefined;
-    @observable.ref accessor _viewedStudentGroup: StudentGroup | undefined = undefined;
+    @observableRef accessor _primaryViewedStudentGroupName: string | undefined = undefined;
+    @observableRef accessor _viewedStudentGroup: StudentGroup | undefined = undefined;
     documentRootConfigs: ObservableMap<string, PageConfig>;
 
     dynamicValues = observable.map<string, string>();
@@ -140,6 +140,36 @@ export default class Page {
         return this._primaryViewedStudentGroupName ?? this.store.currentStudentGroupName;
     }
 
+    @computed
+    get relevantStudentGroups() {
+        const group = this.store.root.studentGroupStore.findByName(this.store.currentStudentGroupName);
+        if (!group) {
+            return [];
+        }
+        const groups: StudentGroup[] = [];
+        const addGroupAndChildren = (g: StudentGroup) => {
+            groups.push(g);
+            g.children.forEach((child) => addGroupAndChildren(child));
+        };
+        addGroupAndChildren(group);
+        return groups;
+    }
+
+    @computed
+    get relevantStudentGroupIds(): Set<string> {
+        const group = this.store.root.studentGroupStore.findByName(this.store.currentStudentGroupName);
+        if (!group) {
+            return new Set();
+        }
+        const groups: StudentGroup[] = [];
+        const addGroupAndChildren = (g: StudentGroup) => {
+            groups.push(g);
+            g.children.forEach((child) => addGroupAndChildren(child));
+        };
+        addGroupAndChildren(group);
+        return new Set(groups.map((g) => g.id));
+    }
+
     @action
     setPrimaryViewedStudentGroupName(name?: string) {
         this._primaryViewedStudentGroupName = name;
@@ -204,13 +234,15 @@ export default class Page {
         if (!uid) {
             return [];
         }
-        return this.taskableDocumentRootIds.flatMap((rid) => {
-            return this.store.root.documentStore
-                .findByDocumentRoot(rid)
-                .filter(
-                    (doc) => doc.authorId === uid && this.TaskableDocuments.has(doc.type)
-                ) as iTaskableDocument[];
-        });
+        return this.taskableDocumentRootIds
+            .flatMap((rid) => {
+                return this.store.root.documentStore
+                    .findByDocumentRoot(rid)
+                    .filter(
+                        (doc) => doc.authorId === uid && this.TaskableDocuments.has(doc.type)
+                    ) as iTaskableDocument[];
+            })
+            .filter((doc) => !doc.hideFromOverview);
     }
 
     @computed

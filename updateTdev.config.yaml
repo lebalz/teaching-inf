@@ -49,6 +49,8 @@ trackedElements:
       - '*/**'
   - src: static/pyodide.sw.js
     dst: static/pyodide.sw.js
+  - src: src/theme/AnnouncementBar
+    dst: src/theme/AnnouncementBar
 watchedElements:
   - .babel.config.js
   - package.json

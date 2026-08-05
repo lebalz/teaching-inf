@@ -1,6 +1,6 @@
 import { RootStore } from '@tdev-stores/rootStore';
 import { io, Socket } from 'socket.io-client';
-import { action, observable, reaction } from 'mobx';
+import { action, observable, reaction, observableRef } from 'mobx';
 import { default as api } from '@tdev-api/base';
 import iStore from '@tdev-stores/iStore';
 import {
@@ -14,7 +14,8 @@ import {
     IoEvent,
     NewRecord,
     RecordType,
-    ServerToClientEvents
+    ServerToClientEvents,
+    StreamedDynamicDocument
 } from '../api/IoEventTypes';
 import { DocumentRoot, DocumentRootUpdate } from '@tdev-api/documentRoot';
 import { GroupPermission, UserPermission } from '@tdev-api/permission';
@@ -37,11 +38,11 @@ type PrimitiveCmsStore = { handleSettingsChange: (settings: CmsSettings) => void
 export class SocketDataStore extends iStore<'ping'> {
     readonly root: RootStore;
 
-    @observable.ref accessor socket: TypedSocket | undefined = undefined;
+    @observableRef accessor socket: TypedSocket | undefined = undefined;
 
     @observable accessor isLive: boolean = false;
 
-    @observable.ref accessor actionRequest: Action['action'] | undefined = undefined;
+    @observableRef accessor actionRequest: Action['action'] | undefined = undefined;
 
     recordsToCreate = observable.set<DocumentType>(RecordsToCreate);
 
@@ -205,8 +206,19 @@ export class SocketDataStore extends iStore<'ping'> {
      * in the payload, which usually is a documentRootId)
      */
     @action
-    streamUpdate(roomId: string, payload: ChangedDocument) {
-        this.socket?.emit(IoClientEvent.STREAM_UPDATE, { ...payload, roomId });
+    streamUpdate<T extends Record<string, unknown>>(
+        roomId: string,
+        payload: Omit<ChangedDocument, 'updatedAt'>,
+        meta?: T
+    ) {
+        const data: StreamedDynamicDocument<T> = {
+            ...payload,
+            roomId
+        };
+        if (meta) {
+            data.meta = meta;
+        }
+        this.socket?.emit(IoClientEvent.STREAM_UPDATE, data);
     }
 
     @action
@@ -291,7 +303,7 @@ export class SocketDataStore extends iStore<'ping'> {
                 this.root.permissionStore.handleGroupPermissionUpdate(record as GroupPermission);
                 break;
             case RecordType.Document:
-                this.root.documentStore.addToStore(record as Document<DocumentType>);
+                this.root.documentStore.addToStore(record as Document<DocumentType>, true);
                 break;
             case RecordType.CmsSettings:
                 if (!this.root.viewStore.stores.has('cmsStore' as keyof ViewStoreTypeMapping)) {
