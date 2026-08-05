@@ -1,5 +1,5 @@
 import { RootStore } from '@site/src/stores/rootStore';
-import { action, observable } from 'mobx';
+import { action, observable, observableRef } from 'mobx';
 import Polybios from './Polybios';
 import Vignere from './Vignere';
 import ClockStore from './ClockStore';
@@ -8,7 +8,7 @@ import LedStore from './LedStore';
 type Source = 'text' | 'cipher';
 
 export class ToolsStore {
-    @observable.ref accessor caesar: {
+    @observableRef accessor caesar: {
         text: string;
         cipher: string;
         key: string;
@@ -20,7 +20,7 @@ export class ToolsStore {
         source: 'text'
     };
 
-    @observable.ref accessor frequencyAnalysis: {
+    @observableRef accessor frequencyAnalysis: {
         text: string;
         sortAlphabetic: boolean;
         onlyLetters: boolean;
@@ -32,11 +32,11 @@ export class ToolsStore {
         indicateUnusedChars: true
     };
 
-    @observable.ref accessor hashSha256: { text: string } = {
+    @observableRef accessor hashSha256: { text: string } = {
         text: ''
     };
 
-    @observable.ref accessor imageEncryption: {
+    @observableRef accessor imageEncryption: {
         imageDataUrl: string;
         srcImageLoaded: boolean;
         resultReady: boolean;
@@ -52,12 +52,12 @@ export class ToolsStore {
         iv: ''
     };
 
-    @observable.ref accessor polybios = new Polybios();
-    @observable.ref accessor vignere = new Vignere();
-    @observable.ref accessor clockStore = new ClockStore();
-    @observable.ref accessor ledStore = new LedStore();
+    @observableRef accessor polybios = new Polybios();
+    @observableRef accessor vignere = new Vignere();
+    @observableRef accessor clockStore = new ClockStore();
+    @observableRef accessor ledStore = new LedStore();
 
-    @observable.ref accessor primeFactorizationTiming: {
+    @observableRef accessor primeFactorizationTiming: {
         digits: number;
         range: [bigint, bigint];
         stage: number;
@@ -85,14 +85,14 @@ export class ToolsStore {
         factPrime2: 0n
     };
 
-    @observable.ref accessor skytale: { text: string; cipherText: string; key: number; source: Source } = {
+    @observableRef accessor skytale: { text: string; cipherText: string; key: number; source: Source } = {
         text: '',
         cipherText: '',
         key: 2,
         source: 'text'
     };
 
-    @observable.ref accessor substitution: {
+    @observableRef accessor substitution: {
         text: string;
         key: string;
         missingChars: string[];
@@ -108,7 +108,7 @@ export class ToolsStore {
         source: 'text'
     };
 
-    @observable.ref accessor xorBlockCipher: {
+    @observableRef accessor xorBlockCipher: {
         text: string;
         cipherText: string;
         key: string;
@@ -124,18 +124,18 @@ export class ToolsStore {
         source: 'text'
     };
 
-    @observable.ref accessor pentacode: { text: string; penta: string; source: 'text' | 'penta' } = {
+    @observableRef accessor pentacode: { text: string; penta: string; source: 'text' | 'penta' } = {
         text: '',
         penta: '',
         source: 'text'
     };
 
-    @observable.ref accessor pentacodePixelEditor: { penta: string; source: 'cell' | 'editor' | '' } = {
+    @observableRef accessor pentacodePixelEditor: { penta: string; source: 'cell' | 'editor' | '' } = {
         penta: '00000 00000 00000 00000 00000',
         source: 'editor'
     };
 
-    @observable.ref accessor colorExchange: {
+    @observableRef accessor colorExchange: {
         colorA: number;
         colorB: number;
         colorS: number;

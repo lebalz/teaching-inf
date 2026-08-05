@@ -1,5 +1,5 @@
 import SerialDevice, { ConnectionState, iSubscriber } from '@tdev/webserial/models/SerialDevice';
-import { action, computed, observable } from 'mobx';
+import { action, computed, observable, observableRef } from 'mobx';
 import DeviceConfig, { Config } from './DeviceConfig';
 import EthernetFrame from './EthernetFrame';
 import Router from './Router';
@@ -45,9 +45,9 @@ class Decoder implements iSubscriber {
     readonly id: string;
     readonly device: SerialDevice;
     readonly syncQueryString: boolean;
-    @observable.ref accessor router: Router | null;
-    @observable.ref accessor _defaultConfig: Config | null = null;
-    @observable.ref accessor config: DeviceConfig | null = null;
+    @observableRef accessor router: Router | null;
+    @observableRef accessor _defaultConfig: Config | null = null;
+    @observableRef accessor config: DeviceConfig | null = null;
     @observable accessor message: string = '';
     @observable accessor receiverIp: string = '';
     @observable accessor receiverMac: string = '';

@@ -1,5 +1,5 @@
 import _ from 'es-toolkit/compat';
-import { action, observable } from 'mobx';
+import { action, observable, observableRef } from 'mobx';
 const SANITIZE_REGEX = /[^ABCDEFGHIKLMNOPQRSTUWXYZ\s]/g;
 const QUADRAT = [
     'A',
@@ -59,7 +59,7 @@ class Polybios {
     @observable accessor source: 'text' | 'cipher';
     @observable accessor textAreaKey: number = 0;
 
-    @observable.ref accessor alphabet: Alphabet[];
+    @observableRef accessor alphabet: Alphabet[];
 
     constructor(alphabet: Alphabet[] = [...QUADRAT]) {
         this.text = '';

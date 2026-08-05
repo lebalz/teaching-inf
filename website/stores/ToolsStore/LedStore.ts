@@ -1,8 +1,8 @@
 import { LED } from '@tdev/packages/pyodide-code/models/LED';
-import { action, observable } from 'mobx';
+import { action, observable, observableRef } from 'mobx';
 
 class LedStore {
-    @observable.ref accessor defaultLed = new LED();
+    @observableRef accessor defaultLed = new LED();
     leds = observable.map<string, LED>([], { deep: false });
 
     @action
