@@ -31,4 +31,5 @@ static/katex/katex.min.css
 *.jpg
 *.png
 static/p/reveal.js
-material_config.yaml
+material.config.yaml
+updateTdev.config.yaml
