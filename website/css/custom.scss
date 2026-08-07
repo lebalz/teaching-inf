@@ -218,3 +218,11 @@ nav.menu {
         }
     }
 }
+
+.markdown {
+    .mdi-icon {
+        &.lightBlue {
+            color: var(--ifm-color-info);
+        }
+    }
+}
