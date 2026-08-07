@@ -15,7 +15,7 @@ const CLASS_DAY = {
     ['30Gx-HK']: ['fr'],
     ['30Gx']: ['fr'],
     ['29Ga']: ['mi'],
-    ['29Gj']: ['mi', 'fr'],
+    ['29Gj']: ['mi', 'do'],
     ['28Gj']: ['fr'],
     ['28Gb']: ['di'],
     ['28Wa']: ['di']
@@ -33,7 +33,7 @@ const needsEscape = (str) => {
 
 const EVENTS = {
     [38]: {
-        desc: /*'Umwelt- und Sozialwoche'*/ 'Kennenlernwoche GYM1',
+        desc: /*'Umwelt- und Sozialwoche'*/ 'Sprachreise',
         type: 'holiday',
         icon: 'mdiWalletTravel'
     },
@@ -53,20 +53,21 @@ const EVENTS = {
 //     [28]: { desc: 'Sommerferien', type: 'holiday', icon: 'mdiBeach' }
 // };
 const CLASS_EVENTS = {
-    ['30Gx-HK']: {
-        [52]: {
-            desc: 'Winterferien',
-            details: 'Schulschluss am Do. 24.12.26 um 12:05',
-            type: 'holiday',
-            date: '25.12.2026'
-        },
-        [5]: {
-            desc: 'Programmieren 1',
-            details: 'Test - findet in der DL in dieser Woche statt, Wochentag noch nicht bekannt.',
-            type: 'test',
-            date: '05.02.2027',
-            icon: 'mdiSchool'
-        }
+    ['29Ga']: {
+        // [52]: {
+        //     desc: 'Winterferien',
+        //     details: 'Schulschluss am Do. 24.12.26 um 12:05',
+        //     type: 'holiday',
+        //     date: '25.12.2026'
+        // }
+    },
+    ['29Gj']: {
+        // [52]: {
+        //     desc: 'Winterferien',
+        //     details: 'Schulschluss am Do. 24.12.26 um 12:05',
+        //     type: 'holiday',
+        //     date: '25.12.2026'
+        // }
     }
 };
 // const CLASS_EVENTS = {
@@ -104,13 +105,13 @@ const CLASS_EVENTS = {
 //     // ],
 // };
 SCHOOL_EVENTS = {
-    [49]: {
-        desc: 'Programmieren 1, Ganzklasse',
-        details: 'Kurztest Programmieren 1, halbzählend',
-        type: 'test',
-        date: '04.12.2026',
-        icon: 'mdiSchool'
-    },
+    // [49]: {
+    //     desc: 'Programmieren 1, Ganzklasse',
+    //     details: 'Kurztest Programmieren 1, halbzählend',
+    //     type: 'test',
+    //     date: '04.12.2026',
+    //     icon: 'mdiSchool'
+    // },
     [3]: { desc: 'Notenschluss', type: 'event', date: '20.01.2027', icon: 'mdiFlagCheckered' },
     [5]: {
         desc: 'Beginn Semester 2',
@@ -352,7 +353,7 @@ const SCHEDULE_GYM2_26_FS = [
     ['Projekt: Abschluss und Abgabe', '🚀🚦🧨🪚⚙️🌡🤖']
 ];
 
-const SCHEDULE_GYM2_28_HS = [
+const SCHEDULE_GYM2_29_HS = [
     ['Kryptologie', 'Antike Verschlüsselungsverfahren'],
     ['Kryptologie', 'Symmetrische Verschlüsselung'],
     ['Kryptologie', 'Symmetrische Verschlüsselung'],
@@ -366,14 +367,14 @@ const SCHEDULE_GYM2_28_HS = [
     ['Programmieren 2', 'Robotik'],
     ['Programmieren 2', 'Robotik'],
     ['Programmieren 2', 'Robotik'],
-    ['Programmieren 2', '"Wettbewerb: Robotik"', 'test'],
+    ['Programmieren 2', 'Robotik'],
+    ['Programmieren 2', '\\"Wettbewerb: Robotik\\"', { type: 'test', icon: 'mdiRobotMowerOutline' }],
     ['Programmieren 2', 'Game of Life'],
-    ['Computer', 'Logische Schaltungen 1'],
-    ['Computer', 'Logische Schaltungen 2'],
-    ['Computer', 'Halbaddierer'],
-    ['Computer', 'Volladdierer, Speichern'],
-    ['Netzwerke', 'Einstieg'],
-    ['Netzwerke', 'Routing']
+    ['Netzwerke', 'Protokolle, Schichtenmodell'],
+    ['Netzwerke', 'Routing, IP-Adresse'],
+    ['Netzwerke', 'TCP/IP'],
+    ['Netzwerke', 'DNS'],
+    ['Netzwerke', 'ATProtokoll?']
 ];
 const SCHEDULE_GYM2_28_FS = [
     ['Robotik', 'Sensoren und Aktoren'],
@@ -418,13 +419,13 @@ const SCHEDULE_WINF_28_FS = [
 //     ['29Ga-HK']: prepareHK(SCHEDULE_GYM1_PRAKTIKUM, ['A', 'B']),
 //     ['29Gj-HK']: prepareHK(SCHEDULE_GYM1_PRAKTIKUM, ['A', 'B'])
 // };
-const CLASS_SCHEDULE_MAP = {
-    ['30Gx-HK']: prepareHK(SCHEDULE_GYM1_PRAKTIKUM, ['A', 'B'])
-};
 // const CLASS_SCHEDULE_MAP = {
-//     ['29Ga']: SCHEDULE_GYM1_29_FS,
-//     ['29Gj']: SCHEDULE_GYM1_29_FS
+//     ['30Gx-HK']: prepareHK(SCHEDULE_GYM1_PRAKTIKUM, ['A', 'B'])
 // };
+const CLASS_SCHEDULE_MAP = {
+    ['29Ga']: SCHEDULE_GYM2_29_HS,
+    ['29Gj']: SCHEDULE_GYM2_29_HS
+};
 Object.keys(CLASS_SCHEDULE_MAP).forEach((klasse) => {
     const cells = [];
     let subjectNr = 0;

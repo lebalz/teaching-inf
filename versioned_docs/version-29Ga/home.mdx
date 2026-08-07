@@ -12,6 +12,7 @@ import WithCmsText from '@tdev-components/documents/CmsText/WithCmsText';
 import hs2025 from './29Ga_HS2025.yaml';
 import hk2025 from './29Ga-HK_HS2025.yaml';
 import fs2026 from './29Ga-FS2026.yaml';
+import hs2026 from './29Ga-HS2026.yaml';
 
 import Directory from '@tdev-components/documents/FileSystem/Directory';
 
@@ -19,7 +20,16 @@ import Directory from '@tdev-components/documents/FileSystem/Directory';
 
 
 <Tabs queryString="semester">
-    <TabItem label="Semester 2" value="s2" default>
+    <TabItem label="Semester 3" value="s3" default>
+        <SemesterTable
+            header={['Datum', 'Thema', 'Inhalt']}
+            compact
+            selectable
+            rows={hs2026}
+            order={SortTimeTableByDate()}
+        />
+    </TabItem>
+    <TabItem label="Semester 2" value="s2">
         <SemesterTable
             header={['Datum', 'Thema', 'Inhalt']}
             compact
