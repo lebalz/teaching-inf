@@ -6,6 +6,7 @@
 02-BYOD/_category_.json
 03-Programmieren-1/*
 !03-Programmieren-1/_category_.yml
+!03-Programmieren-1/index.mdx
 !03-Programmieren-1/02-py-intro/
 !03-Programmieren-1/03-repeat/
 !03-Programmieren-1/04-errors/
