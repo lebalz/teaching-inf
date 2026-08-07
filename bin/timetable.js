@@ -12,6 +12,8 @@ const DAYS = {
     so: 'Sunday'
 };
 const CLASS_DAY = {
+    ['30Gx-HK']: ['fr'],
+    ['30Gx']: ['fr'],
     ['29Ga']: ['mi'],
     ['29Gj']: ['mi', 'fr'],
     ['28Gj']: ['fr'],
@@ -19,60 +21,52 @@ const CLASS_DAY = {
     ['28Wa']: ['di']
 };
 const YEAR = 2026;
-const SEMESTER = 'FS';
+const SEMESTER = 'HS';
 
 const needsEscape = (str) => {
     return /[:&*#|]/.test(str || '');
 };
 
-// const EVENTS = {
-//     [40]: {
-//         desc: /*'Umwelt- und Sozialwoche'*/ 'Kennenlernwoche GYM1',
-//         type: 'holiday',
-//         icon: 'mdiWalletTravel'
-//     },
-//     [41]: { desc: 'Herbstferien', details: '🏝️🏖️🏖️😎', type: 'holiday' },
-//     [42]: { desc: 'Herbstferien', details: '🏝️🏖️🏖️😎', type: 'holiday' },
-//     [52]: { desc: 'Winterferien', details: '🏂❄️⛷️🎄🧑‍🎄', icon: 'mdiPineTreeVariantOutline', type: 'holiday' },
-//     [1]: { desc: 'Winterferien', details: '🏂❄️⛷️🎄🧑‍🎄', icon: 'mdiPineTreeVariantOutline', type: 'holiday' },
-//     [7]: { desc: 'Sportwoche', type: 'holiday', icon: 'mdiWeatherSnowyHeavy' }
-// };
+/**
+ *
+ */
+
 const EVENTS = {
-    [7]: { desc: 'Sportwoche', type: 'holiday', icon: 'mdiWeatherSnowyHeavy' },
-    [14]: { desc: 'Sonderwoche', type: 'holiday', icon: 'mdiSchool' },
-    [15]: { desc: 'Frühlingsferien', type: 'holiday', icon: 'mdiFlowerTulipOutline' },
-    [16]: { desc: 'Frühlingsferien', type: 'holiday', icon: 'mdiFlowerTulipOutline' },
-    [24]: { desc: 'Mündliche Maturwoche', type: 'holiday', icon: 'mdiSchool' },
-    [28]: { desc: 'Sommerferien', type: 'holiday', icon: 'mdiBeach' }
+    [38]: {
+        desc: /*'Umwelt- und Sozialwoche'*/ 'Kennenlernwoche GYM1',
+        type: 'holiday',
+        icon: 'mdiWalletTravel'
+    },
+    [39]: { desc: 'Herbstferien', details: '🏝️🏖️🏖️😎', type: 'holiday' },
+    [40]: { desc: 'Herbstferien', details: '🏝️🏖️🏖️😎', type: 'holiday' },
+    [41]: { desc: 'Herbstferien', details: '🏝️🏖️🏖️😎', type: 'holiday' },
+    [53]: { desc: 'Winterferien', details: '🏂❄️⛷️🎄🧑‍🎄', icon: 'mdiPineTreeVariantOutline', type: 'holiday' },
+    [1]: { desc: 'Winterferien', details: '🏂❄️⛷️🎄🧑‍🎄', icon: 'mdiPineTreeVariantOutline', type: 'holiday' },
+    [7]: { desc: 'Sportwoche', type: 'holiday', icon: 'mdiWeatherSnowyHeavy' }
 };
+// const EVENTS = {
+//     [7]: { desc: 'Sportwoche', type: 'holiday', icon: 'mdiWeatherSnowyHeavy' },
+//     [14]: { desc: 'Sonderwoche', type: 'holiday', icon: 'mdiSchool' },
+//     [15]: { desc: 'Frühlingsferien', type: 'holiday', icon: 'mdiFlowerTulipOutline' },
+//     [16]: { desc: 'Frühlingsferien', type: 'holiday', icon: 'mdiFlowerTulipOutline' },
+//     [24]: { desc: 'Mündliche Maturwoche', type: 'holiday', icon: 'mdiSchool' },
+//     [28]: { desc: 'Sommerferien', type: 'holiday', icon: 'mdiBeach' }
+// };
 const CLASS_EVENTS = {
-    ['28Gb']: {
-        [22]: { desc: 'Integrationstage', details: 'Gym 2 Klassen', type: 'holiday', date: '26.05.2026' }
-    },
-    ['28Gj']: {
-        [20]: { desc: 'Auffahrt', details: 'Frei', type: 'holiday', date: '15.05.2026' }
-    },
-    ['29Ga']: {
-        [8]: {
-            desc: 'Exkursion Bio',
-            details: 'Naturhistorisches Museum Bern',
-            type: 'event',
-            date: '18.02.2026'
+    ['30Gx-HK']: {
+        [52]: {
+            desc: 'Winterferien',
+            details: 'Schulschluss am Do. 24.12.26 um 12:05',
+            type: 'holiday',
+            date: '25.12.2026'
         },
-        [26]: { desc: 'Filmanlass', details: 'Alle GYM-1 Klassen GBSL', type: 'event', date: '24.06.2026' }
-    },
-    ['29Gj']: {
-        [20]: { desc: 'Auffahrt', details: 'Frei', type: 'holiday', date: '15.05.2026' },
-        [26]: { desc: 'Filmanlass', details: 'Alle GYM-1 Klassen GBSL', type: 'event', date: '24.06.2026' }
-    },
-    ['28Wa']: {
-        [18]: {
-            desc: 'Bundeshausbesuch',
-            details: 'Sondersession NR, SR',
-            type: 'event',
-            date: '28.04.2026'
-        },
-        [26]: { desc: 'Triathlon', details: '', type: 'event', date: '23.06.2026' }
+        [5]: {
+            desc: 'Programmieren 1',
+            details: 'Test - findet in der DL in dieser Woche statt, Wochentag noch nicht bekannt.',
+            type: 'test',
+            date: '05.02.2027',
+            icon: 'mdiSchool'
+        }
     }
 };
 // const CLASS_EVENTS = {
@@ -110,41 +104,41 @@ const CLASS_EVENTS = {
 //     // ],
 // };
 SCHOOL_EVENTS = {
-    [26]: { desc: 'Notenschluss', type: 'event', date: '25.06.2026', icon: 'mdiFlagCheckered' },
-    [27]: {
-        desc: 'SchiLw-Tag',
-        details: 'Schulinterne Weiterbildung für Lehrpersonen',
-        type: 'event',
-        date: '01.07.2026',
+    [49]: {
+        desc: 'Programmieren 1, Ganzklasse',
+        details: 'Kurztest Programmieren 1, halbzählend',
+        type: 'test',
+        date: '04.12.2026',
         icon: 'mdiSchool'
     },
-    [27]: {
-        desc: 'Beginn Sommerferien',
-        details: '',
-        type: 'holiday',
-        date: '04.07.2026',
-        icon: 'mdiBeach'
+    [3]: { desc: 'Notenschluss', type: 'event', date: '20.01.2027', icon: 'mdiFlagCheckered' },
+    [5]: {
+        desc: 'Beginn Semester 2',
+        type: 'event',
+        date: '01.02.2027',
+        icon: 'mdiRocketLaunch'
     }
 };
 
-const SCHEDULE_GYM1_29_HS = [
+const SCHEDULE_GYM1_30_HS = [
     ['Einstieg', 'Inf-Webseite, BYOD'],
-    ['ICT', 'BYOD Basics'],
-    ['ICT', 'BYOD Basics'],
-    ['ICT', 'BYOD Basics'],
-    ['ICT', 'BYOD Basics'],
+    ['BYOD Basics', 'Ziel: Modul 1 fertig'],
+    ['BYOD Basics', 'Ziel: Modul 2 fertig'],
+    ['BYOD Basics', 'Ziel: Modul 3+4 fertig'],
+    ['BYOD Basics', 'Ziel: Modul 5 fertig'],
     ['Test Schriftlich', 'Kurztest schriftlich zu den BYOD Basics'],
     ['Test Praktisch', 'Kurztest praktisch zu den BYOD Basics'],
     ['Test Praktisch', 'Kurztest praktisch zu den BYOD Basics'],
     ['Test Praktisch', 'Kurztest praktisch zu den BYOD Basics / Vorbereitung "Informatik Biber"'],
-    ['Test Praktisch', 'Kurztest praktisch zu den BYOD Basics / Vorbereitung "Informatik Biber"'],
+    ['Informatik Biber', 'Vorbereitung auf den Wettbewerb "Informatik Biber"'],
+    ['Informatik Biber', 'Wettbewerb', { type: 'event', icon: 'mdiKarate' }],
     ['Programmieren 1', 'Übungs- und Fragestunde'],
-    ['Programmieren 1', 'Kurztest Programmieren, Variablen, Ein- & Ausgabe'],
+    ['Programmieren 1', 'Kurztest Programmieren 1, halbzählend'],
+    ['Programmieren 1', 'Besprechung Kurztest'],
     ['Programmieren 1', '🎄Programmieren'],
-    ['Digitale Dokumente', 'Struktur von Dokumenten'],
-    ['Digitale Dokumente', 'Word Grundlagen'],
-    ['Digitale Dokumente', 'Formatvorlagen in Word'],
-    ['Digitale Dokumente', 'Formatvorlagen in Word']
+    ['Programmieren 1', 'Verzweigungen'],
+    ['Programmieren 1', 'Wiederholung'],
+    ['Programmieren 1', 'Wiederholung']
 ];
 const SCHEDULE_GYM1_HS = [
     ['Einstieg', 'Informatik, BYOD'],
@@ -174,9 +168,9 @@ const SCHEDULE_GYM1_PRAKTIKUM = [
     ['Programmieren 1', 'Parameter'],
     ['Programmieren 1', 'Variablen, Eingabe & Ausgabe'],
     ['Programmieren 1', 'Verzweigungen'],
-    ['Programmieren 1', 'Listen'],
-    ['Programmieren 1', 'Listen'],
-    ['Programmieren 1', 'Abschluss']
+    ['Programmieren 1', 'While'],
+    ['Programmieren 1', 'Rückgabewerte'],
+    ['Programmieren 1', 'Listen']
 ];
 const SCHEDULE_GYM1_29_FS = [
     ['Programmieren 1', 'Test'],
@@ -425,7 +419,7 @@ const SCHEDULE_WINF_28_FS = [
 //     ['29Gj-HK']: prepareHK(SCHEDULE_GYM1_PRAKTIKUM, ['A', 'B'])
 // };
 const CLASS_SCHEDULE_MAP = {
-    ['28Wa']: SCHEDULE_WINF_28_FS
+    ['30Gx-HK']: prepareHK(SCHEDULE_GYM1_PRAKTIKUM, ['A', 'B'])
 };
 // const CLASS_SCHEDULE_MAP = {
 //     ['29Ga']: SCHEDULE_GYM1_29_FS,
@@ -438,54 +432,55 @@ Object.keys(CLASS_SCHEDULE_MAP).forEach((klasse) => {
     const SCHEDULE = CLASS_SCHEDULE_MAP[klasse];
     const colSize = SCHEDULE[0].length + 1;
     Array(
-        // 34,
-        // 35,
-        // 36,
-        // 37,
-        // 38,
-        // 39,
-        // 40,
-        // 41,
-        // 42,
-        // 43,
-        // 44,
-        // 45,
-        // 46,
-        // 47,
-        // 48,
-        // 49,
-        // 50,
-        // 51,
-        // 52,
-        // 1,
-        // 2,
-        // 3,
-        // 4,
-        // 5,
-        // 6,
-        // 7
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        1,
+        2,
+        3,
+        4,
+        5,
         6,
-        7,
-        8,
-        9,
-        10,
-        11,
-        12,
-        13,
-        14,
-        15,
-        16,
-        17,
-        18,
-        19,
-        20,
-        21,
-        22,
-        23,
-        24,
-        25,
-        26,
-        27
+        7
+        // 6,
+        // 7,
+        // 8,
+        // 9,
+        // 10,
+        // 11,
+        // 12,
+        // 13,
+        // 14,
+        // 15,
+        // 16,
+        // 17,
+        // 18,
+        // 19,
+        // 20,
+        // 21,
+        // 22,
+        // 23,
+        // 24,
+        // 25,
+        // 26,
+        // 27
     ).forEach((weekNr) => {
         const dates = CLASS_DAY[klasse].map((abbr_day) => {
             const day = DAYS[abbr_day];
@@ -527,9 +522,13 @@ Object.keys(CLASS_SCHEDULE_MAP).forEach((klasse) => {
                 });
             } else if (SCHEDULE[subjectNr]) {
                 const isTest = /test/gi.test(SCHEDULE[subjectNr].join(' '));
+                const eType = isTest ? 'test' : SCHEDULE[subjectNr][3];
+                const propsIdx = SCHEDULE[subjectNr].findIndex((item) => typeof item === 'object');
+                const props = propsIdx !== -1 ? SCHEDULE[subjectNr][propsIdx] : {};
                 cells.push({
-                    cells: [date, ...SCHEDULE[subjectNr].slice(0, 3)],
-                    type: isTest ? 'test' : undefined
+                    cells: [date, ...SCHEDULE[subjectNr].slice(0, propsIdx > 0 ? Math.min(propsIdx, 3) : 3)],
+                    type: eType,
+                    ...props
                 });
                 progressSubjectNr = true;
             }

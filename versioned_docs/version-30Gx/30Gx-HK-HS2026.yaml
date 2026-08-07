@@ -1,137 +1,167 @@
 - cells:
     - 14.08.2026
-    - Einstieg
-    - Inf-Webseite, BYOD
+    - A
+    - Programmieren 1
+    - Algorithmen & RoboZZle
 - cells:
     - 21.08.2026
-    - BYOD Basics
-    - "Ziel: Modul 1 fertig"
+    - B
+    - Programmieren 1
+    - Algorithmen & RoboZZle
 - cells:
     - 28.08.2026
-    - BYOD Basics
-    - "Ziel: Modul 2 fertig"
+    - A
+    - Programmieren 1
+    - Algorithmen & Einstieg Turtlegrafik
 - cells:
     - 04.09.2026
-    - BYOD Basics
-    - "Ziel: Modul 3+4 fertig"
+    - B
+    - Programmieren 1
+    - Algorithmen & Einstieg Turtlegrafik
 - cells:
     - 11.09.2026
-    - BYOD Basics
-    - "Ziel: Modul 5 fertig"
+    - A
+    - Programmieren 1
+    - Wiederholte Ausführung
 - cells:
     - 18.09.2026
+    - 
     - Kennenlernwoche GYM1
     - 
   type: holiday
   icon: mdiWalletTravel
 - cells:
     - 25.09.2026
+    - 
     - Herbstferien
     - 🏝️🏖️🏖️😎
   type: holiday
 - cells:
     - 02.10.2026
+    - 
     - Herbstferien
     - 🏝️🏖️🏖️😎
   type: holiday
 - cells:
     - 09.10.2026
+    - 
     - Herbstferien
     - 🏝️🏖️🏖️😎
   type: holiday
 - cells:
     - 16.10.2026
-    - Test Schriftlich
-    - Kurztest schriftlich zu den BYOD Basics
-  type: test
+    - B
+    - Programmieren 1
+    - Wiederholte Ausführung
 - cells:
     - 23.10.2026
-    - Test Praktisch
-    - Kurztest praktisch zu den BYOD Basics
-  type: test
-  icon: mdiLaptop
+    - A
+    - Programmieren 1
+    - Unterprogramme und Fehler
 - cells:
     - 30.10.2026
-    - Test Praktisch
-    - Kurztest praktisch zu den BYOD Basics
-  type: test
-  icon: mdiLaptop
+    - B
+    - Programmieren 1
+    - Unterprogramme und Fehler
 - cells:
     - 06.11.2026
-    - Test Praktisch
-    - Kurztest praktisch zu den BYOD Basics / Vorbereitung "Informatik Biber"
-  type: test
-  icon: mdiLaptop
+    - A
+    - Programmieren 1
+    - Parameter
 - cells:
     - 13.11.2026
-    - Informatik Biber
-    - Vorbereitung auf den Wettbewerb "Informatik Biber"
+    - B
+    - Programmieren 1
+    - Parameter
 - cells:
     - 20.11.2026
-    - Informatik Biber
-    - Wettbewerb
-  type: event
-  icon: mdiKarate
+    - A
+    - Programmieren 1
+    - Variablen, Eingabe & Ausgabe
 - cells:
     - 27.11.2026
+    - B
     - Programmieren 1
-    - Übungs- und Fragestunde
+    - Variablen, Eingabe & Ausgabe
 - cells:
     - 04.12.2026
+    - A
     - Programmieren 1
+    - Verzweigungen
+- cells:
+    - 04.12.2026
+    - A&B
+    - Programmieren 1, Ganzklasse
     - Kurztest Programmieren 1, halbzählend
   type: test
+  icon: mdiSchool
 - cells:
     - 11.12.2026
+    - B
     - Programmieren 1
-    - Besprechung Kurztest
+    - Verzweigungen
 - cells:
     - 18.12.2026
+    - A
     - Programmieren 1
-    - 🎄Programmieren
+    - While
 - cells:
     - 25.12.2026
+    - 
     - Winterferien
-    - "Schulschluss am Do. 24.12.26 um 12:05"
+    - Schulschluss am Do. 24.12.26 um 12:05
   type: holiday
 - cells:
     - 01.01.2027
+    - 
     - Winterferien
     - 🏂❄️⛷️🎄🧑‍🎄
   type: holiday
   icon: mdiPineTreeVariantOutline
 - cells:
     - 08.01.2027
+    - B
     - Programmieren 1
-    - Verzweigungen
+    - While
 - cells:
     - 15.01.2027
+    - A
     - Programmieren 1
-    - Wiederholung
+    - Rückgabewerte
 - cells:
     - 20.01.2027
+    - 
     - Notenschluss
     - 
   type: event
   icon: mdiFlagCheckered
 - cells:
     - 22.01.2027
+    - B
     - Programmieren 1
-    - Wiederholung
+    - Rückgabewerte
 - cells:
     - 01.02.2027
+    - 
     - Beginn Semester 2
     - 
   type: event
   icon: mdiRocketLaunch
 - cells:
     - 05.02.2027
+    - 
     - Programmieren 1
     - Test - findet in der DL in dieser Woche statt, Wochentag noch nicht bekannt.
   type: test
   icon: mdiSchool
 - cells:
+    - 05.02.2027
+    - A
+    - Programmieren 1
+    - Listen
+- cells:
     - 12.02.2027
+    - 
     - Sportwoche
     - 
   type: holiday
