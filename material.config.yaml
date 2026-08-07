@@ -82,7 +82,36 @@
 30Gx:
   - from: docs/Onboarding/
     as: 01-Onboarding
-    ignore: []
+    ignore:
+      - _category_.yml
+  - from: docs/OF-BYOD-Basics-29/
+    as: 02-BYOD
+    ignore:
+      - _category_.yml
+      - 00-Szenarien.mdx
+    open: true
+  - from: docs/OF-Programmieren-1/
+    as: 03-Programmieren-1
+    ignore:
+      - _category_.yml
+      - 02-py-intro
+      - 03-repeat
+      - 04-errors
+      - 05-functions
+      - 06-parameters
+      - 07-Variablen
+      - 08-Verzweigungen
+      - 09-While
+      - 10-Rueckgabewerte
+      - 12-rekursion
+      - 16-modulo
+      - 15-Gruefnisch
+      - 20-commands
+      - 21-mistakes.mdx
+      - 30-Repefragen
+      - 50-Test
+      - 51-Tests.mdx
+    open: true
 pages:
   - from: docs/Math/Taschenrechner/
     to: website/pages/mathematik/taschenrechner
