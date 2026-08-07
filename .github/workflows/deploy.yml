@@ -12,13 +12,13 @@ jobs:
     name: Build Docusaurus
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
           # Whether to checkout submodules: `true` to checkout submodules or `recursive` to
           # recursively checkout submodules.
           submodules: 'recursive'
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: '>=24.13.0'
           cache: yarn
@@ -29,9 +29,6 @@ jobs:
 
       - name: Build Site
         env:
-          CLIENT_ID: ${{ secrets.CLIENT_ID }}
-          TENANT_ID: ${{ secrets.TENANT_ID }}
-          API_URI: ${{ secrets.API_URI }}
           APP_URL: ${{ secrets.APP_URL }}
           BACKEND_URL: ${{ secrets.BACKEND_URL }}
           UMAMI_ID: ${{ secrets.UMAMI_ID }}
@@ -67,4 +64,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
