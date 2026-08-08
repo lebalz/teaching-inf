@@ -19,7 +19,6 @@
 100-Mathematik/01-Taschenrechner/*
 05-Rechnerarchitektur/*
 !05-Rechnerarchitektur/_category_.yml
-05-Rechnerarchitektur/_category_.json
 06-Kryptologie/*
 !06-Kryptologie/04-Chiffren-Knacken.mdx
 !06-Kryptologie/05-Kryptoanalyse/
@@ -30,3 +29,4 @@
 !06-Kryptologie/10-Signaturen/
 !06-Kryptologie/_category_.yml
 !06-Kryptologie/index.mdx
+06-Kryptologie/_category_.json
