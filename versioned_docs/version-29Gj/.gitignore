@@ -20,3 +20,13 @@
 05-Rechnerarchitektur/*
 !05-Rechnerarchitektur/_category_.yml
 05-Rechnerarchitektur/_category_.json
+06-Kryptologie/*
+!06-Kryptologie/04-Chiffren-Knacken.mdx
+!06-Kryptologie/05-Kryptoanalyse/
+!06-Kryptologie/06-Symmetrisch/
+!06-Kryptologie/07-Krypto-Family.mdx
+!06-Kryptologie/08-Asymmetrisch/
+!06-Kryptologie/09-Hashing/
+!06-Kryptologie/10-Signaturen/
+!06-Kryptologie/_category_.yml
+!06-Kryptologie/index.mdx
