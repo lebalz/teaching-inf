@@ -203,6 +203,7 @@ nav.menu {
             &.tdev {
                 --tdev-sidebar-color: var(--ifm-color-info);
             }
+            &.marked,
             &.inf-of {
                 --tdev-sidebar-color: var(--ifm-color-blue);
             }
