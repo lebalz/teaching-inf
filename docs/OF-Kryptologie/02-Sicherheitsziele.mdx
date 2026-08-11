@@ -5,6 +5,11 @@ sidebar_custom_props:
     name: mit Material von classrooms.app
     ref: https://classrooms.app/28Ga/Kryptologie/Grundbegriffe
 ---
+import ChoiceAnswer from '@tdev-components/documents/Assessable/ChoiceAnswer';
+import TrueFalseAnswer from '@tdev-components/documents/Assessable/TrueFalseAnswer';
+import Quiz from '@tdev-components/documents/Assessable/Quiz';
+import { points, multipleChoicePoints, noPoints } from '@tdev-components/documents/Assessable/helpers/scoring';
+import Hints from '@tdev-components/documents/Assessable/Feedback/Hints';
 
 # Sicherheitsziele
 ## Wozu brauchen wir Kryptographie?
@@ -68,10 +73,135 @@ Diese Wechselwirkung gilt jedoch nur dann, wenn auch das Ziel der _Integrität_ 
 Wieso ist das Thema des Misstrauens in der Informatik und der Informationswissenschaft so wichtig, dass sich daraus ein eigenständiger Wissenschaftszweig ergeben hat? Diskutieren Sie!
 :::
 
-## Quiz
-:::aufgabe[Testen Sie Ihr Wissen!]
-<TaskState id="7703eba8-5fa2-4db1-b1d6-a4a8386f6081" />
-::learningapps[https://learningapps.org/pqdbz703c24]
-:::
 
----
+## Aufgaben
+
+::::aufgabe[Aufgabe 1: Sicherheitsziele im Alltag]
+<Quiz scoring={points(1)} keepExpanded='selected' id="973badd9-8831-4429-9e2f-298f69745812" randomizeQuestions randomizeOptions>
+
+<ChoiceAnswer correct={[3]}>
+
+  > Wenn Alice ihrem Mitarbeiter Bob einen Auftrag geben will, dann schreibt sie den Auftrag jeweils auf einen Zettel und legt ihn auf Bobs Schreibtisch. Wenn Bob wieder am Schreibtisch ist, sieht er den Auftrag und bearbeitet ihn. Eva nutzt diesen Ablauf gerne aus, um sich ihre Arbeit zu erleichtern: sie legt ihre eigenen Aufträge auch einfach auf Bobs Schreibtisch, und schon werden sie erledigt. Als Bob und Alice dies bemerken, überlegen sie sich einen Plan: Von nun an wird Alice in jedem Auftrag irgendwo das geheime Codewort "Melone" verwenden. Wenn er dieses Wort liest, weiss Bob, dass der Auftrag wirklich von Alice stammt. Wenn das Wort jedoch fehlt, dann kam der Auftrag vermutlich von Eva. Welche Sicherheitsziel verfolgen Bob und Alice mit ihrem Plan?
+
+  1. Vertraulichkeit
+  2. Integrität
+  3. Authentizität
+  4. Verbindlichkeit
+
+  :::info
+  Es ist möglich, dass der Plan noch weitere Ziele abdeckt. Gesucht ist aber nur dasjenige Ziel, aufgrund dessen Bob und Alice diesen Plan entwickeln.
+  :::
+
+  <Hints when='correct'>
+    Genau! Bob will überprüfen können, ob eine Nachricht wirklich von Alice stammt. Es geht also um die Authentizität.
+
+    Auch wenn dies hier nicht unbedingt das Ziel war, deckt dieser Plan übrigens auch die Verbindlichkeit ziemlich gut ab: Wenn ein Auftrag das Wort "Melone" enthält, wird Bob ihr vermutlich nicht glauben, falls Alice behauptet, der Auftrag sei nicht von ihr.
+  </Hints>
+
+</ChoiceAnswer>
+
+<ChoiceAnswer correct={[2]}>
+  > Anna überreicht ihrer Tochter Mira jeden Freitagmorgen vor der Arbeit eine Einkaufsliste, die sie und Papa Tom anschliessend im Supermarkt abarbeiten. Mira fügt dort aber gerne verbotenerweise zuerst noch ihre Lieblingssnacks hinzu. Sie kann die Handschrift der Mutter schon so gut imitieren, dass Tom regelmässig darauf reinfällt. Also beschliesst Anna, dass sie ab jetzt jeweils direkt unter dem letzten Punkt auf der Liste einen dicken Strich zieht. Damit würden Miras Ergänzungen nun sofort auffallen, weil sie entweder unter dem Strich stehen, oder neben einen anderen Punkt hingekritzelt werden müssten.
+
+  1. Vertraulichkeit
+  2. Integrität
+  3. Authentizität
+  4. Verbindlichkeit
+
+  <Hints when='correct'>
+    Richtig! Anna will sicherstellen, dass die Nachricht (die Einkaufsliste) unterwegs (auf dem Weg zu Tom, via Mira) nicht verändert wird. Zwar kann Mira die Nachricht nach wie vor manipulieren - das würde aber sofort auffallen. Die clevere Mira könnte die Liste aber natürlich auch einfach abschreiben und dann den dicken Strich erst unterhalb ihrer Ergänzungen ziehen. Das Ziel der Authentizität wird von Annas System also nicht erfüllt: Tom kann nicht überprüfen, ob die Liste insgesamt wirklich von Anna verfasst wurde. Er kann nur prüfen, dass sie nicht nachträglich verändert wurde (Integrität). 
+  </Hints>
+</ChoiceAnswer>
+<ChoiceAnswer correct={[1]}>
+  > Beim Verpacken seiner Weihnachtsgeschenke überlegt sich Marco, wie er die Pakete beschriften soll. Er möchte nämlich nicht, dass seine Frau und die beiden Kinder gleich sehen, wer welches Geschenk erhält. Schliesslich könnte man ja anhand der Grösse auch erahnen, was der Inhalt sein könnte. Wenn er die Pakete aber gar nicht beschriftet, weiss er schlussendlich selbst auch nicht mehr, welches Geschenk für wen bestimmt ist. Also markiert er das Geschenk für Anja mit einer Sonne, das für Jan mit einem Mond und das für Tina mit einem Stern. 
+  1. Vertraulichkeit
+  2. Integrität
+  3. Authentizität
+  4. Verbindlichkeit
+
+  <Hints when='correct'>
+    Genau! Hier haben wir es mit drei Nachrichten zu tun, deren Inhalt jeweils die Zuordnung des beschrifteten Geschenks zum entsprechenden Familienmitglied enthält. Bei allen drei Nachrichten ist Marco sowohl der Sender als auch der Empfänger. Ausser ihm soll aber niemand anderes den Inhalt dieser Nachrichten verstehen können. Das Ziel ist also die Vertraulichkeit.
+  </Hints>
+</ChoiceAnswer>
+
+</Quiz>
+::::
+
+
+::::aufgabe[Aufgabe 2: Sicherheitsziele in der Kryptologie]
+<Quiz scoring={points(1)} id="de4adbb3-1c91-435c-b7ef-9cd804ba15ca" randomizeQuestions randomizeOptions>
+<ChoiceAnswer correct={[1]}>
+  > Welche vier primären Sicherheitsziele werden bei der Entwicklung und Verwendung kryptographischer Verfahren verfolgt?
+
+  1. Vertraulichkeit, Integrität, Authentizität, Verbindlichkeit
+  2. Vertraulichkeit, Verschlüsselung, Authentizität, Signatur
+  3. Integrität, Anonymität, Verbindlichkeit, Geschwindigkeit
+  4. Vertraulichkeit, Integrität, Verschlüsselung, Anonymität
+
+</ChoiceAnswer>
+
+<ChoiceAnswer correct={[2]}>
+  > Was bedeutet das Sicherheitsziel "Vertraulichkeit"?
+
+  1. Eine Nachricht darf unterwegs nicht verändert werden
+  2. Eine Nachricht soll nur von den vorgesehenen Empfängern gelesen und verstanden werden können
+  3. Die Sender:in kann die Nachricht später nicht abstreiten
+  4. Die Empfänger:in kann die Herkunft der Nachricht überprüfen
+
+</ChoiceAnswer>
+
+<TrueFalseAnswer  correct >
+  > Beim Beispiel der Geheimsprache unter Freund:innen ist das oberste Sicherheitsziel die Vertraulichkeit.
+
+</TrueFalseAnswer>
+
+<ChoiceAnswer correct={[2]}>
+  > Welche Sicherheitsziele werden durch das Beispiel "Bestätigung für das Lager" (Unterschrift der Eltern) primär abgedeckt?
+
+  1. Nur Vertraulichkeit
+  2. Verbindlichkeit und Authentizität
+  3. Nur Integrität
+  4. Vertraulichkeit und Integrität
+
+</ChoiceAnswer>
+
+<ChoiceAnswer correct={[2]}>
+  > Warum ist beim Lager-Bestätigungsbeispiel die Vertraulichkeit nicht abgedeckt?
+
+  1. Weil die Unterschrift gefälscht werden kann
+  2. Weil das Dokument weder verschlüsselt noch so verpackt ist, dass es nur die Eltern lesen können
+  3. Weil der Inhalt für die Lehrperson unlesbar ist
+  4. Weil die Eltern die Nachricht abstreiten können
+
+</ChoiceAnswer>
+
+<ChoiceAnswer correct={[3]}>
+  > Wem misstraut die Empfänger:in beim Ziel der Verbindlichkeit?
+
+  1. Drittpersonen
+  2. Sich selbst
+  3. Der Sender:in
+  4. Niemandem, da Verbindlichkeit kein Vertrauensproblem betrifft
+
+</ChoiceAnswer>
+
+<ChoiceAnswer correct={[1]}>
+  > Wird eines der Sicherheitsziele *Authentizität* oder *Verbindlichkeit* erreicht, so trifft meist auch das andere Sicherheitsziel zu. Dies gilt jedoch nur, wenn als Voraussetzung...
+
+  1. die *Integrität* 
+  2. die *Vertraulichkeit*
+
+  ...der Nachricht gewährleistet ist
+</ChoiceAnswer>
+
+<ChoiceAnswer correct={[1, 2, 4]} scoring={multipleChoicePoints(2, 1)} multiple>
+  > Welche Aussage(n) zum Beispiel "Telefonspiel / Stille Post" treffen zu?
+
+  1. Es veranschaulicht eine mögliche unabsichtliche Verletzung der Integrität
+  2. Es zeigt, dass Drittpersonen eine Nachricht unterwegs unbeabsichtigt verändern können
+  3. Es dient als Beispiel für einen Verstoss gegen die Verbindlichkeit
+  4. Es zeigt, wie sich übertragene Informationen beim Weitergeben verändern können
+
+</ChoiceAnswer>
+</Quiz>
+::::
