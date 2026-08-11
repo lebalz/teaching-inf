@@ -28,7 +28,7 @@
 	},
 	"solution": {
 		"prefix": "<Solution />",
-		"body": "<Solution id=\"$1\">\n$2\n</Solution>",
+		"body": "<Solution id=\"$1\">\n$2\n</Solution",
 		"description": "insert a solution component"
 	}
 }

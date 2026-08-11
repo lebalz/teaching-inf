@@ -1,0 +1,174 @@
+---
+page_id: 77abc56e-6c36-4609-b248-d93a0d6295b1
+sidebar_custom_props:
+  source:
+    name: brr
+    ref: 'https://classrooms.app/30Gg/Onboarding/Quiz'
+---
+
+import { mdiContentSaveCheckOutline, mdiContentSaveOffOutline, mdiTrashCan } from '@mdi/js';
+import Quiz from "@tdev-components/documents/Assessable/Quiz"
+import ChoiceAnswer from "@tdev-components/documents/Assessable/ChoiceAnswer"
+import TrueFalseAnswer from "@tdev-components/documents/Assessable/TrueFalseAnswer"
+import Button from "@tdev-components/shared/Button"
+import { mdiCheckboxMarkedCircleAutoOutline, mdiRestore, mdiCheckCircleOutline, mdiCloseCircleOutline, mdiProgressCheck, mdiProgressQuestion, mdiTrashCanOutline, mdiInformationOutline } from '@mdi/js';
+import { IfmColors } from '@tdev-components/shared/Colors';
+import { points, multipleChoicePoints, noPoints } from '@tdev-components/documents/Assessable/helpers/scoring';
+import Icon from "@mdi/react"
+import Steps from "@tdev-components/Steps"
+
+# Ankreuz-Aufgaben
+Auf dieser Seite lernen Sie verschiedene Formen von Ankreuz-Aufgaben kennen. Dies sind die wichtigsten Steuerelemente und Symbole solcher Fragen:
+
+<Button icon={mdiCheckboxMarkedCircleAutoOutline} color="success" iconSide="left" size={0.7}>Prüfen</Button>
+: Antwort überprüfen
+<Button icon={mdiRestore} color="secondary" iconSide="left" size={0.7}>Zurücksetzen</Button>
+: Antwort zurücksetzen, um die Frage erneut zu beantworten
+<Icon size={1} path={mdiTrashCanOutline} color={IfmColors.red} /> 
+: Antwort entfernen
+: Erscheint bei Richtig-Falsch- und Single-Choice Fragen, wenn der Mauszeiger über die zu löschende Antwortmöglichkeit bewegt wird
+<Icon size={1} path={mdiCheckCircleOutline} color={IfmColors.green} /> 
+: Die Frage wurde richtig beantwortet.
+<Icon size={1} path={mdiProgressCheck} color={IfmColors.orange} /> 
+: Die Frage wurde teilweise richtig beantwortet (bei Multiple-Choice-Fragen).
+<Icon size={1} path={mdiCloseCircleOutline} color={IfmColors.red} /> 
+: Die Frage wurde falsch beantwortet.
+<Icon size={1} path={mdiProgressQuestion} color={IfmColors.lightBlue} /> 
+: Die Antwort wurde geprüft, aber die Frage wurde nicht beantwortet.
+
+:::tip[Aufgabenübersicht]
+Alle Ankreuz-Fragen werden oben in der Aufgabenübersicht individuell dargestellt:
+
+![--width=300px](img/choice-answer/task-states.png)
+
+Die Farbe bezieht sich auf die Überprüfung der Antwort (grau wenn noch nicht geprüft, grün wenn richtig, etc.).
+:::
+
+**Gehen Sie bei jeder der folgenden Fragen wie folgt vor:**
+<Steps>
+1. Beantworten Sie die Frage.
+2. Prüfen Sie Ihre Antwort mit dem __Prüfen__-Button im Titel der Frage.
+3. Wird die Frage grün umrandet, war Ihre Antwort korrekt. Wenn Sie eine Frage beim ersten Mal nicht richtig beantwortet haben, klicken Sie auf __Zurücksetzen__ und versuchen Sie es erneut. 
+</Steps>
+
+## Richtig-Falsch
+Bei **Richtig-Falsch-Fragen** gibt es nur zwei Antwortmöglichkeiten. Wählen Sie die korrekte Antwort aus und prüfen Sie Ihre Antwort anschliessend mit den Button.
+
+<TrueFalseAnswer correct={true} id="02865748-0b50-4101-9eb8-af311efdf0d5">
+    Sie lernen gerade die Informatik-Webseite kennen.
+</TrueFalseAnswer>
+
+## Single Choice
+Bei Single-Choice-Aufgaben kann es mehr als zwei Antwortmöglichkeiten geben, Sie können jedoch nur eine davon auswählen.
+
+<ChoiceAnswer correct={[3]} keepExpanded='selected' id="930cb3d3-cd8a-46ed-862a-cc6c65ad1cf4">
+In welchem Monat beginnt bei uns jeweils das neue Schuljahr?
+
+1. Januar
+2. Mai
+3. August
+4. September
+5. Dezember
+</ChoiceAnswer>
+
+:::tip[Gut zu wissen…]
+Es kann auch Single-Choice-Aufgaben geben, bei denen mehr als eine Antwort richtig ist. Sie müssen in dem Fall einfach eine der richtigen Antworten auswählen.
+:::
+
+## Multiple Choice
+Bei **Multiple-Choice-Aufgaben** (erkennbar an den eckigen statt runden Auswahl-Kästchen) können mehrere Antworten korrekt sein.
+
+<ChoiceAnswer multiple keepExpanded='selected' correct={[3, 4]} id="c43faff7-6218-48e7-bac6-0ce67f16e99c">
+Welche Monate gehören zum Sommer?
+
+1. Januar
+2. März
+3. Juli
+4. August
+5. November
+</ChoiceAnswer>
+
+:::tip[Teilweise richtig?]
+Multiple-Choice-Fragen können als «teilweise richtig» bewertet werden. Das heisst: Einige Entscheidungen (auswählen oder nicht auswählen) waren korrekt, andere nicht. Sie haben also **mindestens eine korrekte** Antwortmöglichkeit **ausgewählt** oder **mindestens eine nicht korrekte** Antwortmöglichkeit **nicht ausgewählt**.
+:::
+
+## Quizzes
+Ein Quiz besteht aus mehreren Ankreuz-Fragen (und kann theoretisch auch andere Antwort-Typen enthalten) die zusammen bewertet werden.
+
+Bei Quizzes können die beantworteten Fragen nicht einzeln überprüft werden. Stattdessen können Sie am Schluss auf __Quiz beenden__ klicken, um das Quiz abzuschliessen und Ihre Antworten zu überprüfen. Danach sehen Sie, wie viele Punkte Sie erreicht haben. Sie können Ihre Antworten ab dann **nicht mehr anpassen**. Wenn Sie noch nicht alle Fragen korrekt beantwortet haben, müssen Sie das Quiz zurücksetzen und neu beginnen.
+
+:::cards
+<Quiz scoring={points(1)} id="84e83d0e-e380-434c-bdae-f1e022f9e261" randomizeQuestions randomizeOptions>
+    <ChoiceAnswer correct={[1]}>
+        In welchem Jahr war 2024?
+
+        1. 2024
+        2. 1991
+        3. 2000
+        4. 1983
+        5. 1965
+    </ChoiceAnswer>
+
+    <ChoiceAnswer correct={[4]}>
+        Wie heisst ein berühmter Schweizer Tennisspieler?
+
+        1. Max Mustermann
+        2. Barbara Beispiel
+        3. Ezard Exempel
+        4. Roger Federer
+        5. Damian Demo
+    </ChoiceAnswer>
+
+    <TrueFalseAnswer correct={false}>
+        Unsere Atemluft besteht zum grössten Teil aus Sauerstoff.
+    </TrueFalseAnswer>
+
+    <ChoiceAnswer multiple correct={[3, 5]} scoring={multipleChoicePoints(1, 0.5, false)}>
+        Welche Wochentage gibt es **nicht**?
+
+        1. Dienstag
+        2. Freitag
+        3. Zahltag
+        4. Donnerstag
+        5. Jahrestag
+    </ChoiceAnswer>
+</Quiz>
+:::
+
+:::tip[Gut zu wissen…]
+Die Fragen und die Antwortmöglichkeiten innerhalb der Fragen erscheinen bei diesem Quiz in zufälliger Reihenfolge. Bei Ihnen selbst bleibt die Reihenfolge zwar auch beim Neuladen der Seite immer gleich, aber bei Ihrem Nachbarn / Ihrer Nachbarin ist sie womöglich anders.
+:::
+
+Bei einem Quiz gibt es nicht zwingend für jede Frage gleich viele Punkte. Schauen Sie jeweils im Kopf der Frage auf die angegebene Punktzahl. Klicken Sie auf die Punktzahl-Angabe, um mehr darüber zu erfahren, wie die entsprechende Frage bewertet wird.
+
+:::cards
+<Quiz keepExpanded="selected" scoring={points(1)} id="561650d8-8b11-4267-836a-d859a15ab580">
+    <ChoiceAnswer correct={[3]} scoring={points(2)}>
+        Wie viele Seiten hat ein Würfel?
+
+        1. 2
+        2. 4
+        3. 6
+        4. 8
+    </ChoiceAnswer>
+    
+    <TrueFalseAnswer correct={false}>
+        Zürich ist die Hauptstadt der Schweiz.
+    </TrueFalseAnswer>
+
+    <TrueFalseAnswer correct={true} scoring={noPoints()}>
+        Es kann auch Aufgaben geben, für die es keine Punkte gibt.
+    </TrueFalseAnswer>
+
+    <ChoiceAnswer multiple correct={[1, 2, 5]} scoring={multipleChoicePoints(3, 1, true)}>
+        Finden Sie heraus, wie genau diese Frage bewertet wird. Kreuzen Sie anschliessend alle korrekten Aussagen an.
+
+        1. Diese Aufgabe gibt bis zu 3 Punkte.
+        2. Pro falscher Antwort (zu wenig oder zu viel angekreuzt) gibt es 1 Punkt Abzug.
+        3. Bei mehr als einer falschen Antwort (zu wenig oder zu viel angekreuzt) gibt es 0 Punkte.
+        4. Wenn man alles richtig beantwortet, gibt es 6 Punkte.
+        5. Wenn man zu viel falsch beantwortet, gibt es Negativpunkte.
+        6. Wenn man keine der Antworten auswählt, hat man mindestens noch die Hälfte der Punkte.
+    </ChoiceAnswer>
+</Quiz>
+:::
