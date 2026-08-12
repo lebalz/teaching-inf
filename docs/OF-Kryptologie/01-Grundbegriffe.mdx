@@ -35,6 +35,14 @@ Um einen Klartext in einen Geheimtext umzuwandeln, benötigen wir einerseits ein
 | $D$    | **Entschlüsselungsverfahren (Entschlüsselungsalgorithmus)** | _decryption algorithm_ | Ein Algorithmus, der einen Geheimtext unter Verwendung eines Schlüssels in Klartext umwandelt.                                      |
 |        | **Chiffre**                                                 | _cipher_               | Ein Paar aus einem $E$ und einem $D$, bei dem $D$ die unter Verwendung desselben Schlüssels $k$[^1] die Umkehroperation von $E$ ist |
 
+
+
+:::definition[Die Bestandteile einer Chiffre]
+Formal können wir die Bestandteile einer Chiffre also wie folgt definieren:
+* $E$ ist eine Funktion, sodass gilt: $E(p, k) = c$. Das Verschlüsselungsverfahren $E$ ist also eine Funktion, die aus einem Klartext $p$ und dem Schlüssel $k$ den dazugehörigen Geheimtext $c$ berechnet.
+* $D$ ist eine Funktion, sodass gilt: $D(c, k) = p$. Das Entschlüsselungsverfahren $D$ ist also eine Funktion, die aus einem Geheimtext $c$ und dem Schlüssel $k$ den dazugehörigen Klartext $p$ berechnet.
+:::
+
 :::aufgabe[Chiffre]
 <Answer type="state" id="65927357-5a94-4f22-bc55-384f69ecf5fb" />
 
@@ -52,11 +60,6 @@ Die **Chiffre** ist oben zwar wohl definiert, auf Anhieb aber dennoch nicht ganz
 </Solution>
 :::
 
-:::definition[Die Bestandteile einer Chiffre]
-Formal können wir die Bestandteile einer Chiffre also wie folgt definieren:
-* $E$ ist eine Funktion, sodass gilt: $E(p, k) = c$. Das Verschlüsselungsverfahren $E$ ist also eine Funktion, die aus einem Klartext $p$ und dem Schlüssel $k$ den dazugehörigen Geheimtext $c$ berechnet.
-* $D$ ist eine Funktion, sodass gilt: $D(c, k) = p$. Das Entschlüsselungsverfahren $D$ ist also eine Funktion, die aus einem Geheimtext $c$ und dem Schlüssel $k$ den dazugehörigen Klartext $p$ berechnet.
-:::
 
 :::insight[Das Zusammenspiel der Bestandteile einer Chiffre]
 Weil $E(p, k) = c$ gilt, können wir in $D(c, k) = p$ das $c$ mit $E(p, k)$ ersetzen und erhalten somit $D(E(p, k), k) = p$. Mit anderen Worten: Wenn wir einen Klartext $p$ unter Verwendung eines Schlüssels $k$ mit $E$ **ver**schlüsseln und das Ergebnis wieder unter Verwendung desselben Schlüssels $k$[^1] mit $D$ **ent**schlüsseln, dann erhalten wir am Ende wieder den ursprünglichen Klartext $p$.
