@@ -130,13 +130,14 @@ abstract class iAssessable<T extends AssessableType> extends iDocument<T> implem
 
     @computed
     get quiz(): Quiz | undefined {
-        if (this.type === 'quiz' || !this.inQuiz) {
+        if (!this.inQuiz) {
             return undefined;
         }
-        const quiz = this.root?.documents.find(
-            (doc) => doc.authorId === this.authorId && doc.type === 'quiz'
-        );
-        return quiz as Quiz | undefined;
+        const firstQuiz = this.root?.documents.find((d) => d.type === 'quiz') as Quiz | undefined;
+        if (!firstQuiz || firstQuiz.id === this.id) {
+            return undefined;
+        }
+        return firstQuiz;
     }
 
     @computed
@@ -144,10 +145,14 @@ abstract class iAssessable<T extends AssessableType> extends iDocument<T> implem
         if (this.linkedMeta?.scoring) {
             return this.linkedMeta.scoring;
         }
-        if (!this.inQuiz || !this.quiz) {
+        if (!this.inQuiz || this.type === 'quiz') {
             return null;
         }
-        return this.quiz.scoringFunction as ((self: iAssessable<T>) => Assessement) | null;
+        const quiz = this.root?.documentsByType?.get('quiz')?.[0] as Quiz | undefined;
+        if (quiz?.type !== 'quiz') {
+            return null;
+        }
+        return quiz.scoringFunction as ((self: iAssessable<T>) => Assessement) | null;
     }
 
     @computed
