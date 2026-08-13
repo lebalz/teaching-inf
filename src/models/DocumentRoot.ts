@@ -199,7 +199,7 @@ class DocumentRoot<T extends DocumentType> {
             return (
                 this.isDummy ||
                 d.authorId === this.viewedUserId ||
-                !NoneAccess.has(highestAccess(new Set([this.permission]), this.sharedAccess))
+                (!NoneAccess.has(this.sharedAccess) && !NoneAccess.has(this.permission))
             );
         });
         return docs;
