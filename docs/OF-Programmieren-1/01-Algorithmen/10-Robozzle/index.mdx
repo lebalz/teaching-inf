@@ -13,7 +13,7 @@ export const Solution = ({ fns }) => {
     <div style={{ marginBottom: '1em' }}>
       {fns.map((fn, i) => (
         <div key={i} style={{ display: 'flex', alignItems: 'center' }}>
-          <h3 style={{ width: '4em', marginBottom: 0 }}>{fn.name}:</h3>
+          <h3 style={{ width: '4em', marginBottom: 0, alignSelf: 'flex-start', paddingTop: '0.4em' }}>{fn.name}:</h3>
           <div style={{ display: 'flex', alignItems: 'baseline', flexWrap: 'wrap', flexBasis: '10em' }}>
             {
               [...new Array(fn.fields)].map((_, idx) => {
@@ -125,11 +125,28 @@ Es müssen nicht immer alle Felder eines Unterprogramms ausgefüllt werden. In d
 
 ### 3
 :::aufgabe[Robozzle 3]
+  <Answer type="state" id="300594c6-c18b-43ef-a902-41e299911f62" />
+
+  [Puzzle 3](https://alexanderson1993.github.io/robozzle-react/?level=-3)
+
+  ![Puzzle 3 --width=350px](./images/robozzle-3.png)
+  <Solution 
+    fns={[
+      { name: 'Mn', fields: 2}
+    ]}
+  />
+
+  <Answer type="text" id="303bd090-3c63-4324-8be6-7ee82753fd72" />
+:::
+
+
+### 4
+:::aufgabe[Robozzle 4]
   <Answer type="state" id="cd97fd59-1a05-49f8-9257-6eb44b1cc518" />
 
-  [Puzzle 3](https://alexanderson1993.github.io/robozzle-react/?level=14261)
+  [Puzzle 4](https://alexanderson1993.github.io/robozzle-react/?level=14261)
 
-  ![Puzzle 3 --width=350px](./images/robozzle-14261.png)
+  ![Puzzle 4 --width=350px](./images/robozzle-14261.png)
   
   <Solution 
     fns={[
@@ -142,21 +159,6 @@ Es müssen nicht immer alle Felder eines Unterprogramms ausgefüllt werden. In d
 :::
 
 
-### 4
-:::aufgabe[Robozzle 4]
-  <Answer type="state" id="300594c6-c18b-43ef-a902-41e299911f62" />
-
-  [Puzzle 4](https://alexanderson1993.github.io/robozzle-react/?level=-3)
-
-  ![Puzzle 4 --width=350px](./images/robozzle-3.png)
-  <Solution 
-    fns={[
-      { name: 'Mn', fields: 10}
-    ]}
-  />
-
-  <Answer type="text" id="303bd090-3c63-4324-8be6-7ee82753fd72" />
-:::
 
 ### 5
 :::aufgabe[Robozzle 5]
