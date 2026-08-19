@@ -46,13 +46,16 @@ Das obige Tool können Sie dazu nicht verwenden, da dort ein anderes Polybios-Qu
 
 Achten Sie auf Grossschreibung und Leerzeichen. Kontrollieren Sie Ihre Lösungen mit den :mdi[help-circle-outline]-Buttons.
 
-| Klartext                                                                    | Geheimtext                                                                                          |
-|-----------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------|
-| HALLO                                                                       | <String solution="11 51 22 22 41" id="678008d5-3723-4bdb-a3e4-d1727af6a29c" />                      |
-| <String solution="KRYPTO" id="cbc0a29c-7945-4f32-a546-b6a64594abfc" />      | 23 34 53 25 33 41                                                                                   |
-| TREFFPUNKT                                                                  | <String solution="33 34 13 31 31 25 45 21 23 33" id="eb1f9e94-6bb0-442f-bffb-f967beeab36c" />       |
-| <String solution="MISSISSIPPI" id="516704d0-68d3-4e43-87de-f27d0a338ce9" /> | 12 43 35 35 43 35 35 43 25 25 43                                                                    |
-| GRIECHENLAND                                                                | <String solution="52 34 43 13 24 11 13 21 22 51 21 14" id="e86c2e24-74c2-4db1-bfee-59f741410f6e" /> |
+export const sani = (v) => (v || '').toUpperCase().trim();
+export const sani2 = (v) => (v || '').replaceAll(/\s/g, '').trim();
+
+| Klartext                                                                                     | Geheimtext                                                                                          |
+|----------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------|
+| HALLO                                                                                        | <String solution="11 51 22 22 41" id="678008d5-3723-4bdb-a3e4-d1727af6a29c" sanitizer={sani2} />                      |
+| <String solution="KRYPTO" id="cbc0a29c-7945-4f32-a546-b6a64594abfc" sanitizer={sani} />      | 23 34 53 25 33 41                                                                                   |
+| TREFFPUNKT                                                                                   | <String solution="33 34 13 31 31 25 45 21 23 33" id="eb1f9e94-6bb0-442f-bffb-f967beeab36c" sanitizer={sani2} />       |
+| <String solution="MISSISSIPPI" id="516704d0-68d3-4e43-87de-f27d0a338ce9" sanitizer={sani} /> | 12 43 35 35 43 35 35 43 25 25 43                                                                    |
+| GRIECHENLAND                                                                                 | <String solution="52 34 43 13 24 11 13 21 22 51 21 14" id="e86c2e24-74c2-4db1-bfee-59f741410f6e" sanitizer={sani2} /> |
 
 ::::
 
