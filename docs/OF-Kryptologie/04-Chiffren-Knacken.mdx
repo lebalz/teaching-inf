@@ -12,17 +12,13 @@ In jeder Aufgabe finden Sie einen oder mehrere Tipps, die Sie verwenden dürfen,
 ::::aufgabe[Aufgabe 1]
 <TaskState id="c73be70f-bbb6-4153-bf9a-5bb85ff0d9ed" />
 
-Das vermutlich unsicherste Verschlüsselungsverfahren, dass Sie bisher kennen, ist die Caesar-Verschlüsselung. Wenn ein Angreifer das verwendete Verfahren kennt, so kann er den Geheimtext selbst in Zeiten des alten Roms mit sehr geringen Aufwand entschlüsseln, ohne den Schlüssel zu kennen.
+Das vermutlich unsicherste Verschlüsselungsverfahren, dass Sie bisher kennen, ist die Caesar-Verschlüsselung. Wenn eine Angreifer:in das verwendete Verfahren kennt, so kann er den Geheimtext selbst in Zeiten des alten Roms mit sehr geringen Aufwand entschlüsseln, ohne den Schlüssel zu kennen.
 
 Wie? Erklären Sie in maximal 3 Sätzen.
 
-<details>
-  <summary>Tipp</summary>
-  <div>
-    Bei der Caesar-Verschlüsselung besteht der Schlüssel aus genau einem Buchstaben.
-  </div>
-</details>
-
+:::details[Tipp]
+Bei der Caesar-Verschlüsselung besteht der Schlüssel aus genau einem Buchstaben.
+:::
 <QuillV2 id="42d65371-e7e1-41ea-b9d5-c3aacff102c2" />
 ::::
 
@@ -32,17 +28,14 @@ Die Caesar-Chiffre ist eine spezialform der monoalphabetischen Substitution. Wä
 
 Wieso ist das so? Erklären Sie in maximal 3 Sätzen.
 
-<details>
-  <summary>Tipp</summary>
-  <div>
-    Was war bei der Caesar-Verschlüsselung das Hauptproblem? Inwiefern ist das bei der allgemeinen monoalphabetischen Substitution anders?
-  </div>
-</details>
+:::details[Tipp]
+Was war bei der Caesar-Verschlüsselung das Hauptproblem? Inwiefern ist das bei der allgemeinen monoalphabetischen Substitution anders?
+:::
 
 <QuillV2 id="af260d66-82c2-4f1a-8813-acd4ee246220" />
 ::::
 
-## 👑 Challenge
+## 👑 Challenge ⭐
 Was heisst es eigentlich, wenn ein Verschlüsselungsverfahren als _unknackbar_ oder _unverwundbar_ bezeichnet wird? Ist es dann absolut ausgeschlossen, dass jemand den Geheimtext ohne Kenntnis des Schlüssels entschlüsseln kann? Nein. Mindestens eine Möglichkeit haben wir immer - nämlich die sogenannte **Brute-Force-Attacke** (engl.: _brute force_, rohe Gewalt). Solange wir das Verfahren kennen, können wir systematisch jeden möglichen Schlüssel ausprobieren, bis wir den korrekten gefunden haben. Bei vielen Verschlüsselungsverfahren würde dieser Prozess aber beliebig lange dauern.
 
 So verhält es sich auch bei der monoalphabetischen Substitution: Wir könnten systematisch jeden möglichen Schlüssel (also jede Anordnung des Alphabets) ausprobieren, angefangen mit dem normal geordneten `ABC[...]XYZ`, gefolgt von `BAC[...]XYZ`, und so weiter. Wenn irgendwann ein verständlicher Text herauskommt, dann haben wir den korrekten Schlüssel gefunden. Da wir unser Alphabet aber in sehr viele verschiedene Reihenfolgen bringen können, würde dieser Angriff sehr lange dauern.
@@ -66,6 +59,7 @@ Folgendes müssen Sie noch wissen:
 Auch wenn Sie den korrekten Lösungsansatz finden, wäre es ziemlich anspruchsvoll, diesen Text tatsächlich von Hand zu entschlüsseln. Versuchen dürfen / sollen Sie es aber natürlich trotzdem 😉.
 :::
 
+
 <details>
 <summary>Hilfestellungen</summary>
 
@@ -87,6 +81,15 @@ Aus guter Quelle wissen wir, dass das erste Wort des Texts `UEBERMORGEN` lautet.
 </details>
 
 <QuillV2 id="745666c0-b8ee-4576-98a0-f36ad5f6e601" />
+
+<Solution id="5eb0d57d-3419-45aa-9dec-e450da2d3f76">
+Schlüssel
+: `QANEBOCKZMTPRYUDXWFVJHSLGI`
+Text
+:::dd
+> UEBERMORGEN JETZT WAR SIE GEBUNDEN DIE LUEGE MUSSTE ZERBRECHEN UND SIE MIT WENN ES IHR NICHT GELANG JETZT HATTE SIE SICH SELBST DIE FRIST GESTELLT UND ALL DIE WIRRE ANGST DURCHDRANG JETZT MIT EINEM MALE EIN NEUES GEFUEHL EINE ART GLUECK DIE ENTSCHEIDUNG SO NAHE ZU WISSEN UEBERMORGEN NUN WUSSTE SIE IHRE FRIST UND FUEHLTE AUS DIESER GEWISSHEIT EINE MERKWUERDIGE RUHE IN IHRE ANGST UEBERSTROEMEN INNEN WUCHS ETWAS AUF EINE NEUE KRAFT KRAFT ZUM LEBEN UND DIE KRAFT ZU STERBEN DAS ENDLICH GESICHERTE BEWUSSTSEIN DER NAHEN ENTSCHEIDUNG BEGANN EINE UNERWARTETE KLARHEIT IN IHR ZU VERBREITEN DIE NERVOSITAET WICH WUNDERBAR EINER GEORDNETEN UEBERLEGUNG DIE ANGST EINEM IHR SELBST FREMDEN GEFUEHL KRISTALLENER RUHE DANK DER SIE ALLE IHRE DINGE IHRES LEBENS PLOETZLICH DURCHSICHTIG UND IN IHREM WAHRHAFTEN WERT SAH SIE MASS IHR LEBEN UND SPUERTE ES WOG NOCH IMMER SCHWER DURFTE SIE ES BEHALTEN UND STEIGERN IN DEM NEUEN UND ERHOEHTEN SINNE DEN DIESE TAGE DER ANGST SIE GELEHRT HATTEN KONNTE SIE ES NOCH EINMAL REIN UND SICHER OHNE LUEGEN BEGINNEN SIE FUEHLTE SICH BEREIT ABER ALS GESCHIEDENE FRAU EHEBRECHERIN BEFLECKT VOM SKANDAL HINZULEBEN DAZU WAR SIE ZU MUEDE UND ZU MUEDE AUCH WEITER DIES GEFAEHRLICHE SPIEL EINER ERKAUFTEN UND AUF FRIST GEWAEHRTEN BERUHIGUNG FORTZUSETZEN WIDERSTAND WAR DAS FUEHLTE SIE JETZT NICHT MEHR DENKBAR DAS ENDE SCHON NAHE VERRAT DROHTE VON IHREM MANN IHREN KINDERN VON ALLEM DAS SIE UMGAB UND VON IHR SELBST FLUCHT WAR UNMOEGLICH VOR EINEM GEGNER DER ALLGEGENWAERTIG SCHIEN UND DAS BEKENNTNIS DIE SICHERE HILFE BLIEB IHR VERWEHRT DAS WUSSTE SIE NUN EIN EINZIGER WEG WAR NOCH FREI ABER VON DEM GAB ES KEINE WIEDERKEHR
+:::
+</Solution>
 :::::
 
 ---

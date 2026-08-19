@@ -45,8 +45,6 @@
   - from: docs/OF-Kryptologie/
     as: 06-Kryptologie
     ignore:
-      - 04-Chiffren-Knacken.mdx
-      - 05-Kryptoanalyse
       - 06-Symmetrisch
       - 07-Krypto-Family.mdx
       - 08-Asymmetrisch
@@ -94,8 +92,6 @@
   - from: docs/OF-Kryptologie/
     as: 06-Kryptologie
     ignore:
-      - 04-Chiffren-Knacken.mdx
-      - 05-Kryptoanalyse
       - 06-Symmetrisch
       - 07-Krypto-Family.mdx
       - 08-Asymmetrisch

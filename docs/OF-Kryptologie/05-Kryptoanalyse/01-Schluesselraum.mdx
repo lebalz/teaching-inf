@@ -15,7 +15,7 @@ Besteht eine Zahl aber nun beispielsweise aus 5 Bits, dann kann sie $2 \cdot 2 \
 Bei $1024$ möglichen Schlüsseln hätten wir demnach einen Schlüsselraum von $10 Bit$, denn $log_{2}(1024)=10$.
 :::
 
-Sie erinnern sich an die Funktionsweise der [Caesar-Chiffre](../Antike/Caesar): Wir verschieben das Alphabet um eine fixe Anzahl stellen, repräsentiert durch einen einzelnen Buchstaben als Schlüssel. Die Caesar-Chiffre hat damit also einen Schlüsselraum der Grösse $26$ (respektive $25$, wenn wir den Schlüssel `A` nicht erlauben, da dieser keinen Effekt hat). Sofern ein Angreifer das Verschlüsselungsverfahren kennt, benötigt er also lediglich 26 (oder 25) Versuche, um einen Caesar-verschlüsselten Text ohne Kenntnis des Schlüssels zu knacken.
+Sie erinnern sich an die Funktionsweise der [Caesar-Chiffre](../Antike/Caesar): Wir verschieben das Alphabet um eine fixe Anzahl stellen, repräsentiert durch einen einzelnen Buchstaben als Schlüssel. Die Caesar-Chiffre hat damit also einen Schlüsselraum der Grösse $26$ (respektive $25$, wenn wir den Schlüssel `A` nicht erlauben, da dieser keinen Effekt hat). Sofern eine Angreifer:in das Verschlüsselungsverfahren kennt, benötigt er also lediglich 26 (oder 25) Versuche, um einen Caesar-verschlüsselten Text ohne Kenntnis des Schlüssels zu knacken.
 
 :::aufgabe[Schlüsselraum der Caesar-Chiffre]
 <TaskState id="1a596abf-9cb5-4cae-9b5f-86c783695f91" />
@@ -26,14 +26,20 @@ Wie gross ist der Schlüsselraum der Caesar-Chiffre in $Bit$?
 <Solution id="11e3a69a-0423-4fd5-95ba-bcada0473120">
 Bei 26 Schlüsseln: $log_{2}(26) \approx 4.7 Bit$ \
 Bei 25 Schlüsseln: $log_{2}(25) \approx 4.6 Bit$
+
+Total also in der Grössenordnung von $5$ Bit.
 </Solution>
 :::
 
-Die Caesar-Chiffre ist eine stark eingeschränkte Sonderform der [monoalphabetischen Substitution](../Antike/Substitution). Wie viele Schlüsselmöglichkeiten gibt es also bei der allgemeinen Form, bei der wir das Alphabet beliebig umstellen können? Dazu können wir uns vorstellen, dass wir sämtliche Buchstaben von `A` bis `Z` je auf einen Zettel schreiben, diese Zettel in eine Urne geben, und sie in zufälliger Reihenfolge Stück für Stück wieder herausziehen.
+Die Caesar-Chiffre ist eine stark eingeschränkte Sonderform der [monoalphabetischen Substitution](../Antike/Substitution). Wie viele Schlüsselmöglichkeiten gibt es also bei der allgemeinen Form, bei der wir das Alphabet beliebig umstellen können?
 
-Beim ersten Zug haben wir $26$ Möglichkeiten. Sobald der erste Zettel gezogen ist, haben wir für den zweiten Zug noch $25$ Möglichkeiten, dann $24$, und so weiter. Aus den Gesetzen der [Kombinatorik](https://de.wikipedia.org/wiki/Kombinatorik) wissen wir, dass wir diese 26 Zettel also in $26 \cdot 25 \cdot 24 \cdot ... \cdot 3 \cdot 2 \cdot 1 = 26!$ möglichen Reihenfolgen ziehen können. Die mathematische Kurznotation $26!$ wird als _"26 Fakultät"_ ausgesprochen.
+Dazu können wir uns vorstellen, dass wir sämtliche Buchstaben von `A` bis `Z` je auf einen Zettel schreiben, diese Zettel in eine Urne geben, und sie in zufälliger Reihenfolge Stück für Stück wieder herausziehen. Beim ersten Zug haben wir $26$ Möglichkeiten. Sobald der erste Zettel gezogen ist, haben wir für den zweiten Zug noch $25$ Möglichkeiten, dann $24$, und so weiter. Aus den Gesetzen der [Kombinatorik](https://de.wikipedia.org/wiki/Kombinatorik) wissen wir, dass wir diese 26 Zettel also in $26 \cdot 25 \cdot 24 \cdot ... \cdot 3 \cdot 2 \cdot 1 = 26!$ möglichen Reihenfolgen ziehen können. Die mathematische Kurznotation $26!$ wird als *"26 Fakultät"* ausgesprochen.
 
-Der Schlüsselraum der monoalphabetischen Substitution hat also eine Grösse von $26! = 403291461126605635584000000 \approx 4.03 \cdot 10^{26}$ möglichen Schlüsseln (respektive rund $88 Bit$, da $log_{2}(26!) \approx 88.38$).
+:::info[Taschenrechner]
+Auf dem Taschenrechner finden Sie die Fakultät-Funktion __!__ oft hinter der Tatste __PRB__ (für *Probability*) versteckt.
+:::
+
+Der Schlüsselraum der monoalphabetischen Substitution hat also eine Grösse von $26! = 403'291'461'126'605'635'584'000'000 \approx 4.03 \cdot 10^{26}$ möglichen Schlüsseln (respektive rund $88 Bit$, da $log_{2}(26!) \approx 88.38$).
 
 :::aufgabe[Schlüsselraum der Polybios-Chiffre]
 <TaskState id="6f72901c-aee5-48c8-82d7-99bb83a20a0c" />
@@ -44,7 +50,7 @@ Geben Sie eine Schätzung ab und dokumentieren Sie Ihre Überlegungen. Gehen Sie
 <QuillV2 id="6e77a918-15c0-4757-82af-e4cab4782669" />
 
 <Solution id="ede53445-c4f5-4f19-bd37-df80dc5df6f3">
-Grösse des Schlüsselraums: $25! = 15511210043330985984000000$.
+Grösse des Schlüsselraums: $25! = 15511210043330985984000000$, also $83$ Bit.
 <br />
 **Begründung:** Ähnlich zur monoalphabetischen Substitution. Wir können alle Buchstaben (ohne J und V) auf ein Kärtchen schreiben und in eine Urne geben, um sie dann in zufälliger Reihenfolge zu ziehen und beispielsweise von 11 bis 55 auf das Polybios-Quadrat aufzureihen. Da ein Feld leer bleibt, brauchen wir nebst den 24 Buchstabenkärtchen auch ein leeres Kärtchen in der Urne.
 <br/>
