@@ -179,6 +179,11 @@ const getSiteConfig: SiteConfigProvider = () => {
                 ['data-domains']: 'inf.gbsl.website',
                 async: true,
                 defer: true
+            },
+            {
+                src: 'https://umami.gbsl.website/recorder.js',
+                ['data-website-id']: process.env.UMAMI_ID,
+                defer: true
             }
         ],
         plugins: [
