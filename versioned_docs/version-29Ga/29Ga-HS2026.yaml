@@ -20,7 +20,7 @@
     - Hashfunktion
 - cells:
     - 16.09.2026
-    - Sprachreise
+    - Umweltwoche
     - 
   type: holiday
   icon: mdiWalletTravel
@@ -94,10 +94,16 @@
   icon: mdiPineTreeVariantOutline
 - cells:
     - 06.01.2027
+    - Winterferien
+    - 🏂❄️⛷️🎄🧑‍🎄
+  type: holiday
+  icon: mdiPineTreeVariantOutline
+- cells:
+    - 13.01.2027
     - Netzwerke
     - Protokolle, Schichtenmodell
 - cells:
-    - 13.01.2027
+    - 20.01.2027
     - Netzwerke
     - Routing, IP-Adresse
 - cells:
@@ -107,13 +113,9 @@
   type: event
   icon: mdiFlagCheckered
 - cells:
-    - 20.01.2027
-    - Netzwerke
-    - TCP/IP
-- cells:
     - 27.01.2027
     - Netzwerke
-    - DNS
+    - TCP/IP
 - cells:
     - 01.02.2027
     - Beginn Semester 2
@@ -123,9 +125,13 @@
 - cells:
     - 03.02.2027
     - Netzwerke
-    - ATProtokoll?
+    - DNS
 - cells:
     - 10.02.2027
+    - Netzwerke
+    - ATProtokoll?
+- cells:
+    - 17.02.2027
     - Sportwoche
     - 
   type: holiday

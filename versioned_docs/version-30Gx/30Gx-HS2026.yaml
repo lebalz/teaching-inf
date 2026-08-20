@@ -102,12 +102,14 @@
   icon: mdiPineTreeVariantOutline
 - cells:
     - 08.01.2027
-    - Programmieren 1
-    - Verzweigungen
+    - Winterferien
+    - 🏂❄️⛷️🎄🧑‍🎄
+  type: holiday
+  icon: mdiPineTreeVariantOutline
 - cells:
     - 15.01.2027
     - Programmieren 1
-    - Wiederholung
+    - Verzweigungen
 - cells:
     - 20.01.2027
     - Notenschluss
@@ -119,6 +121,10 @@
     - Programmieren 1
     - Wiederholung
 - cells:
+    - 29.01.2027
+    - Programmieren 1
+    - Wiederholung
+- cells:
     - 01.02.2027
     - Beginn Semester 2
     - 
@@ -127,11 +133,15 @@
 - cells:
     - 05.02.2027
     - Programmieren 1
+    - Wiederholung & Fragestunde
+- cells:
+    - 12.02.2027
+    - Programmieren 1
     - Test - findet in der DL in dieser Woche statt, Wochentag noch nicht bekannt.
   type: test
   icon: mdiSchool
 - cells:
-    - 12.02.2027
+    - 19.02.2027
     - Sportwoche
     - 
   type: holiday
