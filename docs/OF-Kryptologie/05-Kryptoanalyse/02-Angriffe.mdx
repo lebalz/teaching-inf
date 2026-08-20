@@ -91,9 +91,9 @@ Beantworten Sie anschliessend die folgenden Fragen und kontrollieren Sie Ihre An
 
 <Dl>
   <dt>Wie lautet der Schlüssel?</dt>
-  <dd><String placeholder="Schlüssel (ein Grossbuchstabe)" id="5d42e7e5-0c8b-476a-b0cd-c6db94f9a3c0" solution="H" inputWidth="20em" /></dd>
+  <dd><String placeholder="Schlüssel (ein Grossbuchstabe)" id="5d42e7e5-0c8b-476a-b0cd-c6db94f9a3c0" solution="H" inputWidth="20em" sanitizer={(t) => (t ?? '').toUpperCase().trim()} /></dd>
   <dt>Wie lautet der erste Satz des Klartexts?</dt>
-  <dd><String label="" placeholder="Erster Satz (alles Grossbuchstaben)" id="92333652-489f-46dd-aa04-22aef6253f57" solution="KRYPTOLOGIE IST DIE LEHRE DES VERBORGENEN." inputWidth="20em" /></dd>
+  <dd><String label="" placeholder="Erster Satz (alles Grossbuchstaben)" id="92333652-489f-46dd-aa04-22aef6253f57" solution="KRYPTOLOGIE IST DIE LEHRE DES VERBORGENEN." inputWidth="20em" sanitizer={(t) => (t ?? '').toUpperCase().trim()} /></dd>
 </Dl>
 
 ::::
