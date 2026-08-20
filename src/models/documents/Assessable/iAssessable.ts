@@ -119,9 +119,13 @@ abstract class iAssessable<T extends AssessableType> extends iDocument<T> implem
     @computed
     get editingIconState() {
         return {
-            path: mdiTooltipQuestionOutline,
+            path: this.icon,
             color: this.isAssessed ? CorrectnessColors[this.correctness] : IfmColors.gray,
-            title: this.isNA ? 'N/A' : `${this.hits}/${this.maxHits}`
+            title: this.isAssessed
+                ? this.assessment?.scoring
+                    ? `${this.assessment.scoring.pointsAchieved}/${this.assessment.scoring.maxPoints}`
+                    : `${this.hits}/${this.maxHits}`
+                : 'N/A'
         };
     }
 
@@ -176,11 +180,6 @@ abstract class iAssessable<T extends AssessableType> extends iDocument<T> implem
     }
 
     @computed
-    get isNA(): boolean {
-        return this.hits === 0 && this.misses === 0;
-    }
-
-    @computed
     get assessment(): Assessement | undefined {
         return this.scoringFunction?.(this);
     }
@@ -209,9 +208,11 @@ abstract class iAssessable<T extends AssessableType> extends iDocument<T> implem
         }
         return this.hits === this.maxHits && this.misses === 0
             ? Correctness.Correct
-            : this.hits === 0
-              ? Correctness.Incorrect
-              : Correctness.PartiallyCorrect;
+            : this.isNA
+              ? Correctness.NA
+              : this.hits > 0
+                ? Correctness.PartiallyCorrect
+                : Correctness.Incorrect;
     }
 
     /**
@@ -262,7 +263,11 @@ abstract class iAssessable<T extends AssessableType> extends iDocument<T> implem
         return this.linkedMeta.title ? `Frage ${nr} – ${this.linkedMeta.title}` : `Frage ${nr}`;
     }
 
+    abstract get icon(): string;
+
     abstract reset(): void;
+
+    abstract get isNA(): boolean;
 
     shuffle(): void {
         // By default, do nothing. Only applicable for certain assessable document types (e.g. ChoiceAnswer).
