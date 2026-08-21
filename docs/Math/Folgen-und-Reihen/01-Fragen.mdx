@@ -9,7 +9,7 @@ import { points, multipleChoicePoints, noPoints } from '@tdev-components/documen
 
 # Fragen Folgen und Reihen
 
-<Quiz scoring={points(1)} id="4c88a5db-5af6-4cec-bae2-06850144c727" randomizeQuestions randomizeOptions>
+<Quiz scoring={points(1)} id="8fb8300e-f5c2-473e-ba74-91d0c6c0b0a8" randomizeQuestions randomizeOptions>
     <ChoiceAnswer correct={[1, 3]} scoring={multipleChoicePoints(2, 1)} multiple>
         > Welche Aussagen zur arithmetischen Folge treffen zu?
 
@@ -49,14 +49,14 @@ import { points, multipleChoicePoints, noPoints } from '@tdev-components/documen
     <ChoiceAnswer correct={[1]} scoring={points(1)}>
         > Wie lautet die Formel für die Summe der ersten $n$ Glieder einer arithmetischen Folge?
 
-        1. $S_n = \dfrac{n}{2} \cdot (a_1 + a_n)$
-        2. $S_n = a_1 \cdot \dfrac{q^n - 1}{q - 1}$
-        3. $S_n = n \cdot a_1 + d$
-        4. $S_n = \dfrac{a_1}{1 - q}$
+        1. $s_n = \dfrac{n}{2} \cdot (a_1 + a_n)$
+        2. $s_n = a_1 \cdot \dfrac{q^n - 1}{q - 1}$
+        3. $s_n = n \cdot a_1 + d$
+        4. $s_n = \dfrac{a_1}{1 - q}$
     </ChoiceAnswer>
 
     <ChoiceAnswer correct={[1]} scoring={points(1)}>
-        > Eine arithmetische Folge hat $a_1 = 2$ und $d = 5$. Wie gross ist $S_{20}$ (Summe der ersten 20 Glieder)?
+        > Eine arithmetische Folge hat $a_1 = 2$ und $d = 5$. Wie gross ist $s_{20}$ (Summe der ersten 20 Glieder)?
 
         1. 990
         2. 950
@@ -67,10 +67,19 @@ import { points, multipleChoicePoints, noPoints } from '@tdev-components/documen
     <ChoiceAnswer correct={[1]} scoring={points(1)}>
         > Wie lautet die Formel für die Summe der ersten $n$ Glieder einer geometrischen Folge (mit $q \neq 1$)?
 
-        1. $S_n = a_1 \cdot \dfrac{q^n - 1}{q - 1}$
-        2. $S_n = \dfrac{n}{2} \cdot (a_1 + a_n)$
-        3. $S_n = \dfrac{a_1}{1 - q}$
-        4. $S_n = a_1 + (n-1) \cdot d$
+        1. $s_n = a_1 \cdot \dfrac{q^n - 1}{q - 1}$
+        2. $s_n = \dfrac{n}{2} \cdot (a_1 + a_n)$
+        3. $s_n = \dfrac{a_1}{1 - q}$
+        4. $s_n = a_1 + (n-1) \cdot d$
+    </ChoiceAnswer>
+
+    <ChoiceAnswer correct={[4]} scoring={points(1)}>
+        > Eine geometrische Folge hat $a_n = 2 \cdot 0.5^{n-1}$. Wie gross ist $s_{10}$ (Summe der ersten 10 Glieder)?
+
+        1. 3.69609375
+        2. 3.79609375
+        3. 3.89609375
+        4. 3.99609375
     </ChoiceAnswer>
 
     <ChoiceAnswer correct={[1]} scoring={points(1)}>
