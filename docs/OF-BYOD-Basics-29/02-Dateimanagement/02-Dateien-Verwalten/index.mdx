@@ -6,17 +6,19 @@ import TabItem from "@theme/TabItem";
 import OsTabs from '@tdev-components/OsTabs';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import Video from '@tdev-components/Video'
+import ChoiceAnswer from '@tdev-components/documents/Assessable/ChoiceAnswer';
+import TrueFalseAnswer from '@tdev-components/documents/Assessable/TrueFalseAnswer';
 
 # Dateien verwalten
 <OsTabs>
 <TabItem value="win">
 Der Zugang zum Dateisystem erfolgt über einen sogenannten **Dateiexplorer**. Unter Windows heisst dieser **«Explorer»** und sieht wie folgt aus:
 
-![Explorer --width=100px](../img/win_explorer.svg)
+![Explorer --width=100px](./images/win_explorer.svg)
 
 Wenn wir ein neues Explorer-Fenster öffnen, sehen wir folgende Ansicht:
 
-![Neues Explorer-Fenster](img/win_explorer_new.png)
+![Neues Explorer-Fenster](./images/win_explorer_new.png)
 
 In der **Seitenleiste** werden die wichgisten Ordner auf dem Gerät angezeigt. Dazu gehören:
 
@@ -31,7 +33,7 @@ In der **Seitenleiste** werden die wichgisten Ordner auf dem Gerät angezeigt. D
 :::warning[Dateien auf dem Desktop]
 Dateien auf dem Desktop sind super schnell zugänglich, da sie bereits beim Start des Geräts direkt sichtbar sind. Erfahrungsgemäss wirkt der Desktop schnell überfüllt und unaufgeräumt - **vermeiden Sie es, dort zu viele Dateien abzulegen**.
 
-![--width=300px](img/win_bloated_desktop.png)
+![--width=300px](./images/win_bloated_desktop.png)
 :::
 ::::
 `Downloads`
@@ -44,20 +46,33 @@ Dateien auf dem Desktop sind super schnell zugänglich, da sie bereits beim Star
 `Dieser PC`
 : Zugang zum Root-Verzeichnis.
 
+<ChoiceAnswer multiple randomizeOptions correct={[1, 2, 3, 4]} keepExpanded="correct" id="decdd884-755e-42e3-bd03-349850465f7a">
+    Wählen Sie alle Ordner aus, die oben (im Bild) in der Seitenleiste aufgelistet sind:
+
+    1. `Bilder`
+    2. `AirDrop`
+    3. `Zuletzt benutzt`
+    4. `material`
+    5. `Notizen`
+    6. `Ferien`
+    7. `Schule`
+    8. `Diverses`
+</ChoiceAnswer>
+
 Im **Anzeigebereich** wird der Ihnhalt des Ordners angezeigt, den Sie gerade geöffnet haben. Hier wird beispielsweise der Inhalt des Ordners `BYOD_Übung` angezeigt:
 
-![Neues Explorer-Fenster](img/win_explorer_byod_folder.png)
+![Neues Explorer-Fenster](./images/win_explorer_byod_folder.png)
 
 In welchem Ordner Sie sich gerade befinden, sehen Sie in der **Pfadleiste**: Sie sind im Ordner `OneDrive` → `OneDrive – EDUBERN` → `Informatik` → `BYOD_Übung`. Sie können auch direkt in einen übergeordneten Ordner wechseln, indem Sie auf den entsprechenden Eintrag in der Pfadleiste klicken. Die einzelnen Einträge werden als Breadcrumbs (dt.: _«Brotkrümel»_) bezeichnet.
 </TabItem>
 <TabItem value="mac">
 Der Zugang zum Dateisystem erfolgt über einen sogenannten **Dateiexplorer**. Unter Windows heisst dieser **«Finder»** und sieht wie folgt aus:
 
-![Finder --width=100px](../img/macos_finder.svg)
+![Finder --width=100px](./images/macos_finder.svg)
 
 Das Finder-Fenster ist wie folgt gegliedert:
 
-![Finder-Fenster](img/macos_finder_overview.png)
+![Finder-Fenster](./images/macos_finder_overview.png)
 
 In der **Seitenleiste** werden die wichgisten Ordner auf dem Gerät angezeigt. Dazu gehören:
 
@@ -79,6 +94,20 @@ In der **Seitenleiste** werden die wichgisten Ordner auf dem Gerät angezeigt. D
 `Dieser PC`
 : Zugang zum Root-Verzeichnis.
 
+<ChoiceAnswer multiple randomizeOptions correct={[1, 2, 3, 4]} keepExpanded="correct" id="decdd884-755e-42e3-bd03-349850465f7a">
+    Wählen Sie alle Ordner aus, die oben (im Bild) in der Seitenleiste aufgelistet sind:
+
+    1. `Bilder`
+    2. `AirDrop`
+    3. `Zuletzt benutzt`
+    4. `material`
+    5. `Notizen`
+    6. `Ferien`
+    7. `Schule`
+    8. `Diverses`
+</ChoiceAnswer>
+
+
 Im **Anzeigebereich** wird der Ihnhalt des Ordners angezeigt, den man gerade geöffnet hat.
 
 In welchem Ordner Sie sich gerade befinden, sehen Sie in der **Pfadleiste**: Sie sind im Ordner `OneDrive – EDUBERN` → `Informatik` → `BYOD_Übung`. Sie können auch direkt in einen übergeordneten Ordner wechseln, indem Sie auf den entsprechenden Eintrag in der Pfadleiste klicken. Die einzelnen Einträge werden als Breadcrumbs (dt.: _«Brotkrümel»_) bezeichnet.
@@ -87,6 +116,15 @@ Die Pfadleiste ist im Finder standardmässig **ausgeblendet**. Sie können sie a
 :::
 </TabItem>
 </OsTabs>
+
+
+<TrueFalseAnswer correct={false} keepExpanded={"correct"} id="6d42d70e-b58b-466b-8a07-0ac886b116af">
+    Oben im Screenshot sehen wir: Eine Datei namens `orcas.txt` liegt direkt im Ordner `Informatik`.
+</TrueFalseAnswer>
+
+
+
+
 
 ## Navigation im Dateiexplorer
 <OsTabs>
@@ -117,9 +155,9 @@ Die Pfadleiste ist im Finder standardmässig **ausgeblendet**. Sie können sie a
         Vergleichen Sie Ihre eigenen Screenshots mit diesen hier und **prüfen** Sie, ob Sie alles richtig gemacht haben. **Wenn nicht**, löschen Sie den Ordner `Übung Navigation Explorer` und **starten** Sie die Übung von vorne.
 
         :::cards{flexBasis=370px}
-        ![Ordner `Übung Navigation Explorer`](img/navigation-exercise/main_folder_win.png)
+        ![Ordner `Übung Navigation Explorer`](./images/navigation-exercise/main_folder_win.png)
         ::br
-        ![Unterordner `Backups`](img/navigation-exercise/backups_folder_win.png)
+        ![Unterordner `Backups`](./images/navigation-exercise/backups_folder_win.png)
         :::
 
         Bestimmen Sie nun den **vollständigen Pfad**…
@@ -145,7 +183,7 @@ Die Pfadleiste ist im Finder standardmässig **ausgeblendet**. Sie können sie a
 
         <Solution id="f412c304-127e-44b0-a9e9-f7e316f42dc9">
 
-        ![Pfad des Ordners `Übung Navigation Explorer`](img/navigation-exercise/path_win.png)
+        ![Pfad des Ordners `Übung Navigation Explorer`](./images/navigation-exercise/path_win.png)
 
         Auf diesem Computer lautet der Pfad des Ordner `Übung Navigation Explorer`:
         ```
@@ -195,9 +233,9 @@ Die Pfadleiste ist im Finder standardmässig **ausgeblendet**. Sie können sie a
         Vergleichen Sie Ihre eigenen Screenshots mit diesen hier und **prüfen** Sie, ob Sie alles richtig gemacht haben. **Wenn nicht**, löschen Sie den Ordner `Übung Navigation Finder` und **starten** Sie die Übung von vorne.
 
         :::cards
-        ![Ordner `Übung Navigation Finder`](img/navigation-exercise/main_folder_macos.png)
+        ![Ordner `Übung Navigation Finder`](./images/navigation-exercise/main_folder_macos.png)
         ::br
-        ![Unterordner `Backups`](img/navigation-exercise/backups_folder_macos.png)
+        ![Unterordner `Backups`](./images/navigation-exercise/backups_folder_macos.png)
         :::
 
         Bestimmen Sie nun den **vollständigen Pfad**…
