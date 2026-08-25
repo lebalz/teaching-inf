@@ -1,0 +1,11 @@
+name: Schule
+children:
+  - name: Mathematik
+    children:
+      - "01 Arithmetik - Musterlösung Aufgabe 5.png"
+      - "01 Arithmetik - Übungen.docx"
+      - "01 Arithmetik - Zusammenfassung.docx"
+      - "02 Trigometrie - Nachbesprechung Test.docx"
+      - "02 Trigometrie - Notizen.docx"
+      - "..."
+      - "11 Analysis - Differentialrechnung.docx"

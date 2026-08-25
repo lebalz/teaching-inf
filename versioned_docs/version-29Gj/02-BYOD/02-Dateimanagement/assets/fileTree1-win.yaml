@@ -1,0 +1,37 @@
+name: "C:"
+children:
+  - name: Users
+    children:
+      - name: Max
+        children:
+          - Desktop
+          - Downloads
+          - name: Documents
+            children:
+              - Text.docx
+  - name: Program Files
+    children:
+      - name: Google
+        children:
+          - name: Chrome
+            children:
+              - chrome.exe
+              - manifest.json
+      - name: Microsoft
+        children:
+          - name: Office
+            children:
+              - Word.exe
+              - Excel.exe
+  - name: Windows
+    children:
+      - name: System32
+        children:
+          - cmd.exe
+          - notepad.exe
+          - name: drivers
+            children:
+              - name: etc
+                children:
+                  - hosts
+      - explorer.exe

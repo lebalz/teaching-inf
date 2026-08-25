@@ -1,0 +1,129 @@
+.scenario {
+    box-sizing: content-box;
+    font-size: 12px;
+    --ifm-h3-font-size: 16px;
+    --ifm-heading-margin-bottom: 4px;
+    --ifm-list-left-padding: 1.5em;
+    --ifm-list-margin: 0;
+    border: 1px solid black;
+    border-radius: 8px;
+    padding: 4px;
+    position: relative;
+    .meta {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        display: flex;
+        gap: 4px;
+    }
+}
+.page {
+    box-sizing: content-box;
+    width: 210mm;
+    height: 297mm;
+    padding: 0px;
+    margin: 0;
+    margin-left: 0.5px;
+    display: grid;
+    grid-template-columns: repeat(2, calc(50% - 5mm / 2));
+    grid-template-rows: repeat(4, calc(25% - 15mm / 4));
+    gap: 5mm;
+    margin-bottom: 16px;
+    border: 2px dashed gray;
+    --ifm-alert-padding-vertical: 2px;
+    --ifm-alert-padding-horizontal: 4px;
+    border-radius: 8px;
+    position: relative;
+    .pageNr {
+        position: absolute;
+        bottom: 4px;
+        right: 4px;
+    }
+    span[class^='stateIcons'],
+    div[class^='admonitionHeading'] {
+        display: none;
+    }
+    :global(.theme-code-block) {
+        margin-bottom: 0;
+    }
+}
+
+html:has(.page),
+body:has(.page) {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    box-shadow: none !important;
+    border: none !important;
+    outline: none !important;
+}
+@page {
+    size: A4 portrait;
+    margin: 5mm calc(8mm + 1px) 5mm 8mm;
+    padding: 0;
+}
+@media print {
+    :global(.markdown) {
+        &::before {
+            display: none;
+        }
+        header {
+            display: none;
+        }
+    }
+    :global(.theme-back-to-top-button) {
+        display: none;
+    }
+    :global(.noComment) {
+        margin: 0;
+        padding: 0;
+    }
+    .page {
+        &:not(:last-child) {
+            page-break-after: always;
+        }
+        border: none;
+        margin-bottom: 0;
+        .pageNr {
+            display: none;
+        }
+    }
+    .scenario {
+        .meta {
+            :global(.badge) {
+                padding: 0.25rem;
+            }
+        }
+    }
+    main {
+        margin: 0;
+        padding: 0;
+    }
+    aside,
+    h1,
+    h2,
+    hr,
+    head,
+    nav {
+        display: none;
+    }
+    :root {
+        --ifm-spacing-horizontal: 0;
+        print-color-adjust: exact !important;
+    }
+    div[class^='footer'] {
+        display: none;
+    }
+    span[class^='editButton'] {
+        display: none;
+    }
+    :global(.theme-doc-version-badge) {
+        display: none;
+    }
+    @layer docusaurus.infima {
+        :global(.container.padding-top--md.padding-bottom--lg) {
+            padding-top: 0px !important;
+            padding-bottom: 0px !important;
+        }
+    }
+}

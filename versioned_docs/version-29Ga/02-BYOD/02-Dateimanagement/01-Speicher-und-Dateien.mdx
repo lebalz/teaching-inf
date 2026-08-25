@@ -1,0 +1,291 @@
+---
+page_id: fe65d503-3e9a-4253-a7e1-0cc2c7ffbc65
+---
+
+import TabItem from "@theme/TabItem";
+import OsTabs from '@tdev-components/OsTabs';
+import Dir from '@tdev-components/FileSystem/Dir';
+import { unifyPath } from "@tdev-components/documents/String/sanitizers";
+
+
+# Speicher und Dateien
+
+import fileTreeWin from "./assets/fileTree1-win.yaml";
+import fileTreeOsx from "./assets/fileTree1-osx.yaml";
+
+
+Jeder Computer verfügt über permanenten **Speicher**, in dem Daten dauerhaft abgelegt werden. Diesen Speicher nennt man auch die **Festplatte** (auch: _HDD, Harddisk, Harddrive, Laufwerk_; wobei es sich heute praktisch immer um eine modernere, schnellere Lösung namens **SSD**[^1] handelt). Typischerweise hat die Festplatte eines modernen Laptops eine Kapazität von 256 GB bis 2 TB oder mehr.
+
+Um diesen Speicher zu organisieren, verwendet jedes Betriebssystem ein sogenanntes **Dateisystem**. Dieses sorgt dafür, dass man Dateien und Ordner anlegen, öffnen, verschieben und löschen kann.
+
+Das Dateisystem ist als sogenannte **Baumstruktur** aufgebaut, die aus Ordnern und Dateien (Verzeichnissen) besteht. Das oberste Verzeichnis im Dateisystem wird als **Root** bezeichnet. Von hier aus verzweigen sich alle weiteren Ordner.
+
+<OsTabs>
+<TabItem value="win">   
+Auf einem Windows-Computer könnte das Dateisystem ungefähr so aussehen, wie in diesem **Dateibaum** gezeigt:
+:::cards
+<Dir
+    dir={fileTreeWin}
+    open
+/>
+:::
+Das `C:/` ist hier das Root-Verzeichnis[^2] – also der «Start» des Dateisystems. In diesem Root-Verzeichnis sehen wir drei Unter-Verzeichnisse (Ordner, Unterordner): `Users`, `Program Files` und `Windows`.
+
+Die Ordner `Programme` und `Windows` gehören zum Betriebssystem. Sie enthalten wichtige Programme und Systemdateien, mit denen wir meistens nichts zu tun haben. In den meisten Fällen arbeiten wir nur im Verzeichnis `Users`. Darin sehen wir einen Ordner für den Benutzer Max, in dem sich sie Unterordner `Desktop`, `Downloads` und `Documents` befinden. Im Ordner `Documents` liegt die Datei `Text.docx`. 
+
+</TabItem>
+
+<TabItem value="mac">
+Auf einem Mac-Computer könnte das Dateisystem ungefähr so aussehen, wie in diesem **Dateibaum** gezeigt:
+
+:::cards
+<Dir
+    dir={fileTreeOsx}
+    open
+/>
+:::
+
+
+Der `/`-Ordner ist hier das Root-Verzeichnis – also der «Start» des Dateisystems. In diesem Root-Verzeichnis sehen wir drei Unter-Verzeichnisse: `Applications`, `System` und `Users`.
+
+Die Ordner `Applications` und `System` gehören zum Betriebssystem. Sie enthalten wichtige Programme und Systemdateien, mit denen wir meistens nichts zu tun haben.  In den meisten Fällen arbeiten wir nur im Verzeichnis `Benutzer`. Darin sehen wir einen Ordner für den Benutzer Max, in dem sich sie Unterordner `Desktop`, `Downloads` und `Dokumente` befinden. Im Ordner `Dokumente` liegt die Datei `Text.docx`. 
+</TabItem>
+</OsTabs>
+
+:::insight[Übersetzte Ordnernamen]
+Wenn Sie Ihren Computer auf Deutsch eingestellt haben, wird Ihnen der Ordner `Users` als `Benutzer` und der Ordner `Documents` als `Dokumente` angezeigt. Aus Sicht des Betriebssystems heisst der Ordner aber immer `Documents`, damit sich das Dateisystem nicht ändert, wenn Sie die Sprache Ihres Computers wechseln. Dasselbe gilt z.B. für den Ordner `Pictures`, der Ihnen vermutlich als `Bilder` angezeigt wird.
+:::
+
+Würde dieser Computer von mehreren Personen genutzt, gäbe es im Ordner `Users` noch weitere Benutzerordner.
+
+Hier die wichtigsten Begriffe nochmal zusammengefasst:
+
+:::definition[Definitionen]
+**Root**
+: Das oberste Verzeichnis im Dateisystem. Von hier aus verzweigen sich alle weiteren Ordner.
+**Ordner** 
+: (auch: Verzeichnisse): Dienen dazu, Dateien und weitere Unterordner zu organisieren.
+**Datei**
+: Ein einzelnes Dokument, Bild, Programm oder eine andere Informationseinheit.
+:::
+
+## Der Pfad
+Der **Pfad** ist die «Adresse» einer Datei oder eines Ordners im Dateisystem. Mit dem _Pfad_ kann man eine Datei eindeutig identifizieren. Man folgt dem Baum von Root-Verzeichnis bis zum Ordner oder der Datei, deren Pfad man angeben will.
+
+<OsTabs>
+<TabItem value="win">
+::::flex
+::br{flexBasis=200px flexGrow=0}
+<Dir
+    dir={fileTreeWin}
+    open
+    maxHeight="500px"
+/>
+::br{flexBasis=400px}
+Die einzelnen **Pfad-Segmente** (also die Verzweigungen auf dem Weg vom Root-Verzeichnis zum Ordner oder zur Datei) werden bei Windows durch _Backslashes_ (`\`) getrennt.
+
+Im obigen Beispiel sieht der Pfad zur Datei `Test.docx` wie folgt aus:
+
+```
+C:\Users\Max\Documents\Text.docx
+```
+
+Mit dem _Pfad_ kann man eine Datei eindeutig identifizieren. Es könnte auf dem obigen Computer beispielsweise mehrere Dateien mit dem Namen `Text.docx` geben. Innerhalb eines Ordners dürfen aber nie mehrere Dateien denselben Namen haben. Deshalb kann es nur eine Datei mit dem Pfad `C:\Users\Max\Documents\Text.docx` geben.
+
+:::aufgabe[Pfad bestimmen]
+<TaskState id="018d232b-550d-4682-91f7-5bcc687d28ad" />
+Bestimmen Sie im obigen Baum den Pfad zur Datei `chrome.exe`. Achten Sie auf die Gross- und Kleinschreibung sowie die korrekte Verwendung von Backslashes (`\`) und nicht Slashes (`/`).
+
+Geben Sie Ihre Lösung hier ein und überprüfen Sie sie mit dem Button. Markieren Sie die Aufgabe als erledigt, wenn dieser anzeigt, dass Ihre Lösung korrekt ist.
+<String id="e726160f-f04c-4aed-af40-c679b9bc1ccc" inputWidth="25em" solution="C:\Program Files\Google\Chrome\chrome.exe" />
+:::
+::::
+</TabItem>
+
+<TabItem value="mac">
+::::flex
+::br{flexBasis=200px flexGrow=0}
+<Dir
+    dir={fileTreeOsx}
+    open
+    maxHeight="500px"
+/>
+::br{flexBasis=400px}
+Die einzelnen **Pfad-Segmente** (also die Verzweigungen auf dem Weg vom Root-Verzeichnis zum Ordner oder zur Datei) werden bei macOS durch _Slashes_ (`/`) getrennt.
+
+Im obigen Beispiel sieht der Pfad zur Datei `Test.docx` wie folgt aus:
+
+```
+/Users/Max/Documents/Text.docx
+```
+
+Mit dem _Pfad_ kann man eine Datei eindeutig identifizieren. Es könnte auf dem obigen Computer beispielsweise mehrere Dateien mit dem Namen `Text.docx` geben. Innerhalb eines Ordners dürfen aber nie mehrere Dateien denselben Namen haben. Deshalb kann es nur eine Datei geben, die den Pfad `/Users/Max/Documents/Text.docx`.
+
+:::aufgabe[Pfad bestimmen]
+<TaskState id="018d232b-550d-4682-91f7-5bcc687d28ad" />
+Bestimmen Sie im obigen Baum den Pfad zur Datei `Finder.app`. Achten Sie auf die Gross- und Kleinschreibung.
+
+Geben Sie Ihre Lösung hier ein und überprüfen Sie sie mit dem Button. Markieren Sie die Aufgabe als erledigt, wenn dieser anzeigt, dass Ihre Lösung korrekt ist.
+<String id="4ff12db9-dfd7-4f83-aac1-b7f8db54e7c8" inputWidth="25em" solution="/System/Library/CoreServices/Finder.app" />
+:::
+::::
+</TabItem>
+</OsTabs>
+
+### Relative Pfade
+In der Informatik werden Pfade oft auch relativ zu einem Verzeichnis angegeben. Dabei werden
+- wie üblich Ordnernamen und Dateien mit einem Backslash `\` unter Windows oder einem Slash `/` unter macOS getrennt.
+- Ein `.` steht für das aktuelle Verzeichnis - ausgehend von der aktuell betrachteten Datei.
+- Ein `..` steht für das übergeordnete Verzeichnis - ausgehend von der betrachteten Datei der übergeordnete Ordner.
+
+::::info[Beispiel]
+:::cards
+::br{flexGrow=0 flexBasis=220px}
+<Dir 
+  open
+  noSelect 
+  dir={{
+    name: 'www',
+    children: [
+      {
+        name: 'static',
+        children: [
+          'logo.png 👈'
+        ]
+      },
+      {
+        name: 'webseite',
+        children: [
+        'index.txt 🟢',
+        { 
+          name: 'images',
+          children: [
+            'blume.png ',
+            'sonne.jpg 👈'
+          ]
+        }
+      ]}
+    ]
+  }}
+/>
+::br{flexBasis=300px}
+
+<OsTabs>
+<TabItem value="win">
+Ausgehend von `index.txt` (🟢) ist der relative Pfad
+- zu `sonne.jpg` (👈) `.\images\sonne.jpg`
+- zu `logo.png` (👈) `..\static\logo.png`
+</TabItem>
+<TabItem value="mac">
+Ausgehend von `index.txt` (🟢) ist der relative Pfad
+- zu `sonne.jpg` (👈) `./images/sonne.jpg`
+- zu `logo.png` (👈) `../static/logo.png`
+</TabItem>
+</OsTabs>
+:::
+::::
+::::aufgabe[Relative Pfade]
+<Answer type="state" id="4e3fdc24-5818-445b-a419-d4549dc0e7cc" />
+
+Geben Sie für folgende Pfade von der aktuellen Datei (🟢 oder 🟠) zum Ziel (👈) die korrekten relativen Pfade an:
+
+:::cards{flexBasis=300px}
+
+<Dir 
+  open
+  noSelect 
+  dir={{
+    name: 'webseite',
+    children: [
+      'index.txt 🟢',
+      {
+        name: 'images',
+        children: [
+          'blume.png',
+          'sonne.jpg 👈'
+        ]
+      }
+    ]
+  }}
+/>
+<Answer type="string" id="cd6cf6ce-51d7-4c50-9e3a-ebba155eb69e" label="🟢" solution="./images/sonne.jpg" sanitizer={unifyPath} />
+
+::br
+
+<Dir 
+  open
+  noSelect 
+  dir={{
+    name: 'webseite',
+    children: [
+      'index.html 🟢',
+      {
+        name: 'pages',
+        children: [
+          'about.txt 🟠',
+          'cv.txt',
+          {
+            name: 'images',
+            children: [
+              'me.png 👈'
+            ]
+          }
+        ]
+      }
+    ]
+  }}
+/>
+<Answer type="string" id="461aecf6-7a9b-4c48-b7d5-e188a6cb9d74" label="🟢" solution="./pages/images/me.png" sanitizer={unifyPath} />
+<Answer type="string" id="1639b223-96f3-4063-a31f-46ca7692ff35" label="🟠" solution="./images/me.png" sanitizer={unifyPath} />
+
+::br
+<Dir 
+  open
+  noSelect 
+  dir={{
+    name: 'webseite',
+    children: [
+      'index.txt',      
+      { 
+        name: 'images',
+        children: [
+          'blume.png 👈',
+          'sonne.jpg'
+        ]
+      },
+      {
+        name: 'pages',
+        children: [
+          'about.txt',
+          'cv.txt 🟢'
+        ]
+      }
+    ]
+  }}
+/>
+<Answer type="string" id="02024975-4189-4c0f-af88-8ac19ef2924b" label="🟢" solution="../images/blume.png" sanitizer={unifyPath} />
+:::
+
+::::
+
+## Speichern und abspeichern
+Wenn wir beispielsweise ein neues Word-Dokument erstellen und es **abspeichern**, dann wird in dem Moment eine **neue Datei erstellt**, die einen Namen (z.B. `Test2.docx`) und einen entsprechenden Pfad hat. Es wird also ein kleiner Bereich der Festplatte reserviert, in dem der Inhalt dieses Word-Dokuments gespeichert wird.
+
+Wenn wir das Word-Dokument weiter bearbeiten und anschliessend **speichern**, dann wird der **Inhalt der Datei aktualisiert**. Es wird also keine neue Datei erstellt, sondern die bestehende Datei wird überschrieben. In vielen Programmen gibt es aber die Menu-Option «Speichern unter…» oder «Kopie speichern», mit der man eine neue Datei anlegen kann, die dann einen anderen Namen oder Pfad hat.
+
+Wenn wir das Word-Dokument schliessen und später wieder öffnen, dann wird die vorher gespeicherte Datei geladen. Das heisst, der Inhalt der Datei wird in das Programm geladen, damit wir ihn bearbeiten können.
+
+:::definition[Aktionen beim Speichern]
+Abspeichern
+: Eine neue Datei wird erstellt, die den Inhalt des Dokuments enthält. Das **Dateisystem** erhält einen **neuen Eintrag**.
+: *Wird ausgeführt, wenn ein Dokument zum ersten Mal gespeichert wird.*
+
+Speichern
+: Der Inhalt der bestehenden Datei wird aktualisiert. Das **Dateisystem** erhält **keinen** neuen Eintrag.
+
+Speichern unter
+: Eine neue Datei wird erstellt, die den Inhalt des Dokuments enthält. Das **Dateisystem** erhält einen **neuen Eintrag**. Die neue Datei ist eine Kopie der alten. Das Programm bearbeitet anschliessend i.d.R. die neue Datei.
+:::
+
+[^1]: SSD steht für _Solid State Drive_ und ist eine schnellere Speichertechnologie im Vergleich zur traditionellen Festplatte (HDD).
+[^2]: Genaugenommen hat unter Windows jedes Laufwerk ein eigenes Root-Verzeichnis, z.B. `C:/` für die Hauptfestplatte, `D:/`, für eine zweite Festplatte oder einen USB-Stick, etc. Auf macOS gibt es nur ein Root-Verzeichnis (`/`), unter dem alle anderen Verzeichnisse liegen.

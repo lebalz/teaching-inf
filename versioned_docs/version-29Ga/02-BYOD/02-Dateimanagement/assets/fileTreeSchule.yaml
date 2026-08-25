@@ -1,0 +1,23 @@
+name: Schule
+children:
+  - name: Administratives
+    children:
+      - "Gym1 - Stundenplan.pdf"
+  - name: Deutsch
+    children:
+      - name: Aufsätze
+        children:
+          - "01 Aufsatz Märchen.docx"
+          - "02 Erörterung zu Textsorten.docx"
+      - name: Grammatik
+        children:
+          - "01 Übungen.docx"
+          - "02 Zusammenfassung Kommaregeln.docx"
+  - name: Informatik
+    children:
+      - name: 01 BYOD Basics
+        children:
+          - "01 Übung Navigation"
+          - "02 Szenarienbibliothek"
+          - "03 BYOD Übung"
+      - "02 Programmieren"
