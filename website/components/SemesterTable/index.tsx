@@ -202,7 +202,6 @@ const SemesterTable = (props: TableProps): React.ReactNode => {
             }
             return 0;
         });
-        console.log(res);
         return res;
     }, [dateIndex, rows]);
 
