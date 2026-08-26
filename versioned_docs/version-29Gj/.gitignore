@@ -18,7 +18,6 @@
 05-Rechnerarchitektur/*
 !05-Rechnerarchitektur/_category_.yml
 06-Kryptologie/*
-!06-Kryptologie/06-Symmetrisch/
 !06-Kryptologie/07-Krypto-Family.mdx
 !06-Kryptologie/08-Asymmetrisch/
 !06-Kryptologie/09-Hashing/

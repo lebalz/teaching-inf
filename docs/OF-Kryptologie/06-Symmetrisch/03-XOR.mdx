@@ -23,10 +23,10 @@ XOR kann auch zur Verschlüsselung verwendet werden. Dabei wird jeweils 1 Bit de
 
 Die Wahrheitstabelle[^1] sieht folgendermassen aus:
 
-:::cards{flexBasis=200px}
+:::cards{flexBasis="200px"}
 #### Verschlüsselung
 
-  |  *p*  |  *k*  | *c* = *p* **XOR** *k* |
+  |  *p*  |  *k*  | *c* = *p* __XOR__ *k* |
   | :---: | :---: | :-------------------: |
   |   0   |   0   |           0           |
   |   0   |   1   |           1           |
@@ -40,12 +40,17 @@ c: *cipher* (Verschlüsselt)
 ::br
 
 #### Entschlüsselung
-|  *c*  |  *k*  | *p* = *c* **XOR** *k* |
+|  *c*  |  *k*  | *p* = *c* __XOR__ *k* |
 | :---: | :---: | :-------------------: |
 |   0   |   0   |           0           |
 |   1   |   1   |           0           |
 |   1   |   0   |           1           |
 |   0   |   1   |           1           |
+
+
+p: *plain text* (Klartext) <br/>
+k: *key* (Schlüssel) <br/>
+c: *cipher* (Verschlüsselt)
 :::
 
 ## Bezug zu ROT13
@@ -67,7 +72,7 @@ Schlüssel
 
 Geben Sie das Resultat hier ein und überprüfen Sie es.
 
-<String id="d928f897-07c5-46a0-ab43-cc9e9f22f062" solution="10001 10111 01010" monospace/>
+<String id="d928f897-07c5-46a0-ab43-cc9e9f22f062" fullWidth solution="10001 10111 01010" monospace/>
 ::::
 
 :::::aufgabe[XOR entschlüsseln]
@@ -92,7 +97,7 @@ Sie dürfen für diese Aufgabe den Pentacode Text-Editor verwenden.
 
 Geben Sie das Klartext-Ergebnis hier ein und überprüfen Sie es.
 
-<String id="9b1e97dc-6807-4ec3-bc18-182a57b0a2d4" solution="GEIST" />
+<String id="9b1e97dc-6807-4ec3-bc18-182a57b0a2d4" sanitizer={(val) => val.trim().toUpperCase()} fullWidth solution="GEIST" />
 :::::
 
 ::::aufgabe[⭐️ Geheime Pixelgrafik austauschen]

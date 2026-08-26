@@ -6,7 +6,8 @@ sidebar_custom_props:
 page_id: 606b460d-e984-4a21-b4b7-d6492a600506
 ---
 
-import { PixelEditor, TextEditor } from "@tdev-components/VisualizationTools/Pentacode";
+import { PixelEditor, TextEditor, toPenta } from "@tdev-components/VisualizationTools/Pentacode";
+import {rootStore} from '@tdev-stores/rootStore';
 
 # Pentacode
 Der Pentacode ist keine offizielle Codierung. Sie wurde von [Stefan Rothe und Tom Jampen](https://rothe.io/?b=crypto&p=1349) für den Unterricht entwickelt, um erstens ein kurzes Alphabet ohne unnötige Zeichen zu verwenden und zweitens einen möglichst kurzen Binärcode zu erhalten.
@@ -14,8 +15,7 @@ Der Pentacode ist keine offizielle Codierung. Sie wurde von [Stefan Rothe und To
 ## Albhabet
 Mit 5 Bits (_Penta_ bedeutet 5) können $2^5 = 32$ Zeichen codiert werden. Die Tabelle beginnt mit dem Leerschlag (Zeichen $0$), gefolgt von den 26 Grossbuchstaben (Zeichen $1$ bis $26$). Zum Schluss folgen die Sonderzeichen `,`, `-`, `.`, `?`, und `@`.
 
-::::details[Pentacode-Tabelle]{open .slim}
-:::flex{justifyContent=center gap=1em}
+:::flex{justifyContent="center" gap="1em" .slim}
     | Buchstabe    | Zahl |   Binär |
     |:-------------|-----:|--------:|
     | *Leerschlag* |    0 | `00000` |
@@ -57,24 +57,40 @@ Mit 5 Bits (_Penta_ bedeutet 5) können $2^5 = 32$ Zeichen codiert werden. Die T
     | `?`       |   30 | `11110` |
     | `@`       |   31 | `11111` |
 :::
-::::
 
+import { observer } from 'mobx-react-lite';
+import { useStore } from '@tdev-hooks/useStore';
+
+export const MyName = observer(() => {
+    const userStore = useStore('userStore');
+    const name = userStore.current?.firstName;
+    if (!name) {
+        return null;
+    }
+    return name.toUpperCase();
+});
 
 :::aufgabe[Name codieren]
 <TaskState id="087efb9c-00b2-4a88-adae-e1dec3a7a555" />
-Codieren Sie Ihren Vornamen mit Pentacode, indem Sie die obige Tabelle verwenden. 
+Codieren Sie Ihren Vornamen <code><MyName /></code> mit Pentacode, indem Sie die obige Tabelle verwenden. 
 
 **Beispiel:** Der Vorname `Gunther` wird zu `00111 10101 01110 10100 01000 00101 10010`.
 
-Tragen Sie Ihre Lösung hier ein:
-<QuillV2 id="060a906c-8b70-41e6-8c01-2a4540536085" />
-
-Unten finden Sie ein Pentacode Text-Editor Tool. **Kontrollieren Sie Ihre Lösung**, indem Sie Ihren Namen im Feld _Klartext_ eingeben und die Ausgabe im Feld _Pentacode_ mit Ihrem Resultat vergleichen.
+<String 
+    id="4f8135fe-327b-4e23-8232-9ab5d56db9a3"
+    label={<MyName />}
+    solution="DYNAMIC_SOLUTION"
+    fullWidth
+    monospace
+    checker={(val) => {
+        const user = rootStore.userStore.current;
+        if (!user || !val) {
+            return undefined;
+        }
+        return val.trim().replace(/\s/g, '') === toPenta(user.firstName.toUpperCase()).join('')
+    }}
+/>
 :::
-
-## Pentacode Text-Editor
-Mit diesem interaktiven Tool können Sie einen Text ganz einfach mit Pentacode codieren und decodieren.
-<TextEditor />
 
 ## Pixel-Editor
 Die Idee von Pentacode lässt sich auch auf einfache Pixelgrafiken erweitern. Jede 5-stellige Binärzahl steht dabei für eine Zeile aus 5 schwarz/weissen Pixel. Das erste Bit steht für das erste Pixel dieser Zeile, das zweite Bit für das zweite Pixel, und so weiter. Wenn ein Bit $0$ ist, ist das Pixel schwarz. Wenn ein Bit $1$ ist, ist das Pixel weiss.
@@ -82,7 +98,7 @@ Die Idee von Pentacode lässt sich auch auf einfache Pixelgrafiken erweitern. Je
 Sie können Ihrer Grafik beliebig viele Zeilen hinzufügen, indem Sie weitere 5-stellige Binärzahlen anhängen.
 <PixelEditor />
 
-:::aufgabe[⭐️ Name als Pixelgrafik]
+:::aufgabe[Name als Pixelgrafik]
 <TaskState id="082b41a0-91bf-4852-8c43-32bcc5cec1de" />
 Wie sieht Ihr Name als Pixelgrafik aus?
 
@@ -92,5 +108,10 @@ Können Sie erklären, wie die Buchstaben Ihres Namens mit dem gezeichneten Bild
 
 <Answer type="text" id="6476cbb1-ca0d-4c12-9f1e-1cf5aa0460f5" />
 :::
+
+
+## Pentacode Text-Editor
+Mit diesem interaktiven Tool können Sie einen Text ganz einfach mit Pentacode codieren und decodieren.
+<TextEditor />
 
 ---
