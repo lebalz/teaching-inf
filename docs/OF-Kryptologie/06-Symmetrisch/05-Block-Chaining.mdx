@@ -31,70 +31,7 @@ Die Entschlüsselung funktioniert analog: Der Geheimtext wird wiederum in Blöck
 
 ![](img/ECB_decryption.svg)
 
-## Der Betriebsmodus «Cipher Block Chaining» (CBC)
-Im CBC-Modus werden die Blöcke nicht mehr getrennt voneinander verarbeitet. Wie in der folgenden Abbildung ersichtlich ist, dient jeder Geheimtext-Block (ausser der letzte) im nachfolgenden Schritt zusätzlich als Input. So werden gleiche Klartext-Blöcke trotz identischem Schlüssel zu unterschiedlichen Geheimtextblöcken verschlüsselt.
-
-Das Plus-Zeichen ich Kreis steht hier ebenfalls für die XOR-Operation. Diese ist gegeben, während die Verschlüsselung im grossen Rechteck mit der Bezeichnung *block cipher encryption* frei gewählt werden kann (also bspw. auch ein aktuell sicheres Verfahren). Da wir in unseren Beispielen allerdings jeweils die XOR-Verschlüsselung als _block cipher encryption_ verwenden, wird bei uns sowohl für die Verrechnung des Klartextblocks mit dem vorherigen Geheimtextblock, wie auch für die eigentliche Verschlüsselung die XOR-Operation verwendet.
-
-Da bei der Verarbeitung des ersten Blocks noch kein Geheimtext-Block zur Verfügung steht, wird als eine Art _Platzhalter_ ein sogenannter **Initialisierungsvektor (IV)** verwendet.
-
-![](img/CBC_encryption.svg)
-
-Ändert man 1 Bit im IV, führt dies zu Änderungen im gesamten Geheimtext. Ändert man 1 Bit im Klartext, so ändern sich auch sämtliche darauffolgenden Blöcke im Geheimtext.
-
-Ein Nachteil des CBC-Modus ist allerdings, dass die **Verschlüsselung** der verschiedenen Blöcke nicht gleichzeitig (also parallel) berechnet werden können, da das Resultat des vorherigen Blocks für die Verschlüsselung des aktuellen Blocks benötigt wird. D.h. ein bestimmter Klartext-Block kann erst verschlüsselt werden, wenn sämtliche vorherigen Blöcke bereits verschlüsselt sind.
-
-Bei der **Entschlüsselung** sieht es anders aus. Da sofort sämtliche Geheimtextblöcke vorliegen, kann die Entschlüsselung problemlos parallelisiert werden, wie Sie in der folgenden Abbildung nachvollziehen können:
-
-![](img/CBC_decryption.svg)
-
-:::insight[XOR-Blockchiffre]
-Selbstverständlich ist XOR als Verschlüsselungsfunktion aus kryptologischer Sicht nicht ideal – dafür aber für uns gut verständlich, überschaubar und einfach anzuwenden.
-
-In der Realität ist es besonders wichtig, dass die Verschlüsselungsfunktion sämtliche Bits des aktuellen Blocks stark «vermischt». Damit ist gemeint, dass eine winzige Änderung an einer bestimmten Stelle im Klartextblock nicht nur zu einer kleinen Änderung an derselben Stelle im Geheimtextblock führt (wie dies bei XOR wegen der bitweisen Verarbeitung der Fall), sondern dass durch die kleine Änderung viele Bits überall im Block verändert werden.
-
-Aus diesem Grund arbeiten aktuelle Verschlüsselungsfunktionen von Blockchiffren in **mehreren Runden**.
-:::
-
-
-### Beispiel CBC
-
-p
-: HEY
-iv
-: U
-k
-: Z
-
-![](img/cbc-example.png)
-
-Beachten Sie, dass der IV nur beim ersten Block verwendet wird und die Blocklänge hier genau ein Buchstabe ist. Die XOR-Operation ist hier mit `+` dargestellt und auch bei der "Block-Cipher-Encryption" wird XOR verwendet.
-
-
-## Vergleich ECB und CBC
-In diesem Rechenbeispiel sehen Sie den ECB- und den CBC-Modus im Vergleich.
-
-<DefinitionList>
-  <dt>Klartext</dt>
-  <dd>`RAMIRA`</dd>
-  <dt>Schlüssel</dt>
-  <dd>`AB`</dd>
-  <dt>Initialvektor (für CBC)</dt>
-  <dd>`XY`</dd>
-</DefinitionList>
-![](img/rechenbeispiel-ecb-cbc.png)
-
-:::insight[Unterschiedliche Resultate]
-Dieses Beispiel zeigt, was die Verkettung von Blöcken ausmachen kann. Bei beiden Modu werden zwei identische Klartextblöcke `RA` mit dem Schlüssel `AB` verschlüsselt.
-
-Beim ECB-Modus weist dementsprechend auch der Geheimtext zwei identische Blöcke `SC` auf. Durch das Verketten der Blöcke kann diese unschöne Regelmässigkeit mit dem CBC-Modus vermieden werden.
-:::
-
-## XOR-Blockchiffre ausprobieren
-<XORBlockCipher />
-
-## Übungen
-### ECB-Modus
+### Übungen ECB-Modus
 :::warning[Übungen von Hand lösen]
 Lösen Sie diese Übungen **von Hand**! Sie dürfen einzig den [Pentacode Text-Editor](Pentacode#pentacode-text-editor) als Hilfsmittel verwenden.
 :::
@@ -145,12 +82,50 @@ Entschlüsseln Sie den Text `XWVJZWEKK,XWVJIK` mit dem Schlüssel `VVXKZ`
 <Answer label="Text (nicht binär)" type="string" id="f877bdef-a2e9-4b82-a6cc-1b61109970c7" solution="NANA ASS ANANAS." sanitizer={UPPER_NOSPACE} monospace width="80%"/>
 :::
 
-### CBC-Modus
+## Der Betriebsmodus «Cipher Block Chaining» (CBC)
+Im CBC-Modus werden die Blöcke nicht mehr getrennt voneinander verarbeitet. Wie in der folgenden Abbildung ersichtlich ist, dient jeder Geheimtext-Block (ausser der letzte) im nachfolgenden Schritt zusätzlich als Input. So werden gleiche Klartext-Blöcke trotz identischem Schlüssel zu unterschiedlichen Geheimtextblöcken verschlüsselt.
+
+Das Plus-Zeichen ich Kreis steht hier ebenfalls für die XOR-Operation. Diese ist gegeben, während die Verschlüsselung im grossen Rechteck mit der Bezeichnung *block cipher encryption* frei gewählt werden kann (also bspw. auch ein aktuell sicheres Verfahren). Da wir in unseren Beispielen allerdings jeweils die XOR-Verschlüsselung als _block cipher encryption_ verwenden, wird bei uns sowohl für die Verrechnung des Klartextblocks mit dem vorherigen Geheimtextblock, wie auch für die eigentliche Verschlüsselung die XOR-Operation verwendet.
+
+Da bei der Verarbeitung des ersten Blocks noch kein Geheimtext-Block zur Verfügung steht, wird als eine Art _Platzhalter_ ein sogenannter **Initialisierungsvektor (IV)** verwendet.
+
+![](img/CBC_encryption.svg)
+
+Ändert man 1 Bit im IV, führt dies zu Änderungen im gesamten Geheimtext. Ändert man 1 Bit im Klartext, so ändern sich auch sämtliche darauffolgenden Blöcke im Geheimtext.
+
+Ein Nachteil des CBC-Modus ist allerdings, dass die **Verschlüsselung** der verschiedenen Blöcke nicht gleichzeitig (also parallel) berechnet werden können, da das Resultat des vorherigen Blocks für die Verschlüsselung des aktuellen Blocks benötigt wird. D.h. ein bestimmter Klartext-Block kann erst verschlüsselt werden, wenn sämtliche vorherigen Blöcke bereits verschlüsselt sind.
+
+Bei der **Entschlüsselung** sieht es anders aus. Da sofort sämtliche Geheimtextblöcke vorliegen, kann die Entschlüsselung problemlos parallelisiert werden, wie Sie in der folgenden Abbildung nachvollziehen können:
+
+![](img/CBC_decryption.svg)
+
+:::insight[XOR-Blockchiffre]
+Selbstverständlich ist XOR als Verschlüsselungsfunktion aus kryptologischer Sicht nicht ideal – dafür aber für uns gut verständlich, überschaubar und einfach anzuwenden.
+
+In der Realität ist es besonders wichtig, dass die Verschlüsselungsfunktion sämtliche Bits des aktuellen Blocks stark «vermischt». Damit ist gemeint, dass eine winzige Änderung an einer bestimmten Stelle im Klartextblock nicht nur zu einer kleinen Änderung an derselben Stelle im Geheimtextblock führt (wie dies bei XOR wegen der bitweisen Verarbeitung der Fall), sondern dass durch die kleine Änderung viele Bits überall im Block verändert werden.
+
+Aus diesem Grund arbeiten aktuelle Verschlüsselungsfunktionen von Blockchiffren in **mehreren Runden**.
+:::
+
+
+### Beispiel CBC
+
+p
+: HEY
+iv
+: U
+k
+: Z
+
+![](img/cbc-example.png)
+
+Beachten Sie, dass der IV nur beim ersten Block verwendet wird und die Blocklänge hier genau ein Buchstabe ist. Die XOR-Operation ist hier mit `+` dargestellt und auch bei der "Block-Cipher-Encryption" wird XOR verwendet.
+
+
+### Übungen CBC-Modus
 :::warning[Übungen von Hand lösen]
 Lösen Sie diese Übungen **von Hand**! Sie dürfen einzig den [Pentacode Text-Editor](Pentacode#pentacode-text-editor) als Hilfsmittel verwenden.
 :::
-
-## CBC Modus
 
 :::info[Hinweis CBC-Modus]
 - Jeder Block hat genau so viele Bits wie der Schlüssel. (Hier werden also meist 2 Buchstaben (=`10` bits) pro Antwort in einem Block verwendet.)
@@ -264,6 +239,29 @@ Entschlüsseln Sie den Text `NNHDFBA` mit dem Schlüssel `BE` und beliebigem IV.
 
 <Answer label="Text (nicht binär)" fullWidth  type="string" id="4ce989c5-27ad-4146-bdf6-adb7b5908b55" solution="DOLCE" sanitizer={(val) => UPPER_NOSPACE(val)?.length === 7 ? UPPER_NOSPACE(val).slice(2) : UPPER_NOSPACE(val)} monospace/>
 ::::
+
+
+## Vergleich ECB und CBC
+In diesem Rechenbeispiel sehen Sie den ECB- und den CBC-Modus im Vergleich.
+
+<DefinitionList>
+  <dt>Klartext</dt>
+  <dd>`RAMIRA`</dd>
+  <dt>Schlüssel</dt>
+  <dd>`AB`</dd>
+  <dt>Initialvektor (für CBC)</dt>
+  <dd>`XY`</dd>
+</DefinitionList>
+![](img/rechenbeispiel-ecb-cbc.png)
+
+:::insight[Unterschiedliche Resultate]
+Dieses Beispiel zeigt, was die Verkettung von Blöcken ausmachen kann. Bei beiden Modu werden zwei identische Klartextblöcke `RA` mit dem Schlüssel `AB` verschlüsselt.
+
+Beim ECB-Modus weist dementsprechend auch der Geheimtext zwei identische Blöcke `SC` auf. Durch das Verketten der Blöcke kann diese unschöne Regelmässigkeit mit dem CBC-Modus vermieden werden.
+:::
+
+## XOR-Blockchiffre ausprobieren
+<XORBlockCipher />
 
 ### Vertiefungsaufgaben
 :::aufgabe[ECB und CBC im Vergleich]

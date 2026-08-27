@@ -83,7 +83,7 @@ Codieren Sie Ihren Vornamen <code><MyName /></code> mit Pentacode, indem Sie die
     fullWidth
     monospace
     checker={(val) => {
-        const user = rootStore.userStore.current;
+        const user = rootStore.userStore.viewedUser;
         if (!user || !val) {
             return undefined;
         }
