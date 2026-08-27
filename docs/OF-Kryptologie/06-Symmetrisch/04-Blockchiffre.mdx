@@ -26,34 +26,39 @@ Key
 Da der Klartext dreimal so lange ist wie der Schlüssel, muss der Text in drei Teile aufgeteilt werden, welche wir separat verschlüsseln. Die Blocklänge entspricht also der Schlüssellänge.
 
 ## Verschlüsselung in Blöcken
-Im folgenden Beispiel wird der oben bereits erwähnte Klartext mit dem Schlüssel bitweise mit XOR verschlüsselt:
+Im folgenden Beispiel wird der oben bereits erwähnte Klartext mit dem Schlüssel bitweise mit XOR verschlüsselt, wobei der Klastext in drei Blöcke aufgeteilt wird:
+
+```
+GEHEI   MNACH   RICHT
+PENTA   PENTA   PENTA
+```
 
 <Steps>
 
 1. **Block 1:** GEHEI
     <div>
-    |     | Text    | Pentacode Block 1               | Geheimtext |
-    |:----|:--------|:--------------------------------|:-----------|
-    | *p* | `GEHEI` | `00111 00101 01000 00101 01001` |            |
-    | *k* | `PENTA` | `10000 00101 01110 10100 00001` |            |
-    | **c** |         | **`10111 00000 00110 10001 01000`** | **`W FQH`**    |
+    |       | Text    | Pentacode Block 1                   | Geheimtext   |
+    |:------|:--------|:------------------------------------|:-------------|
+    | *p*   | `GEHEI` |   `00111 00101 01000 00101 01001`   |              |
+    | *k*   | `PENTA` |   `10000 00101 01110 10100 00001`   |              |
+    | **c** |         | **`10111 00000 00110 10001 01000`** | **`W FQH`**  |
     </div>
 
 2. **Block 2:** MNACH
     <div>
-    |     | Text    | Pentacode Block 2               | Geheimtext |
-    |:----|:--------|:--------------------------------|:-----------|
-    | *p* | `MNACH` | `01101 01110 00001 00011 01000` |            |
-    | *k* | `PENTA` | `10000 00101 01110 10100 00001` |            |
-    | **c** |         | **`11101 01011 01111 10111 01001`** | **`.KOWI`**    |
+    |       | Text    | Pentacode Block 2                   | Geheimtext  |
+    |:------|:--------|:------------------------------------|:------------|
+    | *p*   | `MNACH` |   `01101 01110 00001 00011 01000`   |             |
+    | *k*   | `PENTA` |   `10000 00101 01110 10100 00001`   |             |
+    | **c** |         | **`11101 01011 01111 10111 01001`** | **`.KOWI`** |
     </div>
 3. **Block 3:** RICHT
     <div>
-    |     | Text    | Pentacode Block 3               | Geheimtext |
-    |:----|:--------|:--------------------------------|:-----------|
-    | *p* | `RICHT` | `10010 01001 00011 01000 10100` |            |
-    | *k* | `PENTA` | `10000 00101 01110 10100 00001` |            |
-    | **c** |         | **`00010 01100 01101 11100 10101`** | **`BLM-U`**    |
+    |       | Text    | Pentacode Block 3                   | Geheimtext  |
+    |:------|:--------|:------------------------------------|:------------|
+    | *p*   | `RICHT` |   `10010 01001 00011 01000 10100`   |             |
+    | *k*   | `PENTA` |   `10000 00101 01110 10100 00001`   |             |
+    | **c** |         | **`00010 01100 01101 11100 10101`** | **`BLM-U`** |
     </div>
 4. **Resultat:**
     <div>
