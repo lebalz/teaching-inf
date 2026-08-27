@@ -2,6 +2,10 @@
 page_id: 7913cedd-e3b3-44d0-bbae-8d7722bf589c
 ---
 import DocCardList from '@theme/DocCardList';
+import ChoiceAnswer from '@tdev-components/documents/Assessable/ChoiceAnswer';
+import TrueFalseAnswer from '@tdev-components/documents/Assessable/TrueFalseAnswer';
+import Quiz from '@tdev-components/documents/Assessable/Quiz';
+import { points, multipleChoicePoints, noPoints } from '@tdev-components/documents/Assessable/helpers/scoring';
 
 
 # Algorithmen
@@ -11,3 +15,56 @@ import DocCardList from '@theme/DocCardList';
 ---
 
 <DocCardList />
+
+<Quiz scoring={points(1)} randomizeQuestions randomizeOptions id="017c7e62-c7df-4f60-bb7f-5bafd520fefd" >
+<ChoiceAnswer correct={[2]}>
+  > Welche zwei Bedingungen müssen laut Definition erfüllt sein, damit man von einem Algorithmus spricht?
+
+  1. Eine Schritt-für-Schritt-Anleitung, die beliebig lang sein darf
+  2. Eine Schritt-für-Schritt-Anleitung, die eine Aufgabe oder ein Problem löst
+  3. Eine mathematische Formel, die eindeutig ist
+  4. Eine Programmiersprache, in der die Schritte formuliert sind
+
+</ChoiceAnswer>
+
+<ChoiceAnswer correct={[3]}>
+  > Wofür steht die Abkürzung EVA im Zusammenhang mit Algorithmen?
+
+  1. Effizienz, Verständlichkeit, Ausführbarkeit
+  2. Eingabe, Vergleich, Ausgabe
+  3. Eingabe, Verarbeitung, Ausgabe
+  4. Einheit, Verarbeitung, Antwort
+
+</ChoiceAnswer>
+
+<ChoiceAnswer correct={[2, 4]} scoring={multipleChoicePoints(2, 1)} multiple>
+  > Welche Anforderungen an Algorithmen sollten laut Text **immer** erfüllt sein, damit man von einem brauchbaren Algorithmus sprechen kann?
+
+  1. Allgemeinheit
+  2. Endlichkeit
+  3. Determiniertheit
+  4. Ausführbarkeit
+
+</ChoiceAnswer>
+
+<ChoiceAnswer correct={[1]}>
+  > Was bedeutet die Anforderung «Determiniertheit» bei einem Algorithmus?
+
+  1. Bei gleichen Eingabewerten kommt der Algorithmus immer zur gleichen Ausgabe
+  2. Der Algorithmus löst nicht nur ein einzelnes Problem
+  3. Jeder Schritt muss tatsächlich ausführbar sein
+  4. Der Algorithmus benötigt nur endlich viel Speicherplatz
+
+</ChoiceAnswer>
+
+<ChoiceAnswer correct={[2, 4]} scoring={multipleChoicePoints(2, 1)} multiple>
+  > Welche Aussagen zu Parametern in einem Notenblatt treffen zu?
+
+  1. Parameter legen fest, welche Note als nächstes gespielt wird
+  2. Die Tempoangabe legt fest, wie viele Viertelnoten pro Minute gespielt werden
+  3. Parameter kommen in der Notenschrift nicht vor
+  4. Der Notenschlüssel legt fest, in welcher Höhe die Noten gespielt werden
+
+</ChoiceAnswer>
+
+</Quiz>

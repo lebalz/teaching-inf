@@ -170,9 +170,7 @@ pencolor('green')
 forward(30)
 ```
 
-:::details[Gesamte Farbpalette :mdi[palette]{.cyan}]
-<div className="small-table no-table-header">
-
+:::details[Gesamte Farbpalette :mdi[palette]{.cyan}]{.small-table .no-table-header}
 |             |                                                                            |
 | :---------- | :------------------------------------------------------------------------- |
 | `yellow`    | <div style={{width: '8em', height: '1em', background: 'yellow'}}></div>    |
@@ -197,12 +195,10 @@ forward(30)
 | `black`     | <div style={{width: '8em', height: '1em', background: 'black'}}></div>     |
 | `gray`      | <div style={{width: '8em', height: '1em', background: 'gray'}}></div>      |
 | `white`     | <div style={{width: '8em', height: '1em', background: 'white'}}></div>     |
-
-</div>
 :::
 
 :::warning[`'string'`]
-Beachten Sie die Anführungszeichen rund um die Farb-Namen. Damit Python die Farben als Text (eng. `string`) erkennt und nicht plötzlich nach einem gleichnamigen Befehl sucht, werden rund um Texte immer Anführungszeichen verwendet.
+Beachten Sie die Anführungszeichen rund um die Farb-Namen. Damit Python die Farben als Text (eng. `string`) erkennt und nicht plötzlich nach einem gleichnamigen Befehl sucht, werden rund **um Texte immer Anführungszeichen** verwendet. Es spielt dabei keine Rolle, ob Sie einfache `'` oder doppelte `"` Anführungszeichen verwenden.
 :::
 
 ### Stiftbreite
@@ -228,7 +224,7 @@ forward(20)
 
 
 :::warning[Zahlen]
-Beachten Sie, dass bei Zahlen keine Anführungszeichen verwendet werden. *Eine Verwechslungsgefahr mit anderen Befehlen besteht nicht, da in Python keine Befehle mit einer Zahl beginnen.*
+Beachten Sie, dass **bei Zahlen keine Anführungszeichen** verwendet werden. *Eine Verwechslungsgefahr mit anderen Befehlen besteht nicht, da in Python keine Befehle mit einer Zahl beginnen.*
 :::
 
 :::aufgabe[Aufgabe 3: Zickzack]
@@ -242,12 +238,6 @@ Versuchen Sie, folgendes Zickzack-Muster mit einer Stiftdicke von `5` zu zeichne
 from turtle import *
 
 ```
-
-#### ⭐️ Zusatz:
-Machen Sie bei jedem Richtungswechsel einen Punkt:
-
-![](images/zickzack_py_dots.svg)
-
 <Solution id="c78d232b-af05-498f-a671-01919ce85fd2">
 
 ```py live_py slim
@@ -258,23 +248,18 @@ pensize(5)
 color('red')
 left(60)
 forward(40)
-dot()       # punkt zeichnen
 right(120)
 forward(40)
-dot()       # punkt zeichnen
 left(120)
 
 color('orange')
 forward(40)
-dot()       # punkt zeichnen
 right(120)
 forward(40)
-dot()       # punkt zeichnen
 left(120)
 
 color('lime')
 forward(40)
-dot()       # punkt zeichnen
 right(120)
 forward(40)
 left(120)
@@ -291,7 +276,7 @@ Kommentare sind eine wichtige Hilfe, um Programme (Algorithmen) besser zu verste
 
 ```py live_py slim
 # Autor: B. Hofer
-# Datum: 5.09.2021
+# Datum: 27.08.2026
 
 from turtle import *      # importiere alle Befehle der Bibliothek "turtle"
 
@@ -342,7 +327,7 @@ forward(80)
 :::aufgabe[Aufgabe 5: Würfel]
 <Answer type="state" id="41c270a6-4046-415e-8eee-96c84b7b700c" />
 
-Ändern Sie das Programm so ab, dass die gewürfelte Zahl `5` gezeichnet wird:
+Ändern Sie das Programm so ab, dass die gewürfelte Zahl `5` gezeichnet wird (*ohne Umrandung, nur die Punkte*).
 
 ![Würfel 5](./images/wuerfel-5.svg)
 
@@ -395,6 +380,47 @@ left(90)
 forward(80)
 dot(10)
 left(90)
+hideturtle()
+```
+</Solution>
+:::
+
+:::aufgabe[Erweiterung Aufgabe 3: Zickzack]
+<Answer type="state" id="b8c7b225-0558-4379-831a-46481b15401a" />
+Erweitern Sie das Programm 3 __ZICKZACK.PY__ so, dass Sie bei jedem Richtungswechsel ein Punkt gezeichnet wird:
+
+![](images/zickzack_py_dots.svg)
+<Solution id="0e2faf03-65a0-4dc5-85c9-425f13b6a3c4">
+
+```py live_py slim
+from turtle import *
+
+pensize(5)
+
+color('red')
+left(60)
+forward(40)
+dot()       # punkt zeichnen
+right(120)
+forward(40)
+dot()       # punkt zeichnen
+left(120)
+
+color('orange')
+forward(40)
+dot()       # punkt zeichnen
+right(120)
+forward(40)
+dot()       # punkt zeichnen
+left(120)
+
+color('lime')
+forward(40)
+dot()       # punkt zeichnen
+right(120)
+forward(40)
+left(120)
+
 hideturtle()
 ```
 </Solution>

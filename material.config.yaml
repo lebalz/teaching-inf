@@ -105,7 +105,6 @@
     ignore:
       - _category_.yml
       - index.mdx
-      - 02-py-intro
       - 03-repeat
       - 04-errors
       - 05-functions
@@ -117,7 +116,6 @@
       - 12-rekursion
       - 16-modulo
       - 15-Gruefnisch
-      - 20-commands
       - 21-mistakes.mdx
       - 30-Repefragen
       - 50-Test
