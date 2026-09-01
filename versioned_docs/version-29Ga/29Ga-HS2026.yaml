@@ -13,11 +13,11 @@
 - cells:
     - 02.09.2026
     - Kryptologie
-    - Asymmetrische Verschlüsselung
+    - Symmetrische Verschlüsselung
 - cells:
     - 09.09.2026
     - Kryptologie
-    - Hashfunktion
+    - Asymmetrische Verschlüsselung
 - cells:
     - 16.09.2026
     - Umweltwoche
@@ -42,7 +42,7 @@
 - cells:
     - 14.10.2026
     - Kryptologie
-    - Digitale Signaturen
+    - Hashfunktion & Digitale Signaturen
 - cells:
     - 21.10.2026
     - Kryptologie
