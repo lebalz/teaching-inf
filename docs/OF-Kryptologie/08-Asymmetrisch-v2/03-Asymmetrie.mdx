@@ -11,23 +11,24 @@ import PrimefactorizationTiming from "@tdev-components/VisualizationTools/crypto
 # Asymmetrie
 Wir haben in den beiden vorherigen Abschnitten gesehen, dass es Vorgänge gibt, die in die eine Richtung einfach durchzuführen sind, in die entgegengesetzte Richtung allerdings sehr aufwändig oder gar unmöglich:
 
-| einfacher Vorgang               | aufwändiger/schwieriger Vorgang    |
-|:--------------------------------|:-----------------------------------|
-| offenes Bügelschloss schliessen | Bügelschloss ohne Schlüssel öffnen |
-| Farben mischen                  | Farben trennen                     |
+| einfacher Vorgang               | aufwändiger/schwieriger Vorgang                   |
+|:--------------------------------|:--------------------------------------------------|
+| Kryptobox mit Schlüssel öffnen  | Kryptobox ohne oder mit falschem Schlüssel öffnen |
+| offenes Bügelschloss schliessen | Bügelschloss ohne Schlüssel öffnen                |
+| Farben mischen                  | Farben trennen                                    |
 
 Diese Beispiele zeigen deutlich, worauf die asymmetrische Verschlüsselung basiert:
 
 :::definition[Asymmetrische Verschlüsselung]
 Die asymmetrische Verschlüsselung basiert auf Aufgaben, die in eine Richtung einfach auszuführen sind, während man eine geheime Information braucht, um den Vorgang rückgängig zu machen.
 
-Verfügt jemand nicht über diese geheime Information, ist die Umkehrung des Vorgangs nicht in sinnvoller Zeit zu bewältigen.
+Verfügt jemand nicht über diese geheime Information, ist die Umkehrung des Vorgangs **nicht in sinnvoller Zeit** zu bewältigen.
 :::
 
 ## Ein mathematisches Problem dieser Art
 Auch in der Mathematik gibt es Operationen, die einfach und schnell auszuführen sind. Die Umkehrung jedoch ist selbst für einen Computer aufwändig und kann Jahre dauern.
 
-Ein Beispiel dafür ist das Multiplizieren zweier (Prim-)Zahlen. Jeder Computer kann pro Sekunde mehrere Milliarden Multiplikationen ausführen. Ein Produkt zweier Primzahlen in die beiden Faktoren zu zerlegen, ist jedoch ungleich aufwändiger – insbesondere wenn die Zahlen mehrere hundert Stellen lang sind.
+Ein Beispiel dafür ist das Multiplizieren zweier (Prim-)Zahlen. Jeder Computer kann pro Sekunde mehrere Milliarden Multiplikationen ausführen. Ein Produkt zweier Primzahlen in die beiden Faktoren zu zerlegen, ist jedoch ungleich aufwändiger - insbesondere wenn die Zahlen mehrere hundert Stellen lang sind.
 
 :::aufgabe[Multiplizieren vs. Faktorisieren]
 <TaskState id="0690bbc7-87eb-4701-ba6e-7bd92f2aa3f3" />
@@ -79,15 +80,8 @@ Analog zu ihrer Geheimfarbe könnten sich Alice und Bob beispielsweise je eine g
 
 <PrimefactorizationTiming />
 
-:::aufgabe[Gemeinsame Geheimzahl]
-<TaskState id="29cbadea-13f1-4683-b62c-6dc4665853f6" />
-Sie haben bereits gelernt, wie sich Bob und Alice auf eine [gemeinsame Geheimfarbe einigen können](Secret-Color). Noch praktischer wäre es, wenn sie sich stattdessen auf eine gemeinsame Geheim**zahl** einigen könnten. Diese könnten sie dann mit einer entsprechenden Abmachung als geheimen Schlüssel für ein symmetrisches Verschlüsselungsverfahren verwenden.
-
-Wie könnten Bob und Alice eine gemeinsame Geheimzahl als Schlüssel für ein symmetrisches Verschlüsselungsverfahren verwenden?
-
-<Solution id="2c3e878a-5476-4661-ad2c-e1ca9d530c34">
-Sie könnten die Zahl binär darstellen und diese Binärzahl dann als Schlüssel z.B. für die XOR-Blockchiffre verwenden.
-</Solution>
+:::insight[Gemeinsame Geheimzahl]
+Sie haben bereits gelernt, wie sich Bob und Alice auf eine [gemeinsame Geheimfarbe einigen können](./02-Secret-Color.mdx). Noch praktischer wäre es, wenn sie sich stattdessen auf eine gemeinsame Geheim**zahl** einigen könnten. Diese könnten sie dann mit einer entsprechenden Abmachung als geheimen Schlüssel für ein symmetrisches Verschlüsselungsverfahren verwenden (angenommen, sie verwenden ein präzises Messgerät, welches für die Farbe deren __RGB__-Werte ausgibt).
 :::
 
 ::::aufgabe[⭐️ Die mathematische Seite]
