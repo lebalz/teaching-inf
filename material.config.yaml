@@ -44,7 +44,6 @@
       - 07-Krypto-Family.mdx
       - 08-Asymmetrisch
       - 08-Asymmetrisch-v2
-      - 09-Hashing
       - 10-Signaturen
       - _category_.yml
     open: true
@@ -87,7 +86,6 @@
       - 07-Krypto-Family.mdx
       - 08-Asymmetrisch
       - 08-Asymmetrisch-v2
-      - 09-Hashing
       - 10-Signaturen
       - _category_.yml
     open: true
