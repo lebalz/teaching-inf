@@ -232,12 +232,12 @@ Entschlüsseln Sie den Text `NNHDFBA` mit dem Schlüssel `BE` und beliebigem IV.
 <Answer label="k" inputWidth="9em" labelWidth="2em" type="string" id="f20e9df7-4811-4856-a487-02e2ed6b883b" disabled monospace/>
 <i>Nach XOR mit Schlüssel</i>
 <Answer label="c1" inputWidth="9em" labelWidth="2em" type="string" id="69af84b4-3d3a-4377-adbb-6870b71cb9c7" solution="00011" sanitizer={UPPER_NOSPACE} monospace/>
-<Answer label="IV" inputWidth="9em" labelWidth="2em" type="string" id="791d6b06-0ab1-4cb7-82d2-388ed8cd7626" solution="00110" sanitizer={UPPER_NOSPACE} monospace/>
+<Answer label="IV" inputWidth="9em" labelWidth="2em" type="string" id="791d6b06-0ab1-4cb7-82d2-388ed8cd7626" solution="00110" sanitizer={(val) => val.trim().slice(0, 4)} monospace/>
 <i>Nach XOR mit IV </i>
 <Answer label="p" inputWidth="9em" labelWidth="2em" type="string"  id="d0fbef85-346d-4d70-bb60-972205240d36" solution="00101" sanitizer={UPPER_NOSPACE} monospace/>
 :::
 
-<Answer label="Text (nicht binär)" fullWidth  type="string" id="4ce989c5-27ad-4146-bdf6-adb7b5908b55" solution="DOLCE" sanitizer={(val) => UPPER_NOSPACE(val)?.length === 7 ? UPPER_NOSPACE(val).slice(2) : UPPER_NOSPACE(val)} monospace/>
+<Answer label="Text (nicht binär)" fullWidth  type="string" id="4ce989c5-27ad-4146-bdf6-adb7b5908b55" solution="DOLCE" sanitizer={(val) => (/^\s\S/.test(val || '') && val?.length === 8) ? val?.toUpperCase().slice(2) : UPPER_NOSPACE(val)?.length === 7 ? UPPER_NOSPACE(val).slice(2) : UPPER_NOSPACE(val)} monospace/>
 ::::
 
 
