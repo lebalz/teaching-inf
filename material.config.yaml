@@ -98,7 +98,6 @@
     as: 02-BYOD
     ignore:
       - _category_.yml
-      - 00-Szenarien.mdx
     open: true
   - from: docs/OF-Programmieren-1/
     as: 03-Programmieren-1
