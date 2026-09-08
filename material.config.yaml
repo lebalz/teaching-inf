@@ -41,7 +41,7 @@
   - from: docs/OF-Kryptologie/
     as: 06-Kryptologie
     ignore:
-      - 08-Asymmetrisch
+      - 08-Asymmetrisch-v1
       - 10-Signaturen
       - _category_.yml
     open: true
@@ -81,7 +81,7 @@
   - from: docs/OF-Kryptologie/
     as: 06-Kryptologie
     ignore:
-      - 08-Asymmetrisch
+      - 08-Asymmetrisch-v1
       - 10-Signaturen
       - _category_.yml
     open: true
