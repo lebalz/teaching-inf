@@ -10,7 +10,7 @@ import Finding from '@tdev-components/Finding';
 In der [Aufgabe 7](../02-py-intro/index.mdx#aufgaben) haben Sie eine Treppe gezeichnet. Ihr Programm sieht vermutlich etwa wie folgt aus:
 
 :::flex{justify=space-between align=center}
-::br{flexBasis=200px}
+::br{flexBasis=200px grow=1}
 ```py live_py slim
 from turtle import *
 
@@ -38,6 +38,7 @@ forward(29)
 ::br{grow=0.1 flexBasis=1em empty=true}
 ::br{flexBasis=200px}
 ![](./images/stairs.svg)
+::br{grow=1 flexBasis=1em empty=true}
 :::
 
 <Finding title="Was stellen Sie beim Treppen-Programm fest?">
@@ -60,7 +61,7 @@ forward(29)
 
 ## Wiederholen von Sequenzen
 
-Ein Algorithmus kann Sequenzen wiederholt ausführen. In Python wird die zu wiederholende Sequenz **Codeblock** genannt.
+Ein Algorithmus kann Sequenzen wiederholt ausführen. In Python wird die zu wiederholende Sequenz **Codeblock** genannt. Ein Codeblock ist immer eingerückt (im Vergleich zur vorhergehenden Zeile) und wird mit einem Doppelpunkt `:` eingeleitet.
 
 :::flex
 ::br{flexBasis=200px}
@@ -91,7 +92,8 @@ for i in range(5):
 
 :::def[`for i in range(n):`]
 Mit `for i in range(n):` wird eine wiederholte Ausführung vorbereitet. Der nachfolgende **Codeblock** wird `n` Mal wiederholt, bevor weitere Anweisungen ausgeführt werden.
-**Alles, was wiederholt werden soll, muss eingerückt sein.**
+**Alles, was wiederholt werden soll, muss eingerückt sein.**  
+`i` ist ein Schleifenzähler, der bei jeder Wiederholung um `1` erhöht wird. Für die Übungen auf dieser Seite brauchen wir ihn aber noch nicht.
 
 #### Beispiel
 ```py live_py slim
