@@ -35,5 +35,8 @@
             "displayName": "md directive (web font)",
             "name": "mdDirective"
         }
-    ]
+    ],
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit"
+    }
 }
