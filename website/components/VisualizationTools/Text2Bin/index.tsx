@@ -1,10 +1,10 @@
-import clsx from 'clsx';
-import containerStyle from '../container.module.scss';
-import * as React from 'react';
-import { charToUtf8Binary, fromUTF8 } from '../helpers/binary';
-import CodeBlock from '@theme/CodeBlock';
+import { mdiArrowRight } from '@mdi/js';
 import Icon from '@mdi/react';
-import { mdiArrowRight, mdiArrowRightBold } from '@mdi/js';
+import CodeBlock from '@theme/CodeBlock';
+import clsx from 'clsx';
+import * as React from 'react';
+import containerStyle from '../container.module.scss';
+import { charToUtf8Binary } from '../helpers/binary';
 
 const Text2Bin = () => {
     const [bin, setBin] = React.useState('');

@@ -1,11 +1,11 @@
 import clsx from 'clsx';
-import * as React from 'react';
-import containerStyles from '../container.module.scss';
-import styles from './styles.module.scss';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
-import Css from './Css';
+import * as React from 'react';
+import containerStyles from '../container.module.scss';
 import Bin from './Bin';
+import Css from './Css';
+import styles from './styles.module.scss';
 
 const RGBA = () => {
     const [r, setR] = React.useState(255);

@@ -1,12 +1,12 @@
-import React from 'react';
-import clsx from 'clsx';
-import styles from './styles.module.scss';
-import { observer } from 'mobx-react-lite';
-import { useStore } from '@tdev-hooks/useStore';
-import { CmsTextContext, useFirstCmsTextDocumentIfExists } from '@tdev-components/documents/CmsText/shared';
 import useIsBrowser from '@docusaurus/useIsBrowser';
-import { LabelFunction } from '.';
+import { CmsTextContext, useFirstCmsTextDocumentIfExists } from '@tdev-components/documents/CmsText/shared';
 import type { CmsTextEntries } from '@tdev-components/documents/CmsText/WithCmsText';
+import { useStore } from '@tdev-hooks/useStore';
+import clsx from 'clsx';
+import { observer } from 'mobx-react-lite';
+import React from 'react';
+import { LabelFunction } from '.';
+import styles from './styles.module.scss';
 
 interface Props {
     name: string;

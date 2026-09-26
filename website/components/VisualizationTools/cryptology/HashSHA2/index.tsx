@@ -2,8 +2,8 @@ import clsx from 'clsx';
 import * as React from 'react';
 import styles from '../styles.module.scss';
 // @ts-ignore
-import { sha256 } from 'js-sha256';
 import { useStore } from '@tdev/hooks/useStore';
+import { sha256 } from 'js-sha256';
 import { action } from 'mobx';
 
 const HashSHA2 = () => {

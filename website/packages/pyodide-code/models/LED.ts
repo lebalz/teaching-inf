@@ -1,4 +1,4 @@
-import { action, computed, observable } from 'mobx';
+import { action, observable } from 'mobx';
 
 export class LED {
     /** hours, minutes and seconds ALWAYS in degrees */

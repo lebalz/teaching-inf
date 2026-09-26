@@ -1,6 +1,6 @@
 import { orderBy } from 'es-toolkit/array';
-import { Config } from '../models/DeviceConfig';
 import React from 'react';
+import { Config } from '../models/DeviceConfig';
 
 const parsedNumber = (value: string | number | undefined | null, defaultValue: number): number => {
     const num = parseInt(`${value}`, 10);

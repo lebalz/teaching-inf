@@ -1,8 +1,8 @@
 import { action } from 'mobx';
-import Decoder from './Decoder';
-import IPFrame from './IPFrame';
-import { configToQueryString } from './DeviceConfig';
 import { parseQueryParams } from '../hooks/useRouterConfig';
+import Decoder from './Decoder';
+import { configToQueryString } from './DeviceConfig';
+import IPFrame from './IPFrame';
 
 class Router {
     private interfaces = new Map<string, Decoder>();

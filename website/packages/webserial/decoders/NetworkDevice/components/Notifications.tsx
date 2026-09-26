@@ -1,10 +1,9 @@
-import React from 'react';
-import clsx from 'clsx';
-import styles from './styles.module.scss';
-import { observer } from 'mobx-react-lite';
-import { useStore } from '@tdev-hooks/useStore';
-import Decoder from '../models/Decoder';
 import Alert from '@tdev-components/shared/Alert';
+import clsx from 'clsx';
+import { observer } from 'mobx-react-lite';
+import React from 'react';
+import Decoder from '../models/Decoder';
+import styles from './styles.module.scss';
 
 interface Props {
     decoder: Decoder;

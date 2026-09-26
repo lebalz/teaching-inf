@@ -20,17 +20,8 @@ import * as React from 'react';
 //     ready: faClipboard
 // };
 
-import {
-    mdiCircle,
-    mdiClipboard,
-    mdiClipboardCheck,
-    mdiClipboardSearch,
-    mdiClipboardText,
-    mdiCloseCircle,
-    mdiDotsHorizontal,
-    mdiLoading
-} from '@mdi/js';
-import Icon, { Stack } from '@mdi/react';
+import { mdiClipboard, mdiClipboardCheck, mdiCloseCircle, mdiDotsHorizontal, mdiLoading } from '@mdi/js';
+import Icon from '@mdi/react';
 import { SIZE_S } from '@tdev-components/shared/iconSizes';
 
 interface Props {

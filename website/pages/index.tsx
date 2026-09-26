@@ -1,23 +1,23 @@
-import React, { useRef } from 'react';
-import clsx from 'clsx';
-import Layout from '@theme/Layout';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-import styles from './index.module.scss';
-import HomepageCourses from '@tdev-components/HomepageCourses';
-import _ from 'es-toolkit/compat';
-import useIsMobileView from '@tdev-hooks/useIsMobileView';
-import SourceRef from '@tdev-components/Figure/SourceRef';
+import { mdiShuffleVariant } from '@mdi/js';
 import bib1 from '@site/static/img/index/compsci-1.json';
 import bib2 from '@site/static/img/index/compsci-2.json';
 import bib3 from '@site/static/img/index/compsci-3.json';
 import bib4 from '@site/static/img/index/compsci-4.json';
 import bib5 from '@site/static/img/index/compsci-5.json';
 import bib6 from '@site/static/img/index/compsci-6.json';
+import SourceRef from '@tdev-components/Figure/SourceRef';
+import HomepageCourses from '@tdev-components/HomepageCourses';
 import Button from '@tdev-components/shared/Button';
-import { mdiShuffleVariant } from '@mdi/js';
 import { SIZE_M } from '@tdev-components/shared/iconSizes';
-import { observer } from 'mobx-react-lite';
 import customFields from '@tdev-components/utils/customFields';
+import useIsMobileView from '@tdev-hooks/useIsMobileView';
+import Layout from '@theme/Layout';
+import clsx from 'clsx';
+import _ from 'es-toolkit/compat';
+import { observer } from 'mobx-react-lite';
+import React, { useRef } from 'react';
+import styles from './index.module.scss';
 
 function HomepageHeader() {
     const { siteConfig } = useDocusaurusContext();

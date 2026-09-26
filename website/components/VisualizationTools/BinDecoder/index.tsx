@@ -1,11 +1,11 @@
+import anime from 'animejs';
 import clsx from 'clsx';
 import * as React from 'react';
 import styles from './BinDecoder.module.scss';
 import containerStyle from './container.module.scss';
-import anime from 'animejs';
 /** make sure to adapt the query selector when renaming the svg */
+import { pauseAnimations, playAnimations, removeAnimations } from './animeUtils';
 import Cable from './cable.svg';
-import { pauseAnimations, removeAnimations, playAnimations } from './animeUtils';
 
 const BUTTON_CLSX = ['button', 'button--sm', 'button--primary', 'button--outline'];
 

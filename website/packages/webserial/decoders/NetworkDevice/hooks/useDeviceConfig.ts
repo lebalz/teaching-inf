@@ -1,5 +1,5 @@
-import { Config } from '../models/DeviceConfig';
 import React from 'react';
+import { Config } from '../models/DeviceConfig';
 import { parseQueryParams } from './parseOptions.helper';
 
 export const useDeviceConfig = (

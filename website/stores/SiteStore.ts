@@ -1,7 +1,7 @@
 import { RootStore } from '@tdev-stores/rootStore';
-import { ToolsStore } from './ToolsStore';
-import { action } from 'mobx';
 import { Message } from '@tdev/pyodide-code/pyodideJsModules';
+import { action } from 'mobx';
+import { ToolsStore } from './ToolsStore';
 
 export default class SiteStore {
     toolsStore: ToolsStore;

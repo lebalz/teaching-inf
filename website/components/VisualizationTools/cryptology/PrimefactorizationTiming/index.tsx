@@ -1,17 +1,17 @@
-import clsx from 'clsx';
-import * as React from 'react';
-import shared from '../styles.module.scss';
-import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import CopyImageToClipboard from '@tdev-components/shared/CopyImageToClipboard';
-import { randomPrime } from '@tdev/utils/prime';
-import { useStore } from '@tdev/hooks/useStore';
-import { action } from 'mobx';
-import Icon from '@mdi/react';
-import { SIZE_S, SIZE_XS } from '@tdev-components/shared/iconSizes';
 import { mdiCancel, mdiClock, mdiLoading } from '@mdi/js';
-import styles from './styles.module.scss';
-import Button from '@tdev-components/shared/Button';
+import Icon from '@mdi/react';
 import Badge from '@tdev-components/shared/Badge';
+import Button from '@tdev-components/shared/Button';
+import CopyImageToClipboard from '@tdev-components/shared/CopyImageToClipboard';
+import { SIZE_S, SIZE_XS } from '@tdev-components/shared/iconSizes';
+import { useStore } from '@tdev/hooks/useStore';
+import { randomPrime } from '@tdev/utils/prime';
+import clsx from 'clsx';
+import { action } from 'mobx';
+import * as React from 'react';
+import { CartesianGrid, ResponsiveContainer, Scatter, ScatterChart, Tooltip, XAxis, YAxis } from 'recharts';
+import shared from '../styles.module.scss';
+import styles from './styles.module.scss';
 const Play =
     'M 7.4219 1.8281 c -0.6938 -0.4266 -1.5656 -0.4406 -2.2734 -0.0422 S 4 2.9344 4 3.75 V 20.25 c 0 0.8156 0.4406 1.5656 1.1484 1.9641 s 1.5797 0.3797 2.2734 -0.0422 L 20.9219 13.9219 c 0.6703 -0.4078 1.0781 -1.1344 1.0781 -1.9219 s -0.4078 -1.5094 -1.0781 -1.9219 L 7.4219 1.8281 Z';
 

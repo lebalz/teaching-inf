@@ -1,13 +1,12 @@
-import React from 'react';
-import clsx from 'clsx';
-import styles from './styles.module.scss';
-import shared from '../styles.module.scss';
-import { observer } from 'mobx-react-lite';
-import VigenereStep from './VigenereStep';
-import { action } from 'mobx';
-import { useStore } from '@tdev-hooks/useStore';
-import Button from '@tdev-components/shared/Button';
 import { mdiRestore, mdiUndo } from '@mdi/js';
+import Button from '@tdev-components/shared/Button';
+import { useStore } from '@tdev-hooks/useStore';
+import clsx from 'clsx';
+import { action } from 'mobx';
+import { observer } from 'mobx-react-lite';
+import shared from '../styles.module.scss';
+import styles from './styles.module.scss';
+import VigenereStep from './VigenereStep';
 import VigenereTable from './VigenereTable';
 
 interface Props {}

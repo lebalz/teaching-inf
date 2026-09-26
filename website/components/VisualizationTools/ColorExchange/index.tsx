@@ -1,10 +1,10 @@
-import clsx from 'clsx';
-import * as React from 'react';
-import styles from './index.module.scss';
 import ColorPicker from '@radial-color-picker/react-color-picker';
 import '@radial-color-picker/react-color-picker/dist/style.css';
 import { useStore } from '@tdev/hooks/useStore';
+import clsx from 'clsx';
 import { action } from 'mobx';
+import * as React from 'react';
+import styles from './index.module.scss';
 
 interface Props {
     color: string;

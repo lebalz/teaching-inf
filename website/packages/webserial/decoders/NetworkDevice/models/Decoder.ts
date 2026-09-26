@@ -2,8 +2,8 @@ import SerialDevice, { ConnectionState, iSubscriber } from '@tdev/webserial/mode
 import { action, computed, observable, observableRef } from 'mobx';
 import DeviceConfig, { Config } from './DeviceConfig';
 import EthernetFrame from './EthernetFrame';
-import Router from './Router';
 import IPFrame from './IPFrame';
+import Router from './Router';
 
 const CONFIG = '::CONFIG::';
 export const SEND_L2 = '::L2::';

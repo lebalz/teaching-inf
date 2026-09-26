@@ -1,8 +1,8 @@
-import React, { type ReactNode } from 'react';
-import clsx from 'clsx';
-import styles from './styles.module.scss';
-import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+import clsx from 'clsx';
+import React, { type ReactNode } from 'react';
+import styles from './styles.module.scss';
 
 interface Props {
     children: ReactNode[];

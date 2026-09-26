@@ -1,12 +1,12 @@
-import React from 'react';
-import clsx from 'clsx';
-import styles from '../styles.module.scss';
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { mdiToggleSwitch, mdiToggleSwitchOffOutline } from '@mdi/js';
+import Button from '@tdev-components/shared/Button';
 import CopyImageToClipboard from '@tdev-components/shared/CopyImageToClipboard';
 import { useStore } from '@tdev/hooks/useStore';
+import clsx from 'clsx';
 import { action } from 'mobx';
-import Button from '@tdev-components/shared/Button';
-import { mdiToggleSwitch, mdiToggleSwitchOffOutline } from '@mdi/js';
+import React from 'react';
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import styles from '../styles.module.scss';
 
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 const SWITCH_SIZE = { width: 35, height: 18 };

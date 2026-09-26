@@ -1,9 +1,9 @@
 import { RootStore } from '@site/src/stores/rootStore';
 import { action, observable, observableRef } from 'mobx';
-import Polybios from './Polybios';
-import Vignere from './Vignere';
 import ClockStore from './ClockStore';
 import LedStore from './LedStore';
+import Polybios from './Polybios';
+import Vignere from './Vignere';
 
 type Source = 'text' | 'cipher';
 

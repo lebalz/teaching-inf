@@ -1,11 +1,10 @@
-import clsx from 'clsx';
-import styles from './styles.module.scss';
-import { observer } from 'mobx-react-lite';
-import { useStore } from '@tdev-hooks/useStore';
+import ColorPicker from '@radial-color-picker/react-color-picker';
 import Card from '@tdev-components/shared/Card';
 import CopyBadge from '@tdev-components/shared/CopyBadge';
-import React from 'react';
-import ColorPicker from '@radial-color-picker/react-color-picker';
+import { useStore } from '@tdev-hooks/useStore';
+import clsx from 'clsx';
+import { observer } from 'mobx-react-lite';
+import styles from './styles.module.scss';
 
 interface Props {
     ledId: string;

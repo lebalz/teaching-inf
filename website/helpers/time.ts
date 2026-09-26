@@ -1,4 +1,3 @@
-import _ from 'es-toolkit/compat';
 import { iRow } from '../components/SemesterTable';
 
 export const SECOND_MS = 1000;

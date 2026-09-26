@@ -1,15 +1,15 @@
+import { mdiKeyboardReturn, mdiShuffleVariant } from '@mdi/js';
+import Button from '@tdev-components/shared/Button';
+import CopyBadge from '@tdev-components/shared/CopyBadge';
+import { SIZE_S } from '@tdev-components/shared/iconSizes';
+import TextInput from '@tdev-components/shared/TextInput';
+import { useStore } from '@tdev/hooks/useStore';
 import clsx from 'clsx';
+import { action } from 'mobx';
+import { observer } from 'mobx-react-lite';
 import * as React from 'react';
 import shared from '../styles.module.scss';
 import styles from './styles.module.scss';
-import { useStore } from '@tdev/hooks/useStore';
-import { action } from 'mobx';
-import { observer } from 'mobx-react-lite';
-import Button from '@tdev-components/shared/Button';
-import { mdiKeyboardReturn, mdiShuffleVariant } from '@mdi/js';
-import { SIZE_S } from '@tdev-components/shared/iconSizes';
-import CopyBadge from '@tdev-components/shared/CopyBadge';
-import TextInput from '@tdev-components/shared/TextInput';
 
 export default observer(() => {
     const store = useStore('siteStore').toolsStore.polybios;

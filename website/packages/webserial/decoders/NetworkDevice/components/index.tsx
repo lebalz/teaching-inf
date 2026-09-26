@@ -1,15 +1,3 @@
-import React from 'react';
-import clsx from 'clsx';
-import styles from './styles.module.scss';
-import { observer } from 'mobx-react-lite';
-import { useStore } from '@tdev-hooks/useStore';
-import { useDeviceId } from '@tdev/webserial/hooks/useDeviceId';
-import Decoder from '../models/Decoder';
-import { useFullscreenTargetId } from '@tdev-hooks/useFullscreenTargetId';
-import Button from '@tdev-components/shared/Button';
-import Logs from '@tdev-components/documents/CodeEditor/Editor/Footer/Logs';
-import Badge from '@tdev-components/shared/Badge';
-import TextInput from '@tdev-components/shared/TextInput';
 import {
     mdiAccessPointNetwork,
     mdiCloseCircle,
@@ -19,14 +7,25 @@ import {
     mdiSquareEditOutline,
     mdiSync
 } from '@mdi/js';
-import { SIZE_S, SIZE_XS } from '@tdev-components/shared/iconSizes';
-import CopyBadge from '@tdev-components/shared/CopyBadge';
-import { Config } from '../models/DeviceConfig';
 import Icon from '@mdi/react';
+import Logs from '@tdev-components/documents/CodeEditor/Editor/Footer/Logs';
+import Badge from '@tdev-components/shared/Badge';
+import Button from '@tdev-components/shared/Button';
 import Card from '@tdev-components/shared/Card';
+import CopyBadge from '@tdev-components/shared/CopyBadge';
+import { SIZE_S, SIZE_XS } from '@tdev-components/shared/iconSizes';
+import TextInput from '@tdev-components/shared/TextInput';
+import { useFullscreenTargetId } from '@tdev-hooks/useFullscreenTargetId';
+import { useStore } from '@tdev-hooks/useStore';
+import { useDeviceId } from '@tdev/webserial/hooks/useDeviceId';
+import clsx from 'clsx';
+import { observer } from 'mobx-react-lite';
+import React from 'react';
+import Decoder from '../models/Decoder';
+import { Config } from '../models/DeviceConfig';
+import styles from './styles.module.scss';
 // @ts-ignore
 import Details from '@theme/Details';
-import Alert from '@tdev-components/shared/Alert';
 import Router from '../models/Router';
 import Notifications from './Notifications';
 

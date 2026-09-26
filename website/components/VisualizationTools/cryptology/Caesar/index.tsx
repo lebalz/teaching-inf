@@ -1,8 +1,8 @@
+import { useStore } from '@tdev/hooks/useStore';
 import clsx from 'clsx';
+import { action } from 'mobx';
 import * as React from 'react';
 import styles from '../styles.module.scss';
-import { useStore } from '@tdev/hooks/useStore';
-import { action } from 'mobx';
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
 const sanitizer = (text: string) => {

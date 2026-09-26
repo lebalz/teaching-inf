@@ -1,11 +1,11 @@
 import clsx from 'clsx';
+import 'rc-slider/assets/index.css';
+import Slider from 'rc-slider/lib/Slider';
 import * as React from 'react';
 import containerStyles from '../container.module.scss';
-import styles from './styles.module.scss';
-import Slider from 'rc-slider/lib/Slider';
-import 'rc-slider/assets/index.css';
-import Css from './Css';
 import Bin from './Bin';
+import Css from './Css';
+import styles from './styles.module.scss';
 
 const toBin = (num: number) => {
     return (num >>> 0).toString(2).padStart(8, '0');

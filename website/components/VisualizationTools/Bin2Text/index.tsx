@@ -1,10 +1,10 @@
-import clsx from 'clsx';
-import containerStyle from '../container.module.scss';
-import * as React from 'react';
-import { fromUTF8 } from '../helpers/binary';
-import CodeBlock from '@theme/CodeBlock';
-import Icon from '@mdi/react';
 import { mdiArrowRight } from '@mdi/js';
+import Icon from '@mdi/react';
+import CodeBlock from '@theme/CodeBlock';
+import clsx from 'clsx';
+import * as React from 'react';
+import containerStyle from '../container.module.scss';
+import { fromUTF8 } from '../helpers/binary';
 
 interface Props {}
 const Bin2Text = () => {

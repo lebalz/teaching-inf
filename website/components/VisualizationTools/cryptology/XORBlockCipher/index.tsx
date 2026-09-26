@@ -1,10 +1,10 @@
+import { useStore } from '@tdev/hooks/useStore';
 import clsx from 'clsx';
 import { shuffle } from 'es-toolkit/compat';
+import { action } from 'mobx';
 import * as React from 'react';
 import { PENTA_TABLE, sanitizePentaString } from '../../Pentacode';
 import styles from '../styles.module.scss';
-import { useStore } from '@tdev/hooks/useStore';
-import { action } from 'mobx';
 
 const toPentaInt = (text: string): number[] => {
     const t = sanitizePentaString(text);

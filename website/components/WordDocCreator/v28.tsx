@@ -1,11 +1,10 @@
-import React from 'react';
-import { observer } from 'mobx-react-lite';
-import { Document, ImageRun, Packer, Paragraph } from 'docx';
-import { saveAs } from 'file-saver';
 import { mdiDownload } from '@mdi/js';
+import Button from '@tdev-components/shared/Button';
 import { useStore } from '@tdev-hooks/useStore';
 import User from '@tdev-models/User';
-import Button from '@tdev-components/shared/Button';
+import { Document, ImageRun, Packer, Paragraph } from 'docx';
+import { saveAs } from 'file-saver';
+import { observer } from 'mobx-react-lite';
 interface Props {
     personalize?: boolean;
 }

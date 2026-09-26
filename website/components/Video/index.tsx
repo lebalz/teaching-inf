@@ -1,9 +1,9 @@
 import React, { type ReactNode } from 'react';
 import styles from './styles.module.scss';
 
-import clsx from 'clsx';
-import Icon from '@mdi/react';
 import { mdiWindowMinimize } from '@mdi/js';
+import Icon from '@mdi/react';
+import clsx from 'clsx';
 
 interface Props {
     src: string;

@@ -1,11 +1,10 @@
-import React from 'react';
-import clsx from 'clsx';
-import styles from './styles.module.scss';
-import { observer } from 'mobx-react-lite';
-import WithCmsText, { CmsTextEntries } from '@tdev-components/documents/CmsText/WithCmsText';
-import CmsEntry from './CmsEntry';
 import DefinitionList from '@tdev-components/DefinitionList';
+import WithCmsText, { CmsTextEntries } from '@tdev-components/documents/CmsText/WithCmsText';
 import type { DocumentRootStore } from '@tdev-stores/DocumentRootStore';
+import clsx from 'clsx';
+import { observer } from 'mobx-react-lite';
+import React from 'react';
+import CmsEntry from './CmsEntry';
 
 export type LabelFunction = (entries: CmsTextEntries, docRootStore: DocumentRootStore) => string;
 interface Props {

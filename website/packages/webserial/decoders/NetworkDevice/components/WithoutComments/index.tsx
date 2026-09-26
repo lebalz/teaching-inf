@@ -1,8 +1,8 @@
-import React from 'react';
-import clsx from 'clsx';
-import styles from './styles.module.scss';
-import CodeBlock from '@theme/CodeBlock';
 import TextAreaInput from '@tdev-components/shared/TextAreaInput';
+import CodeBlock from '@theme/CodeBlock';
+import clsx from 'clsx';
+import React from 'react';
+import styles from './styles.module.scss';
 /**
  * Move all multi-line, single-statement if/elif/else/else-if blocks to one line.
  * Modifies Python Syntax in the input string.

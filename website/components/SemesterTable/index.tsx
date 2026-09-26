@@ -1,10 +1,10 @@
-import React, { ReactNode, useMemo } from 'react';
-import styles from './styles.module.scss';
-import clsx from 'clsx';
-import { WEEK_DAYS } from '@tdev/helpers/time';
 import * as MDI from '@mdi/js';
 import Icon from '@mdi/react';
+import { WEEK_DAYS } from '@tdev/helpers/time';
+import clsx from 'clsx';
 import _ from 'es-toolkit/compat';
+import React, { ReactNode, useMemo } from 'react';
+import styles from './styles.module.scss';
 
 export enum Type {
     Holiday = 'holiday',

@@ -1,5 +1,5 @@
-import React from 'react';
 import Tabs from '@theme/Tabs';
+import React from 'react';
 
 type OsType = 'win10' | 'win11' | 'win' | 'mac' | 'osx';
 interface Props {

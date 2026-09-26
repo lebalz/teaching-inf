@@ -1,10 +1,9 @@
-import React from 'react';
 import clsx from 'clsx';
-import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
 import { default as EthernetFrameModel } from '../../models/EthernetFrame';
 import ARP from './ARP';
 import IPFrame from './IPFrame';
+import styles from './styles.module.scss';
 
 interface Props {
     frame: EthernetFrameModel;

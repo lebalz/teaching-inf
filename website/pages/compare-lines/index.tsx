@@ -1,9 +1,9 @@
-import React from 'react';
-import Layout from '@theme/Layout';
-import styles from './styles.module.scss';
-import clsx from 'clsx';
-import Icon from '@mdi/react';
 import { mdiCircleSmall, mdiPlus } from '@mdi/js';
+import Icon from '@mdi/react';
+import Layout from '@theme/Layout';
+import clsx from 'clsx';
+import React from 'react';
+import styles from './styles.module.scss';
 
 interface VectorInputProps {
     value: [string, string, string];

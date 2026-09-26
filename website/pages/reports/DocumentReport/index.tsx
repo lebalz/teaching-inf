@@ -1,9 +1,6 @@
-import React from 'react';
-import clsx from 'clsx';
-import styles from './styles.module.scss';
-import { observer } from 'mobx-react-lite';
 import { DocumentModelType } from '@tdev-api/document';
 import CodeBlock from '@theme/CodeBlock';
+import { observer } from 'mobx-react-lite';
 import QuillRenderer from './QuillRenderer';
 
 interface Props {

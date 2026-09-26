@@ -1,18 +1,18 @@
-import clsx from 'clsx';
-import { observer } from 'mobx-react-lite';
-import styles from './styles.module.scss';
-import Webserial from '@tdev/webserial/component';
-import NetworkDevice from '@tdev/packages/webserial/decoders/NetworkDevice/components';
-import { useRouterConfig } from '../../hooks/useRouterConfig';
-import React from 'react';
-import { default as RouterModel } from '../../models/Router';
-import { Config } from '../../models/DeviceConfig';
-import Icon from '@mdi/react';
 import { mdiClose, mdiPlusCircle, mdiRouter } from '@mdi/js';
+import Icon from '@mdi/react';
 import Badge from '@tdev-components/shared/Badge';
-import { useStore } from '@tdev-hooks/useStore';
 import Button from '@tdev-components/shared/Button';
 import { Confirm } from '@tdev-components/shared/Button/Confirm';
+import { useStore } from '@tdev-hooks/useStore';
+import NetworkDevice from '@tdev/packages/webserial/decoders/NetworkDevice/components';
+import Webserial from '@tdev/webserial/component';
+import clsx from 'clsx';
+import { observer } from 'mobx-react-lite';
+import React from 'react';
+import { useRouterConfig } from '../../hooks/useRouterConfig';
+import { Config } from '../../models/DeviceConfig';
+import { default as RouterModel } from '../../models/Router';
+import styles from './styles.module.scss';
 
 interface Props {
     nr: number;

@@ -1,10 +1,10 @@
-import clsx from 'clsx';
-import Layout from '@theme/Layout';
-import { observer } from 'mobx-react-lite';
-import styles from './styles.module.scss';
-import Webserial from '@tdev/webserial/component';
 import NetworkDevice from '@tdev/packages/webserial/decoders/NetworkDevice/components';
 import { useDeviceConfig } from '@tdev/packages/webserial/decoders/NetworkDevice/hooks/useDeviceConfig';
+import Webserial from '@tdev/webserial/component';
+import Layout from '@theme/Layout';
+import clsx from 'clsx';
+import { observer } from 'mobx-react-lite';
+import styles from './styles.module.scss';
 
 const Client = observer((): React.ReactNode => {
     const config = useDeviceConfig(

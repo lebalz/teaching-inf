@@ -1,9 +1,9 @@
+import { useStore } from '@tdev/hooks/useStore';
 import clsx from 'clsx';
+import { differenceWith, isEqual, shuffle, uniq } from 'es-toolkit/compat';
+import { action } from 'mobx';
 import * as React from 'react';
 import styles from '../styles.module.scss';
-import { differenceWith, isEqual, keys, shuffle, uniq, update } from 'es-toolkit/compat';
-import { useStore } from '@tdev/hooks/useStore';
-import { action } from 'mobx';
 const ALPHABET = [
     'A',
     'B',

@@ -1,9 +1,9 @@
+import { useStore } from '@tdev/hooks/useStore';
 import clsx from 'clsx';
+import { action } from 'mobx';
 import * as React from 'react';
 import CopyImageToClipboard from '../../shared/CopyImageToClipboard';
 import styles from './styles.module.scss';
-import { useStore } from '@tdev/hooks/useStore';
-import { action } from 'mobx';
 
 /**
  * @url: https://rothe.io/crypto/teaching/2-modern/2-1-Kryptologie-Blockchiffre.pdf
@@ -313,4 +313,4 @@ const PixelEditor = () => {
     );
 };
 
-export { PixelEditor, TextEditor, toPenta, toText, pentaChunks };
+export { pentaChunks, PixelEditor, TextEditor, toPenta, toText };

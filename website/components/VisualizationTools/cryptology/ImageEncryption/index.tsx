@@ -1,15 +1,15 @@
-import * as React from 'react';
-import { useEffect, useState } from 'react';
-import styles from './styles.module.scss';
-import clsx from 'clsx';
-import { shuffle } from 'es-toolkit/compat';
-import { PENTA_TABLE } from '@tdev-components/VisualizationTools/Pentacode';
-import { useStore } from '@tdev/hooks/useStore';
-import { action } from 'mobx';
 import Button from '@tdev-components/shared/Button';
 import { SIZE_S } from '@tdev-components/shared/iconSizes';
 import TextInput from '@tdev-components/shared/TextInput';
+import { PENTA_TABLE } from '@tdev-components/VisualizationTools/Pentacode';
+import { useStore } from '@tdev/hooks/useStore';
+import clsx from 'clsx';
+import { shuffle } from 'es-toolkit/compat';
+import { action } from 'mobx';
 import { observer } from 'mobx-react-lite';
+import * as React from 'react';
+import { useEffect, useState } from 'react';
+import styles from './styles.module.scss';
 
 const ImageEncryption = observer(() => {
     const SRC_IMAGE_ID = React.useId();

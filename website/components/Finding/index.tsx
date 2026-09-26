@@ -1,7 +1,7 @@
-import React, { type ReactNode } from 'react';
 import Details from '@theme/Details';
-import styles from './styles.module.scss';
 import clsx from 'clsx';
+import { type ReactNode } from 'react';
+import styles from './styles.module.scss';
 
 interface Props {
     title?: string;

@@ -1,7 +1,6 @@
 import clsx from 'clsx';
 import * as React from 'react';
-import styles from './index.module.scss';
-import containerStyles from '../styles/container.module.scss';
+import { loadJS } from '../../helpers/loaders';
 import {
     CHECKER_DICTIONARY,
     DICTIONARY,
@@ -9,7 +8,8 @@ import {
     NAMED_NUMBER_DICTIONARY,
     PERIOD_DICTIONARY
 } from '../../helpers/password-checker';
-import { loadJS } from '../../helpers/loaders';
+import containerStyles from '../styles/container.module.scss';
+import styles from './index.module.scss';
 
 const LEVEL_CLASSES = {
     0: styles.achievement,
