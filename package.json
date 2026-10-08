@@ -100,7 +100,8 @@
         "socket.io-client": "^4.8.3",
         "svg-parser": "^2.0.4",
         "typed.js": "^2.1.0",
-        "uuid": "^14.0.1"
+        "uuid": "^14.0.1",
+        "@pierre/trees": "^1.0.0-beta.6"
     },
     "devDependencies": {
         "@docusaurus/module-type-aliases": "^3.10.2",
