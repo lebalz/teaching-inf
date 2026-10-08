@@ -4,7 +4,7 @@ import * as React from 'react';
 import Typed from 'typed.js';
 
 interface Props {
-    type: keyof React.ReactHTML;
+    type: React.HTMLElementType;
     strings: string[];
 }
 

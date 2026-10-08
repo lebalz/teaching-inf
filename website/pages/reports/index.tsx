@@ -65,7 +65,7 @@ const Reports = observer((props: Props) => {
             {page && (
                 <div>
                     {page.documentRoots.map((root) => {
-                        const doc = root.firstMainDocument;
+                        const doc = root.documents.find((d) => d.isMain);
                         if (!doc) {
                             return null;
                         }

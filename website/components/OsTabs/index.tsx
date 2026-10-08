@@ -21,7 +21,7 @@ const getValues = (os: OsType[]) => {
 
 const OsTabs = (props: Props) => {
     const tabs = Array.isArray(props.children)
-        ? props.children.map((tab) => tab.props.value)
+        ? props.children.map((tab) => (tab as any).props.value)
         : ['win11', 'win10', 'macOS'];
     return (
         <Tabs

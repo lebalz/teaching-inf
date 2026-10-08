@@ -35,7 +35,7 @@ const CmsEntry = observer((props: Props) => {
     if (!cmsText || (!cmsText.canDisplay && !userStore.isUserSwitched)) {
         return null;
     }
-    const isEmpty = hideEmpty && cmsText.isEmpty;
+    const isEmpty = hideEmpty && cmsText.text?.trim()?.length === 0;
     if (isEmpty) {
         return null;
     }
