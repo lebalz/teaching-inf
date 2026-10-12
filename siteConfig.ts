@@ -1,27 +1,27 @@
 // This file is never changed by teaching-dev.
 // Use it to override or extend your app configuration.
 
-import { mdiSourceCommit } from '@mdi/js';
 import { VersionOptions } from '@docusaurus/plugin-content-docs';
+import { mdiSourceCommit } from '@mdi/js';
 import type { SiteConfigProvider } from '@tdev/siteConfig/siteConfig';
-import {
-    accountSwitcher,
-    blog,
-    loginProfileButton,
-    requestTarget,
-    taskStateOverview,
-    devModeAccessLocalFS,
-    personalSpaceOverlay
-} from './src/siteConfig/navbarItems';
-import { brythonCodePluginConfig } from './src/siteConfig/pluginConfigs';
 import { themes as prismThemes } from 'prism-react-renderer';
-import versions from './versions.json' with { type: 'json' };
 import githubCmsPlugin from './packages/hfr/github-cms/plugin';
 import {
     recommendedBeforeDefaultRemarkPlugins,
     recommendedRehypePlugins,
     recommendedRemarkPlugins
 } from './src/siteConfig/markdownPluginConfigs';
+import {
+    accountSwitcher,
+    blog,
+    devModeAccessLocalFS,
+    loginProfileButton,
+    personalSpaceOverlay,
+    requestTarget,
+    taskStateOverview
+} from './src/siteConfig/navbarItems';
+import { brythonCodePluginConfig } from './src/siteConfig/pluginConfigs';
+import versions from './versions.json' with { type: 'json' };
 
 const GIT_COMMIT_SHA = process.env.GITHUB_SHA || Math.random().toString(36).substring(7);
 const BUILD_ARCHIVE = process.env.BUILD_ARCHIVE === 'true';
@@ -178,11 +178,6 @@ const getSiteConfig: SiteConfigProvider = () => {
                 ['data-website-id']: process.env.UMAMI_ID,
                 ['data-domains']: 'inf.gbsl.website',
                 async: true,
-                defer: true
-            },
-            {
-                src: 'https://umami.gbsl.website/recorder.js',
-                ['data-website-id']: process.env.UMAMI_ID,
                 defer: true
             }
         ],
