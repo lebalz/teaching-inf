@@ -1,4 +1,5 @@
 import { RootStore } from '@site/src/stores/rootStore';
+import { sha256 } from 'js-sha256';
 import { action, observable, observableRef } from 'mobx';
 import ClockStore from './ClockStore';
 import LedStore from './LedStore';
@@ -32,8 +33,9 @@ export class ToolsStore {
         indicateUnusedChars: true
     };
 
-    @observableRef accessor hashSha256: { text: string } = {
-        text: ''
+    @observableRef accessor hashSha256: { text: string; hash: string } = {
+        text: '',
+        hash: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
     };
 
     @observableRef accessor imageEncryption: {
@@ -152,5 +154,14 @@ export class ToolsStore {
     @action
     setTextFieldValue(id: string, value: string) {
         this.textFieldPlaygrounds.set(id, value);
+    }
+
+    @action
+    setSha256Text(value: string) {
+        const hash = sha256(value);
+        this.hashSha256 = {
+            text: value,
+            hash: hash
+        };
     }
 }

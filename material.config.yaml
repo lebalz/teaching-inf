@@ -42,6 +42,7 @@
     as: 06-Kryptologie
     ignore:
       - 08-Asymmetrisch-v26
+      - 09-Hashing-v26
       - 10-Signaturen
       - _category_.yml
     open: true
@@ -82,6 +83,7 @@
     as: 06-Kryptologie
     ignore:
       - 08-Asymmetrisch-v26
+      - 09-Hashing-v26
       - 10-Signaturen
       - _category_.yml
     open: true

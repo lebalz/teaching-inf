@@ -1,54 +1,37 @@
 import clsx from 'clsx';
-import * as React from 'react';
 import styles from '../styles.module.scss';
 // @ts-ignore
 import { useStore } from '@tdev/hooks/useStore';
-import { sha256 } from 'js-sha256';
-import { action } from 'mobx';
+import { observer } from 'mobx-react-lite';
 
-const HashSHA2 = () => {
-    const [text, setText] = React.useState('');
-    const [sha2Text, setSHA2Text] = React.useState('');
+const HashSHA2 = observer(() => {
     const store = useStore('siteStore').toolsStore;
-
-    React.useEffect(() => {
-        setText(store.hashSha256?.text || ''); // TODO: Couldn't we just grab this directly form the store, without useState?
-    }, []);
-
-    React.useEffect(() => {
-        setSHA2Text(sha256(text));
-        return action(() => {
-            // TODO: What exactly is an action, and why do we need to return it?
-            store.hashSha256 = {
-                text
-            };
-        });
-    }, [text]);
+    const { text, hash } = store.hashSha256;
 
     return (
         <div className={clsx('hero', 'shadow--lw', styles.container)}>
             <div className="container">
-                <p className="hero__subtitle">SHA-2 Hash</p>
+                <p className="hero__subtitle">SHA-256 Hash</p>
                 <h4>Input</h4>
                 <textarea
                     className={clsx(styles.input)}
                     value={text}
                     onChange={(e) => {
-                        setText(e.target.value);
+                        store.setSha256Text(e.target.value);
                     }}
                     rows={5}
                     placeholder="Text"
                 ></textarea>
-                <h4>SHA-2 Hash</h4>
+                <h4>SHA-256 Hash</h4>
                 <textarea
                     className={clsx(styles.input)}
-                    value={sha2Text}
+                    value={hash}
                     readOnly
-                    placeholder="SHA2-Hash"
+                    placeholder="SHA256-Hash"
                 ></textarea>
             </div>
         </div>
     );
-};
+});
 
 export default HashSHA2;
