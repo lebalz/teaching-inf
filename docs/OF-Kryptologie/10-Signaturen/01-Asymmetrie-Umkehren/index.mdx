@@ -10,9 +10,9 @@ page_id: 1161bd5d-ed3c-4517-9bab-4b13629f07e1
 # Asymmetrie umkehren
 
 :::cards{flexBasis=250px}
-![Privater Schlüssel (rechts drehend)](./images/PRI.png)
+![Privater Schlüssel (rechts drehend)](./images/PRI.svg)
 ::br
-![Öffentlicher Schlüssel (links drehend)](./images/PUB.png)
+![Öffentlicher Schlüssel (links drehend)](./images/PUB.svg)
 :::
 
 :::aufgabe[aus dem Unterricht...]
@@ -43,8 +43,7 @@ Halten Sie kurz fest, wie die Boxen und ihre Schlüssel funktionieren.
 ## Digitale Signatur
 Wir haben soeben das Prinzip der digitalen Signatur entdeckt.
 
-
-![Digitale Signatur](./images/asymm-signature.svg)
+![Digitale Signatur](./images/asymm-signatur.webp)
 
 :::finding[Digitale Signatur]
 Wenn Bob die Nachricht mit dem öffentlichen Schlüssel von Alice entschlüsseln kann, dann muss diese Nachricht vorher mit dem privaten Schlüssel von Alice verschlüsselt worden sein. Somit kann sie von niemand anderem stammen als von Alice selbst. D.h. diese Nachricht ist quasi digital signiert.
@@ -53,19 +52,23 @@ Wenn Bob die Nachricht mit dem öffentlichen Schlüssel von Alice entschlüsseln
 :::aufgabe[Aufgabe mehrere Leute]
 <Answer type="state" id="9a23f76b-2500-459d-8ffc-dc4da5d06a6a" />
 
-Überlegen Sie sich, wie ein signiertes Dokument von mehr als zwei Personen angeschaut und überprüft wird. Welche Schlüssel werden verwendet?
+Überlegen Sie sich, wie ein signiertes Dokument von mehr als einer Person angeschaut und überprüft wird. Welche Schlüssel werden verwendet?
 
 <Answer type="text" id="6e6c19e8-7a15-41cc-83b4-ca2987de22d1" />
 
 <Solution id="7ff60a15-ccaa-4ab4-98f5-a908c6b89c6e">
 
-![](./images/hash-asymm-signature.svg)
+![](./images/hash-asymm-signature.webp)
 </Solution>
 :::
 
 ## Nachteile
 Die bisher kennengelernte Art der digitalen Signatur ist nicht optimal, denn es gibt mehrere Probleme:
 - Wegen der «Signatur» ist der Klartext nicht mehr lesbar (er ist ja nun speziell «verschlüsselt»). Dies ist umständlich, denn wenn Sie ein Dokument auf Papier unterschreiben, bleibt dieses trotzdem lesbar.
-- Asymmetrische Verfahren sind langsam, d.h. wenn wir ein grosses Dokument (z.B. ein Video) signieren, dauert dieser Vorgang unnötig lange – ebenso das Überprüfen der Signatur (also das Entschlüsseln).
+- Asymmetrische Verfahren sind langsam, d.h. wenn wir ein grosses Dokument (z.B. ein Video) signieren, dauert dieser Vorgang unnötig lange, genauso wie das Überprüfen der Signatur (also das Entschlüsseln).
+
+:::insight[Idee]
+Wie könnten Hashwerte helfen, dieses Problem zu lösen? Überlegen Sie sich, wie man die Signatur auf einen Hashwert anwenden könnte, anstatt auf den gesamten Klartext. Weiteres auf der nächsten Seite...
+:::
 
 

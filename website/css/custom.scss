@@ -207,6 +207,10 @@ nav.menu {
             &.inf-of {
                 --tdev-sidebar-color: var(--ifm-color-blue);
             }
+            &.archive {
+                --tdev-sidebar-color: light-dark(#b89e78, #605448);
+                background-color: light-dark(#c9c1b5, #42403e);
+            }
             &.competition {
                 --tdev-sidebar-color: var(--ifm-color-warning);
             }
