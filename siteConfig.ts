@@ -125,7 +125,11 @@ const getSiteConfig: SiteConfigProvider = () => {
                         },
                         {
                             label: 'GBSL',
-                            to: 'https://gbsl.ch'
+                            to: 'https://www.gbsl.ch'
+                        },
+                        {
+                            label: 'ICT Seite',
+                            to: 'https://ict.gbsl.website'
                         },
                         {
                             label: 'Intranet',

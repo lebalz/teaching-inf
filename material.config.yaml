@@ -33,7 +33,7 @@
     to: versioned_docs/version-29Ga/50-IN-Biber
     ignore:
       - _category_.yml
-  - from: docs/OF-Computer-29/
+  - from: docs/OF-Computer/
     to: versioned_docs/version-29Ga/05-Rechnerarchitektur
     ignore:
       - _category_.yml
@@ -71,7 +71,7 @@
       - _category_.yml
   - from: docs/Math/Taschenrechner/
     to: versioned_docs/version-29Gj/100-Mathematik/01-Taschenrechner
-  - from: docs/OF-Computer-29/
+  - from: docs/OF-Computer/
     to: versioned_docs/version-29Gj/05-Rechnerarchitektur
     ignore:
       - _category_.yml
@@ -86,7 +86,7 @@
     as: 01-Onboarding
     ignore:
       - _category_.yml
-  - from: docs/OF-BYOD-Basics-29/
+  - from: docs/OF-BYOD-Basics/
     as: 02-BYOD
     ignore:
       - _category_.yml
