@@ -1,7 +1,7 @@
 // This file is never changed by teaching-dev.
 // Use it to override or extend your app configuration.
-
 import { VersionOptions } from '@docusaurus/plugin-content-docs';
+import { GlobExcludeDefault } from '@docusaurus/utils';
 import { mdiSourceCommit } from '@mdi/js';
 import type { SiteConfigProvider } from '@tdev/siteConfig/siteConfig';
 import { themes as prismThemes } from 'prism-react-renderer';
@@ -31,6 +31,34 @@ declare module '@tdev/siteConfig/siteConfig' {
         isArchiveBuild?: boolean;
     }
 }
+
+const PROD_EXCLUDE = [...new Set([...GlobExcludeDefault, '**/node_modules/**', 'tdev/**'])];
+
+const ARCHIVE_ALIASES = ['ARCHIVES', 'ARCHIVE'];
+const NO_ARCHIVES =
+    ARCHIVE_ALIASES.some((alias) => process.env[`NO_${alias}`]) ||
+    ARCHIVE_ALIASES.some((alias) => process.env[alias] === 'false' || process.env[alias] === '0');
+
+const EXCLUDE = [
+    ...new Set([
+        ...GlobExcludeDefault,
+        '**/node_modules/**',
+        ...(NO_ARCHIVES ? ['**/Archive.nosync/**/*.{md,mdx}'] : [])
+    ])
+];
+
+const DOCS_INCLUDE = process.env.DOCS_INCLUDE ?? process.env.ONLY ?? process.env.INCLUDE ?? '';
+
+const includedFolders = DOCS_INCLUDE.split(',')
+    .map((folder) => folder.trim())
+    .filter(Boolean);
+
+const INCLUDE =
+    includedFolders.length > 0
+        ? {
+              include: ['home.mdx', ...includedFolders.map((folder) => `${folder}/**/*.{md,mdx}`)]
+          }
+        : {};
 
 const VERSIONS: { [version: string]: VersionOptions } = {
     current: {
@@ -215,7 +243,8 @@ const getSiteConfig: SiteConfigProvider = () => {
             versions: VERSIONS,
             lastVersion: 'current',
             routeBasePath: '/',
-            exclude: process.env.NODE_ENV === 'production' ? ['tdev/**'] : [],
+            exclude: process.env.NODE_ENV === 'production' ? PROD_EXCLUDE : EXCLUDE,
+            ...INCLUDE,
             showLastUpdateTime: true,
             includeCurrentVersion: true,
             sidebarCollapsible: true

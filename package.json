@@ -9,6 +9,7 @@
     "scripts": {
         "docusaurus": "docusaurus",
         "start": "NODE_OPTIONS=--max-old-space-size=12288 docusaurus start",
+        "start:fast": "bash -c 'export NODE_OPTIONS=--max-old-space-size=12288 INCLUDE=\"$(IFS=,; echo \"$*\")\" ARCHIVES=0; exec docusaurus start' --",
         "start:dev": "concurrently --raw --kill-others 'NODE_OPTIONS=--max-old-space-size=12288 docusaurus start' 'sleep 1s && tsx updateSync/packageDocsSync/watch.ts --src packages --dest docs/Packages'",
         "prebuild": "tsx updateSync/packageDocsSync/preBuild.ts --src packages --dest docs/Packages && yarn workspace @tdev/material-sync sync",
         "build": "docusaurus build",

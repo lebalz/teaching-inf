@@ -2,6 +2,20 @@
 
 This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
 
+Start with
+
+```bash
+yarn run start
+
+# or when wanting to reduce memory usage:
+# - ignores archived folders (Archive.nosync) when starting the dev server
+# - only includes specified folders (folder1, folder2) to speedup the dev server and reduce memory usage
+yarn start:fast folder1 folder2
+
+# with env-vars:
+ARCHIVES=0 INCLUDE="folder1,folder2" yarn run start
+```
+
 ## ENV
 
 | Variable                   | For         | Default                             | Example             | Description                                                                                                                                                        |
