@@ -101,3 +101,16 @@ Die Funktionsweise basiert auf den bisherigen Erkenntnissen und löst das Proble
 Die Empfänger:in muss dabei nur einer begrenzten Anzahl von Root-Zertifizierungsstellen unmittelbar vertrauen. Diese können auch weiteren Zertifizierungsstellen Zertifikate ausstellen und sie damit zum Ausstellen eigener Zertifikate berechtigen. So entsteht eine Vertrauenskette, eine sogenannte Chain of Trust, die bis zu einer bereits vertrauenswürdigen Root-Zertifizierungsstelle zurückführt.
 
 Root-Zertifikate enthalten die öffentlichen Schlüssel vertrauenswürdiger Root-Zertifizierungsstellen und sind in den meisten Betriebssystemen und Browsern bereits vorinstalliert. Mithilfe dieser Zertifikate und einer gültigen Vertrauenskette kann überprüft werden, ob ein erhaltener öffentlicher Schlüssel tatsächlich zur angegebenen Absender:in gehört. Mit diesem Schlüssel lässt sich anschliessend die digitale Signatur der empfangenen Daten überprüfen.
+
+
+:::aufgabe[Wer stellt Zertifikate aus?]
+<Answer type="state" id="96de5915-6913-4534-8973-ab621a790373" />
+
+Tool
+: https://tools.trustico.com/chain
+
+Verwenden Sie das obige Tool und überprüfen Sie für Ihre Lieblingswebseite, welche Zertifizierungsstelle das Zertifikat ausgestellt hat, wie viele Zwischenzertifizierungsstellen es gibt und welche Root-Zertifizierungsstelle das Zertifikat signiert hat.
+
+
+<Answer type="text" id="f45118f7-81fc-4b86-b614-de3fec34aa7e" />
+:::
