@@ -1,0 +1,32 @@
+import { action, observable, observableRef } from 'mobx';
+import { LED } from '../models/LED';
+
+class LedStore {
+    @observableRef accessor defaultLed = new LED();
+    leds = observable.map<string, LED>([], { deep: false });
+
+    @action
+    useLED(id: string) {
+        if (this.leds.has(id)) {
+            const led = this.leds.get(id)!;
+            return led;
+        }
+        const led = new LED();
+        this.leds.set(id, led);
+        return led;
+    }
+
+    @action
+    setHSL(id: string, hue: number, saturation: number, brightness: number) {
+        if (this.leds.has(id)) {
+            const led = this.leds.get(id)!;
+            led.setHSL(hue, saturation, brightness);
+            return;
+        }
+        const led = new LED();
+        led.setHSL(hue, saturation, brightness);
+        this.leds.set(id, led);
+    }
+}
+
+export default LedStore;

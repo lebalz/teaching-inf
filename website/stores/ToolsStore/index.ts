@@ -1,8 +1,6 @@
 import { RootStore } from '@site/src/stores/rootStore';
 import { sha256 } from 'js-sha256';
 import { action, observable, observableRef } from 'mobx';
-import ClockStore from './ClockStore';
-import LedStore from './LedStore';
 import Polybios from './Polybios';
 import Vignere from './Vignere';
 
@@ -56,8 +54,6 @@ export class ToolsStore {
 
     @observableRef accessor polybios = new Polybios();
     @observableRef accessor vignere = new Vignere();
-    @observableRef accessor clockStore = new ClockStore();
-    @observableRef accessor ledStore = new LedStore();
 
     @observableRef accessor primeFactorizationTiming: {
         digits: number;

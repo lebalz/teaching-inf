@@ -1,6 +1,4 @@
 import { RootStore } from '@tdev-stores/rootStore';
-import { Message } from '@tdev/pyodide-code/pyodideJsModules';
-import { action } from 'mobx';
 import { ToolsStore } from './ToolsStore';
 
 export default class SiteStore {
@@ -8,43 +6,5 @@ export default class SiteStore {
 
     constructor(root: RootStore) {
         this.toolsStore = new ToolsStore(root);
-    }
-
-    get clockStore() {
-        return this.toolsStore.clockStore;
-    }
-
-    @action
-    handleMessage(from: string, message: any) {
-        switch (from) {
-            case 'pyodide':
-                const pyodideMessage = message as Message;
-                switch (pyodideMessage.type) {
-                    case 'clock':
-                        const clock = this.clockStore.useClock(message.id);
-                        switch (message.clockType) {
-                            case 'hours':
-                                clock.setHours(message.value);
-                                break;
-                            case 'minutes':
-                                clock.setMinutes(message.value);
-                                break;
-                            case 'seconds':
-                                clock.setSeconds(message.value);
-                                break;
-                        }
-                        break;
-                    case 'led':
-                        const led = this.toolsStore.ledStore.useLED(message.id);
-                        const [hue, saturation, brightness] = message.value;
-                        led.setHSL(hue, saturation, brightness);
-                        break;
-                }
-
-                break;
-            default:
-                // handle other messages here
-                break;
-        }
     }
 }
