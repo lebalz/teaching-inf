@@ -3,7 +3,9 @@
 import { VersionOptions } from '@docusaurus/plugin-content-docs';
 import { GlobExcludeDefault } from '@docusaurus/utils';
 import { mdiSourceCommit } from '@mdi/js';
+import type { PluginOptions as PyodidePluginOptions } from '@tdev/pyodide-code/plugin';
 import type { SiteConfigProvider } from '@tdev/siteConfig/siteConfig';
+import path from 'node:path';
 import { themes as prismThemes } from 'prism-react-renderer';
 import githubCmsPlugin from './packages/hfr/github-cms/plugin';
 import {
@@ -215,6 +217,18 @@ const getSiteConfig: SiteConfigProvider = () => {
         ],
         plugins: [
             brythonCodePluginConfig(),
+            [
+                require.resolve('@tdev/pyodide-code/plugin'),
+                {
+                    extensions: [
+                        path.join(__dirname, 'website/pyodide/clock'),
+                        path.join(__dirname, 'website/pyodide/cookie-klicker'),
+                        path.join(__dirname, 'website/pyodide/snowfall-game'),
+                        path.join(__dirname, 'website/pyodide/led_control'),
+                        path.join(__dirname, 'website/pyodide/grid')
+                    ]
+                } satisfies PyodidePluginOptions
+            ],
             () => {
                 return {
                     name: 'yaml-loader-config',

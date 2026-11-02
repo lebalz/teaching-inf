@@ -1,0 +1,45 @@
+import ColorPicker from '@radial-color-picker/react-color-picker';
+import Card from '@tdev-components/shared/Card';
+import CopyBadge from '@tdev-components/shared/CopyBadge';
+import { useExtensionStore } from '@tdev/pyodide-code/hooks/useExtensionStore';
+import clsx from 'clsx';
+import { observer } from 'mobx-react-lite';
+import ledExtension from '../../../client';
+import styles from './styles.module.scss';
+
+interface Props {
+    ledId: string;
+}
+
+const LED = observer((props: Props) => {
+    const { ledId } = props;
+    const clockStore = useExtensionStore(ledExtension);
+    const led = clockStore.useLED(ledId);
+    return (
+        <Card
+            classNames={{ body: clsx(styles.ledCard), card: clsx(styles.card) }}
+            header={
+                <h3>
+                    LED: <CopyBadge value={ledId} className={clsx(styles.id)} />
+                </h3>
+            }
+        >
+            <div
+                style={{
+                    background: `hsl(${led.hsl[0]}, ${led.hsl[1]}%, ${led.hsl[2]}%)`
+                }}
+                className={clsx(styles.led)}
+            >
+                <ColorPicker
+                    key={led.hsl.join('-')}
+                    variant="persistent"
+                    hue={led.hsl[0]}
+                    saturation={led.hsl[1]}
+                    luminosity={led.hsl[2]}
+                />
+            </div>
+        </Card>
+    );
+});
+
+export default LED;

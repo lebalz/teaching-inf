@@ -1,0 +1,6 @@
+{
+    "name": "led_control",
+    "worker": "./worker.ts",
+    "client": "./client.ts",
+    "showcase": "./docs"
+}

@@ -1,0 +1,50 @@
+---
+page_id: fed59a04-a965-4b5e-85c0-fc8aafd0a485
+---
+
+import CodeShowcase from '@tdev-components/CodeShowcase';
+import Steps from '@tdev-components/Steps';
+import LED from '@tdev/pyodide/led_control/src/components/LED';
+import CodeBlock from '@theme/CodeBlock';
+
+# Interaktive LED
+
+Python steuert die Farbe einer React-Komponente. Alle Werte sind in Grad angegeben.
+
+<CodeShowcase lang="md" imports={[`import LED from '@tdev/pyodide/led_control/src/components/LED';`]}>
+<LED ledId="meine-led" />
+
+```py live_pyo id=6db5affc-5faa-4430-a48e-526fc72d3ff7 title=Interaktive_LED
+from led_control import use_led
+from time import sleep
+led = use_led("meine-led")
+hue = 0
+while True:
+    led.set_hsl(hue, 100, 50)
+    hue = (hue + 1) % 360
+    sleep(0.01)
+```
+</CodeShowcase>
+
+## Python-Handle
+
+`use_led(ledId)`
+: Verbindet den Handle mit der `ledId` der React-Komponente.
+`hue`
+: Gibt den aktuellen Farbton in Grad zurück (0-360).
+`saturation`
+: Gibt die aktuelle Sättigung in Prozent zurück (0-100).
+`brightness`
+: Gibt die aktuelle Helligkeit in Prozent zurück (0-100).
+`set_hsl(hue, saturation, brightness)`
+: Setzt die Farbe der LED. Alle Werte sind in Grad bzw. Prozent angegeben.
+`reset()`
+: Setzt die Farbe auf die Standardfarbe `hsl(0, 100, 50)`.
+
+## Zustand und Lebensdauer
+
+Mehrere Komponenten mit derselben `clockId` teilen den Zustand im Browser-Store. Dieser bleibt nach Ende oder Abbruch eines Skripts erhalten; ein Neustart setzt ihn nicht automatisch zurück. Ein unbekanntes Ziel wird beim ersten Update im `ClockStore` angelegt, auch wenn noch keine React-Komponente dafür angezeigt wird.
+
+Ein neuer Python-Handle beginnt dagegen wieder bei null und verändert die Anzeige erst mit seinem ersten Update. Die Erweiterung bietet keine Rückfragen vom Browser an Python.
+
+Für Hilfsmodule, die Handles oder Factory-Referenzen speichern, gelten die Hinweise zur [Wiederverwendung von Workern](../../README.mdx#zustand-und-lebensdauer).

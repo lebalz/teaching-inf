@@ -1,9 +1,9 @@
 import { Document as DocumentProps, Factory } from '@tdev-api/document';
 import iCode from '@tdev-models/documents/iCode';
 import DocumentStore from '@tdev-stores/DocumentStore';
-import { ErrorMessage, LogMessage, Message } from '@tdev/pyodide-code/pyodideJsModules';
 import { orderBy } from 'es-toolkit/array';
 import { action, computed, observable } from 'mobx';
+import type { ErrorMessage, LogMessage, Message } from '../messages';
 import { ModelMeta } from './ModelMeta';
 
 export const createModel: Factory = (data, store) => {
@@ -13,6 +13,7 @@ export const createModel: Factory = (data, store) => {
 class PyodideCode extends iCode<'pyodide_code'> {
     @observable accessor code: string;
     @observable accessor runtimeId: number | null = null;
+    @observable accessor executionPhase: 'idle' | 'preparing' | 'running' = 'idle';
     @observable accessor promptResponse: string | null = null;
     messages = observable.array<Message>([], { deep: false });
     constructor(props: DocumentProps<'pyodide_code'>, store: DocumentStore) {
@@ -53,6 +54,15 @@ class PyodideCode extends iCode<'pyodide_code'> {
     @action
     setRuntimeId(rid: number | null) {
         this.runtimeId = rid;
+        this.executionPhase = rid === null ? 'idle' : 'preparing';
+    }
+
+    @action
+    markRunning(executionId: number) {
+        if (this.runtimeId !== executionId || !this.isExecuting) {
+            return;
+        }
+        this.executionPhase = 'running';
     }
 
     get canExecute(): boolean {
@@ -61,7 +71,12 @@ class PyodideCode extends iCode<'pyodide_code'> {
 
     @computed
     get isExecuting(): boolean {
-        return this.runtimeId === this.pyodideStore.runtimeId;
+        return this.runtimeId !== null && this.pyodideStore.executions.get(this.id) === this.runtimeId;
+    }
+
+    @computed
+    get isPreparing(): boolean {
+        return this.isExecuting && this.executionPhase === 'preparing';
     }
 
     @computed
@@ -85,11 +100,13 @@ class PyodideCode extends iCode<'pyodide_code'> {
 
     @action
     sendPromptResponse() {
-        if (this.promptResponse === null) {
-            this.pyodideStore.cancelCodeExecution(this.id);
-        }
-        this.pyodideStore.sendInputResponse(this.id, this.promptResponse || '');
+        this.pyodideStore.sendInputResponse(this.id, this.promptResponse ?? '');
         this.promptResponse = null;
+    }
+
+    @action
+    cancelPrompt() {
+        this.stopExecution();
     }
 
     @action
@@ -99,6 +116,9 @@ class PyodideCode extends iCode<'pyodide_code'> {
 
     @action
     runCode(skipRemoteTrigger: boolean = false) {
+        if (this.isExecuting) {
+            this.stopExecution(skipRemoteTrigger);
+        }
         this.pyodideStore.run(this);
         if (this.isPresenting && this.canEdit && this.canExecute && !skipRemoteTrigger) {
             this.triggerRemoteAction({ action: 'runCode' });
@@ -107,7 +127,9 @@ class PyodideCode extends iCode<'pyodide_code'> {
 
     @action
     stopExecution(skipRemoteTrigger: boolean = false) {
-        this.pyodideStore.recreatePyWorker();
+        this.promptResponse = null;
+        this.pyodideStore.stopExecution(this.id);
+        this.setRuntimeId(null);
         if (this.isPresenting && this.canEdit && this.canExecute && !skipRemoteTrigger) {
             this.triggerRemoteAction({ action: 'stopExecution' });
         }
