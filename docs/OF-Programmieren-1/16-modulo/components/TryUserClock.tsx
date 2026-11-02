@@ -1,8 +1,8 @@
-import React from 'react';
-import { observer } from 'mobx-react-lite';
-import { useStore } from '@tdev-hooks/useStore';
-import Button from '@tdev-components/shared/Button';
 import { mdiClock } from '@mdi/js';
+import Button from '@tdev-components/shared/Button';
+import { useExtensionStore } from '@tdev/pyodide-code/hooks/useExtensionStore';
+import clockExtension from '@tdev/pyodide/clock/client';
+import { observer } from 'mobx-react-lite';
 
 interface Props {
     clockId: string;
@@ -10,8 +10,8 @@ interface Props {
 
 const TryUserClock = observer((props: Props) => {
     const { clockId } = props;
-    const siteStore = useStore('siteStore');
-    const clock = siteStore.clockStore.useClock(clockId);
+    const clockStore = useExtensionStore(clockExtension);
+    const clock = clockStore.useClock(clockId);
 
     return (
         <Button
