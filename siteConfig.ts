@@ -130,10 +130,14 @@ const getSiteConfig: SiteConfigProvider = () => {
                 {
                     title: 'Links',
                     items: [
-                        // {
-                        //     label: 'Troubleshooting Office 365',
-                        //     to: '/troubleshooting',
-                        // },
+                        {
+                            label: 'Office 365',
+                            to: 'https://office.com'
+                        },
+                        {
+                            label: 'Passwort Zurücksetzen',
+                            to: 'https://password.edubern.ch/'
+                        },
                         {
                             label: 'Jupyterhub',
                             to: 'https://jupyter.gbsl.website'
@@ -143,14 +147,6 @@ const getSiteConfig: SiteConfigProvider = () => {
                 {
                     title: 'Gymnasium',
                     items: [
-                        {
-                            label: 'Passwort Zurücksetzen',
-                            to: 'https://password.edubern.ch/'
-                        },
-                        {
-                            label: 'Office 365',
-                            to: 'https://office.com'
-                        },
                         {
                             label: 'GBSL',
                             to: 'https://www.gbsl.ch'
@@ -164,8 +160,12 @@ const getSiteConfig: SiteConfigProvider = () => {
                             to: 'https://erzbe.sharepoint.com/sites/GYMB/gbsl'
                         },
                         {
+                            label: 'Absenzen',
+                            to: 'https://eventoapp.apps.be.ch/OAuth/Authorization/GymBiel/Login?clientId=Portal&redirectUrl=https%3A%2F%2Fevt.apps.be.ch%2F%3Flocale%3Dde-CH&culture_info=de-CH&application_scope=Tutoring&response_type=code&code_challenge_method=S256&code_challenge=_rIhi5eV53WUuPaWZ7eaCFUqp_KoTe6P2Xs2WL5BxeQ'
+                        },
+                        {
                             label: 'Stundenplan',
-                            to: 'https://mese.webuntis.com/WebUntis/?school=gym_Biel-Bienne#/basic/main'
+                            to: 'https://gym-biel-bienne.webuntis.com/WebUntis/#/basic/login'
                         }
                     ]
                 }
