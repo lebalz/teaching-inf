@@ -21,7 +21,7 @@ Use single choice for one selection, `multiple` for selecting every correct alte
 - Use `multiple correct={[1, 3]}` for multiple choice. Give every multiple-choice question its own `multipleChoicePoints(...)` when the quiz defaults to `points(...)`.
 - `TrueFalseAnswer correct={true}` or `correct={false}` wraps a statement with no alternatives list.
 - The plugin generates local `qid="q1"`, `qid="q2"`, etc., `questionIds`, `optionsCount`, and option wrappers. Do not hand-write generated wrappers or metadata.
-- Meaningful explicit keys such as `qid="list-index"` keep new questions stable through later reordering; these are local strings, not UUIDs. Otherwise omit `qid` for automatic enumeration. Keys must be unique within a quiz.
+- Meaningful explicit keys such as `qid="list-index"` keep new questions stable through later reordering; these are local strings, not UUIDs. Only use explicit `qid` when explicitly asked to. Otherwise omit `qid` for automatic enumeration. Keys must be unique within a quiz.
 - Children inside `Quiz` do not need independent UUID `id` props. Standalone questions outside a quiz need fresh UUIDs.
 - When modifying a used quiz with implicit keys, preserve the old effective `q1`, `q2`, etc. by making them explicit before adding/reordering questions. Preserve explicit keys. Give a different task a new key; give a new quiz a new UUID.
 - Keep questions directly inside one quiz; do not nest quizzes.

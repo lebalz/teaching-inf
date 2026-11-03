@@ -2,7 +2,12 @@
 page_id: 84f95bc1-847e-4178-9e7f-789082e1a083
 ---
 
-import Strukto from '@tdev-components/VisualizationTools/Strukto'
+import Strukto from '@tdev-components/VisualizationTools/Strukto';
+import ChoiceAnswer from '@tdev-components/documents/Assessable/ChoiceAnswer';
+import Hint from '@tdev-components/documents/Assessable/Feedback/Hint';
+import Quiz from '@tdev-components/documents/Assessable/Quiz';
+import TrueFalseAnswer from '@tdev-components/documents/Assessable/TrueFalseAnswer';
+import { multipleChoicePoints, points } from '@tdev-components/documents/Assessable/helpers/scoring';
 
 # 1. Intro
 
@@ -33,6 +38,7 @@ forward(100)
 left(120)
 forward(100)
 left(120)
+```
 :::
 Wiederholung 🔁
 : Einer oder mehrere Schritte werden eine bestimmte Anzahl mal wiederholt.
@@ -43,6 +49,7 @@ from turtle import *
 for i in range(3):
     forward(100)
     left(120)
+```
 :::
 Bedingte Ausführung ⑂
 : Einer oder mehrere Schritte werden nur ausgeführt, wenn eine bestimmte Bedingung erfüllt ist.
@@ -59,6 +66,7 @@ if antwort == lösung:
     print(f'😎 Richtig! {zahl1} * {zahl2} = {lösung}')
 else:
     print(f'🥸 {antwort} ist Falsch! {zahl1} * {zahl2} = {lösung}')
+```
 :::
 Unterprogramm 🏷
 : Eine Sequenz kann mit einem Namen versehen werden. Anstatt immer die ganze Sequenz aufzuschreiben, kann der Name angegeben werden.
@@ -72,6 +80,7 @@ def dreieck():
 dreieck()
 left(90)
 dreieck()
+```
 :::
 Parameter ⊕ ⊖
 : Das Ergebnis eines Algorithmus kann variiert werden durch Werte, welche bei jeder Ausführung neu festgelegt werden.
@@ -105,7 +114,7 @@ for i in range(5):
     left(72)
 ```
 
-Das `i` in der Schleife ist der sog. **Schleifenzähler**. Er wird bei jeder Wiederholung um 1 erhöht und beginnt standardmässig bei `0`. **Der Schleifenzähler kann innerhalb der Schleife verwendet werden.**
+Das `i` in der Schleife ist der **Schleifenzähler** und gibt an, wie oft die Schleife bereits durchlaufen wurde. Er wird also bei jeder Wiederholung um 1 erhöht und beginnt bei `0`. **Der Schleifenzähler kann innerhalb der Schleife verwendet werden.**
 
 ```py live_py slim
 from turtle import *
@@ -115,9 +124,17 @@ for i in range(5):
     left(90)
 ```
 
-:::tip[Beachte]
-Es gibt **nur 4** gezeichnete Linien, da der Schleifenzähler bei `0` beginnt und bis `4` geht (was auf **Z. 4** Seitenlängen von `0`, `10`, `20`, `30`, `40` erzeugt).
-:::
+<ChoiceAnswer correct={[1]} randomizeOptions id="3ea91c6c-697f-4aa2-a182-2af7adba4412">
+    > Welche Längen haben die einzelnen Linien, die gezeichnet werden?
+    - 0, 10, 20, 30, 40
+    - 10, 20, 30, 40, 50
+    <Hint when="assessed" not={['not_answered']} noWrap>
+        :::tip[Beachte]
+        Es gibt **nur 4** gezeichnete Linien, da der Schleifenzähler bei `0` beginnt und bis `4` geht (was auf **Z. 4** Seitenlängen von `0`, `10`, `20`, `30`, `40` erzeugt).
+        :::
+    </Hint>
+</ChoiceAnswer>
+
 
 :::def[`for i in range(start, stopp):`]
 Die `for`-Schleife kann auch mit zwei Parametern verwendet werden: `start` und `stopp`. Der Schleifenzähler beginnt dann bei `start` und läuft bis `stopp - 1`.
@@ -136,9 +153,9 @@ Bei der `for`-Schleife muss bereits im **Voraus** bekannt sein, wie oft die Schl
 :::
 
 ### Die `while`-Schleife
-Die `while`-Schleife ist eine **bedingte Schleife**, ein Code-Block wird so lange wiederholt, wie eine bestimmte Bedingung erfüllt ist. Zähl-Schleifen können immer auch mit einer `while`-Schleife realisiert werden - es braucht dazu aber eine zusätzliche Variable, die den Zählerstand speichert.
+Die `while`-Schleife ist eine **bedingte Schleife**, ein Code-Block wird so lange wiederholt, wie eine bestimmte Bedingung erfüllt ist. Zähl-Schleifen können immer auch mit einer `while`-Schleife realisiert werden - der Schleifenzähler wird dabei in einer selbst definierten Variable gespeichert.
 
-:::cards{flexBasis=300px}
+:::flex{flexBasis=300px}
     **`for`-Schleife**
 
     ```py live_py slim minLines=7
@@ -179,7 +196,7 @@ Die `while`-Schleife ist eine **bedingte Schleife**, ein Code-Block wird so lang
 :::::
 
 
-::::aufgabe[`for` zu `while`]
+::::aufgabe[Aufgabe 1: `for` zu `while`]
 <Answer type="state" id="a3946a2c-10d3-400f-86e8-4c6546e72fe6" />
 
 Schreiben Sie das untenstehende Programm so um, dass nur noch `while` Schleifen verwendet werden.
@@ -221,10 +238,9 @@ from turtle import *
 
 Die eigentliche Stärke der `while`-Schleife liegt aber darin, dass die Anzahl Wiederholungen **im Voraus nicht bekannt** sein muss. Die Schleife läuft so lange, bis eine bestimmte Bedingung erfüllt ist.
 
-Obiges Kopfrechnen-Beispiel könnte mit einer `while`-Schleife zu einem Kopfrechnen-Trainer erweitert werden, der so lange neue Aufgaben stellt, bis `x` eingegeben wird:
+Obiges Kopfrechen-Beispiel könnte mit einer `while`-Schleife zu einem Kopfrechentraining erweitert werden, der so lange neue Aufgaben stellt, bis `x` eingegeben wird:
 
-```py live_py slim
-from browser import alert
+```py live_pyo slim
 from random import randint
 antwort = ''
 while antwort != 'x':
@@ -235,21 +251,186 @@ while antwort != 'x':
         antwort = int(antwort)
         lösung = zahl1 * zahl2
         if antwort == lösung:
-            alert(f'😎 Richtig! {zahl1} * {zahl2} = {lösung}')
+            print(f'😎 Richtig! {zahl1} * {zahl2} = {lösung}')
         else:
-            alert(f'🥸 {antwort} ist Falsch! {zahl1} * {zahl2} = {lösung}')
-
+            print(f'🥸 {antwort} ist Falsch! {zahl1} * {zahl2} = {lösung}')
 ```
 
 ## Anwendung
 
-Die `while`-Schleife kommt oft bei Benutzerinteraktionen, Simulationen oder bei sich dynamisch ändernden Daten vor. Sonstige Wiederholungen lassen sich normalerweise einfacher mit einer `for`-Schleife umsetzen.
+Die `while`-Schleife kommt oft bei Benutzerinteraktionen, Simulationen oder bei sich dynamisch ändernden Daten vor. Sonstige Wiederholungen lassen sich normalerweise verständlicher mit einer `for`-Schleife umsetzen.
 
-:::insight
-<div className="smallDeflist">
-  `while`-Schleife
-  : Die `while`-Schleife wird immer dann verwendet, wenn die Anzahl Wiederholungen **im Voraus unbekannt** ist.
-  `for`-Schleife
-  : Ist die Anzahl Wiederholungen **im Voraus bekannt**, wird meistens die `for`-Schleife verwendet.
-</div>
+:::insight{.smallDeflist}
+`while`-Schleife
+: Die `while`-Schleife wird immer dann verwendet, wenn die Anzahl Wiederholungen **im Voraus unbekannt** ist.
+`for`-Schleife
+: Ist die Anzahl Wiederholungen **im Voraus bekannt**, wird meistens die `for`-Schleife verwendet.
 :::
+
+Dies ist etwa der Fall bei Micro:Bit-Programmen - sie sollen im Normalfall sogar **unendlich** lange laufen, bis der Micro:Bit ausgeschaltet wird. Die Programme enthalten also eine `while`-Schleife, die immer wahr ist:
+
+![](./images/robo-code.png)
+
+Dies ist die sogenannte **Hauptschleife**. Alle Anweisungen innerhalb dieser Schleife werden immer wieder ausgeführt, bis der Micro:Bit ausgeschaltet wird.
+
+Dieselbe Ausgangslage gibt es auch, wenn bspw. eine digitale Stoppuhr programmiert wird - sie soll so lange laufen, bis die Benutzer:in das Programm beendet.
+
+```py live_pyo slim
+from time import sleep
+from os import system
+
+sekunden = 0
+
+while True:
+    system('clear')  # Bildschirm löschen
+    print(f'{sekunden} Sekunden')
+    sekunden = sekunden + 1
+    sleep(1)  # 1 Sekunde warten
+```
+
+## Quiz
+
+<Quiz id="3a16da9f-bed4-448a-96f0-8076f3667fb4" scoring={points(1)} resetMode="all">
+
+<ChoiceAnswer multiple correct={[2, 4]} scoring={multipleChoicePoints(2, 1, false)}>
+Welche Bedingungen muss ein Algorithmus erfüllen? Wählen Sie alle korrekten Aussagen.
+
+1. Er muss in Python geschrieben sein.
+2. Er muss eine Schritt-für-Schritt-Anleitung enthalten.
+3. Er muss eine Schleife enthalten.
+4. Seine korrekte Abarbeitung muss eine Aufgabe oder ein Problem lösen.
+
+<Hint when="assessed">
+Ein Algorithmus beschreibt Schritte zur Lösung einer Aufgabe. Er kann auch ohne Programmiersprache
+und ohne Wiederholung beschrieben werden.
+</Hint>
+</ChoiceAnswer>
+
+<ChoiceAnswer correct={[3]}>
+Eine Turtle soll zuerst 100 Schritte vorwärtsgehen und danach um 90 Grad nach links drehen.
+Welche Struktur beschreibt diese beiden nacheinander ausgeführten Anweisungen?
+
+1. Bedingte Ausführung
+2. Wiederholung
+3. Sequenz
+4. Parameter
+
+<Hint when="assessed">
+Eine Sequenz ist eine Folge von Anweisungen, die nacheinander abgearbeitet werden.
+</Hint>
+</ChoiceAnswer>
+
+<ChoiceAnswer multiple correct={[1, 3]} scoring={multipleChoicePoints(2, 1, false)}>
+Betrachten Sie das Unterprogramm. Wählen Sie alle korrekten Aussagen.
+
+```py showLineNumbers
+def dreieck(seitenlänge, farbe):
+    color(farbe)
+    for i in range(3):
+        forward(seitenlänge)
+        left(120)
+
+dreieck(100, 'blue')
+dreieck(50, 'red')
+```
+
+1. Mit dem Namen `dreieck` kann dieselbe Anweisungsfolge mehrfach aufgerufen werden.
+2. Beide Aufrufe zeichnen ein Dreieck mit derselben Seitenlänge.
+3. Die Parameter legen bei jedem Aufruf die Seitenlänge und die Farbe fest.
+4. Auch ohne die Zeilen 7 und 8 wird von der Definition mit `def` ein Dreieck gezeichnet.
+
+<Hint when="assessed">
+`def` definiert das Unterprogramm. Erst ein Aufruf führt es aus. Die beiden Aufrufe verwenden
+unterschiedliche Werte für Seitenlänge und Farbe: 100 und Blau sowie 50 und Rot.
+</Hint>
+</ChoiceAnswer>
+
+<ChoiceAnswer correct={[4]}>
+Welche Zahlen gibt dieses Programm nacheinander aus?
+
+```py
+for i in range(2, 5):
+    print(10 * i)
+```
+
+1. `0, 10, 20, 30, 40`
+2. `20, 30, 40, 50`
+3. `10, 20, 30, 40`
+4. `20, 30, 40`
+
+<Hint when="assessed">
+`range(2, 5)` liefert die Werte 2, 3 und 4. Der Stoppwert 5 gehört nicht dazu.
+Diese drei Werte werden jeweils mit 10 multipliziert.
+</Hint>
+</ChoiceAnswer>
+
+<ChoiceAnswer correct={[2]}>
+Welche Zahlen gibt dieses Programm nacheinander aus?
+
+```py
+i = 1
+while i < 4:
+    print(i)
+    i = i + 1
+```
+
+1. `0, 1, 2, 3`
+2. `1, 2, 3`
+3. `1, 2, 3, 4`
+4. Nur `1`
+
+<Hint when="assessed">
+Die Schleife beginnt mit `i = 1`. Nach jeder Ausgabe wird `i` erhöht.
+Sobald `i` den Wert 4 erreicht, ist `i < 4` falsch und die Schleife endet.
+</Hint>
+</ChoiceAnswer>
+
+<TrueFalseAnswer correct={false}>
+Der eingerückte Code-Block einer `while`-Schleife wird immer mindestens einmal ausgeführt,
+auch wenn die Bedingung bereits vor dem ersten Durchlauf falsch ist.
+
+<Hint when="assessed">
+Die Bedingung wird vor jedem Durchlauf geprüft, auch vor dem ersten.
+Ist sie bereits zu Beginn falsch, wird der Code-Block kein einziges Mal ausgeführt.
+</Hint>
+</TrueFalseAnswer>
+
+<ChoiceAnswer correct={[1]}>
+Dieses Programm soll viermal `Hallo` ausgeben. Welche Anweisung muss anstelle des Kommentars
+eingerückt in die Schleife eingefügt werden, damit sie danach endet?
+
+```py
+i = 0
+while i < 4:
+    print('Hallo')
+    # Hier eine Anweisung ergänzen
+```
+
+1. `i = i + 1`
+2. `i = 0`
+3. `i = i - 1`
+4. `print(i)`
+
+<Hint when="assessed">
+`i = i + 1` erhöht den Zähler nach jeder Ausgabe. Nach vier Durchläufen ist `i = 4`
+und die Bedingung falsch. Bei den anderen Anweisungen bleibt `i < 4` immer wahr.
+</Hint>
+</ChoiceAnswer>
+
+<ChoiceAnswer correct={[3]}>
+Im Kopfrechentraining wird zuerst `antwort = ''` gesetzt. Danach werden Aufgaben gestellt,
+solange `antwort != 'x'` gilt. Warum passt hier eine `while`-Schleife?
+
+1. Eine `while`-Schleife führt ihren Code-Block immer genau einmal aus.
+2. Eine `while`-Schleife wandelt Eingaben automatisch in Zahlen um.
+3. Die Anzahl der Aufgaben ist im Voraus unbekannt; die Eingabe `x` beendet die Wiederholung.
+4. Eine `while`-Schleife kann nur mit Texteingaben verwendet werden.
+
+<Hint when="assessed">
+Die Anzahl der Aufgaben hängt davon ab, wann die Person `x` eingibt. Sobald `antwort` den
+Wert `'x'` hat, ist die Schleifenbedingung falsch. Im Beispiel verhindert zusätzlich
+`if antwort != 'x':`, dass diese Eingabe in eine Zahl umgewandelt wird.
+</Hint>
+</ChoiceAnswer>
+
+</Quiz>
