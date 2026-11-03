@@ -9,8 +9,8 @@ export default class Scene {
     readonly eventSource: EventSource;
     @observableRef accessor snapshot: SceneSnapshot = {
         ...DEFAULT_SCENE_CONFIGURATION,
-        snowflakes: [],
-        dots: []
+        fps: 0,
+        icons: []
     };
 
     constructor(id: string, store: SceneStore) {

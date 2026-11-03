@@ -2,27 +2,30 @@ export interface SceneConfiguration {
     width: number;
     height: number;
     background_color: string;
+    show_fps: boolean;
 }
 
-export interface DotSnapshot {
+export interface IconSnapshot {
     readonly id: number;
     x: number;
     y: number;
     size: number;
     color: string;
-}
-
-export interface SnowflakeSnapshot extends DotSnapshot {
-    speed: number;
+    name: string;
+    readonly name_short: string;
+    speed_x: number;
+    speed_y: number;
+    rotation: number;
 }
 
 export interface SceneSnapshot extends SceneConfiguration {
-    snowflakes: readonly SnowflakeSnapshot[];
-    dots: readonly DotSnapshot[];
+    icons: readonly IconSnapshot[];
+    fps: number;
 }
 
 export const DEFAULT_SCENE_CONFIGURATION: Readonly<SceneConfiguration> = {
     width: 400,
     height: 200,
-    background_color: 'black'
+    background_color: 'black',
+    show_fps: true
 };

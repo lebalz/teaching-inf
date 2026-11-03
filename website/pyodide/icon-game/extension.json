@@ -1,5 +1,5 @@
 {
-    "name": "snowfall_game",
+    "name": "icon_game",
     "worker": "./worker.ts",
     "client": "./client.ts",
     "showcase": "./docs"

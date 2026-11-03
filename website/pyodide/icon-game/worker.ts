@@ -5,7 +5,7 @@ import WorkerScene from './src/worker/WorkerScene';
 export default defineWorkerExtension<SceneSnapshot>((context) => {
     const scenes = new Map<string, WorkerScene>();
     return {
-        snowfall_game: {
+        icon_game: {
             use_scene: (id: string) => {
                 const existingScene = scenes.get(id);
                 if (existingScene) {

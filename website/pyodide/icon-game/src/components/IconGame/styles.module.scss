@@ -24,3 +24,15 @@
     color: var(--ifm-color-emphasis-700);
     font-size: 0.875rem;
 }
+
+.fps {
+    fill: white;
+    stroke: black;
+    stroke-width: 3px;
+    paint-order: stroke;
+    font-family: monospace;
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    pointer-events: none;
+    user-select: none;
+}

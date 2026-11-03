@@ -1,22 +1,22 @@
-import { mdiSnowflake } from '@mdi/js';
 import { useExtensionStore } from '@tdev/pyodide-code/hooks/useExtensionStore';
 import clsx from 'clsx';
 import { observer } from 'mobx-react-lite';
 import type { KeyboardEvent, MouseEvent } from 'react';
-import snowfallExtension from '../../../client';
+import iconExtension from '../../../client';
+import { getIconPath } from '../../../icons';
 import styles from './styles.module.scss';
 
-interface SnowfallGameProps {
+interface IconGameProps {
     sceneId: string;
     className?: string;
 }
 
 const SCROLL_KEYS = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '];
 
-const SnowfallGame = observer(({ sceneId, className }: SnowfallGameProps) => {
-    const store = useExtensionStore(snowfallExtension);
+const IconGame = observer(({ sceneId, className }: IconGameProps) => {
+    const store = useExtensionStore(iconExtension);
     const scene = store.useScene(sceneId);
-    const { width, height, background_color, snowflakes, dots } = scene.snapshot;
+    const { width, height, background_color, icons, show_fps, fps } = scene.snapshot;
 
     const handleClick = (event: MouseEvent<SVGSVGElement>) => {
         event.currentTarget.focus({ preventScroll: true });
@@ -47,33 +47,33 @@ const SnowfallGame = observer(({ sceneId, className }: SnowfallGameProps) => {
                 viewBox={`0 0 ${width} ${height}`}
                 className={clsx(styles.scene)}
                 role="application"
-                aria-label={`Schneefall-Szene ${sceneId}`}
+                aria-label={`Icon-Szene ${sceneId}`}
                 tabIndex={0}
                 onClick={handleClick}
                 onKeyDown={handleKeyDown}
             >
                 <rect width={width} height={height} fill={background_color} />
                 <g>
-                    {dots.map((dot) => (
-                        <circle key={dot.id} cx={dot.x} cy={dot.y} r={dot.size} fill={dot.color} />
-                    ))}
-                </g>
-                <g>
-                    {snowflakes.map((snowflake) => (
+                    {icons.map((icon) => (
                         <path
-                            key={snowflake.id}
-                            d={mdiSnowflake}
-                            fill={snowflake.color}
-                            transform={`translate(${snowflake.x} ${snowflake.y}) scale(${snowflake.size / 12}) translate(-12 -12)`}
+                            key={icon.id}
+                            d={getIconPath(icon.name)}
+                            fill={icon.color}
+                            transform={`translate(${icon.x} ${icon.y}) rotate(${icon.rotation}) scale(${icon.size / 12}) translate(-12 -12)`}
                         />
                     ))}
                 </g>
+                {show_fps && (
+                    <text x={width - 8} y={18} textAnchor="end" className={styles.fps}>
+                        {scene.isConnected ? fps : 0} FPS
+                    </text>
+                )}
             </svg>
             <span role="status" className={clsx(styles.status)}>
-                {scene.isConnected ? 'Klicke auf eine Schneeflocke.' : 'Starte zuerst das Python-Programm.'}
+                {scene.isConnected ? 'Klicke auf ein Icon.' : 'Starte zuerst das Python-Programm.'}
             </span>
         </div>
     );
 });
 
-export default SnowfallGame;
+export default IconGame;
