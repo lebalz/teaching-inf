@@ -21,4 +21,7 @@
 !05-Rechnerarchitektur/_category_.yml
 06-Kryptologie/*
 !06-Kryptologie/_category_.yml
-06-Kryptologie/_category_.json
+07-Programmieren-2/*
+!07-Programmieren-2/05-contest/
+!07-Programmieren-2/_category_.yml
+07-Programmieren-2/_category_.json

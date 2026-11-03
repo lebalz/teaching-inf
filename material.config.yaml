@@ -46,6 +46,12 @@
     as: 06-Kryptologie
     ignore:
       - _category_.yml
+    open: false
+  - from: docs/OF-Programmieren-2/
+    as: 07-Programmieren-2
+    ignore:
+      - 05-contest
+      - _category_.yml
     open: true
 29Gj:
   - from: docs/Onboarding/
@@ -87,6 +93,12 @@
   - from: docs/OF-Kryptologie/
     as: 06-Kryptologie
     ignore:
+      - _category_.yml
+    open: false
+  - from: docs/OF-Programmieren-2/
+    as: 07-Programmieren-2
+    ignore:
+      - 05-contest
       - _category_.yml
     open: true
 30Gx:
