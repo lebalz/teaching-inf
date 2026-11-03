@@ -20,6 +20,7 @@ from icon_game import use_scene
 from itertools import combinations 
 
 SPEED_FACTOR = 20
+ICON_COUNT = 5
 DIM_X = 400
 DIM_Y = 600
 
@@ -28,7 +29,7 @@ scene.reset()
 scene.configure(width=DIM_X, height=DIM_Y, background_color='black')
 scene.render()
 colors = ['yellow', 'gold', 'orange', 'red', 'maroon', 'violet', 'magenta', 'purple', 'navy', 'blue', 'skyblue', 'cyan', 'teal', 'turquoise', 'lawngreen', 'green', 'darkgreen', 'chocolate', 'brown', 'gray', 'white']
-icons = ['emoticon-poop','emoticon-lol','emoticon-tongue','emoticon-wink','emoticon-cool','emoticon-devil','emoticon-excited','emoticon-confused','emoticon-dead','emoticon-kiss','emoticon-happy','emoticon-cry','emoticon-angry','emoticon-sick','mushroom','alien','alien-outline','ghost','ghost-outline','ghost-off','robot','robot-happy','robot-confused','robot-excited','robot-love','robot-dead','robot-angry','robot-vacuum','duck','penguin','owl','cat','dog','dog-side','pig','pig-variant','cow','sheep','rabbit','rabbit-variant','snail','unicorn','unicorn-variant','jellyfish','pizza','shark','shark-fin','bat','spider','turke']
+icons = ['emoticon-poop','emoticon-lol','emoticon-tongue','emoticon-wink','emoticon-cool','emoticon-devil','emoticon-excited','emoticon-confused','emoticon-dead','emoticon-kiss','emoticon-happy','emoticon-cry','emoticon-angry','emoticon-sick','mushroom','alien','alien-outline','ghost','ghost-outline','ghost-off','robot','robot-happy','robot-confused','robot-excited','robot-love','robot-dead','robot-angry','robot-vacuum','duck','penguin','owl','cat','dog','dog-side','pig','pig-variant','cow','sheep','rabbit','rabbit-variant','snail','unicorn','unicorn-variant','jellyfish','pizza','shark','shark-fin','bat','spider','turkey']
 
 
 def random_speed(ico, randomize_all = False):
@@ -40,7 +41,7 @@ def random_speed(ico, randomize_all = False):
         ico.x = randint(0, DIM_X)
         ico.y = randint(0, DIM_Y)
 
-for name in sample(icons, 5):
+for name in sample(icons, ICON_COUNT):
     x = randint(0, DIM_X)
     y = randint(0, DIM_Y)
     size = randint(8, 20)
