@@ -3,6 +3,8 @@ page_id: cc077ebd-0a28-4c15-b169-e646ead8e19e
 ---
 
 import Strukto from '@tdev-components/VisualizationTools/Strukto';
+import CookieComponent from '@tdev/pyodide/cookie-klicker/src/components/Cookie';
+import IconGame from '@tdev/pyodide/icon-game/src/components/IconGame';
 
 # 2. Listen
 
@@ -47,8 +49,6 @@ noten = [3.5, 6, 5, 4.5]
 
 # Ganze Liste anzeigen 
 print(noten)
-# Element mit Index 2 aus der Liste anzeigen
-print(noten[2])
 ```
 :::
 
@@ -101,167 +101,133 @@ noten = [3.5, 6, 5, 4.5]
 
 länge = len(noten)  # Länge der Liste ermitteln
 
-for index in range(länge):
-    print(index, ":", noten[index])
+for i in range(länge):
+    print(i, ":", noten[i])
 ```
 :::insight[`range(länge)`]
-Bisher war es teilweise eher mühsam, dass mit bspw. `range(5)` die Laufvariable die Zahlen `0, 1, 2, 3, 4` annimmt. Mit Listen ist dies nun aber sehr praktisch, da es gerade genau dem Indexbereich der Liste entspricht.
+Für die Arbeit mit Listen ist es sehr praktisch, dass der Schleifenzähler `i` genau die Indexwerte der Liste annimmt.
 :::
-::::
-
-
-::::aufgabe[Alien-Crew zum Appell]
-Das Raumschiff «Fliegende Untertasse mit WLAN» braucht eine Anwesenheitsliste.
-
-1. Ersetzen Sie die leere Liste durch die Namen `Blub`, `Zorg`, `Wackelpudding` und `Professor Quak` in dieser Reihenfolge.
-2. Geben Sie mit `len()` die Anzahl der Crewmitglieder aus.
-3. Geben Sie mit einer Schleife über die Indizes alle Namen mit einer Platznummer aus. Die Platznummern sollen bei **1** beginnen, obwohl die Listenindizes bei **0** beginnen.
-
-Die Ausgabe soll also wie folgt aussehen:
-
-```
-Crewmitglieder: 4
-1 Blub
-2 Zorg
-3 Wackelpudding
-4 Professor Quak
-```
-
-```py live_py title=alien-crew.py id=2c394e02-6da2-49ec-86f0-72367ab79d85
-crew = []
-# Ergänzen Sie die Liste und den Appell.
-```
-
-<Solution id="bbb4b76f-ace8-48e0-b509-711f49c104a2">
-
-```py
-crew = ['Blub', 'Zorg', 'Wackelpudding', 'Professor Quak']
-print('Crewmitglieder:', len(crew))
-for index in range(len(crew)):
-    print(index + 1, crew[index])
-```
-
-Die Platznummer ist um 1 grösser als der Index. Für den Zugriff auf die Liste bleibt der Index unverändert.
-</Solution>
 ::::
 
 ## Elemente abfragen
 
 
 :::def[Erstes Element: `<liste>[0]`]
-
 ```py live_py slim
 noten = [4.5, 5, 3.5, 5.5]
-if len(noten) > 0:
-    print(noten[0])
+print(noten[0])
 ```
-
-Bemerken Sie: es wird zuerst überprüft, ob die Liste überhaupt ein Element enthält. Nur dann wird dieses Element abgerufen und ausgegeben.
 :::
 
 
 :::def[Letztes Element `<liste>[-1]`]
-
 ```py live_py slim
 noten = [4.5, 5, 3.5, 5.5]
-if len(noten) > 0:
-    print(noten[-1])
-    # oder gleichbedeutend
-    print(noten[len(noten) - 1])
+print(noten[-1])
+# oder gleichbedeutend
+print(noten[len(noten) - 1])
 ```
 :::
 
-:::def[Fehler: IndexError]
-Fragt man einen Index ab, den es nicht gibt (weil es zu wenige Elemente in der Liste hat), so entsteht ein `IndexError`.
+::::def[Fehler: <span className="badge badge--danger">IndexError</span>]
+Fragt man einen Index ab, den es nicht gibt (weil es zu wenige Elemente in der Liste hat), so entsteht ein <span className="badge badge--danger">IndexError</span>.
 
-Beispiel: 
 ```py live_py slim
 noten = [3.5, 6, 5, 4.5]
 
 # Eine Liste mit 4 Elementen: Grösster Index ist 3
-noten[4] = 6
+print(noten[4])  # IndexError: list index out of range
+```
+:::insight[Fehlerbehebung]
+- Prüfen Sie die Länge der Liste mit `len(<liste>)`.
+- Prüfen Sie, ob der Index kleiner als die Länge der Liste ist.
+
+```py live_py slim
+noten = [3.5, 6, 5, 4.5]
+if len(noten) > 4:
+    print(noten[4])
 ```
 :::
 
-::::aufgabe[Das geplünderte Geisterbuffet]
-Beim Geisterbuffet verschwinden die Speisen manchmal schon vor dem Essen.
-Schreiben Sie ein Programm, das die **erste und die letzte Speise** mit den Beschriftungen
-`Vorspeise:` und `Dessert:` ausgibt. Ist die Liste leer, soll stattdessen nur
-`Alles weggegeistert!` erscheinen.
-
-Testen Sie Ihren Code mit der vorgegebenen Liste, danach mit `buffet = ['Nebelwatte']`
-und schliesslich mit `buffet = []`. Er darf bei keinem dieser Tests einen `IndexError` erzeugen.
-Bei der ursprünglichen Liste sind `Spinnensalat` und `Schokogespenst` gesucht;
-bei nur einer Speise ist diese gleichzeitig Vorspeise und Dessert.
-
-```py live_py title=geisterbuffet.py id=b2bad8fb-7e2a-4f7f-be33-41d8c17ef513
-buffet = ['Spinnensalat', 'Kürbissuppe', 'Schokogespenst']
-# buffet = ['Nebelwatte']
-# buffet = []
-
-# Prüfen Sie zuerst, ob das Buffet noch etwas enthält.
-```
-
-<Solution id="8782ac25-87f7-4dce-af88-8b99f7e409ec">
-
-```py
-buffet = ['Spinnensalat', 'Kürbissuppe', 'Schokogespenst']
-if len(buffet) > 0:
-    print('Vorspeise:', buffet[0])
-    print('Dessert:', buffet[-1])
-else:
-    print('Alles weggegeistert!')
-```
-
-Bei einer Liste mit einem Element greifen `buffet[0]` und `buffet[-1]` auf dasselbe Element zu.
-Bei der leeren Liste wird keiner der beiden Zugriffe ausgeführt.
-</Solution>
 ::::
 
-## Elemente Verändern
 
-:::def[Zuordnung: `<liste>[index] = <wert>`]
 
-Ein Element in der Liste kann durch eine Zuordnung verändert werden. Im untenstehenden Beispiel werden alle ungenügenden Noten auf eine `5` gesetzt.
-```py live_py slim
-noten = [4.5, 5, 3.5, 5.5]
-for i in range(len(noten)):
-    if noten[i] < 4:
-        noten[i] = 5
-print(noten)
-```
-:::
+::::aufgabe[Szene mit fünf Icons]
+<Answer type="state" id="2c581fe6-76ca-4683-a385-a90abadaa41f" />
 
-::::aufgabe[Roboter mit Morgenmuffel-Akku]
-Fünf Haushaltsroboter sollen aufräumen. Einige haben aber kaum noch Energie und behaupten,
-sie seien «im Energiesparmodus». Die Liste enthält ihre Akkustände in Prozent.
+In der untenstehenden Aufgabe geht es darum, mittels den in Zeilen 6-9 vorgegebenen Listen die Szene aufzubauen.
+Gehen Sie dabei wie folgt vor:
+1. Untersuchen Sie die Zeilen 11-14 und verstehen Sie, wie ein Icon eingefügt wird.
+2. Jede Liste enthält fünf Elemente - an erster Stelle stehen die Eigenschaften des ersten Icons, an zweiter Stelle die Eigenschaften des zweiten Icons usw. Erstellen Sie alle fünf Icons - natürlich mit einer Schleife (vgl. [Schleife über Listen-Indices](#schleife-über-listen-indices)).
+3. Stimmt alles? Markieren Sie die Aufgabe als erledigt.
 
-Gehen Sie mit einer Schleife über alle Indizes. Jeder Akkustand **unter 20** soll um
-**30 Prozentpunkte** erhöht werden; die anderen Werte bleiben gleich.
+<IconGame sceneId="fünf" />
 
-:::warning[Hinweis]
-Schreiben Sie die fertige Ergebnisliste nicht direkt in den Code.
-:::
+```py live_pyo id=a5631359-af7c-4ad8-b18a-35177898ac7d title=five.py
+from icon_game import use_scene
+scene = use_scene('fünf')
+scene.configure(width=400, height=400, background_color='black', show_fps=False)
+scene.render()
 
-Zur Kontrolle: Aus der vorgegebenen Liste soll `[45, 80, 35, 60, 30]` werden.
-Testen Sie danach mit `[20, 19, 100]`: Das Ergebnis muss `[20, 49, 100]` sein.
+icons = ['snowboard', 'ski', 'rocket-launch', 'bicycle-penny-farthing', 'cards-club']
+koordinaten_x = [80, 320, 200, 80, 320]
+koordinaten_y = [80, 80, 200, 320, 320]
+colors = ['teal', 'lightblue', 'blue', 'lime', 'turquoise']
 
-```py live_py title=morgenmuffel-akku.py id=af994950-d98b-474b-8b02-a4881c880440
-akkus = [15, 80, 5, 60, 0]
-# Laden Sie nur die müden Roboter auf.
+ico = scene.add_icon('snowboard', color='teal')
+ico.x = 80
+ico.y = 80
+scene.render()
 ```
 
-<Solution id="c2a20fcb-43cc-4bf7-bfc3-e11dfbd36bb4">
+Erweiterung: Nun soll bei jedem Klick auf die Szene das mittlere Icon um einen zufälligen Winkel zwischen 0 und 360 Grad gedreht werden. Damit dies funktioniert, muss die Szene interaktiv gemacht werden. Führen Sie dazu folgendes Programm aus und untersuchen Sie es präzise:
 
-```py
-akkus = [15, 80, 5, 60, 0]
-for index in range(len(akkus)):
-    if akkus[index] < 20:
-        akkus[index] = akkus[index] + 30
-print(akkus)
+```py live_pyo slim
+from icon_game import use_scene
+from webio import on_click, run
+
+scene = use_scene('fünf')
+scene.add_icon('weather-sunny', color='yellow')
+scene.render()
+
+@on_click(scene)
+def click(e):
+    if scene.icons[0].color == 'yellow':
+        scene.icons[0].color = 'white'
+    else:
+        scene.icons[0].color = 'yellow'
+    scene.render()
+
+await run()
 ```
 
-Die Zuweisung verändert das Element an der aktuellen Position. Ein Akkustand von genau 20 bleibt unverändert.
+<Solution id="15520d96-ef9c-4769-b7f8-ba4b6b03854a">
+```py live_pyo slim
+from icon_game import use_scene
+scene = use_scene('fünf')
+scene.configure(width=400, height=400, background_color='black', show_fps=False)
+scene.render()
+
+koordinaten_x = [80, 320, 200, 80, 320]
+koordinaten_y = [80, 80, 200, 320, 320]
+icons = ['snowboard', 'ski', 'rocket-launch', 'bicycle-penny-farthing', 'cards-club']
+colors = ['teal', 'lightblue', 'blue', 'lime', 'turquoise']
+
+for i in range(5):
+    ico = scene.add_icon(icons[i], color=colors[i])
+    ico.x = koordinaten_x[i]
+    ico.y = koordinaten_y[i]
+
+scene.render()
+
+@on_click(scene)
+def onclick(e):
+    scene.icons[2].rotation = randint(0, 360)
+    scene.render()
+
+await run()
+```
 </Solution>
 ::::
 
@@ -277,34 +243,24 @@ print('Ursprünglich', noten)
 noten.append(6)
 print('Neu', noten)
 ```
-:::details[An beliebiger Stelle einfügen: `<liste>.insert(<index>, <wert>)`]
-
-```py live_py slim
-noten = [4.5, 5, 3.5, 5.5]
-print('Ursprünglich', noten)
-noten.insert(1, 6) # Bei Index 1 (2. Stelle) wird eine 6 eingefügt
-print('Neu', noten)
-```
-:::
 ::::
 
-:::def[entfernen: `<liste>.pop(<index>)`]
-Entfernt das Element an der Stelle `index` und gibt dieses zurück:
+:::def[entfernen: `<liste>.pop()`]
+Entfernt das letzte Element der Liste und gibt dieses zurück:
 
 ```py live_py slim
 noten = [4.5, 5, 3.5, 5.5]
-entfernt = noten.pop(2)
-print('Entfernt', entfernt)
+noten.pop()
 print('Noten', noten)
 ```
 :::
+:::def[alles entfernen: `<liste>.clear()`]
+Löscht alle Elemente der Liste:
 
-:::def[Aufsteigend sortieren `<liste>.sort()`]
 ```py live_py slim
-noten = [3.5, 6, 5, 4, 4.5, 5]
-
-noten.sort()
-print(noten)
+noten = [4.5, 5, 3.5, 5.5]
+noten.clear()
+print('Noten', noten)
 ```
 :::
 
@@ -328,69 +284,64 @@ print('Schlechteste Noten', min(noten))
 ```
 :::
 
-:::def[Wert in einer Liste? `<wert> in <liste>`]
-Überprüft, ob sich ein Wert in einer Liste befindet
+:::def[Summe: `sum(<liste>)`]
+Gibt die Summe aller Elemente einer numerischen Liste zurück
 
 ```py live_py slim
 noten = [4.5, 5, 3.5, 5.5]
-if 6 in noten:
-    print('Glückwunsch, du hast min. einmal eine 6 geschrieben')
-else:
-    print('Du hast noch keine 6 geschrieben')
+print('Summe der Noten', sum(noten))
+print('Durchschnitt der Noten', sum(noten) / len(noten))
+
 ```
 :::
 
-:::def[Anzahl Elemente mit einem Wert? `<liste>.count(<wert>)`]
-Zählt, wie oft sich ein Wert in einer Liste befindet. 
 
-```py live_py slim
-noten = [4.5, 5, 3.5, 5.5, 5]
-for i in [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6]:
-    if noten.count(i) > 0:
-        print(f'Anzahl {i}: {noten.count(i)}')
-```
-:::
+:::aufgabe[Reaktionszeiten]
+<Answer type="state" id="8ebc7928-9820-445c-86bf-a76b0631d73b" />
 
-::::aufgabe[Schnarch-O-Meter im Klassenlager]
-Ein Messgerät hat die Schnarchlautstärke im Schlafsaal gemessen: `0` bedeutet Stille,
-`9` bedeutet «Ein Traktor schläft im oberen Bett».
+Implementieren Sie ein Reaktionsspiel, bei welchem die Spieler:in so schnell wie möglich 10x auf ein Cookie klicken muss. Sofern die Reaktionszeit zwischen 0 und 1 Sekunde liegt, wird die Zeit in einer Liste `zeiten` hinzugefügt.
 
-Erstellen Sie aus den Messwerten einen kurzen Bericht:
+Nach 10 Klicks wird die
+- der Durchschnitt der Reaktionszeiten berechnet und ausgegeben
+- die schnellste und die langsamste Reaktionszeit ausgegeben
+- die Liste wieder geleert, sodass das Spiel erneut gespielt werden kann.
 
-1. Geben Sie mit `max()` und `min()` den lautesten und den leisesten Wert aus.
-2. Berechnen Sie den Unterschied zwischen diesen beiden Werten und geben Sie ihn aus.
-3. Zählen Sie mit `count()`, wie oft die Lautstärke `9` gemessen wurde.
-4. Prüfen Sie mit `in`, ob eine `0` vorkommt. Geben Sie dann `Endlich Ruhe!` aus, andernfalls `Nicht einmal die Socken konnten schlafen.`
-5. Testen Sie Ihren Code mit der verborgenen Liste `klassenlager`, welche 23 zufällige Messwerte enthält.
+<CookieComponent cookieId="cookie" />
 
-Zur Kontrolle: Maximum `9`, Minimum `1`, Unterschied `8`, drei Traktormomente und keine Stille.
-Ersetzen Sie danach den ersten Messwert durch `0` und prüfen Sie, ob sich Ihr Bericht passend ändert.
+```py live_pyo id=b3c4a6f5-22d4-4e3b-bb59-63562ca17460 title=reaction.py
+from cookie_klicker import use_cookie
+from webio import on_click, run
+cookie = use_cookie('cookie')
+zeiten = []
 
-```py live_pyo title=schnarch-o-meter.py id=353ffeae-c8ac-44ff-9fe4-fcc47739db5b
-from random import choices
-klassenlager = choices(range(10), k=23)
-### PRE
-lautstärken = [2, 9, 4, 9, 1, 9]
-# Werten Sie die nächtlichen Geräusche aus.
+@on_click(cookie)
+def drehen(event):
+    cookie.set_rotation(cookie.rotation + 36)
+    print(event.payload.time_since_last_click)
+
+await run()
 ```
 
-<Solution id="aa8b557e-49b4-4281-a4a0-14aaac887eff">
+<Solution id="f03be09f-d812-4a0d-9391-8ec16be17dd2">
+```py live_pyo slim
+from cookie_klicker import use_cookie
+from webio import on_click, run
 
-```py
-lautstärken = [2, 9, 4, 9, 1, 9]
-lauteste = max(lautstärken)
-leiseste = min(lautstärken)
-print('Maximum:', lauteste)
-print('Minimum:', leiseste)
-print('Unterschied:', lauteste - leiseste)
-print('Traktormomente:', lautstärken.count(9))
-if 0 in lautstärken:
-    print('Endlich Ruhe!')
-else:
-    print('Nicht einmal die Socken konnten schlafen.')
+cookie = use_cookie('cookie')
+zeiten = []
+
+@on_click(cookie)
+def drehen(event):
+    cookie.set_rotation(cookie.rotation + 36)
+    if 0 < event.payload.time_since_last_click < 1:
+        zeiten.append(event.payload.time_since_last_click)
+    if len(zeiten) >= 10:
+        print('Durchschnittliche Reaktionszeit', sum(zeiten) / len(zeiten), 's')
+        print('Schnellste Reaktionszeit', min(zeiten), 's')
+        print('Langsamste Reaktionszeit', max(zeiten), 's')
+        zeiten.clear()
+
+await run()
 ```
-
-Mit einem ersten Messwert von `0` sinkt das Minimum auf 0, der Unterschied steigt auf 9
-und die letzte Ausgabe lautet `Endlich Ruhe!`. Die Zahl der Traktormomente bleibt gleich.
 </Solution>
-::::
+:::

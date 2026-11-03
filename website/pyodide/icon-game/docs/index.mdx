@@ -32,7 +32,7 @@ colors = ['yellow', 'gold', 'orange', 'red', 'maroon', 'violet', 'magenta', 'pur
 icons = ['emoticon-poop','emoticon-lol','emoticon-tongue','emoticon-wink','emoticon-cool','emoticon-devil','emoticon-excited','emoticon-confused','emoticon-dead','emoticon-kiss','emoticon-happy','emoticon-cry','emoticon-angry','emoticon-sick','mushroom','alien','alien-outline','ghost','ghost-outline','ghost-off','robot','robot-happy','robot-confused','robot-excited','robot-love','robot-dead','robot-angry','robot-vacuum','duck','penguin','owl','cat','dog','dog-side','pig','pig-variant','cow','sheep','rabbit','rabbit-variant','snail','unicorn','unicorn-variant','jellyfish','pizza','shark','shark-fin','bat','spider','turkey']
 
 
-def random_speed(ico, randomize_all = False):
+def randomize(ico, randomize_all = False):
     ico.speed_x = randint(-5 * SPEED_FACTOR, 5 * SPEED_FACTOR)
     ico.speed_y = randint(-5 * SPEED_FACTOR, 5 * SPEED_FACTOR)
     ico.color = choice(colors)
@@ -46,7 +46,7 @@ for name in sample(icons, ICON_COUNT):
     y = randint(0, DIM_Y)
     size = randint(8, 20)
     ico = scene.add_icon(name)
-    random_speed(ico, True)
+    randomize(ico, True)
 
 def rect(ico):
     return [
@@ -65,8 +65,8 @@ def is_colliding(a, b):
 def update_icons(dt):
     for a, b in combinations(scene.icons, 2):
         if is_colliding(a, b):
-            random_speed(a)
-            random_speed(b)
+            randomize(a)
+            randomize(b)
     for ico in scene.icons:
         if ico.x > DIM_X or ico.x < 0:
             ico.speed_x = -ico.speed_x

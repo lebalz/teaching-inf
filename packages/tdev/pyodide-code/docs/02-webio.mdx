@@ -61,7 +61,7 @@ Jeder Handler erhält ein Ereignis mit folgenden Attributen:
 `timestamp`
 : Zeitpunkt des Ereignisses in Millisekunden seit der Unix-Epoche.
 `payload`
-: Ereignisspezifische Daten der Erweiterung; beim Cookie `None` für Klicks und `{'key': ...}` für Tastatureingaben.
+: Ereignisspezifische Daten der Erweiterung. Bei Dictionaries funktionieren sowohl `event.payload.key` als auch `event.payload['key']`; Dictionary-Methoden wie `.get()` bleiben verfügbar. Der Cookie liefert bei Klicks `event.payload.time_since_last_click` in Sekunden und bei Tastatureingaben `event.payload.key`.
 `x`, `y`
 : Zusätzliche Koordinatenattribute, wenn der Payload `x` beziehungsweise `y` enthält. Die Schneefall-Szene liefert damit logische Szenenkoordinaten.
 

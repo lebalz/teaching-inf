@@ -3,14 +3,13 @@ import { action, computed, observable } from 'mobx';
 import { DEFAULT_COOKIE_COLOR, type CookieClick, type CookieKey } from '../../protocol';
 import type CookieStore from '../stores/CookieStore';
 
-const CLICK_EVENT: CookieClick = { type: 'click', payload: null };
-
 export default class Cookie {
     @observable accessor rotation = 0;
     @observable accessor color = DEFAULT_COOKIE_COLOR;
     readonly eventSource: EventSource;
     readonly id: string;
     readonly store: CookieStore;
+    private lastClick?: { executionId: number; timeStamp: number };
 
     constructor(id: string, store: CookieStore) {
         this.id = id;
@@ -39,7 +38,25 @@ export default class Cookie {
     }
 
     handleClick = () => {
-        void this.store.context.events.emit(this.eventSource, CLICK_EVENT);
+        const events = this.store.context.events;
+        const execution = events.getExecution(this.eventSource);
+        if (!execution) {
+            return;
+        }
+        const now = Date.now();
+        const previousClick =
+            this.lastClick?.executionId === execution.executionId
+                ? this.lastClick.timeStamp
+                : execution.startedAt;
+        const elapsedSeconds = (now - previousClick) / 1000;
+        const event: CookieClick = {
+            type: 'click',
+            payload: {
+                time_since_last_click: Number.isFinite(elapsedSeconds) ? Math.max(0, elapsedSeconds) : -1
+            }
+        };
+        this.lastClick = { executionId: execution.executionId, timeStamp: now };
+        void events.emit(this.eventSource, event);
     };
 
     handleKey(key: string) {

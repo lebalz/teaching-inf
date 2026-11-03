@@ -9,6 +9,9 @@ import {
 } from '../../protocol';
 
 interface IconOptions {
+    x?: number;
+    y?: number;
+    size?: number;
     color?: string;
     speed_x?: number;
     speed_y?: number;
@@ -16,6 +19,8 @@ interface IconOptions {
 }
 
 const SCENE_OPTIONS = ['width', 'height', 'background_color', 'show_fps'];
+const ICON_COORDINATES = ['x', 'y', 'size'] as const;
+const ICON_OPTIONS = [...ICON_COORDINATES, 'color', 'speed_x', 'speed_y', 'rotation'];
 const FPS_SAMPLE_DURATION_MS = 500;
 
 export default class WorkerScene {
@@ -76,13 +81,8 @@ export default class WorkerScene {
         this.sceneIcons.clear();
     }
 
-    add_icon(
-        name: string,
-        x: number = this.width / 2,
-        y: number = this.height / 2,
-        size: number = this.width * 0.1,
-        options: IconOptions = {}
-    ): IconSnapshot {
+    add_icon(name: string, ...args: (number | IconOptions)[]): IconSnapshot {
+        const options = this.resolveIconOptions(args);
         const id = this.nextIconId;
         const icon: IconSnapshot = {
             get id() {
@@ -92,9 +92,9 @@ export default class WorkerScene {
             get name_short() {
                 return getIconShortName(this.name);
             },
-            x,
-            y,
-            size,
+            x: options.x ?? this.width / 2,
+            y: options.y ?? this.height / 2,
+            size: options.size ?? this.width * 0.1,
             speed_x: options.speed_x ?? 0,
             speed_y: options.speed_y ?? 0,
             color: options.color ?? 'white',
@@ -118,6 +118,33 @@ export default class WorkerScene {
         });
         this.recordFrame(performance.now());
         this.context.send(this.id, { ...this.configuration, icons, fps: this.fps });
+    }
+
+    private resolveIconOptions(args: (number | IconOptions)[]): IconOptions {
+        // Pyodide appends keyword arguments as an object after the supplied positional arguments.
+        const lastArgument = args.at(-1);
+        const hasOptions = lastArgument !== null && typeof lastArgument === 'object';
+        const options: IconOptions = hasOptions ? { ...lastArgument } : {};
+        const coordinates = hasOptions ? args.slice(0, -1) : args;
+        if (coordinates.length > ICON_COORDINATES.length) {
+            throw new Error('add_icon accepts at most three positional coordinates: x, y, size.');
+        }
+        for (const option of Object.keys(options)) {
+            if (!ICON_OPTIONS.includes(option)) {
+                throw new Error(`Unknown icon option: ${option}`);
+            }
+        }
+        coordinates.forEach((value, index) => {
+            const coordinate = ICON_COORDINATES[index];
+            if (Object.hasOwn(options, coordinate)) {
+                throw new Error(`Icon ${coordinate} was supplied both positionally and by name.`);
+            }
+            if (typeof value !== 'number') {
+                throw new Error(`Icon ${coordinate} must be a number.`);
+            }
+            options[coordinate] = value;
+        });
+        return options;
     }
 
     private recordFrame(now: number) {

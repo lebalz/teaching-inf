@@ -1,3 +1,4 @@
+import CopyBadge from '@tdev-components/shared/CopyBadge';
 import { useExtensionStore } from '@tdev/pyodide-code/hooks/useExtensionStore';
 import clsx from 'clsx';
 import { observer } from 'mobx-react-lite';
@@ -41,6 +42,9 @@ const IconGame = observer(({ sceneId, className }: IconGameProps) => {
 
     return (
         <div className={clsx(styles.container, className)}>
+            <div>
+                Szene: <CopyBadge value={sceneId} />
+            </div>
             <svg
                 width={width}
                 height={height}
