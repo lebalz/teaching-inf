@@ -181,7 +181,7 @@ ico.y = 80
 scene.render()
 ```
 
-Erweiterung: Nun soll bei jedem Klick auf die Szene das mittlere Icon um einen zufälligen Winkel zwischen 0 und 360 Grad gedreht werden. Damit dies funktioniert, muss die Szene interaktiv gemacht werden. Führen Sie dazu folgendes Programm aus und untersuchen Sie es präzise:
+Erweiterung: Nun soll bei jedem Klick auf die Szene das mittlere Icon um einen zufälligen Winkel zwischen 0 und 360 Grad gedreht werden. Der Rotationswinkel kann mit `scene.icons[0].rotation = 45` gesetzt werden. Damit dies funktioniert, muss die Szene interaktiv gemacht werden. Führen Sie dazu folgendes Programm aus und untersuchen Sie es präzise:
 
 ```py live_pyo slim
 from icon_game import use_scene
