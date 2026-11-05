@@ -159,9 +159,12 @@ if len(noten) > 4:
 
 In der untenstehenden Aufgabe geht es darum, mittels den in Zeilen 6-9 vorgegebenen Listen die Szene aufzubauen.
 Gehen Sie dabei wie folgt vor:
+<ProgressState id="df0bdbd2-cf39-4f46-85fc-9fe37f285e2c" confirm>
 1. Untersuchen Sie die Zeilen 11-14 und verstehen Sie, wie ein Icon eingefügt wird.
-2. Jede Liste enthält fünf Elemente - an erster Stelle stehen die Eigenschaften des ersten Icons, an zweiter Stelle die Eigenschaften des zweiten Icons usw. Erstellen Sie alle fünf Icons - natürlich mit einer Schleife (vgl. [Schleife über Listen-Indices](#schleife-über-listen-indices)).
-3. Stimmt alles? Markieren Sie die Aufgabe als erledigt.
+2. Offensichtlich stammen die Eigenschaften des Snowboard-Icons aus den vier Listen. Schreiben Sie die Zeilen 11-14 so um, dass sie die Werte von den Listen beziehen, bspw. `ico.color = colors[0]`.
+3. Jede Liste enthält fünf Elemente - an erster Stelle stehen die Eigenschaften des ersten Icons, an zweiter Stelle die Eigenschaften des zweiten Icons usw. Erstellen Sie nun alle fünf Icons - natürlich mit einer Schleife (vgl. [Schleife über Listen-Indices](#schleife-über-listen-indices)).
+4. Stimmt alles? Markieren Sie die Aufgabe als erledigt.
+</ProgressState>
 
 <IconGame sceneId="fünf" />
 
@@ -215,7 +218,8 @@ icons = ['snowboard', 'ski', 'rocket-launch', 'bicycle-penny-farthing', 'cards-c
 colors = ['teal', 'lightblue', 'blue', 'lime', 'turquoise']
 
 for i in range(5):
-    ico = scene.add_icon(icons[i], color=colors[i])
+    ico = scene.add_icon(icons[i])
+    ico.color = colors[i]
     ico.x = koordinaten_x[i]
     ico.y = koordinaten_y[i]
 
