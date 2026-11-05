@@ -116,7 +116,6 @@
     ignore:
       - _category_.yml
       - index.mdx
-      - 06-parameters
       - 07-Variablen
       - 08-Verzweigungen
       - 09-While
