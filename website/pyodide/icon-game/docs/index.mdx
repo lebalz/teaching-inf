@@ -126,6 +126,17 @@ Die Geschwindigkeiten sind in Pixeln pro Sekunde angegeben. `ctx.dt` berücksich
 : Überträgt den aktuellen Zustand der ganzen Szene. Änderungen an Handles, `configure()` und `reset()` werden erst damit sichtbar.
 `events`
 : Ereignisquelle für `@gameloop`, `@on_click` und weitere Handler aus `webio`.
+`was_clicked(ctx)`
+: Liefert den letzten Klick auf eine Icon-Szene im aktuellen Frame oder `None`, wenn nicht geklickt wurde. Der Klick enthält die Szenenkoordinaten in `click.x` und `click.y`. Import: `from icon_game import was_clicked`.
+
+```py
+@gameloop(fps=30, sources=[scene])
+def update(ctx):
+    click = was_clicked(ctx)
+    if click:
+        scene.add_icon('mdiStar', click.x, click.y, 10)
+    scene.render()
+```
 
 Klick-Ereignisse enthalten `event.x` und `event.y` in logischen Szenenkoordinaten, auch bei verkleinerter Darstellung. Dieselben Werte stehen in `event.payload['x']` und `event.payload['y']`. Tastatureingaben gehen an die fokussierte Szene und enthalten den Tastennamen in `event.payload['key']`.
 

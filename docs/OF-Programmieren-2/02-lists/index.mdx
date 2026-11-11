@@ -186,6 +186,10 @@ ico.y = 80
 scene.render()
 ```
 
+:::tip[Weitere Icons]
+Der [Icon-Finder](https://inf.gbsl.website/icon-finder) hilft Ihnen, die Namen der Icons zu finden, die Sie in Ihrer Szene verwenden möchten.
+:::
+
 **Erweiterung**: Nun soll bei jedem Klick auf die Szene das mittlere Icon um einen zufälligen Winkel zwischen 0 und 360 Grad gedreht werden. Damit dies funktioniert, muss die Szene interaktiv gemacht werden. Führen Sie dazu folgendes Programm aus und untersuchen Sie es ausführlich:
 
 ```py live_pyo slim
@@ -299,16 +303,15 @@ print('Durchschnitt der Noten', sum(noten) / len(noten))
 ```
 :::
 
-### Aufgabe 2
+### Aufgabe 2: Cookie
 
-::::aufgabe[Klickgeschwindigkeiten]
 :::info[Ziel]
 Ein Klickgeschwindigkeits-Spiel, bei welchem die Spieler:in so schnell wie möglich 10x auf ein Cookie klicken muss. Immer nach 10 Klicks soll eine kleine Statistik über die letzten 10 Klicks angezeigt werden mit:
 - der Durchschnitt der Reaktionszeiten berechnet und ausgegeben
 - die schnellste und die langsamste Reaktionszeit ausgegeben
 :::
 
-
+:::aufgabe[Klickgeschwindigkeiten]
 <ProgressState id="b9d4ab9a-bc6c-4d19-907a-c1762f0b5a66" confirm>
 1. fügen Sie der Liste `zeiten` immer die aktuelle Reaktionszeit (`event.payload.time_since_last_click`) hinzu. Printen Sie zudem die Liste `zeiten` nach jedem Klick.
 2. Sobald die Liste `zeiten` 10 Elemente enthält soll sie gelöscht werden. Die Ausgabe sollte ca. wie folgt aussehen:
@@ -361,4 +364,39 @@ def drehen(event):
 await run()
 ```
 </Solution>
-::::
+:::
+{/*
+
+### Aufgabe 3: Schneefall
+
+:::tip[Ziel]
+Schnee soll herunterfallen, die Schneeflocken sollen dabei zufällig auf der Szene verteilt sein. Die Schneeflocken sollen sich dabei langsam nach unten bewegen.
+:::
+
+:::aufgabe[Schneefall]
+<ProgressState id="b2d81334-d375-4478-adb1-95f6ca2358c7" confirm>
+1. 
+
+</ProgressState>
+
+<IconGame sceneId="snow" />
+
+```py live_pyo id=61f7d0b2-ec79-4204-a4fc-ca6e7c9945e2 title=snow.py
+from icon_game import use_scene
+scene = use_scene('snow')
+scene.configure(width=600, height=400, background_color='black', show_fps=False)
+scene.render()
+
+icons = ['snowboard', 'ski', 'rocket-launch', 'bicycle-penny-farthing', 'cards-club']
+koordinaten_x = [80, 320, 200, 80, 320]
+koordinaten_y = [80, 80, 200, 320, 320]
+colors = ['teal', 'lightblue', 'blue', 'lime', 'turquoise']
+
+ico = scene.add_icon('snowboard')
+ico.color = 'teal'
+ico.x = 80
+ico.y = 80
+scene.render()
+```
+:::
+*/}

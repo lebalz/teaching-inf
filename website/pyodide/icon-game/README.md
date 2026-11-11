@@ -70,4 +70,16 @@ await run()
 
 Punkte werden mit `scene.add_icon('mdiCircle', x, y, size)` erstellt. Ein Symbol lässt sich beispielsweise mit `icon.name = 'mdiRocketLaunch'` ändern; `icon.rotation = 90` dreht es. Änderungen werden beim nächsten `scene.render()` sichtbar.
 
+`was_clicked(ctx)`
+: Liefert den letzten Klick auf eine Icon-Szene im aktuellen Frame oder `None`, wenn nicht geklickt wurde. Der Klick enthält die Szenenkoordinaten in `click.x` und `click.y`. Import: `from icon_game import was_clicked`.
+
+```py
+@gameloop(fps=30, sources=[scene])
+def update(ctx):
+    click = was_clicked(ctx)
+    if click:
+        scene.add_icon('mdiStar', click.x, click.y, 10)
+    scene.render()
+```
+
 Klickereignisse enthalten `x` und `y` im `payload`, bereits in die konfigurierten Szenenkoordinaten umgerechnet. Das SVG passt sich schmalen Fenstern an. Mehrere Ansichten derselben `sceneId` teilen ihren Zustand.
