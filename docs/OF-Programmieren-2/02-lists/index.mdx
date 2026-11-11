@@ -365,7 +365,7 @@ await run()
 ```
 </Solution>
 :::
-{/*
+
 
 ### Aufgabe 3: Schneefall
 
@@ -373,30 +373,92 @@ await run()
 Schnee soll herunterfallen, die Schneeflocken sollen dabei zufällig auf der Szene verteilt sein. Die Schneeflocken sollen sich dabei langsam nach unten bewegen.
 :::
 
-:::aufgabe[Schneefall]
+#### Vorbereitung
+
+Damit eine Szene animiert werden kann, muss eine Codesequenz immer wieder aufgerufen werden. Dies kann mit einer `while True` Schleife erreicht werden:
+
+```py
+snow = scene.add_icon('snowflake')
+
+while True:
+    snow.y = snow.y + 1
+    scene.render()
+```
+
+**Beachte** dass bei jedem Schleifendurchgang `scene.render()` aufgerufen wird, so dass die Szene aktualisiert wird.
+
+::::aufgabe[Schneefall]
 <ProgressState id="b2d81334-d375-4478-adb1-95f6ca2358c7" confirm>
-1. 
+1. Führen Sie das untenstehende Programm aus. Aktuell fällt die Schneeflocke sehr schnell herunter. Fügen Sie nach jeder Aktualisierung der y-Position ein `sleep` ein, welches kurz wartet (Angabe in Sekunden).
+2. Können Sie die Schneeflocke auch schief fliegen lassen?
+3. Sobald die Schneeflocke unten am BIldschirm angekommen ist, soll sie wieder oben am Bildschirm erscheinen.
+   :::details[Hilfe]
+   Es braucht sicher eine bedingte Abfrage. Die Szenenhöhe beträgt \`400\` Pixel.
+
+   ```py
+   while True:
+       snow.y = snow.y + 1
+       if snow.y > 400:
+           # setze die Position zurück
+       scene.render()
+   ```
+   :::
+
+4. Nun sollen regelmässig neue Schneeflocken hinzugefügt werden. Dazu muss der aktuelle Code etwas umgestellt werden:
+
+   1. erstellen Sie eine neue Funktion `neue_schneeflocke` welche der Szene eine neue Schneeflocke oben in der Szene hinzufügt.
+      :::details[Hilfe]
+      ```py
+      def neue_schneeflocke():
+          snow = scene.add_icon('snowflake')
+          snow.color = 'lightblue'
+          snow.size = 16
+          snow.x = 300
+          snow.y = 0
+
+      neue_schneeflocke()
+      ```
+      Die aktuellen Zeilen Code zum hinzufügen von Schneeflocken können nun **entfernt** werden.
+      :::
+   2. Nach diesem ersten Schritt gibt das Programm einen Fehler aus, da `snow` nun nicht mehr definiert ist. Zudem sollen nun alle Schneeflocken herunterfallen. Dies wird erreicht, indem über eine **Liste aller Schneeflocken iteriert** wird. Diese Liste kann von der Szene abgefragt werden:
+      ```py
+      while True:
+          for snow in scene.icons:
+              # bisheriger Code hier einfügen, eingerückt!
+      ```
+   3. Probieren Sie aus, ob es für mehrere Schneeflocken funktioniert: Fügen Sie zu Beginn drei Schneeflocken hinzu.
+      :::details[Nur eine Schneeflocke wird angezeigt?]
+      Die drei Schneeflocken werden übereinander gezeichnet. Lösung: die x-Position sollte zu beginn **zufällig** gesetzt werden.
+      :::
+
+      :::details[Zufällige Positionierung]
+      ```py
+      from random import randint
+      snow.x = randint(0, 600)
+      ```
+      :::
+5. Jede Sekunde eine neue Schneeflocke
 
 </ProgressState>
 
 <IconGame sceneId="snow" />
 
-```py live_pyo id=61f7d0b2-ec79-4204-a4fc-ca6e7c9945e2 title=snow.py
+```py live_pyo id=adecc77d-e48a-43fb-9ebe-5862860f98da title=snow.py
 from icon_game import use_scene
+from time import sleep
+
 scene = use_scene('snow')
 scene.configure(width=600, height=400, background_color='black', show_fps=False)
 scene.render()
 
-icons = ['snowboard', 'ski', 'rocket-launch', 'bicycle-penny-farthing', 'cards-club']
-koordinaten_x = [80, 320, 200, 80, 320]
-koordinaten_y = [80, 80, 200, 320, 320]
-colors = ['teal', 'lightblue', 'blue', 'lime', 'turquoise']
+snow = scene.add_icon('snowflake')
+snow.color = 'lightblue'
+snow.size = 16
+snow.x = 300
+snow.y = 0
 
-ico = scene.add_icon('snowboard')
-ico.color = 'teal'
-ico.x = 80
-ico.y = 80
-scene.render()
+while True:
+    snow.y = snow.y + 1
+    scene.render()
 ```
-:::
-*/}
+::::
