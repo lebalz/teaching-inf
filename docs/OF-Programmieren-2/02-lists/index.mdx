@@ -366,14 +366,13 @@ await run()
 </Solution>
 :::
 
-
-### Aufgabe 3: Schneefall
+## Aufgabe 3: Schneefall
 
 :::tip[Ziel]
 Schnee soll herunterfallen, die Schneeflocken sollen dabei zufällig auf der Szene verteilt sein. Die Schneeflocken sollen sich dabei langsam nach unten bewegen.
 :::
 
-#### Vorbereitung
+### Vorbereitung
 
 Damit eine Szene animiert werden kann, muss eine Codesequenz immer wieder aufgerufen werden. Dies kann mit einer `while True` Schleife erreicht werden:
 
@@ -437,7 +436,17 @@ while True:
       snow.x = randint(0, 600)
       ```
       :::
-5. Jede Sekunde eine neue Schneeflocke
+
+5. Nun soll jede Sekunde eine neue Schneeflocke hinzugefügt werden. Also braucht es eine Art Stoppuhr - mit `time()` erhalten wir die Anzahl Sekunden seit dem 1.1.1970, 00\:00 Uhr morgens. Um damit eine Stoppuhr zu bauen, berechnen wir die **differenz** zwischen dem Startzeitpunkt und dem Endzeitpunkt:
+
+   ```py live_pyo slim
+   from time import sleep, time
+
+   t0 = time()
+   sleep(1)
+   now = time()
+   print('vergangen:', now - t0)
+   ```
 
 </ProgressState>
 
@@ -445,7 +454,7 @@ while True:
 
 ```py live_pyo id=adecc77d-e48a-43fb-9ebe-5862860f98da title=snow.py
 from icon_game import use_scene
-from time import sleep
+from time import sleep, time
 
 scene = use_scene('snow')
 scene.configure(width=600, height=400, background_color='black', show_fps=False)
