@@ -431,6 +431,14 @@ while True:
       Die drei Schneeflocken werden übereinander gezeichnet. Lösung: die x-Position sollte zu beginn **zufällig** gesetzt werden.
       :::
 
+      :::details[Zufällige Positionierung]
+      ```py
+      from random import randint
+      snow.x = randint(0, 600)
+      ```
+      :::
+5. Jede Sekunde eine neue Schneeflocke
+
 </ProgressState>
 
 <IconGame sceneId="snow" />
