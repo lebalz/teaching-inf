@@ -33,7 +33,7 @@
       - Lernziele
       - index.mdx
       - _category_.yml
-  - from: docs/IN-Biber/2025/
+  - from: docs/IN-Biber/90-Archive.nosync/2025/
     to: versioned_docs/version-29Ga/50-IN-Biber
     ignore:
       - _category_.yml
@@ -79,7 +79,7 @@
       - Lernziele
       - index.mdx
       - _category_.yml
-  - from: docs/IN-Biber/2025/
+  - from: docs/IN-Biber/90-Archive.nosync/2025/
     to: versioned_docs/version-29Gj/50-IN-Biber
     ignore:
       - _category_.yml
@@ -128,6 +128,10 @@
       - 50-Test
       - 51-Tests.mdx
     open: true
+  - from: docs/IN-Biber/
+    as: 50-IN-Biber
+    ignore:
+      - _category_.yml
 pages:
   - from: docs/Math/Taschenrechner/
     to: website/pages/mathematik/taschenrechner
