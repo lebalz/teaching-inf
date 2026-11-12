@@ -14,7 +14,6 @@ class PyodideCode extends iCode<'pyodide_code'> {
     @observable accessor code: string;
     @observable accessor runtimeId: number | null = null;
     @observable accessor executionPhase: 'idle' | 'preparing' | 'running' = 'idle';
-    executionStartedAt: number | null = null;
     @observable accessor promptResponse: string | null = null;
     messages = observable.array<Message>([], { deep: false });
     constructor(props: DocumentProps<'pyodide_code'>, store: DocumentStore) {
@@ -55,7 +54,6 @@ class PyodideCode extends iCode<'pyodide_code'> {
     @action
     setRuntimeId(rid: number | null) {
         this.runtimeId = rid;
-        this.executionStartedAt = null;
         this.executionPhase = rid === null ? 'idle' : 'preparing';
     }
 
@@ -65,7 +63,6 @@ class PyodideCode extends iCode<'pyodide_code'> {
             return;
         }
         this.executionPhase = 'running';
-        this.executionStartedAt ??= Date.now();
     }
 
     get canExecute(): boolean {

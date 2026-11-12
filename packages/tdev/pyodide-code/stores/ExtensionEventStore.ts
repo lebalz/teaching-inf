@@ -27,16 +27,12 @@ export default class ExtensionEventStore {
         return this.subscriptions.has(eventSourceKey(source));
     }
 
-    getExecution(source: EventSource): { executionId: number; startedAt: number } | undefined {
+    getExecutionId(source: EventSource): number | undefined {
         const owner = this.subscriptions.get(eventSourceKey(source));
-        if (
-            !owner ||
-            this.store.executions.get(owner.code.id) !== owner.executionId ||
-            owner.code.executionStartedAt === null
-        ) {
+        if (!owner || this.store.executions.get(owner.code.id) !== owner.executionId) {
             return;
         }
-        return { executionId: owner.executionId, startedAt: owner.code.executionStartedAt };
+        return owner.executionId;
     }
 
     @action

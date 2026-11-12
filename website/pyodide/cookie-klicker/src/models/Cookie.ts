@@ -39,23 +39,19 @@ export default class Cookie {
 
     handleClick = () => {
         const events = this.store.context.events;
-        const execution = events.getExecution(this.eventSource);
-        if (!execution) {
+        const executionId = events.getExecutionId(this.eventSource);
+        if (executionId === undefined) {
             return;
         }
         const now = Date.now();
         const previousClick =
-            this.lastClick?.executionId === execution.executionId
-                ? this.lastClick.timeStamp
-                : execution.startedAt;
-        const elapsedSeconds = (now - previousClick) / 1000;
+            this.lastClick?.executionId === executionId ? this.lastClick.timeStamp : undefined;
+        const timeSinceLastClick = previousClick === undefined ? -1 : (now - previousClick) / 1000;
         const event: CookieClick = {
             type: 'click',
-            payload: {
-                time_since_last_click: Number.isFinite(elapsedSeconds) ? Math.max(0, elapsedSeconds) : -1
-            }
+            payload: { time_since_last_click: timeSinceLastClick }
         };
-        this.lastClick = { executionId: execution.executionId, timeStamp: now };
+        this.lastClick = { executionId, timeStamp: now };
         void events.emit(this.eventSource, event);
     };
 

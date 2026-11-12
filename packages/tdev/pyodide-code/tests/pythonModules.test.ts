@@ -75,18 +75,18 @@ from _test_webio import _decode_event
 def decode_payload(payload):
     return _decode_event({
         'event': {'type': 'click', 'payload': payload},
-        'extension': 'cookie_klicker',
-        'targetId': 'cookie',
+        'extension': 'example',
+        'targetId': 'target',
         'timeStamp': 1000,
     })
 `);
     });
 
-    it.each([0.75, -1])('reads click timing %s using attributes and dictionary access', (interval) => {
+    it.each([0.75, -1])('reads value %s using attributes and dictionary access', (value) => {
         expect(
             pyodide.runPython(`
-payload = decode_payload({'time_since_last_click': ${interval}}).payload
-payload.time_since_last_click == payload['time_since_last_click'] == ${interval}
+payload = decode_payload({'value': ${value}}).payload
+payload.value == payload['value'] == ${value}
 `)
         ).toBe(true);
     });
