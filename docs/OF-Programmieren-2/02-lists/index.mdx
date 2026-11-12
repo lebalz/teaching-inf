@@ -407,7 +407,14 @@ while True:
 
 4. Nun sollen regelmässig neue Schneeflocken hinzugefügt werden. Dazu muss der aktuelle Code etwas umgestellt werden:
 
-   1. erstellen Sie eine neue Funktion `neue_schneeflocke` welche der Szene eine neue Schneeflocke oben in der Szene hinzufügt.
+   1. Damit mehrere Schneeflocken bearbeitet werden können, braucht es eine **Liste** in welcher die einzelnen Schneeflocken gespeichert werden:
+
+      ```py
+      schneeflocken = []
+      ```
+
+   2. erstellen Sie eine neue Funktion `neue_schneeflocke` welche der Szene eine neue Schneeflocke oben in der Szene hinzufügt **und** die Schneeflocke zur [Liste hinzufügt](#hinzufügen-listeappendwert).
+
       :::details[Hilfe]
       ```py
       def neue_schneeflocke():
@@ -416,18 +423,26 @@ while True:
           snow.size = 16
           snow.x = 300
           snow.y = 0
+          # TODO: snow zur Liste schneeflocken hinzufügen.
 
-      neue_schneeflocke()
+      neue_schneeflocke() # schneeflocke hinzufügen
       ```
+
       Die aktuellen Zeilen Code zum hinzufügen von Schneeflocken können nun **entfernt** werden.
       :::
-   2. Nach diesem ersten Schritt gibt das Programm einen Fehler aus, da `snow` nun nicht mehr definiert ist. Zudem sollen nun alle Schneeflocken herunterfallen. Dies wird erreicht, indem über eine **Liste aller Schneeflocken iteriert** wird. Diese Liste kann von der Szene abgefragt werden:
+
+   3. Nach diesem ersten Schritt gibt das Programm einen Fehler aus, da `snow` nun nicht mehr definiert ist. Zudem sollen nun alle Schneeflocken herunterfallen. Dies wird erreicht, indem über eine **Liste aller Schneeflocken iteriert** wird.
+
       ```py
       while True:
-          for snow in scene.icons:
+          for snow in schneeflocken:
+              snow.y = snow.y + 1
               # bisheriger Code hier einfügen, eingerückt!
+              # ...
+              scene.render()
       ```
-   3. Probieren Sie aus, ob es für mehrere Schneeflocken funktioniert: Fügen Sie zu Beginn drei Schneeflocken hinzu.
+
+   4. Probieren Sie aus, ob es für mehrere Schneeflocken funktioniert: Fügen Sie zu Beginn drei Schneeflocken hinzu.
       :::details[Nur eine Schneeflocke wird angezeigt?]
       Die drei Schneeflocken werden übereinander gezeichnet. Lösung: die x-Position sollte zu beginn **zufällig** gesetzt werden.
       :::
