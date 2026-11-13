@@ -110,7 +110,7 @@
     as: 02-BYOD
     ignore:
       - _category_.yml
-    open: true
+    open: false
   - from: docs/OF-Programmieren-1/
     as: 03-Programmieren-1
     ignore:
