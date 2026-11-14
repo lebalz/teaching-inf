@@ -20,11 +20,10 @@
       "locked": true,
       "customData": {
         "exportFormatMimeType": "image/png",
-        "scale": 1.5,
-        "initExtension": ".png"
+        "scale": 4
       },
       "version": 2,
-      "versionNonce": 532143015,
+      "versionNonce": 532143016,
       "index": "a0",
       "fillStyle": "solid",
       "strokeWidth": 2,
