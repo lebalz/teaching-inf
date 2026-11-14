@@ -19,7 +19,7 @@
       ],
       "locked": true,
       "customData": {
-        "exportFormatMimeType": "image/png",
+        "exportFormatMimeType": "image/webp",
         "scale": 4
       },
       "version": 2,
