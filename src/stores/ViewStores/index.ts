@@ -1,5 +1,6 @@
 import { ViewStore as ViewStores, ViewStoreType, ViewStoreTypeMapping } from '@tdev-api/document';
 import type { RootStore } from '@tdev-stores/rootStore';
+import { RegistrationOptions } from '@tdev-stores/utils/RegistrationOptions';
 import { action, computed, observable, observableRef } from 'mobx';
 import { computedFn } from 'mobx-utils';
 import { AdminView } from './AdminView';
@@ -51,17 +52,25 @@ export default class ViewStore {
         if (!this.root.userStore.current?.hasElevatedAccess) {
             return 'open';
         }
-        return this._presentationPanelState ?? ' open';
+        return this._presentationPanelState ?? 'open';
     }
 
     useStore<T extends ViewStoreType>(type: T): ViewStoreTypeMapping[T] {
         return this.stores.get(type) as ViewStoreTypeMapping[T];
     }
 
+    /**
+     * Registering a type again replaces its previous store and warns,
+     * unless `override` says it is replaced on purpose.
+     */
     registerStore<T extends ViewStoreType>(
         type: T,
-        store: (viewStore: ViewStore) => ViewStoreTypeMapping[T]
+        store: (viewStore: ViewStore) => ViewStoreTypeMapping[T],
+        options: RegistrationOptions = {}
     ) {
+        if (this.stores.has(type) && !options.override) {
+            console.warn(`View store ${type} is already registered, replacing it`);
+        }
         this.stores.set(type, store(this));
     }
 

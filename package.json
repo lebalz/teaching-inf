@@ -49,6 +49,7 @@
         "@mdi/react": "^1.6.1",
         "@mdx-js/react": "^3.1.1",
         "@mermaid-js/layout-elk": "^1.0.1",
+        "@pierre/trees": "^1.0.0-beta.6",
         "@radial-color-picker/react-color-picker": "^4.0.1",
         "@sentry/react": "^10.64.0",
         "@sentry/webpack-plugin": "^3.3.1",
@@ -102,8 +103,7 @@
         "socket.io-client": "^4.8.4",
         "svg-parser": "^2.0.4",
         "typed.js": "^2.1.0",
-        "uuid": "^14.0.3",
-        "@pierre/trees": "^1.0.0-beta.6"
+        "uuid": "^14.0.3"
     },
     "devDependencies": {
         "@docusaurus/module-type-aliases": "^3.10.2",
@@ -125,6 +125,8 @@
         "@types/wicg-file-system-access": "^2023.10.7",
         "@vitest/coverage-v8": "^5.0.5",
         "concurrently": "^10.0.6",
+        "esbuild": "^0.28.2",
+        "fake-indexeddb": "6.2.7",
         "fs-extra": "^11.4.1",
         "gulp": "^4.0.2",
         "gulp-connect": "^5.7.0",
@@ -136,10 +138,9 @@
         "tsx": "^4.23.15",
         "typescript": "^7.0.2",
         "vfile": "^6.0.3",
+        "vite": "^8.3.0",
         "vitest": "^5.0.5",
-        "yaml-loader": "^0.9.0",
-        "esbuild": "^0.28.2",
-        "vite": "^8.3.0"
+        "yaml-loader": "^0.9.0"
     },
     "peerDependencies": {
         "react-hook-form": "*"

@@ -12,21 +12,12 @@ import DocumentRoot, { TypeMeta } from '@tdev-models/DocumentRoot';
 import GroupPermission from '@tdev-models/GroupPermission';
 import User from '@tdev-models/User';
 import UserPermission from '@tdev-models/UserPermission';
-import { CodeMeta } from '@tdev-models/documents/Code';
-import { ModelMeta as MdxCommentMeta } from '@tdev-models/documents/MdxComment';
-import { ModelMeta as QuillV2Meta } from '@tdev-models/documents/QuillV2';
-import { ModelMeta as RestrictedMeta } from '@tdev-models/documents/Restricted';
-import { ModelMeta as SolutionMeta } from '@tdev-models/documents/Solution';
-import { ModelMeta as StringMeta } from '@tdev-models/documents/String';
 import { NoneAccess } from '@tdev-models/helpers/accessPolicy';
 import iStore from '@tdev-stores/iStore';
 import { RootStore } from '@tdev-stores/rootStore';
 import _ from 'es-toolkit/compat';
 import { action, computed, observable, runInAction, transaction } from 'mobx';
 import { computedFn } from 'mobx-utils';
-
-import { CmsTextMeta } from '@tdev-models/documents/CmsText';
-import { UnknownMeta } from '@tdev-models/documents/Unknown';
 
 type LoadConfig = {
     /** if true, user permissions will be loaded
@@ -71,16 +62,7 @@ type BatchedMeta = {
     access: Partial<Config>;
 };
 
-const DefaultMeta: TypeMeta<DocumentType>[] = [
-    new UnknownMeta({}),
-    new CodeMeta({}),
-    new MdxCommentMeta({}),
-    new RestrictedMeta({}),
-    new SolutionMeta({}),
-    new StringMeta({}),
-    new CmsTextMeta({}),
-    new QuillV2Meta({})
-];
+const MAX_CREATE_ATTEMPTS = 5;
 
 export class DocumentRootStore extends iStore {
     readonly root: RootStore;
@@ -96,11 +78,6 @@ export class DocumentRootStore extends iStore {
     @computed
     get hasApiAccess() {
         return this.root.sessionStore.isLoggedIn;
-    }
-
-    @computed
-    get defaultMetas(): TypeMeta<DocumentType>[] {
-        return [...DefaultMeta, ...this.root.componentStore.defaultMeta];
     }
 
     @action
@@ -271,20 +248,12 @@ export class DocumentRootStore extends iStore {
                         .map((id) => {
                             const config = currentBatch.get(id);
                             if (config && config.meta) {
-                                return this.create(id, config.meta, config.access).catch(() => {
-                                    // queue it up for loading later - the model was probably generated in the mean time?
-                                    if (this.createAttempts.has(id)) {
-                                        this.createAttempts.set(id, this.createAttempts.get(id)! + 1);
-                                        if (this.createAttempts.get(id)! >= 5) {
-                                            // prevent infinite loading cycle
-                                            return undefined;
-                                        }
-                                    } else {
-                                        this.createAttempts.set(id, 1);
-                                    }
-                                    this.loadInNextBatch(id, config.meta, config.load, config.access);
-                                    return Promise.resolve({ id: id });
-                                });
+                                return this.create(id, config.meta, config.access)
+                                    .then((docRoot) => {
+                                        this.createAttempts.delete(id);
+                                        return docRoot;
+                                    })
+                                    .catch(() => this.retryCreateInNextBatch(id, config));
                             }
                             return Promise.resolve(undefined);
                         })
@@ -316,13 +285,13 @@ export class DocumentRootStore extends iStore {
         if (!data.documents) {
             return;
         }
-        const defaultType = this.root.componentStore.extractDefaultDocumentType(
+        const defaultType = this.root.documentStore.extractDefaultDocumentType(
             data.documents.map((d) => d.type)
         );
         const meta =
             config.meta ||
             (this.find(data.id)?.meta as TypeMeta<any>) ||
-            (defaultType ? this.defaultMetas.find((m) => m.type === defaultType) : undefined);
+            (defaultType ? this.root.documentStore.defaultMetaOf(defaultType) : undefined);
         const documentRoot =
             config.load.documentRoot && meta ? new DocumentRoot(data, meta, this) : this.find(data.id);
         if (!documentRoot) {
@@ -414,6 +383,20 @@ export class DocumentRootStore extends iStore {
     currentUsersPermissions(documentRootId: string) {
         const currentUser = this.root.userStore.current;
         return this._permissionsByUser(documentRootId, currentUser);
+    }
+
+    /**
+     * Queues the document root for loading later - the model was probably created in the meantime.
+     */
+    private retryCreateInNextBatch(id: string, config: BatchedMeta) {
+        const attempts = (this.createAttempts.get(id) ?? 0) + 1;
+        this.createAttempts.set(id, attempts);
+        if (attempts >= MAX_CREATE_ATTEMPTS) {
+            // prevent infinite loading cycle
+            return undefined;
+        }
+        this.loadInNextBatch(id, config.meta, config.load, config.access);
+        return { id: id };
     }
 
     /**
