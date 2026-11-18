@@ -4,6 +4,7 @@ page_id: e8626b18-516c-4569-b60e-4bd071004b76
 
 import LED from '@tdev/pyodide/led_control/src/components/LED';
 import HslColorPicker from '../components/HslColorPicker';
+import Steps from '@tdev-components/Steps';
 
 # LED's
 
@@ -129,20 +130,20 @@ Erzeugen Sie eine durchgehende Farbanimation (mit einer `while`-Schleife), bei d
 
 <LED ledId='übergänge' />
 
-```py live_pyo id=df0e21f4-696f-4f0f-81ca-9b3d0af270a5
-from time import sleep
-from led_control import use_led
-led = use_led('übergänge')
+<Steps>
+  1. ```py live_pyo id=df0e21f4-696f-4f0f-81ca-9b3d0af270a5
+     from time import sleep
+     from led_control import use_led
+     led = use_led('übergänge')
 
-```
+     ```
+  2. Versuchen Sie nun, den Code auf den Maqueen zu übertragen - die `sleep()` Funktion könnte ein Stolperstein sein und der Farbwechsel muss leicht angepasst werden.
+     ```mpy live_py id=e0153d58-649d-452c-85b5-f4cfa1cec630
+     from microbit import *
+     from maqueen import *
 
-Versuchen Sie nun, den Code auf den Maqueen zu übertragen - die `sleep()` Funktion könnte ein Stolperstein sein und der Farbwechsel muss leicht angepasst werden.
-
-```mpy live_py id=e0153d58-649d-452c-85b5-f4cfa1cec630
-from microbit import *
-from maqueen import *
-
-```
+     ```
+</Steps>
 ::::
 
 :::warning[Lightness]
