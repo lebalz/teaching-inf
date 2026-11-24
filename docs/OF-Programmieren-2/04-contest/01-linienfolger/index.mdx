@@ -6,17 +6,14 @@ import Restricted from '@tdev-components/documents/Restricted';
 
 # Linienfolger
 
-Für einen Linienfolger braucht es Sensoren, welche die Linie erkennen können. Der Maqueen Plus V2 hat fünf Liniensensoren, welche schwarz/weiss unterscheiden können.
+Die Anordnung und Kalibrierung der Liniensensoren (__L2__, __L1__, __M__, __R1__, __R2__) ist auf der Seite "Liniensensoren" beschrieben.
 
-Dabei gilt:
-Schwarz
-: Sensorwert __1__
-Weiss
-: Sensorwert __0__
-
-Die Sensoren sind wie folgt angeordnet und können mit `line_sensor_all()` ausgelesen werden:
-
-![](./images/maqueen-line-sensors.svg)
+:::note[Referenz]
+Micro\:Bit Editor
+: [https://python.microbit.org/v/3](https://python.microbit.org/v/3)
+Maqueen Bibliothek
+: [https://gbsl-informatik.github.io/maqueen-plus-v2-mpy/](https://gbsl-informatik.github.io/maqueen-plus-v2-mpy/)
+:::
 
 Ein einfacher Ansatz für einen Linienfolger wäre, die Liniensensoren immer zu überprüfen und entsprechend die Motoren anzusteuern:
 
@@ -27,11 +24,15 @@ Sensor L1 = 1 und M = 0
 Sensor R1 = 1 und M = 0
 : Rechtskurve, da nun zu weit links
 
-In Python würde das etwa so aussehen:
+In Python würde dies etwa so aussehen:
 
 ```python
 from microbit import *
 from maqueen import *
+
+# recalibrate() # mit A-Taste Kalibrierung starten und Werte in `calibrate()` anpassen
+calibrate([80, 80, 80, 80, 80]) # todo: Kalibrierung anpassen!
+
 while True:
     sensoren = line_sensor_all()
     if sensoren[2] == 1:
@@ -44,7 +45,15 @@ while True:
         motor_run(Motor.RIGHT, 0)
 ```
 :::tip[Bemerke]
-Weil zuerst der mittlere Sensor __M__ überprüft wird, ist bei den folgenden `elif` Bedingungen bereits **sicher**, dass __M__ Null ist, da sonst die erste Bedingung zugetroffen hätte. Deshalb braucht es ein zusätzliches `... and sensoren[2]==0` nicht.
+Weil zuerst der mittlere Sensor __M__ überprüft wird, ist bei den folgenden `elif` Bedingungen bereits **sicher**, dass __M__ Null ist, da sonst die erste Bedingung zugetroffen hätte. Deshalb braucht es kein zusätzliches `... and sensoren[2] == 0`.
+:::
+
+:::aufgabe[Ausprobieren]
+<Answer type="state" id="4ff77a42-5dde-41f1-a9bb-53086a82d553" />
+
+Kopieren Sie den obigen Code und testen Sie den Linienfolger
+1. auf dem Papier-Testparcours
+2. auf dem Testparcours im Klassenzimmer
 :::
 
 Dieser Ansatz funktioniert allerdings nicht zuverlässig 😭.
@@ -54,7 +63,7 @@ Dieser Ansatz funktioniert allerdings nicht zuverlässig 😭.
 :::aufgabe
 <Answer type="state" id="f666e93e-fb45-453d-90bd-a1489dacefea" />
 
-Erklären Sie kurz anhand der obigen Abbilgung, weshalb der einfache Linienfolger nicht zuverlässig funktioniert.
+Erklären Sie kurz anhand der obigen Abbildung, weshalb der einfache Linienfolger nicht zuverlässig funktioniert.
 
 <Answer type="text" id="176cf1ac-a450-40f6-a4e2-35688a6c3a1e" />
 :::
@@ -64,10 +73,10 @@ Erklären Sie kurz anhand der obigen Abbilgung, weshalb der einfache Linienfolge
 <Restricted id="8e173b0e-2238-4120-8ec8-d0fff180c541">
 
 ## Zustandsdiagramm
-Um den Linienfolger robuster und zuverlässiger zu machen, braucht es eine Zustandsmaschine. Der Roboter ist stets nur in einem Zustand. Abhängig von den Sensorwerten wird dann der Zustand gewechselt. In jedem Zustand ist zudem definiert, wie die Motoren angesteuert werden.
+Um den Linienfolger robuster und zuverlässiger zu machen, braucht es eine **Zustandsmaschine**. Der Roboter ist zu jedem Zeitpunkt nur in genau einem Zustand. Abhängig von den Sensorwerten wird dann der Zustand gewechselt. In jedem Zustand ist zudem definiert, wie die Motoren angesteuert werden.
 
 
-:::cards{cols=2 width=390px}
+:::cards{cols=2 width="390px"}
 Im Unterricht haben wir folgendes Zustandsdiagramm erarbeitet:
 
 ![](./images/simple-line-follower-state-diagram.svg)
@@ -105,7 +114,7 @@ while True:
         # TODO: dann die Sensoren einlesen
 ```
 :::
-:::tip[Bemerke]
+:::insight[Bemerke]
 Mit diesem Zustandsdiagramm ist es nicht möglich, von einer Rechtskurve direkt zu einer Linkskurve überzugehen.
 :::
 
@@ -113,7 +122,7 @@ Mit diesem Ansatz ist es nun auch möglich, den Roboter zuverlässig auf der Lin
 
 ![](./images/maqueen-line-sensor-with-state.png)
 
-:::info[Zustandsübergänge]
+:::insight[Zustandsübergänge]
 Zustandsübergänge werden **nur durch die Sensoren** ausgelöst. Somit spielt es keine Rolle, wenn im Zustand __linkskurve__ der Sensor __L1__ plötzlich wieder weiss sieht. Der Roboter wird weiterhin eine Linkskurve fahren, bis der Sensor __M__ wieder schwarz detektiert und somit in den Zustand __vorwärts__ übergangen wird.
 :::
 
@@ -123,15 +132,26 @@ Obiger Ansatz funktioniert gut, aber nicht perfekt.
 
 ![](./images/maqueen-line-sensor-rectangle.png)
 
-:::tip[Ecken erkennen]
-- Bei **Zeitpunkt 2** bleibt der Maqueen im __Vorwärts__-Zustand, da der Sensor __M__ weiterhin schwarz sieht. Das passt soweit ✅.
-- Bei **Zeitpunkt 3** sehen alle Sensoren weiss. Da aktuell keine Bedingung in der `if-elif` Abfrage wahr wird, bleibt der Roboter im Zustand __Vorwärts__.
-- Bei **Zeitpunkt 4** sieht der Sensor __L2__ schwarz. Dies ist der entscheidende "Hinweis", dass es sich um einen linke Ecke handelt. **Achtung**: Es können Spezialfälle auftreten!
+:::tip[Ecken erkennen]{.compactDeflist}
+Zeitpunkt 1
+: Der Maqueen fährt im Zustand __Vorwärts__ auf der Linie.
+: __Vorwärts__-Zustand
+: __M__ sieht schwarz
+Zeitpunkt 2
+: Der Maqueen bleibt im __Vorwärts__-Zustand, da der Sensor __M__ weiterhin schwarz sieht. Das passt soweit ✅.
+: __L1__ und __M__ sehen schwarz
+Zeitpunkt 3
+: alle Sensoren weiss, keine Bedingung in der `if-elif` Abfrage trifft zu, also bleibt der __Vorwärts__-Zustand unverändert.
+Zeitpunkt 4
+: Der Seitensensor __L2__ sieht schwarz. Dies ist der entscheidende "Hinweis", dass es sich um eine linke Ecke handelt.
+: __L2__ sieht schwarz
+: Übergang zu :mdi[arrow-right] __Linkskurve__-Zustand 
+: **Achtung**: Es können Spezialfälle auftreten!
 :::
 
 :::aufgabe[Spezialfälle]
 
-Bei den unten aufgeführten Spezialfällen ist der Maqueen zum Zeitpunkt 1 jeweils im Zustand __Vorwärts__. Welcher Zustand nimmt der Maqueen beim Zeitpunkt 2 an?
+Bei den unten aufgeführten Spezialfällen ist der Maqueen zum Zeitpunkt 1 jeweils im Zustand __Vorwärts__. Welchen Zustand nimmt der Maqueen beim Zeitpunkt 2 an?
 
 ---
 <Answer type="state" id="8ec81456-3a7e-4a7e-ae0b-4401b6070285" label="Spezialfall 1"/>
@@ -181,7 +201,7 @@ Wie müsste das Zustandsdiagramm angepasst werden, damit der Maqueen auch in die
 
 ## Optimierung
 
-![](./images/partial-line-follower-state-diagram.svg)
+![die Änderungen sind rot markiert](./images/partial-line-follower-state-diagram.svg)
 
 
 :::aufgabe

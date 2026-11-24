@@ -50,7 +50,7 @@
   - from: docs/OF-Programmieren-2/
     as: 07-Programmieren-2
     ignore:
-      - 05-contest
+      - 04-contest
       - _category_.yml
     open: true
 29Gj:
@@ -98,7 +98,7 @@
   - from: docs/OF-Programmieren-2/
     as: 07-Programmieren-2
     ignore:
-      - 05-contest
+      - 04-contest
       - _category_.yml
     open: true
 30Gx:
