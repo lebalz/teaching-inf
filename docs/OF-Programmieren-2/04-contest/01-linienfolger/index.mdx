@@ -76,8 +76,7 @@ Erklären Sie kurz anhand der obigen Abbildung, weshalb der einfache Linienfolge
 ## Zustandsdiagramm
 Um den Linienfolger robuster und zuverlässiger zu machen, braucht es eine **Zustandsmaschine**. Der Roboter ist zu jedem Zeitpunkt nur in genau einem Zustand. Abhängig von den Sensorwerten wird dann der Zustand gewechselt. In jedem Zustand ist zudem definiert, wie die Motoren angesteuert werden.
 
-
-:::cards{cols=2 width="390px"}
+:::cards{cols="2" width="390px"}
 Im Unterricht haben wir folgendes Zustandsdiagramm erarbeitet:
 
 ![](./images/simple-line-follower-state-diagram.svg)
@@ -95,11 +94,8 @@ zustand = 'vorwärts'
 while True:
     sensoren = line_sensor_all()
     if zustand == 'vorwärts':
-        # zuerst immer Motoren ansteuern
         motor_run(Motor.ALL, 40)
-        # ... dann die Sensoren einlesen
         if sensoren[2] == 1:
-            # alles beim Alten, weiterfahren
             zustand = 'vorwärts'
         elif sensoren[1] == 1:
             zustand = 'linkskurve'
@@ -108,13 +104,14 @@ while True:
     elif zustand == 'linkskurve':
         motor_run(Motor.LEFT, 0)
         motor_run(Motor.RIGHT, 40)
-        # TODO: dann die Sensoren einlesen
+        # TODO: die Sensorwerte verarbeiten
     elif zustand == 'rechtskurve':
         motor_run(Motor.LEFT, 40)
         motor_run(Motor.RIGHT, 0)
-        # TODO: dann die Sensoren einlesen
+        # TODO: die Sensorwerte verarbeiten
 ```
 :::
+
 :::insight[Bemerke]
 Mit diesem Zustandsdiagramm ist es nicht möglich, von einer Rechtskurve direkt zu einer Linkskurve überzugehen.
 :::
