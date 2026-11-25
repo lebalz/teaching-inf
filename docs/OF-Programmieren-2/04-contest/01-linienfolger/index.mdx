@@ -35,25 +35,26 @@ calibrate([80, 80, 80, 80, 80]) # todo: Kalibrierung anpassen!
 
 while True:
     sensoren = line_sensor_all()
-    if sensoren[2] == 1:
-        motor_run(Motor.ALL, 40)
-    elif sensoren[1] == 1:
+    motor_run(Motor.ALL, 40)
+    if sensoren[1] == 1 and sensoren[2] == 0:
         motor_run(Motor.LEFT, 0)
         motor_run(Motor.RIGHT, 40)
-    elif sensoren[3] == 1:
+    elif sensoren[3] == 1 and sensoren[2] == 0:
         motor_run(Motor.LEFT, 40)
         motor_run(Motor.RIGHT, 0)
 ```
-:::tip[Bemerke]
-Weil zuerst der mittlere Sensor __M__ überprüft wird, ist bei den folgenden `elif` Bedingungen bereits **sicher**, dass __M__ Null ist, da sonst die erste Bedingung zugetroffen hätte. Deshalb braucht es kein zusätzliches `... and sensoren[2] == 0`.
-:::
 
 :::aufgabe[Ausprobieren]
 <Answer type="state" id="4ff77a42-5dde-41f1-a9bb-53086a82d553" />
 
 Kopieren Sie den obigen Code und testen Sie den Linienfolger
+
 1. auf dem Papier-Testparcours
 2. auf dem Testparcours im Klassenzimmer
+
+Was stellen Sie fest?
+
+<Answer type="text" id="fe59c76d-55b7-4585-a8f6-ca5c9269537b" />
 :::
 
 Dieser Ansatz funktioniert allerdings nicht zuverlässig 😭.
