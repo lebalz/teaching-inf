@@ -136,7 +136,6 @@ Die Drehgeschwindigkeit der Motoren wird über die Spannung gesteuert, was leide
 Kurvenfahren kann durch unterschiedliche Geschwindigkeiten der linken- und rechten Motoren erreicht werden. Soll der Maqueen an Ort und Stelle drehen, so müssen die Motoren in entgegengesetzte Richtungen laufen.
 :::
 
-
 :::aufgabe[Quadrat fahren]
 <Answer type="state" id="cac5a052-f977-4649-a918-214ecfe85c92" />
 
@@ -153,7 +152,6 @@ Schreiben Sie ein Programm, das den Maqueen ein Quadrat fahren lässt. Halten Si
 #### Ansatz 1: Wiederholungen brauchen
 
 ```py
-# Imports go at the top
 from microbit import *
 from maqueen import *
 
@@ -166,6 +164,7 @@ for i in range(4):
     sleep(1900)
 motor_stop()
 ```
+
 #### Ansatz 2: Funktionen schreiben, die man einfach anpassen kann
 
 ```py
