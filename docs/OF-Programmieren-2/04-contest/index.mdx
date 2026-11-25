@@ -46,18 +46,18 @@ Wettbewerb
 
 ### Punkteskala
 
-| Punkte | Kriterien | Abzüge |
-| :---: | :--- | :--- |
-| 12 | Der Parcours wird bewältigt, ohne manuellen Eingriff. | Manueller Eingriff nötig: -4 Punkte |
-| 2| Der Roboter blinkt während der Fahrt in verschiedenen Farben. | Kein Blinken sondern kontinuierlicher Farbwechsel: -1 Punkte |
-| 2 | Der Roboter zeigt auf dem Display mit einem Pfeil an, ob er aktuell links, rechts oder gerade steuert. |  |
-| 2 | Der Roboter bleibt stehen, wenn er auf ein Hindernis trifft und fährt dann weiter, wenn es wieder weg ist. | Hält an, aber fährt dann nicht mehr weiter: -1 Punkt |
-| 2 | Der Roboter dreht sich um 360 ° wenn geklatscht wird. | Funktioniert nur teilweise: -1 Punkt |
-| 2 | Der Roboter spielt beim Richtungswechsel einen Ton oder eine kurze Melodie.\* |  |
-| 2 | Der Roboter findet den Weg zum Ziel, auch wenn Einbahnstrassen vorhanden sind. | ⭐ |
-| 3 | Der Roboter kann einem Hindernis ausweichen und findet die Fahrtstrecke wieder. | ⭐ |
+| Punkte | Kriterien                                                                                                  | Abzüge                                                       |
+| :----: | :--------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------- |
+|   12   | Der Parcours wird bewältigt, ohne manuellen Eingriff.                                                      | Manueller Eingriff nötig: -4 Punkte                          |
+|    2   | Der Roboter blinkt während der Fahrt in verschiedenen Farben.                                              | Kein Blinken sondern kontinuierlicher Farbwechsel: -1 Punkte |
+|    2   | Der Roboter zeigt auf dem Display mit einem Pfeil an, ob er aktuell links, rechts oder gerade steuert.     |                                                              |
+|    2   | Der Roboter bleibt stehen, wenn er auf ein Hindernis trifft und fährt dann weiter, wenn es wieder weg ist. | Hält an, aber fährt dann nicht mehr weiter: -1 Punkt         |
+|    2   | Der Roboter dreht sich um 360 ° wenn geklatscht wird.                                                      | Funktioniert nur teilweise: -1 Punkt                         |
+|    2   | Der Roboter spielt beim Richtungswechsel einen Ton oder eine kurze Melodie.\*                              |                                                              |
+|    2   | Der Roboter findet den Weg zum Ziel, auch wenn Einbahnstrassen vorhanden sind.                             | ⭐                                                            |
+|    3   | Der Roboter kann einem Hindernis ausweichen und findet die Fahrtstrecke wieder.                            | ⭐                                                            |
 
-\* Damit der Roboter während dem Abspielen eines Tons maneuvrierefähig bleibt, muss die Funktion `music.play()` mit dem Argument `wait=False` aufgerufen werden:
+\* Damit der Roboter während dem Abspielen eines Tons manövrierfähig bleibt, muss die Funktion `music.play()` mit dem Argument `wait=False` aufgerufen werden. Andernfalls blockiert `music.play()` parallele Codeausführung - es verhält sich im Grunde wie genau so wie `sleep()`.
 
 ```py
 from microbit import *
