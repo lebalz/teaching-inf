@@ -18,7 +18,7 @@
       "opacity": 100,
       "locked": true,
       "version": 2,
-      "versionNonce": 1833911768,
+      "versionNonce": 1833911769,
       "index": "a0",
       "isDeleted": false,
       "angle": 0,
@@ -31,7 +31,7 @@
       "link": null,
       "customData": {
         "exportPadding": 4,
-        "scale": 1.2
+        "scale": 3
       }
     },
     {
