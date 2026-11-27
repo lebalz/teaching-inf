@@ -67,27 +67,27 @@
     - 06.11.2026
     - A
     - Programmieren 1
-    - Parameter
+    - Unterprogramme + Parameter
 - cells:
     - 13.11.2026
     - B
     - Programmieren 1
-    - Parameter
+    - Unterprogramme + Parameter
 - cells:
     - 20.11.2026
     - A
     - Programmieren 1
-    - Variablen, Eingabe & Ausgabe
+    - Parameter
 - cells:
     - 27.11.2026
     - B
     - Programmieren 1
-    - Variablen, Eingabe & Ausgabe
+    - Parameter
 - cells:
     - 04.12.2026
     - A
     - Programmieren 1
-    - Verzweigungen
+    - Variablen, Eingabe & Ausgabe
 - cells:
     - 04.12.2026
     - A&B
@@ -99,12 +99,12 @@
     - 11.12.2026
     - B
     - Programmieren 1
-    - Verzweigungen
+    - Variablen, Eingabe & Ausgabe
 - cells:
     - 18.12.2026
     - A
     - Programmieren 1
-    - While
+    - Verzweigungen, While
 - cells:
     - 25.12.2026
     - 
@@ -122,12 +122,12 @@
     - 08.01.2027
     - B
     - Programmieren 1
-    - While
+    - Verzweigungen, While
 - cells:
     - 15.01.2027
     - A
     - Programmieren 1
-    - Rückgabewerte
+    - While, Rückgabewerte
 - cells:
     - 20.01.2027
     - 
@@ -139,7 +139,7 @@
     - 22.01.2027
     - B
     - Programmieren 1
-    - Rückgabewerte
+    - While, Rückgabewerte
 - cells:
     - 01.02.2027
     - 
